@@ -7,12 +7,13 @@ main() {
   LinearRegression predictor = new LinearRegression();
 
   List<List<double>> features = [
-    [1.0, 2.0, 3.0],
-    [4.0, 5.0, 7.2]
+    [11.0, 2.324, 345.7],
+    [43.0, 544.0, 0.0]
   ];
 
   List<double> labels = [4.0, 3.0];
 
   predictor.train(features, labels);
+
   print(predictor.weights);
 }
