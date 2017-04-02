@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:dart_ml/src/vector_operations.dart' as vectors;
 import 'package:dart_ml/src/optimizers/optimizer.dart';
 import 'package:dart_ml/src/optimizers/sgd.dart';
@@ -10,20 +8,23 @@ class LinearRegression implements Predictor {
   List<double> _weights;
   Optimizer _optimizer;
 
-  void train(List<List<num>> features, List<num> labels,
+  List<double> get weights => _weights;
+  Optimizer get optimizer => _optimizer;
+
+  void train(List<List<double>> features, List<double> labels,
       [OptimizationMethod opMethod = OptimizationMethod.SGD, CostFunction metric = CostFunction.RMSE]) {
     _weights = new List<double>();
 
     int dimension = features.first.length;
-    List<num> biasFeatures = vectors.create(dimension, 1.0);
+    List<double> biasFeatures = vectors.create(dimension, 1.0);
 
     features.add(biasFeatures);
 
     _weights = _calculateWeights(features, labels, opMethod, metric);
   }
 
-  List<num> predict(List<List<num>> features) {
-    List<num> labels = new List<num>();
+  List<double> predict(List<List<double>> features) {
+    List<double> labels = new List<double>();
 
     for (int i = 0; i < features.length; i++) {
       labels.add(vectors.scalarMult(_weights, features[i]));
@@ -32,10 +33,7 @@ class LinearRegression implements Predictor {
     return labels;
   }
 
-  List<double> get weights => _weights;
-  Optimizer get optimizer => _optimizer;
-
-  List<double> _calculateWeights(List<List<num>> features, List<num> labels,
+  List<double> _calculateWeights(List<List<double>> features, List<double> labels,
       OptimizationMethod method, CostFunction metric) {
     switch (method) {
       case OptimizationMethod.SGD:
@@ -44,7 +42,4 @@ class LinearRegression implements Predictor {
 
     return _optimizer.optimize(features, labels);
   }
-
-  double _calculateMSE(num label, num predictedLabel) =>
-      math.pow((label - predictedLabel), 2);
 }
