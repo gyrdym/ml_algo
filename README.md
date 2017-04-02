@@ -1,19 +1,20 @@
-# linear_regression
+# Machine learning with dart
 
-A library for Dart developers. It is awesome.
+Only linear regression with SGD is available now
 
 ## Usage
 
 A simple usage example:
-
-    import 'package:linear_regression/linear_regression.dart';
-
-    main() {
-      var awesome = new Awesome();
-    }
-
-## Features and bugs
-
-Please file feature requests and bugs at the [issue tracker][tracker].
-
-[tracker]: http://example.com/issues/replaceme
+    
+    import 'package:dart_ml/dart_ml.dart';
+    
+    LinearRegression predictor = new LinearRegression();
+    
+    List<List<double>> features = [
+        [1.0, 2.0, 3.0, 223.3, 3.444, 23478.0],
+        [4.0, 5.0, 7.2, 309.1, 237.98, 2345.0]
+    ];
+    
+    List<double> labels = [4.0, 3.0];
+    
+    predictor.train(features, labels);
