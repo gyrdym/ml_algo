@@ -9,7 +9,7 @@ class StochasticGradientDescent implements Optimizer {
   int iterationLimit;
   List<double> errors;
 
-  StochasticGradientDescent({this.step = 1e-4, this.minWeightsDistance = 1e-8, this.iterationLimit = 1000});
+  StochasticGradientDescent({this.step = 1e-9, this.minWeightsDistance = 1e-8, this.iterationLimit = 1000});
 
   List<double> optimize(List<List<double>> features, List<double> labels) {
     math.Random randomizer = new math.Random();
@@ -19,7 +19,7 @@ class StochasticGradientDescent implements Optimizer {
     List<double> weights = vectors.create(features.first.length, 0.0);
 
     while (weightsDistance > minWeightsDistance && iterationCounter < iterationLimit) {
-      int k = randomizer.nextInt(features.length - 1);
+      int k = randomizer.nextInt(features.length);
 
       double eta = step / (iterationCounter + 1);
       List<double> newWeights = _doIteration(weights, features[k], labels[k], eta);
@@ -35,13 +35,13 @@ class StochasticGradientDescent implements Optimizer {
   List<double> _doIteration(List<double> weights, List<double> features, double y, double eta) {
     int dimensions = features.length;
     List<double> newWeights = new List<double>();
-    double diff = vectors.scalarMult(weights, features) - y;
+    double delta = vectors.scalarMult(weights, features) - y;
 
     for (int i = 0; i < dimensions; i++) {
       double w = weights[i];
       double x = features[i];
 
-      newWeights.add(w - (2 * eta / dimensions) * x * diff);
+      newWeights.add(w - (2 * eta / dimensions) * delta * x);
     }
 
     return newWeights;

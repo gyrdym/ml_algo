@@ -36,6 +36,16 @@ List<double> subtraction(List<double> a, List<double> b) {
   return result;
 }
 
+List<double> add(List<double> a, double b) {
+  List<double> result = new List<double>();
+
+  for (int i = 0; i < a.length; i++) {
+    result.add(a[i] + b);
+  }
+
+  return result;
+}
+
 List<double> pow(List<double> a, num exponent) {
   List<double> result = new List<double>();
 
