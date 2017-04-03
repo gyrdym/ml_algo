@@ -11,14 +11,18 @@ class LinearRegression implements Predictor {
   List<double> get weights => _weights;
   Optimizer get optimizer => _optimizer;
 
+  LinearRegression([OptimizationMethod opMethod = OptimizationMethod.SGD]) {
+    switch (opMethod) {
+      case OptimizationMethod.SGD:
+        _optimizer = new StochasticGradientDescent();
+    }
+  }
+
   void train(List<List<double>> features, List<double> labels,
       [OptimizationMethod opMethod = OptimizationMethod.SGD, CostFunction metric = CostFunction.RMSE]) {
     _weights = new List<double>();
 
-    int dimension = features.first.length;
-    List<double> biasFeatures = vectors.create(dimension, 1.0);
-
-    features.add(biasFeatures);
+    _addBias(features);
 
     _weights = _calculateWeights(features, labels, opMethod, metric);
   }
@@ -35,11 +39,12 @@ class LinearRegression implements Predictor {
 
   List<double> _calculateWeights(List<List<double>> features, List<double> labels,
       OptimizationMethod method, CostFunction metric) {
-    switch (method) {
-      case OptimizationMethod.SGD:
-        _optimizer = new StochasticGradientDescent();
-    }
-
     return _optimizer.optimize(features, labels);
+  }
+
+  void _addBias(List<List<double>> features) {
+    for (int i = 0; i < features.length; i++) {
+      features[i].add(1.0);
+    }
   }
 }
