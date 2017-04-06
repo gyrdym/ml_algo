@@ -80,6 +80,20 @@ double scalarMult(List<double> a, List<double> b) {
   return sum;
 }
 
+List<double> mult(List<double> a, List<double> b) {
+  if (a.length != b.length) {
+    throw new Exception('Lists must have the same length!');
+  }
+
+  List<double> vector = new List<double>();
+
+  for (int i = 0; i < a.length; i++) {
+    vector.add(a[i] * b[i]);
+  }
+
+  return vector;
+}
+
 List<double> create(int len, [double initialValue = 0.0]) {
   List<double> vector = new List<double>();
 
