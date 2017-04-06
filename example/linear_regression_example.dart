@@ -1,20 +1,30 @@
-// Copyright (c) 2017, Ilya Gyrdymov. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 
 import 'package:dart_ml/dart_ml.dart';
-import 'package:dart_ml/src/vector_operations.dart' as vectors;
+import 'package:csv/csv.dart' as csv;
 
-main() {
-  LinearRegression predictor = new LinearRegression();
+main() async {
+  csv.CsvCodec csvCodec = new csv.CsvCodec();
+  Stream<List<int>> input = new File('example/advertising.csv').openRead();
+  List<List<num>> fields = (await input.transform(UTF8.decoder)
+      .transform(csvCodec.decoder).toList() as List<List<num>>)
+      .sublist(1);
 
-  List<List<double>> features = [
-    [113242.0, 23221.32423234, 345322.7, 54566.78333, 34536.0, 345443.0]
-  ];
+  SGDLinearRegressor predictor = new SGDLinearRegressor();
 
-  List<double> labels = [4.0];
+  List<List<double>> features = fields
+      .map((List<num> item) => item.sublist(1, 3)
+      .map((num feature) => feature.toDouble()).toList())
+      .toList();
+
+  List<double> labels = fields
+      .map((List<num> item) => item.last.toDouble())
+      .toList();
 
   predictor.train(features, labels);
 
   print("weights: ${predictor.weights}");
-  print("checking, original label: ${labels.first}, predicted label: ${vectors.scalarMult(features.first, predictor.weights)}");
+  print("rmse (training) is: ${predictor.rmse}");
 }
