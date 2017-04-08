@@ -8,7 +8,7 @@ A simple usage example:
     
     import 'package:dart_ml/dart_ml.dart';
     
-    LinearRegression predictor = new LinearRegression();
+    SGDLinearRegressor predictor = new SGDLinearRegressor();
     
     List<List<double>> features = [
         [1.0, 2.0, 3.0, 223.3, 3.444, 23478.0],
@@ -18,3 +18,6 @@ A simple usage example:
     List<double> labels = [4.0, 3.0];
     
     predictor.train(features, labels);
+    
+    print("weights: ${predictor.weights}");
+    print("rmse (training) is: ${predictor.rmse}");
