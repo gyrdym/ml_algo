@@ -25,12 +25,24 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.15.2+10"
+  benchmark_harness:
+    description:
+      name: benchmark_harness
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   boolean_selector:
     description:
       name: boolean_selector
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  browser:
+    description:
+      name: browser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.0+2"
   charcode:
     description:
       name: charcode

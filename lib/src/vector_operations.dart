@@ -4,16 +4,16 @@ import 'dart:typed_data';
 
 import 'package:dart_ml/src/enums.dart' show Norm;
 
-class Vector extends ListBase {
+class TypedVector extends ListBase {
   Float32x4List _innerList;
   int _origLength;
 
-  Vector.fromList(List<double> source) {
+  TypedVector.fromList(List<double> source) {
     _origLength = source.length;
     _innerList = _convertRegularListToTyped(source);
   }
 
-  Vector.fromTypedList(Float32x4List source, [int origLength]) {
+  TypedVector.fromTypedList(Float32x4List source, [int origLength]) {
     _origLength = origLength ?? source.length * 4;
     _innerList = source;
   }
@@ -93,7 +93,7 @@ class Vector extends ListBase {
     }
   }
 
-  Vector operator +(Vector vector) {
+  TypedVector operator +(TypedVector vector) {
     if (vector.length != this.length) {
       throw _mismatchLengthError();
     }
@@ -104,7 +104,7 @@ class Vector extends ListBase {
       _bufList[i] = vector.typedList[i] + this.typedList[i];
     }
 
-    return new Vector.fromTypedList(_bufList, this.length);
+    return new TypedVector.fromTypedList(_bufList, this.length);
   }
 
   Float32x4List _convertRegularListToTyped(List<double> source) {
@@ -115,12 +115,16 @@ class Vector extends ListBase {
       int end = (i + 1) * 4;
       int start = end - 4;
       int diff = end - _origLength;
+      List<double> sublist;
 
       if (diff > 0) {
-        source.addAll(new List.filled(diff, 0.0));
+        List<double> zeroItems = new List<double>.filled(diff, 0.0);
+        sublist = source.sublist(start);
+        sublist.addAll(zeroItems);
+      } else {
+        sublist = source.sublist(start, end);
       }
 
-      List<double> sublist = source.sublist(start, end);
       double x = sublist[0] ?? 0.0;
       double y = sublist[1] ?? 0.0;
       double z = sublist[2] ?? 0.0;
@@ -188,6 +192,20 @@ List<double> add(List<double> a, double b) {
 
   for (int i = 0; i < a.length; i++) {
     result.add(a[i] + b);
+  }
+
+  return result;
+}
+
+List<double> vectorAddition(List<double> a, List<double> b) {
+  if (a.length != b.length) {
+    throw new Exception('Lists must have the same length!');
+  }
+
+  List<double> result = new List<double>(a.length);
+
+  for (int i = 0; i < a.length; i++) {
+    result[i] = a[i] + b[i];
   }
 
   return result;
