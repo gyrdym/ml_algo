@@ -1,10 +1,10 @@
-part of dart_ml.benchmark.templates;
+part of dart_ml.benchmark;
 
 TypedVector typedVector1;
 TypedVector typedVector2;
 
 class TypedVectorInitBenchmark extends BenchmarkBase {
-  const TypedVectorInitBenchmark() : super('Template');
+  const TypedVectorInitBenchmark() : super('Typed vector initialization, $AMOUNT_OF_ELEMENTS elements');
 
   static void main() {
     new TypedVectorInitBenchmark().report();
@@ -20,7 +20,7 @@ class TypedVectorInitBenchmark extends BenchmarkBase {
 }
 
 class TypedVectorAdditionBenchmark extends BenchmarkBase {
-  const TypedVectorAdditionBenchmark() : super('Template');
+  const TypedVectorAdditionBenchmark() : super('Typed vectors addition, $AMOUNT_OF_ELEMENTS elements');
 
   static void main() {
     new TypedVectorAdditionBenchmark().report();
