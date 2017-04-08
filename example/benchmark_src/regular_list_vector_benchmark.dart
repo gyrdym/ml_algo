@@ -1,10 +1,10 @@
-part of dart_ml.benchmark.templates;
+part of dart_ml.benchmark;
 
 List<double> regularVector1;
 List<double> regularVector2;
 
 class RegularListVectorInitBenchmark extends BenchmarkBase {
-  const RegularListVectorInitBenchmark() : super('Template');
+  const RegularListVectorInitBenchmark() : super('Regular list-based vector initialization, $AMOUNT_OF_ELEMENTS elements');
 
   static void main() {
     new RegularListVectorInitBenchmark().report();
@@ -20,7 +20,7 @@ class RegularListVectorInitBenchmark extends BenchmarkBase {
 }
 
 class RegularListVectorAdditionBenchmark extends BenchmarkBase {
-  const RegularListVectorAdditionBenchmark() : super('Template');
+  const RegularListVectorAdditionBenchmark() : super('Regular list-based vectors addition, $AMOUNT_OF_ELEMENTS elements');
 
   static void main() {
     new RegularListVectorAdditionBenchmark().report();
