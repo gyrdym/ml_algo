@@ -43,6 +43,8 @@ void main() {
       vector.length = 0;
       expect(vector.length, 0);
       expect(() => vector[1], throwsRangeError);
+
+      expect(() => vector.length = -2, throwsRangeError);
     });
   });
 }

@@ -15,6 +15,10 @@ class Vector extends ListBase {
 
   ///Very slow operation
   void set length(int newLength) {
+    if (newLength < 0) {
+      throw new RangeError.value(newLength, 'length', 'Invalid length: length must be positive or equal to zero');
+    }
+
     if (newLength == _origLength) {
       return;
     }
@@ -34,7 +38,7 @@ class Vector extends ListBase {
 
   double operator [](int index) {
     if (index > (_origLength - 1) || index < 0) {
-      throw new RangeError("Index out of range!");
+      throw new RangeError("Index $index out of range!");
     }
 
     int base = (index / 4).floor();
@@ -50,13 +54,13 @@ class Vector extends ListBase {
       case 3:
         return _innerList[base].w;
       default:
-        throw new RangeError("Index out of range!");
+        throw new RangeError("Index $index out of range!");
     }
   }
 
   void operator []=(int index, double value) {
     if (index > (_origLength - 1) || index < 0) {
-      throw new RangeError("Index out of range!");
+      throw new RangeError("Index $index out of range!");
     }
 
     int base = (index / 4).floor();
@@ -76,7 +80,7 @@ class Vector extends ListBase {
         _innerList[base] = _innerList[base].withW(value);
         break;
       default:
-        throw new RangeError("Index out of range!");
+        throw new RangeError("Index $index out of range!");
     }
   }
 
