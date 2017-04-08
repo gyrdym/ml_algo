@@ -8,15 +8,22 @@ class Vector extends ListBase {
   Float32x4List _innerList;
   int _origLength;
 
-  Vector.from(List<double> source) {
+  Vector.fromList(List<double> source) {
     _origLength = source.length;
     _innerList = _convertRegularListToTyped(source);
   }
 
+  Vector.fromTypedList(Float32x4List source, [int origLength]) {
+    _origLength = origLength ?? source.length * 4;
+    _innerList = source;
+  }
+
+  Float32x4List get typedList => _innerList;
+
   ///Very slow operation
   void set length(int newLength) {
     if (newLength < 0) {
-      throw new RangeError.value(newLength, 'length', 'Invalid length: length must be positive or equal to zero');
+      throw _lengthRangeError(newLength);
     }
 
     if (newLength == _origLength) {
@@ -36,9 +43,10 @@ class Vector extends ListBase {
 
   int get length => _origLength;
 
+  ///Do not use it in iteration! Use it only to read certain element
   double operator [](int index) {
     if (index > (_origLength - 1) || index < 0) {
-      throw new RangeError("Index $index out of range!");
+      throw _outOfRangeError(index);
     }
 
     int base = (index / 4).floor();
@@ -54,13 +62,14 @@ class Vector extends ListBase {
       case 3:
         return _innerList[base].w;
       default:
-        throw new RangeError("Index $index out of range!");
+        throw _outOfRangeError(index);
     }
   }
 
+  ///Do not use it in iteration! Use it only to update certain element
   void operator []=(int index, double value) {
     if (index > (_origLength - 1) || index < 0) {
-      throw new RangeError("Index $index out of range!");
+      throw _outOfRangeError(index);
     }
 
     int base = (index / 4).floor();
@@ -80,13 +89,27 @@ class Vector extends ListBase {
         _innerList[base] = _innerList[base].withW(value);
         break;
       default:
-        throw new RangeError("Index $index out of range!");
+        throw _outOfRangeError(index);
     }
+  }
+
+  Vector operator +(Vector vector) {
+    if (vector.length != this.length) {
+      throw _mismatchLengthError();
+    }
+
+    Float32x4List _bufList = new Float32x4List(this.typedList.length);
+
+    for (int i = 0; i < this.typedList.length; i++) {
+      _bufList[i] = vector.typedList[i] + this.typedList[i];
+    }
+
+    return new Vector.fromTypedList(_bufList, this.length);
   }
 
   Float32x4List _convertRegularListToTyped(List<double> source) {
     int partsCount = (_origLength / 4).ceil();
-    List<Float32x4>_bufferList = [];
+    Float32x4List _bufferList = new Float32x4List(partsCount);
 
     for (int i = 0; i < partsCount; i++) {
       int end = (i + 1) * 4;
@@ -103,10 +126,10 @@ class Vector extends ListBase {
       double z = sublist[2] ?? 0.0;
       double w = sublist[3] ?? 0.0;
 
-      _bufferList.add(new Float32x4(x, y, z, w));
+      _bufferList[i] = new Float32x4(x, y, z, w);
     }
 
-    return new Float32x4List.fromList(_bufferList);
+    return _bufferList;
   }
 
   List<double> _convertTypedListToRegular(Float32x4List source) {
@@ -119,6 +142,11 @@ class Vector extends ListBase {
 
     return _buffList;
   }
+
+  RangeError _outOfRangeError(index) => new RangeError("Index $index out of range!");
+  RangeError _lengthRangeError(value) => new RangeError.value(value, 'length', 'Invalid length: length must be positive'
+      ' or equal to zero');
+  RangeError _mismatchLengthError() => new RangeError('Vectors length must be equal');
 }
 
 double distance(List<double> a, List<double> b, [Norm norm = Norm.EUCLIDEAN]) {
