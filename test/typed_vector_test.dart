@@ -1,6 +1,7 @@
 // Copyright (c) 2017, Ilya Gyrdymov. All rights reserved. Use of this source code
 // is governed by a BSD-style license that can be found in the LICENSE file.
-import 'package:dart_ml/dart_ml.dart';
+
+import 'package:dart_ml/dart_ml.dart' show TypedVector;
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
