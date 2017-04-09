@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'package:dart_ml/src/vector_operations.dart' as vectors;
+import 'package:dart_ml/src/math/typed_vector.dart' as vectors;
 import 'package:dart_ml/src/predictors/predictor.dart';
 import 'package:dart_ml/src/enums.dart';
 
