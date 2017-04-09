@@ -20,5 +20,7 @@ abstract class VectorInterface {
 
   VectorInterface pow(double degree, {bool inPlace = false});
   VectorInterface scalarMult(double value, {bool inPlace = false});
+  VectorInterface scalarDivision(double value, {bool inPlace = false});
   VectorInterface scalarAddition(double value, {bool inPlace = false});
+  VectorInterface scalarSubtraction(double value, {bool inPlace = false});
 }

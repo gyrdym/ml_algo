@@ -109,6 +109,12 @@ void main() {
       expect(() => vector1[-1], throwsRangeError);
     });
 
+    test('vector multiplication (scalar format):\n', () {
+      double result = vector1.vectorScalarMult(vector2);
+
+      expect(result, equals(30.0));
+    });
+
     test('vector and scalar multiplication:\n', () {
       RegularVector result = vector1.scalarMult(2.0);
 
@@ -121,10 +127,16 @@ void main() {
       expect(() => vector1[-1], throwsRangeError);
     });
 
-    test('vector multiplication (scalar format):\n', () {
-      double result = vector1.vectorScalarMult(vector2);
+    test('vector and scalar division:\n', () {
+      RegularVector result = vector1.scalarDivision(2.0);
 
-      expect(result, equals(30.0));
+      expect(result.length, equals(4));
+      expect(result[0], equals(0.5));
+      expect(result[1], equals(1.0));
+      expect(result[2], equals(1.5));
+      expect(result[3], equals(2.0));
+      expect(() => vector1[4], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
     });
 
     test('add a scalar to a vector:\n', () {
@@ -135,6 +147,18 @@ void main() {
       expect(result[1], equals(15.0));
       expect(result[2], equals(16.0));
       expect(result[3], equals(17.0));
+      expect(() => vector1[4], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+    });
+
+    test('subtract a scalar from a vector:\n', () {
+      RegularVector result = vector1.scalarSubtraction(13.0);
+
+      expect(result.length, equals(4));
+      expect(result[0], equals(-12.0));
+      expect(result[1], equals(-11.0));
+      expect(result[2], equals(-10.0));
+      expect(result[3], equals(-9.0));
       expect(() => vector1[4], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
