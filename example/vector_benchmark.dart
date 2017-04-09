@@ -4,6 +4,6 @@ main() {
   print('Measuring...');
   TypedVectorInitBenchmark.main();
   TypedVectorAdditionBenchmark.main();
-  RegularListVectorInitBenchmark.main();
+  RegularVectorInitBenchmark.main();
   RegularListVectorAdditionBenchmark.main();
 }

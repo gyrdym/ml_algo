@@ -3,11 +3,11 @@ part of dart_ml.benchmark;
 RegularVector regularVector1;
 RegularVector regularVector2;
 
-class RegularListVectorInitBenchmark extends BenchmarkBase {
-  const RegularListVectorInitBenchmark() : super('Regular list-based vector initialization, $AMOUNT_OF_ELEMENTS elements');
+class RegularVectorInitBenchmark extends BenchmarkBase {
+  const RegularVectorInitBenchmark() : super('Regular list-based vector initialization, $AMOUNT_OF_ELEMENTS elements');
 
   static void main() {
-    new RegularListVectorInitBenchmark().report();
+    new RegularVectorInitBenchmark().report();
   }
 
   void run() {
