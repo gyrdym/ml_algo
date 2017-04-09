@@ -1,10 +1,11 @@
+import 'dart:collection';
 import 'package:dart_ml/src/enums.dart';
 
-abstract class VectorInterface {
+abstract class VectorInterface implements ListBase<double> {
   VectorInterface.fromList(List<double> source);
 
-  double operator [] (int index);
-  void operator []= (int index, double value);
+  int get dimension;
+  void set dimension(int value);
 
   VectorInterface operator + (VectorInterface vector);
   VectorInterface operator - (VectorInterface vector);

@@ -5,12 +5,32 @@ import 'package:dart_ml/src/enums.dart';
 import 'package:dart_ml/src/math/vector_interface.dart';
 
 class RegularVector extends ListBase<double> implements VectorInterface {
-  final List<double> _innerList;
+  List<double> _innerList;
 
   RegularVector.fromList(List<double> this._innerList);
 
   void set length(int value) {_innerList.length = value;}
   int get length => _innerList.length;
+
+  ///it's a high-cost operation, cause dimension changing means fully vector re-creation
+  void set dimension(int value) {
+    if (value == length) {
+      return;
+    }
+
+    if (value < length) {
+      _innerList = _innerList.take(value).toList(growable: false);
+      return;
+    }
+
+    _innerList = _innerList.toList(growable: true)
+      ..length = value
+      ..fillRange(length, value, 0.0);
+
+    _innerList = _innerList.toList(growable: false);
+  }
+
+  int get dimension => length;
 
   double operator [] (int index) => _innerList[index];
   void operator []= (int index, double value) {_innerList[index] = value;}
