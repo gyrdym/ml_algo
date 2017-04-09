@@ -11,16 +11,14 @@ abstract class VectorInterface {
   VectorInterface operator * (VectorInterface vector);
   VectorInterface operator / (VectorInterface vector);
 
-  int get length;
-
-  double norm([Norm normType = Norm.EUCLIDEAN]);
-  double distanceTo(VectorInterface vector, [Norm normType = Norm.EUCLIDEAN]);
-
-  double vectorScalarMult(VectorInterface vector);
-
   VectorInterface pow(double degree, {bool inPlace = false});
   VectorInterface scalarMult(double value, {bool inPlace = false});
   VectorInterface scalarDivision(double value, {bool inPlace = false});
   VectorInterface scalarAddition(double value, {bool inPlace = false});
   VectorInterface scalarSubtraction(double value, {bool inPlace = false});
+
+  double norm([Norm normType = Norm.EUCLIDEAN]);
+  double distanceTo(VectorInterface vector, [Norm normType = Norm.EUCLIDEAN]);
+
+  double vectorScalarMult(VectorInterface vector);
 }

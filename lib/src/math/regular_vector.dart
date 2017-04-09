@@ -20,7 +20,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
   RegularVector operator * (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a * b, false);
   RegularVector operator / (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a / b, false);
 
-  RegularVector pow(double degree, {bool inPlace = false}) => _elementWiseOperation(degree, (a,b) => math.pow(a,b), inPlace);
+  RegularVector pow(double degree, {bool inPlace = false}) => _elementWiseOperation(degree, (a,b) => math.pow(a, b), inPlace);
   RegularVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a + b, inPlace);
   RegularVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a - b, inPlace);
   RegularVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a * b, inPlace);
