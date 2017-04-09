@@ -18,9 +18,10 @@ void main() {
       vector1 = new RegularVector.fromList([1.0, 2.0, 3.0]);
 
       expect(vector1.length, equals(3));
+
       expect(vector1[0], equals(1.0));
-      expect(vector1[1], equals(2.0));
-      expect(vector1[2], equals(3.0));
+
+      expect(vector1, equals([1.0, 2.0, 3.0]));
       expect(() => vector1[3], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
@@ -30,9 +31,7 @@ void main() {
       vector1 = new RegularVector.fromList(source);
 
       expect(vector1.length, equals(3));
-      expect(vector1[0], equals(1.0));
-      expect(vector1[1], equals(1.0));
-      expect(vector1[2], equals(1.0));
+      expect(vector1, equals([1.0, 1.0, 1.0]));
       expect(() => vector1[3], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
@@ -43,11 +42,23 @@ void main() {
       vector1[1] = 45.0;
 
       expect(vector1.length, equals(3));
-      expect(vector1[0], equals(1.0));
-      expect(vector1[1], equals(45.0));
-      expect(vector1[2], equals(1.0));
+      expect(vector1, equals([1.0, 45.0, 1.0]));
       expect(() => vector1[3], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
+    });
+
+    test('Vector dimension (length) manipulation:\n', () {
+      List<double> source = new List<double>.filled(5, 1.0);
+      vector1 = new RegularVector.fromList(source);
+
+      expect(vector1.length, equals(5));
+      expect(vector1.length, equals(vector1.dimension));
+
+      vector1.dimension = 10;
+
+      expect(vector1[8], isZero);
+      expect(vector1, equals([1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0]));
+      expect(() => vector1.add(1.0), throwsUnsupportedError, reason: 'inner list of a vector must have fixed length');
     });
   });
 
@@ -67,10 +78,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(2.0));
-      expect(result[1], equals(4.0));
-      expect(result[2], equals(6.0));
-      expect(result[3], equals(8.0));
+      expect(result, equals([2.0, 4.0, 6.0, 8.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -80,10 +88,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(0.0));
-      expect(result[1], equals(0.0));
-      expect(result[2], equals(0.0));
-      expect(result[3], equals(0.0));
+      expect(result, equals([0.0, 0.0, 0.0, 0.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -93,10 +98,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(1.0));
-      expect(result[1], equals(4.0));
-      expect(result[2], equals(9.0));
-      expect(result[3], equals(16.0));
+      expect(result, equals([1.0, 4.0, 9.0, 16.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -106,10 +108,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(1.0));
-      expect(result[1], equals(1.0));
-      expect(result[2], equals(1.0));
-      expect(result[3], equals(1.0));
+      expect(result, equals([1.0, 1.0, 1.0, 1.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -119,10 +118,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(1.0));
-      expect(result[1], equals(8.0));
-      expect(result[2], equals(27.0));
-      expect(result[3], equals(64.0));
+      expect(result, equals([1.0, 8.0, 27.0, 64.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -132,10 +128,7 @@ void main() {
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
-      expect(vector1[0], equals(1.0));
-      expect(vector1[1], equals(8.0));
-      expect(vector1[2], equals(27.0));
-      expect(vector1[3], equals(64.0));
+      expect(vector1, equals([1.0, 8.0, 27.0, 64.0]));
       expect(() => vector1[4], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
@@ -151,10 +144,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(2.0));
-      expect(result[1], equals(4.0));
-      expect(result[2], equals(6.0));
-      expect(result[3], equals(8.0));
+      expect(result, equals([2.0, 4.0, 6.0, 8.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -164,10 +154,7 @@ void main() {
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
-      expect(vector1[0], equals(2.0));
-      expect(vector1[1], equals(4.0));
-      expect(vector1[2], equals(6.0));
-      expect(vector1[3], equals(8.0));
+      expect(vector1, equals([2.0, 4.0, 6.0, 8.0]));
       expect(() => vector1[4], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
@@ -177,10 +164,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(0.5));
-      expect(result[1], equals(1.0));
-      expect(result[2], equals(1.5));
-      expect(result[3], equals(2.0));
+      expect(result, equals([0.5, 1.0, 1.5, 2.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -190,10 +174,7 @@ void main() {
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
-      expect(vector1[0], equals(0.5));
-      expect(vector1[1], equals(1.0));
-      expect(vector1[2], equals(1.5));
-      expect(vector1[3], equals(2.0));
+      expect(vector1, equals([0.5, 1.0, 1.5, 2.0]));
       expect(() => vector1[4], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
@@ -203,10 +184,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(14.0));
-      expect(result[1], equals(15.0));
-      expect(result[2], equals(16.0));
-      expect(result[3], equals(17.0));
+      expect(result, equals([14.0, 15.0, 16.0, 17.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -216,10 +194,7 @@ void main() {
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
-      expect(vector1[0], equals(14.0));
-      expect(vector1[1], equals(15.0));
-      expect(vector1[2], equals(16.0));
-      expect(vector1[3], equals(17.0));
+      expect(vector1, equals([14.0, 15.0, 16.0, 17.0]));
       expect(() => vector1[4], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
@@ -229,10 +204,7 @@ void main() {
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
-      expect(result[0], equals(-12.0));
-      expect(result[1], equals(-11.0));
-      expect(result[2], equals(-10.0));
-      expect(result[3], equals(-9.0));
+      expect(result, equals([-12.0, -11.0, -10.0, -9.0]));
       expect(() => result[4], throwsRangeError);
       expect(() => result[-1], throwsRangeError);
     });
@@ -242,10 +214,7 @@ void main() {
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
-      expect(vector1[0], equals(-12.0));
-      expect(vector1[1], equals(-11.0));
-      expect(vector1[2], equals(-10.0));
-      expect(vector1[3], equals(-9.0));
+      expect(vector1, equals([-12.0, -11.0, -10.0, -9.0]));
       expect(() => vector1[4], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
     });
