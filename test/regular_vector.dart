@@ -15,7 +15,7 @@ void main() {
     });
 
     test('from dynamic-length list:\n', () {
-      vector1 = new RegularVector.fromList([1.0, 2.0, 3.0]);
+      vector1 = new RegularVector.from([1.0, 2.0, 3.0]);
 
       expect(vector1.length, equals(3));
 
@@ -28,7 +28,7 @@ void main() {
 
     test('from fixed-length list:\n', () {
       List<double> source = new List<double>.filled(3, 1.0);
-      vector1 = new RegularVector.fromList(source);
+      vector1 = new RegularVector.from(source);
 
       expect(vector1.length, equals(3));
       expect(vector1, equals([1.0, 1.0, 1.0]));
@@ -38,7 +38,7 @@ void main() {
 
     test('Assign value to vector element:\n', () {
       List<double> source = new List<double>.filled(3, 1.0);
-      vector1 = new RegularVector.fromList(source);
+      vector1 = new RegularVector.from(source);
       vector1[1] = 45.0;
 
       expect(vector1.length, equals(3));
@@ -49,7 +49,7 @@ void main() {
 
     test('Vector dimension (length) manipulation:\n', () {
       List<double> source = new List<double>.filled(5, 1.0);
-      vector1 = new RegularVector.fromList(source);
+      vector1 = new RegularVector.from(source);
 
       expect(vector1.length, equals(5));
       expect(vector1.length, equals(vector1.dimension));
@@ -58,14 +58,13 @@ void main() {
 
       expect(vector1[8], isZero);
       expect(vector1, equals([1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0]));
-      expect(() => vector1.add(1.0), throwsUnsupportedError, reason: 'inner list of a vector must have fixed length');
     });
   });
 
   group('Regular vector operations (not inplace).\n', () {
     setUp(() {
-      vector1 = new RegularVector.fromList([1.0, 2.0, 3.0, 4.0]);
-      vector2 = new RegularVector.fromList([1.0, 2.0, 3.0, 4.0]);
+      vector1 = new RegularVector.from([1.0, 2.0, 3.0, 4.0]);
+      vector2 = new RegularVector.from([1.0, 2.0, 3.0, 4.0]);
     });
 
     tearDown(() {
@@ -226,8 +225,8 @@ void main() {
     });
 
     test('find the euclidean distance between two different vectors:\n', () {
-      vector1 = new RegularVector.fromList([23.0, 34.0, 12.0, 10.0]);
-      vector2 = new RegularVector.fromList([100.0, 200.0, 300.0, 55.0]);
+      vector1 = new RegularVector.from([23.0, 34.0, 12.0, 10.0]);
+      vector2 = new RegularVector.from([100.0, 200.0, 300.0, 55.0]);
 
       expect(vector1.distanceTo(vector2), equals(344.1714688930505), reason: 'Wrong vector distance calculation');
     });

@@ -2,7 +2,9 @@ import 'dart:collection';
 import 'package:dart_ml/src/enums.dart';
 
 abstract class VectorInterface implements ListBase<double> {
-  VectorInterface.fromList(List<double> source);
+  VectorInterface(int dimension);
+  VectorInterface.from(List<double> source);
+  VectorInterface.filled(int dimension, double value);
 
   int get dimension;
   void set dimension(int value);

@@ -11,7 +11,7 @@ class RegularVectorInitBenchmark extends BenchmarkBase {
   }
 
   void run() {
-    regularVector1 = new RegularVector.fromList(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    regularVector1 = new RegularVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
   }
 
   void tearDown() {
@@ -31,8 +31,8 @@ class RegularListVectorAdditionBenchmark extends BenchmarkBase {
   }
 
   void setup() {
-    regularVector1 = new RegularVector.fromList(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
-    regularVector2 = new RegularVector.fromList(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    regularVector1 = new RegularVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    regularVector2 = new RegularVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
   }
 
   void tearDown() {

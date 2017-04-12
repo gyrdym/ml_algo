@@ -12,16 +12,17 @@ main() async {
       .transform(csvCodec.decoder).toList() as List<List<num>>)
       .sublist(1);
 
-  SGDLinearRegressor predictor = new SGDLinearRegressor();
-
-  List<List<double>> features = fields
-      .map((List<num> item) => item.sublist(1, 3)
-      .map((num feature) => feature.toDouble()).toList())
+  List<double> extractFeatures(item) => item.sublist(0, 3)
+      .map((num feature) => feature.toDouble())
       .toList();
 
-  List<double> labels = fields
-      .map((List<num> item) => item.last.toDouble())
-      .toList();
+  SGDLinearRegressor predictor = new SGDLinearRegressor<RegularVector>();
+
+  List<RegularVector> features = fields
+      .map((List<num> item) => new RegularVector.from(extractFeatures(item)))
+      .toList(growable: false);
+
+  RegularVector labels = new RegularVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
   predictor.train(features, labels);
 
