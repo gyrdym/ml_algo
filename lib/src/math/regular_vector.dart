@@ -7,7 +7,17 @@ import 'package:dart_ml/src/math/vector_interface.dart';
 class RegularVector extends ListBase<double> implements VectorInterface {
   List<double> _innerList;
 
-  RegularVector.fromList(List<double> this._innerList);
+  RegularVector(int dimension) {
+    _innerList = new List<double>(dimension);
+  }
+
+  RegularVector.from(List<double> source) {
+    _innerList = source.toList(growable: false);
+  }
+
+  RegularVector.filled(int dimension, double value) {
+    _innerList = new List<double>.filled(dimension, value, growable: false);
+  }
 
   void set length(int value) {_innerList.length = value;}
   int get length => _innerList.length;
@@ -61,6 +71,11 @@ class RegularVector extends ListBase<double> implements VectorInterface {
     return math.pow(pow(degree)._sum(), 1 / degree);
   }
 
+  void add(double value) {
+    _innerList = _innerList.toList(growable: true)..add(value);
+    _innerList = _innerList.toList(growable: false);
+  }
+
   double _sum() => this.reduce((double item, double sum) => item + sum);
 
   RegularVector _elementWiseOperation(Object value, operation(double a, double b), bool inPlace) {
@@ -70,6 +85,6 @@ class RegularVector extends ListBase<double> implements VectorInterface {
       _bufList[i] = operation(this[i], (value is RegularVector ? value[i] : value));
     }
 
-    return inPlace ? this : new RegularVector.fromList(_bufList);
+    return inPlace ? this : new RegularVector.from(_bufList);
   }
 }
