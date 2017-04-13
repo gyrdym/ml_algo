@@ -1,14 +1,13 @@
-import 'dart:math' as math;
-import 'dart:collection';
 import 'dart:typed_data';
+import 'package:dart_ml/src/math/vector_interface.dart';
 
 import 'package:dart_ml/src/enums.dart' show Norm;
 
-class TypedVector extends ListBase {
+class TypedVector implements VectorInterface {
   Float32x4List _innerList;
   int _origLength;
 
-  TypedVector.fromList(List<double> source) {
+  TypedVector.from(List<double> source) {
     _origLength = source.length;
     _innerList = _convertRegularListToTyped(source);
   }
@@ -17,8 +16,6 @@ class TypedVector extends ListBase {
     _origLength = origLength ?? source.length * 4;
     _innerList = source;
   }
-
-  Float32x4List get typedList => _innerList;
 
   ///Very slow operation
   void set length(int newLength) {
@@ -93,19 +90,16 @@ class TypedVector extends ListBase {
     }
   }
 
-  TypedVector operator +(TypedVector vector) {
-    if (vector.length != this.length) {
-      throw _mismatchLengthError();
-    }
+  TypedVector operator + (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a + b, false);
+  TypedVector operator - (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a - b, false);
+  TypedVector operator * (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a * b, false);
+  TypedVector operator / (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a / b, false);
 
-    Float32x4List _bufList = new Float32x4List(this.typedList.length);
-
-    for (int i = 0; i < this.typedList.length; i++) {
-      _bufList[i] = vector.typedList[i] + this.typedList[i];
-    }
-
-    return new TypedVector.fromTypedList(_bufList, this.length);
-  }
+  TypedVector pow(double degree, {bool inPlace = false}) => _elementWiseOperation(degree, (a, b) => a * b, inPlace);
+  TypedVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a * b, inPlace);
+  TypedVector scalarDivision(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a / b, inPlace);
+  TypedVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a + b, inPlace);
+  TypedVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a - b, inPlace);
 
   Float32x4List _convertRegularListToTyped(List<double> source) {
     int partsCount = (_origLength / 4).ceil();
@@ -147,124 +141,28 @@ class TypedVector extends ListBase {
     return _buffList;
   }
 
+  TypedVector _elementWiseOperation(Object value, operation(Float32x4 a, Float32x4 b), bool inPlace) {
+    if (value is TypedVector && value.length != this.length) {
+      throw _mismatchLengthError();
+    }
+
+    Float32x4 _typedValue;
+
+    if (value is double) {
+      _typedValue = new Float32x4.splat(value);
+    }
+
+    Float32x4List _bufList = inPlace ? _innerList : new Float32x4List(this._innerList.length);
+
+    for (int i = 0; i < this._innerList.length; i++) {
+      _bufList[i] = operation(this._innerList[i], (value is TypedVector ? value[i] : _typedValue));
+    }
+
+    return inPlace ? this : new TypedVector.fromTypedList(_bufList);
+  }
+
   RangeError _outOfRangeError(index) => new RangeError("Index $index out of range!");
   RangeError _lengthRangeError(value) => new RangeError.value(value, 'length', 'Invalid length: length must be positive'
       ' or equal to zero');
   RangeError _mismatchLengthError() => new RangeError('Vectors length must be equal');
-}
-
-double distance(List<double> a, List<double> b, [Norm norm = Norm.EUCLIDEAN]) {
-  if (a.length != b.length) {
-    throw new Exception('Lists must have the same length!');
-  }
-
-  double sum = 0.0;
-  int pow;
-
-  switch (norm) {
-    case Norm.EUCLIDEAN:
-      pow = 2;
-  }
-
-  for (int i = 0; i < a.length; i ++) {
-    sum += math.pow(a[i] - b[i], pow);
-  }
-
-  return math.sqrt(sum);
-}
-
-List<double> subtraction(List<double> a, List<double> b) {
-  if (a.length != b.length) {
-    throw new Exception('Lists must have the same length!');
-  }
-
-  List<double> result = new List<double>();
-
-  for (int i = 0; i < a.length; i ++) {
-    result.add(a[i] - b[i]);
-  }
-
-  return result;
-}
-
-List<double> add(List<double> a, double b) {
-  List<double> result = new List<double>();
-
-  for (int i = 0; i < a.length; i++) {
-    result.add(a[i] + b);
-  }
-
-  return result;
-}
-
-List<double> vectorAddition(List<double> a, List<double> b) {
-  if (a.length != b.length) {
-    throw new Exception('Lists must have the same length!');
-  }
-
-  List<double> result = new List<double>(a.length);
-
-  for (int i = 0; i < a.length; i++) {
-    result[i] = a[i] + b[i];
-  }
-
-  return result;
-}
-
-List<double> pow(List<double> a, num exponent) {
-  List<double> result = new List<double>();
-
-  for (int i = 0; i < a.length; i++) {
-    result.add(math.pow(a[i], exponent));
-  }
-
-  return result;
-}
-
-double mean(List<double> a) {
-  double sum = 0.0;
-
-  for (int i = 0; i < a.length; i++) {
-    sum += a[i];
-  }
-
-  return sum / a.length;
-}
-
-double scalarMult(List<double> a, List<double> b) {
-  if (a.length != b.length) {
-    throw new Exception('Lists must have the same length!');
-  }
-
-  double sum = 0.0;
-
-  for (int i = 0; i < a.length; i++) {
-    sum += a[i] * b[i];
-  }
-
-  return sum;
-}
-
-List<double> mult(List<double> a, List<double> b) {
-  if (a.length != b.length) {
-    throw new Exception('Lists must have the same length!');
-  }
-
-  List<double> vector = new List<double>();
-
-  for (int i = 0; i < a.length; i++) {
-    vector.add(a[i] * b[i]);
-  }
-
-  return vector;
-}
-
-List<double> create(int len, [double initialValue = 0.0]) {
-  List<double> vector = new List<double>();
-
-  for (int i = 0; i < len; i++) {
-    vector.add(initialValue);
-  }
-
-  return vector;
 }

@@ -19,11 +19,8 @@ class RegularVector extends ListBase<double> implements VectorInterface {
     _innerList = new List<double>.filled(dimension, value, growable: false);
   }
 
-  void set length(int value) {_innerList.length = value;}
-  int get length => _innerList.length;
-
   ///it's a high-cost operation, cause dimension changing means fully vector re-creation
-  void set dimension(int value) {
+  void set length(int value) {
     if (value == length) {
       return;
     }
@@ -40,7 +37,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
     _innerList = _innerList.toList(growable: false);
   }
 
-  int get dimension => length;
+  int get length => _innerList.length;
 
   double operator [] (int index) => _innerList[index];
   void operator []= (int index, double value) {_innerList[index] = value;}
@@ -76,7 +73,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
     _innerList = _innerList.toList(growable: false);
   }
 
-  double _sum() => this.reduce((double item, double sum) => item + sum);
+  double _sum() => this._innerList.reduce((double item, double sum) => item + sum);
 
   RegularVector _elementWiseOperation(Object value, operation(double a, double b), bool inPlace) {
     List<double> _bufList = inPlace ? _innerList : new List<double>(this.length);
