@@ -52,9 +52,9 @@ void main() {
       vector1 = new RegularVector.from(source);
 
       expect(vector1.length, equals(5));
-      expect(vector1.length, equals(vector1.dimension));
+      expect(vector1.length, equals(vector1.length));
 
-      vector1.dimension = 10;
+      vector1.length = 10;
 
       expect(vector1[8], isZero);
       expect(vector1, equals([1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0]));

@@ -11,7 +11,7 @@ void main() {
 
   group('Vector fundamental', () {
     setUp(() {
-      vector1 = new TypedVector.fromList([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
     });
 
     test('Vector initialization: ', () {
@@ -23,7 +23,7 @@ void main() {
 
       expect(vector1.length, equals(6));
 
-      vector2 = new TypedVector.fromList(new List.filled(11, 1.0));
+      vector2 = new TypedVector.from(new List.filled(11, 1.0));
       expect(vector2.length, 11);
       expect(vector2[10], 1.0);
     });
@@ -56,8 +56,8 @@ void main() {
 
   group('Vector operations.', () {
     setUp(() {
-      vector1 = new TypedVector.fromList([1.0, 2.0, 3.0, 4.0, 5.0]);
-      vector2 = new TypedVector.fromList([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector2 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
     });
 
     test('Vector addition: ', () {
@@ -67,8 +67,8 @@ void main() {
       expect(result[4], equals(10.0));
       expect(result.length, equals(5));
 
-      TypedVector vector3 = new TypedVector.fromList([1.0, 2.0, 3.0, 4.0, 5.0]);
-      TypedVector vector4 = new TypedVector.fromList([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 + vector4, throwsRangeError);
     });

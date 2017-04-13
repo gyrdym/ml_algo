@@ -11,7 +11,7 @@ class TypedVectorInitBenchmark extends BenchmarkBase {
   }
 
   void run() {
-    typedVector1 = new TypedVector.fromList(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    typedVector1 = new TypedVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
   }
 
   void tearDown() {
@@ -31,8 +31,8 @@ class TypedVectorAdditionBenchmark extends BenchmarkBase {
   }
 
   void setup() {
-    typedVector1 = new TypedVector.fromList(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
-    typedVector2 = new TypedVector.fromList(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    typedVector1 = new TypedVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    typedVector2 = new TypedVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
   }
 
   void tearDown() {

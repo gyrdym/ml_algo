@@ -1,13 +1,15 @@
-import 'dart:collection';
 import 'package:dart_ml/src/enums.dart';
 
-abstract class VectorInterface implements ListBase<double> {
+abstract class VectorInterface {
   VectorInterface(int dimension);
   VectorInterface.from(List<double> source);
   VectorInterface.filled(int dimension, double value);
 
-  int get dimension;
-  void set dimension(int value);
+  int get length;
+  void set length(int value);
+
+  double operator [] (int index);
+  void operator []= (int index, double value);
 
   VectorInterface operator + (VectorInterface vector);
   VectorInterface operator - (VectorInterface vector);
@@ -24,4 +26,7 @@ abstract class VectorInterface implements ListBase<double> {
   double distanceTo(VectorInterface vector, [Norm normType = Norm.EUCLIDEAN]);
 
   double vectorScalarMult(VectorInterface vector);
+
+  void add(double value);
+  void forEach(iteration(Object item));
 }
