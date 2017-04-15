@@ -16,7 +16,7 @@ abstract class VectorInterface {
   VectorInterface operator * (VectorInterface vector);
   VectorInterface operator / (VectorInterface vector);
 
-  VectorInterface pow(double degree, {bool inPlace = false});
+  VectorInterface intPow(int exponent, {bool inPlace = false});
   VectorInterface scalarMult(double value, {bool inPlace = false});
   VectorInterface scalarDivision(double value, {bool inPlace = false});
   VectorInterface scalarAddition(double value, {bool inPlace = false});
@@ -26,6 +26,8 @@ abstract class VectorInterface {
   double distanceTo(VectorInterface vector, [Norm normType = Norm.EUCLIDEAN]);
 
   double vectorScalarMult(VectorInterface vector);
+
+  double mean();
 
   void add(double value);
   void forEach(iteration(Object item));

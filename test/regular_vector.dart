@@ -113,7 +113,7 @@ void main() {
     });
 
     test('element-wise vector power:\n', () {
-      RegularVector result = vector1.pow(3.0);
+      RegularVector result = vector1.intPow(3);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
@@ -123,7 +123,7 @@ void main() {
     });
 
     test('element-wise vector power, inplace:\n', () {
-      RegularVector result = vector1.pow(3.0, inPlace: true);
+      RegularVector result = vector1.intPow(3, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
