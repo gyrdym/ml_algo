@@ -222,24 +222,24 @@ class TypedVector implements VectorInterface {
 
     Float32x4 _typedValue;
 
-    if (value is double) {
+    if (value is! TypedVector) {
       _typedValue = new Float32x4.splat(value);
     }
 
     Float32x4List _bufList = inPlace ? _innerList : new Float32x4List(this._innerList.length);
 
     for (int i = 0; i < this._innerList.length; i++) {
-      _bufList[i] = operation(this._innerList[i], (value is TypedVector ? value._innerList[i] : _typedValue));
+      _bufList[i] = operation(this._innerList[i], value is TypedVector ? value._innerList[i] : _typedValue);
     }
 
-    return inPlace ? this : new TypedVector.fromTypedList(_bufList);
+    return inPlace ? this : new TypedVector.fromTypedList(_bufList, _origLength);
   }
 
   TypedVector _elementWisePow(int exp, bool inPlace) {
-    Float32x4List _bufList = inPlace ? _innerList : new Float32x4List(this._innerList.length);
+    Float32x4List _bufList = inPlace ? _innerList : new Float32x4List(_innerList.length);
 
-    for (int i = 0; i < this._innerList.length; i++) {
-      _bufList[i] = _laneIntPow(this._innerList[i], exp);
+    for (int i = 0; i < _innerList.length; i++) {
+      _bufList[i] = _laneIntPow(_innerList[i], exp);
     }
 
     return inPlace ? this : new TypedVector.fromTypedList(_bufList);
