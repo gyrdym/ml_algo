@@ -118,11 +118,38 @@ class TypedVector implements VectorInterface {
   }
 
   void add(double value) {
+    int diff = _innerList.length * 4 - _origLength;
 
+    if (diff == 0) {
+      _add(new Float32x4.splat(value));
+    } else {
+      int base = _innerList.length - 1;
+      switch (diff) {
+        case 1:
+          _innerList[base] = _innerList.last.withW(value);
+          break;
+        case 2:
+          _innerList[base] = _innerList.last.withZ(value);
+          break;
+        case 3:
+          _innerList[base] = _innerList.last.withY(value);
+          break;
+        case 4:
+          _innerList[base] = _innerList.last.withX(value);
+          break;
+      }
+    }
+
+    _origLength++;
+  }
+
+  void _add(Float32x4 value) {
+    _innerList = _innerList.toList(growable: true)..add(value);
+    _innerList = _innerList.toList(growable: false);
   }
 
   void forEach(iteration(Float32x4 item)) {
-
+    _innerList.forEach(iteration);
   }
 
   double mean() => _sum() / length;
@@ -132,7 +159,7 @@ class TypedVector implements VectorInterface {
     return sum.x + sum.y + sum.z + sum.w;
   }
 
-  Float32x4 _lanePowInt(Float32x4 lane, int e) {
+  Float32x4 _laneIntPow(Float32x4 lane, int e) {
     if (e == 0) {
       return new Float32x4.splat(1.0);
     }
@@ -142,10 +169,10 @@ class TypedVector implements VectorInterface {
     }
 
     if (( e % 2 ) == 0) {
-      return _lanePowInt(lane * lane, e ~/ 2);
+      return _laneIntPow(lane * lane, e ~/ 2);
     }
 
-    return _lanePowInt(lane * lane, (e - 1 ) ~/ 2);
+    return _laneIntPow(lane * lane, (e - 1 ) ~/ 2);
   }
 
   Float32x4List _convertRegularListToTyped(List<double> source) {
@@ -208,11 +235,11 @@ class TypedVector implements VectorInterface {
     return inPlace ? this : new TypedVector.fromTypedList(_bufList);
   }
 
-  TypedVector _elementWisePow(num exp, bool inPlace) {
+  TypedVector _elementWisePow(int exp, bool inPlace) {
     Float32x4List _bufList = inPlace ? _innerList : new Float32x4List(this._innerList.length);
 
     for (int i = 0; i < this._innerList.length; i++) {
-      _bufList[i] = _lanePowInt(this._innerList[i], exp);
+      _bufList[i] = _laneIntPow(this._innerList[i], exp);
     }
 
     return inPlace ? this : new TypedVector.fromTypedList(_bufList);
