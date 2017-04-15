@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:dart_ml/src/math/vector_interface.dart';
 
@@ -95,11 +96,57 @@ class TypedVector implements VectorInterface {
   TypedVector operator * (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a * b, false);
   TypedVector operator / (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a / b, false);
 
-  TypedVector pow(double degree, {bool inPlace = false}) => _elementWiseOperation(degree, (a, b) => a * b, inPlace);
+  TypedVector intPow(int exponent, {bool inPlace = false}) => _elementWisePow(exponent, inPlace);
   TypedVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a * b, inPlace);
   TypedVector scalarDivision(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a / b, inPlace);
   TypedVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a + b, inPlace);
   TypedVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a - b, inPlace);
+
+  double vectorScalarMult(VectorInterface vector) => (this * vector)._sum();
+  double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
+
+  double norm([Norm norm = Norm.EUCLIDEAN]) {
+    int exp;
+
+    switch(norm) {
+      case Norm.EUCLIDEAN:
+        exp = 2;
+        break;
+    }
+
+    return math.pow(intPow(exp)._sum(), 1 / exp);
+  }
+
+  void add(double value) {
+
+  }
+
+  void forEach(iteration(Float32x4 item)) {
+
+  }
+
+  double mean() => _sum() / length;
+
+  double _sum() {
+    Float32x4 sum = this._innerList.reduce((Float32x4 item, Float32x4 sum) => item + sum);
+    return sum.x + sum.y + sum.z + sum.w;
+  }
+
+  Float32x4 _lanePowInt(Float32x4 lane, int e) {
+    if (e == 0) {
+      return new Float32x4.splat(1.0);
+    }
+
+    if (e == 1) {
+      return lane;
+    }
+
+    if (( e % 2 ) == 0) {
+      return _lanePowInt(lane * lane, e ~/ 2);
+    }
+
+    return _lanePowInt(lane * lane, (e - 1 ) ~/ 2);
+  }
 
   Float32x4List _convertRegularListToTyped(List<double> source) {
     int partsCount = (_origLength / 4).ceil();
@@ -155,7 +202,17 @@ class TypedVector implements VectorInterface {
     Float32x4List _bufList = inPlace ? _innerList : new Float32x4List(this._innerList.length);
 
     for (int i = 0; i < this._innerList.length; i++) {
-      _bufList[i] = operation(this._innerList[i], (value is TypedVector ? value[i] : _typedValue));
+      _bufList[i] = operation(this._innerList[i], (value is TypedVector ? value._innerList[i] : _typedValue));
+    }
+
+    return inPlace ? this : new TypedVector.fromTypedList(_bufList);
+  }
+
+  TypedVector _elementWisePow(num exp, bool inPlace) {
+    Float32x4List _bufList = inPlace ? _innerList : new Float32x4List(this._innerList.length);
+
+    for (int i = 0; i < this._innerList.length; i++) {
+      _bufList[i] = _lanePowInt(this._innerList[i], exp);
     }
 
     return inPlace ? this : new TypedVector.fromTypedList(_bufList);

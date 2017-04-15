@@ -47,7 +47,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
   RegularVector operator * (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a * b, false);
   RegularVector operator / (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a / b, false);
 
-  RegularVector pow(double degree, {bool inPlace = false}) => _elementWiseOperation(degree, (a,b) => math.pow(a, b), inPlace);
+  RegularVector intPow(int exponent, {bool inPlace = false}) => _elementWiseOperation(exponent, (a,b) => math.pow(a, b), inPlace);
   RegularVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a + b, inPlace);
   RegularVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a - b, inPlace);
   RegularVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a * b, inPlace);
@@ -57,16 +57,18 @@ class RegularVector extends ListBase<double> implements VectorInterface {
   double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
 
   double norm([Norm norm = Norm.EUCLIDEAN]) {
-    double degree;
+    int exponent;
 
     switch(norm) {
       case Norm.EUCLIDEAN:
-        degree = 2.0;
+        exponent = 2;
         break;
     }
 
-    return math.pow(pow(degree)._sum(), 1 / degree);
+    return math.pow(intPow(exponent)._sum(), 1 / exponent);
   }
+
+  double mean() => _sum() / length;
 
   void add(double value) {
     _innerList = _innerList.toList(growable: true)..add(value);
