@@ -85,6 +85,7 @@ void main() {
       expect(vector1[0], equals(34.0));
       expect(vector1[4], equals(277.0));
       expect(vector1[5], equals(1000.0));
+      expect(vector1.length, equals(6));
     });
 
     test('Vector length updating: ', () {
