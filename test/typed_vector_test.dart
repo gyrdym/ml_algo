@@ -327,5 +327,15 @@ void main() {
       expect(vector4[7], equals(3.0));
       expect(vector4, equals([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 17.5, 3.0]));
     });
+
+    test('`Foreach` method testing', () {
+      List<double> testList = [];
+
+      vector3.forEach((double value) {
+        testList.add(value);
+      });
+
+      expect(testList, equals(vector3));
+    });
   });
 }
