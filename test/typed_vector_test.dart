@@ -17,6 +17,7 @@ void main() {
     });
 
     test('Vector initialization via `from` constructor: ', () {
+      //dynamic-length list
       vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(vector1[0], equals(1.0));
@@ -27,6 +28,7 @@ void main() {
 
       expect(vector1.length, equals(6));
 
+      //fixed-length list
       vector2 = new TypedVector.from(new List.filled(11, 1.0));
 
       expect(vector2.length, 11);
@@ -58,6 +60,18 @@ void main() {
       expect(vector1[9], equals(10.0));
       expect(() => vector1[10], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
+      expect(vector1.length, equals(10));
+    });
+
+    test('Vector initialization via `fill` constructor: ', () {
+      vector1 = new TypedVector.filled(10, 2.0);
+
+      expect(vector1[0], equals(2.0));
+      expect(vector1[4], equals(2.0));
+      expect(vector1[5], equals(2.0));
+      expect(() => vector1[11], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+
       expect(vector1.length, equals(10));
     });
 
