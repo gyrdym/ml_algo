@@ -19,11 +19,8 @@ class RegularVector extends ListBase<double> implements VectorInterface {
     _innerList = new List<double>.filled(dimension, value, growable: false);
   }
 
-  void set length(int value) {_innerList.length = value;}
-  int get length => _innerList.length;
-
   ///it's a high-cost operation, cause dimension changing means fully vector re-creation
-  void set dimension(int value) {
+  void set length(int value) {
     if (value == length) {
       return;
     }
@@ -40,7 +37,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
     _innerList = _innerList.toList(growable: false);
   }
 
-  int get dimension => length;
+  int get length => _innerList.length;
 
   double operator [] (int index) => _innerList[index];
   void operator []= (int index, double value) {_innerList[index] = value;}
@@ -50,7 +47,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
   RegularVector operator * (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a * b, false);
   RegularVector operator / (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a / b, false);
 
-  RegularVector pow(double degree, {bool inPlace = false}) => _elementWiseOperation(degree, (a,b) => math.pow(a, b), inPlace);
+  RegularVector intPow(int exponent, {bool inPlace = false}) => _elementWiseOperation(exponent, (a,b) => math.pow(a, b), inPlace);
   RegularVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a + b, inPlace);
   RegularVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a - b, inPlace);
   RegularVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a * b, inPlace);
@@ -60,23 +57,25 @@ class RegularVector extends ListBase<double> implements VectorInterface {
   double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
 
   double norm([Norm norm = Norm.EUCLIDEAN]) {
-    double degree;
+    int exponent;
 
     switch(norm) {
       case Norm.EUCLIDEAN:
-        degree = 2.0;
+        exponent = 2;
         break;
     }
 
-    return math.pow(pow(degree)._sum(), 1 / degree);
+    return math.pow(intPow(exponent)._sum(), 1 / exponent);
   }
+
+  double mean() => _sum() / length;
 
   void add(double value) {
     _innerList = _innerList.toList(growable: true)..add(value);
     _innerList = _innerList.toList(growable: false);
   }
 
-  double _sum() => this.reduce((double item, double sum) => item + sum);
+  double _sum() => this._innerList.reduce((double item, double sum) => item + sum);
 
   RegularVector _elementWiseOperation(Object value, operation(double a, double b), bool inPlace) {
     List<double> _bufList = inPlace ? _innerList : new List<double>(this.length);

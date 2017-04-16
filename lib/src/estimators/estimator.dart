@@ -1,3 +1,5 @@
+import 'package:dart_ml/src/math/vector_interface.dart';
+
 abstract class Estimator {
-  double calculateError(List<double> predictedLabels, List<double> origLabels);
+  double calculateError(VectorInterface predictedLabels, VectorInterface origLabels);
 }

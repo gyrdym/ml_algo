@@ -1,7 +1,6 @@
 import 'dart:mirrors';
 import 'dart:math' as math;
 import 'package:dart_ml/src/math/vector_interface.dart';
-import 'package:dart_ml/src/math/regular_vector.dart';
 import 'package:dart_ml/src/predictors/predictor.dart';
 import 'package:dart_ml/src/enums.dart';
 
@@ -26,13 +25,13 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
   }
 
   T predict(List<T> features) {
-    List<double> labels = new List(_weights.dimension);
+    List<double> labels = new List(_weights.length);
 
     for (int i = 0; i < features.length; i++) {
       labels[i] = _weights.vectorScalarMult(features[i]);
     }
 
-    return (reflectType(T) as ClassMirror).newInstance(const Symbol('fromList'), [labels]).reflectee;
+    return (reflectType(T) as ClassMirror).newInstance(const Symbol('from'), [labels]).reflectee;
   }
 
   void _addBiasTo(List<T> features) {
@@ -45,7 +44,7 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
     int iterationCounter = 0;
 
     T weights = (reflectType(T) as ClassMirror).newInstance(
-        const Symbol('filled'), [features.first.dimension, 0.0]).reflectee;
+        const Symbol('filled'), [features.first.length, 0.0]).reflectee;
 
     while (weightsDistance > minWeightsDistance && iterationCounter < iterationLimit) {
       int k = randomizer.nextInt(features.length);
@@ -60,10 +59,10 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
   }
 
   T _doIteration(T weights, T features, double y, double eta) {
-    var newWeights = new List<double>.filled(features.dimension, 0.0);
+    var newWeights = new List<double>.filled(features.length, 0.0);
     var delta = weights.vectorScalarMult(features) - y;
 
-    for (int i = 0; i < features.dimension; i++) {
+    for (int i = 0; i < features.length; i++) {
       newWeights[i] = weights[i] - (2 * eta) * delta * features[i];
     }
 
