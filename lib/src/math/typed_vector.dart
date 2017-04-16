@@ -1,10 +1,11 @@
+import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'package:dart_ml/src/math/vector_interface.dart';
 
 import 'package:dart_ml/src/enums.dart' show Norm;
 
-class TypedVector implements VectorInterface {
+class TypedVector extends ListBase<double> implements VectorInterface {
   Float32x4List _innerList;
   int _origLength;
 
@@ -153,8 +154,10 @@ class TypedVector implements VectorInterface {
     _innerList = _innerList.toList(growable: false);
   }
 
-  void forEach(iteration(Float32x4 item)) {
-    _innerList.forEach(iteration);
+  void forEach(iteration(double item)) {
+    for (int i = 0; i < _origLength; i++) {
+      iteration(this[i]);
+    }
   }
 
   double mean() => _sum() / length;
