@@ -150,8 +150,7 @@ class TypedVector extends ListBase<double> implements VectorInterface {
   }
 
   void _add(Float32x4 value) {
-    _innerList = _innerList.toList(growable: true)..add(value);
-    _innerList = _innerList.toList(growable: false);
+    _innerList = new Float32x4List.fromList(_innerList.toList(growable: true)..add(value));
   }
 
   void forEach(iteration(double item)) {
