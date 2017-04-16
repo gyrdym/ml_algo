@@ -107,7 +107,7 @@ void main() {
       vector2 = null;
     });
 
-    test('Vector addition: ', () {
+    test('Vectors addition: ', () {
       TypedVector result = vector1 + vector2;
 
       expect(result, equals([2.0, 4.0, 6.0, 8.0, 10.0]));
@@ -117,6 +117,166 @@ void main() {
       TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 + vector4, throwsRangeError);
+    });
+
+    test('Vectors subtraction: ', () {
+      TypedVector result = vector1 - vector2;
+
+      expect(result, equals([0.0, 0.0, 0.0, 0.0, 0.0]));
+      expect(result.length, equals(5));
+
+      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+
+      expect(() => vector3 - vector4, throwsRangeError);
+    });
+
+    test('Vectors multiplication: ', () {
+      TypedVector result = vector1 * vector2;
+
+      expect(result, equals([1.0, 4.0, 9.0, 16.0, 25.0]));
+      expect(result.length, equals(5));
+
+      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+
+      expect(() => vector3 * vector4, throwsRangeError);
+    });
+
+    test('Vectors division: ', () {
+      TypedVector result = vector1 / vector2;
+
+      expect(result, equals([1.0, 1.0, 1.0, 1.0, 1.0]));
+      expect(result.length, equals(5));
+
+      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+
+      expect(() => vector3 / vector4, throwsRangeError);
+    });
+
+    test('element-wise vector power:\n', () {
+      TypedVector result = vector1.intPow(3);
+
+      expect(result != vector1, isTrue);
+      expect(result.length, equals(5));
+      expect(result, equals([1.0, 8.0, 27.0, 64.0, 125.0]));
+      expect(() => result[5], throwsRangeError);
+      expect(() => result[-1], throwsRangeError);
+    });
+
+    test('element-wise vector power, inplace:\n', () {
+      TypedVector result = vector1.intPow(3, inPlace: true);
+
+      expect(result, same(vector1));
+      expect(vector1.length, equals(5));
+      expect(vector1, equals([1.0, 8.0, 27.0, 64.0, 125.0]));
+      expect(() => vector1[5], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+    });
+
+    test('vector multiplication (scalar format):\n', () {
+      double result = vector1.vectorScalarMult(vector2);
+
+      expect(result, equals(55.0));
+    });
+
+    test('vector and scalar multiplication:\n', () {
+      TypedVector result = vector1.scalarMult(2.0);
+
+      expect(result != vector1, isTrue);
+      expect(result.length, equals(5));
+      expect(result, equals([2.0, 4.0, 6.0, 8.0, 10.0]));
+      expect(() => result[5], throwsRangeError);
+      expect(() => result[-1], throwsRangeError);
+    });
+
+    test('vector and scalar multiplication, inplace:\n', () {
+      TypedVector result = vector1.scalarMult(2.0, inPlace: true);
+
+      expect(result, same(vector1));
+      expect(vector1.length, equals(5));
+      expect(vector1, equals([2.0, 4.0, 6.0, 8.0, 10.0]));
+      expect(() => vector1[5], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+    });
+
+    test('vector and scalar division:\n', () {
+      TypedVector result = vector1.scalarDivision(2.0);
+
+      expect(result != vector1, isTrue);
+      expect(result.length, equals(5));
+      expect(result, equals([0.5, 1.0, 1.5, 2.0, 2.5]));
+      expect(() => result[5], throwsRangeError);
+      expect(() => result[-1], throwsRangeError);
+    });
+
+    test('vector and scalar division, inplace:\n', () {
+      TypedVector result = vector1.scalarDivision(2.0, inPlace: true);
+
+      expect(result, same(vector1));
+      expect(vector1.length, equals(5));
+      expect(vector1, equals([0.5, 1.0, 1.5, 2.0, 2.5]));
+      expect(() => vector1[5], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+    });
+
+    test('add a scalar to a vector:\n', () {
+      TypedVector result = vector1.scalarAddition(13.0);
+
+      expect(result != vector1, isTrue);
+      expect(result.length, equals(5));
+      expect(result, equals([14.0, 15.0, 16.0, 17.0, 18.0]));
+      expect(() => result[5], throwsRangeError);
+      expect(() => result[-1], throwsRangeError);
+    });
+
+    test('add a scalar to a vector, inplace:\n', () {
+      TypedVector result = vector1.scalarAddition(13.0, inPlace: true);
+
+      expect(result, same(vector1));
+      expect(vector1.length, equals(5));
+      expect(vector1, equals([14.0, 15.0, 16.0, 17.0, 18.0]));
+      expect(() => vector1[5], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+    });
+
+    test('subtract a scalar from a vector:\n', () {
+      TypedVector result = vector1.scalarSubtraction(13.0);
+
+      expect(result != vector1, isTrue);
+      expect(result.length, equals(5));
+      expect(result, equals([-12.0, -11.0, -10.0, -9.0, -8.0]));
+      expect(() => result[5], throwsRangeError);
+      expect(() => result[-1], throwsRangeError);
+    });
+
+    test('subtract a scalar from a vector, inplace:\n', () {
+      TypedVector result = vector1.scalarSubtraction(13.0, inPlace: true);
+
+      expect(result, same(vector1));
+      expect(vector1.length, equals(5));
+      expect(vector1, equals([-12.0, -11.0, -10.0, -9.0, -8.0]));
+      expect(() => vector1[5], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+    });
+
+    test('find the euclidean distance between two identical vectors:\n', () {
+      double distance1 = vector1.distanceTo(vector2);
+
+      expect(distance1, equals(0.0), reason: 'Wrong vector distance calculation');
+    });
+
+    test('find the euclidean distance between two different vectors:\n', () {
+      vector1 = new TypedVector.from([10.0, 3.0, 4.0, 7.0, 9.0, 12.0]);
+      vector2 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5]);
+      double distance2 = vector1.distanceTo(vector2);
+
+      expect(distance2, equals(10.88577052853862), reason: 'Wrong vector distance calculation');
+    });
+
+    test('find the euclidean norm of a vector', () {
+      expect(vector1.norm(), equals(7.416198487095663), reason: 'Wrong norm calculation');
     });
   });
 }
