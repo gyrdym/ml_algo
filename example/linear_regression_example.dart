@@ -16,13 +16,13 @@ main() async {
       .map((num feature) => feature.toDouble())
       .toList();
 
-  SGDLinearRegressor predictor = new SGDLinearRegressor<RegularVector>();
+  SGDLinearRegressor predictor = new SGDLinearRegressor<TypedVector>();
 
-  List<RegularVector> features = fields
-      .map((List<num> item) => new RegularVector.from(extractFeatures(item)))
+  List<TypedVector> features = fields
+      .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  RegularVector labels = new RegularVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+  TypedVector labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
   predictor.train(features, labels);
 
