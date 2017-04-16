@@ -1,6 +1,3 @@
-// Copyright (c) 2017, Ilya Gyrdymov. All rights reserved. Use of this source code
-// is governed by a BSD-style license that can be found in the LICENSE file.
-
 import 'dart:typed_data';
 import 'package:dart_ml/dart_ml.dart' show TypedVector;
 import 'package:test/test.dart';
@@ -9,6 +6,8 @@ import 'package:matcher/matcher.dart';
 void main() {
   TypedVector vector1;
   TypedVector vector2;
+  TypedVector vector3;
+  TypedVector vector4;
 
   group('Vector fundamental', () {
     tearDown(() {
@@ -105,6 +104,8 @@ void main() {
     tearDown(() {
       vector1 = null;
       vector2 = null;
+      vector3 = null;
+      vector4 = null;
     });
 
     test('Vectors addition: ', () {
@@ -113,8 +114,8 @@ void main() {
       expect(result, equals([2.0, 4.0, 6.0, 8.0, 10.0]));
       expect(result.length, equals(5));
 
-      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 + vector4, throwsRangeError);
     });
@@ -125,8 +126,8 @@ void main() {
       expect(result, equals([0.0, 0.0, 0.0, 0.0, 0.0]));
       expect(result.length, equals(5));
 
-      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 - vector4, throwsRangeError);
     });
@@ -137,8 +138,8 @@ void main() {
       expect(result, equals([1.0, 4.0, 9.0, 16.0, 25.0]));
       expect(result.length, equals(5));
 
-      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 * vector4, throwsRangeError);
     });
@@ -149,8 +150,8 @@ void main() {
       expect(result, equals([1.0, 1.0, 1.0, 1.0, 1.0]));
       expect(result.length, equals(5));
 
-      TypedVector vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      TypedVector vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 / vector4, throwsRangeError);
     });
@@ -277,6 +278,54 @@ void main() {
 
     test('find the euclidean norm of a vector', () {
       expect(vector1.norm(), equals(7.416198487095663), reason: 'Wrong norm calculation');
+    });
+  });
+
+  group('Common list operations.', () {
+    setUp(() {
+      vector1 = new TypedVector.from([1.0, 3.0, 2.0, 11.5]);
+      vector2 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0]);
+      vector3 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5]);
+      vector4 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 17.5]);
+    });
+
+    tearDown(() {
+      vector1 = null;
+      vector2 = null;
+      vector3 = null;
+      vector4 = null;
+    });
+
+    test('Add value to the end of a vector (offset = 0)', () {
+      vector1.add(3.0);
+
+      expect(vector1.length, equals(5));
+      expect(vector1[4], equals(3.0));
+      expect(vector1, equals([1.0, 3.0, 2.0, 11.5, 3.0]));
+    });
+
+    test('Add value to the end of a vector (offset = 3)', () {
+      vector2.add(3.0);
+
+      expect(vector2.length, equals(6));
+      expect(vector2[5], equals(3.0));
+      expect(vector2, equals([1.0, 3.0, 2.0, 11.5, 10.0, 3.0]));
+    });
+
+    test('Add value to the end of a vector (offset = 2)', () {
+      vector3.add(3.0);
+
+      expect(vector3.length, equals(7));
+      expect(vector3[6], equals(3.0));
+      expect(vector3, equals([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 3.0]));
+    });
+
+    test('Add value to the end of a vector (offset = 1)', () {
+      vector4.add(3.0);
+
+      expect(vector4.length, equals(8));
+      expect(vector4[7], equals(3.0));
+      expect(vector4, equals([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 17.5, 3.0]));
     });
   });
 }
