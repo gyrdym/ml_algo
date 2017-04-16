@@ -18,6 +18,11 @@ class TypedVector implements VectorInterface {
     _innerList = source;
   }
 
+  TypedVector.filled(int length, double value) {
+    _origLength = length;
+    _innerList = _convertRegularListToTyped(new List<double>.filled(length, value));
+  }
+
   ///Very slow operation
   void set length(int newLength) {
     if (newLength < 0) {
@@ -176,13 +181,13 @@ class TypedVector implements VectorInterface {
   }
 
   Float32x4List _convertRegularListToTyped(List<double> source) {
-    int partsCount = (_origLength / 4).ceil();
+    int partsCount = (source.length / 4).ceil();
     Float32x4List _bufferList = new Float32x4List(partsCount);
 
     for (int i = 0; i < partsCount; i++) {
       int end = (i + 1) * 4;
       int start = end - 4;
-      int diff = end - _origLength;
+      int diff = end - source.length;
       List<double> sublist;
 
       if (diff > 0) {
@@ -207,8 +212,8 @@ class TypedVector implements VectorInterface {
   List<double> _convertTypedListToRegular(Float32x4List source) {
     List<double> _buffList = [];
 
-    for (int i = 0; i < _innerList.length; i++) {
-      Float32x4 item = _innerList[i];
+    for (int i = 0; i < source.length; i++) {
+      Float32x4 item = source[i];
       _buffList.addAll([item.x, item.y, item.z, item.w]);
     }
 
