@@ -1,5 +1,7 @@
 # Changelog
 
-## 0.0.1
+## 0.1.0
+- Implementation of `-`, `*`, `/` operators and all vectors methods added to the `TypedVector`
 
-- Initial version, created by Stagehand
+## 0.0.1
+- Initial version

@@ -52,9 +52,9 @@ void main() {
       vector1 = new RegularVector.from(source);
 
       expect(vector1.length, equals(5));
-      expect(vector1.length, equals(vector1.dimension));
+      expect(vector1.length, equals(vector1.length));
 
-      vector1.dimension = 10;
+      vector1.length = 10;
 
       expect(vector1[8], isZero);
       expect(vector1, equals([1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0]));
@@ -113,7 +113,7 @@ void main() {
     });
 
     test('element-wise vector power:\n', () {
-      RegularVector result = vector1.pow(3.0);
+      RegularVector result = vector1.intPow(3);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
@@ -123,7 +123,7 @@ void main() {
     });
 
     test('element-wise vector power, inplace:\n', () {
-      RegularVector result = vector1.pow(3.0, inPlace: true);
+      RegularVector result = vector1.intPow(3, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
