@@ -172,15 +172,14 @@ class TypedVector extends ListBase<double> implements VectorInterface {
       return new Float32x4.splat(1.0);
     }
 
-    if (e == 1) {
-      return lane;
+    Float32x4 x = _laneIntPow(lane, e ~/ 2);
+    Float32x4 sqrX = x * x;
+
+    if (e % 2 == 0) {
+      return sqrX;
     }
 
-    if (( e % 2 ) == 0) {
-      return _laneIntPow(lane * lane, e ~/ 2);
-    }
-
-    return _laneIntPow(lane * lane, (e - 1 ) ~/ 2);
+    return (lane * sqrX);
   }
 
   Float32x4List _convertRegularListToTyped(List<double> source) {
@@ -250,7 +249,7 @@ class TypedVector extends ListBase<double> implements VectorInterface {
       _bufList[i] = _laneIntPow(_innerList[i], exp);
     }
 
-    return inPlace ? this : new TypedVector.fromTypedList(_bufList);
+    return inPlace ? this : new TypedVector.fromTypedList(_bufList, _origLength);
   }
 
   RangeError _outOfRangeError(index) => new RangeError("Index $index out of range!");
