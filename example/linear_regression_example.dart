@@ -18,14 +18,42 @@ main() async {
 
   SGDLinearRegressor predictor = new SGDLinearRegressor<TypedVector>();
 
-  List<TypedVector> features = fields
+  List<TypedVector> allFeatures = fields
       .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  TypedVector labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+  TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
-  predictor.train(features, labels);
+  Map<String, List<VectorInterface>> splittedFeatures = splitMatrix(allFeatures, .6);
+  Map<String, VectorInterface> splitedLabels = splitVector(allLabels, .6);
 
+  List<TypedVector> trainFeatures = splittedFeatures['train'];
+  TypedVector trainLabels = splitedLabels['train'];
+
+  List<TypedVector> testFeatures = splittedFeatures['test'];
+  TypedVector testLabels = splitedLabels['test'];
+
+  predictor.train(trainFeatures, trainLabels);
   print("weights: ${predictor.weights}");
-  print("rmse (training) is: ${predictor.rmse}");
+
+  VectorInterface prediction = predictor.predict(testFeatures);
+  print("rmse (test) is: ${predictor.estimator.calculateError(prediction, testLabels)}");
+}
+
+Map<String, List<VectorInterface>> splitMatrix(List<VectorInterface> sample, double trainRatio) {
+  int ratioLength = (sample.length * trainRatio).floor();
+
+  return <String, List<VectorInterface>>{
+    'train': sample.sublist(0, ratioLength),
+    'test': sample.sublist(ratioLength)
+  };
+}
+
+Map<String, VectorInterface> splitVector(VectorInterface sample, double trainRatio) {
+  int ratioLength = (sample.length * trainRatio).floor();
+
+  return <String, VectorInterface>{
+    'train': sample.fromRange(0, ratioLength),
+    'test': sample.fromRange(ratioLength)
+  };
 }

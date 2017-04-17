@@ -30,5 +30,5 @@ abstract class VectorInterface {
   double mean();
 
   void add(double value);
-  void forEach(iteration(Object item));
+  VectorInterface fromRange(int start, [int end]);
 }
