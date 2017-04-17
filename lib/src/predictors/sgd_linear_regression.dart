@@ -14,10 +14,8 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
   List<double> errors;
 
   T _weights;
-  double _rmse;
 
   T get weights => _weights;
-  double get rmse => _rmse;
   RMSEEstimator get estimator => _estimator;
 
   SGDLinearRegressor({this.step = 1e-8, this.minWeightsDistance = 1e-8, this.iterationLimit = 10000});
@@ -25,7 +23,6 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
   void train(List<T> features, T labels, [CostFunction metric = CostFunction.RMSE]) {
     _addBiasTo(features);
     _weights = _optimize(features, labels, metric);
-    _rmse = _calculateRMSE(features, labels);
   }
 
   T predict(List<T> features) {
@@ -70,18 +67,5 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
     }
 
     return (reflectType(T) as ClassMirror).newInstance(const Symbol('from'), [newWeights]).reflectee;
-  }
-
-  double _calculateRMSE(List<T> features, T labels) {
-    List<double> errors = [];
-
-    for (int i = 0; i < features.length; i++) {
-      double predictedLabel = _weights.vectorScalarMult(features[i]);
-      double label = labels[i];
-      double delta = predictedLabel - label;
-      errors.add(math.pow(delta, 2));
-    }
-
-    return math.sqrt(errors.reduce((double item, double sum) => sum += item) / features.length);
   }
 }
