@@ -34,12 +34,9 @@ main() async {
   TypedVector testLabels = splitedLabels['test'];
 
   predictor.train(trainFeatures, trainLabels);
-
   print("weights: ${predictor.weights}");
-  print("rmse (training) is: ${predictor.rmse}");
 
   VectorInterface prediction = predictor.predict(testFeatures);
-
   print("rmse (test) is: ${predictor.estimator.calculateError(prediction, testLabels)}");
 }
 
