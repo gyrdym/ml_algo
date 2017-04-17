@@ -75,6 +75,8 @@ class RegularVector extends ListBase<double> implements VectorInterface {
     _innerList = _innerList.toList(growable: false);
   }
 
+  RegularVector fromRange(int start, [int end]) => new RegularVector.from(sublist(start, end));
+
   double _sum() => this._innerList.reduce((double item, double sum) => item + sum);
 
   RegularVector _elementWiseOperation(Object value, operation(double a, double b), bool inPlace) {

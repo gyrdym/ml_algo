@@ -149,17 +149,13 @@ class TypedVector extends ListBase<double> implements VectorInterface {
     _origLength++;
   }
 
+  double mean() => _sum() / length;
+
+  TypedVector fromRange(int start, [int end]) => new TypedVector.from(sublist(start, end));
+
   void _add(Float32x4 value) {
     _innerList = new Float32x4List.fromList(_innerList.toList(growable: true)..add(value));
   }
-
-  void forEach(iteration(double item)) {
-    for (int i = 0; i < _origLength; i++) {
-      iteration(this[i]);
-    }
-  }
-
-  double mean() => _sum() / length;
 
   double _sum() {
     Float32x4 sum = this._innerList.reduce((Float32x4 item, Float32x4 sum) => item + sum);

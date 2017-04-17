@@ -2,9 +2,12 @@ import 'dart:mirrors';
 import 'dart:math' as math;
 import 'package:dart_ml/src/math/vector_interface.dart';
 import 'package:dart_ml/src/predictors/predictor.dart';
+import 'package:dart_ml/src/estimators/rmse.dart';
 import 'package:dart_ml/src/enums.dart';
 
 class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
+  final RMSEEstimator _estimator = new RMSEEstimator();
+
   double step;
   double minWeightsDistance;
   int iterationLimit;
@@ -15,6 +18,7 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
 
   T get weights => _weights;
   double get rmse => _rmse;
+  RMSEEstimator get estimator => _estimator;
 
   SGDLinearRegressor({this.step = 1e-8, this.minWeightsDistance = 1e-8, this.iterationLimit = 10000});
 
@@ -25,12 +29,11 @@ class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
   }
 
   T predict(List<T> features) {
-    List<double> labels = new List(_weights.length);
-
+    _addBiasTo(features);
+    List<double> labels = new List(features.length);
     for (int i = 0; i < features.length; i++) {
       labels[i] = _weights.vectorScalarMult(features[i]);
     }
-
     return (reflectType(T) as ClassMirror).newInstance(const Symbol('from'), [labels]).reflectee;
   }
 
