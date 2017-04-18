@@ -15,6 +15,16 @@ void main() {
       vector2 = null;
     });
 
+    test('Vector initialization via default constructor: ', () {
+      vector1 = new TypedVector(5);
+
+      expect(vector1, equals([0.0, 0.0, 0.0, 0.0, 0.0]));
+      expect(() => vector1[11], throwsRangeError);
+      expect(() => vector1[-1], throwsRangeError);
+
+      expect(vector1.length, equals(5));
+    });
+
     test('Vector initialization via `from` constructor: ', () {
       //dynamic-length list
       vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
