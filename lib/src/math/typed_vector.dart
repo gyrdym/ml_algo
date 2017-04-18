@@ -9,6 +9,11 @@ class TypedVector extends ListBase<double> implements VectorInterface {
   Float32x4List _innerList;
   int _origLength;
 
+  TypedVector(int length) {
+    _innerList = new Float32x4List((length / 4).ceil());
+    _origLength = length;
+  }
+
   TypedVector.from(List<double> source) {
     _origLength = source.length;
     _innerList = _convertRegularListToTyped(source);
