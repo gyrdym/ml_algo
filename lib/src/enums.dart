@@ -9,3 +9,7 @@ enum CostFunction {
 enum Norm {
   EUCLIDEAN
 }
+
+enum DataCategory {
+  TRAIN, TEST
+}
