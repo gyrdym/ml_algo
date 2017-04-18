@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dart_ml/dart_ml.dart';
+import 'package:dart_ml/src/utils/data_splitter.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {
@@ -24,36 +25,18 @@ main() async {
 
   TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
-  Map<String, List<VectorInterface>> splittedFeatures = splitMatrix(allFeatures, .6);
-  Map<String, VectorInterface> splitedLabels = splitVector(allLabels, .6);
+  Map<DataCategory, List<VectorInterface>> splittedFeatures = DataTrainTestSplitter.splitMatrix(allFeatures, .6);
+  Map<DataCategory, VectorInterface> splitedLabels = DataTrainTestSplitter.splitVector(allLabels, .6);
 
-  List<TypedVector> trainFeatures = splittedFeatures['train'];
-  TypedVector trainLabels = splitedLabels['train'];
+  List<TypedVector> trainFeatures = splittedFeatures[DataCategory.TRAIN];
+  TypedVector trainLabels = splitedLabels[DataCategory.TRAIN];
 
-  List<TypedVector> testFeatures = splittedFeatures['test'];
-  TypedVector testLabels = splitedLabels['test'];
+  List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
+  TypedVector testLabels = splitedLabels[DataCategory.TEST];
 
   predictor.train(trainFeatures, trainLabels);
   print("weights: ${predictor.weights}");
 
   VectorInterface prediction = predictor.predict(testFeatures);
   print("rmse (test) is: ${predictor.estimator.calculateError(prediction, testLabels)}");
-}
-
-Map<String, List<VectorInterface>> splitMatrix(List<VectorInterface> sample, double trainRatio) {
-  int ratioLength = (sample.length * trainRatio).floor();
-
-  return <String, List<VectorInterface>>{
-    'train': sample.sublist(0, ratioLength),
-    'test': sample.sublist(ratioLength)
-  };
-}
-
-Map<String, VectorInterface> splitVector(VectorInterface sample, double trainRatio) {
-  int ratioLength = (sample.length * trainRatio).floor();
-
-  return <String, VectorInterface>{
-    'train': sample.fromRange(0, ratioLength),
-    'test': sample.fromRange(ratioLength)
-  };
 }
