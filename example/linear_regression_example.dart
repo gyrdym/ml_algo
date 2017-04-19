@@ -17,8 +17,6 @@ main() async {
       .map((num feature) => feature.toDouble())
       .toList();
 
-  SGDLinearRegressor predictor = new SGDLinearRegressor<TypedVector>();
-
   List<TypedVector> allFeatures = fields
       .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
       .toList(growable: false);
@@ -34,9 +32,16 @@ main() async {
   List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
   TypedVector testLabels = splitedLabels[DataCategory.TEST];
 
+  SGDLinearRegressor predictor = new SGDLinearRegressor<TypedVector>();
+
   predictor.train(trainFeatures, trainLabels);
   print("weights: ${predictor.weights}");
 
   VectorInterface prediction = predictor.predict(testFeatures);
-  print("rmse (test) is: ${predictor.estimator.calculateError(prediction, testLabels)}");
+
+  RMSEEstimator rmseEstimator = new RMSEEstimator();
+  print("rmse (test) is: ${rmseEstimator.calculateError(prediction, testLabels)}");
+
+  MAPEEstimator mapeEstimator = new MAPEEstimator();
+  print("mape (test) is: ${mapeEstimator.calculateError(prediction, testLabels)}");
 }

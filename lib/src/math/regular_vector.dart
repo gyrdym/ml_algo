@@ -53,7 +53,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
   RegularVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a * b, inPlace);
   RegularVector scalarDivision(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a / b, inPlace);
 
-  double vectorScalarMult(VectorInterface vector) => (this * vector)._sum();
+  double vectorScalarMult(VectorInterface vector) => (this * vector).sum();
   double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
 
   double norm([Norm norm = Norm.EUCLIDEAN]) {
@@ -65,10 +65,10 @@ class RegularVector extends ListBase<double> implements VectorInterface {
         break;
     }
 
-    return math.pow(intPow(exponent)._sum(), 1 / exponent);
+    return math.pow(intPow(exponent).sum(), 1 / exponent);
   }
 
-  double mean() => _sum() / length;
+  double mean() => sum() / length;
 
   void add(double value) {
     _innerList = _innerList.toList(growable: true)..add(value);
@@ -77,7 +77,18 @@ class RegularVector extends ListBase<double> implements VectorInterface {
 
   RegularVector fromRange(int start, [int end]) => new RegularVector.from(sublist(start, end));
 
-  double _sum() => this._innerList.reduce((double item, double sum) => item + sum);
+  double sum() => this._innerList.reduce((double item, double sum) => item + sum);
+
+  RegularVector abs({bool inPlace = false}) {
+    List<double> list = _innerList.map((double item) => item.abs()).toList(growable: false);
+
+    if (inPlace) {
+      _innerList = list;
+      return this;
+    }
+
+    return new RegularVector.from(list);
+  }
 
   RegularVector _elementWiseOperation(Object value, operation(double a, double b), bool inPlace) {
     List<double> _bufList = inPlace ? _innerList : new List<double>(this.length);
