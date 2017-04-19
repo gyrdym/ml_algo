@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0
+- MAPE cost function added
+
 ## 0.2.0
 - SGD Regressor refactored (rmse on training removed, estimator added) + example extended
 
