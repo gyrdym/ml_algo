@@ -1,9 +1,7 @@
-enum OptimizationMethod {
-  SGD
-}
-
+/// RMSE - root mean square error [https://en.wikipedia.org/wiki/Root-mean-square_deviation]
+/// MAPE - mean absolute percentage error [https://en.wikipedia.org/wiki/Mean_absolute_percentage_error]
 enum CostFunction {
-  RMSE
+  RMSE, MAPE
 }
 
 enum Norm {
