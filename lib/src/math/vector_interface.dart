@@ -18,12 +18,15 @@ abstract class VectorInterface {
   VectorInterface scalarAddition(double value, {bool inPlace = false});
   VectorInterface scalarSubtraction(double value, {bool inPlace = false});
 
+  VectorInterface abs({bool inPlace = false});
+
   double norm([Norm normType = Norm.EUCLIDEAN]);
   double distanceTo(VectorInterface vector, [Norm normType = Norm.EUCLIDEAN]);
 
   double vectorScalarMult(VectorInterface vector);
 
   double mean();
+  double sum();
 
   void add(double value);
   VectorInterface fromRange(int start, [int end]);

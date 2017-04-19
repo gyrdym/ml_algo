@@ -2,23 +2,18 @@ import 'dart:mirrors';
 import 'dart:math' as math;
 import 'package:dart_ml/src/math/vector_interface.dart';
 import 'package:dart_ml/src/predictors/predictor.dart';
-import 'package:dart_ml/src/estimators/rmse.dart';
 import 'package:dart_ml/src/enums.dart';
 
 class SGDLinearRegressor<T extends VectorInterface> implements Predictor<T> {
-  final RMSEEstimator _estimator = new RMSEEstimator();
-
-  double step;
-  double minWeightsDistance;
-  int iterationLimit;
-  List<double> errors;
+  final double step;
+  final double minWeightsDistance;
+  final int iterationLimit;
 
   T _weights;
 
   T get weights => _weights;
-  RMSEEstimator get estimator => _estimator;
 
-  SGDLinearRegressor({this.step = 1e-8, this.minWeightsDistance = 1e-8, this.iterationLimit = 10000});
+  SGDLinearRegressor({this.step = 1e-5, this.minWeightsDistance = 1e-8, this.iterationLimit = 10000});
 
   void train(List<T> features, T labels, [CostFunction metric = CostFunction.RMSE]) {
     _addBiasTo(features);
