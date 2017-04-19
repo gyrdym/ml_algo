@@ -113,7 +113,7 @@ class TypedVector extends ListBase<double> implements VectorInterface {
   TypedVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a + b, inPlace);
   TypedVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a - b, inPlace);
 
-  double vectorScalarMult(VectorInterface vector) => (this * vector)._sum();
+  double vectorScalarMult(VectorInterface vector) => (this * vector).sum();
   double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
 
   double norm([Norm norm = Norm.EUCLIDEAN]) {
@@ -125,7 +125,7 @@ class TypedVector extends ListBase<double> implements VectorInterface {
         break;
     }
 
-    return math.pow(intPow(exp)._sum(), 1 / exp);
+    return math.pow(intPow(exp).sum(), 1 / exp);
   }
 
   void add(double value) {
@@ -154,17 +154,30 @@ class TypedVector extends ListBase<double> implements VectorInterface {
     _origLength++;
   }
 
-  double mean() => _sum() / length;
+  double mean() => sum() / length;
+
+  double sum() {
+    Float32x4 sum = this._innerList.reduce((Float32x4 item, Float32x4 sum) => item + sum);
+    return sum.x + sum.y + sum.z + sum.w;
+  }
+
+  TypedVector abs({bool inPlace = false}) {
+    Float32x4List list = new Float32x4List.fromList(
+        _innerList.map((Float32x4 item) => item.abs())
+            .toList(growable: false));
+
+    if (inPlace) {
+      _innerList = list;
+      return this;
+    }
+
+    return new TypedVector.fromTypedList(list, _origLength);
+  }
 
   TypedVector fromRange(int start, [int end]) => new TypedVector.from(sublist(start, end));
 
   void _add(Float32x4 value) {
     _innerList = new Float32x4List.fromList(_innerList.toList(growable: true)..add(value));
-  }
-
-  double _sum() {
-    Float32x4 sum = this._innerList.reduce((Float32x4 item, Float32x4 sum) => item + sum);
-    return sum.x + sum.y + sum.z + sum.w;
   }
 
   Float32x4 _laneIntPow(Float32x4 lane, int e) {
