@@ -289,6 +289,24 @@ void main() {
     test('find the euclidean norm of a vector', () {
       expect(vector1.norm(), equals(7.416198487095663), reason: 'Wrong norm calculation');
     });
+
+    test('find the sum of vector elements:\n', () {
+      expect(vector1.sum(), equals(15.0));
+    });
+
+    test('find the absolute value of an each element of a vector:\n', () {
+      vector1 = new TypedVector.from([-3.0, 4.5, -12.0, -23.5, 44.0]);
+      TypedVector result = vector1.abs();
+      expect(result, equals([3.0, 4.5, 12.0, 23.5, 44.0]));
+      expect(result, isNot(vector1));
+    });
+
+    test('find the absolute value of an each element of a vector (in place):\n', () {
+      vector1 = new TypedVector.from([-3.0, 4.5, -12.0, -23.5, 44.0]);
+      TypedVector result = vector1.abs(inPlace: true);
+      expect(result, equals([3.0, 4.5, 12.0, 23.5, 44.0]));
+      expect(result, same(vector1));
+    });
   });
 
   group('Common list operations.', () {
@@ -338,14 +356,12 @@ void main() {
       expect(vector4, equals([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 17.5, 3.0]));
     });
 
-    test('`Foreach` method testing', () {
-      List<double> testList = [];
-
-      vector3.forEach((double value) {
-        testList.add(value);
-      });
-
-      expect(testList, equals(vector3));
+    test('`fromRange` method testing', () {
+      expect(vector4.fromRange(2, 4), equals([2.0, 11.5]));
+      expect(vector4.fromRange(2, 5), equals([2.0, 11.5, 10.0]));
+      expect(vector4.fromRange(2), equals([2.0, 11.5, 10.0, 15.5, 17.5]));
+      expect(() => vector4.fromRange(-1), throwsRangeError);
+      expect(() => vector4.fromRange(10), throwsRangeError);
     });
   });
 }
