@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dart_ml/dart_ml.dart';
-import 'package:dart_ml/src/utils/data_splitter.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {

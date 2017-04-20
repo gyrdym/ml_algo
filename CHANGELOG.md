@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1
+- tests for `sum`, `abs`, `fromRange` methods of the `TypedVector` added
+- tests for `DataTrainTestSplitter` added
+
 ## 0.3.0
 - MAPE cost function added
 
