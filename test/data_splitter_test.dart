@@ -24,12 +24,19 @@ void main() {
     new TypedVector.from([19.5, 2.0, 3.0, 5.6, 23.0])
   ];
 
-  group('Data splitter test.', () {
+  group('Split a data to train/test samples', () {
     test('Vector split', () {
       Map<DataCategory, VectorInterface> result = DataTrainTestSplitter.splitVector(vector, 0.6);
 
       expect(result[DataCategory.TRAIN], equals([1.5, 2.0, 3.0, 5.5, 23.0]));
       expect(result[DataCategory.TEST], equals([45.0, 60.0, 78.0, 99.0]));
+    });
+
+    test('Matrix split', () {
+      Map<DataCategory, List<VectorInterface>> result = DataTrainTestSplitter.splitMatrix(matrix, 0.7);
+
+      expect(result[DataCategory.TRAIN].length, equals(11));
+      expect(result[DataCategory.TEST].length, equals(5));
     });
   });
 }
