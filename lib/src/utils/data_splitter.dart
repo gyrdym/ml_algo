@@ -3,7 +3,7 @@ import 'package:dart_ml/src/enums.dart';
 
 class DataTrainTestSplitter {
   static Map<DataCategory, List<VectorInterface>> splitMatrix(List<VectorInterface> sample, double trainRatio) {
-    int ratioLength = (sample.length * trainRatio).floor();
+    int ratioLength = (sample.length * trainRatio).round();
 
     return <DataCategory, List<VectorInterface>>{
       DataCategory.TRAIN: sample.sublist(0, ratioLength),
@@ -12,7 +12,7 @@ class DataTrainTestSplitter {
   }
 
   static Map<DataCategory, VectorInterface> splitVector(VectorInterface sample, double trainRatio) {
-    int ratioLength = (sample.length * trainRatio).floor();
+    int ratioLength = (sample.length * trainRatio).round();
 
     return <DataCategory, VectorInterface>{
       DataCategory.TRAIN: sample.fromRange(0, ratioLength),
