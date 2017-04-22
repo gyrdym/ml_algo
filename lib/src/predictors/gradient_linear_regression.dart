@@ -12,7 +12,7 @@ class GradientLinearRegressor<T extends VectorInterface, O extends GradientOptim
   GradientLinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000})
       : _optimizer = Instantiator.createInstance(O, const Symbol(''), [learningRate, minWeightsDistance, iterationLimit]);
 
-  void train(List<T> features, T labels) {
+  void train(List<T> features, List<double> labels) {
     _weights = _optimizer.optimize(features, labels);
   }
 
