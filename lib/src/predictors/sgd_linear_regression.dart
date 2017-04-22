@@ -2,7 +2,6 @@ import 'dart:mirrors';
 import 'package:dart_ml/src/math/vector_interface.dart';
 import 'package:dart_ml/src/predictors/predictor_interface.dart';
 import 'package:dart_ml/src/optimizers/sgd_optimizer.dart';
-import 'package:dart_ml/src/enums.dart';
 
 class SGDLinearRegressor<T extends VectorInterface> implements PredictorInterface<T> {
   SGDOptimizer<T> _optimizer;
@@ -14,9 +13,9 @@ class SGDLinearRegressor<T extends VectorInterface> implements PredictorInterfac
   SGDLinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000})
       : _optimizer = new SGDOptimizer<T>(learningRate: learningRate, minWeightsDistance: minWeightsDistance, iterationLimit: iterationLimit);
 
-  void train(List<T> features, T labels, [CostFunction metric = CostFunction.RMSE]) {
+  void train(List<T> features, T labels) {
     _addBiasTo(features);
-    _weights = optimizer.optimize(features, labels, metric);
+    _weights = optimizer.optimize(features, labels);
   }
 
   T predict(List<T> features) {
