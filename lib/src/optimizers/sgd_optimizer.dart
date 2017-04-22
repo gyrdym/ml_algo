@@ -1,5 +1,7 @@
 import 'dart:mirrors';
 import 'dart:math' as math;
+
+import 'package:dart_ml/src/utils/generic_type_instantiator.dart';
 import 'package:dart_ml/src/enums.dart';
 import 'package:dart_ml/src/math/vector_interface.dart';
 import 'package:dart_ml/src/optimizers/optimizer_interface.dart';
@@ -16,8 +18,7 @@ class SGDOptimizer<T extends VectorInterface> extends OptimizerInterface<T> {
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
-    T weights = (reflectType(T) as ClassMirror).newInstance(
-        const Symbol('filled'), [features.first.length, 0.0]).reflectee;
+    T weights = Instantiator.createInstance(T, const Symbol('filled'), [features.first.length, 0.0]);
 
     while (weightsDistance > minWeightsDistance && iterationCounter < iterationLimit) {
       int k = randomizer.nextInt(features.length);

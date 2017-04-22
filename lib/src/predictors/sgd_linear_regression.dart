@@ -1,5 +1,4 @@
 import 'dart:mirrors';
-import 'dart:math' as math;
 import 'package:dart_ml/src/math/vector_interface.dart';
 import 'package:dart_ml/src/predictors/predictor_interface.dart';
 import 'package:dart_ml/src/optimizers/sgd_optimizer.dart';
@@ -13,7 +12,7 @@ class SGDLinearRegressor<T extends VectorInterface> implements PredictorInterfac
   SGDOptimizer<T> get optimizer => _optimizer;
 
   SGDLinearRegressor({double step = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000})
-      : _optimizer = new SGDOptimizer(step: step, minWeightsDistance: minWeightsDistance, iterationLimit: iterationLimit);
+      : _optimizer = new SGDOptimizer<T>(step: step, minWeightsDistance: minWeightsDistance, iterationLimit: iterationLimit);
 
   void train(List<T> features, T labels, [CostFunction metric = CostFunction.RMSE]) {
     _addBiasTo(features);
