@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+- `OptimizerInterface` added
+- Stochastic gradient descent optimizer extracted from the linear regressor class
+- Line separators changed for all files (CRLF -> LF)
+
 ## 0.3.1
 - tests for `sum`, `abs`, `fromRange` methods of the `TypedVector` added
 - tests for `DataTrainTestSplitter` added
