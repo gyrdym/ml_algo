@@ -31,16 +31,23 @@ main() async {
   List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
   TypedVector testLabels = splitedLabels[DataCategory.TEST];
 
-  SGDLinearRegressor predictor = new SGDLinearRegressor<TypedVector>();
-
-  predictor.train(trainFeatures, trainLabels);
-  print("weights: ${predictor.weights}");
-
-  VectorInterface prediction = predictor.predict(testFeatures);
-
   RMSEEstimator rmseEstimator = new RMSEEstimator();
-  print("rmse (test) is: ${rmseEstimator.calculateError(prediction, testLabels)}");
-
   MAPEEstimator mapeEstimator = new MAPEEstimator();
-  print("mape (test) is: ${mapeEstimator.calculateError(prediction, testLabels)}");
+  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
+  GradientLinearRegressor batchGdRegressor = new GradientLinearRegressor<TypedVector, BatchGDOptimizer<TypedVector>>();
+
+  batchGdRegressor.train(trainFeatures, trainLabels);
+  sgdRegressor.train(trainFeatures, trainLabels);
+
+  print("SGD regressor weights: ${sgdRegressor.weights}");
+  print("Batch GD regressor weights: ${batchGdRegressor.weights}");
+
+  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
+  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures);
+
+  print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
+  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}");
+
+  print("Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(batchGdPrediction, testLabels)}");
+  print("Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(batchGdPrediction, testLabels)}");
 }

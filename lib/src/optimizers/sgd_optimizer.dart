@@ -6,7 +6,7 @@ import 'package:dart_ml/src/optimizers/gradient_optimizer.dart';
 class SGDOptimizer<T extends VectorInterface> extends GradientOptimizer<T> {
   final math.Random _randomizer = new math.Random();
 
-  SGDOptimizer({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000}) : super(
+  SGDOptimizer(double learningRate, double minWeightsDistance, int iterationLimit) : super(
       learningRate,
       minWeightsDistance,
       iterationLimit
