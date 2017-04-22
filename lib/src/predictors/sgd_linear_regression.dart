@@ -11,8 +11,8 @@ class SGDLinearRegressor<T extends VectorInterface> implements PredictorInterfac
   T get weights => _weights;
   SGDOptimizer<T> get optimizer => _optimizer;
 
-  SGDLinearRegressor({double step = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000})
-      : _optimizer = new SGDOptimizer<T>(step: step, minWeightsDistance: minWeightsDistance, iterationLimit: iterationLimit);
+  SGDLinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000})
+      : _optimizer = new SGDOptimizer<T>(learningRate: learningRate, minWeightsDistance: minWeightsDistance, iterationLimit: iterationLimit);
 
   void train(List<T> features, T labels, [CostFunction metric = CostFunction.RMSE]) {
     _addBiasTo(features);
