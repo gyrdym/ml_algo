@@ -9,7 +9,7 @@ abstract class GradientOptimizer<T extends VectorInterface> implements Optimizer
 
   GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit);
 
-  T optimize(List<T> features, T labels) {
+  T optimize(List<T> features, List<double> labels) {
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
@@ -26,7 +26,7 @@ abstract class GradientOptimizer<T extends VectorInterface> implements Optimizer
     return weights;
   }
 
-  T doIteration(T weights, List<T> features, T labels, double eta);
+  T doIteration(T weights, List<T> features, List<double> labels, double eta);
 
   T makeGradientStep(T k, List<T> Xs, List<double> y, double eta) {
     T gradientSumVector = Instantiator.createInstance(T, new Symbol('filled'), [k.length, 0.0]);

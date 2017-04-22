@@ -13,7 +13,7 @@ class SGDOptimizer<T extends VectorInterface> extends GradientOptimizer<T> {
     );
 
   @override
-  T doIteration(T weights, List<T> features, T labels, double eta) {
+  T doIteration(T weights, List<T> features, List<double> labels, double eta) {
     int k = _randomizer.nextInt(features.length);
     return makeGradientStep(weights, [features[k]], [labels[k]], eta);
   }
