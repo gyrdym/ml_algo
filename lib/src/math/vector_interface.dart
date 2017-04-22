@@ -1,6 +1,10 @@
 import 'package:dart_ml/src/enums.dart';
 
 abstract class VectorInterface {
+  VectorInterface(int length);
+  VectorInterface.from(List<double> source);
+  VectorInterface.filled(int length, double value);
+
   int get length;
   void set length(int value);
 

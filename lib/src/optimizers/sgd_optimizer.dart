@@ -6,7 +6,7 @@ import 'package:dart_ml/src/enums.dart';
 import 'package:dart_ml/src/math/vector_interface.dart';
 import 'package:dart_ml/src/optimizers/optimizer_interface.dart';
 
-class SGDOptimizer<T extends VectorInterface> extends OptimizerInterface<T> {
+class SGDOptimizer<T extends VectorInterface> implements OptimizerInterface<T> {
   final double minWeightsDistance;
   final double step;
   final int iterationLimit;
