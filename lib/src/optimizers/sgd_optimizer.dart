@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'package:dart_ml/src/utils/generic_type_instantiator.dart';
 import 'package:dart_ml/src/enums.dart';
 import 'package:dart_ml/src/math/vector_interface.dart';
-import 'package:dart_ml/src/optimizers/optimizer_interface.dart';
+import 'package:dart_ml/src/optimizers/gradient_optimizer.dart';
 
-class SGDOptimizer<T extends VectorInterface> implements OptimizerInterface<T> {
+class SGDOptimizer<T extends VectorInterface> extends GradientOptimizer<T> {
   final double minWeightsDistance;
   final double learningRate;
   final int iterationLimit;
@@ -22,7 +22,7 @@ class SGDOptimizer<T extends VectorInterface> implements OptimizerInterface<T> {
     while (weightsDistance > minWeightsDistance && iterationCounter < iterationLimit) {
       int k = randomizer.nextInt(features.length);
       double eta = learningRate / (iterationCounter + 1);
-      T newWeights = _doIteration(weights, features[k], labels[k], eta);
+      VectorInterface newWeights = makeGradientStep(weights, [features[k]], [labels[k]], eta);
       weightsDistance = newWeights.distanceTo(weights);
       weights = newWeights;
       iterationCounter++;
@@ -30,7 +30,4 @@ class SGDOptimizer<T extends VectorInterface> implements OptimizerInterface<T> {
 
     return weights;
   }
-
-  T _doIteration(T weights, T features, double y, double eta) =>
-      weights - features.scalarMult(2 * eta * (weights.vectorScalarMult(features) - y));
 }
