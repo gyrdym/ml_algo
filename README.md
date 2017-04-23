@@ -1,6 +1,6 @@
 # Machine learning with dart
 
-Only linear regression with SGD is available now
+Only linear regression is available now (with Batch, mini-Batch and Stochastic gradient descent optimizers)
 
 ## Usage
 
@@ -12,7 +12,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dart_ml/dart_ml.dart';
-import 'package:dart_ml/src/utils/data_splitter.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {
@@ -41,17 +40,16 @@ main() async {
   List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
   TypedVector testLabels = splitedLabels[DataCategory.TEST];
 
-  SGDLinearRegressor predictor = new SGDLinearRegressor<TypedVector>();
-
-  predictor.train(trainFeatures, trainLabels);
-  print("weights: ${predictor.weights}");
-
-  VectorInterface prediction = predictor.predict(testFeatures);
-
   RMSEEstimator rmseEstimator = new RMSEEstimator();
-  print("rmse (test) is: ${rmseEstimator.calculateError(prediction, testLabels)}");
-
   MAPEEstimator mapeEstimator = new MAPEEstimator();
-  print("mape (test) is: ${mapeEstimator.calculateError(prediction, testLabels)}");
+  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
+  
+  sgdRegressor.train(trainFeatures, trainLabels);
+  print("SGD regressor weights: ${sgdRegressor.weights}"););
+
+  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
+  print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
+  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
 }
+
 ````
