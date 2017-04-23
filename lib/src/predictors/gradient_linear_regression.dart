@@ -1,7 +1,7 @@
 import 'package:dart_ml/src/utils/generic_type_instantiator.dart';
 import 'package:dart_ml/src/math/vector_interface.dart';
 import 'package:dart_ml/src/predictors/predictor_interface.dart';
-import 'package:dart_ml/src/optimizers/gradient_optimizer.dart';
+import 'package:dart_ml/src/optimizers/gradient/base_gradient_optimizer.dart';
 
 class GradientLinearRegressor<T extends VectorInterface, O extends GradientOptimizer<T>> implements PredictorInterface<T> {
   O _optimizer;
