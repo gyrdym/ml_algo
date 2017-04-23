@@ -31,16 +31,31 @@ main() async {
   List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
   TypedVector testLabels = splitedLabels[DataCategory.TEST];
 
-  SGDLinearRegressor predictor = new SGDLinearRegressor<TypedVector>();
-
-  predictor.train(trainFeatures, trainLabels);
-  print("weights: ${predictor.weights}");
-
-  VectorInterface prediction = predictor.predict(testFeatures);
-
   RMSEEstimator rmseEstimator = new RMSEEstimator();
-  print("rmse (test) is: ${rmseEstimator.calculateError(prediction, testLabels)}");
-
   MAPEEstimator mapeEstimator = new MAPEEstimator();
-  print("mape (test) is: ${mapeEstimator.calculateError(prediction, testLabels)}");
+
+  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
+  GradientLinearRegressor batchGdRegressor = new GradientLinearRegressor<TypedVector, BGDOptimizer<TypedVector>>();
+  GradientLinearRegressor mbgdRegressor = new GradientLinearRegressor<TypedVector, MBGDOptimizer<TypedVector>>();
+
+  batchGdRegressor.train(trainFeatures, trainLabels);
+  sgdRegressor.train(trainFeatures, trainLabels);
+  mbgdRegressor.train(trainFeatures, trainLabels);
+
+  print("SGD regressor weights: ${sgdRegressor.weights}");
+  print("Batch GD regressor weights: ${batchGdRegressor.weights}");
+  print("Mini batch GD regressor weights: ${mbgdRegressor.weights}\n");
+
+  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
+  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures);
+  VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures);
+
+  print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
+  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
+
+  print("Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(batchGdPrediction, testLabels)}");
+  print("Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(batchGdPrediction, testLabels)}\n");
+
+  print("Mini Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(mbgdPrediction, testLabels)}");
+  print("Mini Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(mbgdPrediction, testLabels)}");
 }

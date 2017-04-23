@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.0
+- `BGDOptimizer`, `MBGDOptimizer` and `GradientOptimizer` added
+
 ## 0.4.0
 - `OptimizerInterface` added
 - Stochastic gradient descent optimizer extracted from the linear regressor class
