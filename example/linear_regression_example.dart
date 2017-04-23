@@ -44,17 +44,17 @@ main() async {
 
   print("SGD regressor weights: ${sgdRegressor.weights}");
   print("Batch GD regressor weights: ${batchGdRegressor.weights}");
-  print("Mini batch GD regressor weights: ${mbgdRegressor.weights}");
+  print("Mini batch GD regressor weights: ${mbgdRegressor.weights}\n");
 
   VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
   VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures);
   VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures);
 
   print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
-  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}");
+  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
 
   print("Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(batchGdPrediction, testLabels)}");
-  print("Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(batchGdPrediction, testLabels)}");
+  print("Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(batchGdPrediction, testLabels)}\n");
 
   print("Mini Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(mbgdPrediction, testLabels)}");
   print("Mini Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(mbgdPrediction, testLabels)}");
