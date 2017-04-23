@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/math/vector_interface.dart';
-import 'package:dart_ml/src/optimizers/gradient_optimizer.dart';
+import 'package:dart_ml/src/optimizers/gradient/base_gradient_optimizer.dart';
 
 class BGDOptimizer<T extends VectorInterface> extends GradientOptimizer<T> {
   BGDOptimizer(double learningRate, double minWeightsDistance, int iterationLimit) : super(
