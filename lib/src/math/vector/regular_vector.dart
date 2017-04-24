@@ -1,10 +1,9 @@
 import 'dart:math' as math;
-import 'dart:collection';
 
-import 'package:dart_ml/src/enums.dart';
 import 'package:dart_ml/src/math/vector/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_abstract.dart';
 
-class RegularVector extends ListBase<double> implements VectorInterface {
+class RegularVector extends Vector {
   List<double> _innerList;
 
   RegularVector(int dimension) {
@@ -52,26 +51,6 @@ class RegularVector extends ListBase<double> implements VectorInterface {
   RegularVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a - b, inPlace);
   RegularVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a * b, inPlace);
   RegularVector scalarDivision(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a / b, inPlace);
-
-  double vectorScalarMult(VectorInterface vector) => (this * vector).sum();
-  double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
-
-  double norm([Norm norm = Norm.EUCLIDEAN]) {
-    int exponent;
-
-    switch(norm) {
-      case Norm.EUCLIDEAN:
-        exponent = 2;
-        break;
-      case Norm.MANHATTAN:
-        exponent = 1;
-        break;
-    }
-
-    return math.pow(intPow(exponent).abs().sum(), 1 / exponent);
-  }
-
-  double mean() => sum() / length;
 
   void add(double value) {
     _innerList = _innerList.toList(growable: true)..add(value);
