@@ -229,7 +229,7 @@ void main() {
       expect(vector1.distanceTo(vector2, Norm.MANHATTAN), equals(576.0), reason: 'Wrong vector distance calculation');
     });
 
-    test('find s norm of a vector', () {
+    test('find a norm of a vector', () {
       expect(vector1.norm(Norm.EUCLIDEAN), equals(5.477225575051661), reason: 'Wrong norm calculation');
       expect(vector1.norm(Norm.MANHATTAN), equals(10.0), reason: 'Wrong norm calculation');
     });
