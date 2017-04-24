@@ -4,7 +4,7 @@ Only linear regression is available now (with Batch, mini-Batch and Stochastic g
 
 ## Usage
 
-###A simple usage example:
+### A simple usage example:
 
 Import all necessary packages: 
 
