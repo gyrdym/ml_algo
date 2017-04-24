@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:dart_ml/dart_ml.dart' show TypedVector;
+import 'package:dart_ml/dart_ml.dart' show TypedVector, Norm;
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
@@ -288,6 +288,10 @@ void main() {
 
     test('find the euclidean norm of a vector', () {
       expect(vector1.norm(), equals(7.416198487095663), reason: 'Wrong norm calculation');
+    });
+
+    test('find the manhattan norm of a vector', () {
+      expect(vector1.norm(Norm.MANHATTAN), equals(15.0), reason: 'Wrong norm calculation');
     });
 
     test('find the sum of vector elements:\n', () {
