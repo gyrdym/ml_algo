@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:collection';
 
 import 'package:dart_ml/src/enums.dart';
-import 'package:dart_ml/src/math/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_interface.dart';
 
 class RegularVector extends ListBase<double> implements VectorInterface {
   List<double> _innerList;

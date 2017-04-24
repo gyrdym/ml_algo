@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:typed_data';
-import 'package:dart_ml/src/math/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_interface.dart';
 
 import 'package:dart_ml/src/enums.dart' show Norm;
 
