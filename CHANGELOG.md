@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.7.0
+- Abstract `Vector`-class was added as a base for typed and regular vector classes 
+
 ## 0.6.0
 - Manhattan norm support was added
 
