@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/utils/generic_type_instantiator.dart';
-import 'package:dart_ml/src/math/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_interface.dart';
 import 'package:dart_ml/src/optimizers/optimizer_interface.dart';
 
 abstract class GradientOptimizer<T extends VectorInterface> implements OptimizerInterface<T> {
