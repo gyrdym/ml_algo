@@ -68,7 +68,7 @@ class RegularVector extends ListBase<double> implements VectorInterface {
         break;
     }
 
-    return math.pow(intPow(exponent).sum(), 1 / exponent);
+    return math.pow(intPow(exponent).abs().sum(), 1 / exponent);
   }
 
   double mean() => sum() / length;
