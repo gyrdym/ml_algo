@@ -128,7 +128,7 @@ class TypedVector extends ListBase<double> implements VectorInterface {
         break;
     }
 
-    return math.pow(intPow(exp).sum(), 1 / exp);
+    return math.pow(intPow(exp).abs().sum(), 1 / exp);
   }
 
   void add(double value) {

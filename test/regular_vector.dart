@@ -221,18 +221,16 @@ void main() {
       expect(distance, equals(0.0), reason: 'Wrong vector distance calculation');
     });
 
-    test('find the euclidean distance between two different vectors:\n', () {
+    test('find the distance between two different vectors:\n', () {
       vector1 = new RegularVector.from([23.0, 34.0, 12.0, 10.0]);
       vector2 = new RegularVector.from([100.0, 200.0, 300.0, 55.0]);
 
-      expect(vector1.distanceTo(vector2), equals(344.1714688930505), reason: 'Wrong vector distance calculation');
+      expect(vector1.distanceTo(vector2, Norm.EUCLIDEAN), equals(344.1714688930505), reason: 'Wrong vector distance calculation');
+      expect(vector1.distanceTo(vector2, Norm.MANHATTAN), equals(576.0), reason: 'Wrong vector distance calculation');
     });
 
-    test('find the euclidean norm of a vector', () {
-      expect(vector1.norm(), equals(5.477225575051661), reason: 'Wrong norm calculation');
-    });
-
-    test('find the manhattan norm of a vector', () {
+    test('find s norm of a vector', () {
+      expect(vector1.norm(Norm.EUCLIDEAN), equals(5.477225575051661), reason: 'Wrong norm calculation');
       expect(vector1.norm(Norm.MANHATTAN), equals(10.0), reason: 'Wrong norm calculation');
     });
   });
