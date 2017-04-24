@@ -4,52 +4,83 @@ Only linear regression is available now (with Batch, mini-Batch and Stochastic g
 
 ## Usage
 
-A simple usage example:
+###A simple usage example:
+
+Import all necessary packages: 
 
 ````dart  
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
+````
 
-main() async {
-  csv.CsvCodec csvCodec = new csv.CsvCodec();
-  Stream<List<int>> input = new File('example/advertising.csv').openRead();
-  List<List<num>> fields = (await input.transform(UTF8.decoder)
-      .transform(csvCodec.decoder).toList() as List<List<num>>)
-      .sublist(1);
+Read a `csv`-file `advertising.csv` with a test data:
+````dart
+csv.CsvCodec csvCodec = new csv.CsvCodec();
+Stream<List<int>> input = new File('example/advertising.csv').openRead();
+List<List<num>> fields = (await input.transform(UTF8.decoder)
+  .transform(csvCodec.decoder).toList() as List<List<num>>)
+  .sublist(1);
+````
 
-  List<double> extractFeatures(item) => item.sublist(0, 3)
-      .map((num feature) => feature.toDouble())
-      .toList();
+Data in this file is represented as 200 lines, every line contains 4 elements. 3 elements of every line are features and the last - label.  
+Let's extract features from this data. Declare utility method `extractFeatures`, that extracts 3 elements of a every line: 
+````dart
+List<double> extractFeatures(item) => item.sublist(0, 3)
+  .map((num feature) => feature.toDouble())
+  .toList();
+````
 
-  List<TypedVector> allFeatures = fields
-      .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
-      .toList(growable: false);
+...and finally get all features:
+```dart
+List<TypedVector> allFeatures = fields
+  .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
+  .toList(growable: false);
+```
 
-  TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+...and all labels (last element of a every line)
+````dart
+TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+````
 
-  Map<DataCategory, List<VectorInterface>> splittedFeatures = DataTrainTestSplitter.splitMatrix(allFeatures, .6);
-  Map<DataCategory, VectorInterface> splitedLabels = DataTrainTestSplitter.splitVector(allLabels, .6);
+Split features and labels into train and test samples:
+````dart
+Map<DataCategory, List<VectorInterface>> splittedFeatures = DataTrainTestSplitter.splitMatrix(allFeatures, .6);
+Map<DataCategory, VectorInterface> splitedLabels = DataTrainTestSplitter.splitVector(allLabels, .6);
 
-  List<TypedVector> trainFeatures = splittedFeatures[DataCategory.TRAIN];
-  TypedVector trainLabels = splitedLabels[DataCategory.TRAIN];
+List<TypedVector> trainFeatures = splittedFeatures[DataCategory.TRAIN];
+TypedVector trainLabels = splitedLabels[DataCategory.TRAIN];
 
-  List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
-  TypedVector testLabels = splitedLabels[DataCategory.TEST];
+List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
+TypedVector testLabels = splitedLabels[DataCategory.TEST];
+````
 
-  RMSEEstimator rmseEstimator = new RMSEEstimator();
-  MAPEEstimator mapeEstimator = new MAPEEstimator();
-  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
-  
-  sgdRegressor.train(trainFeatures, trainLabels);
-  print("SGD regressor weights: ${sgdRegressor.weights}"););
+Create RMSE and MAPE estimator instances for evaluating a forecast quality:
+````dart
+RMSEEstimator rmseEstimator = new RMSEEstimator();
+MAPEEstimator mapeEstimator = new MAPEEstimator();
+````
 
-  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
-  print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
-  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
-}
+Create linear regressor instance with stochastic gradient descent optimizer: 
+````dart
+GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
+````
 
+Train our model:
+````dart
+sgdRegressor.train(trainFeatures, trainLabels);
+print("SGD regressor weights: ${sgdRegressor.weights}");
+````
+
+...and make a forecast:
+````dart
+VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
+````
+
+Let's print an forecast evaluation:
+````dart
+print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
+print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
 ````
