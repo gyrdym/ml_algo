@@ -123,6 +123,9 @@ class TypedVector extends ListBase<double> implements VectorInterface {
       case Norm.EUCLIDEAN:
         exp = 2;
         break;
+      case Norm.MANHATTAN:
+        exp = 1;
+        break;
     }
 
     return math.pow(intPow(exp).sum(), 1 / exp);
