@@ -63,6 +63,9 @@ class RegularVector extends ListBase<double> implements VectorInterface {
       case Norm.EUCLIDEAN:
         exponent = 2;
         break;
+      case Norm.MANHATTAN:
+        exponent = 1;
+        break;
     }
 
     return math.pow(intPow(exponent).sum(), 1 / exponent);
