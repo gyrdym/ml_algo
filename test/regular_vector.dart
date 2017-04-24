@@ -231,5 +231,9 @@ void main() {
     test('find the euclidean norm of a vector', () {
       expect(vector1.norm(), equals(5.477225575051661), reason: 'Wrong norm calculation');
     });
+
+    test('find the manhattan norm of a vector', () {
+      expect(vector1.norm(Norm.MANHATTAN), equals(10.0), reason: 'Wrong norm calculation');
+    });
   });
 }
