@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/math/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_interface.dart';
 import 'package:dart_ml/src/optimizers/gradient/base_optimizer.dart';
 
 class BGDOptimizer<T extends VectorInterface> extends GradientOptimizer<T> {

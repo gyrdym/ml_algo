@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/math/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_interface.dart';
 
 abstract class PredictorInterface<T extends VectorInterface> {
   void train(List<T> features, List<double> labels);

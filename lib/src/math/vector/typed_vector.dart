@@ -1,11 +1,8 @@
-import 'dart:collection';
-import 'dart:math' as math;
 import 'dart:typed_data';
-import 'package:dart_ml/src/math/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_abstract.dart';
 
-import 'package:dart_ml/src/enums.dart' show Norm;
-
-class TypedVector extends ListBase<double> implements VectorInterface {
+class TypedVector extends Vector {
   Float32x4List _innerList;
   int _origLength;
 
@@ -113,24 +110,6 @@ class TypedVector extends ListBase<double> implements VectorInterface {
   TypedVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a + b, inPlace);
   TypedVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a - b, inPlace);
 
-  double vectorScalarMult(VectorInterface vector) => (this * vector).sum();
-  double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
-
-  double norm([Norm norm = Norm.EUCLIDEAN]) {
-    int exp;
-
-    switch(norm) {
-      case Norm.EUCLIDEAN:
-        exp = 2;
-        break;
-      case Norm.MANHATTAN:
-        exp = 1;
-        break;
-    }
-
-    return math.pow(intPow(exp).abs().sum(), 1 / exp);
-  }
-
   void add(double value) {
     int diff = _innerList.length * 4 - _origLength;
 
@@ -156,8 +135,6 @@ class TypedVector extends ListBase<double> implements VectorInterface {
 
     _origLength++;
   }
-
-  double mean() => sum() / length;
 
   double sum() {
     Float32x4 sum = this._innerList.reduce((Float32x4 item, Float32x4 sum) => item + sum);

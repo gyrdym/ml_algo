@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/utils/generic_type_instantiator.dart';
-import 'package:dart_ml/src/math/vector_interface.dart';
+import 'package:dart_ml/src/math/vector/vector_interface.dart';
 import 'package:dart_ml/src/predictors/predictor_interface.dart';
 import 'package:dart_ml/src/optimizers/gradient/base_optimizer.dart';
 
