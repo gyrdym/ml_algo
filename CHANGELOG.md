@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.2
+- `README` file was extended and clarified
+
 ## 0.5.1
 - Random interval obtaining for the mini-batch gradient descent was fixed
 
