@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.6.0
+- Manhattan norm support was added
+
 ## 0.5.2
 - `README` file was extended and clarified
 

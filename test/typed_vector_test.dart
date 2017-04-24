@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'package:dart_ml/dart_ml.dart' show TypedVector;
+import 'package:dart_ml/dart_ml.dart' show TypedVector, Norm;
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
@@ -278,16 +278,17 @@ void main() {
       expect(distance1, equals(0.0), reason: 'Wrong vector distance calculation');
     });
 
-    test('find the euclidean distance between two different vectors:\n', () {
+    test('find the distance between two different vectors:\n', () {
       vector1 = new TypedVector.from([10.0, 3.0, 4.0, 7.0, 9.0, 12.0]);
       vector2 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5]);
-      double distance2 = vector1.distanceTo(vector2);
 
-      expect(distance2, equals(10.88577052853862), reason: 'Wrong vector distance calculation');
+      expect(vector1.distanceTo(vector2, Norm.EUCLIDEAN), equals(10.88577052853862), reason: 'Wrong vector distance calculation');
+      expect(vector1.distanceTo(vector2, Norm.MANHATTAN), equals(20.0), reason: 'Wrong vector distance calculation');
     });
 
-    test('find the euclidean norm of a vector', () {
-      expect(vector1.norm(), equals(7.416198487095663), reason: 'Wrong norm calculation');
+    test('find a norm of a vector', () {
+      expect(vector1.norm(Norm.EUCLIDEAN), equals(7.416198487095663), reason: 'Wrong norm calculation');
+      expect(vector1.norm(Norm.MANHATTAN), equals(15.0), reason: 'Wrong norm calculation');
     });
 
     test('find the sum of vector elements:\n', () {
