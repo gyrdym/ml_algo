@@ -5,7 +5,8 @@ enum CostFunction {
 }
 
 enum Norm {
-  EUCLIDEAN
+  EUCLIDEAN,
+  MANHATTAN
 }
 
 enum DataCategory {
