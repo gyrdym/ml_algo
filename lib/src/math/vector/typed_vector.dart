@@ -11,7 +11,7 @@ class TypedVector extends Vector {
     _origLength = length;
   }
 
-  TypedVector.from(List<double> source) {
+  TypedVector.from(Iterable<double> source) : super.from(source) {
     _origLength = source.length;
     _innerList = _convertRegularListToTyped(source);
   }
@@ -21,7 +21,7 @@ class TypedVector extends Vector {
     _innerList = source;
   }
 
-  TypedVector.filled(int length, double value) {
+  TypedVector.filled(int length, double value) : super.filled(length, value) {
     _origLength = length;
     _innerList = _convertRegularListToTyped(new List<double>.filled(length, value));
   }

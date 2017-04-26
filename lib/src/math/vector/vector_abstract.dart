@@ -5,6 +5,10 @@ import 'package:dart_ml/src/enums.dart';
 import 'package:dart_ml/src/math/vector/vector_interface.dart';
 
 abstract class Vector extends ListBase<double> implements VectorInterface {
+  Vector();
+  Vector.from(Iterable<double> source);
+  Vector.filled(int length, double value);
+
   double vectorScalarMult(VectorInterface vector) => (this * vector).sum();
   double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
   double mean() => sum() / length;
