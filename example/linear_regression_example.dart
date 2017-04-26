@@ -34,9 +34,9 @@ main() async {
   RMSEEstimator rmseEstimator = new RMSEEstimator();
   MAPEEstimator mapeEstimator = new MAPEEstimator();
 
-  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
-  GradientLinearRegressor batchGdRegressor = new GradientLinearRegressor<TypedVector, BGDOptimizer<TypedVector>>();
-  GradientLinearRegressor mbgdRegressor = new GradientLinearRegressor<TypedVector, MBGDOptimizer<TypedVector>>();
+  SGDLinearRegressor<TypedVector> sgdRegressor = new SGDLinearRegressor<TypedVector>();
+  BGDLinearRegressor<TypedVector> batchGdRegressor = new BGDLinearRegressor<TypedVector>();
+  MBGDLinearRegressor<TypedVector> mbgdRegressor = new MBGDLinearRegressor<TypedVector>();
 
   batchGdRegressor.train(trainFeatures, trainLabels);
   sgdRegressor.train(trainFeatures, trainLabels);
