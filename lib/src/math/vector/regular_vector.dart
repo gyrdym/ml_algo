@@ -10,11 +10,11 @@ class RegularVector extends Vector {
     _innerList = new List<double>(dimension);
   }
 
-  RegularVector.from(List<double> source) {
+  RegularVector.from(Iterable<double> source) : super.from(source) {
     _innerList = source.toList(growable: false);
   }
 
-  RegularVector.filled(int dimension, double value) {
+  RegularVector.filled(int dimension, double value) : super.filled(dimension, value) {
     _innerList = new List<double>.filled(dimension, value, growable: false);
   }
 

@@ -34,21 +34,23 @@ main() async {
   RMSEEstimator rmseEstimator = new RMSEEstimator();
   MAPEEstimator mapeEstimator = new MAPEEstimator();
 
-  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
-  GradientLinearRegressor batchGdRegressor = new GradientLinearRegressor<TypedVector, BGDOptimizer<TypedVector>>();
-  GradientLinearRegressor mbgdRegressor = new GradientLinearRegressor<TypedVector, MBGDOptimizer<TypedVector>>();
+  SGDLinearRegressor sgdRegressor = new SGDLinearRegressor();
+  BGDLinearRegressor batchGdRegressor = new BGDLinearRegressor();
+  MBGDLinearRegressor mbgdRegressor = new MBGDLinearRegressor();
 
-  batchGdRegressor.train(trainFeatures, trainLabels);
-  sgdRegressor.train(trainFeatures, trainLabels);
-  mbgdRegressor.train(trainFeatures, trainLabels);
+  int dimension = trainFeatures.first.length;
+
+  batchGdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
+  sgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
+  mbgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
 
   print("SGD regressor weights: ${sgdRegressor.weights}");
   print("Batch GD regressor weights: ${batchGdRegressor.weights}");
   print("Mini batch GD regressor weights: ${mbgdRegressor.weights}\n");
 
-  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
-  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures);
-  VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures);
+  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+  VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
 
   print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
   print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
