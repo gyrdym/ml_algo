@@ -65,22 +65,29 @@ MAPEEstimator mapeEstimator = new MAPEEstimator();
 
 Create linear regressor instance with stochastic gradient descent optimizer: 
 ````dart
-GradientLinearRegressor sgdRegressor = new GradientLinearRegressor<TypedVector, SGDOptimizer<TypedVector>>();
+SGDLinearRegressor sgdRegressor = new SGDLinearRegressor();
 ````
 
-Train our model:
+Train our model (third argument - initial vector for weights):
 ````dart
-sgdRegressor.train(trainFeatures, trainLabels);
+int dimension = trainFeatures.first.length;
+sgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
 print("SGD regressor weights: ${sgdRegressor.weights}");
 ````
 
-...and make a forecast:
+...and make a forecast (second argument - vector for storing predicted labels):
 ````dart
-VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures);
+VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
 ````
 
 Let's print an forecast evaluation:
 ````dart
 print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
 print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
+````
+
+We will see something like this:
+````
+SGD regressor, rmse (test) is: 4.91429797944094
+SGD regressor, mape (test) is: 31.221150755882263
 ````
