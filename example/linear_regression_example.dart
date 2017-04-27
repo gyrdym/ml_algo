@@ -40,17 +40,17 @@ main() async {
 
   int dimension = trainFeatures.first.length;
 
-  batchGdRegressor.train(trainFeatures, trainLabels, new TypedVector(dimension));
-  sgdRegressor.train(trainFeatures, trainLabels, new TypedVector(dimension));
-  mbgdRegressor.train(trainFeatures, trainLabels, new TypedVector(dimension));
+  batchGdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
+  sgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
+  mbgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
 
   print("SGD regressor weights: ${sgdRegressor.weights}");
   print("Batch GD regressor weights: ${batchGdRegressor.weights}");
   print("Mini batch GD regressor weights: ${mbgdRegressor.weights}\n");
 
-  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector(testFeatures.length));
-  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures, new TypedVector(testFeatures.length));
-  VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures, new TypedVector(testFeatures.length));
+  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+  VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
 
   print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
   print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
