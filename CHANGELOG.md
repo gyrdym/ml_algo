@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.8.0
+- Reflection was removed for all cases (Vector instantiation, Optimizer instantiation)
+
 ## 0.7.0
 - Abstract `Vector`-class was added as a base for typed and regular vector classes 
 
