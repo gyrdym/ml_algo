@@ -58,6 +58,11 @@ class RegularVector extends Vector {
   }
 
   RegularVector fromRange(int start, [int end]) => new RegularVector.from(sublist(start, end));
+  RegularVector copy() => fromRange(0);
+
+  void fill(double value) {
+    _innerList.fillRange(0, _innerList.length, value);
+  }
 
   double sum() => this._innerList.reduce((double item, double sum) => item + sum);
 
