@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.0
+- `copy`, `fill` methods were added to `VectorInterface`
+
 ## 0.8.0
 - Reflection was removed for all cases (Vector instantiation, Optimizer instantiation)
 
