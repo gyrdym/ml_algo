@@ -364,5 +364,16 @@ void main() {
       expect(() => vector4.fromRange(-1), throwsRangeError);
       expect(() => vector4.fromRange(10), throwsRangeError);
     });
+
+    test('`copy` method testing', () {
+      TypedVector tmp = vector1.copy();
+      expect(tmp, equals([1.0, 3.0, 2.0, 11.5]));
+      expect(tmp == vector1, false);
+    });
+
+    test('`fill` method testing', () {
+      vector1.fill(1.0);
+      expect(vector1, equals([1.0, 1.0, 1.0, 1.0]));
+    });
   });
 }
