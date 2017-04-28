@@ -29,4 +29,7 @@ abstract class VectorInterface {
   double sum();
 
   VectorInterface fromRange(int start, [int end]);
+  VectorInterface copy();
+
+  void fill(double value);
 }

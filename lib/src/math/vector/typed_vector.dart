@@ -155,6 +155,11 @@ class TypedVector extends Vector {
   }
 
   TypedVector fromRange(int start, [int end]) => new TypedVector.from(sublist(start, end));
+  TypedVector copy() => fromRange(0);
+
+  void fill(double value) {
+    _innerList.fillRange(0, _innerList.length, new Float32x4.splat(value));
+  }
 
   void _add(Float32x4 value) {
     _innerList = new Float32x4List.fromList(_innerList.toList(growable: true)..add(value));

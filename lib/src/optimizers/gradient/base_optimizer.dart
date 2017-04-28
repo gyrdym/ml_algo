@@ -13,11 +13,10 @@ abstract class GradientOptimizer implements OptimizerInterface {
     int iterationCounter = 0;
 
     while (weightsDistance > minWeightsDistance && iterationCounter < iterationLimit) {
-      double eta = learningRate / (iterationCounter + 1);
+      double eta = learningRate / ++iterationCounter;
       VectorInterface newWeights = iteration(weights, features, labels, eta);
       weightsDistance = newWeights.distanceTo(weights);
       weights = newWeights;
-      iterationCounter++;
     }
 
     return weights;
@@ -36,5 +35,5 @@ abstract class GradientOptimizer implements OptimizerInterface {
   }
 
   VectorInterface _calculateGradient(VectorInterface k, VectorInterface x, double y) =>
-      x.scalarMult(x.vectorScalarMult(k) - y);
+      x.scalarMult((x * k).sum() - y);
 }
