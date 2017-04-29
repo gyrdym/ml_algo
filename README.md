@@ -80,7 +80,7 @@ print("SGD regressor weights: ${sgdRegressor.weights}");
 VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
 ````
 
-Let's print an forecast evaluation:
+Let's print a forecast evaluation:
 ````dart
 print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
 print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
