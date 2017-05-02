@@ -1,4 +1,5 @@
 import 'package:dart_ml/dart_ml.dart' show VectorInterface, TypedVector, DataCategory, DataTrainTestSplitter;
+import 'package:dart_ml/src/data_operations/kfold.dart';
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
@@ -37,6 +38,17 @@ void main() {
 
       expect(result[DataCategory.TRAIN].length, equals(11));
       expect(result[DataCategory.TEST].length, equals(5));
+    });
+
+    test('K fold tetsing', () {
+      expect(getKFoldIndices(12), equals([[0,3],[3,6],[6,8],[8,10],[10,12]]));
+      expect(getKFoldIndices(12, folds: 4), equals([[0,3],[3,6],[6,9],[9,12]]));
+      expect(getKFoldIndices(12, folds: 3), equals([[0,4],[4,8],[8,12]]));
+      expect(getKFoldIndices(12, folds: 1), equals([[0,12]]));
+      expect(getKFoldIndices(12, folds: 12), equals([[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12]]));
+      expect(getKFoldIndices(67, folds: 3), equals([[0,23],[23,45],[45,67]]));
+      expect(() => getKFoldIndices(0, folds: 3), throwsRangeError);
+      expect(() => getKFoldIndices(8, folds: 9), throwsRangeError);
     });
   });
 }
