@@ -1,54 +1,39 @@
-import 'package:dart_ml/dart_ml.dart' show VectorInterface, TypedVector, DataCategory, DataTrainTestSplitter;
-import 'package:dart_ml/src/data_operations/kfold.dart';
+import 'package:dart_ml/src/data_splitters/simple_splitter.dart';
+import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
 void main() {
-  TypedVector vector = new TypedVector.from([1.5, 2.0, 3.0, 5.5, 23.0, 45.0, 60.0, 78.0, 99.0]);
+  group('Splitters test.\n', () {
+    test('Simple splitter test: ', () {
+      SimpleDataSplitter simpleSplitter = new SimpleDataSplitter(ratio: .7);
 
-  List<TypedVector> matrix = [
-    new TypedVector.from([1.5, 92.0, 34.0, 5.6, 23.0]),
-    new TypedVector.from([11.5, 29.0, 32.0, 5.6, 23.0]),
-    new TypedVector.from([1.55, 2.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([21.5, 2.0, 31.0, 5.6, 23.0]),
-    new TypedVector.from([145.15, 12.0, 13.0, 5.6, 23.0]),
-    new TypedVector.from([10.5, 234.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([1.05, 278.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([21.5, 92.0, 35.0, 5.6, 23.0]),
-    new TypedVector.from([15.5, 2.06, 3.0, 5.6, 23.0]),
-    new TypedVector.from([13.5, 23.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([1.5, 122.0, 35.0, 5.6, 23.0]),
-    new TypedVector.from([133.5, 425.0, 53.0, 5.6, 23.0]),
-    new TypedVector.from([144.5, 25.0, 3.50, 5.6, 23.0]),
-    new TypedVector.from([166.5, 26.0, 83.0, 5.6, 23.0]),
-    new TypedVector.from([61.5, 92.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([19.5, 2.0, 3.0, 5.6, 23.0])
-  ];
+      List<List<int>> ranges = simpleSplitter.split(10);
+      List<int> trainRange = ranges[0];
+      List<int> testRange = ranges[1];
 
-  group('Split a data to train/test samples', () {
-    test('Vector split', () {
-      Map<DataCategory, VectorInterface> result = DataTrainTestSplitter.splitVector(vector, 0.6);
+      expect(trainRange.toSet(), equals([0, 1, 2, 3, 4, 5, 6].toSet()));
+      expect(testRange.toSet(), equals([7, 8, 9].toSet()));
 
-      expect(result[DataCategory.TRAIN], equals([1.5, 2.0, 3.0, 5.5, 23.0]));
-      expect(result[DataCategory.TEST], equals([45.0, 60.0, 78.0, 99.0]));
+      ranges = simpleSplitter.split(8);
+      trainRange = ranges[0];
+      testRange = ranges[1];
+
+      expect(trainRange.toSet(), equals([0, 1, 2, 3, 4, 5].toSet()));
+      expect(testRange.toSet(), equals([6, 7].toSet()));
     });
 
-    test('Matrix split', () {
-      Map<DataCategory, List<VectorInterface>> result = DataTrainTestSplitter.splitMatrix(matrix, 0.7);
+    test('K fold splitter test', () {
+      KFoldSplitter splitter = new KFoldSplitter();
 
-      expect(result[DataCategory.TRAIN].length, equals(11));
-      expect(result[DataCategory.TEST].length, equals(5));
-    });
-
-    test('K fold tetsing', () {
-      expect(getKFoldIndices(12), equals([[0,3],[3,6],[6,8],[8,10],[10,12]]));
-      expect(getKFoldIndices(12, folds: 4), equals([[0,3],[3,6],[6,9],[9,12]]));
-      expect(getKFoldIndices(12, folds: 3), equals([[0,4],[4,8],[8,12]]));
-      expect(getKFoldIndices(12, folds: 1), equals([[0,12]]));
-      expect(getKFoldIndices(12, folds: 12), equals([[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12]]));
-      expect(getKFoldIndices(67, folds: 3), equals([[0,23],[23,45],[45,67]]));
-      expect(() => getKFoldIndices(0, folds: 3), throwsRangeError);
-      expect(() => getKFoldIndices(8, folds: 9), throwsRangeError);
+      expect(splitter.split(12), equals([[0,3],[3,6],[6,8],[8,10],[10,12]]));
+      expect(splitter.split(12, numberOfFolds: 4), equals([[0,3],[3,6],[6,9],[9,12]]));
+      expect(splitter.split(12, numberOfFolds: 3), equals([[0,4],[4,8],[8,12]]));
+      expect(splitter.split(12, numberOfFolds: 1), equals([[0,12]]));
+      expect(splitter.split(12, numberOfFolds: 12), equals([[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12]]));
+      expect(splitter.split(67, numberOfFolds: 3), equals([[0,23],[23,45],[45,67]]));
+      expect(() => splitter.split(0, numberOfFolds: 3), throwsRangeError);
+      expect(() => splitter.split(8, numberOfFolds: 9), throwsRangeError);
     });
   });
 }

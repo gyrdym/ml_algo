@@ -154,11 +154,17 @@ class TypedVector extends Vector {
     return new TypedVector.fromTypedList(list, _origLength);
   }
 
-  TypedVector fromRange(int start, [int end]) => new TypedVector.from(sublist(start, end));
-  TypedVector copy() => fromRange(0);
+  TypedVector cut(int start, [int end]) => new TypedVector.from(sublist(start, end));
+  TypedVector copy() => cut(0);
 
   void fill(double value) {
     _innerList.fillRange(0, _innerList.length, new Float32x4.splat(value));
+  }
+
+  void concat(VectorInterface vector) {
+    _innerList = _innerList.toList(growable: true)..addAll((vector as TypedVector)._innerList);
+    _innerList = _innerList.toList(growable: false);
+    _origLength += vector.length;
   }
 
   void _add(Float32x4 value) {
