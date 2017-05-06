@@ -156,6 +156,7 @@ class TypedVector extends Vector {
 
   TypedVector cut(int start, [int end]) => new TypedVector.from(sublist(start, end));
   TypedVector copy() => cut(0);
+  TypedVector createFrom(Iterable<double> iterable) => new TypedVector.from(iterable);
 
   void fill(double value) {
     _innerList.fillRange(0, _innerList.length, new Float32x4.splat(value));
@@ -166,8 +167,7 @@ class TypedVector extends Vector {
   }
 
   void _concat(TypedVector vector) {
-    _innerList = _innerList.toList(growable: true)..addAll(vector._innerList);
-    _innerList = _innerList.toList(growable: false);
+    _innerList = new Float32x4List.fromList(_innerList.toList(growable: true)..addAll(vector._innerList));
     _origLength += vector.length;
   }
 

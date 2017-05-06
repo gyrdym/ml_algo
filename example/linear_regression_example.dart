@@ -22,15 +22,6 @@ main() async {
 
   TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
-  Map<DataCategory, List<VectorInterface>> splittedFeatures = DataTrainTestSplitter.splitMatrix(allFeatures, .6);
-  Map<DataCategory, VectorInterface> splitedLabels = DataTrainTestSplitter.splitVector(allLabels, .6);
-
-  List<TypedVector> trainFeatures = splittedFeatures[DataCategory.TRAIN];
-  TypedVector trainLabels = splitedLabels[DataCategory.TRAIN];
-
-  List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
-  TypedVector testLabels = splitedLabels[DataCategory.TEST];
-
   RMSEEstimator rmseEstimator = new RMSEEstimator();
   MAPEEstimator mapeEstimator = new MAPEEstimator();
 
@@ -38,26 +29,13 @@ main() async {
   BGDLinearRegressor batchGdRegressor = new BGDLinearRegressor();
   MBGDLinearRegressor mbgdRegressor = new MBGDLinearRegressor();
 
-  int dimension = trainFeatures.first.length;
+  KFoldCrossValidator validator = new KFoldCrossValidator();
 
-  batchGdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
-  sgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
-  mbgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
+  print('SGD regressor: ${validator.validate(sgdRegressor, allFeatures, allLabels, rmseEstimator)}');
+  print('Batch GD regressor: ${validator.validate(batchGdRegressor, allFeatures, allLabels, rmseEstimator)}');
+  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, allFeatures, allLabels, rmseEstimator)}');
 
-  print("SGD regressor weights: ${sgdRegressor.weights}");
-  print("Batch GD regressor weights: ${batchGdRegressor.weights}");
-  print("Mini batch GD regressor weights: ${mbgdRegressor.weights}\n");
-
-  TypedVector sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-  TypedVector batchGdPrediction = batchGdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-  TypedVector mbgdPrediction = mbgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-
-  print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
-  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
-
-  print("Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(batchGdPrediction, testLabels)}");
-  print("Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(batchGdPrediction, testLabels)}\n");
-
-  print("Mini Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(mbgdPrediction, testLabels)}");
-  print("Mini Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(mbgdPrediction, testLabels)}");
+  print('SGD GD regressor: ${validator.validate(sgdRegressor, allFeatures, allLabels, mapeEstimator)}');
+  print('Batch GD regressor: ${validator.validate(batchGdRegressor, allFeatures, allLabels, mapeEstimator)}');
+  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, allFeatures, allLabels, mapeEstimator)}');
 }
