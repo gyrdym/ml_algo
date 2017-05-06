@@ -28,8 +28,9 @@ abstract class VectorInterface {
   double mean();
   double sum();
 
-  VectorInterface fromRange(int start, [int end]);
+  VectorInterface cut(int start, [int end]);
   VectorInterface copy();
 
   void fill(double value);
+  void concat(VectorInterface vector);
 }

@@ -48,9 +48,9 @@ main() async {
   print("Batch GD regressor weights: ${batchGdRegressor.weights}");
   print("Mini batch GD regressor weights: ${mbgdRegressor.weights}\n");
 
-  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-  VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+  TypedVector sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+  TypedVector batchGdPrediction = batchGdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+  TypedVector mbgdPrediction = mbgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
 
   print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
   print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");

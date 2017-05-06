@@ -57,11 +57,16 @@ class RegularVector extends Vector {
     _innerList = _innerList.toList(growable: false);
   }
 
-  RegularVector fromRange(int start, [int end]) => new RegularVector.from(sublist(start, end));
-  RegularVector copy() => fromRange(0);
+  RegularVector cut(int start, [int end]) => new RegularVector.from(sublist(start, end));
+  RegularVector copy() => cut(0);
 
   void fill(double value) {
     _innerList.fillRange(0, _innerList.length, value);
+  }
+
+  void concat(VectorInterface vector) {
+    _innerList = _innerList.toList(growable: true)..addAll((vector as RegularVector)._innerList);
+    _innerList = _innerList.toList(growable: false);
   }
 
   double sum() => this._innerList.reduce((double item, double sum) => item + sum);
