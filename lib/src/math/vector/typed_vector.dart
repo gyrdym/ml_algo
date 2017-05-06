@@ -162,7 +162,11 @@ class TypedVector extends Vector {
   }
 
   void concat(VectorInterface vector) {
-    _innerList = _innerList.toList(growable: true)..addAll((vector as TypedVector)._innerList);
+    _concat(vector);
+  }
+
+  void _concat(TypedVector vector) {
+    _innerList = _innerList.toList(growable: true)..addAll(vector._innerList);
     _innerList = _innerList.toList(growable: false);
     _origLength += vector.length;
   }

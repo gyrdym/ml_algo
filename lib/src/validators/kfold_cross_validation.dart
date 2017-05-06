@@ -6,7 +6,7 @@ import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
 class KFoldCrossValidator implements CrossValidatorInterface {
   final KFoldSplitter _splitter = new KFoldSplitter();
 
-  List<double> validate(PredictorInterface predictor, List<VectorInterface> features, List<double> labels,
+  List<double> validate(PredictorInterface predictor, List<VectorInterface> features, VectorInterface labels,
                         {int numberOfFolds = 5}) {
 
     if (features.length != labels.length) {
@@ -21,14 +21,14 @@ class KFoldCrossValidator implements CrossValidatorInterface {
 
       List<VectorInterface> trainFeatures = features.sublist(0, testRange.first)
         ..addAll(features.sublist(testRange.last));
-      List<double> trainLabels = labels.sublist(0, testRange.first)
-        ..addAll(labels.sublist(testRange.last));
+      VectorInterface trainLabels = labels.cut(0, testRange.first)
+        ..concat(labels.cut(testRange.last));
 
       List<VectorInterface> testFeatures = features.sublist(testRange.first, testRange.last);
-      List<double> testLabels = labels.sublist(testRange.first, testRange.last);
+      VectorInterface testLabels = labels.cut(testRange.first, testRange.last);
 
       predictor.train(trainFeatures, trainLabels, trainFeatures.first.copy()..fill(0.0));
-      predictor.predict(testFeatures, testFeatures.first.copy()..fill(0.0));
+      scores.add(predictor.test(testFeatures, testLabels));
     }
 
     return scores;

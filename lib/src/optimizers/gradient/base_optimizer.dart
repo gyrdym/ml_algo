@@ -8,7 +8,7 @@ abstract class GradientOptimizer implements OptimizerInterface {
 
   GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit);
 
-  VectorInterface optimize(List<VectorInterface> features, List<double> labels, VectorInterface weights) {
+  VectorInterface optimize(List<VectorInterface> features, VectorInterface labels, VectorInterface weights) {
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
@@ -22,9 +22,9 @@ abstract class GradientOptimizer implements OptimizerInterface {
     return weights;
   }
 
-  VectorInterface iteration(VectorInterface weights, List<VectorInterface> features, List<double> labels, double eta);
+  VectorInterface iteration(VectorInterface weights, List<VectorInterface> features, VectorInterface labels, double eta);
 
-  VectorInterface makeGradientStep(VectorInterface k, List<VectorInterface> Xs, List<double> y, double eta) {
+  VectorInterface makeGradientStep(VectorInterface k, List<VectorInterface> Xs, VectorInterface y, double eta) {
     VectorInterface gradientSumVector = _calculateGradient(k, Xs[0], y[0]);
 
     for (int i = 1; i < Xs.length; i++) {
