@@ -30,6 +30,7 @@ abstract class VectorInterface {
 
   VectorInterface cut(int start, [int end]);
   VectorInterface copy();
+  VectorInterface createFrom(Iterable<double> iterable);
 
   void fill(double value);
   void concat(VectorInterface vector);

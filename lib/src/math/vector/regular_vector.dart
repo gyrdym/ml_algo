@@ -59,6 +59,7 @@ class RegularVector extends Vector {
 
   RegularVector cut(int start, [int end]) => new RegularVector.from(sublist(start, end));
   RegularVector copy() => cut(0);
+  RegularVector createFrom(Iterable<double> iterable) => new RegularVector.from(iterable);
 
   void fill(double value) {
     _innerList.fillRange(0, _innerList.length, value);

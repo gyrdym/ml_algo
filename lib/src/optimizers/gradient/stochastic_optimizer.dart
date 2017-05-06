@@ -15,6 +15,6 @@ class SGDOptimizer extends GradientOptimizer {
   @override
   VectorInterface iteration(VectorInterface weights, List<VectorInterface> features, VectorInterface labels, double eta) {
     int k = _randomizer.nextInt(features.length);
-    return makeGradientStep(weights, [features[k]], [labels[k]] as VectorInterface, eta);
+    return makeGradientStep(weights, [features[k]], labels.createFrom([labels[k]]), eta);
   }
 }
