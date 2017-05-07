@@ -16,11 +16,11 @@ main() async {
       .map((num feature) => feature.toDouble())
       .toList();
 
-  List<TypedVector> allFeatures = fields
+  List<TypedVector> features = fields
       .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+  TypedVector labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
   RMSEEstimator rmseEstimator = new RMSEEstimator();
   MAPEEstimator mapeEstimator = new MAPEEstimator();
@@ -31,11 +31,14 @@ main() async {
 
   KFoldCrossValidator validator = new KFoldCrossValidator();
 
-  print('SGD regressor: ${validator.validate(sgdRegressor, allFeatures, allLabels, rmseEstimator)}');
-  print('Batch GD regressor: ${validator.validate(batchGdRegressor, allFeatures, allLabels, rmseEstimator)}');
-  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, allFeatures, allLabels, rmseEstimator)}');
+  print('K-fold cross validation:');
+  print('\nRMSE:');
+  print('SGD regressor: ${validator.validate(sgdRegressor, features, labels).mean()}');
+  print('Batch GD regressor: ${validator.validate(batchGdRegressor, features, labels).mean()}');
+  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, features, labels).mean()}');
 
-  print('SGD GD regressor: ${validator.validate(sgdRegressor, allFeatures, allLabels, mapeEstimator)}');
-  print('Batch GD regressor: ${validator.validate(batchGdRegressor, allFeatures, allLabels, mapeEstimator)}');
-  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, allFeatures, allLabels, mapeEstimator)}');
+  print('\nMAPE:');
+  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, estimator: mapeEstimator).mean()}');
+  print('Batch GD regressor: ${validator.validate(batchGdRegressor, features, labels, estimator: mapeEstimator).mean()}');
+  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, features, labels, estimator: mapeEstimator).mean()}');
 }
