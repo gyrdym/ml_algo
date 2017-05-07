@@ -7,8 +7,8 @@ import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
 class KFoldCrossValidator implements CrossValidatorInterface {
   final KFoldSplitter _splitter = new KFoldSplitter();
 
-  List<double> validate(PredictorInterface predictor, List<VectorInterface> features, VectorInterface labels,
-                        EstimatorInterface estimator, {int numberOfFolds = 5}) {
+  VectorInterface validate(PredictorInterface predictor, List<VectorInterface> features, VectorInterface labels,
+                           {EstimatorInterface estimator, int numberOfFolds = 5}) {
 
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
@@ -32,6 +32,6 @@ class KFoldCrossValidator implements CrossValidatorInterface {
       scores.add(predictor.test(testFeatures, testLabels, estimator: estimator));
     }
 
-    return scores;
+    return labels.createFrom(scores);
   }
 }

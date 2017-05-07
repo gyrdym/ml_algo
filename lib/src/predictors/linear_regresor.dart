@@ -4,6 +4,7 @@ import 'package:dart_ml/src/optimizers/optimizer_interface.dart';
 import 'package:dart_ml/src/estimators/estimator_interface.dart';
 
 abstract class LinearRegressor implements PredictorInterface {
+  EstimatorInterface defaultEstimator;
   OptimizerInterface optimizer;
   VectorInterface _weights;
 
@@ -12,6 +13,7 @@ abstract class LinearRegressor implements PredictorInterface {
   }
 
   double test(List<VectorInterface> features, VectorInterface origLabels, {EstimatorInterface estimator}) {
+    estimator = estimator ?? defaultEstimator;
     VectorInterface prediction = predict(features, origLabels.copy()..fill(0.0));
     return estimator.calculateError(prediction, origLabels);
   }
