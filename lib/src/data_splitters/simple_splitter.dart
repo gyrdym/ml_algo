@@ -1,6 +1,6 @@
 import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
 
-class SimpleDataSplitter implements DataSplitterInterface {
+class SimpleDataSplitter implements SplitterInterface {
   double ratio = .6;
 
   SimpleDataSplitter({this.ratio});

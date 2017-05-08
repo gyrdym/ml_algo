@@ -1,3 +1,3 @@
-abstract class DataSplitterInterface {
+abstract class SplitterInterface {
   List<List<int>> split(int samples);
 }
