@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/enums.dart';
+import 'package:dart_ml/src/enums.dart' show Norm;
 
 abstract class VectorInterface {
   int get length;

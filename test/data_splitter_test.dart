@@ -1,7 +1,11 @@
 import 'package:dart_ml/src/data_splitters/simple_splitter.dart';
 import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
+import 'package:dart_ml/src/data_splitters/leave_one_out_splitter.dart';
+
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
+
+import 'package:dart_ml/src/data_splitters/base_splitter.dart';
 
 void main() {
   group('Splitters test.\n', () {
@@ -34,6 +38,11 @@ void main() {
       expect(splitter.split(67, numberOfFolds: 3), equals([[0,23],[23,45],[45,67]]));
       expect(() => splitter.split(0, numberOfFolds: 3), throwsRangeError);
       expect(() => splitter.split(8, numberOfFolds: 9), throwsRangeError);
+    });
+
+    test('Leave one out splitter test', () {
+      LeaveOneOutSplitter splitter = new LeaveOneOutSplitter();
+      expect(splitter.split(5), equals([[0,1],[1,2],[2,3],[3,4],[4,5]]));
     });
   });
 }
