@@ -1,4 +1,6 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
+
 import 'package:dart_ml/src/math/vector/vector_interface.dart';
 import 'package:dart_ml/src/math/vector/vector_abstract.dart';
 
@@ -11,7 +13,7 @@ class TypedVector extends Vector {
     _origLength = length;
   }
 
-  TypedVector.from(Iterable<double> source) : super.from(source) {
+  TypedVector.from(Iterable<double> source) {
     _origLength = source.length;
     _innerList = _convertRegularListToTyped(source);
   }
@@ -21,9 +23,16 @@ class TypedVector extends Vector {
     _innerList = source;
   }
 
-  TypedVector.filled(int length, double value) : super.filled(length, value) {
+  TypedVector.filled(int length, double value) {
     _origLength = length;
     _innerList = _convertRegularListToTyped(new List<double>.filled(length, value));
+  }
+
+  TypedVector.randomFilled(int length, {int seed}) {
+    math.Random _randomizer = new math.Random(seed);
+    List<double> _list = new List<double>.generate(length, (_) => _randomizer.nextDouble());
+    _origLength = length;
+    _innerList = _convertRegularListToTyped(_list);
   }
 
   ///Very slow operation

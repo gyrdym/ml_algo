@@ -8,4 +8,4 @@ export 'package:dart_ml/src/predictors/mbgd_linear_regressor.dart';
 export 'package:dart_ml/src/predictors/bgd_linear_regressor.dart';
 export 'package:dart_ml/src/math/vector/typed_vector.dart';
 export 'package:dart_ml/src/math/vector/regular_vector.dart';
-export 'package:dart_ml/src/validators/kfold_cross_validation.dart';
+export 'package:dart_ml/src/validators/kfold_cross_validator.dart';
