@@ -10,12 +10,17 @@ class RegularVector extends Vector {
     _innerList = new List<double>(dimension);
   }
 
-  RegularVector.from(Iterable<double> source) : super.from(source) {
+  RegularVector.from(Iterable<double> source) {
     _innerList = source.toList(growable: false);
   }
 
-  RegularVector.filled(int dimension, double value) : super.filled(dimension, value) {
+  RegularVector.filled(int dimension, double value) {
     _innerList = new List<double>.filled(dimension, value, growable: false);
+  }
+
+  RegularVector.randomFilled(int length, {int seed}) {
+    math.Random _randomizer = new math.Random(seed);
+    _innerList = new List<double>.generate(length, (_) => _randomizer.nextDouble());
   }
 
   ///it's a high-cost operation, cause dimension changing means fully vector re-creation

@@ -8,6 +8,7 @@ abstract class Vector extends ListBase<double> implements VectorInterface {
   Vector();
   Vector.from(Iterable<double> source);
   Vector.filled(int length, double value);
+  Vector.randomFilled(int length, {int seed});
 
   double vectorScalarMult(VectorInterface vector) => (this * vector).sum();
   double distanceTo(VectorInterface vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
