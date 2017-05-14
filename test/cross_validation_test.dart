@@ -21,10 +21,11 @@ void main() {
     });
 
     test('k-fold cross validation test: ', () {
-      KFoldCrossValidator validator = new KFoldCrossValidator();
+      KFoldCrossValidator validator1 = new KFoldCrossValidator();
+      KFoldCrossValidator validator2 = new KFoldCrossValidator(numberOfFolds: 10);
 
-      TypedVector score1 = validator.validate(predictor, features, labels);
-      TypedVector score2 = validator.validate(predictor, features, labels, numberOfFolds: 10);
+      TypedVector score1 = validator1.validate(predictor, features, labels);
+      TypedVector score2 = validator2.validate(predictor, features, labels);
 
       expect(score1.length, equals(5));
       expect(score2.length, equals(10));
