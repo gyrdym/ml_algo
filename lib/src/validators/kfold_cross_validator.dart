@@ -4,16 +4,18 @@ import 'package:dart_ml/src/estimators/estimator_interface.dart';
 import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
 
 class KFoldCrossValidator {
-  final KFoldSplitter _splitter = new KFoldSplitter();
+  final KFoldSplitter _splitter;
+
+  KFoldCrossValidator({int numberOfFolds = 5}) : _splitter = new KFoldSplitter(numberOfFolds: numberOfFolds);
 
   VectorInterface validate(PredictorInterface predictor, List<VectorInterface> features, VectorInterface labels,
-                           {EstimatorInterface estimator, int numberOfFolds = 5}) {
+                           {EstimatorInterface estimator}) {
 
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
     }
 
-    List<List<int>> testSampleRanges = _splitter.split(features.length, numberOfFolds: numberOfFolds);
+    List<List<int>> testSampleRanges = _splitter.split(features.length);
     List<double> scores = [];
 
     for (int i = 0; i < testSampleRanges.length; i++) {
