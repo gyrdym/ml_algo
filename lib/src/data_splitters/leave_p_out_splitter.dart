@@ -1,6 +1,6 @@
 import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
 
-class LeavePOutSplitter implements SplitterInterface {
+class LeavePOutSplitter {
   final int _p;
 
   LeavePOutSplitter({int p = 2}) : _p = p {
@@ -9,33 +9,21 @@ class LeavePOutSplitter implements SplitterInterface {
     }
   }
 
-  List<List<int>> split(int samplesLength) {
+  List<List<int>> split(int length) {
     List<List<int>> folds = <List<int>>[];
-    List<int> fold = new List<int>(_p);
-    int counter = 1;
-
-    void _initNewFold(int start) {
-      fold = new List<int>(_p);
-      fold[0] = start;
-      counter = 1;
-    }
-
-    for (int startIndex = 0; startIndex < samplesLength; startIndex++) {
-      _initNewFold(startIndex);
-
-      for (int idx = 0; idx < samplesLength; idx++) {
-        if (idx <= startIndex) {
-          continue;
-        }
-
-        fold[counter++] = idx;
-
-        if (counter == _p) {
+    folds.add(new List<int>.generate(_p, (idx) => idx));
+    int iteration = 0;
+    do {
+      int digit = _p - 1;
+      int maxValForDigit = length - 1;
+      do {
+        List<int> fold = new List<int>.from(folds.last, growable: false);
+        if (fold[digit] < maxValForDigit--) {
+          ++fold[digit];
           folds.add(fold);
-          _initNewFold(startIndex);
         }
-      }
-    }
+      } while(digit-- != 0);
+    } while (iteration++ != length);
 
     return folds;
   }
