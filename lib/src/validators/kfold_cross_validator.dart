@@ -15,12 +15,10 @@ class KFoldCrossValidator {
       throw new Exception('Number of features objects must be equal to the number of labels!');
     }
 
-    List<List<int>> testSampleRanges = _splitter.split(features.length);
+    Iterable<Iterable<int>> testSampleRanges = _splitter.split(features.length);
     List<double> scores = [];
 
-    for (int i = 0; i < testSampleRanges.length; i++) {
-      List<int> testRange = testSampleRanges[i];
-
+    testSampleRanges.forEach((Iterable<int> testRange) {
       List<VectorInterface> trainFeatures = features.sublist(0, testRange.first)
         ..addAll(features.sublist(testRange.last));
       VectorInterface trainLabels = labels.cut(0, testRange.first)
@@ -31,7 +29,7 @@ class KFoldCrossValidator {
 
       predictor.train(trainFeatures, trainLabels, trainFeatures.first.copy()..fill(0.0));
       scores.add(predictor.test(testFeatures, testLabels, estimator: estimator));
-    }
+    });
 
     return labels.createFrom(scores);
   }

@@ -1,4 +1,4 @@
-import 'benchmark_src/benchmarks.dart';
+import 'vector/benchmarks.dart';
 
 main() {
   print('Measuring...');

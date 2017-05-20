@@ -1,5 +1,3 @@
-library dart_ml.benchmark;
-
 import 'package:dart_ml/dart_ml.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
 
