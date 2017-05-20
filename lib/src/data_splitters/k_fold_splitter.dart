@@ -1,12 +1,12 @@
 import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
 
-class KFoldSplitter implements SplitterInterface {
+class KFoldSplitter /*implements SplitterInterface*/ {
   final int _numberOfFolds;
 
   KFoldSplitter({int numberOfFolds = 5}) : _numberOfFolds = numberOfFolds;
 
-  @override
-  List<List<int>> split(int numberOfSamples) {
+//  @override
+  Iterable<Iterable<int>> split(int numberOfSamples) sync* {
     if (_numberOfFolds > numberOfSamples) {
       throw new RangeError.range(_numberOfFolds, 0, numberOfSamples, null, 'Number of folds must be less than number of samples!');
     }
@@ -22,14 +22,16 @@ class KFoldSplitter implements SplitterInterface {
 
     int startIdx = 0;
     int endIdx = 0;
-    List<List<int>> folds = [];
 
     for (int i = 0; i < sizes.length; i++) {
       endIdx = startIdx + sizes[i];
-      folds.add(new List.from([startIdx, endIdx], growable: false));
+      yield _generateRange(startIdx, endIdx);
       startIdx = endIdx;
     }
+  }
 
-    return folds;
+  Iterable<int> _generateRange(int start, int end) sync* {
+    yield start;
+    yield end;
   }
 }
