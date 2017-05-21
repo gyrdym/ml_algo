@@ -1,38 +1,6 @@
-import 'package:dart_ml/src/math/vector/vector_interface.dart';
-import 'package:dart_ml/src/predictors/predictor_interface.dart';
-import 'package:dart_ml/src/estimators/estimator_interface.dart';
-import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
+import 'cross_validator.dart';
+import 'package:dart_ml/src/data_splitters/leave_p_out_splitter.dart';
 
-class LpoCrossValidator {
-  final KFoldSplitter _splitter;
-
-  LpoCrossValidator({int numberOfFolds = 5}) : _splitter = new KFoldSplitter(numberOfFolds: numberOfFolds);
-
-  VectorInterface validate(PredictorInterface predictor, List<VectorInterface> features, VectorInterface labels,
-                           {EstimatorInterface estimator}) {
-
-    if (features.length != labels.length) {
-      throw new Exception('Number of features objects must be equal to the number of labels!');
-    }
-
-    Iterable<Iterable<int>> testSampleRanges = _splitter.split(features.length);
-    List<double> scores = new List<double>(testSampleRanges.length);
-    int scoreCounter = 0;
-
-    for (var testRange in testSampleRanges) {
-      List<VectorInterface> trainFeatures = features.sublist(0, testRange.first)
-        ..addAll(features.sublist(testRange.last));
-      VectorInterface trainLabels = labels.cut(0, testRange.first)
-        ..concat(labels.cut(testRange.last));
-
-      List<VectorInterface> testFeatures = features.sublist(testRange.first, testRange.last);
-      VectorInterface testLabels = labels.cut(testRange.first, testRange.last);
-
-      predictor.train(trainFeatures, trainLabels, trainFeatures.first.copy()
-        ..fill(0.0));
-      scores[scoreCounter++] = predictor.test(testFeatures, testLabels, estimator: estimator);
-    }
-
-    return labels.createFrom(scores);
-  }
+class LpoCrossValidator extends CrossValidator {
+  LpoCrossValidator({int p = 5}) : super(new LeavePOutSplitter(p: p));
 }
