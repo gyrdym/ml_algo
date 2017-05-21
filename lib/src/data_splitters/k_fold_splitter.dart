@@ -31,7 +31,8 @@ class KFoldSplitter implements SplitterInterface {
   }
 
   Iterable<int> _generateRange(int start, int end) sync* {
-    yield start;
-    yield end;
+    for (int i = start ; i < end; i++) {
+      yield i;
+    }
   }
 }

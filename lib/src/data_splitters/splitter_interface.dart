@@ -1,3 +1,3 @@
 abstract class SplitterInterface {
-  Iterable<Iterable<int>> split(int samples);
+  Iterable<Iterable<int>> split(int numberOfSamples);
 }

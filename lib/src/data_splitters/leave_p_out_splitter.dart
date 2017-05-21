@@ -9,8 +9,8 @@ class LeavePOutSplitter implements SplitterInterface {
     }
   }
 
-  Iterable<Iterable<int>> split(int n) sync* {
-    for (int u = 0; u < 1 << n; u++) {
+  Iterable<Iterable<int>> split(int numberOfSamples) sync* {
+    for (int u = 0; u < 1 << numberOfSamples; u++) {
       if (_bitCount(u) == _p) {
         yield _generatePart(u);
       }
