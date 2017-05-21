@@ -1,6 +1,6 @@
 import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
 
-class LeavePOutSplitter /*implements SplitterInterface*/ {
+class LeavePOutSplitter implements SplitterInterface {
   final int _p;
 
   LeavePOutSplitter({int p = 2}) : _p = p {
@@ -10,7 +10,7 @@ class LeavePOutSplitter /*implements SplitterInterface*/ {
   }
 
   Iterable<Iterable<int>> split(int n) sync* {
-    for(int u = 0; u < 1 << n; u++) {
+    for (int u = 0; u < 1 << n; u++) {
       if (_bitCount(u) == _p) {
         yield _generatePart(u);
       }
