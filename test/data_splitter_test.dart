@@ -10,22 +10,23 @@ void main() {
       KFoldSplitter splitter;
 
       splitter = new KFoldSplitter();
-      expect(splitter.split(12), equals([[0,3],[3,6],[6,8],[8,10],[10,12]]));
+      expect(splitter.split(12), equals([[0,1,2],[3,4,5],[6,7],[8,9],[10,11]]));
 
       splitter = new KFoldSplitter(numberOfFolds: 4);
-      expect(splitter.split(12), equals([[0,3],[3,6],[6,9],[9,12]]));
+      expect(splitter.split(12), equals([[0,1,2],[3,4,5],[6,7,8],[9,10,11]]));
 
       splitter = new KFoldSplitter(numberOfFolds: 3);
-      expect(splitter.split(12), equals([[0,4],[4,8],[8,12]]));
+      expect(splitter.split(12), equals([[0,1,2,3],[4,5,6,7],[8,9,10,11]]));
 
       splitter = new KFoldSplitter(numberOfFolds: 1);
-      expect(splitter.split(12), equals([[0,12]]));
+      expect(splitter.split(12), equals([[0,1,2,3,4,5,6,7,8,9,10,11]]));
 
       splitter = new KFoldSplitter(numberOfFolds: 12);
-      expect(splitter.split(12), equals([[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11],[11,12]]));
+      expect(splitter.split(12), equals([[0],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11]]));
 
-      splitter = new KFoldSplitter(numberOfFolds: 3);
-      expect(splitter.split(67), equals([[0,23],[23,45],[45,67]]));
+      splitter = new KFoldSplitter(numberOfFolds: 5);
+      expect(splitter.split(37), equals([[0,1,2,3,4,5,6,7],[8,9,10,11,12,13,14,15],[16,17,18,19,20,21,22],
+        [23,24,25,26,27,28,29],[30,31,32,33,34,35,36]]));
 
       splitter = new KFoldSplitter(numberOfFolds: 3);
       expect(() => splitter.split(0), throwsRangeError);
@@ -39,11 +40,13 @@ void main() {
 
       splitter = new LeavePOutSplitter();
       expect(splitter.split(4).toSet(), equals([[0,1], [0,2], [0,3], [1,2], [1,3], [2,3]].toSet()));
-      expect(splitter.split(5).toSet(), equals([[0,1], [0,2], [0,3], [0,4], [1,2], [1,3], [1,4], [2,3], [2,4], [3,4]].toSet()));
+      expect(splitter.split(5).toSet(), equals([[0,1], [0,2], [0,3], [0,4], [1,2], [1,3], [1,4], [2,3], [2,4],
+        [3,4]].toSet()));
 
       splitter = new LeavePOutSplitter(p: 3);
       expect(splitter.split(4).toSet(), equals([[0,1,2], [0,1,3], [0,2,3], [1,2,3]].toSet()));
-      expect(splitter.split(5).toSet(), equals([[0,1,2], [0,1,3], [0,1,4], [0,2,3], [0,2,4], [0,3,4], [1,2,3], [1,2,4], [1,3,4], [2,3,4]].toSet()));
+      expect(splitter.split(5).toSet(), equals([[0,1,2], [0,1,3], [0,1,4], [0,2,3], [0,2,4], [0,3,4], [1,2,3], [1,2,4],
+        [1,3,4], [2,3,4]].toSet()));
 
       expect(() => splitter = new LeavePOutSplitter(p: 0), throwsUnsupportedError);
       expect(() => splitter = new LeavePOutSplitter(p: 1), throwsUnsupportedError);
