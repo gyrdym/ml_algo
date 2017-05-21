@@ -1,11 +1,11 @@
 import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
 
-class KFoldSplitter /*implements SplitterInterface*/ {
+class KFoldSplitter implements SplitterInterface {
   final int _numberOfFolds;
 
   KFoldSplitter({int numberOfFolds = 5}) : _numberOfFolds = numberOfFolds;
 
-//  @override
+  @override
   Iterable<Iterable<int>> split(int numberOfSamples) sync* {
     if (_numberOfFolds > numberOfSamples) {
       throw new RangeError.range(_numberOfFolds, 0, numberOfSamples, null, 'Number of folds must be less than number of samples!');

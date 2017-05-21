@@ -16,9 +16,10 @@ class KFoldCrossValidator {
     }
 
     Iterable<Iterable<int>> testSampleRanges = _splitter.split(features.length);
-    List<double> scores = [];
+    List<double> scores = new List<double>(testSampleRanges.length);
+    int scoreCounter = 0;
 
-    testSampleRanges.forEach((Iterable<int> testRange) {
+    for (var testRange in testSampleRanges) {
       List<VectorInterface> trainFeatures = features.sublist(0, testRange.first)
         ..addAll(features.sublist(testRange.last));
       VectorInterface trainLabels = labels.cut(0, testRange.first)
@@ -27,9 +28,10 @@ class KFoldCrossValidator {
       List<VectorInterface> testFeatures = features.sublist(testRange.first, testRange.last);
       VectorInterface testLabels = labels.cut(testRange.first, testRange.last);
 
-      predictor.train(trainFeatures, trainLabels, trainFeatures.first.copy()..fill(0.0));
-      scores.add(predictor.test(testFeatures, testLabels, estimator: estimator));
-    });
+      predictor.train(trainFeatures, trainLabels, trainFeatures.first.copy()
+        ..fill(0.0));
+      scores[scoreCounter++] = predictor.test(testFeatures, testLabels, estimator: estimator);
+    }
 
     return labels.createFrom(scores);
   }
