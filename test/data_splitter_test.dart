@@ -43,13 +43,15 @@ void main() {
       expect(splitter.split(5).toSet(), equals([[0,1], [0,2], [0,3], [0,4], [1,2], [1,3], [1,4], [2,3], [2,4],
         [3,4]].toSet()));
 
+      splitter = new LeavePOutSplitter(p: 1);
+      expect(splitter.split(5).toSet(), equals([[0],[1],[2],[3],[4]]));
+
       splitter = new LeavePOutSplitter(p: 3);
       expect(splitter.split(4).toSet(), equals([[0,1,2], [0,1,3], [0,2,3], [1,2,3]].toSet()));
       expect(splitter.split(5).toSet(), equals([[0,1,2], [0,1,3], [0,1,4], [0,2,3], [0,2,4], [0,3,4], [1,2,3], [1,2,4],
         [1,3,4], [2,3,4]].toSet()));
 
       expect(() => splitter = new LeavePOutSplitter(p: 0), throwsUnsupportedError);
-      expect(() => splitter = new LeavePOutSplitter(p: 1), throwsUnsupportedError);
     });
   });
 }
