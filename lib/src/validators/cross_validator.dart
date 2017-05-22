@@ -19,7 +19,7 @@ class CrossValidator {
     List<double> scores = new List<double>(allIndices.length);
     int scoreCounter = 0;
 
-    for (var testIndices in allIndices) {
+    for (Iterable<int> testIndices in allIndices) {
       List<VectorInterface> trainFeatures = new List<VectorInterface>(features.length - testIndices.length);
       VectorInterface trainLabels = labels.copy()
         ..length = features.length - testIndices.length
