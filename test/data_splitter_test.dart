@@ -1,42 +1,57 @@
-import 'package:dart_ml/dart_ml.dart' show VectorInterface, TypedVector, DataCategory, DataTrainTestSplitter;
+import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
+import 'package:dart_ml/src/data_splitters/leave_p_out_splitter.dart';
+
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
 void main() {
-  TypedVector vector = new TypedVector.from([1.5, 2.0, 3.0, 5.5, 23.0, 45.0, 60.0, 78.0, 99.0]);
+  group('Splitters test.\n', () {
+    test('K fold splitter test', () {
+      KFoldSplitter splitter;
 
-  List<TypedVector> matrix = [
-    new TypedVector.from([1.5, 92.0, 34.0, 5.6, 23.0]),
-    new TypedVector.from([11.5, 29.0, 32.0, 5.6, 23.0]),
-    new TypedVector.from([1.55, 2.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([21.5, 2.0, 31.0, 5.6, 23.0]),
-    new TypedVector.from([145.15, 12.0, 13.0, 5.6, 23.0]),
-    new TypedVector.from([10.5, 234.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([1.05, 278.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([21.5, 92.0, 35.0, 5.6, 23.0]),
-    new TypedVector.from([15.5, 2.06, 3.0, 5.6, 23.0]),
-    new TypedVector.from([13.5, 23.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([1.5, 122.0, 35.0, 5.6, 23.0]),
-    new TypedVector.from([133.5, 425.0, 53.0, 5.6, 23.0]),
-    new TypedVector.from([144.5, 25.0, 3.50, 5.6, 23.0]),
-    new TypedVector.from([166.5, 26.0, 83.0, 5.6, 23.0]),
-    new TypedVector.from([61.5, 92.0, 3.0, 5.6, 23.0]),
-    new TypedVector.from([19.5, 2.0, 3.0, 5.6, 23.0])
-  ];
+      splitter = new KFoldSplitter();
+      expect(splitter.split(12), equals([[0,1,2],[3,4,5],[6,7],[8,9],[10,11]]));
 
-  group('Split a data to train/test samples', () {
-    test('Vector split', () {
-      Map<DataCategory, VectorInterface> result = DataTrainTestSplitter.splitVector(vector, 0.6);
+      splitter = new KFoldSplitter(numberOfFolds: 4);
+      expect(splitter.split(12), equals([[0,1,2],[3,4,5],[6,7,8],[9,10,11]]));
 
-      expect(result[DataCategory.TRAIN], equals([1.5, 2.0, 3.0, 5.5, 23.0]));
-      expect(result[DataCategory.TEST], equals([45.0, 60.0, 78.0, 99.0]));
+      splitter = new KFoldSplitter(numberOfFolds: 3);
+      expect(splitter.split(12), equals([[0,1,2,3],[4,5,6,7],[8,9,10,11]]));
+
+      splitter = new KFoldSplitter(numberOfFolds: 1);
+      expect(splitter.split(12), equals([[0,1,2,3,4,5,6,7,8,9,10,11]]));
+
+      splitter = new KFoldSplitter(numberOfFolds: 12);
+      expect(splitter.split(12), equals([[0],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11]]));
+
+      splitter = new KFoldSplitter(numberOfFolds: 5);
+      expect(splitter.split(37), equals([[0,1,2,3,4,5,6,7],[8,9,10,11,12,13,14,15],[16,17,18,19,20,21,22],
+        [23,24,25,26,27,28,29],[30,31,32,33,34,35,36]]));
+
+      splitter = new KFoldSplitter(numberOfFolds: 3);
+      expect(() => splitter.split(0), throwsRangeError);
+
+      splitter = new KFoldSplitter(numberOfFolds: 9);
+      expect(() => splitter.split(8), throwsRangeError);
     });
 
-    test('Matrix split', () {
-      Map<DataCategory, List<VectorInterface>> result = DataTrainTestSplitter.splitMatrix(matrix, 0.7);
+    test('Leave P out splitter test', () {
+      LeavePOutSplitter splitter;
 
-      expect(result[DataCategory.TRAIN].length, equals(11));
-      expect(result[DataCategory.TEST].length, equals(5));
+      splitter = new LeavePOutSplitter();
+      expect(splitter.split(4).toSet(), equals([[0,1], [0,2], [0,3], [1,2], [1,3], [2,3]].toSet()));
+      expect(splitter.split(5).toSet(), equals([[0,1], [0,2], [0,3], [0,4], [1,2], [1,3], [1,4], [2,3], [2,4],
+        [3,4]].toSet()));
+
+      splitter = new LeavePOutSplitter(p: 1);
+      expect(splitter.split(5).toSet(), equals([[0],[1],[2],[3],[4]]));
+
+      splitter = new LeavePOutSplitter(p: 3);
+      expect(splitter.split(4).toSet(), equals([[0,1,2], [0,1,3], [0,2,3], [1,2,3]].toSet()));
+      expect(splitter.split(5).toSet(), equals([[0,1,2], [0,1,3], [0,1,4], [0,2,3], [0,2,4], [0,3,4], [1,2,3], [1,2,4],
+        [1,3,4], [2,3,4]].toSet()));
+
+      expect(() => splitter = new LeavePOutSplitter(p: 0), throwsUnsupportedError);
     });
   });
 }

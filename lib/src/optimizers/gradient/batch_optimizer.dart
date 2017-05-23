@@ -9,7 +9,7 @@ class BGDOptimizer extends GradientOptimizer {
     );
 
   @override
-  VectorInterface iteration(VectorInterface weights, List<VectorInterface> features, List<double> labels, double eta) {
+  VectorInterface iteration(VectorInterface weights, List<VectorInterface> features, VectorInterface labels, double eta) {
     return makeGradientStep(weights, features, labels, eta);
   }
 }

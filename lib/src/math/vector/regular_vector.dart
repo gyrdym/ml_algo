@@ -10,12 +10,17 @@ class RegularVector extends Vector {
     _innerList = new List<double>(dimension);
   }
 
-  RegularVector.from(Iterable<double> source) : super.from(source) {
+  RegularVector.from(Iterable<double> source) {
     _innerList = source.toList(growable: false);
   }
 
-  RegularVector.filled(int dimension, double value) : super.filled(dimension, value) {
+  RegularVector.filled(int dimension, double value) {
     _innerList = new List<double>.filled(dimension, value, growable: false);
+  }
+
+  RegularVector.randomFilled(int length, {int seed}) {
+    math.Random _randomizer = new math.Random(seed);
+    _innerList = new List<double>.generate(length, (_) => _randomizer.nextDouble());
   }
 
   ///it's a high-cost operation, cause dimension changing means fully vector re-creation
@@ -57,11 +62,17 @@ class RegularVector extends Vector {
     _innerList = _innerList.toList(growable: false);
   }
 
-  RegularVector fromRange(int start, [int end]) => new RegularVector.from(sublist(start, end));
-  RegularVector copy() => fromRange(0);
+  RegularVector cut(int start, [int end]) => new RegularVector.from(sublist(start, end));
+  RegularVector copy() => cut(0);
+  RegularVector createFrom(Iterable<double> iterable) => new RegularVector.from(iterable);
 
   void fill(double value) {
     _innerList.fillRange(0, _innerList.length, value);
+  }
+
+  void concat(VectorInterface vector) {
+    _innerList = _innerList.toList(growable: true)..addAll((vector as RegularVector)._innerList);
+    _innerList = _innerList.toList(growable: false);
   }
 
   double sum() => this._innerList.reduce((double item, double sum) => item + sum);
