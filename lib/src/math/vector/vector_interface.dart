@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/enums.dart';
+import 'package:dart_ml/src/enums.dart' show Norm;
 
 abstract class VectorInterface {
   int get length;
@@ -28,8 +28,10 @@ abstract class VectorInterface {
   double mean();
   double sum();
 
-  VectorInterface fromRange(int start, [int end]);
+  VectorInterface cut(int start, [int end]);
   VectorInterface copy();
+  VectorInterface createFrom(Iterable<double> iterable);
 
   void fill(double value);
+  void concat(VectorInterface vector);
 }

@@ -1,4 +1,6 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
+
 import 'package:dart_ml/src/math/vector/vector_interface.dart';
 import 'package:dart_ml/src/math/vector/vector_abstract.dart';
 
@@ -11,7 +13,7 @@ class TypedVector extends Vector {
     _origLength = length;
   }
 
-  TypedVector.from(Iterable<double> source) : super.from(source) {
+  TypedVector.from(Iterable<double> source) {
     _origLength = source.length;
     _innerList = _convertRegularListToTyped(source);
   }
@@ -21,9 +23,16 @@ class TypedVector extends Vector {
     _innerList = source;
   }
 
-  TypedVector.filled(int length, double value) : super.filled(length, value) {
+  TypedVector.filled(int length, double value) {
     _origLength = length;
     _innerList = _convertRegularListToTyped(new List<double>.filled(length, value));
+  }
+
+  TypedVector.randomFilled(int length, {int seed}) {
+    math.Random _randomizer = new math.Random(seed);
+    List<double> _list = new List<double>.generate(length, (_) => _randomizer.nextDouble());
+    _origLength = length;
+    _innerList = _convertRegularListToTyped(_list);
   }
 
   ///Very slow operation
@@ -154,11 +163,21 @@ class TypedVector extends Vector {
     return new TypedVector.fromTypedList(list, _origLength);
   }
 
-  TypedVector fromRange(int start, [int end]) => new TypedVector.from(sublist(start, end));
-  TypedVector copy() => fromRange(0);
+  TypedVector cut(int start, [int end]) => new TypedVector.from(sublist(start, end));
+  TypedVector copy() => cut(0);
+  TypedVector createFrom(Iterable<double> iterable) => new TypedVector.from(iterable);
 
   void fill(double value) {
     _innerList.fillRange(0, _innerList.length, new Float32x4.splat(value));
+  }
+
+  void concat(VectorInterface vector) {
+    _concat(vector);
+  }
+
+  void _concat(TypedVector vector) {
+    _innerList = new Float32x4List.fromList(_innerList.toList(growable: true)..addAll(vector._innerList));
+    _origLength += vector.length;
   }
 
   void _add(Float32x4 value) {

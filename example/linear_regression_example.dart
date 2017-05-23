@@ -16,20 +16,11 @@ main() async {
       .map((num feature) => feature.toDouble())
       .toList();
 
-  List<TypedVector> allFeatures = fields
+  List<TypedVector> features = fields
       .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
-
-  Map<DataCategory, List<VectorInterface>> splittedFeatures = DataTrainTestSplitter.splitMatrix(allFeatures, .6);
-  Map<DataCategory, VectorInterface> splitedLabels = DataTrainTestSplitter.splitVector(allLabels, .6);
-
-  List<TypedVector> trainFeatures = splittedFeatures[DataCategory.TRAIN];
-  TypedVector trainLabels = splitedLabels[DataCategory.TRAIN];
-
-  List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
-  TypedVector testLabels = splitedLabels[DataCategory.TEST];
+  TypedVector labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
   RMSEEstimator rmseEstimator = new RMSEEstimator();
   MAPEEstimator mapeEstimator = new MAPEEstimator();
@@ -38,26 +29,16 @@ main() async {
   BGDLinearRegressor batchGdRegressor = new BGDLinearRegressor();
   MBGDLinearRegressor mbgdRegressor = new MBGDLinearRegressor();
 
-  int dimension = trainFeatures.first.length;
+  KFoldCrossValidator validator = new KFoldCrossValidator();
 
-  batchGdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
-  sgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
-  mbgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
+  print('K-fold cross validation:');
+  print('\nRMSE:');
+  print('SGD regressor: ${validator.validate(sgdRegressor, features, labels).mean()}');
+  print('Batch GD regressor: ${validator.validate(batchGdRegressor, features, labels).mean()}');
+  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, features, labels).mean()}');
 
-  print("SGD regressor weights: ${sgdRegressor.weights}");
-  print("Batch GD regressor weights: ${batchGdRegressor.weights}");
-  print("Mini batch GD regressor weights: ${mbgdRegressor.weights}\n");
-
-  VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-  VectorInterface batchGdPrediction = batchGdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-  VectorInterface mbgdPrediction = mbgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
-
-  print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
-  print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
-
-  print("Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(batchGdPrediction, testLabels)}");
-  print("Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(batchGdPrediction, testLabels)}\n");
-
-  print("Mini Batch GD regressor, rmse (test) is: ${rmseEstimator.calculateError(mbgdPrediction, testLabels)}");
-  print("Mini Batch GD regressor, mape (test) is: ${mapeEstimator.calculateError(mbgdPrediction, testLabels)}");
+  print('\nMAPE:');
+  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, estimator: mapeEstimator).mean()}');
+  print('Batch GD regressor: ${validator.validate(batchGdRegressor, features, labels, estimator: mapeEstimator).mean()}');
+  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, features, labels, estimator: mapeEstimator).mean()}');
 }

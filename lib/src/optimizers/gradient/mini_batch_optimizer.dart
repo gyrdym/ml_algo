@@ -12,12 +12,12 @@ class MBGDOptimizer extends GradientOptimizer {
     );
 
   @override
-  VectorInterface iteration(VectorInterface weights, List<VectorInterface> features, List<double> labels, double eta) {
+  VectorInterface iteration(VectorInterface weights, List<VectorInterface> features, VectorInterface labels, double eta) {
     int end = _randomizer.nextInt(features.length - 1) + 1;
     int start = _randomizer.nextInt(end);
 
     List<VectorInterface> featuresBatch = features.sublist(start, end);
-    List<double> labelsBatch = labels.sublist(start, end);
+    VectorInterface labelsBatch = labels.cut(start, end);
 
     return makeGradientStep(weights, featuresBatch, labelsBatch, eta);
   }
