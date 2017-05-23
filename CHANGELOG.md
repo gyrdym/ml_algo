@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.0
+- K-fold cross validation added (`KFoldCrossValidation`)
+- Leave P out cross validation added (`LpoCrossValidation`)
+
 ## 0.9.0
 - `copy`, `fill` methods were added to `VectorInterface`
 
