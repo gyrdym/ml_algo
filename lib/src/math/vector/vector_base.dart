@@ -5,7 +5,7 @@ import 'package:dart_ml/src/math/vector/norm.dart';
 import 'package:dart_ml/src/math/vector/vector.dart';
 
 abstract class VectorBase extends ListBase<double> implements Vector {
-  double vectorScalarMult(Vector vector) => (this * vector).sum();
+  double dot(Vector vector) => (this * vector).sum();
   double distanceTo(Vector vector, [Norm norm = Norm.EUCLIDEAN]) => (this - vector).norm(norm);
   double mean() => sum() / length;
   double norm([Norm norm = Norm.EUCLIDEAN]) {
