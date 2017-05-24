@@ -136,7 +136,7 @@ void main() {
     });
 
     test('vector and scalar multiplication:\n', () {
-      RegularVector result = vector1.scalarMult(2.0);
+      RegularVector result = vector1.scalarMul(2.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
@@ -146,7 +146,7 @@ void main() {
     });
 
     test('vector and scalar multiplication, inplace:\n', () {
-      RegularVector result = vector1.scalarMult(2.0, inPlace: true);
+      RegularVector result = vector1.scalarMul(2.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
@@ -156,7 +156,7 @@ void main() {
     });
 
     test('vector and scalar division:\n', () {
-      RegularVector result = vector1.scalarDivision(2.0);
+      RegularVector result = vector1.scalarDiv(2.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
@@ -166,7 +166,7 @@ void main() {
     });
 
     test('vector and scalar division, inplace:\n', () {
-      RegularVector result = vector1.scalarDivision(2.0, inPlace: true);
+      RegularVector result = vector1.scalarDiv(2.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
@@ -176,7 +176,7 @@ void main() {
     });
 
     test('add a scalar to a vector:\n', () {
-      RegularVector result = vector1.scalarAddition(13.0);
+      RegularVector result = vector1.scalarAdd(13.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
@@ -186,7 +186,7 @@ void main() {
     });
 
     test('add a scalar to a vector, inplace:\n', () {
-      RegularVector result = vector1.scalarAddition(13.0, inPlace: true);
+      RegularVector result = vector1.scalarAdd(13.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));
@@ -196,7 +196,7 @@ void main() {
     });
 
     test('subtract a scalar from a vector:\n', () {
-      RegularVector result = vector1.scalarSubtraction(13.0);
+      RegularVector result = vector1.scalarSub(13.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(4));
@@ -206,7 +206,7 @@ void main() {
     });
 
     test('subtract a scalar from a vector, inplace:\n', () {
-      RegularVector result = vector1.scalarSubtraction(13.0, inPlace: true);
+      RegularVector result = vector1.scalarSub(13.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(4));

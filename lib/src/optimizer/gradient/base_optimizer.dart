@@ -31,9 +31,9 @@ abstract class GradientOptimizer implements Optimizer {
       gradientSumVector += _calculateGradient(k, Xs[i], y[i]);
     }
 
-    return k - gradientSumVector.scalarDivision(Xs.length * 1.0).scalarMult(2 * eta);
+    return k - gradientSumVector.scalarDiv(Xs.length * 1.0).scalarMul(2 * eta);
   }
 
   Vector _calculateGradient(Vector k, Vector x, double y) =>
-      x.scalarMult((x * k).sum() - y);
+      x.scalarMul((x * k).sum() - y);
 }

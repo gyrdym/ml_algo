@@ -52,10 +52,10 @@ class RegularVector extends VectorBase {
   RegularVector operator / (Vector vector) => _elementWiseOperation(vector, (a,b) => a / b, false);
 
   RegularVector intPow(int exponent, {bool inPlace = false}) => _elementWiseOperation(exponent, (a,b) => math.pow(a, b), inPlace);
-  RegularVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a + b, inPlace);
-  RegularVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a - b, inPlace);
-  RegularVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a * b, inPlace);
-  RegularVector scalarDivision(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a / b, inPlace);
+  RegularVector scalarAdd(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a + b, inPlace);
+  RegularVector scalarSub(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a - b, inPlace);
+  RegularVector scalarMul(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a * b, inPlace);
+  RegularVector scalarDiv(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a / b, inPlace);
 
   void add(double value) {
     _innerList = _innerList.toList(growable: true)..add(value);
