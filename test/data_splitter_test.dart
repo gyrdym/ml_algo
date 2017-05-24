@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/data_splitters/k_fold_splitter.dart';
-import 'package:dart_ml/src/data_splitters/leave_p_out_splitter.dart';
+import 'package:dart_ml/src/data_splitter/k_fold_splitter.dart';
+import 'package:dart_ml/src/data_splitter/leave_p_out_splitter.dart';
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';

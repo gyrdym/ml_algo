@@ -1,3 +1,3 @@
-abstract class SplitterInterface {
+abstract class Splitter {
   Iterable<Iterable<int>> split(int numberOfSamples);
 }

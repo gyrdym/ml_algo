@@ -1,15 +1,15 @@
-import 'package:dart_ml/src/math/vector/vector_interface.dart';
-import 'package:dart_ml/src/predictors/predictor_interface.dart';
-import 'package:dart_ml/src/estimators/estimator_interface.dart';
-import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
+import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_ml/src/predictor/predictor.dart';
+import 'package:dart_ml/src/estimator/estimator.dart';
+import 'package:dart_ml/src/data_splitter/splitter.dart';
 
 class CrossValidator {
-  final SplitterInterface _splitter;
+  final Splitter _splitter;
 
   CrossValidator(this._splitter);
 
-  VectorInterface validate(PredictorInterface predictor, List<VectorInterface> features, VectorInterface labels,
-                           {EstimatorInterface estimator}) {
+  Vector validate(Predictor predictor, List<Vector> features, Vector labels,
+                           {Estimator estimator}) {
 
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
@@ -20,13 +20,13 @@ class CrossValidator {
     int scoreCounter = 0;
 
     for (Iterable<int> testIndices in allIndices) {
-      List<VectorInterface> trainFeatures = new List<VectorInterface>(features.length - testIndices.length);
-      VectorInterface trainLabels = labels.copy()
+      List<Vector> trainFeatures = new List<Vector>(features.length - testIndices.length);
+      Vector trainLabels = labels.copy()
         ..length = features.length - testIndices.length
         ..fill(0.0);
 
-      List<VectorInterface> testFeatures = new List<VectorInterface>(testIndices.length);
-      VectorInterface testLabels = labels.copy()
+      List<Vector> testFeatures = new List<Vector>(testIndices.length);
+      Vector testLabels = labels.copy()
         ..length = testIndices.length
         ..fill(0.0);
 

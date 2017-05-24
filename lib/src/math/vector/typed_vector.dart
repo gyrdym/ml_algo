@@ -1,10 +1,10 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/math/vector/vector_interface.dart';
-import 'package:dart_ml/src/math/vector/vector_abstract.dart';
+import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_ml/src/math/vector/vector_base.dart';
 
-class TypedVector extends Vector {
+class TypedVector extends VectorBase {
   Float32x4List _innerList;
   int _origLength;
 
@@ -108,10 +108,10 @@ class TypedVector extends Vector {
     }
   }
 
-  TypedVector operator + (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a + b, false);
-  TypedVector operator - (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a - b, false);
-  TypedVector operator * (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a * b, false);
-  TypedVector operator / (VectorInterface vector) => _elementWiseOperation(vector, (a, b) => a / b, false);
+  TypedVector operator + (Vector vector) => _elementWiseOperation(vector, (a, b) => a + b, false);
+  TypedVector operator - (Vector vector) => _elementWiseOperation(vector, (a, b) => a - b, false);
+  TypedVector operator * (Vector vector) => _elementWiseOperation(vector, (a, b) => a * b, false);
+  TypedVector operator / (Vector vector) => _elementWiseOperation(vector, (a, b) => a / b, false);
 
   TypedVector intPow(int exponent, {bool inPlace = false}) => _elementWisePow(exponent, inPlace);
   TypedVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a * b, inPlace);
@@ -171,7 +171,7 @@ class TypedVector extends Vector {
     _innerList.fillRange(0, _innerList.length, new Float32x4.splat(value));
   }
 
-  void concat(VectorInterface vector) {
+  void concat(Vector vector) {
     _concat(vector);
   }
 

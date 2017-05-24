@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
-import 'package:dart_ml/src/math/vector/vector_interface.dart';
-import 'package:dart_ml/src/math/vector/vector_abstract.dart';
+import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_ml/src/math/vector/vector_base.dart';
 
-class RegularVector extends Vector {
+class RegularVector extends VectorBase {
   List<double> _innerList;
 
   RegularVector(int dimension) {
@@ -46,10 +46,10 @@ class RegularVector extends Vector {
   double operator [] (int index) => _innerList[index];
   void operator []= (int index, double value) {_innerList[index] = value;}
 
-  RegularVector operator + (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a + b, false);
-  RegularVector operator - (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a - b, false);
-  RegularVector operator * (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a * b, false);
-  RegularVector operator / (VectorInterface vector) => _elementWiseOperation(vector, (a,b) => a / b, false);
+  RegularVector operator + (Vector vector) => _elementWiseOperation(vector, (a,b) => a + b, false);
+  RegularVector operator - (Vector vector) => _elementWiseOperation(vector, (a,b) => a - b, false);
+  RegularVector operator * (Vector vector) => _elementWiseOperation(vector, (a,b) => a * b, false);
+  RegularVector operator / (Vector vector) => _elementWiseOperation(vector, (a,b) => a / b, false);
 
   RegularVector intPow(int exponent, {bool inPlace = false}) => _elementWiseOperation(exponent, (a,b) => math.pow(a, b), inPlace);
   RegularVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a,b) => a + b, inPlace);
@@ -70,7 +70,7 @@ class RegularVector extends Vector {
     _innerList.fillRange(0, _innerList.length, value);
   }
 
-  void concat(VectorInterface vector) {
+  void concat(Vector vector) {
     _innerList = _innerList.toList(growable: true)..addAll((vector as RegularVector)._innerList);
     _innerList = _innerList.toList(growable: false);
   }

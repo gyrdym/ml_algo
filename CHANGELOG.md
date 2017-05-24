@@ -1,11 +1,15 @@
 # Changelog
 
+## 0.11.0
+- Entity names correction
+
 ## 0.10.0
 - K-fold cross validation added (`KFoldCrossValidation`)
 - Leave P out cross validation added (`LpoCrossValidation`)
+- `DataTrainTestSplitter` was removed
 
 ## 0.9.0
-- `copy`, `fill` methods were added to `VectorInterface`
+- `copy`, `fill` methods were added to `Vector`
 
 ## 0.8.0
 - Reflection was removed for all cases (Vector instantiation, Optimizer instantiation)
