@@ -1,6 +1,6 @@
-import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
+import 'package:dart_ml/src/data_splitter/splitter.dart';
 
-class LeavePOutSplitter implements SplitterInterface {
+class LeavePOutSplitter implements Splitter {
   final int _p;
 
   LeavePOutSplitter({int p = 2}) : _p = p {

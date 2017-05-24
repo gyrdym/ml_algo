@@ -1,5 +1,5 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:dart_ml/src/data_splitters/leave_p_out_splitter.dart';
+import 'package:dart_ml/src/data_splitter/leave_p_out_splitter.dart';
 
 Iterable<Iterable<int>> result;
 
