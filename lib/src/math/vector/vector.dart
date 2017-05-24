@@ -13,10 +13,11 @@ abstract class Vector {
   Vector operator / (Vector vector);
 
   Vector intPow(int exponent, {bool inPlace = false});
-  Vector scalarMult(double value, {bool inPlace = false});
-  Vector scalarDivision(double value, {bool inPlace = false});
-  Vector scalarAddition(double value, {bool inPlace = false});
-  Vector scalarSubtraction(double value, {bool inPlace = false});
+
+  Vector scalarMul(double value, {bool inPlace = false});
+  Vector scalarDiv(double value, {bool inPlace = false});
+  Vector scalarAdd(double value, {bool inPlace = false});
+  Vector scalarSub(double value, {bool inPlace = false});
 
   Vector abs({bool inPlace = false});
 

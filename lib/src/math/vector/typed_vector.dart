@@ -114,10 +114,10 @@ class TypedVector extends VectorBase {
   TypedVector operator / (Vector vector) => _elementWiseOperation(vector, (a, b) => a / b, false);
 
   TypedVector intPow(int exponent, {bool inPlace = false}) => _elementWisePow(exponent, inPlace);
-  TypedVector scalarMult(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a * b, inPlace);
-  TypedVector scalarDivision(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a / b, inPlace);
-  TypedVector scalarAddition(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a + b, inPlace);
-  TypedVector scalarSubtraction(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a - b, inPlace);
+  TypedVector scalarMul(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a * b, inPlace);
+  TypedVector scalarDiv(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a / b, inPlace);
+  TypedVector scalarAdd(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a + b, inPlace);
+  TypedVector scalarSub(double value, {bool inPlace = false}) => _elementWiseOperation(value, (a, b) => a - b, inPlace);
 
   void add(double value) {
     int diff = _innerList.length * 4 - _origLength;
