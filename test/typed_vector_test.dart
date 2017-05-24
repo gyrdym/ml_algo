@@ -187,7 +187,7 @@ void main() {
     });
 
     test('vector multiplication (scalar format):\n', () {
-      double result = vector1.vectorScalarMult(vector2);
+      double result = vector1.dot(vector2);
 
       expect(result, equals(55.0));
     });

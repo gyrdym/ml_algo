@@ -23,7 +23,7 @@ abstract class Vector {
   double norm([Norm normType = Norm.EUCLIDEAN]);
   double distanceTo(Vector vector, [Norm normType = Norm.EUCLIDEAN]);
 
-  double vectorScalarMult(Vector vector);
+  double dot(Vector vector);
 
   double mean();
   double sum();

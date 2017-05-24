@@ -20,7 +20,7 @@ abstract class LinearRegressor implements Predictor {
 
   Vector predict(List<Vector> features, Vector labels) {
     for (int i = 0; i < features.length; i++) {
-      labels[i] = _weights.vectorScalarMult(features[i]);
+      labels[i] = _weights.dot(features[i]);
     }
 
     return labels;
