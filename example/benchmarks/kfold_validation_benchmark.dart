@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:csv/csv.dart' as csv;
 import 'package:dart_ml/dart_ml.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:dart_ml/src/validators/kfold_cross_validator.dart';
+import 'package:dart_ml/src/validator/kfold_cross_validator.dart';
 
 SGDLinearRegressor predictor;
 List<TypedVector> features;

@@ -1,6 +1,6 @@
-import 'package:dart_ml/src/estimators/rmse.dart';
-import 'package:dart_ml/src/predictors/linear_regresor.dart';
-import 'package:dart_ml/src/optimizers/gradient/mini_batch_optimizer.dart';
+import 'package:dart_ml/src/estimator/rmse.dart';
+import 'package:dart_ml/src/predictor/linear_regresor.dart';
+import 'package:dart_ml/src/optimizer/gradient/mini_batch_optimizer.dart';
 
 class MBGDLinearRegressor extends LinearRegressor {
   @override

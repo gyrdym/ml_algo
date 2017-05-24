@@ -1,7 +1,7 @@
 import 'package:dart_ml/src/math/vector/typed_vector.dart';
-import 'package:dart_ml/src/validators/kfold_cross_validator.dart';
-import 'package:dart_ml/src/validators/lpo_cross_validator.dart';
-import 'package:dart_ml/src/predictors/mbgd_linear_regressor.dart';
+import 'package:dart_ml/src/validator/kfold_cross_validator.dart';
+import 'package:dart_ml/src/validator/lpo_cross_validator.dart';
+import 'package:dart_ml/src/predictor/mbgd_linear_regressor.dart';
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';

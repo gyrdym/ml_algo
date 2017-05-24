@@ -1,6 +1,6 @@
-import 'package:dart_ml/src/data_splitters/splitter_interface.dart';
+import 'package:dart_ml/src/data_splitter/splitter.dart';
 
-class KFoldSplitter implements SplitterInterface {
+class KFoldSplitter implements Splitter {
   final int _numberOfFolds;
 
   KFoldSplitter({int numberOfFolds = 5}) : _numberOfFolds = numberOfFolds;

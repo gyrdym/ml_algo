@@ -1,6 +1,6 @@
-import 'package:dart_ml/src/estimators/rmse.dart';
-import 'package:dart_ml/src/predictors/linear_regresor.dart';
-import 'package:dart_ml/src/optimizers/gradient/stochastic_optimizer.dart';
+import 'package:dart_ml/src/estimator/rmse.dart';
+import 'package:dart_ml/src/predictor/linear_regresor.dart';
+import 'package:dart_ml/src/optimizer/gradient/stochastic_optimizer.dart';
 
 class SGDLinearRegressor extends LinearRegressor {
   @override
