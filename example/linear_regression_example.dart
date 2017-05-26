@@ -16,11 +16,11 @@ main() async {
       .map((num feature) => feature.toDouble())
       .toList();
 
-  List<TypedVector> features = fields
-      .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
+  List<Vector> features = fields
+      .map((List<num> item) => new Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  TypedVector labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+  Vector labels = new Vector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
   RMSEEstimator rmseEstimator = new RMSEEstimator();
   MAPEEstimator mapeEstimator = new MAPEEstimator();

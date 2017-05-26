@@ -1,7 +1,7 @@
 part of dart_ml.benchmark;
 
-TypedVector typedVector1;
-TypedVector typedVector2;
+Vector typedVector1;
+Vector typedVector2;
 
 class TypedVectorInitBenchmark extends BenchmarkBase {
   const TypedVectorInitBenchmark() : super('Typed vector initialization, $AMOUNT_OF_ELEMENTS elements');
@@ -11,7 +11,7 @@ class TypedVectorInitBenchmark extends BenchmarkBase {
   }
 
   void run() {
-    typedVector1 = new TypedVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    typedVector1 = new Vector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
   }
 
   void tearDown() {
@@ -31,8 +31,8 @@ class TypedVectorAdditionBenchmark extends BenchmarkBase {
   }
 
   void setup() {
-    typedVector1 = new TypedVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
-    typedVector2 = new TypedVector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    typedVector1 = new Vector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
+    typedVector2 = new Vector.from(new List<double>.filled(AMOUNT_OF_ELEMENTS, 1.0));
   }
 
   void tearDown() {
