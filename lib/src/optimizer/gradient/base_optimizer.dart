@@ -8,7 +8,8 @@ abstract class GradientOptimizer implements Optimizer {
 
   GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit);
 
-  Vector optimize(List<Vector> features, Vector labels, Vector weights) {
+  Vector optimize(List<Vector> features, Vector labels, {Vector weights}) {
+    weights = weights ?? new Vector.zero(features.first.length);
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 

@@ -1,13 +1,13 @@
 import 'dart:typed_data';
-import 'package:dart_ml/dart_ml.dart' show TypedVector, Norm;
+import 'package:dart_ml/dart_ml.dart' show Vector, Norm;
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
 void main() {
-  TypedVector vector1;
-  TypedVector vector2;
-  TypedVector vector3;
-  TypedVector vector4;
+  Vector vector1;
+  Vector vector2;
+  Vector vector3;
+  Vector vector4;
 
   group('Vector fundamental', () {
     tearDown(() {
@@ -16,7 +16,7 @@ void main() {
     });
 
     test('Vector initialization via default constructor: ', () {
-      vector1 = new TypedVector(5);
+      vector1 = new Vector(5);
 
       expect(vector1, equals([0.0, 0.0, 0.0, 0.0, 0.0]));
       expect(() => vector1[11], throwsRangeError);
@@ -27,7 +27,7 @@ void main() {
 
     test('Vector initialization via `from` constructor: ', () {
       //dynamic-length list
-      vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector1 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(vector1[0], equals(1.0));
       expect(vector1[4], equals(5.0));
@@ -38,7 +38,7 @@ void main() {
       expect(vector1.length, equals(6));
 
       //fixed-length list
-      vector2 = new TypedVector.from(new List.filled(11, 1.0));
+      vector2 = new Vector.from(new List.filled(11, 1.0));
 
       expect(vector2.length, 11);
       expect(vector2[10], 1.0);
@@ -51,14 +51,14 @@ void main() {
         new Float32x4(9.0, 10.0, 0.0, 0.0)
       ]);
 
-      vector1 = new TypedVector.fromTypedList(typedList);
+      vector1 = new Vector.fromTypedList(typedList);
 
       expect(vector1, equals([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 0.0, 0.0]));
       expect(() => vector1[12], throwsRangeError);
       expect(() => vector1[-1], throwsRangeError);
       expect(vector1.length, equals(12));
 
-      vector1 = new TypedVector.fromTypedList(typedList, 10);
+      vector1 = new Vector.fromTypedList(typedList, 10);
 
       expect(vector1, equals([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]));
       expect(() => vector1[10], throwsRangeError);
@@ -67,7 +67,7 @@ void main() {
     });
 
     test('Vector initialization via `fill` constructor: ', () {
-      vector1 = new TypedVector.filled(10, 2.0);
+      vector1 = new Vector.filled(10, 2.0);
 
       expect(vector1, equals([2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0]));
       expect(() => vector1[11], throwsRangeError);
@@ -77,7 +77,7 @@ void main() {
     });
 
     test('Vector elements updating: ', () {
-      vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector1 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       vector1[0] = 34.0;
       vector1[4] = 277.0;
@@ -88,7 +88,7 @@ void main() {
     });
 
     test('Vector length updating: ', () {
-      vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector1 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       vector1.length = 8;
       expect(vector1.length, 8);
@@ -107,8 +107,8 @@ void main() {
 
   group('Vector operations.', () {
     setUp(() {
-      vector1 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      vector2 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector1 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector2 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
     });
 
     tearDown(() {
@@ -119,55 +119,55 @@ void main() {
     });
 
     test('Vectors addition: ', () {
-      TypedVector result = vector1 + vector2;
+      Vector result = vector1 + vector2;
 
       expect(result, equals([2.0, 4.0, 6.0, 8.0, 10.0]));
       expect(result.length, equals(5));
 
-      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 + vector4, throwsRangeError);
     });
 
     test('Vectors subtraction: ', () {
-      TypedVector result = vector1 - vector2;
+      Vector result = vector1 - vector2;
 
       expect(result, equals([0.0, 0.0, 0.0, 0.0, 0.0]));
       expect(result.length, equals(5));
 
-      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 - vector4, throwsRangeError);
     });
 
     test('Vectors multiplication: ', () {
-      TypedVector result = vector1 * vector2;
+      Vector result = vector1 * vector2;
 
       expect(result, equals([1.0, 4.0, 9.0, 16.0, 25.0]));
       expect(result.length, equals(5));
 
-      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 * vector4, throwsRangeError);
     });
 
     test('Vectors division: ', () {
-      TypedVector result = vector1 / vector2;
+      Vector result = vector1 / vector2;
 
       expect(result, equals([1.0, 1.0, 1.0, 1.0, 1.0]));
       expect(result.length, equals(5));
 
-      vector3 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
-      vector4 = new TypedVector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+      vector3 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0]);
+      vector4 = new Vector.from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
 
       expect(() => vector3 / vector4, throwsRangeError);
     });
 
     test('element-wise vector power:\n', () {
-      TypedVector result = vector1.intPow(3);
+      Vector result = vector1.intPow(3);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(5));
@@ -177,7 +177,7 @@ void main() {
     });
 
     test('element-wise vector power, inplace:\n', () {
-      TypedVector result = vector1.intPow(3, inPlace: true);
+      Vector result = vector1.intPow(3, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(5));
@@ -193,7 +193,7 @@ void main() {
     });
 
     test('vector and scalar multiplication:\n', () {
-      TypedVector result = vector1.scalarMul(2.0);
+      Vector result = vector1.scalarMul(2.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(5));
@@ -203,7 +203,7 @@ void main() {
     });
 
     test('vector and scalar multiplication, inplace:\n', () {
-      TypedVector result = vector1.scalarMul(2.0, inPlace: true);
+      Vector result = vector1.scalarMul(2.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(5));
@@ -213,7 +213,7 @@ void main() {
     });
 
     test('vector and scalar division:\n', () {
-      TypedVector result = vector1.scalarDiv(2.0);
+      Vector result = vector1.scalarDiv(2.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(5));
@@ -223,7 +223,7 @@ void main() {
     });
 
     test('vector and scalar division, inplace:\n', () {
-      TypedVector result = vector1.scalarDiv(2.0, inPlace: true);
+      Vector result = vector1.scalarDiv(2.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(5));
@@ -233,7 +233,7 @@ void main() {
     });
 
     test('add a scalar to a vector:\n', () {
-      TypedVector result = vector1.scalarAdd(13.0);
+      Vector result = vector1.scalarAdd(13.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(5));
@@ -243,7 +243,7 @@ void main() {
     });
 
     test('add a scalar to a vector, inplace:\n', () {
-      TypedVector result = vector1.scalarAdd(13.0, inPlace: true);
+      Vector result = vector1.scalarAdd(13.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(5));
@@ -253,7 +253,7 @@ void main() {
     });
 
     test('subtract a scalar from a vector:\n', () {
-      TypedVector result = vector1.scalarSub(13.0);
+      Vector result = vector1.scalarSub(13.0);
 
       expect(result != vector1, isTrue);
       expect(result.length, equals(5));
@@ -263,7 +263,7 @@ void main() {
     });
 
     test('subtract a scalar from a vector, inplace:\n', () {
-      TypedVector result = vector1.scalarSub(13.0, inPlace: true);
+      Vector result = vector1.scalarSub(13.0, inPlace: true);
 
       expect(result, same(vector1));
       expect(vector1.length, equals(5));
@@ -279,8 +279,8 @@ void main() {
     });
 
     test('find the distance between two different vectors:\n', () {
-      vector1 = new TypedVector.from([10.0, 3.0, 4.0, 7.0, 9.0, 12.0]);
-      vector2 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5]);
+      vector1 = new Vector.from([10.0, 3.0, 4.0, 7.0, 9.0, 12.0]);
+      vector2 = new Vector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5]);
 
       expect(vector1.distanceTo(vector2, Norm.EUCLIDEAN), equals(10.88577052853862), reason: 'Wrong vector distance calculation');
       expect(vector1.distanceTo(vector2, Norm.MANHATTAN), equals(20.0), reason: 'Wrong vector distance calculation');
@@ -296,15 +296,15 @@ void main() {
     });
 
     test('find the absolute value of an each element of a vector:\n', () {
-      vector1 = new TypedVector.from([-3.0, 4.5, -12.0, -23.5, 44.0]);
-      TypedVector result = vector1.abs();
+      vector1 = new Vector.from([-3.0, 4.5, -12.0, -23.5, 44.0]);
+      Vector result = vector1.abs();
       expect(result, equals([3.0, 4.5, 12.0, 23.5, 44.0]));
       expect(result, isNot(vector1));
     });
 
     test('find the absolute value of an each element of a vector (in place):\n', () {
-      vector1 = new TypedVector.from([-3.0, 4.5, -12.0, -23.5, 44.0]);
-      TypedVector result = vector1.abs(inPlace: true);
+      vector1 = new Vector.from([-3.0, 4.5, -12.0, -23.5, 44.0]);
+      Vector result = vector1.abs(inPlace: true);
       expect(result, equals([3.0, 4.5, 12.0, 23.5, 44.0]));
       expect(result, same(vector1));
     });
@@ -312,10 +312,10 @@ void main() {
 
   group('Common list operations.', () {
     setUp(() {
-      vector1 = new TypedVector.from([1.0, 3.0, 2.0, 11.5]);
-      vector2 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0]);
-      vector3 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5]);
-      vector4 = new TypedVector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 17.5]);
+      vector1 = new Vector.from([1.0, 3.0, 2.0, 11.5]);
+      vector2 = new Vector.from([1.0, 3.0, 2.0, 11.5, 10.0]);
+      vector3 = new Vector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5]);
+      vector4 = new Vector.from([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 17.5]);
     });
 
     tearDown(() {
@@ -366,7 +366,7 @@ void main() {
     });
 
     test('`copy` method testing', () {
-      TypedVector tmp = vector1.copy();
+      Vector tmp = vector1.copy();
       expect(tmp, equals([1.0, 3.0, 2.0, 11.5]));
       expect(tmp == vector1, false);
     });
