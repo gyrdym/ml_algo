@@ -3,7 +3,7 @@ import 'package:dart_ml/src/estimator/estimator.dart';
 
 abstract class Predictor {
   Estimator defaultEstimator;
-  void train(List<Vector> features, Vector labels, Vector weights);
+  void train(List<Vector> features, Vector labels, {Vector weights});
   double test(List<Vector> features, Vector origLabels, {Estimator estimator});
-  Vector predict(List<Vector> features, Vector labels);
+  Vector predict(List<Vector> features);
 }
