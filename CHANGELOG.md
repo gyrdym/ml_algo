@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.12.0
+- Vector interface removed
+- Regular vector implementation removed
+- `TypedVector` -> `Vector`
+- Implicit vectors constructing replaced with explicit `new`-instantiation
+
 ## 0.11.0
 - Entity names correction
 

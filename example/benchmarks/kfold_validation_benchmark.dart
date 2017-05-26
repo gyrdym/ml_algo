@@ -7,8 +7,8 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:dart_ml/src/validator/kfold_cross_validator.dart';
 
 SGDLinearRegressor predictor;
-List<TypedVector> features;
-TypedVector labels;
+List<Vector> features;
+Vector labels;
 
 class KFoldValidatorBenchmark extends BenchmarkBase {
   const KFoldValidatorBenchmark() : super('k-fold validator test');
@@ -35,10 +35,10 @@ Future main() async {
       .toList();
 
   features = fields
-      .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
+      .map((List<num> item) => new Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+  labels = new Vector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
   predictor = new SGDLinearRegressor();
 

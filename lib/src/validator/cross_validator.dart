@@ -8,8 +8,7 @@ class CrossValidator {
 
   CrossValidator(this._splitter);
 
-  Vector validate(Predictor predictor, List<Vector> features, Vector labels,
-                           {Estimator estimator}) {
+  Vector validate(Predictor predictor, List<Vector> features, Vector labels, {Estimator estimator}) {
 
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
@@ -21,14 +20,9 @@ class CrossValidator {
 
     for (Iterable<int> testIndices in allIndices) {
       List<Vector> trainFeatures = new List<Vector>(features.length - testIndices.length);
-      Vector trainLabels = labels.copy()
-        ..length = features.length - testIndices.length
-        ..fill(0.0);
-
+      Vector trainLabels = new Vector.zero(features.length - testIndices.length);
       List<Vector> testFeatures = new List<Vector>(testIndices.length);
-      Vector testLabels = labels.copy()
-        ..length = testIndices.length
-        ..fill(0.0);
+      Vector testLabels = new Vector.zero(testIndices.length);
 
       int trainSamplesCounter = 0;
       int testSamplesCounter = 0;
@@ -45,12 +39,11 @@ class CrossValidator {
         }
       }
 
-      predictor.train(trainFeatures, trainLabels, trainFeatures.first.copy()
-        ..fill(0.0));
+      predictor.train(trainFeatures, trainLabels);
 
       scores[scoreCounter++] = predictor.test(testFeatures, testLabels, estimator: estimator);
     }
 
-    return labels.createFrom(scores);
+    return new Vector.from(scores);
   }
 }
