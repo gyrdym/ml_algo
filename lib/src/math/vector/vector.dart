@@ -77,8 +77,6 @@ class Vector extends ListBase<double> {
 
   Vector copy() => cut(0);
 
-  Vector createFrom(Iterable<double> iterable) => new Vector.from(iterable);
-
   void fill(double value) { _innerList.fillRange(0, _innerList.length, new Float32x4.splat(value)); }
 
   void concat(Vector vector) { _concat(vector); }

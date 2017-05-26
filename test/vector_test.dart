@@ -357,7 +357,7 @@ void main() {
       expect(vector4, equals([1.0, 3.0, 2.0, 11.5, 10.0, 15.5, 17.5, 3.0]));
     });
 
-    test('`fromRange` method testing', () {
+    test('`cut` method testing', () {
       expect(vector4.cut(2, 4), equals([2.0, 11.5]));
       expect(vector4.cut(2, 5), equals([2.0, 11.5, 10.0]));
       expect(vector4.cut(2), equals([2.0, 11.5, 10.0, 15.5, 17.5]));
@@ -374,6 +374,16 @@ void main() {
     test('`fill` method testing', () {
       vector1.fill(1.0);
       expect(vector1, equals([1.0, 1.0, 1.0, 1.0]));
+    });
+
+    test('`addAll` method testing', () {
+      vector1.addAll([2.0 , 3.0, 4.0, 5.0, 6.0]);
+      expect(vector1, equals([1.0, 3.0, 2.0, 11.5, 2.0 , 3.0, 4.0, 5.0, 6.0]));
+    });
+
+    test('`getRange` method testing', () {
+      Iterable<double> res = vector4.getRange(0, 3);
+      expect(res, equals([1.0, 3.0, 2.0]));
     });
   });
 }
