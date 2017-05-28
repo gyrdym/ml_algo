@@ -2,11 +2,11 @@ library linear_regressor;
 
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/predictor.dart';
-import 'package:dart_ml/src/estimator/estimator_type.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:dart_ml/src/optimizer/optimizer_type.dart';
 import 'package:dart_ml/src/optimizer/optimizer_factory.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
+import 'package:dart_ml/src/estimator/estimator_type.dart';
 import 'package:dart_ml/src/estimator/estimator_factory.dart';
 
 class LinearRegressor implements Predictor {
