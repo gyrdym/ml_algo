@@ -5,8 +5,8 @@ import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
 void main() {
-  group('Splitters test.\n', () {
-    test('K fold splitter test', () {
+  group('Splitters test:\n', () {
+    test('K fold splitter test... ', () {
       KFoldSplitter splitter;
 
       splitter = new KFoldSplitter();
@@ -35,7 +35,7 @@ void main() {
       expect(() => splitter.split(8), throwsRangeError);
     });
 
-    test('Leave P out splitter test', () {
+    test('Leave P out splitter test... ', () {
       LeavePOutSplitter splitter;
 
       splitter = new LeavePOutSplitter();
