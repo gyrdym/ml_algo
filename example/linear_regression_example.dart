@@ -22,12 +22,11 @@ main() async {
 
   Vector labels = new Vector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
-  RMSEEstimator rmseEstimator = new RMSEEstimator();
   MAPEEstimator mapeEstimator = new MAPEEstimator();
 
-  SGDLinearRegressor sgdRegressor = new SGDLinearRegressor();
-  BGDLinearRegressor batchGdRegressor = new BGDLinearRegressor();
-  MBGDLinearRegressor mbgdRegressor = new MBGDLinearRegressor();
+  LinearRegressor sgdRegressor = new LinearRegressor(optimizerType: GradientDescent.SGD);
+  LinearRegressor batchGdRegressor = new LinearRegressor(optimizerType: GradientDescent.BGD);
+  LinearRegressor mbgdRegressor = new LinearRegressor(optimizerType: GradientDescent.MBGD);
 
   KFoldCrossValidator validator = new KFoldCrossValidator();
 
