@@ -1,3 +1,3 @@
 enum EstimatorType {
-  RMSE
+  RMSE, MAPE
 }
