@@ -36,5 +36,5 @@ abstract class GradientOptimizer implements Optimizer {
   }
 
   Vector _calculateGradient(Vector k, Vector x, double y) =>
-      x.scalarMul((x * k).sum() - y);
+      x.scalarMul((x.dot(k) - y));
 }
