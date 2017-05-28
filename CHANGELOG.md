@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.13.0
+- Script for running all unit tests added
+
 ## 0.12.0
 - Vector interface removed
 - Regular vector implementation removed
