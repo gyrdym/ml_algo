@@ -17,7 +17,7 @@ class LinearRegressor implements Predictor {
 
   LinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000,
                     OptimizerType optimizerType = OptimizerType.MBGD, EstimatorType estimatorType = EstimatorType.RMSE})
-      : _optimizer = OptimizerFactory.create(optimizerType),
+      : _optimizer = OptimizerFactory.create(optimizerType, learningRate, minWeightsDistance, iterationLimit),
         estimator = EstimatorFactory.create(estimatorType);
 
   void train(List<Vector> features, Vector labels, {Vector weights}) {

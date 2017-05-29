@@ -15,7 +15,7 @@ abstract class GradientOptimizer implements Optimizer {
 
     while (weightsDistance > minWeightsDistance && iterationCounter < iterationLimit) {
       double eta = learningRate / ++iterationCounter;
-      Vector newWeights = iteration(weights, features, labels, eta);
+      Vector newWeights = _generateNewWeights(weights, features, labels, eta);
       weightsDistance = newWeights.distanceTo(weights);
       weights = newWeights;
     }
@@ -23,9 +23,21 @@ abstract class GradientOptimizer implements Optimizer {
     return weights;
   }
 
-  Vector iteration(Vector weights, List<Vector> features, Vector labels, double eta);
+  Iterable<int> getSampleRange(int totalSamplesCount);
 
-  Vector makeGradientStep(Vector k, List<Vector> Xs, Vector y, double eta) {
+  Vector _generateNewWeights(Vector weights, List<Vector> features, Vector labels, double eta) {
+    Iterable<int> range = getSampleRange(features.length);
+
+    int start = range.first;
+    int end = range.last;
+
+    List<Vector> featuresBatch = features.sublist(start, end);
+    Vector labelsBatch = labels.cut(start, end);
+
+    return _makeGradientStep(weights, featuresBatch, labelsBatch, eta);
+  }
+
+  Vector _makeGradientStep(Vector k, List<Vector> Xs, Vector y, double eta) {
     Vector gradientSumVector = _calculateGradient(k, Xs[0], y[0]);
 
     for (int i = 1; i < Xs.length; i++) {
