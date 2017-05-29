@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/optimizer/gradient/base_optimizer.dart';
 
 class MBGDOptimizer extends GradientOptimizer {
@@ -12,13 +11,10 @@ class MBGDOptimizer extends GradientOptimizer {
     );
 
   @override
-  Vector iteration(Vector weights, List<Vector> features, Vector labels, double eta) {
-    int end = _random.nextInt(features.length - 1) + 1;
+  Iterable<int> getSampleRange(int totalSamplesCount) {
+    int end = _random.nextInt(totalSamplesCount - 1) + 1;
     int start = _random.nextInt(end);
 
-    List<Vector> featuresBatch = features.sublist(start, end);
-    Vector labelsBatch = labels.cut(start, end);
-
-    return makeGradientStep(weights, featuresBatch, labelsBatch, eta);
+    return [start, end];
   }
 }

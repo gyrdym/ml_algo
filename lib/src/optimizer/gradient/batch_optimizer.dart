@@ -1,4 +1,3 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/optimizer/gradient/base_optimizer.dart';
 
 class BGDOptimizer extends GradientOptimizer {
@@ -9,7 +8,5 @@ class BGDOptimizer extends GradientOptimizer {
     );
 
   @override
-  Vector iteration(Vector weights, List<Vector> features, Vector labels, double eta) {
-    return makeGradientStep(weights, features, labels, eta);
-  }
+  Iterable<int> getSampleRange(int totalSamplesCount) => [0, totalSamplesCount];
 }

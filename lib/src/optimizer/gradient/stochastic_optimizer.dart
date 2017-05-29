@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/optimizer/gradient/base_optimizer.dart';
 
 class SGDOptimizer extends GradientOptimizer {
@@ -13,8 +12,8 @@ class SGDOptimizer extends GradientOptimizer {
     );
 
   @override
-  Vector iteration(Vector weights, List<Vector> features, Vector labels, double eta) {
-    int k = _random.nextInt(features.length);
-    return makeGradientStep(weights, [features[k]], new Vector.from([labels[k]]), eta);
+  Iterable<int> getSampleRange(int totalSamplesCount) {
+    int k = _random.nextInt(totalSamplesCount);
+    return [k, k + 1];
   }
 }
