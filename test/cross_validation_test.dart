@@ -1,7 +1,7 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/validator/kfold_cross_validator.dart';
 import 'package:dart_ml/src/validator/lpo_cross_validator.dart';
-import 'package:dart_ml/src/predictor/linear_regressor.dart';
+import 'package:dart_ml/src/predictor/gradient_linear_regressor.dart';
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
@@ -12,10 +12,10 @@ void main() {
   group('Cross validators test.\n', () {
     List<Vector> features = new List<Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Vector.randomFilled(4));
     Vector labels = new Vector.randomFilled(NUMBER_OF_SAMPLES);
-    LinearRegressor predictor;
+    GradientLinearRegressor predictor;
 
     setUp(() {
-      predictor = new LinearRegressor();
+      predictor = new GradientLinearRegressor();
     });
 
     tearDown(() {
