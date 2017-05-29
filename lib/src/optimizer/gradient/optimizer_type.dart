@@ -1,3 +1,3 @@
-enum OptimizerType {
+enum GradientOptimizerType {
   BGD, MBGD, SGD
 }

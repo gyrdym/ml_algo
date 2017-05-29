@@ -16,7 +16,7 @@ class GradientLinearRegressor implements Predictor {
   Vector _weights;
 
   GradientLinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000,
-                    OptimizerType optimizerType = OptimizerType.MBGD, EstimatorType estimatorType = EstimatorType.RMSE})
+                    GradientOptimizerType optimizerType = GradientOptimizerType.MBGD, EstimatorType estimatorType = EstimatorType.RMSE})
       : _optimizer = GradientOptimizerFactory.create(optimizerType, learningRate, minWeightsDistance, iterationLimit),
         estimator = EstimatorFactory.create(estimatorType);
 
