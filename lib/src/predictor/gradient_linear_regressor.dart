@@ -3,21 +3,21 @@ library linear_regressor;
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/predictor.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:dart_ml/src/optimizer/optimizer_type.dart';
-import 'package:dart_ml/src/optimizer/optimizer_factory.dart';
+import 'package:dart_ml/src/optimizer/gradient/optimizer_type.dart';
+import 'package:dart_ml/src/optimizer/gradient/optimizer_factory.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
 import 'package:dart_ml/src/estimator/estimator_type.dart';
 import 'package:dart_ml/src/estimator/estimator_factory.dart';
 
-class LinearRegressor implements Predictor {
+class GradientLinearRegressor implements Predictor {
   final Estimator estimator;
   final Optimizer _optimizer;
 
   Vector _weights;
 
-  LinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000,
+  GradientLinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000,
                     OptimizerType optimizerType = OptimizerType.MBGD, EstimatorType estimatorType = EstimatorType.RMSE})
-      : _optimizer = OptimizerFactory.create(optimizerType, learningRate, minWeightsDistance, iterationLimit),
+      : _optimizer = GradientOptimizerFactory.create(optimizerType, learningRate, minWeightsDistance, iterationLimit),
         estimator = EstimatorFactory.create(estimatorType);
 
   void train(List<Vector> features, Vector labels, {Vector weights}) {

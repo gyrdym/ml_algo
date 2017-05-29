@@ -24,9 +24,9 @@ main() async {
 
   MAPEEstimator mapeEstimator = new MAPEEstimator();
 
-  LinearRegressor sgdRegressor = new LinearRegressor(optimizerType: OptimizerType.SGD);
-  LinearRegressor batchGdRegressor = new LinearRegressor(optimizerType: OptimizerType.BGD);
-  LinearRegressor mbgdRegressor = new LinearRegressor(optimizerType: OptimizerType.MBGD);
+  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor(optimizerType: OptimizerType.SGD);
+  GradientLinearRegressor batchGdRegressor = new GradientLinearRegressor(optimizerType: OptimizerType.BGD);
+  GradientLinearRegressor mbgdRegressor = new GradientLinearRegressor(optimizerType: OptimizerType.MBGD);
 
   KFoldCrossValidator validator = new KFoldCrossValidator();
 
