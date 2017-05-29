@@ -1,12 +1,14 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
+import 'package:dart_ml/src/optimizer/regularization.dart';
 
 abstract class GradientOptimizer implements Optimizer {
   final double minWeightsDistance;
   final double learningRate;
   final int iterationLimit;
+  final Regularization regularization;
 
-  GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit);
+  GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit, this.regularization);
 
   Vector optimize(List<Vector> features, Vector labels, {Vector weights}) {
     weights = weights ?? new Vector.zero(features.first.length);

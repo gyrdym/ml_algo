@@ -1,20 +1,23 @@
+import 'package:dart_ml/src/optimizer/regularization.dart';
+
+import 'optimizer.dart';
 import 'optimizer_type.dart';
-import 'base_optimizer.dart';
-import 'batch_optimizer.dart';
-import 'mini_batch_optimizer.dart';
-import 'stochastic_optimizer.dart';
+import 'batch.dart';
+import 'mini_batch.dart';
+import 'stochastic.dart';
 
 class GradientOptimizerFactory {
-  static GradientOptimizer create(GradientOptimizerType type, [double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000]) {
+  static GradientOptimizer create(GradientOptimizerType type, double learningRate, double minWeightsDistance,
+                                  int iterationLimit, Regularization regularization) {
     switch (type) {
       case GradientOptimizerType.MBGD:
-        return new MBGDOptimizer(learningRate, minWeightsDistance, iterationLimit);
+        return new MBGDOptimizer(learningRate, minWeightsDistance, iterationLimit, regularization);
 
       case GradientOptimizerType.BGD:
-        return new BGDOptimizer(learningRate, minWeightsDistance, iterationLimit);
+        return new BGDOptimizer(learningRate, minWeightsDistance, iterationLimit, regularization);
 
       case GradientOptimizerType.SGD:
-        return new SGDOptimizer(learningRate, minWeightsDistance, iterationLimit);
+        return new SGDOptimizer(learningRate, minWeightsDistance, iterationLimit, regularization);
 
       default:
         throw new UnsupportedError('Gradient descent type $type is not supported!');

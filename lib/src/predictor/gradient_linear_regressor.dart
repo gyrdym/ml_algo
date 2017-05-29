@@ -2,7 +2,8 @@ library linear_regressor;
 
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/predictor.dart';
-import 'package:dart_ml/src/optimizer/optimizer.dart';
+import 'package:dart_ml/src/optimizer/regularization.dart';
+import 'package:dart_ml/src/optimizer/gradient/optimizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/optimizer_type.dart';
 import 'package:dart_ml/src/optimizer/gradient/optimizer_factory.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
@@ -11,13 +12,15 @@ import 'package:dart_ml/src/estimator/estimator_factory.dart';
 
 class GradientLinearRegressor implements Predictor {
   final Estimator estimator;
-  final Optimizer _optimizer;
+  final GradientOptimizer _optimizer;
 
   Vector _weights;
 
   GradientLinearRegressor({double learningRate = 1e-5, double minWeightsDistance = 1e-8, int iterationLimit = 10000,
-                    GradientOptimizerType optimizerType = GradientOptimizerType.MBGD, EstimatorType estimatorType = EstimatorType.RMSE})
-      : _optimizer = GradientOptimizerFactory.create(optimizerType, learningRate, minWeightsDistance, iterationLimit),
+                    GradientOptimizerType optimizerType = GradientOptimizerType.MBGD,
+                            EstimatorType estimatorType = EstimatorType.RMSE, Regularization regularization = Regularization.L2})
+
+      : _optimizer = GradientOptimizerFactory.create(optimizerType, learningRate, minWeightsDistance, iterationLimit, regularization),
         estimator = EstimatorFactory.create(estimatorType);
 
   void train(List<Vector> features, Vector labels, {Vector weights}) {
