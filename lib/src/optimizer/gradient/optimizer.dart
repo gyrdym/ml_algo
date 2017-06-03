@@ -7,8 +7,10 @@ abstract class GradientOptimizer implements Optimizer {
   final double learningRate;
   final int iterationLimit;
   final Regularization regularization;
+  final double alpha;
 
-  GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit, this.regularization);
+  GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit, this.regularization,
+                    {this.alpha = .00001});
 
   Vector optimize(List<Vector> features, Vector labels, {Vector weights}) {
     weights = weights ?? new Vector.zero(features.first.length);
@@ -39,16 +41,36 @@ abstract class GradientOptimizer implements Optimizer {
     return _makeGradientStep(weights, featuresBatch, labelsBatch, eta);
   }
 
-  Vector _makeGradientStep(Vector k, List<Vector> Xs, Vector y, double eta) {
-    Vector gradientSumVector = _calculateGradient(k, Xs[0], y[0]);
+  Vector _makeGradientStep(Vector weights, List<Vector> data, Vector target, double eta) {
+    Vector gradientSumVector = _calculateGradient(weights, data[0], target[0], eta);
 
-    for (int i = 1; i < Xs.length; i++) {
-      gradientSumVector += _calculateGradient(k, Xs[i], y[i]);
+    for (int i = 1; i < data.length; i++) {
+      gradientSumVector += _calculateGradient(weights, data[i], target[i], eta);
     }
 
-    return k - gradientSumVector.scalarDiv(Xs.length * 1.0).scalarMul(2 * eta);
+    return weights - gradientSumVector.scalarDiv(data.length * 1.0);
   }
 
-  Vector _calculateGradient(Vector k, Vector x, double y) =>
-      x.scalarMul((x.dot(k) - y));
+  Vector _calculateGradient(Vector k, Vector x, double y, double eta) {
+    Vector pureGradient = x.scalarMul(2.0 * eta).scalarMul(x.dot(k) - y);
+
+    if (regularization != null) {
+      return pureGradient + _calcRegularizationVector(k);
+    }
+
+    return pureGradient;
+  }
+
+  Vector _calcRegularizationVector(Vector weights) {
+    switch (regularization) {
+      case Regularization.L1:
+        return weights.scalarMul(0.0).scalarAdd(alpha);
+
+      case Regularization.L2:
+        return weights.scalarMul(2.0 * alpha);
+
+      default:
+        throw new UnimplementedError('Unimplemented regularization type $regularization');
+    }
+  }
 }
