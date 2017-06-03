@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.14.0
+- L1 and L2 regularization added
+
 ## 0.13.0
 - Script for running all unit tests added
 
