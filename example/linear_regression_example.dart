@@ -6,8 +6,10 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {
+  DiConfigurator.configure();
+
   csv.CsvCodec csvCodec = new csv.CsvCodec();
-  Stream<List<int>> input = new File('example/advertising.csv').openRead();
+  Stream<List<int>> input = new File('example/datasets/advertising.csv').openRead();
   List<List<num>> fields = (await input.transform(UTF8.decoder)
       .transform(csvCodec.decoder).toList() as List<List<num>>)
       .sublist(1);

@@ -6,7 +6,6 @@ import 'package:dart_ml/src/math/vector/norm.dart';
 
 class Vector extends ListBase<double> {
   Float32x4List _innerList;
-
   int _origLength;
 
   Vector(int length) {

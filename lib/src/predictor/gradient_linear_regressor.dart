@@ -1,5 +1,6 @@
 library linear_regressor;
 
+import 'package:dart_ml/src/di/di.dart';
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/predictor.dart';
 import 'package:dart_ml/src/optimizer/regularization.dart';

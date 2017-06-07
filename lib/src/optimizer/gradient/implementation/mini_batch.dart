@@ -1,13 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:dart_ml/src/optimizer/gradient/optimizer.dart';
-import 'package:dart_ml/src/optimizer/regularization.dart';
+import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
 
-class MBGDOptimizer extends GradientOptimizer {
+class MBGDOptimizerImpl extends GradientOptimizer implements MBGDOptimizer {
   final math.Random _random = new math.Random();
-
-  MBGDOptimizer(double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization)
-      : super(learningRate, minWeightsDistance, iterationLimit, regularization);
 
   @override
   Iterable<int> getSampleRange(int totalSamplesCount) {
