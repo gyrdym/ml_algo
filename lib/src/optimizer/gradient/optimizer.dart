@@ -3,22 +3,28 @@ import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:dart_ml/src/optimizer/regularization.dart';
 
 abstract class GradientOptimizer implements Optimizer {
-  final double minWeightsDistance;
-  final double learningRate;
-  final int iterationLimit;
-  final Regularization regularization;
-  final double alpha;
+  double _minWeightsDistance;
+  double _learningRate;
+  int _iterationLimit;
+  Regularization _regularization;
+  double _alpha;
 
-  GradientOptimizer(this.learningRate, this.minWeightsDistance, this.iterationLimit, this.regularization,
-                    {this.alpha = .00001});
+  void configure(double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
+                 {double alpha = .00001}) {
+    _learningRate = learningRate;
+    _minWeightsDistance = minWeightsDistance;
+    _iterationLimit = iterationLimit;
+    _regularization = regularization;
+    _alpha = alpha;
+  }
 
   Vector optimize(List<Vector> features, Vector labels, {Vector weights}) {
     weights = weights ?? new Vector.zero(features.first.length);
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
-    while (weightsDistance > minWeightsDistance && iterationCounter < iterationLimit) {
-      double eta = learningRate / ++iterationCounter;
+    while (weightsDistance > _minWeightsDistance && iterationCounter < _iterationLimit) {
+      double eta = _learningRate / ++iterationCounter;
       Vector newWeights = _generateNewWeights(weights, features, labels, eta);
       weightsDistance = newWeights.distanceTo(weights);
       weights = newWeights;
@@ -54,7 +60,7 @@ abstract class GradientOptimizer implements Optimizer {
   Vector _calculateGradient(Vector k, Vector x, double y, double eta) {
     Vector pureGradient = x.scalarMul(2.0 * eta).scalarMul(x.dot(k) - y);
 
-    if (regularization != null) {
+    if (_regularization != null) {
       return pureGradient + _calcRegularizationVector(k);
     }
 
@@ -62,15 +68,15 @@ abstract class GradientOptimizer implements Optimizer {
   }
 
   Vector _calcRegularizationVector(Vector weights) {
-    switch (regularization) {
+    switch (_regularization) {
       case Regularization.L1:
-        return weights.scalarMul(0.0).scalarAdd(alpha);
+        return weights.scalarMul(0.0).scalarAdd(_alpha);
 
       case Regularization.L2:
-        return weights.scalarMul(2.0 * alpha);
+        return weights.scalarMul(2.0 * _alpha);
 
       default:
-        throw new UnimplementedError('Unimplemented regularization type $regularization');
+        throw new UnimplementedError('Unimplemented regularization type $_regularization');
     }
   }
 }
