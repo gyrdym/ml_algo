@@ -1,14 +1,14 @@
-import 'dart:math' as math;
-
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:dart_ml/src/math/misc/randomizer/interface/randomizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/optimizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
 
 class SGDOptimizerImpl extends GradientOptimizer implements SGDOptimizer {
-  final math.Random _random = new math.Random();
+  final Randomizer _random = injector.get(Randomizer);
 
   @override
   Iterable<int> getSampleRange(int totalSamplesCount) {
-    int k = _random.nextInt(totalSamplesCount);
+    int k = _random.getIntegerFromInterval(0, totalSamplesCount);
     return [k, k + 1];
   }
 }
