@@ -1,5 +1,6 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
+export 'package:dart_ml/src/optimizer/interface/optimizer.dart';
+export 'package:dart_ml/src/optimizer/gradient/interface/batch.dart';
+export 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
+export 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
 
-abstract class Optimizer {
-  Vector optimize(List<Vector> features, Vector labels, {Vector weights});
-}
+export 'package:dart_ml/src/optimizer/regularization/regularization.dart';

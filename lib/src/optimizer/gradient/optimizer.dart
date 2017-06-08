@@ -1,6 +1,6 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
-import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:dart_ml/src/optimizer/regularization.dart';
+import 'package:dart_ml/src/optimizer/interface/optimizer.dart';
+import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 
 abstract class GradientOptimizer implements Optimizer {
   double _minWeightsDistance;
