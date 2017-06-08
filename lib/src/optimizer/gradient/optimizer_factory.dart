@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_ml/src/optimizer/regularization.dart';
+import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 
 import 'optimizer.dart';
 import 'optimizer_type.dart';
