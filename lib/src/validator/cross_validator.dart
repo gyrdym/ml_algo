@@ -1,7 +1,7 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/predictor.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
-import 'package:dart_ml/src/data_splitter/splitter.dart';
+import 'package:dart_ml/src/data_splitter/interface/splitter.dart';
 
 class CrossValidator {
   final Splitter _splitter;
