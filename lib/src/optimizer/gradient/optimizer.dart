@@ -11,6 +11,11 @@ abstract class GradientOptimizer implements Optimizer {
 
   void configure(double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
                  {double alpha = .00001}) {
+
+    if (minWeightsDistance == null && iterationLimit == null) {
+      throw new Exception('You must specify at least one criterion of convergence');
+    }
+
     _learningRate = learningRate;
     _minWeightsDistance = minWeightsDistance;
     _iterationLimit = iterationLimit;
