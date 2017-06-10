@@ -30,7 +30,7 @@ main() async {
   GradientLinearRegressor batchGdRegressor = new GradientLinearRegressor(optimizerType: GradientOptimizerType.BGD);
   GradientLinearRegressor mbgdRegressor = new GradientLinearRegressor(optimizerType: GradientOptimizerType.MBGD);
 
-  KFoldCrossValidator validator = new KFoldCrossValidator();
+  KFoldCrossValidatorImpl validator = new KFoldCrossValidatorImpl();
 
   print('K-fold cross validation:');
   print('\nRMSE:');

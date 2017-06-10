@@ -1,6 +1,6 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
-import 'package:dart_ml/src/validator/kfold_cross_validator.dart';
-import 'package:dart_ml/src/validator/lpo_cross_validator.dart';
+import 'package:dart_ml/src/model_selection/validator/implementation/kfold_cross_validator.dart';
+import 'package:dart_ml/src/model_selection/validator/implementation/lpo_cross_validator.dart';
 import 'package:dart_ml/src/predictor/gradient_linear_regressor.dart';
 
 import 'package:test/test.dart';
@@ -23,8 +23,8 @@ void main() {
     });
 
     test('k-fold cross validation test: ', () {
-      KFoldCrossValidator validator1 = new KFoldCrossValidator();
-      KFoldCrossValidator validator2 = new KFoldCrossValidator(numberOfFolds: 10);
+      KFoldCrossValidatorImpl validator1 = new KFoldCrossValidatorImpl();
+      KFoldCrossValidatorImpl validator2 = new KFoldCrossValidatorImpl(numberOfFolds: 10);
 
       Vector score1 = validator1.validate(predictor, features, labels);
       Vector score2 = validator2.validate(predictor, features, labels);
@@ -34,8 +34,8 @@ void main() {
     });
 
     test('leave p out validation test: ', () {
-      LpoCrossValidator validator1 = new LpoCrossValidator();
-      LpoCrossValidator validator2 = new LpoCrossValidator(p: 3);
+      LpoCrossValidatorImpl validator1 = new LpoCrossValidatorImpl();
+      LpoCrossValidatorImpl validator2 = new LpoCrossValidatorImpl(p: 3);
 
       Vector score1 = validator1.validate(predictor, features, labels);
       Vector score2 = validator2.validate(predictor, features, labels);

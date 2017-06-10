@@ -2,11 +2,12 @@ import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/predictor.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
 import 'package:dart_ml/src/data_splitter/interface/splitter.dart';
+import 'package:dart_ml/src/model_selection/validator/interface/cross_validator.dart';
 
-class CrossValidator {
+abstract class BaseCrossValidator implements CrossValidator {
   final Splitter _splitter;
 
-  CrossValidator(this._splitter);
+  BaseCrossValidator(this._splitter);
 
   Vector validate(Predictor predictor, List<Vector> features, Vector labels, {Estimator estimator}) {
 

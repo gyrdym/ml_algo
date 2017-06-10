@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:csv/csv.dart' as csv;
 import 'package:dart_ml/dart_ml.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:dart_ml/src/validator/kfold_cross_validator.dart';
+import 'package:dart_ml/src/model_selection/validator/implementation/kfold_cross_validator.dart';
 
 GradientLinearRegressor predictor;
 List<Vector> features;
@@ -18,7 +18,7 @@ class KFoldValidatorBenchmark extends BenchmarkBase {
   }
 
   void run() {
-    KFoldCrossValidator validator = new KFoldCrossValidator();
+    KFoldCrossValidatorImpl validator = new KFoldCrossValidatorImpl();
     validator.validate(predictor, features, labels);
   }
 }
