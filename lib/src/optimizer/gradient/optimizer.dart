@@ -53,17 +53,17 @@ abstract class GradientOptimizer implements Optimizer {
   }
 
   Vector _makeGradientStep(Vector weights, List<Vector> data, Vector target, double eta) {
-    Vector gradientSumVector = _calculateGradient(weights, data[0], target[0], eta);
+    Vector gradientSumVector = _calculateGradient(weights, data[0], target[0]);
 
     for (int i = 1; i < data.length; i++) {
-      gradientSumVector += _calculateGradient(weights, data[i], target[i], eta);
+      gradientSumVector += _calculateGradient(weights, data[i], target[i]);
     }
 
-    return weights - gradientSumVector.scalarDiv(data.length * 1.0);
+    return weights - gradientSumVector.scalarMul(eta / data.length);
   }
 
-  Vector _calculateGradient(Vector k, Vector x, double y, double eta) {
-    Vector pureGradient = x.scalarMul(2.0 * eta).scalarMul(x.dot(k) - y);
+  Vector _calculateGradient(Vector k, Vector x, double y) {
+    Vector pureGradient = x.scalarMul(2.0).scalarMul(x.dot(k) - y);
 
     if (_regularization != null) {
       return pureGradient + _calcRegularizationVector(k);
