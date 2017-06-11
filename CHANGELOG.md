@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.16.0
+- `README.md` was actualized
+
 ## 0.15.0
 - Tests for gradient optimizers were added
 - Interfaces (almost for all entities) for DI and IOC mechanism were added
