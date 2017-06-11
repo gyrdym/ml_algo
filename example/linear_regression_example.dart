@@ -30,7 +30,7 @@ main() async {
   BGDRegressor batchGdRegressor = new BGDRegressor();
   MBGDRegressor mbgdRegressor = new MBGDRegressor();
 
-  var validator = new CrossValidator.KFold();
+  CrossValidator validator = new CrossValidator.KFold();
 
   print('K-fold cross validation:');
   print('\nRMSE:');
