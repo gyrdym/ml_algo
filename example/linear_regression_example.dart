@@ -6,7 +6,7 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {
-  DiConfigurator.configure();
+  Dependencies.configure();
 
   csv.CsvCodec csvCodec = new csv.CsvCodec();
   Stream<List<int>> input = new File('example/datasets/advertising.csv').openRead();

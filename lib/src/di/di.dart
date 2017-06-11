@@ -10,7 +10,7 @@ import 'package:dart_ml/src/optimizer/optimizer_impl.dart';
 import 'package:dart_ml/src/data_splitter/data_splitter.dart';
 import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
 
-class DiConfigurator {
+class Dependencies {
   static void configure() {
     injector = new ModuleInjector([new Module()
       ..bind(Randomizer, toFactory: () => new RandomizerImpl())
