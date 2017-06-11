@@ -8,4 +8,4 @@ export 'package:dart_ml/src/estimator/mape.dart';
 export 'package:dart_ml/src/estimator/estimator_type.dart';
 export 'package:dart_ml/src/predictor/linear_regressor/linear_regressor.dart' show MBGDRegressor, BGDRegressor, SGDRegressor;
 export 'package:dart_ml/src/model_selection/validator/cross_validator_impl.dart';
-export 'package:dart_ml/src/di/di.dart';
+export 'package:dart_ml/src/di/dependencies.dart';
