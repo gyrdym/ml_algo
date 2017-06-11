@@ -6,7 +6,7 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:dart_ml/src/model_selection/validator/implementation/kfold_cross_validator.dart';
 
-GradientLinearRegressor predictor;
+MBGDRegressor predictor;
 List<Vector> features;
 Vector labels;
 
@@ -40,7 +40,7 @@ Future main() async {
 
   labels = new Vector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
-  predictor = new GradientLinearRegressor();
+  predictor = new MBGDRegressor();
 
   print('measuring...');
   KFoldValidatorBenchmark.main();
