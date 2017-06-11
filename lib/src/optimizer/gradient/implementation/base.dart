@@ -1,6 +1,17 @@
+library gradient_optimizer_base;
+
+import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/base.dart';
+import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
+import 'package:dart_ml/src/optimizer/gradient/interface/batch.dart';
+import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
+import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
+
+part 'batch.dart';
+part 'mini_batch.dart';
+part 'stochastic.dart';
 
 abstract class GradientOptimizerImpl implements GradientOptimizer {
   double _minWeightsDistance;
@@ -38,10 +49,10 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
     return weights;
   }
 
-  Iterable<int> getSampleRange(int totalSamplesCount);
+  Iterable<int> _getSamplesRange(int totalSamplesCount);
 
   Vector _generateNewWeights(Vector weights, List<Vector> features, Vector labels, double eta) {
-    Iterable<int> range = getSampleRange(features.length);
+    Iterable<int> range = _getSamplesRange(features.length);
 
     int start = range.first;
     int end = range.last;

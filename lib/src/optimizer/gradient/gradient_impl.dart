@@ -1,3 +1,1 @@
-export 'implementation/batch.dart';
-export 'implementation/mini_batch.dart';
-export 'implementation/stochastic.dart';
+export 'implementation/base.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;
