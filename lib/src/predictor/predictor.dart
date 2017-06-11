@@ -1,1 +1,1 @@
-export 'package:dart_ml/src/predictor/interface/predictor.dart';
+export 'interface/predictor.dart';
