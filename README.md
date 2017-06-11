@@ -16,6 +16,11 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 ````
 
+Let's start with dependencies configuring:
+````dart
+Dependencies.configure();
+````
+
 Read a `csv`-file `advertising.csv` with a test data:
 ````dart
 csv.CsvCodec csvCodec = new csv.CsvCodec();
@@ -35,26 +40,19 @@ List<double> extractFeatures(item) => item.sublist(0, 3)
 
 ...and finally get all features:
 ```dart
-List<TypedVector> allFeatures = fields
+List<TypedVector> features = fields
   .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
   .toList(growable: false);
 ```
 
-...and all labels (last element of a every line)
+...and labels (last element of a every line)
 ````dart
-TypedVector allLabels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+TypedVector labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 ````
 
-Split features and labels into train and test samples:
+Create an instance of `CrossValidator` class for evaluating quality of our predictor
 ````dart
-Map<DataCategory, List<VectorInterface>> splittedFeatures = DataTrainTestSplitter.splitMatrix(allFeatures, .6);
-Map<DataCategory, VectorInterface> splitedLabels = DataTrainTestSplitter.splitVector(allLabels, .6);
-
-List<TypedVector> trainFeatures = splittedFeatures[DataCategory.TRAIN];
-TypedVector trainLabels = splitedLabels[DataCategory.TRAIN];
-
-List<TypedVector> testFeatures = splittedFeatures[DataCategory.TEST];
-TypedVector testLabels = splitedLabels[DataCategory.TEST];
+CrossValidator validator = new CrossValidator.KFold();
 ````
 
 Create RMSE and MAPE estimator instances for evaluating a forecast quality:
@@ -65,29 +63,27 @@ MAPEEstimator mapeEstimator = new MAPEEstimator();
 
 Create linear regressor instance with stochastic gradient descent optimizer: 
 ````dart
-SGDLinearRegressor sgdRegressor = new SGDLinearRegressor();
+SGDRegressor sgdRegressor = new SGDRegressor();
 ````
 
-Train our model (third argument - initial vector for weights):
+Evaluate our model via RMSE-metric (default metric for cross validation):
 ````dart
-int dimension = trainFeatures.first.length;
-sgdRegressor.train(trainFeatures, trainLabels, new TypedVector.filled(dimension, 0.0));
-print("SGD regressor weights: ${sgdRegressor.weights}");
+Vector scoreRMSE = validator.validate(sgdRegressor, features, labels);
 ````
 
-...and make a forecast (second argument - vector for storing predicted labels):
+...and via MAPE-metric:
 ````dart
-VectorInterface sgdPrediction = sgdRegressor.predict(testFeatures, new TypedVector.filled(testFeatures.length, 0.0));
+Vector scoreMAPE = validator.validate(sgdRegressor, features, labels, estimator: mapeEstimator);
 ````
 
-Let's print a forecast evaluation:
+Let's print score:
 ````dart
-print("SGD regressor, rmse (test) is: ${rmseEstimator.calculateError(sgdPrediction, testLabels)}");
-print("SGD regressor, mape (test) is: ${mapeEstimator.calculateError(sgdPrediction, testLabels)}\n");
+print("score (RMSE): ${scoreRMSE.mean()}");
+print("score (MAPE): ${scoreMAPE.mean()}");
 ````
 
 We will see something like this:
 ````
-SGD regressor, rmse (test) is: 4.91429797944094
-SGD regressor, mape (test) is: 31.221150755882263
+score (RMSE): 4.91429797944094
+score (MAPE): 31.221150755882263
 ````
