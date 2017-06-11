@@ -1,13 +1,10 @@
-import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/gradient/implementation/base.dart';
-import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
+part of gradient_optimizer_base;
 
 class MBGDOptimizerImpl extends GradientOptimizerImpl implements MBGDOptimizer {
   final Randomizer _randomizer = injector.get(Randomizer);
 
   @override
-  Iterable<int> getSampleRange(int totalSamplesCount) {
+  Iterable<int> _getSamplesRange(int totalSamplesCount) {
     int end = _randomizer.getIntegerFromInterval(1, totalSamplesCount);
     int start = _randomizer.getIntegerFromInterval(0, end);
 
