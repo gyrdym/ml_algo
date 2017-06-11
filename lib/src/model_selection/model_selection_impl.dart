@@ -1,1 +1,1 @@
-export 'package:dart_ml/src/model_selection/validator/validator_impl.dart';
+export 'package:dart_ml/src/model_selection/validator/cross_validator_impl.dart';
