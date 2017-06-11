@@ -7,7 +7,7 @@ import 'package:dart_ml/src/data_splitter/data_splitter.dart';
 import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart' show SGDOptimizer, GradientOptimizerType;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show SGDOptimizerImpl;
-import 'package:dart_ml/src/predictor/gradient_linear_regressor.dart';
+import 'package:dart_ml/src/predictor/linear_regressor/gradient/implementation/gradient_linear_regressor.dart';
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';

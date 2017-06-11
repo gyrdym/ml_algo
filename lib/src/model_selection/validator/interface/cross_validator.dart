@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
-import 'package:dart_ml/src/predictor/predictor.dart';
+import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
 
 abstract class CrossValidator {
