@@ -1,12 +1,14 @@
-import 'package:dart_ml/src/data_splitter/splitter.dart';
+import 'package:dart_ml/src/data_splitter/interface/leave_p_out_splitter.dart';
 
-class LeavePOutSplitter implements Splitter {
-  final int _p;
+class LeavePOutSplitterImpl implements LeavePOutSplitter {
+  int _p = 2;
 
-  LeavePOutSplitter({int p = 2}) : _p = p {
+  void configure({int p = 2}) {
     if (p == 0) {
       throw new UnsupportedError('Value `$p` for parameter `p` is unsupported');
     }
+
+    _p = p;
   }
 
   Iterable<Iterable<int>> split(int numberOfSamples) sync* {

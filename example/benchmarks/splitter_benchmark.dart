@@ -1,5 +1,5 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:dart_ml/src/data_splitter/leave_p_out_splitter.dart';
+import 'package:dart_ml/src/data_splitter/implementation/leave_p_out_splitter.dart';
 
 Iterable<Iterable<int>> result;
 
@@ -12,7 +12,8 @@ class LeavePOutSplitterBenchmark extends BenchmarkBase {
   }
 
   void run() {
-    LeavePOutSplitter splitter = new LeavePOutSplitter(p: 3);
+    LeavePOutSplitterImpl splitter = new LeavePOutSplitterImpl();
+    splitter.configure(p: 3);
     result = splitter.split(100);
   }
 }

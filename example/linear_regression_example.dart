@@ -6,8 +6,10 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {
+  Dependencies.configure();
+
   csv.CsvCodec csvCodec = new csv.CsvCodec();
-  Stream<List<int>> input = new File('example/advertising.csv').openRead();
+  Stream<List<int>> input = new File('example/datasets/advertising.csv').openRead();
   List<List<num>> fields = (await input.transform(UTF8.decoder)
       .transform(csvCodec.decoder).toList() as List<List<num>>)
       .sublist(1);
@@ -24,11 +26,11 @@ main() async {
 
   MAPEEstimator mapeEstimator = new MAPEEstimator();
 
-  GradientLinearRegressor sgdRegressor = new GradientLinearRegressor(optimizerType: GradientOptimizerType.SGD);
-  GradientLinearRegressor batchGdRegressor = new GradientLinearRegressor(optimizerType: GradientOptimizerType.BGD);
-  GradientLinearRegressor mbgdRegressor = new GradientLinearRegressor(optimizerType: GradientOptimizerType.MBGD);
+  SGDRegressor sgdRegressor = new SGDRegressor();
+  BGDRegressor batchGdRegressor = new BGDRegressor();
+  MBGDRegressor mbgdRegressor = new MBGDRegressor();
 
-  KFoldCrossValidator validator = new KFoldCrossValidator();
+  CrossValidator validator = new CrossValidator.KFold();
 
   print('K-fold cross validation:');
   print('\nRMSE:');
