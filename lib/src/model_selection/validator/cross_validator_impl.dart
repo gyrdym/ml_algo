@@ -2,15 +2,25 @@ import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
 import 'package:dart_ml/src/data_splitter/interface/splitter.dart';
-import 'package:dart_ml/src/model_selection/validator/interface/cross_validator.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:dart_ml/src/data_splitter/interface/k_fold_splitter.dart';
+import 'package:dart_ml/src/data_splitter/interface/leave_p_out_splitter.dart';
+import 'cross_validator.dart';
 
-abstract class BaseCrossValidator implements CrossValidator {
+class CrossValidator implements ICrossValidator {
   final Splitter _splitter;
 
-  BaseCrossValidator(this._splitter);
+  factory CrossValidator.KFold({int numberOfFolds = 5}) =>
+      new CrossValidator._internal((injector.get(KFoldSplitter) as KFoldSplitter)
+                                     ..configure(numberOfFolds: numberOfFolds));
+
+  factory CrossValidator.LPO({int p = 5}) =>
+      new CrossValidator._internal((injector.get(LeavePOutSplitter) as LeavePOutSplitter)
+                                     ..configure(p: p));
+
+  CrossValidator._internal(this._splitter);
 
   Vector validate(Predictor predictor, List<Vector> features, Vector labels, {Estimator estimator}) {
-
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
     }

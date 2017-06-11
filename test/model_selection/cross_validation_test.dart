@@ -2,7 +2,7 @@ import 'package:di/di.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/math/math.dart';
 import 'package:dart_ml/src/math/math_impl.dart';
-import 'package:dart_ml/src/model_selection/validator/validator_impl.dart';
+import 'package:dart_ml/src/model_selection/model_selection_impl.dart' show CrossValidator;
 import 'package:dart_ml/src/data_splitter/data_splitter.dart';
 import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart' show SGDOptimizer;
@@ -35,13 +35,13 @@ void main() {
 
   group('K-fold cross validator', () {
     test('should return scores vector with proper length', () {
-      KFoldCrossValidatorImpl validator = new KFoldCrossValidatorImpl(numberOfFolds: 10);
+      CrossValidator validator = new CrossValidator.KFold(numberOfFolds: 10);
       Vector score2 = validator.validate(predictor, features, labels);
       expect(score2.length, equals(10));
     });
 
     test('should return scores vector with proper length (if `numberOfFolds` argument wasn\'t passed)', () {
-      KFoldCrossValidatorImpl validator = new KFoldCrossValidatorImpl();
+      CrossValidator validator = new CrossValidator.KFold();
       Vector score = validator.validate(predictor, features, labels);
       expect(score.length, equals(5));
     });
@@ -49,13 +49,13 @@ void main() {
 
   group('LPO cross validator', () {
     test('should return scores vector with proper length', () {
-      LpoCrossValidatorImpl validator = new LpoCrossValidatorImpl(p: 3);
+      CrossValidator validator = new CrossValidator.LPO(p: 3);
       Vector score = validator.validate(predictor, features, labels);
       expect(score.length, equals(220));
     });
 
-    test('should return scores vector with proper length', () {
-      LpoCrossValidatorImpl validator = new LpoCrossValidatorImpl();
+    test('should return scores vector with proper length (if `p` argument wasn\'t passed)', () {
+      CrossValidator validator = new CrossValidator.LPO();
       Vector score = validator.validate(predictor, features, labels);
       expect(score.length, equals(792));
     });
