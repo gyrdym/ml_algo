@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.0
+- Tests for gradient optimizers were added
+- Interfaces (almost for all entities) for DI and IOC mechanism were added
+- `Randomizer` class was added
+- Removed separate classes for k-fold cross validation and lpo cross validation, now it resides in `CrossValidation` class
+
 ## 0.14.0
 - L1 and L2 regularization added
 
