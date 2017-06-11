@@ -1,14 +1,16 @@
 name: dart_ml
 description: Machine learning with dart
-version: 0.14.0
+version: 0.15.0
 author: Ilya Gyrdymov <ilgyrd@gmail.com>
 
 environment:
   sdk: '>=1.20.1 <2.0.0'
 
 dependencies:
+  di: "^3.3.10"
   csv: "^3.1.2"
 
 dev_dependencies:
   benchmark_harness: ">=1.0.0 <2.0.0"
   test: ^0.12.0
+  mockito: ^2.0.2
