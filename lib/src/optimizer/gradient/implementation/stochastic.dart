@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_ml/src/math/misc/randomizer/interface/randomizer.dart';
+import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/optimizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
 
