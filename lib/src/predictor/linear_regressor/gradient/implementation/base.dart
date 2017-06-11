@@ -1,6 +1,6 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
-import 'package:dart_ml/src/optimizer/gradient/optimizer.dart';
+import 'package:dart_ml/src/optimizer/gradient/interface/base.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
 import 'package:dart_ml/src/estimator/estimator_type.dart';
 import 'package:dart_ml/src/estimator/estimator_factory.dart';

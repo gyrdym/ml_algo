@@ -1,8 +1,8 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
-import 'package:dart_ml/src/optimizer/interface/optimizer.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
+import 'package:dart_ml/src/optimizer/gradient/interface/base.dart';
 
-abstract class GradientOptimizer implements Optimizer {
+abstract class GradientOptimizerImpl implements GradientOptimizer {
   double _minWeightsDistance;
   double _learningRate;
   int _iterationLimit;
