@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/math/misc/randomizer/implementation/randomizer.dart';
+import 'package:dart_ml/src/math/misc/randomizer/randomizer_impl.dart';
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 

@@ -1,1 +1,1 @@
-export 'package:dart_ml/src/math/misc/randomizer/interface/randomizer.dart';
+export 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';

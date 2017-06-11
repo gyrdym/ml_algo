@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:dart_ml/src/math/misc/randomizer/interface/randomizer.dart';
+import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
 
 class RandomizerImpl implements Randomizer {
   final Random _generator;
