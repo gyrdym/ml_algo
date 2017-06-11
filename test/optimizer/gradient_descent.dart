@@ -7,6 +7,7 @@ import 'package:dart_ml/src/optimizer/optimizer.dart' show Regularization;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;
 
 void main() {
+  const int MAX_EPOCH = 200;
   List<Vector> data;
   Vector target;
 
@@ -34,11 +35,18 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      Vector weights = optimizer.optimize(data, target);
-      expect(weights.length, equals(3));
-      expect(0.07 < weights[0] && weights[0] < 0.08, isTrue, reason: '${weights[0]} not in interval (0.07...0.08)');
-      expect(0.02 < weights[1] && weights[1] < 0.03, isTrue, reason: '${weights[1]} not in interval (0.02...0.03)');
-      expect(0.04 < weights[2] && weights[2] < 0.05, isTrue, reason: '${weights[2]} not in interval (0.04...0.05)');
+      Vector weightsSum = new Vector.zero(3);
+
+      for (int i = 0; i < MAX_EPOCH; i++) {
+        weightsSum += optimizer.optimize(data, target);
+      }
+
+      Vector weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH);
+
+      expect(weightsMean.length, equals(3));
+      expect(0.07 < weightsMean[0] && weightsMean[0] < 0.08, isTrue, reason: '${weightsMean[0]} not in interval (0.07...0.08)');
+      expect(0.02 < weightsMean[1] && weightsMean[1] < 0.03, isTrue, reason: '${weightsMean[1]} not in interval (0.02...0.03)');
+      expect(0.04 < weightsMean[2] && weightsMean[2] < 0.05, isTrue, reason: '${weightsMean[2]} not in interval (0.04...0.05)');
     });
   });
 
@@ -68,14 +76,14 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      const int maxEpoch = 200;
       Vector weightsSum = new Vector.zero(3);
 
-      for (int i = 0; i < maxEpoch; i++) {
+      for (int i = 0; i < MAX_EPOCH; i++) {
         weightsSum += optimizer.optimize(data, target);
       }
 
-      Vector weightsMean = weightsSum.scalarMul(1 / maxEpoch);
+      Vector weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH);
+
       expect(weightsMean.length, equals(3));
       expect(0.07 < weightsMean[0] && weightsMean[0] < 0.08, isTrue,
                  reason: '${weightsMean[0]} not in interval (0.08...0.09)');

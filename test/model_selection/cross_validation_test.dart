@@ -1,6 +1,12 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
-import 'package:dart_ml/src/model_selection/validator/implementation/kfold_cross_validator.dart';
-import 'package:dart_ml/src/model_selection/validator/implementation/lpo_cross_validator.dart';
+import 'package:di/di.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:dart_ml/src/math/math.dart';
+import 'package:dart_ml/src/math/math_impl.dart';
+import 'package:dart_ml/src/model_selection/validator/validator_impl.dart';
+import 'package:dart_ml/src/data_splitter/data_splitter.dart';
+import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
+import 'package:dart_ml/src/optimizer/optimizer.dart' show SGDOptimizer, GradientOptimizerType;
+import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show SGDOptimizerImpl;
 import 'package:dart_ml/src/predictor/gradient_linear_regressor.dart';
 
 import 'package:test/test.dart';
@@ -9,39 +15,49 @@ import 'package:matcher/matcher.dart';
 const int NUMBER_OF_SAMPLES = 12;
 
 void main() {
-  group('Cross validators test.\n', () {
-    List<Vector> features = new List<Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Vector.randomFilled(4));
-    Vector labels = new Vector.randomFilled(NUMBER_OF_SAMPLES);
-    GradientLinearRegressor predictor;
+  List<Vector> features;
+  Vector labels;
+  GradientLinearRegressor predictor;
 
-    setUp(() {
-      predictor = new GradientLinearRegressor();
-    });
+  setUp(() {
+    injector = new ModuleInjector([
+      new Module()
+        ..bind(Randomizer, toFactory: () => new RandomizerImpl())
+        ..bind(KFoldSplitter, toFactory: () => new KFoldSplitterImpl())
+        ..bind(LeavePOutSplitter, toFactory: () => new LeavePOutSplitterImpl())
+        ..bind(SGDOptimizer, toFactory: () => new SGDOptimizerImpl())
+    ]);
 
-    tearDown(() {
-      predictor = null;
-    });
+    features = new List<Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Vector.randomFilled(4));
+    labels = new Vector.randomFilled(NUMBER_OF_SAMPLES);
+    predictor = new GradientLinearRegressor(optimizerType: GradientOptimizerType.SGD);
+  });
 
-    test('k-fold cross validation test: ', () {
-      KFoldCrossValidatorImpl validator1 = new KFoldCrossValidatorImpl();
-      KFoldCrossValidatorImpl validator2 = new KFoldCrossValidatorImpl(numberOfFolds: 10);
-
-      Vector score1 = validator1.validate(predictor, features, labels);
-      Vector score2 = validator2.validate(predictor, features, labels);
-
-      expect(score1.length, equals(5));
+  group('K-fold cross validator', () {
+    test('should return scores vector with proper length', () {
+      KFoldCrossValidatorImpl validator = new KFoldCrossValidatorImpl(numberOfFolds: 10);
+      Vector score2 = validator.validate(predictor, features, labels);
       expect(score2.length, equals(10));
     });
 
-    test('leave p out validation test: ', () {
-      LpoCrossValidatorImpl validator1 = new LpoCrossValidatorImpl();
-      LpoCrossValidatorImpl validator2 = new LpoCrossValidatorImpl(p: 3);
+    test('should return scores vector with proper length (if `numberOfFolds` argument wasn\'t passed)', () {
+      KFoldCrossValidatorImpl validator = new KFoldCrossValidatorImpl();
+      Vector score = validator.validate(predictor, features, labels);
+      expect(score.length, equals(5));
+    });
+  });
 
-      Vector score1 = validator1.validate(predictor, features, labels);
-      Vector score2 = validator2.validate(predictor, features, labels);
+  group('LPO cross validator', () {
+    test('should return scores vector with proper length', () {
+      LpoCrossValidatorImpl validator = new LpoCrossValidatorImpl(p: 3);
+      Vector score = validator.validate(predictor, features, labels);
+      expect(score.length, equals(220));
+    });
 
-      expect(score1.length, equals(792));
-      expect(score2.length, equals(220));
+    test('should return scores vector with proper length', () {
+      LpoCrossValidatorImpl validator = new LpoCrossValidatorImpl();
+      Vector score = validator.validate(predictor, features, labels);
+      expect(score.length, equals(792));
     });
   });
 }
