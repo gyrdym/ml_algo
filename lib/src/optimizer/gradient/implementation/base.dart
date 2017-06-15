@@ -1,6 +1,5 @@
 library gradient_optimizer_base;
 
-import 'dart:math' as math show pow;
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/math/vector/vector.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
@@ -9,6 +8,7 @@ import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/batch.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
 
 part 'batch.dart';
 part 'mini_batch.dart';
@@ -25,9 +25,10 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
   //hyper parameters declaration end
 
   Vector _increment;
+  LossFunction _targetMetric;
 
   void configure(double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
-                 {double alpha = .00001, double argumentIncrement = 1e-5}) {
+                 LossFunction lossFunction, {double alpha = .00001, double argumentIncrement = 1e-5}) {
 
     if (minWeightsDistance == null && iterationLimit == null) {
       throw new Exception('You must specify at least one criterion of convergence');
@@ -39,6 +40,7 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
     _regularization = regularization;
     _alpha = alpha;
     _argumentIncrement = argumentIncrement;
+    _targetMetric = lossFunction;
   }
 
   Vector optimize(List<Vector> features, Vector labels, {Vector weights}) {
@@ -72,19 +74,16 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
   }
 
   Vector _makeGradientStep(Vector weights, List<Vector> data, Vector target, double eta) {
-    Vector gradientSumVector = _meanGradient(weights, data[0], target[0]);
+    Vector gradientSumVector = _extendedGradient(weights, data[0], target[0]);
 
     for (int i = 1; i < data.length; i++) {
-      gradientSumVector += _meanGradient(weights, data[i], target[i]);
+      gradientSumVector += _extendedGradient(weights, data[i], target[i]);
     }
 
     return weights - gradientSumVector.scalarMul(eta / data.length);
   }
 
-  SquaredLoss _targetMetric = new SquaredLoss();
-
-  Vector _meanGradient(Vector k, Vector x, double y) {
-    //x.scalarMul(2.0).scalarMul(x.dot(k) - y);
+  Vector _extendedGradient(Vector k, Vector x, double y) {
     Vector pureGradient = _gradient(k, x, y);
 
     if (_regularization != null) {
@@ -121,13 +120,4 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
         throw new UnimplementedError('Unimplemented regularization type $_regularization');
     }
   }
-}
-
-class SquaredLoss implements LossFunction {
-  @override
-  double function(Vector k, Vector x, double y) => math.pow(k.dot(x) - y, 2);
-}
-
-abstract class LossFunction {
-  double function(Vector k, Vector x, double y);
 }
