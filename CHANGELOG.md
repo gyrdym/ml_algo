@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.17.0
+- Common interface for loss function was added
+- Derivative calculation was fixed (common canonical method was used)
+- Squared loss function was added as a separate class
+
 ## 0.16.0
 - `README.md` was actualized
 
