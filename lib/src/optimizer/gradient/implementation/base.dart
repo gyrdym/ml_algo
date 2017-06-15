@@ -8,20 +8,27 @@ import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/batch.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
 
 part 'batch.dart';
 part 'mini_batch.dart';
 part 'stochastic.dart';
 
 abstract class GradientOptimizerImpl implements GradientOptimizer {
+  //hyper parameters declaration
   double _minWeightsDistance;
   double _learningRate;
   int _iterationLimit;
   Regularization _regularization;
   double _alpha;
+  double _argumentIncrement;
+  //hyper parameters declaration end
+
+  Vector _increment;
+  LossFunction _targetMetric;
 
   void configure(double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
-                 {double alpha = .00001}) {
+                 LossFunction lossFunction, {double alpha = .00001, double argumentIncrement = 1e-5}) {
 
     if (minWeightsDistance == null && iterationLimit == null) {
       throw new Exception('You must specify at least one criterion of convergence');
@@ -32,10 +39,13 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
     _iterationLimit = iterationLimit;
     _regularization = regularization;
     _alpha = alpha;
+    _argumentIncrement = argumentIncrement;
+    _targetMetric = lossFunction;
   }
 
   Vector optimize(List<Vector> features, Vector labels, {Vector weights}) {
     weights = weights ?? new Vector.zero(features.first.length);
+    _increment = new Vector.zero(weights.length);
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
@@ -64,17 +74,17 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
   }
 
   Vector _makeGradientStep(Vector weights, List<Vector> data, Vector target, double eta) {
-    Vector gradientSumVector = _calculateGradient(weights, data[0], target[0]);
+    Vector gradientSumVector = _extendedGradient(weights, data[0], target[0]);
 
     for (int i = 1; i < data.length; i++) {
-      gradientSumVector += _calculateGradient(weights, data[i], target[i]);
+      gradientSumVector += _extendedGradient(weights, data[i], target[i]);
     }
 
     return weights - gradientSumVector.scalarMul(eta / data.length);
   }
 
-  Vector _calculateGradient(Vector k, Vector x, double y) {
-    Vector pureGradient = x.scalarMul(2.0).scalarMul(x.dot(k) - y);
+  Vector _extendedGradient(Vector k, Vector x, double y) {
+    Vector pureGradient = _gradient(k, x, y);
 
     if (_regularization != null) {
       return pureGradient + _calcRegularizationVector(k);
@@ -82,6 +92,21 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
 
     return pureGradient;
   }
+
+  Vector _gradient(Vector k, Vector x, double y) {
+    Vector gradient = new Vector(k.length);
+
+    for (int i = 0; i < k.length; i++) {
+      _increment[i] = _argumentIncrement;
+      gradient[i] = _partialDerivative(k, x, y);
+      _increment[i] = 0.0;
+    }
+
+    return gradient;
+  }
+
+  double _partialDerivative(Vector k, Vector x, double y) =>
+      (_targetMetric.function(k + _increment, x, y) - _targetMetric.function(k - _increment, x, y)) / 2 / _argumentIncrement;
 
   Vector _calcRegularizationVector(Vector weights) {
     switch (_regularization) {

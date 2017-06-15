@@ -74,7 +74,7 @@ class Vector extends ListBase<double> {
 
   Vector cut(int start, [int end]) => new Vector.from(sublist(start, end));
 
-  Vector copy() => cut(0);
+  Vector copy() => new Vector.fromTypedList(_innerList, _origLength);
 
   void fill(double value) { _innerList.fillRange(0, _innerList.length, new Float32x4.splat(value)); }
 
