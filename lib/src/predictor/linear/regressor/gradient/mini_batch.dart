@@ -5,7 +5,7 @@ import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/loss_function/squared_loss.dart';
 
-import 'base.dart';
+import 'package:dart_ml/src/predictor/linear/regressor/gradient/base.dart';
 
 class MBGDRegressor extends GradientLinearRegressor {
   MBGDRegressor({double learningRate = 1e-5,
