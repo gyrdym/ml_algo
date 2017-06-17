@@ -5,7 +5,7 @@ import 'package:dart_ml/src/math/math.dart' show Randomizer;
 import 'package:dart_ml/src/math/math_impl.dart' show Vector, RandomizerImpl;
 import 'package:dart_ml/src/optimizer/optimizer.dart' show Regularization;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;
-import 'package:dart_ml/src/loss_function/squared_loss.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
 
 void main() {
   const int MAX_EPOCH = 200;
@@ -32,7 +32,7 @@ void main() {
 
     setUp(() {
       optimizer = new BGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new SquaredLoss(), alpha: .00001);
+      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new LossFunction.Squared(), alpha: .00001);
     });
 
     test('should find optimal weights for the given data', () {
@@ -56,7 +56,7 @@ void main() {
 
     setUp(() {
       optimizer = new MBGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new SquaredLoss(), alpha: .00001);
+      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new LossFunction.Squared(), alpha: .00001);
     });
 
     test('should find optimal weights for the given data', () {
@@ -73,7 +73,7 @@ void main() {
 
     setUp(() {
       optimizer = new SGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new SquaredLoss(), alpha: .00001);
+      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new LossFunction.Squared(), alpha: .00001);
     });
 
     test('should find optimal weights for the given data', () {

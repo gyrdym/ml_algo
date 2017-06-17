@@ -1,9 +1,7 @@
-import 'dart:math' as math;
-import 'package:dart_ml/src/math/vector/vector.dart';
-import 'loss_function.dart';
+part of loss_function;
 
-class CrossEntropy implements LossFunction {
-  const CrossEntropy();
+class _CrossEntropy implements LossFunction {
+  const _CrossEntropy();
 
   @override
   double function(Vector w, Vector x, double y) {

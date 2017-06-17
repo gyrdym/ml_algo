@@ -3,7 +3,6 @@ import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/loss_function/squared_loss.dart';
 
 import 'package:dart_ml/src/predictor/linear/regressor/gradient/base.dart';
 
@@ -13,10 +12,11 @@ class MBGDRegressor extends GradientLinearRegressor {
                  int iterationLimit = 10000,
                  Metric metric,
                  Regularization regularization = Regularization.L2,
-                 LossFunction lossFunction = const SquaredLoss(),
+                 LossFunction lossFunction,
                  alpha = .00001})
       : super(
       (injector.get(MBGDOptimizer) as MBGDOptimizer)
-        ..configure(learningRate, minWeightsDistance, iterationLimit, regularization, lossFunction, alpha: alpha),
+        ..configure(learningRate, minWeightsDistance, iterationLimit, regularization,
+                        lossFunction ?? new LossFunction.Squared(), alpha: alpha),
       metric: metric);
 }
