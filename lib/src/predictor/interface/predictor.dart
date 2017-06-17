@@ -1,9 +1,9 @@
 import 'package:dart_ml/src/math/vector/vector.dart';
-import 'package:dart_ml/src/estimator/estimator.dart';
+import 'package:dart_ml/src/metric/metric.dart';
 
 abstract class Predictor {
-  Estimator get estimator;
+  Metric get metric;
   void train(List<Vector> features, Vector labels, {Vector weights});
-  double test(List<Vector> features, Vector origLabels, {Estimator estimator});
+  double test(List<Vector> features, Vector origLabels, {Metric estimator});
   Vector predict(List<Vector> features);
 }

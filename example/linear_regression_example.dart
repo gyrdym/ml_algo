@@ -24,8 +24,6 @@ main() async {
 
   Vector labels = new Vector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
 
-  MAPEEstimator mapeEstimator = new MAPEEstimator();
-
   SGDRegressor sgdRegressor = new SGDRegressor();
   BGDRegressor batchGdRegressor = new BGDRegressor();
   MBGDRegressor mbgdRegressor = new MBGDRegressor();
@@ -39,7 +37,7 @@ main() async {
   print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, features, labels).mean()}');
 
   print('\nMAPE:');
-  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, estimator: mapeEstimator).mean()}');
-  print('Batch GD regressor: ${validator.validate(batchGdRegressor, features, labels, estimator: mapeEstimator).mean()}');
-  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, features, labels, estimator: mapeEstimator).mean()}');
+  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, estimator: new Metric.MAPE()).mean()}');
+  print('Batch GD regressor: ${validator.validate(batchGdRegressor, features, labels, estimator: new Metric.MAPE()).mean()}');
+  print('Mini batch GD regressor: ${validator.validate(mbgdRegressor, features, labels, estimator: new Metric.MAPE()).mean()}');
 }

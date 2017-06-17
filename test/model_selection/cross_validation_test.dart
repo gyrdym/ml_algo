@@ -2,12 +2,12 @@ import 'package:di/di.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/math/math.dart';
 import 'package:dart_ml/src/math/math_impl.dart';
-import 'package:dart_ml/src/model_selection/model_selection_impl.dart' show CrossValidator;
+import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;
 import 'package:dart_ml/src/data_splitter/data_splitter.dart';
 import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart' show SGDOptimizer;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show SGDOptimizerImpl;
-import 'package:dart_ml/src/predictor/linear/regressor/linear_regressor.dart' show SGDRegressor;
+import 'package:dart_ml/src/predictor/linear/regressor/regressor.dart' show SGDRegressor;
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
