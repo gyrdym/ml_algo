@@ -1,2 +1,2 @@
 export 'interface/predictor.dart';
-export 'linear/regressor/linear_regressor.dart';
+export 'linear/regressor/regressor.dart';
