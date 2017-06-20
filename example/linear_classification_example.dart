@@ -29,7 +29,19 @@ Future main() async {
 
   Vector labels = new Vector.from(
       fields
-          .map((List<num> item) => item.last.toDouble())
+          .map((List<num> item) => item.last == 1 ? 0.0 : 1.0)
           .toList(growable: false)
       );
+
+  LogisticRegressor sgdClassifier = new LogisticRegressor();
+  CrossValidator validator = new CrossValidator.KFold();
+
+  print(labels);
+
+  print('K-fold cross validation:');
+  print('\nRMSE:');
+  print('SGD regressor: ${validator.validate(sgdClassifier, features, labels).mean()}');
+
+  print('\nMAPE:');
+  print('SGD GD regressor: ${validator.validate(sgdClassifier, features, labels, metric: new Metric.MAPE()).mean()}');
 }

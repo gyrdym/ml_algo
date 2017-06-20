@@ -4,5 +4,5 @@ class _SquaredLoss implements LossFunction {
   const _SquaredLoss();
 
   @override
-  double function(Vector w, Vector x, double y) => math.pow(w.dot(x) - y, 2);
+  double loss(double predictedLabel, double originalLabel) => math.pow(predictedLabel - originalLabel, 2);
 }

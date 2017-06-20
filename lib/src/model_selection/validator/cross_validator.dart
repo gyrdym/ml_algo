@@ -19,7 +19,7 @@ class CrossValidator {
 
   CrossValidator._internal(this._splitter);
 
-  Vector validate(Predictor predictor, List<Vector> features, Vector labels, {Metric estimator}) {
+  Vector validate(Predictor predictor, List<Vector> features, Vector labels, {Metric metric}) {
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
     }
@@ -51,7 +51,7 @@ class CrossValidator {
 
       predictor.train(trainFeatures, trainLabels);
 
-      scores[scoreCounter++] = predictor.test(testFeatures, testLabels, estimator: estimator);
+      scores[scoreCounter++] = predictor.test(testFeatures, testLabels, metric: metric);
     }
 
     return new Vector.from(scores);

@@ -32,7 +32,13 @@ void main() {
 
     setUp(() {
       optimizer = new BGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new LossFunction.Squared(), alpha: .00001);
+      optimizer.configure(
+        learningRate: 1e-5,
+        minWeightsDistance: 1e-8,
+        iterationLimit:  100,
+        regularization: Regularization.L2,
+        alpha: .00001
+      );
     });
 
     test('should find optimal weights for the given data', () {
@@ -56,7 +62,13 @@ void main() {
 
     setUp(() {
       optimizer = new MBGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new LossFunction.Squared(), alpha: .00001);
+      optimizer.configure(
+        learningRate: 1e-5,
+        minWeightsDistance: 1e-8,
+        iterationLimit:  100,
+        regularization: Regularization.L2,
+        alpha: .00001
+      );
     });
 
     test('should find optimal weights for the given data', () {
@@ -73,7 +85,13 @@ void main() {
 
     setUp(() {
       optimizer = new SGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new LossFunction.Squared(), alpha: .00001);
+      optimizer.configure(
+        learningRate: 1e-5,
+        minWeightsDistance: 1e-8,
+        iterationLimit:  100,
+        regularization: Regularization.L2,
+        alpha: .00001
+      );
     });
 
     test('should find optimal weights for the given data', () {

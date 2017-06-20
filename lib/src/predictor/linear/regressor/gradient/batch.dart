@@ -3,19 +3,26 @@ import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/batch.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/predictor/linear/regressor/gradient/base.dart';
+import 'package:dart_ml/src/score_function/score_function.dart';
+import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
 
-class BGDRegressor extends GradientLinearRegressor {
-  BGDRegressor({double learningRate = 1e-5,
-                 double minWeightsDistance = 1e-8,
-                 int iterationLimit = 10000,
+class BGDRegressor extends GradientLinearPredictor {
+  BGDRegressor({double learningRate,
+                 double minWeightsDistance,
+                 int iterationLimit,
                  Metric metric,
-                 Regularization regularization = Regularization.L2,
-                 LossFunction lossFunction,
-                 alpha = .00001})
+                 Regularization regularization,
+                 alpha})
       : super(
       (injector.get(BGDOptimizer) as BGDOptimizer)
-        ..configure(learningRate, minWeightsDistance, iterationLimit, regularization,
-                        lossFunction ?? new LossFunction.Squared(), alpha: alpha),
+        ..configure(
+            learningRate: learningRate,
+            minWeightsDistance: minWeightsDistance,
+            iterationLimit: iterationLimit,
+            regularization: regularization,
+            lossFunction: new LossFunction.Squared(),
+            scoreFunction: new ScoreFunction.Linear(),
+            alpha: alpha),
+
       metric: metric);
 }

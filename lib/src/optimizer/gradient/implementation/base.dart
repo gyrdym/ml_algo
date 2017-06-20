@@ -9,6 +9,7 @@ import 'package:dart_ml/src/optimizer/gradient/interface/batch.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/score_function/score_function.dart';
 
 part 'batch.dart';
 part 'mini_batch.dart';
@@ -26,21 +27,24 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
 
   Vector _increment;
   LossFunction _targetMetric;
+  ScoreFunction _scoreFunction;
 
-  void configure(double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
-                 LossFunction lossFunction, {double alpha = .00001, double argumentIncrement = 1e-5}) {
+  void configure({double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
+                 LossFunction lossFunction, ScoreFunction scoreFunction,
+                 double alpha, double argumentIncrement}) {
 
-    if (minWeightsDistance == null && iterationLimit == null) {
-      throw new Exception('You must specify at least one criterion of convergence');
+    if (lossFunction == null || scoreFunction == null) {
+      throw new Exception('You must specify both loss function and score function');
     }
 
-    _learningRate = learningRate;
-    _minWeightsDistance = minWeightsDistance;
-    _iterationLimit = iterationLimit;
-    _regularization = regularization;
-    _alpha = alpha;
-    _argumentIncrement = argumentIncrement;
+    _learningRate = learningRate ?? 1e-5;
+    _minWeightsDistance = minWeightsDistance ?? 1e-8;
+    _iterationLimit = iterationLimit ?? 10000;
+    _regularization = regularization ?? Regularization.L2;
+    _alpha = alpha ?? 1e-5;
+    _argumentIncrement = argumentIncrement ?? 1e-5;
     _targetMetric = lossFunction;
+    _scoreFunction = scoreFunction;
   }
 
   Vector optimize(List<Vector> features, Vector labels, {Vector weights}) {
@@ -106,7 +110,8 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
   }
 
   double _partialDerivative(Vector k, Vector x, double y) =>
-      (_targetMetric.function(k + _increment, x, y) - _targetMetric.function(k - _increment, x, y)) / 2 / _argumentIncrement;
+      (_targetMetric.loss(_scoreFunction.score(k + _increment, x), y) -
+       _targetMetric.loss(_scoreFunction.score(k - _increment, x), y)) / 2 / _argumentIncrement;
 
   Vector _calcRegularizationVector(Vector weights) {
     switch (_regularization) {
