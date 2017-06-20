@@ -3,20 +3,26 @@ import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/score_function/score_function.dart';
+import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
 
-import 'package:dart_ml/src/predictor/linear/regressor/gradient/base.dart';
-
-class SGDRegressor extends GradientLinearRegressor {
-  SGDRegressor({double learningRate = 1e-5,
-                 double minWeightsDistance = 1e-8,
-                 int iterationLimit = 10000,
+class SGDRegressor extends GradientLinearPredictor {
+  SGDRegressor({double learningRate,
+                 double minWeightsDistance,
+                 int iterationLimit,
                  Metric metric,
-                 Regularization regularization = Regularization.L2,
-                 LossFunction lossFunction,
-                 alpha = .00001})
+                 Regularization regularization,
+                 alpha})
       : super(
       (injector.get(SGDOptimizer) as SGDOptimizer)
-        ..configure(learningRate, minWeightsDistance, iterationLimit, regularization,
-                        lossFunction ?? new LossFunction.Squared(), alpha: alpha),
+        ..configure(
+            learningRate: learningRate,
+            minWeightsDistance: minWeightsDistance,
+            iterationLimit: iterationLimit,
+            regularization: regularization,
+            lossFunction: new LossFunction.Squared(),
+            scoreFunction: new ScoreFunction.Linear(),
+            alpha: alpha),
+
       metric: metric);
 }
