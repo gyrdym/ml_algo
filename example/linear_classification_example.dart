@@ -9,19 +9,13 @@ Future main() async {
   Dependencies.configure();
 
   csv.CsvCodec csvCodec = new csv.CsvCodec();
-  Stream<List<int>> input = new File('example/datasets/LSVT_voice_rehabilitation.csv').openRead();
+  Stream<List<int>> input = new File('example/datasets/fertility.csv').openRead();
   List<List<num>> fields = (await input.transform(UTF8.decoder)
       .transform(csvCodec.decoder).toList() as List<List<num>>)
       .sublist(1);
 
   List<double> extractFeatures(item) =>
-      item.map((Object feature) {
-        if (feature is String) {
-          return double.parse(feature.replaceFirst(new RegExp('\,'), '.'));
-        }
-
-        return (feature as num).toDouble();
-      }).toList();
+      item.map((Object feature) => (feature as num).toDouble()).toList();
 
   List<Vector> features = fields
       .map((List item) => new Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
@@ -29,19 +23,16 @@ Future main() async {
 
   Vector labels = new Vector.from(
       fields
-          .map((List<num> item) => item.last == 1 ? 0.0 : 1.0)
-          .toList(growable: false)
-      );
+          .map((List item) => item.last == "N" ? 1.0 : 0.0)
+          .toList(growable: false));
 
-  LogisticRegressor sgdClassifier = new LogisticRegressor();
-  CrossValidator validator = new CrossValidator.KFold();
+  print('features: $features');
+  print('labels: $labels');
 
-  print(labels);
+  LogisticRegressor logisticRegressor = new LogisticRegressor(learningRate: 1e-1);
 
-  print('K-fold cross validation:');
-  print('\nRMSE:');
-  print('SGD regressor: ${validator.validate(sgdClassifier, features, labels).mean()}');
+  logisticRegressor.train(features.sublist(0,70), labels.cut(0, 70));
+  Vector prediction = logisticRegressor.predictProbabilities(features.sublist(70));
 
-  print('\nMAPE:');
-  print('SGD GD regressor: ${validator.validate(sgdClassifier, features, labels, metric: new Metric.MAPE()).mean()}');
+  print('prediction: $prediction');
 }
