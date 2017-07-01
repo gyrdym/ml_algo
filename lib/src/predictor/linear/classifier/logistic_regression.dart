@@ -4,10 +4,9 @@ import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
+import 'gradient_classifier.dart';
 
-import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
-
-class LogisticRegressor extends GradientLinearPredictor {
+class LogisticRegressor extends GradientLinearClassifier {
   LogisticRegressor({double learningRate,
                  double minWeightsDistance,
                  int iterationLimit,
@@ -24,6 +23,5 @@ class LogisticRegressor extends GradientLinearPredictor {
           lossFunction: new LossFunction.LogisticLoss(),
           scoreFunction: new ScoreFunction.Linear(),
           alpha: alpha
-        ),
-      metric: metric);
+        ), metric);
 }
