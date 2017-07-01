@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.18.0
+- class `Vector` and enum `Norm` were extracted to separate library (`https://github.com/gyrdym/dart_vector.git`)
+
 ## 0.17.0
 - Common interface for loss function was added
 - Derivative calculation was fixed (common canonical method was used)
