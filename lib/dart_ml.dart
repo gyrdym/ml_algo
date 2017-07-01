@@ -1,7 +1,6 @@
 library dart_ml;
 
-export 'package:dart_ml/src/math/vector/norm.dart';
-export 'package:dart_ml/src/math/vector/vector.dart';
+export 'package:dart_vector/vector.dart';
 export 'package:dart_ml/src/optimizer/regularization/regularization.dart';
 export 'package:dart_ml/src/estimator/rmse.dart';
 export 'package:dart_ml/src/estimator/mape.dart';
