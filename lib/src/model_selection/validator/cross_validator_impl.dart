@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_vector/vector.dart' show Vector;
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
 import 'package:dart_ml/src/data_splitter/interface/splitter.dart';

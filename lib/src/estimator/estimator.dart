@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_vector/vector.dart' show Vector;
 
 abstract class Estimator {
   double calculateError(Vector predictedLabels, Vector origLabels);
