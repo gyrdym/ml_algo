@@ -1,4 +1,0 @@
-enum Norm {
-  EUCLIDEAN,
-  MANHATTAN
-}

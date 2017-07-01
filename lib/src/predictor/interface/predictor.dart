@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_vector/vector.dart' show Vector;
 import 'package:dart_ml/src/estimator/estimator.dart';
 
 abstract class Predictor {
