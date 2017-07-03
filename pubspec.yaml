@@ -11,6 +11,7 @@ dependencies:
   csv: "^3.1.2"
   dart_vector:
     git:
+      ref: vector-refactoring
       url: https://github.com/gyrdym/dart_vector.git
 
 dev_dependencies:

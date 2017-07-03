@@ -1,17 +1,18 @@
 import 'package:di/di.dart';
 import 'package:test/test.dart';
-import 'package:dart_vector/vector.dart' show Vector;
+import 'package:dart_vector/vector.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/math/math.dart' show Randomizer;
 import 'package:dart_ml/src/math/math_impl.dart' show RandomizerImpl;
 import 'package:dart_ml/src/optimizer/optimizer.dart' show Regularization;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;
 import 'package:dart_ml/src/loss_function/squared_loss.dart';
+import 'dart:typed_data' show Float32List;
 
 void main() {
   const int MAX_EPOCH = 200;
-  List<Vector> data;
-  Vector target;
+  List<Float32x4Vector> data;
+  List<double> target;
 
   setUp(() {
     injector = new ModuleInjector([
@@ -20,12 +21,12 @@ void main() {
     ]);
 
     data = [
-      new Vector.from([230.1, 37.8, 69.2]),
-      new Vector.from([44.5, 39.3, 45.1]),
-      new Vector.from([17.2, 45.9, 69.3])
+      new Float32x4Vector.from([230.1, 37.8, 69.2]),
+      new Float32x4Vector.from([44.5, 39.3, 45.1]),
+      new Float32x4Vector.from([17.2, 45.9, 69.3])
     ];
 
-    target = new Vector.from([22.1, 10.4, 9.3]);
+    target = [22.1, 10.4, 9.3];
   });
 
   group('Batch gradient descent optimizer', () {
@@ -37,13 +38,13 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      Vector weightsSum = new Vector.zero(3);
+      Float32x4Vector weightsSum = new Float32x4Vector.zero(3);
 
       for (int i = 0; i < MAX_EPOCH; i++) {
         weightsSum += optimizer.optimize(data, target);
       }
 
-      Vector weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH);
+      Float32List weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH).asList();
 
       expect(weightsMean.length, equals(3));
       expect(0.07 < weightsMean[0] && weightsMean[0] < 0.08, isTrue, reason: '${weightsMean[0]} not in interval (0.07...0.08)');
@@ -61,7 +62,8 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      Vector weights = optimizer.optimize(data, target);
+      Float32List weights = optimizer.optimize(data, target).asList();
+
       expect(weights.length, equals(3));
       expect(0.07 < weights[0] && weights[0] < 0.09, isTrue, reason: '${weights[0]} not in interval (0.08...0.09)');
       expect(0.01 < weights[1] && weights[1] < 0.03, isTrue, reason: '${weights[1]} not in interval (0.01...0.03)');
@@ -78,13 +80,13 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      Vector weightsSum = new Vector.zero(3);
+      Float32x4Vector weightsSum = new Float32x4Vector.zero(3);
 
       for (int i = 0; i < MAX_EPOCH; i++) {
         weightsSum += optimizer.optimize(data, target);
       }
 
-      Vector weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH);
+      Float32List weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH).asList();
 
       expect(weightsMean.length, equals(3));
       expect(0.07 < weightsMean[0] && weightsMean[0] < 0.08, isTrue,
