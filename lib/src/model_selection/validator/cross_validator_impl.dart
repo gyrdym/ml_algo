@@ -1,4 +1,4 @@
-import 'package:dart_vector/vector.dart' show Vector;
+import 'package:dart_vector/vector.dart';
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
 import 'package:dart_ml/src/data_splitter/interface/splitter.dart';
@@ -20,7 +20,7 @@ class CrossValidator implements ICrossValidator {
 
   CrossValidator._internal(this._splitter);
 
-  Vector validate(Predictor predictor, List<Vector> features, Vector labels, {Estimator estimator}) {
+  Float32x4Vector validate(Predictor predictor, List<Float32x4Vector> features, List<double> labels, {Estimator estimator}) {
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
     }
@@ -30,10 +30,10 @@ class CrossValidator implements ICrossValidator {
     int scoreCounter = 0;
 
     for (Iterable<int> testIndices in allIndices) {
-      List<Vector> trainFeatures = new List<Vector>(features.length - testIndices.length);
-      Vector trainLabels = new Vector.zero(features.length - testIndices.length);
-      List<Vector> testFeatures = new List<Vector>(testIndices.length);
-      Vector testLabels = new Vector.zero(testIndices.length);
+      List<Float32x4Vector> trainFeatures = new List<Float32x4Vector>(features.length - testIndices.length);
+      List<double> trainLabels = new List<double>.filled(features.length - testIndices.length, 0.0);
+      List<Float32x4Vector> testFeatures = new List<Float32x4Vector>(testIndices.length);
+      List<double> testLabels = new List<double>.filled(testIndices.length, 0.0);
 
       int trainSamplesCounter = 0;
       int testSamplesCounter = 0;
@@ -55,6 +55,6 @@ class CrossValidator implements ICrossValidator {
       scores[scoreCounter++] = predictor.test(testFeatures, testLabels, estimator: estimator);
     }
 
-    return new Vector.from(scores);
+    return new Float32x4Vector.from(scores);
   }
 }

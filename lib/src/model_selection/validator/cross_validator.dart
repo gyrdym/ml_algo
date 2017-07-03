@@ -1,7 +1,7 @@
-import 'package:dart_vector/vector.dart' show Vector;
+import 'package:dart_vector/vector.dart';
 import 'package:dart_ml/src/predictor/predictor.dart' show Predictor;
 import 'package:dart_ml/src/estimator/estimator.dart';
 
 abstract class ICrossValidator {
-  Vector validate(Predictor predictor, List<Vector> features, Vector labels, {Estimator estimator});
+  Float32x4Vector validate(Predictor predictor, List<Float32x4Vector> features, List<double> labels, {Estimator estimator});
 }

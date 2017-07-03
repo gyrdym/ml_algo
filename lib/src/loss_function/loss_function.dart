@@ -1,5 +1,5 @@
-import 'package:dart_vector/vector.dart' show Vector;
+import 'package:dart_vector/vector.dart';
 
 abstract class LossFunction {
-  double function(Vector w, Vector x, double y);
+  double function(Float32x4Vector w, Float32x4Vector x, double y);
 }
