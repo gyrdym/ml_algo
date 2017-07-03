@@ -1,5 +1,6 @@
 library gradient_optimizer_base;
 
+import 'dart:typed_data' show Float32List;
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_vector/vector.dart';
 import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
@@ -43,7 +44,7 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
     _targetMetric = lossFunction;
   }
 
-  Float32x4Vector optimize(List<Float32x4Vector> features, List<double> labels, {Float32x4Vector weights}) {
+  Float32x4Vector optimize(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights}) {
     weights = weights ?? new Float32x4Vector.zero(features.first.length);
     _weightsDeltaMatrix = _generateWeightsDeltaMatrix(_argumentIncrement, weights.length);
     double weightsDistance = double.MAX_FINITE;
@@ -71,7 +72,7 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
 
   Iterable<int> _getSamplesRange(int totalSamplesCount);
 
-  Float32x4Vector _generateNewWeights(Float32x4Vector weights, List<Float32x4Vector> features, List<double> labels, double eta) {
+  Float32x4Vector _generateNewWeights(Float32x4Vector weights, List<Float32x4Vector> features, Float32List labels, double eta) {
     Iterable<int> range = _getSamplesRange(features.length);
 
     int start = range.first;
@@ -83,7 +84,7 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
     return _makeGradientStep(weights, featuresBatch, labelsBatch, eta);
   }
 
-  Float32x4Vector _makeGradientStep(Float32x4Vector weights, List<Float32x4Vector> data, List<double> target, double eta) {
+  Float32x4Vector _makeGradientStep(Float32x4Vector weights, List<Float32x4Vector> data, Float32List target, double eta) {
     Float32x4Vector gradientSumVector = _extendedGradient(weights, data[0], target[0]);
 
     for (int i = 1; i < data.length; i++) {

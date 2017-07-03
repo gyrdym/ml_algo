@@ -1,3 +1,4 @@
+import 'dart:typed_data' show Float32List;
 import 'package:dart_vector/vector.dart';
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/base.dart';
@@ -15,7 +16,9 @@ abstract class GradientLinearRegressor implements Predictor {
       : estimator = EstimatorFactory.create(estimatorType);
 
   void train(List<Float32x4Vector> features, List<double> labels, {Float32x4Vector weights}) {
-    _weights = _optimizer.optimize(features, labels, weights: weights);
+    Float32List typedLabelList = new Float32List.fromList(labels);
+
+    _weights = _optimizer.optimize(features, typedLabelList, weights: weights);
   }
 
   double test(List<Float32x4Vector> features, List<double> origLabels, {Estimator estimator}) {
