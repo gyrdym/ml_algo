@@ -1,4 +1,5 @@
-import 'package:dart_vector/vector.dart' show Vector;
+import 'dart:typed_data' show Float32List;
+import 'package:dart_vector/vector.dart';
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/base.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
@@ -9,26 +10,28 @@ abstract class GradientLinearRegressor implements Predictor {
   final Estimator estimator;
   final GradientOptimizer _optimizer;
 
-  Vector _weights;
+  Float32x4Vector _weights;
 
   GradientLinearRegressor(this._optimizer, {EstimatorType estimatorType})
       : estimator = EstimatorFactory.create(estimatorType);
 
-  void train(List<Vector> features, Vector labels, {Vector weights}) {
-    _weights = _optimizer.optimize(features, labels, weights: weights);
+  void train(List<Float32x4Vector> features, List<double> labels, {Float32x4Vector weights}) {
+    Float32List typedLabelList = new Float32List.fromList(labels);
+
+    _weights = _optimizer.optimize(features, typedLabelList, weights: weights);
   }
 
-  double test(List<Vector> features, Vector origLabels, {Estimator estimator}) {
+  double test(List<Float32x4Vector> features, List<double> origLabels, {Estimator estimator}) {
     estimator = estimator ?? this.estimator;
-    Vector prediction = predict(features);
-    return estimator.calculateError(prediction, origLabels);
+    Float32x4Vector prediction = predict(features);
+    return estimator.calculateError(prediction, new Float32x4Vector.from(origLabels));
   }
 
-  Vector predict(List<Vector> features) {
+  Float32x4Vector predict(List<Float32x4Vector> features) {
     List<double> labels = new List<double>(features.length);
     for (int i = 0; i < features.length; i++) {
       labels[i] = _weights.dot(features[i]);
     }
-    return new Vector.from(labels);
+    return new Float32x4Vector.from(labels);
   }
 }

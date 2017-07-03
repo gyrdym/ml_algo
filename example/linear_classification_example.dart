@@ -23,13 +23,11 @@ Future main() async {
         return (feature as num).toDouble();
       }).toList();
 
-  List<Vector> features = fields
-      .map((List item) => new Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
+  List<Float32x4Vector> features = fields
+      .map((List item) => new Float32x4Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
       .toList(growable: false);
 
-  Vector labels = new Vector.from(
-      fields
-          .map((List<num> item) => item.last.toDouble())
-          .toList(growable: false)
-      );
+  List<double> labels = fields
+      .map((List<num> item) => item.last.toDouble())
+      .toList(growable: false);
 }
