@@ -1,5 +1,5 @@
-import 'package:dart_vector/vector.dart' show Vector;
+import 'package:dart_vector/vector.dart';
 
 abstract class Optimizer {
-  Vector optimize(List<Vector> features, Vector labels, {Vector weights});
+  Float32x4Vector optimize(List<Float32x4Vector> features, List<double> labels, {Float32x4Vector weights});
 }

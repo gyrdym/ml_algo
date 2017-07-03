@@ -1,7 +1,7 @@
 import 'package:dart_ml/src/estimator/estimator.dart';
-import 'package:dart_vector/vector.dart' show Vector;
+import 'package:dart_vector/vector.dart';
 
 class MAPEEstimator implements Estimator {
-  double calculateError(Vector predictedLabels, Vector origLabels) =>
-      100 / predictedLabels.length * ((origLabels - predictedLabels) / origLabels).abs(inPlace: true).sum();
+  double calculateError(Float32x4Vector predictedLabels, Float32x4Vector origLabels) =>
+      100 / predictedLabels.length * ((origLabels - predictedLabels) / origLabels).abs().sum();
 }

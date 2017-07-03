@@ -6,8 +6,8 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:benchmark_harness/benchmark_harness.dart';
 
 MBGDRegressor predictor;
-List<Vector> features;
-Vector labels;
+List<Float32x4Vector> features;
+List<double> labels;
 
 class KFoldValidatorBenchmark extends BenchmarkBase {
   const KFoldValidatorBenchmark() : super('k-fold validator test');
@@ -34,10 +34,10 @@ Future main() async {
       .toList();
 
   features = fields
-      .map((List<num> item) => new Vector.from(extractFeatures(item)))
+      .map((List<num> item) => new Float32x4Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  labels = new Vector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+  labels = fields.map((List<num> item) => item.last.toDouble()).toList();
 
   predictor = new MBGDRegressor();
 
