@@ -1,5 +1,6 @@
 import 'package:di/di.dart';
 import 'package:dart_ml/src/di/injector.dart';
+import 'package:dart_vector/vector.dart';
 import 'package:dart_ml/src/math/math.dart';
 import 'package:dart_ml/src/math/math_impl.dart';
 import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;
@@ -15,8 +16,8 @@ import 'package:matcher/matcher.dart';
 const int NUMBER_OF_SAMPLES = 12;
 
 void main() {
-  List<Vector> features;
-  Vector labels;
+  List<Float32x4Vector> features;
+  List<double> labels;
   SGDRegressor predictor;
 
   setUp(() {
@@ -28,21 +29,21 @@ void main() {
         ..bind(SGDOptimizer, toFactory: () => new SGDOptimizerImpl())
     ]);
 
-    features = new List<Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Vector.randomFilled(4));
-    labels = new Vector.randomFilled(NUMBER_OF_SAMPLES);
+    features = new List<Float32x4Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Float32x4Vector.randomFilled(4));
+    labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
     predictor = new SGDRegressor();
   });
 
   group('K-fold cross validator', () {
     test('should return scores vector with proper length', () {
       CrossValidator validator = new CrossValidator.KFold(numberOfFolds: 10);
-      Vector score2 = validator.validate(predictor, features, labels);
+      Float32x4Vector score2 = validator.validate(predictor, features, labels);
       expect(score2.length, equals(10));
     });
 
     test('should return scores vector with proper length (if `numberOfFolds` argument wasn\'t passed)', () {
       CrossValidator validator = new CrossValidator.KFold();
-      Vector score = validator.validate(predictor, features, labels);
+      Float32x4Vector score = validator.validate(predictor, features, labels);
       expect(score.length, equals(5));
     });
   });
@@ -50,13 +51,13 @@ void main() {
   group('LPO cross validator', () {
     test('should return scores vector with proper length', () {
       CrossValidator validator = new CrossValidator.LPO(p: 3);
-      Vector score = validator.validate(predictor, features, labels);
+      Float32x4Vector score = validator.validate(predictor, features, labels);
       expect(score.length, equals(220));
     });
 
     test('should return scores vector with proper length (if `p` argument wasn\'t passed)', () {
       CrossValidator validator = new CrossValidator.LPO();
-      Vector score = validator.validate(predictor, features, labels);
+      Float32x4Vector score = validator.validate(predictor, features, labels);
       expect(score.length, equals(792));
     });
   });

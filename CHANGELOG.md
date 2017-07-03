@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.19.0
+- Support for `Float32x4Vector` class was added (from `dart_vector` library)
+- Type `List` for label (target) list replaced with `Float32List` (in `Predictor.train()` and `Optimizer.optimize()`)
+
+## 0.18.0
+- class `Vector` and enum `Norm` were extracted to separate library (`https://github.com/gyrdym/dart_vector.git`)
+
 ## 0.17.0
 - Common interface for loss function was added
 - Derivative calculation was fixed (common canonical method was used)
