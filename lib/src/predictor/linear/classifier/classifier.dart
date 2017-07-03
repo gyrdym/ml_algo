@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_vector/vector.dart';
 
 abstract class Classifier {
-  Vector predictProbabilities(List<Vector> features);
+  Float32x4Vector predictProbabilities(List<Float32x4Vector> features);
 }

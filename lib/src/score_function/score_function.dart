@@ -1,11 +1,11 @@
 library score_function;
 
-import 'package:dart_ml/src/math/vector/vector.dart';
+import 'package:dart_vector/vector.dart';
 
 part 'linear.dart';
 
 abstract class ScoreFunction {
-  double score(Vector w, Vector x);
+  double score(Float32x4Vector w, Float32x4Vector x);
 
   factory ScoreFunction.Linear() => const _LinearScore();
 }

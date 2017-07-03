@@ -1,5 +1,6 @@
-import 'package:dart_ml/src/math/vector/vector.dart';
+import 'dart:typed_data' show Float32List;
+import 'package:dart_vector/vector.dart';
 
 abstract class Optimizer {
-  Vector optimize(List<Vector> features, Vector labels, {Vector weights});
+  Float32x4Vector optimize(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights});
 }

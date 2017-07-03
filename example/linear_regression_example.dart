@@ -18,11 +18,11 @@ main() async {
       .map((num feature) => feature.toDouble())
       .toList();
 
-  List<Vector> features = fields
-      .map((List<num> item) => new Vector.from(extractFeatures(item)))
+  List<Float32x4Vector> features = fields
+      .map((List<num> item) => new Float32x4Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  Vector labels = new Vector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+  List<double> labels = fields.map((List<num> item) => item.last.toDouble()).toList();
 
   SGDRegressor sgdRegressor = new SGDRegressor();
   CrossValidator validator = new CrossValidator.KFold();

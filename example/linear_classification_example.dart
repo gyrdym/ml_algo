@@ -17,22 +17,21 @@ Future main() async {
   List<double> extractFeatures(item) =>
       item.map((Object feature) => (feature as num).toDouble()).toList();
 
-  List<Vector> features = fields
-      .map((List item) => new Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
+  List<Float32x4Vector> features = fields
+      .map((List item) => new Float32x4Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
       .toList(growable: false);
 
-  Vector labels = new Vector.from(
-      fields
-          .map((List item) => item.last == "N" ? 1.0 : 0.0)
-          .toList(growable: false));
+  List<double> labels = fields
+    .map((List item) => item.last == "N" ? 1.0 : 0.0)
+    .toList(growable: false);
 
   print('features: $features');
   print('labels: $labels');
 
   LogisticRegressor logisticRegressor = new LogisticRegressor(learningRate: 1e-1);
 
-  logisticRegressor.train(features.sublist(0,70), labels.cut(0, 70));
-  Vector prediction = logisticRegressor.predictProbabilities(features.sublist(70));
+  logisticRegressor.train(features.sublist(0,70), labels.sublist(0, 70));
+  Float32x4Vector prediction = logisticRegressor.predictProbabilities(features.sublist(70));
 
   print('prediction: $prediction');
 }
