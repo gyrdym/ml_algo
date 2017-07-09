@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.20.1
+- `simd_vector` dependency url fixed
+
 ## 0.20.0
 - Repository dependency corrected (dart_vector -> simd_vector)
 
