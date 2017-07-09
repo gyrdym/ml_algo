@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.20.0
+- Repository dependency corrected (dart_vector -> simd_vector)
+
 ## 0.19.0
 - Support for `Float32x4Vector` class was added (from `dart_vector` library)
 - Type `List` for label (target) list replaced with `Float32List` (in `Predictor.train()` and `Optimizer.optimize()`)
