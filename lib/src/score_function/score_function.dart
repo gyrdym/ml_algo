@@ -1,6 +1,6 @@
 library score_function;
 
-import 'package:dart_vector/vector.dart';
+import 'package:simd_vector/vector.dart';
 
 part 'linear.dart';
 

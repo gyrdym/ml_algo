@@ -1,6 +1,6 @@
 name: dart_ml
 description: Machine learning with dart
-version: 0.19.0
+version: 0.20.2
 author: Ilya Gyrdymov <ilgyrd@gmail.com>
 
 environment:
@@ -9,9 +9,9 @@ environment:
 dependencies:
   di: "^3.3.10"
   csv: "^3.1.2"
-  dart_vector:
+  simd_vector:
     git:
-      url: https://github.com/gyrdym/dart_vector.git
+      url: https://github.com/gyrdym/simd_vector.git
 
 dev_dependencies:
   benchmark_harness: ">=1.0.0 <2.0.0"

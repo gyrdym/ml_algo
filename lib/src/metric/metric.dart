@@ -1,7 +1,7 @@
 library metric;
 
 import 'dart:math' as math;
-import 'package:dart_vector/vector.dart';
+import 'package:simd_vector/vector.dart';
 
 part 'mape.dart';
 part 'rmse.dart';

@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_vector/vector.dart';
+import 'package:simd_vector/vector.dart';
 
 void main() {
   Float32x4Vector w;

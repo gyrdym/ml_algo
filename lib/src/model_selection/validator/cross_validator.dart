@@ -1,4 +1,4 @@
-import 'package:dart_vector/vector.dart';
+import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/data_splitter/interface/splitter.dart';
