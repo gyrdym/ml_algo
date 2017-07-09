@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.20.2
+- `README.md` updated
+
 ## 0.20.1
 - `simd_vector` dependency url fixed
 
