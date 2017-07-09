@@ -1,6 +1,6 @@
 import 'package:di/di.dart';
 import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_vector/vector.dart';
+import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/math/math.dart';
 import 'package:dart_ml/src/math/math_impl.dart';
 import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;

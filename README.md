@@ -40,14 +40,14 @@ List<double> extractFeatures(item) => item.sublist(0, 3)
 
 ...and finally get all features:
 ```dart
-List<TypedVector> features = fields
-  .map((List<num> item) => new TypedVector.from(extractFeatures(item)))
+List<Float32x4Vector> features = fields
+  .map((List<num> item) => new Float32x4Vector.from(extractFeatures(item)))
   .toList(growable: false);
 ```
 
 ...and labels (last element of a every line)
 ````dart
-TypedVector labels = new TypedVector.from(fields.map((List<num> item) => item.last.toDouble()).toList());
+List<double> labels = fields.map((List<num> item) => item.last.toDouble()).toList(growable: false);
 ````
 
 Create an instance of `CrossValidator` class for evaluating quality of our predictor
