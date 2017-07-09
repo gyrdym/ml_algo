@@ -11,7 +11,7 @@ dependencies:
   csv: "^3.1.2"
   dart_vector:
     git:
-      url: https://github.com/gyrdym/dart_vector.git
+      url: https://github.com/gyrdym/dart_simd_vector.git
 
 dev_dependencies:
   benchmark_harness: ">=1.0.0 <2.0.0"
