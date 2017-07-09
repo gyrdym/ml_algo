@@ -9,7 +9,7 @@ environment:
 dependencies:
   di: "^3.3.10"
   csv: "^3.1.2"
-  dart_vector:
+  simd_vector:
     git:
       url: https://github.com/gyrdym/dart_simd_vector.git
 

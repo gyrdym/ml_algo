@@ -1,5 +1,5 @@
 import 'dart:typed_data' show Float32List;
-import 'package:dart_vector/vector.dart';
+import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/predictor/interface/predictor.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/base.dart';
 import 'package:dart_ml/src/estimator/estimator.dart';
