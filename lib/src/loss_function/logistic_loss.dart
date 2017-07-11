@@ -5,5 +5,7 @@ class _LogisticLoss implements LossFunction {
 
   @override
   double loss(double predictedLabel, double originalLabel) =>
-      math.log(1.0 + math.exp(-originalLabel * predictedLabel));
+      log2(1.0 + math.exp(-originalLabel * predictedLabel));
+
+  double log2(double x) => math.log(x) / math.log(2);
 }

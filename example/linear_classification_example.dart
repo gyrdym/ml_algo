@@ -25,13 +25,9 @@ Future main() async {
     .map((List item) => item.last == "N" ? 1.0 : 0.0)
     .toList(growable: false);
 
-  print('features: $features');
-  print('labels: $labels');
+  LogisticRegressor logisticRegressor = new LogisticRegressor(metric: new Metric.Accuracy());
+  CrossValidator validator = new CrossValidator.KFold();
 
-  LogisticRegressor logisticRegressor = new LogisticRegressor(learningRate: 1e-1);
-
-  logisticRegressor.train(features.sublist(0,70), labels.sublist(0, 70));
-  Float32x4Vector prediction = logisticRegressor.predictProbabilities(features.sublist(70));
-
-  print('prediction: $prediction');
+  print('Ratio of incorrect answers on cross validation: ');
+  print(validator.validate(logisticRegressor, features, labels).mean());
 }
