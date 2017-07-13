@@ -9,7 +9,7 @@ Future main() async {
   Dependencies.configure();
 
   csv.CsvCodec csvCodec = new csv.CsvCodec();
-  Stream<List<int>> input = new File('example/datasets/fertility.csv').openRead();
+  Stream<List<int>> input = new File('example/datasets/pima_indians_diabetes_database.csv').openRead();
   List<List<num>> fields = (await input.transform(UTF8.decoder)
       .transform(csvCodec.decoder).toList() as List<List<num>>)
       .sublist(1);
@@ -21,13 +21,11 @@ Future main() async {
       .map((List item) => new Float32x4Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
       .toList(growable: false);
 
-  List<double> labels = fields
-    .map((List item) => item.last == "N" ? 1.0 : 0.0)
-    .toList(growable: false);
+  List<double> labels = fields.map((List<num> item) => item.last * 1.0).toList(growable: false);
 
-  LogisticRegressor logisticRegressor = new LogisticRegressor(metric: new Metric.Accuracy());
+  LogisticRegressor logisticRegressor = new LogisticRegressor(metric: new Metric.Accuracy(), alpha: 0.0);
   CrossValidator validator = new CrossValidator.KFold();
 
-  print('Ratio of incorrect answers on cross validation: ');
+  print('Ratio of incorrect answers on a cross validation: ');
   print(validator.validate(logisticRegressor, features, labels).mean());
 }
