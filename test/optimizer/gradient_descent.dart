@@ -6,7 +6,7 @@ import 'package:dart_ml/src/math/math.dart' show Randomizer;
 import 'package:dart_ml/src/math/math_impl.dart' show RandomizerImpl;
 import 'package:dart_ml/src/optimizer/optimizer.dart' show Regularization;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;
-import 'package:dart_ml/src/loss_function/squared_loss.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'dart:typed_data' show Float32List;
 
 void main() {
@@ -34,7 +34,13 @@ void main() {
 
     setUp(() {
       optimizer = new BGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new SquaredLoss(), alpha: .00001);
+      optimizer.configure(
+        learningRate: 1e-5,
+        minWeightsDistance: 1e-8,
+        iterationLimit:  100,
+        regularization: Regularization.L2,
+        alpha: .00001
+      );
     });
 
     test('should find optimal weights for the given data', () {
@@ -58,7 +64,13 @@ void main() {
 
     setUp(() {
       optimizer = new MBGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new SquaredLoss(), alpha: .00001);
+      optimizer.configure(
+        learningRate: 1e-5,
+        minWeightsDistance: 1e-8,
+        iterationLimit:  100,
+        regularization: Regularization.L2,
+        alpha: .00001
+      );
     });
 
     test('should find optimal weights for the given data', () {
@@ -76,7 +88,13 @@ void main() {
 
     setUp(() {
       optimizer = new SGDOptimizerImpl();
-      optimizer.configure(1e-5, 1e-8, 100, Regularization.L2, new SquaredLoss(), alpha: .00001);
+      optimizer.configure(
+        learningRate: 1e-5,
+        minWeightsDistance: 1e-8,
+        iterationLimit:  100,
+        regularization: Regularization.L2,
+        alpha: .00001
+      );
     });
 
     test('should find optimal weights for the given data', () {
