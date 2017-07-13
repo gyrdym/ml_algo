@@ -1,3 +1,4 @@
+import 'dart:typed_data' show Float32List;
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
@@ -8,6 +9,15 @@ class GradientLinearClassifier extends GradientLinearPredictor implements Classi
   GradientLinearClassifier(SGDOptimizer optimizer, Metric metric)
       : super(optimizer, metric: metric);
 
-  Float32x4Vector predictProbabilities(List<Float32x4Vector> features) =>
-      new Float32x4Vector.from(predict(features).asList().map((double value) => value > 0.5 ? 1.0 : 0.0));
+  @override
+  double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) {
+    metric = metric ?? this.metric;
+    Float32x4Vector prediction = predictClasses(features);
+    return metric.getError(prediction, new Float32x4Vector.from(origLabels));
+  }
+
+  Float32x4Vector predictClasses(List<Float32x4Vector> features) {
+    Float32List probabilities = predict(features).asList();
+    return new Float32x4Vector.from(probabilities.map((double value) => value.round() * 1.0));
+  }
 }

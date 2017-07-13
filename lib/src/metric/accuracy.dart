@@ -3,7 +3,10 @@ part of metric;
 class _AccuracyMetric implements Metric {
   const _AccuracyMetric();
 
-  double getError(Float32x4Vector predictedLabels, Float32x4Vector origLabels) {
+  double getError(Float32x4Vector predictedLabels, Float32x4Vector origLabels) =>
+      1 - getScore(predictedLabels, origLabels);
+
+  double getScore(Float32x4Vector predictedLabels, Float32x4Vector origLabels) {
     double score = 0.0;
 
     List<double> _origLabels = origLabels.asList();
@@ -15,6 +18,6 @@ class _AccuracyMetric implements Metric {
       }
     }
 
-    return 1.0 - score / origLabels.length;
+    return score / origLabels.length;
   }
 }
