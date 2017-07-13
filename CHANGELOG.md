@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.21.0
+- Logistic regression model added (with example)
+
 ## 0.20.2
 - `README.md` updated
 

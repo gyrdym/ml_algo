@@ -1,10 +1,8 @@
-import 'dart:math' as math;
-import 'package:simd_vector/vector.dart';
-import 'loss_function.dart';
+part of loss_function;
 
-class SquaredLoss implements LossFunction {
-  const SquaredLoss();
+class _SquaredLoss implements LossFunction {
+  const _SquaredLoss();
 
   @override
-  double function(Float32x4Vector w, Float32x4Vector x, double y) => math.pow(w.dot(x) - y, 2);
+  double loss(double predictedLabel, double originalLabel) => math.pow(predictedLabel - originalLabel, 2);
 }

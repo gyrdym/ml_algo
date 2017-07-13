@@ -1,5 +1,15 @@
-import 'package:simd_vector/vector.dart';
+library loss_function;
+
+import 'dart:math' as math;
+
+part 'cross_entropy.dart';
+part 'squared_loss.dart';
+part 'logistic_loss.dart';
 
 abstract class LossFunction {
-  double function(Float32x4Vector w, Float32x4Vector x, double y);
+  double loss(double predictedLabel, double originalLabel);
+
+  factory LossFunction.Squared() => const _SquaredLoss();
+  factory LossFunction.CrossEntropy() => const _CrossEntropy();
+  factory LossFunction.LogisticLoss() => const _LogisticLoss();
 }
