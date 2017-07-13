@@ -1,10 +1,17 @@
 # Machine learning with dart
 
-Only linear regression is available now (with Batch, mini-Batch and Stochastic gradient descent optimizers)
+Following models are implemented:
+- Linear regression:
+    - with stochastic gradient descent
+    - with mini batch gradient descent
+    - with batch gradient descent
 
+- Linear classifier:
+    - Logistic regression
+    
 ## Usage
 
-### A simple usage example:
+### A simple usage example (Linear regression with stochastic gradient descent):
 
 Import all necessary packages: 
 
@@ -87,3 +94,5 @@ We will see something like this:
 score (RMSE): 4.91429797944094
 score (MAPE): 31.221150755882263
 ````
+
+For more examples please visit [examples folder](https://github.com/gyrdym/dart_ml/tree/master/example) 
