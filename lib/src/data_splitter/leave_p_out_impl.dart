@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/data_splitter/interface/leave_p_out_splitter.dart';
+import 'package:dart_ml/src/data_splitter/leave_p_out.dart';
 
 class LeavePOutSplitterImpl implements LeavePOutSplitter {
   int _p = 2;

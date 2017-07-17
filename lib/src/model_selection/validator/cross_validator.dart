@@ -1,10 +1,10 @@
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/predictor/base/predictor.dart';
 import 'package:dart_ml/src/metric/metric.dart';
-import 'package:dart_ml/src/data_splitter/interface/splitter.dart';
+import 'package:dart_ml/src/data_splitter/base.dart';
 import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_ml/src/data_splitter/interface/k_fold_splitter.dart';
-import 'package:dart_ml/src/data_splitter/interface/leave_p_out_splitter.dart';
+import 'package:dart_ml/src/data_splitter/k_fold.dart';
+import 'package:dart_ml/src/data_splitter/leave_p_out.dart';
 
 class CrossValidator {
   final Splitter _splitter;
