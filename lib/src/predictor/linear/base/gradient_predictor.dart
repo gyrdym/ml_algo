@@ -5,5 +5,5 @@ import 'package:dart_ml/src/score_function/score_function.dart';
 
 abstract class GradientLinearPredictor extends PredictorImpl {
   GradientLinearPredictor(GradientOptimizer optimizer, {Metric metric}) :
-        super(optimizer, metric: metric ?? new Metric.RMSE(), scoreFn: new ScoreFunction.Linear());
+        super(optimizer, metric: metric ?? new RegressionMetric.RMSE(), scoreFn: new ScoreFunction.Linear());
 }
