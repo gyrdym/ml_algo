@@ -32,5 +32,5 @@ main() async {
   print('SGD regressor: ${validator.validate(sgdRegressor, features, labels).mean()}');
 
   print('\nMAPE:');
-  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, metric: new Metric.MAPE()).mean()}');
+  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, metric: new RegressionMetric.MAPE()).mean()}');
 }

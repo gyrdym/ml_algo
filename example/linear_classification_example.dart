@@ -23,7 +23,7 @@ Future main() async {
 
   List<double> labels = fields.map((List<num> item) => item.last * 1.0).toList(growable: false);
 
-  LogisticRegressor logisticRegressor = new LogisticRegressor(metric: new Metric.Accuracy(), alpha: 0.0);
+  LogisticRegressor logisticRegressor = new LogisticRegressor(metric: new ClassificationMetric.Accuracy(), alpha: 0.0);
   CrossValidator validator = new CrossValidator.KFold();
 
   print('Ratio of incorrect answers on a cross validation: ');
