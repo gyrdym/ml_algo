@@ -3,9 +3,9 @@ library metric;
 import 'dart:math' as math;
 import 'package:simd_vector/vector.dart';
 
-part 'mape.dart';
-part 'rmse.dart';
-part 'accuracy.dart';
+part 'package:dart_ml/src/metric/regression/mape.dart';
+part 'package:dart_ml/src/metric/regression/rmse.dart';
+part 'package:dart_ml/src/metric/classification/accuracy.dart';
 
 abstract class Metric {
   double getError(Float32x4Vector predictedLabels, Float32x4Vector origLabels);
