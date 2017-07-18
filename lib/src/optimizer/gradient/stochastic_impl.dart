@@ -1,4 +1,4 @@
-part of gradient_optimizer_base;
+part of 'base_impl.dart';
 
 class SGDOptimizerImpl extends GradientOptimizerImpl implements SGDOptimizer {
   final Randomizer _randomizer = injector.get(Randomizer);
