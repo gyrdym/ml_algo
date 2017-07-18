@@ -5,14 +5,14 @@ import 'package:dart_ml/src/optimizer/base.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 
-abstract class PredictorImpl implements Predictor {
+abstract class PredictorBase implements Predictor {
   final Metric metric;
   final ScoreFunction scoreFunction;
   final Optimizer _optimizer;
 
   Float32x4Vector _weights;
 
-  PredictorImpl(this._optimizer, {Metric metric, ScoreFunction scoreFn}) :
+  PredictorBase(this._optimizer, {Metric metric, ScoreFunction scoreFn}) :
         metric = metric,
         scoreFunction = scoreFn;
 

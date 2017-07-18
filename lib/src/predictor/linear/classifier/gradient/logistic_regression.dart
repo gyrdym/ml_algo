@@ -4,7 +4,7 @@ import 'package:dart_ml/src/optimizer/gradient/stochastic.dart';
 import 'package:dart_ml/src/optimizer/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
-import 'gradient_classifier.dart';
+import 'package:dart_ml/src/predictor/linear/classifier/gradient/gradient_classifier.dart';
 
 class LogisticRegressor extends GradientLinearClassifier {
   LogisticRegressor({double learningRate,

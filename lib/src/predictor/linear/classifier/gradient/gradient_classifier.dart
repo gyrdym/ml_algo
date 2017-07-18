@@ -3,9 +3,9 @@ import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/optimizer/gradient/stochastic.dart';
 import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
-import 'classifier.dart';
+import 'package:dart_ml/src/predictor/base/classifier.dart';
 
-class GradientLinearClassifier extends GradientLinearPredictor implements Classifier {
+class GradientLinearClassifier extends GradientLinearPredictorBase implements Classifier {
   GradientLinearClassifier(SGDOptimizer optimizer, Metric metric)
       : super(optimizer, metric: metric);
 
