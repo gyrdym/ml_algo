@@ -1,7 +1,7 @@
 import 'dart:typed_data' show Float32List;
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/predictor/base/predictor.dart';
-import 'package:dart_ml/src/optimizer/interface/optimizer.dart';
+import 'package:dart_ml/src/optimizer/base.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 

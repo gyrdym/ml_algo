@@ -3,7 +3,7 @@ library gradient_optimizer_base;
 import 'dart:typed_data' show Float32List;
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
+import 'package:dart_ml/src/optimizer/regularization.dart';
 import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/gradient/batch.dart';
 import 'package:dart_ml/src/optimizer/gradient/mini_batch.dart';
