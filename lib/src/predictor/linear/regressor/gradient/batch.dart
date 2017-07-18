@@ -6,7 +6,7 @@ import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
 
-class BGDRegressor extends GradientLinearPredictor {
+class BGDRegressor extends GradientLinearPredictorBase {
   BGDRegressor({double learningRate,
                  double minWeightsDistance,
                  int iterationLimit,

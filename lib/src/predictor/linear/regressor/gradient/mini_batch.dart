@@ -6,7 +6,7 @@ import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
 
-class MBGDRegressor extends GradientLinearPredictor {
+class MBGDRegressor extends GradientLinearPredictorBase {
   MBGDRegressor({double learningRate,
                  double minWeightsDistance,
                  int iterationLimit,

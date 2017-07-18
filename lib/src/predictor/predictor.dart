@@ -1,3 +1,3 @@
 export 'package:dart_ml/src/predictor/base/predictor.dart';
 export 'linear/regressor/regressor.dart';
-export 'linear/classifier/logistic_regression.dart';
+export 'package:dart_ml/src/predictor/linear/classifier/gradient/logistic_regression.dart';
