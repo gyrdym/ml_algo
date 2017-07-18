@@ -1,4 +1,4 @@
-part of gradient_optimizer_base;
+part of 'base_impl.dart';
 
 class MBGDOptimizerImpl extends GradientOptimizerImpl implements MBGDOptimizer {
   final Randomizer _randomizer = injector.get(Randomizer);

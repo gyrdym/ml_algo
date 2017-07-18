@@ -1,7 +1,7 @@
 import 'dart:typed_data' show Float32List;
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/metric/metric.dart';
-import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
+import 'package:dart_ml/src/optimizer/gradient/stochastic.dart';
 import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
 import 'classifier.dart';
 
