@@ -1,7 +1,7 @@
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/optimizer/gradient/stochastic.dart';
-import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
+import 'package:dart_ml/src/optimizer/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 import 'gradient_classifier.dart';
