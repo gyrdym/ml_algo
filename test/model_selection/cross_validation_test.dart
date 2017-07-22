@@ -1,5 +1,4 @@
 import 'package:di/di.dart';
-import 'package:dart_ml/src/di/injector.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/math/math.dart';
 import 'package:dart_ml/src/math/math_impl.dart';
@@ -8,7 +7,7 @@ import 'package:dart_ml/src/data_splitter/data_splitter.dart';
 import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart' show SGDOptimizer;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show SGDOptimizerImpl;
-import 'package:dart_ml/src/predictor/linear/regressor/regressor.dart' show SGDRegressor;
+import 'package:dart_ml/src/predictor/predictor.dart' show GradientRegressor;
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
@@ -18,20 +17,18 @@ const int NUMBER_OF_SAMPLES = 12;
 void main() {
   List<Float32x4Vector> features;
   List<double> labels;
-  SGDRegressor predictor;
+  GradientRegressor<SGDOptimizer> predictor;
 
   setUp(() {
-    injector = new ModuleInjector([
+    features = new List<Float32x4Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Float32x4Vector.randomFilled(4));
+    labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
+    predictor = new GradientRegressor<SGDOptimizer>(customInjector: new ModuleInjector([
       new Module()
         ..bind(Randomizer, toFactory: () => new RandomizerImpl())
         ..bind(KFoldSplitter, toFactory: () => new KFoldSplitterImpl())
         ..bind(LeavePOutSplitter, toFactory: () => new LeavePOutSplitterImpl())
         ..bind(SGDOptimizer, toFactory: () => new SGDOptimizerImpl())
-    ]);
-
-    features = new List<Float32x4Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Float32x4Vector.randomFilled(4));
-    labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
-    predictor = new SGDRegressor();
+    ]));
   });
 
   group('K-fold cross validator', () {

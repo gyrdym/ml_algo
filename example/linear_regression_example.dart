@@ -6,8 +6,6 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {
-  Dependencies.configure();
-
   csv.CsvCodec csvCodec = new csv.CsvCodec();
   Stream<List<int>> input = new File('example/datasets/advertising.csv').openRead();
   List<List<num>> fields = (await input.transform(UTF8.decoder)
@@ -24,7 +22,7 @@ main() async {
 
   List<double> labels = fields.map((List<num> item) => item.last.toDouble()).toList();
 
-  SGDRegressor sgdRegressor = new SGDRegressor();
+  GradientRegressor<SGDOptimizer> sgdRegressor = new GradientRegressor<SGDOptimizer>();
   CrossValidator validator = new CrossValidator.KFold();
 
   print('K-fold cross validation:');
