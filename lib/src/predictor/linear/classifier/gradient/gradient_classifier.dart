@@ -1,13 +1,7 @@
-import 'dart:typed_data' show Float32List;
-import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/metric/metric.dart';
-import 'package:dart_ml/src/optimizer/gradient/stochastic.dart';
-import 'package:dart_ml/src/predictor/linear/base/gradient_predictor.dart';
-import 'package:dart_ml/src/predictor/base/classifier.dart';
+part of '../../../predictor.dart';
 
-class GradientLinearClassifier extends GradientLinearPredictorBase implements Classifier {
-  GradientLinearClassifier(SGDOptimizer optimizer, Metric metric)
-      : super(optimizer, metric: metric);
+class GradientLinearClassifier extends GradientLinearPredictor implements Classifier {
+  GradientLinearClassifier(Metric metric) : super(metric: metric);
 
   @override
   double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) {
