@@ -1,4 +1,4 @@
-part of '../../predictor.dart';
+part of 'package:dart_ml/src/predictor/predictor.dart';
 
 abstract class GradientLinearPredictor extends PredictorBase {
   GradientLinearPredictor({Metric metric}) :

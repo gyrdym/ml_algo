@@ -1,4 +1,4 @@
-part of '../../../predictor.dart';
+part of 'package:dart_ml/src/predictor/predictor.dart';
 
 class GradientLinearClassifier extends GradientLinearPredictor implements Classifier {
   GradientLinearClassifier(Metric metric) : super(metric: metric);
