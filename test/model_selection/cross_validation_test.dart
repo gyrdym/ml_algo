@@ -7,7 +7,7 @@ import 'package:dart_ml/src/data_splitter/data_splitter.dart';
 import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart' show SGDOptimizer;
 import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show SGDOptimizerImpl;
-import 'package:dart_ml/src/predictor/predictor.dart' show GradientRegressor;
+import 'package:dart_ml/src/predictor/predictor.dart' show SGDRegressor;
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
@@ -17,12 +17,12 @@ const int NUMBER_OF_SAMPLES = 12;
 void main() {
   List<Float32x4Vector> features;
   List<double> labels;
-  GradientRegressor<SGDOptimizer> predictor;
+  SGDRegressor predictor;
 
   setUp(() {
     features = new List<Float32x4Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Float32x4Vector.randomFilled(4));
     labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
-    predictor = new GradientRegressor<SGDOptimizer>(customInjector: new ModuleInjector([
+    predictor = new SGDRegressor(customInjector: new ModuleInjector([
       new Module()
         ..bind(Randomizer, toFactory: () => new RandomizerImpl())
         ..bind(KFoldSplitter, toFactory: () => new KFoldSplitterImpl())
