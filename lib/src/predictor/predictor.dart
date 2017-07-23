@@ -8,7 +8,7 @@ import 'package:dart_ml/src/optimizer/gradient/base.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_ml/src/di/dependencies.dart';
+import 'package:dart_ml/src/di/factory.dart';
 import 'package:dart_ml/src/optimizer/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/optimizer/gradient/batch.dart';
