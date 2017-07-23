@@ -1,6 +1,6 @@
 part of 'package:dart_ml/src/predictor/predictor.dart';
 
-class MBGDRegressor extends GradientRegressor<MBGDOptimizer> {
+class MBGDRegressor extends _GradientRegressor<MBGDOptimizer> {
   MBGDRegressor({double learningRate, double minWeightsDistance, int iterationLimit, Metric metric,
                  Regularization regularization, ModuleInjector customInjector, alpha})
 
