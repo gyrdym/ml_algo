@@ -1,4 +1,4 @@
-part of '../../../predictor.dart';
+part of 'package:dart_ml/src/predictor/predictor.dart';
 
 class LogisticRegressor extends GradientLinearClassifier {
   LogisticRegressor({double learningRate, double minWeightsDistance, int iterationLimit, ClassificationMetric metric,

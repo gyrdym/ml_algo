@@ -1,4 +1,4 @@
-part of '../../../predictor.dart';
+part of 'package:dart_ml/src/predictor/predictor.dart';
 
 class GradientRegressor<T extends GradientOptimizer> extends GradientLinearPredictor {
   GradientRegressor({double learningRate, double minWeightsDistance, int iterationLimit, Metric metric,
