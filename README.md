@@ -23,11 +23,6 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 ````
 
-Let's start with dependencies configuring:
-````dart
-Dependencies.configure();
-````
-
 Read a `csv`-file `advertising.csv` with a test data:
 ````dart
 csv.CsvCodec csvCodec = new csv.CsvCodec();
@@ -62,13 +57,7 @@ Create an instance of `CrossValidator` class for evaluating quality of our predi
 CrossValidator validator = new CrossValidator.KFold();
 ````
 
-Create RMSE and MAPE estimator instances for evaluating a forecast quality:
-````dart
-RMSEEstimator rmseEstimator = new RMSEEstimator();
-MAPEEstimator mapeEstimator = new MAPEEstimator();
-````
-
-Create linear regressor instance with stochastic gradient descent optimizer: 
+Create linear regressor instance with stochastic gradient descent optimizer:
 ````dart
 SGDRegressor sgdRegressor = new SGDRegressor();
 ````
@@ -80,7 +69,7 @@ Float32x4Vector scoreRMSE = validator.validate(sgdRegressor, features, labels);
 
 ...and via MAPE-metric:
 ````dart
-Float32x4Vector scoreMAPE = validator.validate(sgdRegressor, features, labels, estimator: mapeEstimator);
+Float32x4Vector scoreMAPE = validator.validate(sgdRegressor, features, labels, metric: new RegressionMetric.MAPE());
 ````
 
 Let's print score:
