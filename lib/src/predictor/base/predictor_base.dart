@@ -1,18 +1,13 @@
-import 'dart:typed_data' show Float32List;
-import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/predictor/base/predictor.dart';
-import 'package:dart_ml/src/optimizer/interface/optimizer.dart';
-import 'package:dart_ml/src/metric/metric.dart';
-import 'package:dart_ml/src/score_function/score_function.dart';
+part of 'package:dart_ml/src/predictor/predictor.dart';
 
-abstract class PredictorImpl implements Predictor {
+abstract class _PredictorBase implements Predictor {
   final Metric metric;
   final ScoreFunction scoreFunction;
-  final Optimizer _optimizer;
 
+  Optimizer _optimizer;
   Float32x4Vector _weights;
 
-  PredictorImpl(this._optimizer, {Metric metric, ScoreFunction scoreFn}) :
+  _PredictorBase({Metric metric, ScoreFunction scoreFn}) :
         metric = metric,
         scoreFunction = scoreFn;
 

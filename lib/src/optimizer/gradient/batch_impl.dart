@@ -1,4 +1,4 @@
-part of gradient_optimizer_base;
+part of 'base_impl.dart';
 
 class BGDOptimizerImpl extends GradientOptimizerImpl implements BGDOptimizer {
   @override

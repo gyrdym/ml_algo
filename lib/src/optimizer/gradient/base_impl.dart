@@ -3,18 +3,18 @@ library gradient_optimizer_base;
 import 'dart:typed_data' show Float32List;
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/optimizer/regularization/regularization.dart';
-import 'package:dart_ml/src/optimizer/gradient/interface/base.dart';
+import 'package:dart_ml/src/optimizer/regularization.dart';
 import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/gradient/interface/batch.dart';
-import 'package:dart_ml/src/optimizer/gradient/interface/mini_batch.dart';
-import 'package:dart_ml/src/optimizer/gradient/interface/stochastic.dart';
+import 'package:dart_ml/src/optimizer/gradient/batch.dart';
+import 'package:dart_ml/src/optimizer/gradient/mini_batch.dart';
+import 'package:dart_ml/src/optimizer/gradient/stochastic.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
+import 'base.dart';
 
-part 'batch.dart';
-part 'mini_batch.dart';
-part 'stochastic.dart';
+part 'batch_impl.dart';
+part 'mini_batch_impl.dart';
+part 'stochastic_impl.dart';
 
 abstract class GradientOptimizerImpl implements GradientOptimizer {
   //hyper parameters declaration

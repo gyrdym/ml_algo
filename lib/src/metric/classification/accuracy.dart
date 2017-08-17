@@ -1,6 +1,6 @@
-part of metric;
+part of 'metric.dart';
 
-class _AccuracyMetric implements Metric {
+class _AccuracyMetric implements ClassificationMetric {
   const _AccuracyMetric();
 
   double getError(Float32x4Vector predictedLabels, Float32x4Vector origLabels) =>
