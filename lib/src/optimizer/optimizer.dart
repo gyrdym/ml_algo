@@ -1,3 +1,3 @@
+export 'base.dart';
 export 'gradient/gradient.dart';
-export 'interface/optimizer.dart';
-export 'regularization/regularization.dart';
+export 'regularization.dart';

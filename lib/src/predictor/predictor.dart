@@ -1,3 +1,25 @@
-export 'package:dart_ml/src/predictor/base/predictor.dart';
-export 'linear/regressor/regressor.dart';
-export 'linear/classifier/logistic_regression.dart';
+import 'package:di/di.dart';
+import 'dart:typed_data' show Float32List;
+import 'package:simd_vector/vector.dart';
+import 'package:dart_ml/src/predictor/base/classifier.dart';
+import 'package:dart_ml/src/predictor/base/predictor.dart';
+import 'package:dart_ml/src/optimizer/base.dart';
+import 'package:dart_ml/src/optimizer/gradient/base.dart';
+import 'package:dart_ml/src/metric/metric.dart';
+import 'package:dart_ml/src/score_function/score_function.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:dart_ml/src/di/factory.dart';
+import 'package:dart_ml/src/optimizer/regularization.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/optimizer/gradient/batch.dart';
+import 'package:dart_ml/src/optimizer/gradient/mini_batch.dart';
+import 'package:dart_ml/src/optimizer/gradient/stochastic.dart';
+
+part 'base/predictor_base.dart';
+part 'linear/base/gradient_predictor.dart';
+part 'linear/classifier/gradient/gradient_classifier.dart';
+part 'linear/classifier/gradient/logistic_regression.dart';
+part 'linear/regressor/gradient/regressor.dart';
+part 'linear/regressor/gradient/batch.dart';
+part 'linear/regressor/gradient/mini_batch.dart';
+part 'linear/regressor/gradient/stochastic.dart';

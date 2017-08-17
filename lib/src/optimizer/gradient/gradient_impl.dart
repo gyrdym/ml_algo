@@ -1,1 +1,1 @@
-export 'implementation/base.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;
+export 'base_impl.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;

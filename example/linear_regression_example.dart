@@ -6,8 +6,6 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
 main() async {
-  Dependencies.configure();
-
   csv.CsvCodec csvCodec = new csv.CsvCodec();
   Stream<List<int>> input = new File('example/datasets/advertising.csv').openRead();
   List<List<num>> fields = (await input.transform(UTF8.decoder)
@@ -32,5 +30,5 @@ main() async {
   print('SGD regressor: ${validator.validate(sgdRegressor, features, labels).mean()}');
 
   print('\nMAPE:');
-  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, metric: new Metric.MAPE()).mean()}');
+  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, metric: new RegressionMetric.MAPE()).mean()}');
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.22.0
+- File structure reorganized, predictor classes refactored
+- `README.md` updated
+
 ## 0.21.0
 - Logistic regression model added (with example)
 

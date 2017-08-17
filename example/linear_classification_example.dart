@@ -6,8 +6,6 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
 Future main() async {
-  Dependencies.configure();
-
   csv.CsvCodec csvCodec = new csv.CsvCodec();
   Stream<List<int>> input = new File('example/datasets/pima_indians_diabetes_database.csv').openRead();
   List<List<num>> fields = (await input.transform(UTF8.decoder)
@@ -23,7 +21,7 @@ Future main() async {
 
   List<double> labels = fields.map((List<num> item) => item.last * 1.0).toList(growable: false);
 
-  LogisticRegressor logisticRegressor = new LogisticRegressor(metric: new Metric.Accuracy(), alpha: 0.0);
+  LogisticRegressor logisticRegressor = new LogisticRegressor(metric: new ClassificationMetric.Accuracy(), alpha: 0.0);
   CrossValidator validator = new CrossValidator.KFold();
 
   print('Ratio of incorrect answers on a cross validation: ');
