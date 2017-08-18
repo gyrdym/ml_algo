@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.23.0
+- `findMaxima` and `findMinima` methods were added to `Optimizer` interface
+
 ## 0.22.0
 - File structure reorganized, predictor classes refactored
 - `README.md` updated

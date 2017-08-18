@@ -13,7 +13,7 @@ abstract class _PredictorBase implements Predictor {
 
   void train(List<Float32x4Vector> features, List<double> labels, {Float32x4Vector weights}) {
     Float32List typedLabelList = new Float32List.fromList(labels);
-    _weights = _optimizer.optimize(features, typedLabelList, weights: weights);
+    _weights = _optimizer.findMinima(features, typedLabelList, weights: weights);
   }
 
   double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) {

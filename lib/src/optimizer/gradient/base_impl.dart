@@ -48,7 +48,17 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
     _scoreFunction = scoreFunction;
   }
 
-  Float32x4Vector optimize(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights}) {
+  Float32x4Vector findMinima(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights}) {
+    return _findExtrema(features, labels, weights: weights);
+  }
+
+  Float32x4Vector findMaxima(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights}) {
+    return _findExtrema(features, labels, weights: weights, findingMinima: false);
+  }
+
+  Float32x4Vector _findExtrema(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights,
+    bool findingMinima: true}) {
+
     weights = weights ?? new Float32x4Vector.zero(features.first.length);
     _weightsDeltaMatrix = _generateWeightsDeltaMatrix(_argumentIncrement, weights.length);
     double weightsDistance = double.MAX_FINITE;
@@ -56,7 +66,7 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
 
     while (weightsDistance > _minWeightsDistance && iterationCounter < _iterationLimit) {
       double eta = _learningRate / ++iterationCounter;
-      Float32x4Vector newWeights = _generateNewWeights(weights, features, labels, eta);
+      Float32x4Vector newWeights = _generateNewWeights(weights, features, labels, eta, findingMinima: findingMinima);
       weightsDistance = newWeights.distanceTo(weights);
       weights = newWeights;
     }
@@ -76,7 +86,9 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
 
   Iterable<int> _getSamplesRange(int totalSamplesCount);
 
-  Float32x4Vector _generateNewWeights(Float32x4Vector weights, List<Float32x4Vector> features, Float32List labels, double eta) {
+  Float32x4Vector _generateNewWeights(Float32x4Vector weights, List<Float32x4Vector> features, Float32List labels,
+                                      double eta, {bool findingMinima: true}) {
+
     Iterable<int> range = _getSamplesRange(features.length);
 
     int start = range.first;
@@ -85,17 +97,22 @@ abstract class GradientOptimizerImpl implements GradientOptimizer {
     List<Float32x4Vector> featuresBatch = features.sublist(start, end);
     List<double> labelsBatch = labels.sublist(start, end);
 
-    return _makeGradientStep(weights, featuresBatch, labelsBatch, eta);
+    return _makeGradientStep(weights, featuresBatch, labelsBatch, eta, findingMinima: findingMinima);
   }
 
-  Float32x4Vector _makeGradientStep(Float32x4Vector weights, List<Float32x4Vector> data, Float32List target, double eta) {
+  Float32x4Vector _makeGradientStep(Float32x4Vector weights, List<Float32x4Vector> data, Float32List target, double eta,
+                                    {bool findingMinima: true}) {
+
     Float32x4Vector gradientSumVector = _extendedGradient(weights, data[0], target[0]);
 
     for (int i = 1; i < data.length; i++) {
       gradientSumVector += _extendedGradient(weights, data[i], target[i]);
     }
 
-    return weights - gradientSumVector.scalarMul(eta / data.length);
+    return findingMinima ?
+           weights - gradientSumVector.scalarMul(eta / data.length)
+            :
+           weights + gradientSumVector.scalarMul(eta / data.length);
   }
 
   Float32x4Vector _extendedGradient(Float32x4Vector k, Float32x4Vector x, double y) {
