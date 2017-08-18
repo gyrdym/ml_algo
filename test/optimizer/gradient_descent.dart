@@ -47,7 +47,7 @@ void main() {
       Float32x4Vector weightsSum = new Float32x4Vector.zero(3);
 
       for (int i = 0; i < MAX_EPOCH; i++) {
-        weightsSum += optimizer.optimize(data, target);
+        weightsSum += optimizer.findMinima(data, target);
       }
 
       Float32List weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH).asList();
@@ -74,7 +74,7 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      Float32List weights = optimizer.optimize(data, target).asList();
+      Float32List weights = optimizer.findMinima(data, target).asList();
 
       expect(weights.length, equals(3));
       expect(0.07 < weights[0] && weights[0] < 0.09, isTrue, reason: '${weights[0]} not in interval (0.08...0.09)');
@@ -101,7 +101,7 @@ void main() {
       Float32x4Vector weightsSum = new Float32x4Vector.zero(3);
 
       for (int i = 0; i < MAX_EPOCH; i++) {
-        weightsSum += optimizer.optimize(data, target);
+        weightsSum += optimizer.findMinima(data, target);
       }
 
       Float32List weightsMean = weightsSum.scalarMul(1 / MAX_EPOCH).asList();
