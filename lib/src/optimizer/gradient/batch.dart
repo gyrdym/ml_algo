@@ -1,3 +1,3 @@
-import 'package:dart_ml/src/optimizer/gradient/base.dart';
+part of 'package:dart_ml/src/dart_ml.dart';
 
 abstract class BGDOptimizer implements GradientOptimizer {}
