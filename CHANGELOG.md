@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.24.0
+- All implementations were hidden
+
 ## 0.23.0
 - `findMaxima` and `findMinima` methods were added to `Optimizer` interface
 
