@@ -1,13 +1,10 @@
 import 'package:di/di.dart';
 
+import 'package:dart_ml/src/dart_ml.dart';
+import 'package:dart_ml/src/dart_ml_impl.dart';
+
 import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
 import 'package:dart_ml/src/math/misc/randomizer/randomizer_impl.dart';
-
-import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:dart_ml/src/optimizer/optimizer_impl.dart';
-
-import 'package:dart_ml/src/data_splitter/data_splitter.dart';
-import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
 
 class InjectorFactory {
   static ModuleInjector create() {
