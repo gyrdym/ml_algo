@@ -2,11 +2,11 @@ import 'package:di/di.dart';
 import 'package:test/test.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/di/injector.dart';
+import 'package:dart_ml/src/dart_ml.dart';
+import 'package:dart_ml/src/dart_ml_impl.dart';
 import 'package:dart_ml/src/math/math.dart' show Randomizer;
 import 'package:dart_ml/src/math/math_impl.dart' show RandomizerImpl;
 import 'package:dart_ml/src/optimizer/optimizer.dart' show Regularization;
-import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show BGDOptimizerImpl, MBGDOptimizerImpl, SGDOptimizerImpl;
-import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'dart:typed_data' show Float32List;
 
 void main() {
