@@ -1,6 +1,6 @@
 part of 'package:dart_ml/src/dart_ml_impl.dart';
 
-class LeavePOutSplitterImpl implements LeavePOutSplitter {
+class _LeavePOutSplitterImpl implements LeavePOutSplitter {
   int _p = 2;
 
   void configure({int p = 2}) {

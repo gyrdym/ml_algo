@@ -2,11 +2,9 @@ import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/math/math.dart';
 import 'package:dart_ml/src/math/math_impl.dart';
+import 'package:dart_ml/src/dart_ml.dart';
+import 'package:dart_ml/src/dart_ml_impl.dart';
 import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;
-import 'package:dart_ml/src/data_splitter/data_splitter.dart';
-import 'package:dart_ml/src/data_splitter/data_splitter_impl.dart';
-import 'package:dart_ml/src/optimizer/optimizer.dart' show SGDOptimizer;
-import 'package:dart_ml/src/optimizer/optimizer_impl.dart' show SGDOptimizerImpl;
 import 'package:dart_ml/src/predictor/predictor.dart' show SGDRegressor;
 
 import 'package:test/test.dart';
@@ -25,8 +23,8 @@ void main() {
     predictor = new SGDRegressor(customInjector: new ModuleInjector([
       new Module()
         ..bind(Randomizer, toFactory: () => new RandomizerImpl())
-        ..bind(KFoldSplitter, toFactory: () => new KFoldSplitterImpl())
-        ..bind(LeavePOutSplitter, toFactory: () => new LeavePOutSplitterImpl())
+        ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
+        ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.Lpo())
         ..bind(SGDOptimizer, toFactory: () => new SGDOptimizerImpl())
     ]));
   });

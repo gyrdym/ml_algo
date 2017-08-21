@@ -13,8 +13,8 @@ class InjectorFactory {
       ..bind(BGDOptimizer, toFactory: () => new BGDOptimizerImpl())
       ..bind(MBGDOptimizer, toFactory: () => new MBGDOptimizerImpl())
       ..bind(SGDOptimizer, toFactory: () => new SGDOptimizerImpl())
-      ..bind(KFoldSplitter, toFactory: () => new KFoldSplitterImpl())
-      ..bind(LeavePOutSplitter, toFactory: () => new LeavePOutSplitterImpl())
+      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
+      ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.Lpo())
     ]);
   }
 }
