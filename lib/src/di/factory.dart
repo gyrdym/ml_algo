@@ -3,13 +3,10 @@ import 'package:di/di.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
 
-import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
-import 'package:dart_ml/src/math/misc/randomizer/randomizer_impl.dart';
-
 class InjectorFactory {
   static ModuleInjector create() {
     return new ModuleInjector([new Module()
-      ..bind(Randomizer, toFactory: () => new RandomizerImpl())
+      ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
       ..bind(BGDOptimizer, toFactory: () => GradientOptimizerFactory.createBatchOptimizer())
       ..bind(MBGDOptimizer, toFactory: () => GradientOptimizerFactory.createMiniBatchOptimizer())
       ..bind(SGDOptimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer())

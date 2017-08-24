@@ -1,7 +1,5 @@
 import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/math/math.dart';
-import 'package:dart_ml/src/math/math_impl.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
 import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;
@@ -22,7 +20,7 @@ void main() {
     labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
     predictor = new SGDRegressor(customInjector: new ModuleInjector([
       new Module()
-        ..bind(Randomizer, toFactory: () => new RandomizerImpl())
+        ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
         ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
         ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.createLpoSplitter())
         ..bind(SGDOptimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer())
