@@ -1,10 +1,9 @@
-import 'dart:math';
-import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
-class RandomizerImpl implements Randomizer {
+class _RandomizerImpl implements Randomizer {
   final Random _generator;
 
-  RandomizerImpl({int seed}) : _generator = new Random(seed);
+  _RandomizerImpl({int seed}) : _generator = new Random(seed);
 
   int getIntegerFromInterval(int start, int end) => _generator.nextInt(end - start) + start;
 

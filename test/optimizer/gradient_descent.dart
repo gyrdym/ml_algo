@@ -4,8 +4,6 @@ import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
-import 'package:dart_ml/src/math/math.dart' show Randomizer;
-import 'package:dart_ml/src/math/math_impl.dart' show RandomizerImpl;
 import 'dart:typed_data' show Float32List;
 
 void main() {
@@ -16,7 +14,7 @@ void main() {
   setUp(() {
     injector = new ModuleInjector([
       new Module()
-        ..bind(Randomizer, toFactory: () => new RandomizerImpl())
+        ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
     ]);
 
     data = [
