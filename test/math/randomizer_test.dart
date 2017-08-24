@@ -1,15 +1,16 @@
-import 'package:dart_ml/src/math/misc/randomizer/randomizer_impl.dart';
+import 'package:dart_ml/src/interface.dart';
+import 'package:dart_ml/src/implementation.dart';
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
 void main() {
   const int MAX_EPOCH = 200;
 
-  RandomizerImpl randomizer;
+  Randomizer randomizer;
 
   group('Randomizer ', () {
     setUp(() {
-      randomizer = new RandomizerImpl();
+      randomizer = MathUtils.createRandomizer();
     });
 
     test('should return a proper integer value from the given interval', () {

@@ -1,6 +1,6 @@
-import 'package:dart_ml/src/data_splitter/k_fold.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
-class KFoldSplitterImpl implements KFoldSplitter {
+class _KFoldSplitterImpl implements KFoldSplitter {
   int _numberOfFolds = 5;
 
   @override

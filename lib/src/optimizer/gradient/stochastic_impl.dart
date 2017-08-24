@@ -1,6 +1,6 @@
-part of 'base_impl.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
-class SGDOptimizerImpl extends GradientOptimizerImpl implements SGDOptimizer {
+class _SGDOptimizerImpl extends _GradientOptimizerImpl implements SGDOptimizer {
   final Randomizer _randomizer = injector.get(Randomizer);
 
   @override
