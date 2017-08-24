@@ -1,7 +1,4 @@
-import 'package:dart_ml/src/optimizer/regularization.dart';
-import 'package:dart_ml/src/optimizer/base.dart';
-import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/score_function/score_function.dart';
+part of 'package:dart_ml/src/interface.dart';
 
 abstract class GradientOptimizer implements Optimizer {
   void configure({double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
