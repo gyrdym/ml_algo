@@ -7,7 +7,7 @@ import 'package:matcher/matcher.dart';
 void main() {
   group('Splitters test:\n', () {
     test('K fold splitter test', () {
-      KFoldSplitter splitter = DataSplitterFactory.KFold();
+      KFoldSplitter splitter = DataSplitterFactory.createKFoldSplitter();
 
       expect(splitter.split(12), equals([[0,1,2],[3,4,5],[6,7],[8,9],[10,11]]));
 
@@ -35,7 +35,7 @@ void main() {
     });
 
     test('Leave P out splitter test... ', () {
-      LeavePOutSplitter splitter = DataSplitterFactory.Lpo();
+      LeavePOutSplitter splitter = DataSplitterFactory.createLpoSplitter();
 
       expect(splitter.split(4).toSet(), equals([[0,1], [0,2], [0,3], [1,2], [1,3], [2,3]].toSet()));
       expect(splitter.split(5).toSet(), equals([[0,1], [0,2], [0,3], [0,4], [1,2], [1,3], [1,4], [2,3], [2,4],

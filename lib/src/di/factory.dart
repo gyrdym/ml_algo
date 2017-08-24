@@ -10,11 +10,11 @@ class InjectorFactory {
   static ModuleInjector create() {
     return new ModuleInjector([new Module()
       ..bind(Randomizer, toFactory: () => new RandomizerImpl())
-      ..bind(BGDOptimizer, toFactory: () => new BGDOptimizerImpl())
-      ..bind(MBGDOptimizer, toFactory: () => new MBGDOptimizerImpl())
-      ..bind(SGDOptimizer, toFactory: () => new SGDOptimizerImpl())
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
-      ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.Lpo())
+      ..bind(BGDOptimizer, toFactory: () => GradientOptimizerFactory.createBatchOptimizer())
+      ..bind(MBGDOptimizer, toFactory: () => GradientOptimizerFactory.createMiniBatchOptimizer())
+      ..bind(SGDOptimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer())
+      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
+      ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.createLpoSplitter())
     ]);
   }
 }

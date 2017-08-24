@@ -23,9 +23,9 @@ void main() {
     predictor = new SGDRegressor(customInjector: new ModuleInjector([
       new Module()
         ..bind(Randomizer, toFactory: () => new RandomizerImpl())
-        ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
-        ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.Lpo())
-        ..bind(SGDOptimizer, toFactory: () => new SGDOptimizerImpl())
+        ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
+        ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.createLpoSplitter())
+        ..bind(SGDOptimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer())
     ]));
   });
 

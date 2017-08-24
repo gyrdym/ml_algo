@@ -1,6 +1,6 @@
 part of 'package:dart_ml/src/dart_ml_impl.dart';
 
-class MBGDOptimizerImpl extends _GradientOptimizerImpl implements MBGDOptimizer {
+class _MBGDOptimizerImpl extends _GradientOptimizerImpl implements MBGDOptimizer {
   final Randomizer _randomizer = injector.get(Randomizer);
 
   @override
