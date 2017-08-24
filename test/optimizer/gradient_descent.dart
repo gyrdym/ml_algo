@@ -6,7 +6,6 @@ import 'package:dart_ml/src/dart_ml.dart';
 import 'package:dart_ml/src/dart_ml_impl.dart';
 import 'package:dart_ml/src/math/math.dart' show Randomizer;
 import 'package:dart_ml/src/math/math_impl.dart' show RandomizerImpl;
-import 'package:dart_ml/src/optimizer/optimizer.dart' show Regularization;
 import 'dart:typed_data' show Float32List;
 
 void main() {
@@ -30,10 +29,10 @@ void main() {
   });
 
   group('Batch gradient descent optimizer', () {
-    BGDOptimizerImpl optimizer;
+    BGDOptimizer optimizer;
 
     setUp(() {
-      optimizer = new BGDOptimizerImpl();
+      optimizer = GradientOptimizerFactory.createBatchOptimizer();
       optimizer.configure(
         learningRate: 1e-5,
         minWeightsDistance: 1e-8,
@@ -60,10 +59,10 @@ void main() {
   });
 
   group('Mini batch gradient descent optimizer', () {
-    MBGDOptimizerImpl optimizer;
+    MBGDOptimizer optimizer;
 
     setUp(() {
-      optimizer = new MBGDOptimizerImpl();
+      optimizer = GradientOptimizerFactory.createMiniBatchOptimizer();
       optimizer.configure(
         learningRate: 1e-5,
         minWeightsDistance: 1e-8,
@@ -84,10 +83,10 @@ void main() {
   });
 
   group('Stochastic gradient descent optimizer', () {
-    SGDOptimizerImpl optimizer;
+    SGDOptimizer optimizer;
 
     setUp(() {
-      optimizer = new SGDOptimizerImpl();
+      optimizer = GradientOptimizerFactory.createStochasticOptimizer();
       optimizer.configure(
         learningRate: 1e-5,
         minWeightsDistance: 1e-8,

@@ -23,7 +23,7 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 ````
 
-Read a `csv`-file `advertising.csv` with a test data:
+Read `csv`-file `advertising.csv` with test data:
 ````dart
 csv.CsvCodec csvCodec = new csv.CsvCodec();
 Stream<List<int>> input = new File('example/advertising.csv').openRead();
@@ -32,8 +32,8 @@ List<List<num>> fields = (await input.transform(UTF8.decoder)
   .sublist(1);
 ````
 
-Data in this file is represented as 200 lines, every line contains 4 elements. 3 elements of every line are features and the last - label.  
-Let's extract features from this data. Declare utility method `extractFeatures`, that extracts 3 elements of a every line: 
+Data in this file is represented by 200 lines, every line contains 4 elements. First 3 elements of every line are features and the last is label.
+Let's extract features from the data. Declare utility method `extractFeatures`, which extracts 3 elements of an every line:
 ````dart
 List<double> extractFeatures(item) => item.sublist(0, 3)
   .map((num feature) => feature.toDouble())
@@ -57,7 +57,7 @@ Create an instance of `CrossValidator` class for evaluating quality of our predi
 CrossValidator validator = new CrossValidator.KFold();
 ````
 
-Create linear regressor instance with stochastic gradient descent optimizer:
+Create a linear regressor instance with stochastic gradient descent optimizer:
 ````dart
 SGDRegressor sgdRegressor = new SGDRegressor();
 ````
@@ -84,4 +84,4 @@ score (RMSE): 4.91429797944094
 score (MAPE): 31.221150755882263
 ````
 
-For more examples please visit [examples folder](https://github.com/gyrdym/dart_ml/tree/master/example) 
+For more examples please see [examples folder](https://github.com/gyrdym/dart_ml/tree/master/example)
