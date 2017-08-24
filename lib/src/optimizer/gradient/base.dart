@@ -1,4 +1,4 @@
-part of 'package:dart_ml/src/dart_ml.dart';
+part of 'package:dart_ml/src/interface.dart';
 
 abstract class GradientOptimizer implements Optimizer {
   void configure({double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,

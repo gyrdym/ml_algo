@@ -2,8 +2,8 @@ import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/math/math.dart';
 import 'package:dart_ml/src/math/math_impl.dart';
-import 'package:dart_ml/src/dart_ml.dart';
-import 'package:dart_ml/src/dart_ml_impl.dart';
+import 'package:dart_ml/src/interface.dart';
+import 'package:dart_ml/src/implementation.dart';
 import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;
 import 'package:dart_ml/src/predictor/predictor.dart' show SGDRegressor;
 

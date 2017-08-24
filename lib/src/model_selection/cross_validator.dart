@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/dart_ml.dart';
+import 'package:dart_ml/src/interface.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/predictor/base/predictor.dart';
 import 'package:dart_ml/src/metric/metric.dart';
