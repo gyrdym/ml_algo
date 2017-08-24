@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/dart_ml_impl.dart';
-import 'package:dart_ml/src/dart_ml.dart';
+import 'package:dart_ml/src/implementation.dart';
+import 'package:dart_ml/src/interface.dart';
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';

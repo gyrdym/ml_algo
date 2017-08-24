@@ -1,9 +1,8 @@
-import 'dart_ml.dart';
+import 'interface.dart';
 import 'package:dart_ml/src/math/misc/randomizer/randomizer.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'dart:typed_data' show Float32List;
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/optimizer/regularization.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 

@@ -1,4 +1,4 @@
-part of 'package:dart_ml/src/dart_ml.dart';
+part of 'package:dart_ml/src/interface.dart';
 
 abstract class LeavePOutSplitter implements Splitter {
   void configure({int p});

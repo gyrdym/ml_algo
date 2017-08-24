@@ -1,12 +1,14 @@
 import 'package:di/di.dart';
 import 'dart:typed_data' show Float32List;
 import 'package:simd_vector/vector.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/score_function/score_function.dart';
 import 'package:dart_ml/src/predictor/base/classifier.dart';
 import 'package:dart_ml/src/predictor/base/predictor.dart';
 import 'package:dart_ml/src/metric/metric.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/di/factory.dart';
-import 'package:dart_ml/src/dart_ml.dart';
+import 'package:dart_ml/src/interface.dart';
 
 part 'base/predictor_base.dart';
 part 'linear/base/gradient_predictor.dart';

@@ -1,5 +1,4 @@
-import 'dart:typed_data' show Float32List;
-import 'package:simd_vector/vector.dart';
+part of 'package:dart_ml/src/interface.dart';
 
 abstract class Optimizer {
   Float32x4Vector findMinima(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights});

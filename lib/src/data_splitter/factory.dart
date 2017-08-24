@@ -1,4 +1,4 @@
-part of 'package:dart_ml/src/dart_ml_impl.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
 class DataSplitterFactory {
   static KFoldSplitter createKFoldSplitter() => new _KFoldSplitterImpl();
