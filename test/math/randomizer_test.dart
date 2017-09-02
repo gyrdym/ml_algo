@@ -23,6 +23,23 @@ void main() {
       }
     });
 
+    test('should always return a zero in case of [0, 1] passed interval', () {
+      int start = 0;
+      int end = 1;
+
+      for (int i = 0; i < MAX_EPOCH; i++) {
+        int value = randomizer.getIntegerFromInterval(start, end);
+        expect(value, isZero);
+      }
+    });
+
+    test('should return range error if start and end values are equal (integer value generation)', () {
+      int start = 1;
+      int end = 1;
+
+      expect(() => randomizer.getIntegerFromInterval(start, end), throwsRangeError);
+    });
+
     test('should return a proper double value from the given interval', () {
       double start = 5.3;
       double end = 123.4;
@@ -31,6 +48,13 @@ void main() {
         double value = randomizer.getDoubleFromInterval(start, end);
         expect(start <= value && value < end, isTrue);
       }
+    });
+
+    test('should return range error if start and end values are equal (double value generation)', () {
+      double start = 1.0;
+      double end = 1.0;
+
+      expect(() => randomizer.getDoubleFromInterval(start, end), throwsRangeError);
     });
   });
 }

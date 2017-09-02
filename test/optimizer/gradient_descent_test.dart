@@ -1,10 +1,31 @@
 import 'package:di/di.dart';
 import 'package:test/test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
 import 'dart:typed_data' show Float32List;
+
+
+///Randomizer for mini batch gradient descent.
+class MBGDRandomizerMock extends Mock implements Randomizer {
+  int _iterationCounter = 0;
+  int _epochNumber = 200;
+
+  int getIntegerFromInterval(int start, int end) {
+
+  }
+}
+
+class SGDRandomizerMock extends Mock implements Randomizer {
+  int _iterationCounter = 0;
+  int _epochNumber = 200;
+
+  int getIntegerFromInterval(int start, int end) {
+
+  }
+}
 
 void main() {
   const int MAX_EPOCH = 200;
@@ -12,11 +33,6 @@ void main() {
   List<double> target;
 
   setUp(() {
-    injector = new ModuleInjector([
-      new Module()
-        ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
-    ]);
-
     data = [
       new Float32x4Vector.from([230.1, 37.8, 69.2]),
       new Float32x4Vector.from([44.5, 39.3, 45.1]),
@@ -60,6 +76,11 @@ void main() {
     MBGDOptimizer optimizer;
 
     setUp(() {
+      injector = new ModuleInjector([
+        new Module()
+          ..bind(Randomizer, toFactory: () => new MBGDRandomizerMock())
+      ]);
+
       optimizer = GradientOptimizerFactory.createMiniBatchOptimizer();
       optimizer.configure(
         learningRate: 1e-5,
@@ -84,6 +105,11 @@ void main() {
     SGDOptimizer optimizer;
 
     setUp(() {
+      injector = new ModuleInjector([
+        new Module()
+          ..bind(Randomizer, toFactory: () => new SGDRandomizerMock())
+      ]);
+
       optimizer = GradientOptimizerFactory.createStochasticOptimizer();
       optimizer.configure(
         learningRate: 1e-5,
