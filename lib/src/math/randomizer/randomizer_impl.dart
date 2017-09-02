@@ -12,7 +12,12 @@ class _RandomizerImpl implements Randomizer {
     }
 
     List<int> interval = _normalizeInterval(lowerBound, upperBound);
-    int end = getIntegerFromInterval(1, interval.last);
+
+    if (interval.last - interval.first == 1) {
+      throw new RangeError('Wrong interval given');
+    }
+
+    int end = getIntegerFromInterval(interval.first + 1, interval.last);
     int start = getIntegerFromInterval(interval.first, end);
 
     return [start, end];
