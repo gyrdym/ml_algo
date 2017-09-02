@@ -87,10 +87,10 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
   Float32x4Vector _makeGradientStep(Float32x4Vector weights, List<Float32x4Vector> data, Float32List target, double eta,
                                     {bool findingMinima: true}) {
 
-    Float32x4Vector gradientSumVector = _extendedGradient(weights, data[0], target[0]);
+    Float32x4Vector gradientSumVector = _getExtendedGradient(weights, data[0], target[0]);
 
     for (int i = 1; i < data.length; i++) {
-      gradientSumVector += _extendedGradient(weights, data[i], target[i]);
+      gradientSumVector += _getExtendedGradient(weights, data[i], target[i]);
     }
 
     return findingMinima ?
@@ -99,7 +99,7 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
            weights + gradientSumVector.scalarMul(eta / data.length);
   }
 
-  Float32x4Vector _extendedGradient(Float32x4Vector k, Float32x4Vector x, double y) {
+  Float32x4Vector _getExtendedGradient(Float32x4Vector k, Float32x4Vector x, double y) {
     Float32x4Vector pureGradient = _gradient(k, x, y);
 
     if (_regularization != null) {
