@@ -6,6 +6,8 @@ import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/score_function/score_function.dart';
 
 class RandomizerMock extends Mock implements Randomizer {
   int _iterationCounter = 0;
@@ -53,7 +55,9 @@ void main() {
           minWeightsDistance: null,
           iterationLimit:  10,
           regularization: Regularization.L2,
-          alpha: .00001
+          alpha: .00001,
+          lossFunction: new LossFunction.Squared(),
+          scoreFunction: new ScoreFunction.Linear()
       );
     });
 
