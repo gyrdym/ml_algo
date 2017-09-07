@@ -6,6 +6,8 @@ import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/score_function/score_function.dart';
 
 ///Randomizer for mini batch gradient descent.
 class MBGDRandomizerMock extends Mock implements Randomizer {
@@ -54,7 +56,9 @@ void main() {
         minWeightsDistance: null,
         iterationLimit:  10,
         regularization: Regularization.L2,
-        alpha: .00001
+        alpha: .00001,
+        lossFunction: new LossFunction.Squared(),
+        scoreFunction: new ScoreFunction.Linear()
       );
     });
 
