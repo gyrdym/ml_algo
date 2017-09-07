@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:di/di.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
@@ -26,7 +27,7 @@ class RandomizerMock extends Mock implements Randomizer {
 
 void main() {
   List<Float32x4Vector> data;
-  List<double> target;
+  Float32List target;
 
   setUp(() {
     data = [
@@ -34,7 +35,7 @@ void main() {
       new Float32x4Vector.from([44.5, 39.3, 45.1])
     ];
 
-    target = [22.1, 10.4, 9.3];
+    target = new Float32List.fromList([22.1, 10.4, 9.3]);
   });
 
   group('Stochastic gradient descent optimizer', () {
