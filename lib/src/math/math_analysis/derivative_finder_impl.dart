@@ -3,14 +3,12 @@ part of 'package:dart_ml/src/implementation.dart';
 class _DerivativeFinderImpl implements DerivativeFinder {
   List<Float32x4Vector> _argumentsDeltaMatrix;
   double _argumentIncrement;
-  ScoreFunction _scoreFunction;
-  LossFunction _lossFunction;
+  TargetFunction _targetFunction;
 
-  void configure(int numberOfArguments, double argumentDelta, ScoreFunction scoreFunction, LossFunction lossFunction) {
+  void configure(int numberOfArguments, double argumentDelta, TargetFunction function) {
     _argumentsDeltaMatrix = _generateArgumentsDeltaMatrix(argumentDelta, numberOfArguments);
     _argumentIncrement = argumentDelta;
-    _scoreFunction = scoreFunction;
-    _lossFunction = lossFunction;
+    _targetFunction = function;
   }
 
   Float32x4Vector gradient(Float32x4Vector k, Float32x4Vector x, double y) {
@@ -19,8 +17,7 @@ class _DerivativeFinderImpl implements DerivativeFinder {
   }
 
   double partialDerivative(Float32x4Vector k, Float32x4Vector deltaK, Float32x4Vector x, double y) {
-    return (_lossFunction.loss(_scoreFunction.score(k + deltaK, x), y) -
-     _lossFunction.loss(_scoreFunction.score(k - deltaK, x), y)) / 2 / _argumentIncrement;
+    return (_targetFunction(k + deltaK, x, y) - _targetFunction(k - deltaK, x, y)) / 2 / _argumentIncrement;
   }
 
   List<Float32x4Vector> _generateArgumentsDeltaMatrix(double increment, int length) {
