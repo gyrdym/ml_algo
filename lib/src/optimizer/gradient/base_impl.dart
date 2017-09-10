@@ -1,6 +1,8 @@
 part of 'package:dart_ml/src/implementation.dart';
 
 abstract class _GradientOptimizerImpl implements GradientOptimizer {
+  final DerivativeFinder _derivativeFinder = injector.get(DerivativeFinder);
+
   //hyper parameters declaration
   double _minWeightsDistance;
   double _learningRate;
@@ -10,7 +12,6 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
   double _argumentIncrement;
   //hyper parameters declaration end
 
-  List<Float32x4Vector> _weightsDeltaMatrix;
   LossFunction _targetMetric;
   ScoreFunction _scoreFunction;
 
@@ -44,7 +45,9 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
     bool findingMinima: true}) {
 
     weights = weights ?? new Float32x4Vector.zero(features.first.length);
-    _weightsDeltaMatrix = _generateWeightsDeltaMatrix(_argumentIncrement, weights.length);
+
+    _derivativeFinder.configure(weights.length, _argumentIncrement, _scoreFunction, _targetMetric);
+
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
@@ -56,16 +59,6 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
     }
 
     return weights;
-  }
-
-  List<Float32x4Vector> _generateWeightsDeltaMatrix(double increment, int length) {
-    List<Float32x4Vector> matrix = new List<Float32x4Vector>(length);
-
-    for (int i = 0; i < length; i++) {
-      matrix[i] = new Float32x4Vector.from(new List<double>.generate(length, (int idx) => idx == i ? increment : 0.0));
-    }
-
-    return matrix;
   }
 
   Iterable<int> _getSamplesRange(int totalSamplesCount);
@@ -100,7 +93,7 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
   }
 
   Float32x4Vector _getExtendedGradient(Float32x4Vector k, Float32x4Vector x, double y) {
-    Float32x4Vector pureGradient = _gradient(k, x, y);
+    Float32x4Vector pureGradient = _derivativeFinder.gradient(k, x, y);
 
     if (_regularization != null) {
       return pureGradient + _calcRegularizationVector(k);
@@ -108,13 +101,6 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
 
     return pureGradient;
   }
-
-  Float32x4Vector _gradient(Float32x4Vector k, Float32x4Vector x, double y) =>
-    new Float32x4Vector.from(new List<double>.generate(k.length, (int i) => _partialDerivative(k, _weightsDeltaMatrix[i], x, y)));
-
-  double _partialDerivative(Float32x4Vector k, Float32x4Vector deltaK, Float32x4Vector x, double y) =>
-      (_targetMetric.loss(_scoreFunction.score(k + deltaK, x), y) -
-       _targetMetric.loss(_scoreFunction.score(k - deltaK, x), y)) / 2 / _argumentIncrement;
 
   Float32x4Vector _calcRegularizationVector(Float32x4Vector weights) {
     switch (_regularization) {
