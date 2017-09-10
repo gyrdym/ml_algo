@@ -46,7 +46,9 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
 
     weights = weights ?? new Float32x4Vector.zero(features.first.length);
 
-    _derivativeFinder.configure(weights.length, _argumentIncrement, _scoreFunction, _targetMetric);
+    _derivativeFinder.configure(weights.length, _argumentIncrement,
+      (Float32x4Vector k, Float32x4Vector x, double y) => _targetMetric.loss(_scoreFunction.score(k, x), y)
+    );
 
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
