@@ -6,19 +6,25 @@ import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
 void main() {
-  LossFunctionDerivativeCalculator finder;
+  LossFunctionDerivativeCalculator calculator;
 
   group('Derivative finder', () {
     setUp(() {
-      finder = MathUtils.createDerivativeCalculator();
-      finder.init(3, 0.00001, (Float32x4Vector a, Float32x4Vector b, double c) {
+      calculator = MathUtils.createDerivativeCalculator();
+      calculator.init(3, 0.00001, (Float32x4Vector a, Float32x4Vector b, double c) {
         return math.pow(a.dot(b) - c, 2);
       });
     });
 
-    test('should return an approximately value of the derivative', () {
-//      finder.partialDerivative(new Float32x4Vector.from([]), new Float32x4Vector.from([]), 2.0, 0);
-//      expect(start <= value && value < end, isTrue);
+    test('should return a proper gradient vector', () {
+      Float32x4Vector k = new Float32x4Vector.from([0.3, 0.7, 0.4]);
+      Float32x4Vector x = new Float32x4Vector.from([1.0, 2.0, 3.0]);
+      double y = 1.0;
+
+      List<double> gradient = calculator.gradient(k, x, y).asList()
+          .map((double value) => double.parse(value.toStringAsFixed(2))).toList();
+
+      expect(gradient, equals([3.81, 7.61, 11.42]));
     });
   });
 }
