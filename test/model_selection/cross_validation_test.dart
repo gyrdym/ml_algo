@@ -1,5 +1,6 @@
 import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';
+import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
 import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;
@@ -16,15 +17,18 @@ void main() {
   SGDRegressor predictor;
 
   setUp(() {
-    features = new List<Float32x4Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Float32x4Vector.randomFilled(4));
-    labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
-    predictor = new SGDRegressor(customInjector: new ModuleInjector([
+    injector = new ModuleInjector([
       new Module()
         ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
+        ..bind(LossFunctionDerivativeCalculator, toFactory: () => MathUtils.createDerivativeCalculator())
         ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
         ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.createLpoSplitter())
         ..bind(SGDOptimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer())
-    ]));
+    ]);
+
+    features = new List<Float32x4Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Float32x4Vector.randomFilled(4));
+    labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
+    predictor = new SGDRegressor();
   });
 
   group('K-fold cross validator', () {

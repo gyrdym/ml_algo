@@ -3,7 +3,7 @@ import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 
-part 'package:dart_ml/src/math/math_analysis/derivative_finder.dart';
+part 'package:dart_ml/src/math/math_analysis/derivative_calculator.dart';
 part 'package:dart_ml/src/math/randomizer/randomizer.dart';
 
 part 'package:dart_ml/src/optimizer/regularization.dart';

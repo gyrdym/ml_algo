@@ -8,7 +8,7 @@ class _GradientLinearClassifier<T extends GradientOptimizer> extends _GradientLi
     injector = customInjector ?? InjectorFactory.create();
 
     _optimizer = injector.get(T)
-      ..configure(
+      ..init(
         learningRate: learningRate,
         minWeightsDistance: minWeightsDistance,
         iterationLimit: iterationLimit,
