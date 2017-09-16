@@ -6,7 +6,7 @@ import 'package:simd_vector/vector.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 
-part 'package:dart_ml/src/math/math_analysis/derivative_finder_impl.dart';
+part 'package:dart_ml/src/math/math_analysis/derivative_calculator_impl.dart';
 part 'package:dart_ml/src/math/randomizer/randomizer_impl.dart';
 part 'package:dart_ml/src/math/math.dart';
 
