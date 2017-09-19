@@ -20,7 +20,8 @@ void main() {
     injector = new ModuleInjector([
       new Module()
         ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
-        ..bind(LossFunctionDerivativeCalculator, toFactory: () => MathUtils.createDerivativeCalculator())
+        ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
+        ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
         ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
         ..bind(LeavePOutSplitter, toFactory: () => DataSplitterFactory.createLpoSplitter())
         ..bind(SGDOptimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer())

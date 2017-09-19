@@ -1,7 +1,7 @@
 part of 'package:dart_ml/src/implementation.dart';
 
 abstract class _GradientOptimizerImpl implements GradientOptimizer {
-  final LossFunctionDerivativeCalculator _derivativeCalculator = injector.get(LossFunctionDerivativeCalculator);
+  final GradientCalculator _gradientCalculator = injector.get(GradientCalculator);
 
   //hyper parameters declaration
   double _minWeightsDistance;
@@ -46,7 +46,7 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
 
     weights = weights ?? new Float32x4Vector.zero(features.first.length);
 
-    _derivativeCalculator.init(weights.length, _argumentIncrement,
+    _gradientCalculator.init(weights.length, _argumentIncrement,
       (Float32x4Vector k, Float32x4Vector x, double y) => _targetMetric.loss(_scoreFunction.score(k, x), y)
     );
 
@@ -95,7 +95,7 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
   }
 
   Float32x4Vector _getExtendedGradient(Float32x4Vector k, Float32x4Vector x, double y) {
-    Float32x4Vector pureGradient = _derivativeCalculator.gradient(k, x, y);
+    Float32x4Vector pureGradient = _gradientCalculator.getGradient(k, x, y);
 
     if (_regularization != null) {
       return pureGradient + _calcRegularizationVector(k);
