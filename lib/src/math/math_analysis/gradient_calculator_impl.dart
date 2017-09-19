@@ -1,6 +1,6 @@
 part of 'package:dart_ml/src/implementation.dart';
 
-class _LossFunctionDerivativeCalculatorImpl implements LossFunctionDerivativeCalculator {
+class _GradientCalculatorImpl implements GradientCalculator {
   List<Float32x4Vector> _weightsDeltaMatrix;
   double _weightDelta;
   TargetFunction _function;
@@ -11,7 +11,7 @@ class _LossFunctionDerivativeCalculatorImpl implements LossFunctionDerivativeCal
     _function = function;
   }
 
-  Float32x4Vector gradient(Float32x4Vector k, Float32x4Vector x, double y) {
+  Float32x4Vector getGradient(Float32x4Vector k, Float32x4Vector x, double y) {
     return new Float32x4Vector.from(
         new List<double>.generate(k.length, (int i) => _partialDerivative(k, x, y, i)));
   }

@@ -6,11 +6,11 @@ import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 
 void main() {
-  LossFunctionDerivativeCalculator calculator;
+  GradientCalculator calculator;
 
   group('Derivative finder', () {
     setUp(() {
-      calculator = MathUtils.createDerivativeCalculator();
+      calculator = MathUtils.createGradientCalculator();
       calculator.init(3, 0.00001, (Float32x4Vector a, Float32x4Vector b, double c) {
         return math.pow(a.dot(b) - c, 2);
       });
@@ -21,7 +21,7 @@ void main() {
       Float32x4Vector x = new Float32x4Vector.from([1.0, 2.0, 3.0]);
       double y = 1.0;
 
-      List<double> gradient = calculator.gradient(k, x, y).asList()
+      List<double> gradient = calculator.getGradient(k, x, y).asList()
           .map((double value) => double.parse(value.toStringAsFixed(2))).toList();
 
       expect(gradient, equals([3.81, 7.61, 11.42]));

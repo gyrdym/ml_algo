@@ -6,7 +6,7 @@ import 'package:dart_ml/src/implementation.dart';
 class InjectorFactory {
   static ModuleInjector create() {
     return new ModuleInjector([new Module()
-      ..bind(LossFunctionDerivativeCalculator, toFactory: () => MathUtils.createDerivativeCalculator())
+      ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
       ..bind(BGDOptimizer, toFactory: () => GradientOptimizerFactory.createBatchOptimizer())
       ..bind(MBGDOptimizer, toFactory: () => GradientOptimizerFactory.createMiniBatchOptimizer())
