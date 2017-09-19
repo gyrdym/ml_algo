@@ -14,6 +14,8 @@ part 'package:dart_ml/src/data_splitter/k_fold_impl.dart';
 part 'package:dart_ml/src/data_splitter/leave_p_out_impl.dart';
 part 'package:dart_ml/src/data_splitter/factory.dart';
 
+part 'package:dart_ml/src/optimizer/gradient/learning_rate_generator/simple_learning_rate_generator_impl.dart';
+part 'package:dart_ml/src/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
 part 'package:dart_ml/src/optimizer/gradient/base_impl.dart';
 part 'package:dart_ml/src/optimizer/gradient/batch_impl.dart';
 part 'package:dart_ml/src/optimizer/gradient/mini_batch_impl.dart';
