@@ -2,10 +2,10 @@ part of 'package:dart_ml/src/implementation.dart';
 
 abstract class _GradientOptimizerImpl implements GradientOptimizer {
   final GradientCalculator _gradientCalculator = injector.get(GradientCalculator);
+  final LearningRateGenerator _learningRateGenerator = injector.get(LearningRateGenerator);
 
   //hyper parameters declaration
   double _minWeightsDistance;
-  double _learningRate;
   int _iterationLimit;
   Regularization _regularization;
   double _alpha;
@@ -23,7 +23,6 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
       throw new Exception('You must specify both loss function and score function');
     }
 
-    _learningRate = learningRate ?? 1e-5;
     _minWeightsDistance = minWeightsDistance ?? 1e-8;
     _iterationLimit = iterationLimit ?? 10000;
     _regularization = regularization ?? Regularization.L2;
@@ -31,6 +30,8 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
     _argumentIncrement = argumentIncrement ?? 1e-5;
     _targetMetric = lossFunction;
     _scoreFunction = scoreFunction;
+
+    _learningRateGenerator.init(learningRate ?? 1e-5);
   }
 
   Float32x4Vector findMinima(List<Float32x4Vector> features, Float32List labels, {Float32x4Vector weights}) {
@@ -54,7 +55,7 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
     int iterationCounter = 0;
 
     while (weightsDistance > _minWeightsDistance && iterationCounter < _iterationLimit) {
-      double eta = _learningRate / ++iterationCounter;
+      double eta = _learningRateGenerator.generate(++iterationCounter);
       Float32x4Vector newWeights = _generateNewWeights(weights, features, labels, eta, findingMinima: findingMinima);
       weightsDistance = newWeights.distanceTo(weights);
       weights = newWeights;
