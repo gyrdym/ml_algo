@@ -9,6 +9,11 @@ import 'package:dart_ml/src/implementation.dart';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/score_function/score_function.dart';
 
+class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {
+  void init(double initialValue) {}
+  double generate(int iterationNumber) => 1.0;
+}
+
 class GradientCalculatorMock extends Mock implements GradientCalculator {
   int _counter = 0;
 
@@ -19,13 +24,13 @@ class GradientCalculatorMock extends Mock implements GradientCalculator {
 
     switch(_counter) {
       case 1:
-        return new Float32x4Vector.from([1.0, 2.0, 3.0]);
+        return new Float32x4Vector.from([1.1, 2.1, 3.1]);
       case 2:
-        return new Float32x4Vector.from([2.0, 3.0, 4.0]); //1.5 2.5 3.5 - -1.5 -2.5 -3.5
+        return new Float32x4Vector.from([2.1, 3.1, 4.1]); //-1.6, -2.6, -3.6
       case 3:
-        return new Float32x4Vector.from([3.0, 4.0, 5.0]);
+        return new Float32x4Vector.from([3.1, 4.1, 5.1]);
       case 4:
-        return new Float32x4Vector.from([4.0, 5.0, 6.0]); //3.5 4.5 5.5 - -5.0 -7.0 -9.0
+        return new Float32x4Vector.from([4.1, 5.1, 6.1]); //[-1.6, -2.6, -3.6] - [3.6, 4.6, 5.6] = [-5.2, -7.2, -9.2]
       default:
         throw new Error();
     }
@@ -41,6 +46,7 @@ void main() {
     setUp(() {
       injector = new ModuleInjector([
         new Module()
+          ..bind(LearningRateGenerator, toFactory: () => new LearningRateGeneratorMock())
           ..bind(GradientCalculator, toFactory: () => new GradientCalculatorMock())
       ]);
 
@@ -66,7 +72,10 @@ void main() {
 
     test('should find optimal weights for the given data', () {
       Float32x4Vector weights = optimizer.findMinima(data, target);
-      expect(weights.asList(), [-5.0, -7.0, -9.0]);
+      List<double> formattedWeights = weights.asList().map((double value) => double.parse(value.toStringAsFixed(2)))
+          .toList();
+
+      expect(formattedWeights, [-5.2, -7.2, -9.2]);
     });
   });
 }
