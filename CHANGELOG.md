@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.25.0
+- Tests for gradient optimizers were added
+- Gradient calculator was created as a separate entity
+- Initial weights generator was created as a separate entity
+- Learning rate generator was created as a separate entity
+
 ## 0.24.0
 - All implementations were hidden
 
