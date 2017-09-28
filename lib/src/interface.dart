@@ -15,7 +15,6 @@ part 'package:dart_ml/src/data_splitter/splitter.dart';
 part 'package:dart_ml/src/optimizer/optimizer.dart';
 part 'package:dart_ml/src/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
 part 'package:dart_ml/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
-part 'package:dart_ml/src/optimizer/gradient/weights_generator/weights_generator.dart';
 part 'package:dart_ml/src/optimizer/gradient/base.dart';
 part 'package:dart_ml/src/optimizer/gradient/batch.dart';
 part 'package:dart_ml/src/optimizer/gradient/mini_batch.dart';
