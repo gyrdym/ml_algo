@@ -6,6 +6,9 @@ import 'package:dart_ml/src/implementation.dart';
 class InjectorFactory {
   static ModuleInjector create() {
     return new ModuleInjector([new Module()
+      ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
+      ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
+      ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer())
       ..bind(BGDOptimizer, toFactory: () => GradientOptimizerFactory.createBatchOptimizer())
       ..bind(MBGDOptimizer, toFactory: () => GradientOptimizerFactory.createMiniBatchOptimizer())
