@@ -26,7 +26,7 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
 
     _minWeightsDistance = minWeightsDistance ?? 1e-8;
     _iterationLimit = iterationLimit ?? 10000;
-    _regularization = regularization ?? Regularization.L2;
+    _regularization = regularization;
     _alpha = alpha ?? 1e-5;
     _argumentIncrement = argumentIncrement ?? 1e-5;
     _targetMetric = lossFunction;

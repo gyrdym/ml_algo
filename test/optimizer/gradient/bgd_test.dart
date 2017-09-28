@@ -48,9 +48,6 @@ void main() {
       gradientCalculatorMock = new GradientCalculatorMock();
       weightsGenerator = new InitialWeightsGeneratorMock();
 
-      when(learningRateGeneratorMock.getNextValue()).thenReturn(1.0);
-      when(weightsGenerator.generate(3)).thenReturn(new Float32x4Vector.from([0.0, 0.0, 0.0]));
-
       injector = new ModuleInjector([
         new Module()
           ..bind(LearningRateGenerator, toValue: learningRateGeneratorMock)
@@ -76,6 +73,9 @@ void main() {
       ];
 
       target = new Float32List.fromList([10.0, 20.0]);
+
+      when(learningRateGeneratorMock.getNextValue()).thenReturn(1.0);
+      when(weightsGenerator.generate(3)).thenReturn(new Float32x4Vector.from([0.0, 0.0, 0.0]));
     });
 
     tearDown(() {
