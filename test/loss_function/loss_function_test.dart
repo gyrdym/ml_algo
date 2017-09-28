@@ -16,7 +16,7 @@ void main() {
       y = 1.0;
 
       expect(crossEntropyLoss.loss(w.dot(x), y), null);
-    });
+    }, skip: true);
 
     test('should return proper value', () {
       LossFunction logisticLoss = new LossFunction.LogisticLoss();
