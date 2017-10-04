@@ -1,10 +1,43 @@
-part of 'package:dart_ml/src/predictor/predictor.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
-class LogisticRegressor extends _GradientLinearClassifier<SGDOptimizer> {
-  LogisticRegressor({double learningRate, double minWeightsDistance, int iterationLimit, Metric metric,
-                 Regularization regularization, ModuleInjector customInjector, alpha})
+class LogisticRegressor implements Classifier {
+  _ClassifierBase _classifier;
 
-      : super(lossFunction: new LossFunction.LogisticLoss(), learningRate: learningRate,
-                  minWeightsDistance: minWeightsDistance, iterationLimit: iterationLimit, metric: metric,
-                  regularization: regularization, customInjector: customInjector, alpha: alpha);
+  LogisticRegressor({
+    double learningRate,
+    double minWeightsDistance,
+    int iterationLimit,
+    Metric metric,
+    Regularization regularization,
+    double alpha,
+    double argumentIncrement
+  }) {
+    injector ??= new ModuleInjector([
+      ModuleFactory.createLogisticRegressionModule(
+        learningRate: learningRate,
+        minWeightsDistance: minWeightsDistance,
+        iterationLimit: iterationLimit,
+        metric: metric,
+        regularization: regularization,
+        alpha: alpha,
+        argumentIncrement: argumentIncrement
+      )
+    ]);
+
+    _classifier = new _ClassifierBase();
+  }
+
+  Metric get metric => _classifier.metric;
+
+  void train(List<Float32x4Vector> features, List<double> origLabels, {Float32x4Vector weights}) =>
+      _classifier.train(features, origLabels);
+
+  double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) =>
+      _classifier.test(features, origLabels, metric: metric);
+
+  Float32x4Vector predict(List<Float32x4Vector> features) =>
+      _classifier.predict(features);
+
+  Float32x4Vector predictClasses(List<Float32x4Vector> features) =>
+      _classifier.predictClasses(features);
 }
