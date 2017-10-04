@@ -1,15 +1,11 @@
-part of 'package:dart_ml/src/predictor/predictor.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
-abstract class _PredictorBase implements Predictor {
-  final Metric metric;
-  final ScoreFunction scoreFunction;
+class _PredictorBase {
+  final Metric metric = injector.get(Metric);
+  final ScoreFunction scoreFunction = injector.get(ScoreFunction);
+  final Optimizer _optimizer = injector.get(Optimizer);
 
-  Optimizer _optimizer;
   Float32x4Vector _weights;
-
-  _PredictorBase({Metric metric, ScoreFunction scoreFn}) :
-        metric = metric,
-        scoreFunction = scoreFn;
 
   void train(List<Float32x4Vector> features, List<double> labels, {Float32x4Vector weights}) {
     Float32List typedLabelList = new Float32List.fromList(labels);

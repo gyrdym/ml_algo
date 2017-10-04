@@ -1,6 +1,8 @@
 part of 'package:dart_ml/src/implementation.dart';
 
-abstract class _GradientOptimizerImpl implements GradientOptimizer {
+class _GradientOptimizerImpl implements Optimizer {
+  final LossFunction _targetMetric = injector.get(LossFunction);
+  final ScoreFunction _scoreFunction = injector.get(ScoreFunction);
   final GradientCalculator _gradientCalculator = injector.get(GradientCalculator);
   final LearningRateGenerator _learningRateGenerator = injector.get(LearningRateGenerator);
   final InitialWeightsGenerator _initialWeightsGenerator = injector.get(InitialWeightsGenerator);
@@ -13,25 +15,14 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
   double _argumentIncrement;
   //hyper parameters declaration end
 
-  LossFunction _targetMetric;
-  ScoreFunction _scoreFunction;
-
-  void configure({double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
-                 LossFunction lossFunction, ScoreFunction scoreFunction,
+  _GradientOptimizerImpl({double learningRate, double minWeightsDistance, int iterationLimit, Regularization regularization,
                  double alpha, double argumentIncrement}) {
-
-    if (lossFunction == null || scoreFunction == null) {
-      throw new Exception('You must specify both loss function and score function');
-    }
 
     _minWeightsDistance = minWeightsDistance ?? 1e-8;
     _iterationLimit = iterationLimit ?? 10000;
     _regularization = regularization;
     _alpha = alpha ?? 1e-5;
     _argumentIncrement = argumentIncrement ?? 1e-5;
-    _targetMetric = lossFunction;
-    _scoreFunction = scoreFunction;
-
     _learningRateGenerator.init(learningRate ?? 1e-5);
   }
 
@@ -67,7 +58,7 @@ abstract class _GradientOptimizerImpl implements GradientOptimizer {
     return weights;
   }
 
-  Iterable<int> _getSamplesRange(int totalSamplesCount);
+  Iterable<int> _getSamplesRange(int totalSamplesCount) {}
 
   Float32x4Vector _generateNewWeights(Float32x4Vector weights, List<Float32x4Vector> features, Float32List labels,
                                       double eta, {bool findingMinima: true}) {

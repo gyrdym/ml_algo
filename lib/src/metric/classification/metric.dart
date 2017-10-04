@@ -1,6 +1,3 @@
-import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/metric/base.dart';
-
 part 'accuracy.dart';
 
 abstract class ClassificationMetric implements Metric {
