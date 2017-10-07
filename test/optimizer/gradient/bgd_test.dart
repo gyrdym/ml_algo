@@ -55,17 +55,7 @@ void main() {
           ..bind(InitialWeightsGenerator, toValue: weightsGenerator)
       ]);
 
-      optimizer = GradientOptimizerFactory.createBatchOptimizer();
-
-      optimizer.configure(
-        learningRate: 1e-5,
-        minWeightsDistance: null,
-        iterationLimit: ITERATIONS_NUMBER,
-        regularization: Regularization.L2,
-        alpha: .00001,
-        lossFunction: new LossFunction.Squared(),
-        scoreFunction: new ScoreFunction.Linear()
-      );
+      optimizer = GradientOptimizerFactory.createBatchOptimizer(1e-5, null, ITERATIONS_NUMBER, Regularization.L2, .00001, .00001);
 
       data = [
         new Float32x4Vector.from([5.0, 10.0, 15.0]),

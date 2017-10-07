@@ -1,7 +1,11 @@
 import 'dart:typed_data' show Float32List;
 import 'package:simd_vector/vector.dart';
 
-part 'package:dart_ml/src/metric/base.dart';
+
+part 'package:dart_ml/src/metric/metric.dart';
+part 'package:dart_ml/src/metric/classification/metric.dart';
+part 'package:dart_ml/src/metric/regression/metric.dart';
+
 part 'package:dart_ml/src/loss_function/loss_function.dart';
 part 'package:dart_ml/src/score_function/score_function.dart';
 
