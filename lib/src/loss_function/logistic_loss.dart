@@ -1,9 +1,9 @@
-part of loss_function;
+part of 'package:dart_ml/src/implementation.dart';
 
 class _LogisticLoss implements LossFunction {
   const _LogisticLoss();
 
   @override
   double loss(double predictedLabel, double originalLabel) =>
-      math.log(1.0 + math.exp(-originalLabel * predictedLabel)) / math.LN2;
+      log(1.0 + exp(-originalLabel * predictedLabel)) / LN2;
 }

@@ -1,9 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data' show Float32List;
 
-import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/score_function/score_function.dart';
+import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';
 
 import 'interface.dart';
@@ -11,6 +9,12 @@ import 'interface.dart';
 part 'package:dart_ml/src/data_splitter/factory.dart';
 part 'package:dart_ml/src/data_splitter/k_fold_impl.dart';
 part 'package:dart_ml/src/data_splitter/leave_p_out_impl.dart';
+part 'package:dart_ml/src/di/factory.dart';
+part 'package:dart_ml/src/di/injector.dart';
+part 'package:dart_ml/src/loss_function/cross_entropy.dart';
+part 'package:dart_ml/src/loss_function/logistic_loss.dart';
+part 'package:dart_ml/src/loss_function/loss_function_factory.dart';
+part 'package:dart_ml/src/loss_function/squared_loss.dart';
 part 'package:dart_ml/src/math/math.dart';
 part 'package:dart_ml/src/math/math_analysis/gradient_calculator_impl.dart';
 part 'package:dart_ml/src/math/randomizer/randomizer_impl.dart';
@@ -28,9 +32,5 @@ part 'package:dart_ml/src/optimizer/gradient/learning_rate_generator/learning_ra
 part 'package:dart_ml/src/optimizer/gradient/learning_rate_generator/simple_learning_rate_generator.dart';
 part 'package:dart_ml/src/optimizer/gradient/mini_batch_impl.dart';
 part 'package:dart_ml/src/optimizer/gradient/stochastic_impl.dart';
-part 'package:dart_ml/src/predictor/base/classifier_base.dart';
-part 'package:dart_ml/src/predictor/base/predictor_base.dart';
-part 'package:dart_ml/src/predictor/linear/classifier/gradient/logistic_regression.dart';
-part 'package:dart_ml/src/predictor/linear/regressor/gradient/batch.dart';
-part 'package:dart_ml/src/predictor/linear/regressor/gradient/mini_batch.dart';
-part 'package:dart_ml/src/predictor/linear/regressor/gradient/stochastic.dart';
+part 'package:dart_ml/src/score_function/linear.dart';
+part 'package:dart_ml/src/score_function/score_function_factory.dart';

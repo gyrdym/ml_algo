@@ -1,4 +1,4 @@
-part of 'package:dart_ml/src/implementation.dart';
+part of 'package:dart_ml/src/predictor/implementation.dart';
 
 class BGDRegressor implements Predictor {
   _PredictorBase _predictor;

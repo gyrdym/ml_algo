@@ -3,11 +3,8 @@ import 'package:di/di.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
-import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/score_function/score_function.dart';
 
 const int ITERATIONS_NUMBER = 2;
 
@@ -55,7 +52,7 @@ void main() {
           ..bind(InitialWeightsGenerator, toValue: weightsGenerator)
       ]);
 
-      optimizer = GradientOptimizerFactory.createBatchOptimizer(1e-5, null, ITERATIONS_NUMBER, Regularization.L2, .00001, .00001);
+      optimizer = GradientOptimizerFactory.createBatchOptimizer(1e-5, null, ITERATIONS_NUMBER, Regularization.L2, .00001, .0001);
 
       data = [
         new Float32x4Vector.from([5.0, 10.0, 15.0]),

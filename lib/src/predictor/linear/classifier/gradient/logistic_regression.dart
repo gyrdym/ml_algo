@@ -1,4 +1,4 @@
-part of 'package:dart_ml/src/implementation.dart';
+part of 'package:dart_ml/src/predictor/implementation.dart';
 
 class LogisticRegressor implements Classifier {
   _ClassifierBase _classifier;
@@ -7,7 +7,7 @@ class LogisticRegressor implements Classifier {
     double learningRate,
     double minWeightsDistance,
     int iterationLimit,
-    Metric metric,
+    ClassificationMetric metric,
     Regularization regularization,
     double alpha,
     double argumentIncrement
