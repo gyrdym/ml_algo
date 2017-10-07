@@ -1,10 +1,8 @@
 import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
 import 'package:dart_ml/src/model_selection/model_selection.dart' show CrossValidator;
-import 'package:dart_ml/src/predictor/predictor.dart' show SGDRegressor;
 
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';

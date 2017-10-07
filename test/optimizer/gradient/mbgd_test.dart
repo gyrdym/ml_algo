@@ -3,11 +3,8 @@ import 'package:di/di.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/di/injector.dart';
 import 'package:dart_ml/src/interface.dart';
 import 'package:dart_ml/src/implementation.dart';
-import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/score_function/score_function.dart';
 
 const int ITERATIONS_NUMBER = 3;
 
@@ -39,16 +36,7 @@ void main() {
           ..bind(GradientCalculator, toValue: gradientCalculator)
       ]);
 
-      optimizer = GradientOptimizerFactory.createMiniBatchOptimizer();
-      optimizer.configure(
-        learningRate: 1e-5,
-        minWeightsDistance: null,
-        iterationLimit:  ITERATIONS_NUMBER,
-        regularization: null,
-        alpha: .00001,
-        lossFunction: new LossFunction.Squared(),
-        scoreFunction: new ScoreFunction.Linear()
-      );
+      optimizer = GradientOptimizerFactory.createMiniBatchOptimizer(1e-5, null, ITERATIONS_NUMBER, null, .00001, 0.0001);
 
       data = [
         new Float32x4Vector.from([230.1, 37.8, 69.2]),

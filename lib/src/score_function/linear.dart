@@ -1,4 +1,4 @@
-part of score_function;
+part of 'package:dart_ml/src/implementation.dart';
 
 class _LinearScore implements ScoreFunction {
   const _LinearScore();

@@ -1,6 +1,7 @@
-import 'package:dart_ml/src/interface.dart';
-import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/di/injector.dart';
+import 'package:dart_ml/src/implementation.dart' show injector;
+import 'package:dart_ml/src/interface.dart' show Splitter, KFoldSplitter, LeavePOutSplitter, Metric;
+import 'package:dart_ml/src/predictor/interface.dart';
+import 'package:simd_vector/vector.dart' show Float32x4Vector;
 
 class CrossValidator {
   final Splitter _splitter;

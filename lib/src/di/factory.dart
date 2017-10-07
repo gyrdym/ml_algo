@@ -1,18 +1,13 @@
-import 'package:di/di.dart';
-
-import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/score_function/score_function.dart';
-import 'package:dart_ml/src/interface.dart';
-import 'package:dart_ml/src/implementation.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
 class ModuleFactory {
   static Module createLogisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-                                                 Regularization regularization, alpha, double argumentIncrement}) {
+    ClassificationMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
 
     return new Module()
-      ..bind(ClassificationMetric, toFactory: () => ClassificationMetricFactory.Accuracy())
-      ..bind(LossFunction, toFactory: () => new LossFunction.LogisticLoss())
-      ..bind(ScoreFunction, toFactory: () => new ScoreFunction.Linear())
+      ..bind(Metric, toValue: metric ?? ClassificationMetricFactory.Accuracy())
+      ..bind(LossFunction, toFactory: () => LossFunctionFactory.LogisticLoss())
+      ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
       ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
@@ -24,12 +19,12 @@ class ModuleFactory {
   }
 
   static Module createSGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-    Metric metric, Regularization regularization, alpha, double argumentIncrement}) {
+    RegressionMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
 
     return new Module()
-      ..bind(Metric, toValue: metric)
-      ..bind(LossFunction, toFactory: () => new LossFunction.LogisticLoss())
-      ..bind(ScoreFunction, toFactory: () => new ScoreFunction.Linear())
+      ..bind(Metric, toValue: metric ?? RegressionMetricFactory.RMSE())
+      ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
+      ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
       ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
@@ -41,12 +36,12 @@ class ModuleFactory {
   }
 
   static Module createMBGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-    Metric metric, Regularization regularization, alpha, double argumentIncrement}) {
+    RegressionMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
 
     return new Module()
       ..bind(Metric, toValue: metric)
-      ..bind(LossFunction, toFactory: () => new LossFunction.LogisticLoss())
-      ..bind(ScoreFunction, toFactory: () => new ScoreFunction.Linear())
+      ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
+      ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
       ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
@@ -57,12 +52,12 @@ class ModuleFactory {
   }
 
   static Module createBGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-                                             Metric metric, Regularization regularization, alpha, double argumentIncrement}) {
+    RegressionMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
 
     return new Module()
       ..bind(Metric, toValue: metric)
-      ..bind(LossFunction, toFactory: () => new LossFunction.LogisticLoss())
-      ..bind(ScoreFunction, toFactory: () => new ScoreFunction.Linear())
+      ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
+      ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
       ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
