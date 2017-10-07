@@ -1,4 +1,3 @@
-import 'package:dart_ml/src/metric/metric.dart';
 import 'package:di/di.dart';
 
 import 'package:dart_ml/src/loss_function/loss_function.dart';
@@ -8,10 +7,10 @@ import 'package:dart_ml/src/implementation.dart';
 
 class ModuleFactory {
   static Module createLogisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-    Metric metric, Regularization regularization, alpha, double argumentIncrement}) {
+                                                 Regularization regularization, alpha, double argumentIncrement}) {
 
     return new Module()
-      ..bind(Metric, toValue: metric)
+      ..bind(ClassificationMetric, toFactory: () => ClassificationMetricFactory.Accuracy())
       ..bind(LossFunction, toFactory: () => new LossFunction.LogisticLoss())
       ..bind(ScoreFunction, toFactory: () => new ScoreFunction.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())

@@ -1,3 +1,5 @@
-export 'base.dart';
-export 'classification/metric.dart';
-export 'regression/metric.dart';
+part of 'package:dart_ml/src/interface.dart';
+
+abstract class Metric {
+  double getError(Float32x4Vector predictedLabels, Float32x4Vector origLabels);
+}

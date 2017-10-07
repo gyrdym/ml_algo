@@ -1,4 +1,4 @@
-part of 'metric.dart';
+part of 'package:dart_ml/src/implementation.dart';
 
 class _MAPEMetric implements RegressionMetric {
   const _MAPEMetric();
