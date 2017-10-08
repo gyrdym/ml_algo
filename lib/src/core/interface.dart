@@ -4,14 +4,14 @@ import 'package:simd_vector/vector.dart';
 
 part 'package:dart_ml/src/core/data_splitter/splitter.dart';
 part 'package:dart_ml/src/core/data_splitter/type.dart';
-part 'package:dart_ml/src/core/loss_function/enum.dart';
+part 'package:dart_ml/src/core/loss_function/type.dart';
 part 'package:dart_ml/src/core/loss_function/loss_function.dart';
 part 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
 part 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
-part 'package:dart_ml/src/core/metric/classification/enum.dart';
+part 'package:dart_ml/src/core/metric/classification/type.dart';
 part 'package:dart_ml/src/core/metric/classification/metric.dart';
 part 'package:dart_ml/src/core/metric/metric.dart';
-part 'package:dart_ml/src/core/metric/regression/enum.dart';
+part 'package:dart_ml/src/core/metric/regression/type.dart';
 part 'package:dart_ml/src/core/metric/regression/metric.dart';
 part 'package:dart_ml/src/core/metric/type.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/base.dart';
