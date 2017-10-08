@@ -2,8 +2,6 @@ import 'dart:typed_data' show Float32List;
 
 import 'package:simd_vector/vector.dart';
 
-part 'package:dart_ml/src/core/data_splitter/k_fold.dart';
-part 'package:dart_ml/src/core/data_splitter/leave_p_out.dart';
 part 'package:dart_ml/src/core/data_splitter/splitter.dart';
 part 'package:dart_ml/src/core/data_splitter/type.dart';
 part 'package:dart_ml/src/core/loss_function/enum.dart';

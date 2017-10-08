@@ -23,7 +23,7 @@ main() async {
   List<double> labels = fields.map((List<num> item) => item.last.toDouble()).toList();
 
   SGDRegressor sgdRegressor = new SGDRegressor();
-  CrossValidatorImpl validator = new CrossValidatorImpl.KFold();
+  CrossValidator validator = new CrossValidator.KFold();
 
   print('K-fold cross validation:');
   print('\nRMSE:');
