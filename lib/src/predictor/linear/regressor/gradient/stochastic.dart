@@ -4,13 +4,15 @@ class SGDRegressor implements Predictor {
   _PredictorBase _predictor;
 
   SGDRegressor({
+    int iterationLimit,
+
     double learningRate,
     double minWeightsDistance,
-    int iterationLimit,
-    Metric metric,
-    Regularization regularization,
     double alpha,
-    double argumentIncrement
+    double argumentIncrement,
+
+    RegressionMetricType metric,
+    Regularization regularization
   }) {
     injector ??= new ModuleInjector([
       ModuleFactory.createSGDRegressionModule(
