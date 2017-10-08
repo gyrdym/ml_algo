@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/implementation.dart' show injector;
-import 'package:dart_ml/src/interface.dart' show Splitter, KFoldSplitter, LeavePOutSplitter, Metric;
+import 'package:dart_ml/src/core/implementation.dart' show injector;
+import 'package:dart_ml/src/core/interface.dart' show Splitter, KFoldSplitter, LeavePOutSplitter, Metric;
 import 'package:dart_ml/src/predictor/interface.dart';
 import 'package:simd_vector/vector.dart' show Float32x4Vector;
 
