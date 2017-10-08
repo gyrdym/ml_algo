@@ -1,6 +1,6 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
-class _BGDOptimizerImpl extends _GradientOptimizerImpl implements BGDOptimizer {
+class _BGDOptimizerImpl extends _GradientOptimizerImpl implements Optimizer {
 
   _BGDOptimizerImpl({
     double learningRate,
