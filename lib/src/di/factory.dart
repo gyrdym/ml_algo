@@ -1,6 +1,12 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class ModuleFactory {
+  static Module createModelSelectionModule({SplitterType splitter}) {
+    return new Module()
+      ..bind(Splitter, toFactory: () => splitter == null ? DataSplitterFactory.KFold() :
+                                        DataSplitterFactory.createByType(splitter));
+  }
+
   static Module createLogisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
                                                  ClassificationMetricType metricType, Regularization regularization, alpha,
                                                  double argumentIncrement}) {
@@ -17,7 +23,6 @@ class ModuleFactory {
       ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer(
         learningRate, minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement
       ))
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
@@ -37,7 +42,7 @@ class ModuleFactory {
       ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer(
           learningRate, minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement
           ))
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
+      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
@@ -56,7 +61,7 @@ class ModuleFactory {
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
       ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createMiniBatchOptimizer(learningRate,
           minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement))
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
+      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
@@ -75,7 +80,7 @@ class ModuleFactory {
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
       ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createBatchOptimizer(learningRate,
           minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement))
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.createKFoldSplitter())
+      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 }

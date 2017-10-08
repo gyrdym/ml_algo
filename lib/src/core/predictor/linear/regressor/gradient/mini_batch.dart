@@ -1,9 +1,9 @@
-part of 'package:dart_ml/src/predictor/implementation.dart';
+part of 'package:dart_ml/src/core/implementation.dart';
 
-class SGDRegressor implements Predictor {
+class MBGDRegressor implements Predictor {
   _PredictorBase _predictor;
 
-  SGDRegressor({
+  MBGDRegressor({
     int iterationLimit,
 
     double learningRate,
@@ -15,7 +15,7 @@ class SGDRegressor implements Predictor {
     Regularization regularization
   }) {
     injector ??= new ModuleInjector([
-      ModuleFactory.createSGDRegressionModule(
+      ModuleFactory.createMBGDRegressionModule(
         learningRate: learningRate,
         minWeightsDistance: minWeightsDistance,
         iterationLimit: iterationLimit,
