@@ -1,9 +1,9 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class _PredictorBase {
-  final Metric metric = injector.get(Metric);
-  final ScoreFunction scoreFunction = injector.get(ScoreFunction);
-  final Optimizer _optimizer = injector.get(Optimizer);
+  final Metric metric = coreInjector.get(Metric);
+  final ScoreFunction scoreFunction = coreInjector.get(ScoreFunction);
+  final Optimizer _optimizer = coreInjector.get(Optimizer);
 
   Float32x4Vector _weights;
 
@@ -12,10 +12,10 @@ class _PredictorBase {
     _weights = _optimizer.findMinima(features, typedLabelList, weights: weights);
   }
 
-  double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) {
-    metric = metric ?? this.metric;
+  double test(List<Float32x4Vector> features, List<double> origLabels, {MetricType metricType}) {
+    Metric _metric = metricType == null ? metric : MetricFactory.createByType(metricType);
     Float32x4Vector prediction = predict(features);
-    return metric.getError(prediction, new Float32x4Vector.from(origLabels));
+    return _metric.getError(prediction, new Float32x4Vector.from(origLabels));
   }
 
   Float32x4Vector predict(List<Float32x4Vector> features) {

@@ -1,7 +1,7 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class _SGDOptimizerImpl extends _GradientOptimizerImpl implements Optimizer {
-  final Randomizer _randomizer = injector.get(Randomizer);
+  final Randomizer _randomizer = coreInjector.get(Randomizer);
 
   _SGDOptimizerImpl({
     double learningRate,

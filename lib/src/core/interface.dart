@@ -13,6 +13,7 @@ part 'package:dart_ml/src/core/metric/classification/metric.dart';
 part 'package:dart_ml/src/core/metric/metric.dart';
 part 'package:dart_ml/src/core/metric/regression/enum.dart';
 part 'package:dart_ml/src/core/metric/regression/metric.dart';
+part 'package:dart_ml/src/core/metric/type.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/base.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/batch.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';

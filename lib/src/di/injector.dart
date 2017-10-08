@@ -1,4 +1,4 @@
 import 'package:di/di.dart';
 
-ModuleInjector injector;
+ModuleInjector coreInjector;
 ModuleInjector modelSelectionInjector;

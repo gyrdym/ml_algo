@@ -9,8 +9,8 @@ class _ClassifierBase {
     _basePredictor.train(features, labels, weights: weights);
   }
 
-  double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) {
-    metric = metric ?? _basePredictor.metric;
+  double test(List<Float32x4Vector> features, List<double> origLabels, {MetricType metricType}) {
+    Metric metric = metricType == null ? _basePredictor.metric : MetricFactory.createByType(metricType);
     Float32x4Vector prediction = predictClasses(features);
     return metric.getError(prediction, new Float32x4Vector.from(origLabels));
   }
