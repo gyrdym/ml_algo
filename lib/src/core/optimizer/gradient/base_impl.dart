@@ -1,11 +1,11 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class _GradientOptimizerImpl implements Optimizer {
-  final LossFunction _targetMetric = injector.get(LossFunction);
-  final ScoreFunction _scoreFunction = injector.get(ScoreFunction);
-  final GradientCalculator _gradientCalculator = injector.get(GradientCalculator);
-  final LearningRateGenerator _learningRateGenerator = injector.get(LearningRateGenerator);
-  final InitialWeightsGenerator _initialWeightsGenerator = injector.get(InitialWeightsGenerator);
+  final LossFunction _targetMetric = coreInjector.get(LossFunction);
+  final ScoreFunction _scoreFunction = coreInjector.get(ScoreFunction);
+  final GradientCalculator _gradientCalculator = coreInjector.get(GradientCalculator);
+  final LearningRateGenerator _learningRateGenerator = coreInjector.get(LearningRateGenerator);
+  final InitialWeightsGenerator _initialWeightsGenerator = coreInjector.get(InitialWeightsGenerator);
 
   //hyper parameters declaration
   double _minWeightsDistance;

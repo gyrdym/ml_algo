@@ -14,7 +14,7 @@ class LogisticRegressor implements Classifier {
     ClassificationMetricType metric,
     Regularization regularization
   }) {
-    injector ??= new ModuleInjector([
+    coreInjector ??= new ModuleInjector([
       ModuleFactory.createLogisticRegressionModule(
         learningRate: learningRate,
         minWeightsDistance: minWeightsDistance,
@@ -34,8 +34,8 @@ class LogisticRegressor implements Classifier {
   void train(List<Float32x4Vector> features, List<double> origLabels, {Float32x4Vector weights}) =>
       _classifier.train(features, origLabels);
 
-  double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) =>
-      _classifier.test(features, origLabels, metric: metric);
+  double test(List<Float32x4Vector> features, List<double> origLabels, {MetricType metric}) =>
+      _classifier.test(features, origLabels, metricType: metric);
 
   Float32x4Vector predict(List<Float32x4Vector> features) =>
       _classifier.predict(features);

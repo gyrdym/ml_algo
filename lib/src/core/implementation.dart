@@ -19,6 +19,7 @@ part 'package:dart_ml/src/core/math/math_analysis/gradient_calculator_impl.dart'
 part 'package:dart_ml/src/core/math/randomizer/randomizer_impl.dart';
 part 'package:dart_ml/src/core/metric/classification/accuracy.dart';
 part 'package:dart_ml/src/core/metric/classification/metric_factory.dart';
+part 'package:dart_ml/src/core/metric/factory.dart';
 part 'package:dart_ml/src/core/metric/regression/mape.dart';
 part 'package:dart_ml/src/core/metric/regression/metric_factory.dart';
 part 'package:dart_ml/src/core/metric/regression/rmse.dart';

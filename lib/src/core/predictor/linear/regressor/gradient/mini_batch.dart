@@ -14,7 +14,7 @@ class MBGDRegressor implements Predictor {
     RegressionMetricType metric,
     Regularization regularization
   }) {
-    injector ??= new ModuleInjector([
+    coreInjector ??= new ModuleInjector([
       ModuleFactory.createMBGDRegressionModule(
         learningRate: learningRate,
         minWeightsDistance: minWeightsDistance,
@@ -25,6 +25,8 @@ class MBGDRegressor implements Predictor {
         argumentIncrement: argumentIncrement
       )
     ]);
+
+    _predictor = new _PredictorBase();
   }
 
   Metric get metric => _predictor.metric;
@@ -32,8 +34,8 @@ class MBGDRegressor implements Predictor {
   void train(List<Float32x4Vector> features, List<double> labels, {Float32x4Vector weights}) =>
       _predictor.train(features, labels, weights: weights);
 
-  double test(List<Float32x4Vector> features, List<double> origLabels, {Metric metric}) =>
-      _predictor.test(features, origLabels, metric: metric);
+  double test(List<Float32x4Vector> features, List<double> origLabels, {MetricType metric}) =>
+      _predictor.test(features, origLabels, metricType: metric);
 
   Float32x4Vector predict(List<Float32x4Vector> features) =>
       _predictor.predict(features);
