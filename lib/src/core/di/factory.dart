@@ -2,11 +2,13 @@ part of 'package:dart_ml/src/core/implementation.dart';
 
 class ModuleFactory {
   static Module createLogisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-                                                 ClassificationMetric metric, Regularization regularization, alpha,
+                                                 ClassificationMetricType metricType, Regularization regularization, alpha,
                                                  double argumentIncrement}) {
 
     return new Module()
-      ..bind(Metric, toValue: metric ?? ClassificationMetricFactory.Accuracy())
+      ..bind(Metric, toValue: metricType == null ? ClassificationMetricFactory.Accuracy() :
+                              ClassificationMetricFactory.createByType(metricType))
+
       ..bind(LossFunction, toFactory: () => LossFunctionFactory.LogisticLoss())
       ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())

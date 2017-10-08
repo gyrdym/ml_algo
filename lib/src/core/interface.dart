@@ -9,6 +9,7 @@ part 'package:dart_ml/src/core/loss_function/enum.dart';
 part 'package:dart_ml/src/core/loss_function/loss_function.dart';
 part 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
 part 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
+part 'package:dart_ml/src/core/metric/classification/enum.dart';
 part 'package:dart_ml/src/core/metric/classification/metric.dart';
 part 'package:dart_ml/src/core/metric/metric.dart';
 part 'package:dart_ml/src/core/metric/regression/metric.dart';

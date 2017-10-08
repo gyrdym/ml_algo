@@ -7,7 +7,7 @@ class LogisticRegressor implements Classifier {
     double learningRate,
     double minWeightsDistance,
     int iterationLimit,
-    ClassificationMetric metric,
+    ClassificationMetricType metric,
     Regularization regularization,
     double alpha,
     double argumentIncrement
@@ -17,7 +17,7 @@ class LogisticRegressor implements Classifier {
         learningRate: learningRate,
         minWeightsDistance: minWeightsDistance,
         iterationLimit: iterationLimit,
-        metric: metric,
+        metricType: metric,
         regularization: regularization,
         alpha: alpha,
         argumentIncrement: argumentIncrement
