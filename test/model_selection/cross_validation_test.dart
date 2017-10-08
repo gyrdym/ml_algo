@@ -29,7 +29,7 @@ void main() {
       Float32x4Vector score = validator.evaluate(predictor, features, labels);
       expect(score.length, equals(5));
     });
-  });
+  }, skip: true);
 
   group('LPO cross validator', () {
     test('should return scores vector with proper length', () {
@@ -43,5 +43,5 @@ void main() {
       Float32x4Vector score = validator.evaluate(predictor, features, labels);
       expect(score.length, equals(792));
     });
-  });
+  }, skip: true);
 }
