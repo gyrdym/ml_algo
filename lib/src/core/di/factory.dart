@@ -2,7 +2,8 @@ part of 'package:dart_ml/src/core/implementation.dart';
 
 class ModuleFactory {
   static Module createLogisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-    ClassificationMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
+                                                 ClassificationMetric metric, Regularization regularization, alpha,
+                                                 double argumentIncrement}) {
 
     return new Module()
       ..bind(Metric, toValue: metric ?? ClassificationMetricFactory.Accuracy())

@@ -5,6 +5,7 @@ import 'package:simd_vector/vector.dart';
 part 'package:dart_ml/src/core/data_splitter/k_fold.dart';
 part 'package:dart_ml/src/core/data_splitter/leave_p_out.dart';
 part 'package:dart_ml/src/core/data_splitter/splitter.dart';
+part 'package:dart_ml/src/core/loss_function/enum.dart';
 part 'package:dart_ml/src/core/loss_function/loss_function.dart';
 part 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
 part 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
