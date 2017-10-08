@@ -1,20 +1,20 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class DataSplitterFactory {
-  static Splitter KFold() => new _KFoldSplitterImpl();
+  static Splitter KFold(int numberOfFolds) => new _KFoldSplitterImpl(numberOfFolds);
 
-  static Splitter LPO() => new _LeavePOutSplitterImpl();
+  static Splitter LPO(int p) => new _LeavePOutSplitterImpl(p);
 
-  static Splitter createByType(SplitterType type) {
+  static Splitter createByType(SplitterType type, int value) {
     Splitter splitter;
 
     switch(type) {
       case SplitterType.KFOLD:
-        splitter = KFold();
+        splitter = KFold(value);
         break;
 
       case SplitterType.LPO:
-        splitter = LPO();
+        splitter = LPO(value);
         break;
 
       default:

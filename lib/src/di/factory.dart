@@ -1,10 +1,10 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class ModuleFactory {
-  static Module createModelSelectionModule({SplitterType splitter}) {
+  static Module createModelSelectionModule(int value, {SplitterType splitter}) {
     return new Module()
-      ..bind(Splitter, toFactory: () => splitter == null ? DataSplitterFactory.KFold() :
-                                        DataSplitterFactory.createByType(splitter));
+      ..bind(Splitter, toFactory: () => splitter == null ? DataSplitterFactory.KFold(value) :
+                                        DataSplitterFactory.createByType(splitter, value));
   }
 
   static Module createLogisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
@@ -42,7 +42,6 @@ class ModuleFactory {
       ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer(
           learningRate, minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement
           ))
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
@@ -61,7 +60,6 @@ class ModuleFactory {
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
       ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createMiniBatchOptimizer(learningRate,
           minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement))
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
@@ -80,7 +78,6 @@ class ModuleFactory {
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
       ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createBatchOptimizer(learningRate,
           minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement))
-      ..bind(KFoldSplitter, toFactory: () => DataSplitterFactory.KFold())
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 }

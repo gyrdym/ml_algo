@@ -8,8 +8,8 @@ import 'package:simd_vector/vector.dart';
 import 'interface.dart';
 
 part 'package:dart_ml/src/core/data_splitter/factory.dart';
-part 'package:dart_ml/src/core/data_splitter/k_fold_impl.dart';
-part 'package:dart_ml/src/core/data_splitter/leave_p_out_impl.dart';
+part 'package:dart_ml/src/core/data_splitter/k_fold.dart';
+part 'package:dart_ml/src/core/data_splitter/leave_p_out.dart';
 part 'package:dart_ml/src/core/loss_function/cross_entropy.dart';
 part 'package:dart_ml/src/core/loss_function/logistic_loss.dart';
 part 'package:dart_ml/src/core/loss_function/loss_function_factory.dart';

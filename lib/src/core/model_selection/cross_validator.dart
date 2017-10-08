@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/core/interface.dart' show Splitter, SplitterType, KFoldSplitter, LeavePOutSplitter, Metric, Predictor;
+import 'package:dart_ml/src/core/interface.dart' show Splitter, SplitterType, Metric, Predictor;
 import 'package:dart_ml/src/core/implementation.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:simd_vector/vector.dart' show Float32x4Vector;
@@ -7,13 +7,15 @@ import 'package:di/di.dart';
 class CrossValidator {
   Splitter _splitter;
 
-  factory CrossValidator.KFold({int numberOfFolds = 5}) => new CrossValidator._internal(SplitterType.KFOLD);
+  factory CrossValidator.KFold({int numberOfFolds = 5}) =>
+      new CrossValidator._(SplitterType.KFOLD, numberOfFolds);
 
-  factory CrossValidator.LPO({int p = 5}) => new CrossValidator._internal(SplitterType.LPO);
+  factory CrossValidator.LPO({int p = 5}) =>
+      new CrossValidator._(SplitterType.LPO, p);
 
-  CrossValidator._internal(SplitterType splitterType) {
+  CrossValidator._(SplitterType splitterType, int value) {
     modelSelectionInjector ??= new ModuleInjector(<Module>[ModuleFactory
-        .createModelSelectionModule(splitter: splitterType)]);
+        .createModelSelectionModule(value, splitter: splitterType)]);
 
     _splitter = modelSelectionInjector.get(Splitter);
   }
