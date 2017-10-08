@@ -12,6 +12,7 @@ part 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
 part 'package:dart_ml/src/core/metric/classification/enum.dart';
 part 'package:dart_ml/src/core/metric/classification/metric.dart';
 part 'package:dart_ml/src/core/metric/metric.dart';
+part 'package:dart_ml/src/core/metric/regression/enum.dart';
 part 'package:dart_ml/src/core/metric/regression/metric.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/base.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/batch.dart';

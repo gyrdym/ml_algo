@@ -4,13 +4,15 @@ class LogisticRegressor implements Classifier {
   _ClassifierBase _classifier;
 
   LogisticRegressor({
+    int iterationLimit,
+
     double learningRate,
     double minWeightsDistance,
-    int iterationLimit,
-    ClassificationMetricType metric,
-    Regularization regularization,
     double alpha,
-    double argumentIncrement
+    double argumentIncrement,
+
+    ClassificationMetricType metric,
+    Regularization regularization
   }) {
     injector ??= new ModuleInjector([
       ModuleFactory.createLogisticRegressionModule(

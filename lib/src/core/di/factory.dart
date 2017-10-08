@@ -22,10 +22,13 @@ class ModuleFactory {
   }
 
   static Module createSGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-    RegressionMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
+                                            RegressionMetricType metric, Regularization regularization, alpha,
+                                            double argumentIncrement}) {
 
     return new Module()
-      ..bind(Metric, toValue: metric ?? RegressionMetricFactory.RMSE())
+      ..bind(Metric, toValue: metric == null ? RegressionMetricFactory.RMSE() :
+                              RegressionMetricFactory.createByType(metric))
+
       ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
       ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
@@ -39,10 +42,13 @@ class ModuleFactory {
   }
 
   static Module createMBGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-    RegressionMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
+                                             RegressionMetricType metric, Regularization regularization, alpha,
+                                             double argumentIncrement}) {
 
     return new Module()
-      ..bind(Metric, toValue: metric)
+      ..bind(Metric, toValue: metric == null ? RegressionMetricFactory.RMSE() :
+                              RegressionMetricFactory.createByType(metric))
+
       ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
       ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
@@ -55,10 +61,13 @@ class ModuleFactory {
   }
 
   static Module createBGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
-    RegressionMetric metric, Regularization regularization, alpha, double argumentIncrement}) {
+                                            RegressionMetricType metric, Regularization regularization, alpha,
+                                            double argumentIncrement}) {
 
     return new Module()
-      ..bind(Metric, toValue: metric)
+      ..bind(Metric, toValue: metric == null ? RegressionMetricFactory.RMSE() :
+                              RegressionMetricFactory.createByType(metric))
+
       ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
       ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
