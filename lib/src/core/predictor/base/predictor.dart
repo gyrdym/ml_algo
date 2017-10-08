@@ -1,4 +1,4 @@
-part of 'package:dart_ml/src/predictor/interface.dart';
+part of 'package:dart_ml/src/core/interface.dart';
 
 abstract class Predictor {
   Metric get metric;

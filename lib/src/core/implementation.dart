@@ -31,6 +31,12 @@ part 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learni
 part 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/simple_learning_rate_generator.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/mini_batch_impl.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/stochastic_impl.dart';
+part 'package:dart_ml/src/core/predictor/base/classifier_base.dart';
+part 'package:dart_ml/src/core/predictor/base/predictor_base.dart';
+part 'package:dart_ml/src/core/predictor/linear/classifier/gradient/logistic_regression.dart';
+part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/batch.dart';
+part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/mini_batch.dart';
+part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/stochastic.dart';
 part 'package:dart_ml/src/core/score_function/linear.dart';
 part 'package:dart_ml/src/core/score_function/score_function_factory.dart';
 part 'package:dart_ml/src/di/factory.dart';

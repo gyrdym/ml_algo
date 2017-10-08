@@ -23,12 +23,12 @@ main() async {
   List<double> labels = fields.map((List<num> item) => item.last.toDouble()).toList();
 
   SGDRegressor sgdRegressor = new SGDRegressor();
-  CrossValidator validator = new CrossValidator.KFold();
+  CrossValidatorImpl validator = new CrossValidatorImpl.KFold();
 
   print('K-fold cross validation:');
   print('\nRMSE:');
-  print('SGD regressor: ${validator.validate(sgdRegressor, features, labels).mean()}');
+  print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels).mean()}');
 
   print('\nMAPE:');
-  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels).mean()}');
+  print('SGD GD regressor: ${validator.evaluate(sgdRegressor, features, labels).mean()}');
 }
