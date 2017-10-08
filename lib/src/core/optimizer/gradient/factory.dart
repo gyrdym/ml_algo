@@ -1,7 +1,7 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class GradientOptimizerFactory {
-  static BGDOptimizer createBatchOptimizer(
+  static Optimizer createBatchOptimizer(
     double learningRate,
     double minWeightsDistance,
     int iterationLimit,
@@ -18,7 +18,7 @@ class GradientOptimizerFactory {
       argumentIncrement: argumentIncrement
     );
 
-  static MBGDOptimizer createMiniBatchOptimizer(
+  static Optimizer createMiniBatchOptimizer(
     double learningRate,
     double minWeightsDistance,
     int iterationLimit,

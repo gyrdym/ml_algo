@@ -1,15 +1,19 @@
 import 'dart:typed_data';
+
+import 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/interface.dart';
+import 'package:dart_ml/src/di/injector.dart' show coreInjector;
 import 'package:di/di.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/core/interface.dart';
-import 'package:dart_ml/src/core/implementation.dart';
+import 'package:test/test.dart';
 
 const int ITERATIONS_NUMBER = 2;
 
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
+class LossFunctionMock extends Mock implements LossFunction {}
+class ScoreFunctionMock extends Mock implements ScoreFunction {}
 
 class GradientCalculatorMock extends Mock implements GradientCalculator {
   int _counter = 0;
@@ -35,8 +39,10 @@ void main() {
     LearningRateGeneratorMock learningRateGeneratorMock;
     GradientCalculatorMock gradientCalculatorMock;
     InitialWeightsGeneratorMock weightsGenerator;
+    LossFunctionMock lossFunctionMock;
+    ScoreFunctionMock scoreFunctionMock;
 
-    BGDOptimizer optimizer;
+    Optimizer optimizer;
     List<Float32x4Vector> data;
     Float32List target;
 
@@ -44,12 +50,16 @@ void main() {
       learningRateGeneratorMock = new LearningRateGeneratorMock();
       gradientCalculatorMock = new GradientCalculatorMock();
       weightsGenerator = new InitialWeightsGeneratorMock();
+      lossFunctionMock = new LossFunctionMock();
+      scoreFunctionMock = new ScoreFunctionMock();
 
-      injector = new ModuleInjector([
+      coreInjector = new ModuleInjector([
         new Module()
           ..bind(LearningRateGenerator, toValue: learningRateGeneratorMock)
           ..bind(GradientCalculator, toValue: gradientCalculatorMock)
           ..bind(InitialWeightsGenerator, toValue: weightsGenerator)
+          ..bind(LossFunction, toValue: lossFunctionMock)
+          ..bind(ScoreFunction, toValue: scoreFunctionMock)
       ]);
 
       optimizer = GradientOptimizerFactory.createBatchOptimizer(1e-5, null, ITERATIONS_NUMBER, Regularization.L2, .00001, .0001);
