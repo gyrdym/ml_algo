@@ -1,7 +1,7 @@
 import 'dart:typed_data' show Float32List;
 
-import 'package:dart_ml/src/implementation.dart';
-import 'package:dart_ml/src/interface.dart';
+import 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/interface.dart';
 import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart' show Float32x4Vector;
 

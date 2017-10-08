@@ -3,8 +3,8 @@ import 'package:di/di.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/interface.dart';
-import 'package:dart_ml/src/implementation.dart';
+import 'package:dart_ml/src/core/interface.dart';
+import 'package:dart_ml/src/core/implementation.dart';
 
 const int ITERATIONS_NUMBER = 3;
 
