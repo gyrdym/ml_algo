@@ -64,12 +64,12 @@ SGDRegressor sgdRegressor = new SGDRegressor();
 
 Evaluate our model via RMSE-metric (default metric for cross validation):
 ````dart
-Float32x4Vector scoreRMSE = validator.validate(sgdRegressor, features, labels);
+Float32x4Vector scoreRMSE = validator.validate(sgdRegressor, features, labels, metric: MetricType.RMSE);
 ````
 
 ...and via MAPE-metric:
 ````dart
-Float32x4Vector scoreMAPE = validator.validate(sgdRegressor, features, labels, metric: new RegressionMetric.MAPE());
+Float32x4Vector scoreMAPE = validator.validate(sgdRegressor, features, labels, metric: MetricType.MAPE);
 ````
 
 Let's print score:
