@@ -19,6 +19,6 @@ part 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/init
 part 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 part 'package:dart_ml/src/core/optimizer/optimizer.dart';
 part 'package:dart_ml/src/core/optimizer/regularization.dart';
-part 'package:dart_ml/src/core/predictor/base/classifier.dart';
-part 'package:dart_ml/src/core/predictor/base/predictor.dart';
+part 'package:dart_ml/src/core/classifier/classifier.dart';
+part 'package:dart_ml/src/core/predictor/predictor.dart';
 part 'package:dart_ml/src/core/score_function/score_function.dart';
