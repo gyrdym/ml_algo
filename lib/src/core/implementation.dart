@@ -39,6 +39,7 @@ part 'package:dart_ml/src/core/predictor/linear/classifier/gradient/logistic_reg
 part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/batch.dart';
 part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/mini_batch.dart';
 part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/stochastic.dart';
+part 'package:dart_ml/src/core/predictor/linear/regressor/regressor_impl.dart';
 part 'package:dart_ml/src/core/score_function/linear.dart';
 part 'package:dart_ml/src/core/score_function/score_function_factory.dart';
 part 'package:dart_ml/src/di/factory.dart';

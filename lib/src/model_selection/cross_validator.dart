@@ -15,7 +15,7 @@ class CrossValidator {
 
   CrossValidator._(SplitterType splitterType, int value) {
     modelSelectionInjector ??= new ModuleInjector(<Module>[ModuleFactory
-        .createModelSelectionModule(value, splitter: splitterType)]);
+        .modelSelectionModule(value, splitter: splitterType)]);
 
     _splitter = modelSelectionInjector.get(Splitter);
   }

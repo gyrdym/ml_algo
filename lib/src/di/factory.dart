@@ -1,7 +1,7 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class ModuleFactory {
-  static Module createModelSelectionModule(int value, {SplitterType splitter}) {
+  static Module modelSelectionModule(int value, {SplitterType splitter}) {
     return new Module()
       ..bind(Splitter, toFactory: () => splitter == null ? DataSplitterFactory.KFold(value) :
                                         DataSplitterFactory.createByType(splitter, value));
@@ -26,7 +26,7 @@ class ModuleFactory {
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
-  static Module createSGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
+  static Module SGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
                                             RegressionMetricType metric, Regularization regularization, alpha,
                                             double argumentIncrement}) {
 
@@ -45,7 +45,7 @@ class ModuleFactory {
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
-  static Module createMBGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
+  static Module MBGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
                                              RegressionMetricType metric, Regularization regularization, alpha,
                                              double argumentIncrement}) {
 
@@ -63,7 +63,7 @@ class ModuleFactory {
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
-  static Module createBGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
+  static Module BGDRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
                                             RegressionMetricType metric, Regularization regularization, alpha,
                                             double argumentIncrement}) {
 
