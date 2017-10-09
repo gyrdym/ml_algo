@@ -34,6 +34,7 @@ part 'package:dart_ml/src/core/optimizer/gradient/mini_batch.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/stochastic.dart';
 part 'package:dart_ml/src/core/predictor/base/classifier_base.dart';
 part 'package:dart_ml/src/core/predictor/base/predictor_base.dart';
+part 'package:dart_ml/src/core/predictor/linear/classifier/classifier_impl.dart';
 part 'package:dart_ml/src/core/predictor/linear/classifier/gradient/logistic_regression.dart';
 part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/batch.dart';
 part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/mini_batch.dart';
