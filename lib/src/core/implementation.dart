@@ -7,6 +7,8 @@ import 'package:simd_vector/vector.dart';
 
 import 'interface.dart';
 
+part 'package:dart_ml/src/core/classifier/classifier_base.dart';
+part 'package:dart_ml/src/core/classifier/classifier_impl.dart';
 part 'package:dart_ml/src/core/data_splitter/factory.dart';
 part 'package:dart_ml/src/core/data_splitter/k_fold.dart';
 part 'package:dart_ml/src/core/data_splitter/leave_p_out.dart';
@@ -32,14 +34,12 @@ part 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learni
 part 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/simple_learning_rate_generator.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/mini_batch.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/stochastic.dart';
-part 'package:dart_ml/src/core/predictor/base/classifier_base.dart';
-part 'package:dart_ml/src/core/predictor/base/predictor_base.dart';
-part 'package:dart_ml/src/core/predictor/base/classifier_impl.dart';
-part 'package:dart_ml/src/core/predictor/linear/classifier/gradient/logistic_regression.dart';
-part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/batch.dart';
-part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/mini_batch.dart';
-part 'package:dart_ml/src/core/predictor/linear/regressor/gradient/stochastic.dart';
-part 'package:dart_ml/src/core/predictor/base/regressor_impl.dart';
+part 'package:dart_ml/src/core/predictor/predictor_base.dart';
+part 'package:dart_ml/src/core/regressor/regressor_impl.dart';
+part 'package:dart_ml/src/core/classifier/linear/gradient/logistic_regression.dart';
+part 'package:dart_ml/src/core/regressor/linear/gradient/batch.dart';
+part 'package:dart_ml/src/core/regressor/linear/gradient/mini_batch.dart';
+part 'package:dart_ml/src/core/regressor/linear/gradient/stochastic.dart';
 part 'package:dart_ml/src/core/score_function/linear.dart';
 part 'package:dart_ml/src/core/score_function/score_function_factory.dart';
 part 'package:dart_ml/src/di/factory.dart';
