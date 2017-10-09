@@ -1,23 +1,28 @@
-import 'package:dart_ml/src/interface.dart';
-import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/predictor/base/predictor.dart';
-import 'package:dart_ml/src/metric/metric.dart';
+import 'package:dart_ml/src/core/interface.dart' show Splitter, SplitterType, MetricType, Predictor;
+import 'package:dart_ml/src/core/implementation.dart';
 import 'package:dart_ml/src/di/injector.dart';
+import 'package:simd_vector/vector.dart' show Float32x4Vector;
+import 'package:di/di.dart';
 
 class CrossValidator {
-  final Splitter _splitter;
+  Splitter _splitter;
 
   factory CrossValidator.KFold({int numberOfFolds = 5}) =>
-      new CrossValidator._internal((injector.get(KFoldSplitter) as KFoldSplitter)
-                                     ..configure(numberOfFolds: numberOfFolds));
+      new CrossValidator._(SplitterType.KFOLD, numberOfFolds);
 
   factory CrossValidator.LPO({int p = 5}) =>
-      new CrossValidator._internal((injector.get(LeavePOutSplitter) as LeavePOutSplitter)
-                                     ..configure(p: p));
+      new CrossValidator._(SplitterType.LPO, p);
 
-  CrossValidator._internal(this._splitter);
+  CrossValidator._(SplitterType splitterType, int value) {
+    modelSelectionInjector ??= new ModuleInjector(<Module>[ModuleFactory
+        .modelSelectionModule(value, splitter: splitterType)]);
 
-  Float32x4Vector validate(Predictor predictor, List<Float32x4Vector> features, List<double> labels, {Metric metric}) {
+    _splitter = modelSelectionInjector.get(Splitter);
+  }
+
+  Float32x4Vector evaluate(Predictor predictor, List<Float32x4Vector> features, List<double> labels,
+                           {MetricType metric}) {
+
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
     }

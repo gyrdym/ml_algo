@@ -1,6 +1,7 @@
-import 'package:test/test.dart';
-import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/core/implementation.dart' show LossFunctionFactory;
+import 'package:dart_ml/src/core/interface.dart' show LossFunction;
 import 'package:simd_vector/vector.dart';
+import 'package:test/test.dart';
 
 void main() {
   Float32x4Vector w;
@@ -9,7 +10,7 @@ void main() {
 
   group('Cross entropy loss', () {
     test('should return proper value', () {
-      LossFunction crossEntropyLoss = new LossFunction.CrossEntropy();
+      LossFunction crossEntropyLoss = LossFunctionFactory.CrossEntropy();
 
       w = new Float32x4Vector.from([0.2, 0.3, 0.4, 0.5]);
       x = new Float32x4Vector.from([1.0, 2.0, 3.0, 4.0]);
@@ -19,7 +20,7 @@ void main() {
     }, skip: true);
 
     test('should return proper value', () {
-      LossFunction logisticLoss = new LossFunction.LogisticLoss();
+      LossFunction logisticLoss = LossFunctionFactory.LogisticLoss();
 
       w = new Float32x4Vector.from([1.2, 1.3, 1.4, 1.5]);
       x = new Float32x4Vector.from([1.0, 2.0, 3.0, 4.0]);

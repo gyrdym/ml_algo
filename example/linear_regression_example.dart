@@ -27,8 +27,8 @@ main() async {
 
   print('K-fold cross validation:');
   print('\nRMSE:');
-  print('SGD regressor: ${validator.validate(sgdRegressor, features, labels).mean()}');
+  print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels, metric: MetricType.RMSE).mean()}');
 
   print('\nMAPE:');
-  print('SGD GD regressor: ${validator.validate(sgdRegressor, features, labels, metric: new RegressionMetric.MAPE()).mean()}');
+  print('SGD GD regressor: ${validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE).mean()}');
 }
