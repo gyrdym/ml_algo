@@ -7,7 +7,7 @@ class ModuleFactory {
                                         DataSplitterFactory.createByType(splitter, value));
   }
 
-  static Module createLogisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
+  static Module logisticRegressionModule({double learningRate, double minWeightsDistance, int iterationLimit,
                                                  ClassificationMetricType metricType, Regularization regularization, alpha,
                                                  double argumentIncrement}) {
 
