@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.26.0
+- More distinct modularity was added to the library
+- Unit tests were fixed
+
 ## 0.25.0
 - Tests for gradient optimizers were added
 - Gradient calculator was created as a separate entity
