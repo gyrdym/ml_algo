@@ -1,13 +1,12 @@
 import 'dart:typed_data';
+
+import 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/interface.dart';
+import 'package:dart_ml/src/di/injector.dart' show coreInjector;
 import 'package:di/di.dart';
-import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
-import 'package:dart_ml/src/di/injector.dart';
-import 'package:dart_ml/src/interface.dart';
-import 'package:dart_ml/src/implementation.dart';
-import 'package:dart_ml/src/loss_function/loss_function.dart';
-import 'package:dart_ml/src/score_function/score_function.dart';
+import 'package:test/test.dart';
 
 const int ITERATIONS_NUMBER = 3;
 
@@ -15,14 +14,18 @@ class SGDRandomizerMock extends Mock implements Randomizer {}
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
+class LossFunctionMock extends Mock implements LossFunction {}
+class ScoreFunctionMock extends Mock implements ScoreFunction {}
 
 void main() {
   group('Mini batch gradient descent optimizer', () {
     LearningRateGenerator learningRateGeneratorMock;
     Randomizer randomizerMock;
     GradientCalculator gradientCalculator;
+    LossFunctionMock lossFunctionMock;
+    ScoreFunctionMock scoreFunctionMock;
 
-    SGDOptimizer optimizer;
+    Optimizer optimizer;
     List<Float32x4Vector> data;
     Float32List target;
 
@@ -31,24 +34,17 @@ void main() {
       learningRateGeneratorMock = new LearningRateGeneratorMock();
       gradientCalculator = new GradientCalculatorMock();
 
-      injector = new ModuleInjector([
+      coreInjector = new ModuleInjector([
         new Module()
           ..bind(Randomizer, toValue: randomizerMock)
           ..bind(InitialWeightsGenerator, toFactory: () => new InitialWeightsGeneratorMock())
           ..bind(LearningRateGenerator, toValue: learningRateGeneratorMock)
           ..bind(GradientCalculator, toValue: gradientCalculator)
+          ..bind(LossFunction, toValue: lossFunctionMock)
+          ..bind(ScoreFunction, toValue: scoreFunctionMock)
       ]);
 
-      optimizer = GradientOptimizerFactory.createStochasticOptimizer();
-      optimizer.configure(
-        learningRate: 1e-5,
-        minWeightsDistance: null,
-        iterationLimit:  ITERATIONS_NUMBER,
-        regularization: null,
-        alpha: .00001,
-        lossFunction: new LossFunction.Squared(),
-        scoreFunction: new ScoreFunction.Linear()
-      );
+      optimizer = GradientOptimizerFactory.createStochasticOptimizer(1e-5, null, ITERATIONS_NUMBER, null, .00001, 0.0001);
 
       data = [
         new Float32x4Vector.from([230.1, 37.8, 69.2]),
