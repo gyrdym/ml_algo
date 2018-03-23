@@ -80,10 +80,10 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      Float32x4Vector weights = optimizer.findMinima(data, target);
+      Float32x4Vector weights = optimizer.findExtrema(data, target);
       List<double> formattedWeights = weights.asList().map((double value) => double.parse(value.toStringAsFixed(2)))
           .toList();
-      expect(formattedWeights, equals([-5.2, -7.2, -9.2]));
+      expect(formattedWeights, equals([-10.4, -14.4, -18.4]));
     });
   });
 }

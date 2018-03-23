@@ -9,6 +9,6 @@ class LogisticRegressor extends _ClassifierImpl {
                                                                iterationLimit: iterationLimit,
                                                                metricType: metric,
                                                                regularization: regularization,
-                                                               alpha: alpha,
+                                                               lambda: alpha,
                                                                argumentIncrement: argumentIncrement));
 }

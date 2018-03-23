@@ -69,7 +69,7 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      Float32x4Vector weights = optimizer.findMinima(data, target, weights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
+      Float32x4Vector weights = optimizer.findExtrema(data, target, weights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
       List<double> formattedWeights = weights.asList().map((double value) => double.parse(value.toStringAsFixed(2)))
           .toList();
 
