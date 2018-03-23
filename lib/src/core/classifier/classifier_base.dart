@@ -2,8 +2,8 @@ part of 'package:dart_ml/src/core/implementation.dart';
 
 class _ClassifierBase extends _PredictorBase {
   @override
-  double test(List<Float32x4Vector> features, List<double> origLabels, {MetricType metricType}) {
-    Metric _metric = metricType == null ? metric : MetricFactory.createByType(metricType);
+  double test(List<Float32x4Vector> features, List<double> origLabels, {MetricType metric}) {
+    Metric _metric = metric == null ? metric : MetricFactory.createByType(metric);
     Float32x4Vector prediction = predictClasses(features);
     return _metric.getError(prediction, new Float32x4Vector.from(origLabels));
   }

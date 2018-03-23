@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.26.1
+- Code was optimized (removed unnecessary)
+- Refactoring
+
 ## 0.26.0
 - More distinct modularity was added to the library
 - Unit tests were fixed

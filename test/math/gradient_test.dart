@@ -8,7 +8,7 @@ import 'package:matcher/matcher.dart';
 void main() {
   GradientCalculator calculator;
 
-  group('Derivative finder', () {
+  group('GradientCalculator', () {
     setUp(() {
       calculator = MathUtils.createGradientCalculator();
       calculator.init(3, 0.00001, (Float32x4Vector a, Float32x4Vector b, double c) {

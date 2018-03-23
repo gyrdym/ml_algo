@@ -6,7 +6,7 @@ class GradientOptimizerFactory {
     double minWeightsDistance,
     int iterationLimit,
     Regularization regularization,
-    double alpha,
+    double lambda,
     double argumentIncrement
   ) =>
     new _BGDOptimizerImpl(
@@ -14,7 +14,7 @@ class GradientOptimizerFactory {
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,
       regularization: regularization,
-      alpha: alpha,
+      lambda: lambda,
       argumentIncrement: argumentIncrement
     );
 
@@ -23,7 +23,7 @@ class GradientOptimizerFactory {
     double minWeightsDistance,
     int iterationLimit,
     Regularization regularization,
-    double alpha,
+    double lambda,
     double argumentIncrement
   ) =>
     new _MBGDOptimizerImpl(
@@ -31,7 +31,7 @@ class GradientOptimizerFactory {
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,
       regularization: regularization,
-      alpha: alpha,
+      alpha: lambda,
       argumentIncrement: argumentIncrement
     );
 
@@ -40,7 +40,7 @@ class GradientOptimizerFactory {
     double minWeightsDistance,
     int iterationLimit,
     Regularization regularization,
-    double alpha,
+    double lambda,
     double argumentIncrement
   ) =>
     new _SGDOptimizerImpl(
@@ -48,7 +48,7 @@ class GradientOptimizerFactory {
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,
       regularization: regularization,
-      alpha: alpha,
+      alpha: lambda,
       argumentIncrement: argumentIncrement
     );
 }
