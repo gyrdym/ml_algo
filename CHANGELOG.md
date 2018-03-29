@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.27.0
+- Gradient calculation changed
+
 ## 0.26.1
 - Code was optimized (removed unnecessary)
 - Refactoring

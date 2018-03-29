@@ -30,5 +30,5 @@ main() async {
   print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels, metric: MetricType.RMSE).mean()}');
 
   print('\nMAPE:');
-  print('SGD GD regressor: ${validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE).mean()}');
+  print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE).mean()}');
 }

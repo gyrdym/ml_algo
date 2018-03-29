@@ -1,7 +1,7 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class _GradientOptimizerImpl implements Optimizer {
-  final LossFunction _costFunction = coreInjector.get(LossFunction);
+  final LossFunction _lossFunction = coreInjector.get(LossFunction);
   final ScoreFunction _scoreFunction = coreInjector.get(ScoreFunction);
   final GradientCalculator _gradientCalculator = coreInjector.get(GradientCalculator);
   final LearningRateGenerator _learningRateGenerator = coreInjector.get(LearningRateGenerator);
@@ -38,15 +38,12 @@ class _GradientOptimizerImpl implements Optimizer {
     }
   ) {
     weights = weights ?? _initialWeightsGenerator.generate(features.first.length);
-    TargetFunction fn = (Float32x4Vector k, Float32x4Vector x, double y) => _costFunction.loss(_scoreFunction.score(k, x), y);
-    _gradientCalculator.init(weights.length, _argumentIncrement, fn);
-
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
     while (weightsDistance > _weightsDiffThreshold && iterationCounter++ < _iterationLimit) {
-      double eta = _learningRateGenerator.getNextValue();
-      Float32x4Vector newWeights = _generateNewWeights(weights, features, labels, eta, isMinimization: isMinimizingObjective);
+      final eta = _learningRateGenerator.getNextValue();
+      final newWeights = _generateNewWeights(weights, features, labels, eta, isMinimization: isMinimizingObjective);
       weightsDistance = newWeights.distanceTo(weights);
       weights = newWeights;
     }
@@ -82,22 +79,27 @@ class _GradientOptimizerImpl implements Optimizer {
     double eta,
     {bool isMinimization: true}
   ) {
-    Float32x4Vector gradientSumVector = _getExtendedGradient(weights, data[0], target[0]);
+    Float32x4Vector gradientSumVector = _getGradient(weights, data[0], target[0]);
     for (int i = 1; i < data.length; i++) {
-      gradientSumVector += _getExtendedGradient(weights, data[i], target[i]);
+      gradientSumVector += _getGradient(weights, data[i], target[i]);
     }
     return isMinimization ? weights - gradientSumVector.scalarMul(eta) : weights + gradientSumVector.scalarMul(eta);
   }
 
-  Float32x4Vector _getExtendedGradient(
+  Float32x4Vector _getGradient(
     Float32x4Vector k,
     Float32x4Vector x,
     double y
   ) {
-    Float32x4Vector pureGradient = _gradientCalculator.getGradient(k, x, y);
-    if (_lambda > 0) {
-      return pureGradient + k.scalarMul(2.0 * _lambda);;
-    }
-    return pureGradient;
+    final gradient = _gradientCalculator.getGradient(
+      (Float32x4Vector k, List<Float32x4Vector> vectorArgs, List<double> scalarArgs) {
+        final x = vectorArgs[0];
+        final y = scalarArgs[0];
+        final lambda = scalarArgs[1];
+        return _lossFunction.loss(_scoreFunction.score(k, x), y) + lambda * k.norm(Norm.EUCLIDEAN);
+      }, k, [x], [y, _lambda], _argumentIncrement
+    );
+
+    return gradient;
   }
 }

@@ -14,7 +14,7 @@ class _PredictorBase implements Predictor {
     List<double> labels,
     {Float32x4Vector weights}
   ) {
-    Float32List typedLabelList = new Float32List.fromList(labels);
+    final typedLabelList = new Float32List.fromList(labels);
     _weights = _optimizer.findExtrema(features, typedLabelList, weights: weights, isMinimizingObjective: true);
   }
 
