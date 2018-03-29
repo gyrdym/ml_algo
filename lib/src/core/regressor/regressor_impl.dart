@@ -22,6 +22,5 @@ class _RegressorImpl implements Predictor {
     {MetricType metric}
   ) => _predictor.test(features, origLabels, metric: metric);
 
-  Float32x4Vector predict(List<Float32x4Vector> features) =>
-      _predictor.predict(features);
+  Float32x4Vector predict(List<Float32x4Vector> features) => _predictor.predict(features);
 }
