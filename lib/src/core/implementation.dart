@@ -26,6 +26,7 @@ part 'package:dart_ml/src/core/metric/factory.dart';
 part 'package:dart_ml/src/core/metric/regression/mape.dart';
 part 'package:dart_ml/src/core/metric/regression/metric_factory.dart';
 part 'package:dart_ml/src/core/metric/regression/rmse.dart';
+part 'package:dart_ml/src/core/optimizer/coordinate/factory.dart';
 part 'package:dart_ml/src/core/optimizer/coordinate/optimizer.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/batch.dart';
 part 'package:dart_ml/src/core/optimizer/gradient/factory.dart';
