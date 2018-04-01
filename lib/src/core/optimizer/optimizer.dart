@@ -5,7 +5,7 @@ abstract class Optimizer {
     List<Float32x4Vector> features,
     Float32List labels,
     {
-      Float32x4Vector weights,
+      Float32x4Vector initialWeights,
       bool isMinimizingObjective
     }
   );
