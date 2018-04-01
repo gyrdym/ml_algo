@@ -24,18 +24,18 @@ class _CoordinateOptimizerImpl implements Optimizer {
     List<Float32x4Vector> points,
     Float32List labels,
     {
-      Float32x4Vector weights,
+      Float32x4Vector initialWeights,
       bool isMinimizingObjective = true
     }
   ) {
-    weights = weights ?? _initialWeightsGenerator.generate(points.first.length);
+    Float32x4Vector weights = initialWeights ?? _initialWeightsGenerator.generate(points.first.length);
 
-    double weightsDiff = 0.0;
+    double weightsDiff = double.INFINITY;
     int iteration = 0;
 
-    final updatedWeights = new List<double>.filled(weights.length, 0.0, growable: false);
+    while (weightsDiff > _weightsDiffThreshold && iteration < _iterationLimit) {
+      final updatedWeights = new List<double>.filled(weights.length, 0.0, growable: false);
 
-    while (weightsDiff > _weightsDiffThreshold || iteration < _iterationLimit) {
       for (int j = 0; j < weights.length; j++) {
         final weightsAsList = weights.asList();
         weightsAsList[j] = 0.0;

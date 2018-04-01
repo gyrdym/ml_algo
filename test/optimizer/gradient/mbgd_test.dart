@@ -71,7 +71,7 @@ void main() {
     test('should find optimal weights for the given data', () {
       when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([0, 4]);
 
-      optimizer.findExtrema(data, labels, weights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
+      optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
       verify(randomizerMock.getIntegerInterval(0, 4)).called(ITERATIONS_NUMBER);
       verify(learningRateGeneratorMock.getNextValue()).called(ITERATIONS_NUMBER);
@@ -89,7 +89,7 @@ void main() {
     test('should cut off a piece of certain size from the given data', () {
       when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([1, 3]);
 
-      optimizer.findExtrema(data, labels, weights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
+      optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
       verifyNever(gradientCalculator.getGradient(any, any, [point1], [labels[0], lambda], delta));
       verifyNever(gradientCalculator.getGradient(any, any, [point4], [labels[3], lambda], delta));
@@ -102,7 +102,7 @@ void main() {
       when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([0, 5]);
 
       expect(() {
-        optimizer.findExtrema(data, labels, weights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
+        optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
       }, throwsRangeError);
     });
   });
