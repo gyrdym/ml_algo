@@ -1,7 +1,5 @@
 # Machine learning with dart
 
-## Guys, who interested in the library, currently, I am in search of new knowledge of the domain, so there are nor any work neither any updates here; approximately, in a month or two (February or March 2018) here will be new important changes (some new functionality, like kNN-regression, lasso-regression and so on, and some redesigned one). 
-
 Following models are implemented:
 - Linear regression:
     - with stochastic gradient descent
