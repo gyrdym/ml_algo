@@ -8,7 +8,7 @@ import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Coordinate descent optimizer', () {
+  group('Coordinate descent optimizer (unregularized case)', () {
     const iterationsNumber = 2;
     const lambda = 0.0;
 
@@ -28,7 +28,7 @@ void main() {
           ..bind(ScoreFunction, toValue: ScoreFunctionFactory.Linear())
       ]);
 
-      optimizer = CoordinateOptimizerFactory.createCoordinateOptimizerFactory(1e-5, iterationsNumber, lambda);
+      optimizer = CoordinateOptimizerFactory.createCoordinateOptimizer(1e-5, iterationsNumber, lambda);
 
       data = [point1, point2, point3, point4];
       labels = new Float32List.fromList([20.0, 30.0, 20.0, 40.0]);
@@ -92,8 +92,8 @@ void main() {
     /// but we cannot get exactly the same vector as above due to fuzzy arithmetic with floating point numbers. In our case
     /// we will never get exactly -81295300 (second element of the vector w), since 32-bit floating point number has 24 bits
     /// of mantissa precision. 81295300 in binary is 100110110000111011111000100. This requires 25bits of mantissa
-    /// precision to store precisely, so the number 100 (4 in decimal) will be cut off. Thus we should deposit some delta
-    /// to comparision
+    /// precision to store precisely, so the binary number 100 (4 in decimal) will be cut off. Thus we should deposit
+    /// some delta to comparision
     ///
     test('should find optimal weights for the given data', () {
       final weights = optimizer.findExtrema(data, labels).asList();
@@ -106,5 +106,9 @@ void main() {
       expect(w2, closeTo(-81295300, delta));
       expect(w3, closeTo(-85285400, delta));
     });
+  });
+
+  group('Coordinate descent optimizer (regularized case)', () {
+
   });
 }
