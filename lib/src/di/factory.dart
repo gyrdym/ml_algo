@@ -5,10 +5,8 @@ class ModuleFactory {
     int value,
     {SplitterType splitter}
   ) => new Module()
-      ..bind(
-        Splitter,
-        toFactory: () => splitter == null ?
-                         DataSplitterFactory.KFold(value) : DataSplitterFactory.createByType(splitter, value));
+      ..bind(Splitter, toFactory: () => splitter == null ? DataSplitterFactory.KFold(value) :
+                                        DataSplitterFactory.createByType(splitter, value));
 
   static Module logisticRegressionModule({
     double learningRate,

@@ -1,12 +1,12 @@
 part of 'package:dart_ml/src/core/implementation.dart';
 
 class CoordinateOptimizerFactory {
-  static Optimizer createCoordinateOptimizerFactory(
+  static Optimizer createCoordinateOptimizer(
     double minWeightsDiff,
     int iterationLimit,
     double lambda
   ) => new _CoordinateOptimizerImpl(
-    minWeightsDiff: minWeightsDiff,
+    minCoefficientsDiff: minWeightsDiff,
     iterationLimit: iterationLimit,
     lambda: lambda
   );
