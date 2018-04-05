@@ -89,9 +89,22 @@ void main() {
     ///
     /// weights at the second iteration: w = [-81796400, -81295300, -85285400]
     ///
-    /// iteration 3:
+    /// but we cannot get exactly the same vector as above due to fuzzy arithmetic with floating point numbers. In our case
+    /// we will never get exactly -81295300 (second element of the vector w), since 32-bit floating point number has 24 bits
+    /// of mantissa precision. 81295300 in binary is 100110110000111011111000100. This requires 25bits of mantissa
+    /// precision to store precisely, so the number 100 (4 in decimal) will be cut off. Thus we should deposit some delta
+    /// to comparision
+    ///
     test('should find optimal weights for the given data', () {
-      expect(optimizer.findExtrema(data, labels).asList(), [-81796400.0, -81295300.0, -85285400.0]);
+      final weights = optimizer.findExtrema(data, labels).asList();
+      final w1 = weights[0];
+      final w2 = weights[1];
+      final w3 = weights[2];
+      final delta = 5.0;
+
+      expect(w1, closeTo(-81796400, delta));
+      expect(w2, closeTo(-81295300, delta));
+      expect(w3, closeTo(-85285400, delta));
     });
   });
 }

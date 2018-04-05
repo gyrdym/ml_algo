@@ -56,6 +56,7 @@ class _CoordinateOptimizerImpl implements Optimizer {
       }
 
       final newWeights = new Float32x4Vector.from(updatedWeights);
+
       weightsDiff = newWeights.distanceTo(weights);
       weights = newWeights;
 
