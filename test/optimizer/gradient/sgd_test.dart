@@ -71,7 +71,7 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      optimizer.findExtrema(data, labels, weights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
+      optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
       verify(randomizerMock.getIntegerFromInterval(0, 4)).called(iterationsNumber);
       verify(learningRateGeneratorMock.getNextValue()).called(iterationsNumber);

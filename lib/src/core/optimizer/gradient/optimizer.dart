@@ -33,11 +33,11 @@ class _GradientOptimizerImpl implements Optimizer {
     List<Float32x4Vector> features,
     Float32List labels,
     {
-      Float32x4Vector weights,
+      Float32x4Vector initialWeights,
       bool isMinimizingObjective = true
     }
   ) {
-    weights = weights ?? _initialWeightsGenerator.generate(features.first.length);
+    Float32x4Vector weights = initialWeights ?? _initialWeightsGenerator.generate(features.first.length);
     double weightsDistance = double.MAX_FINITE;
     int iterationCounter = 0;
 
