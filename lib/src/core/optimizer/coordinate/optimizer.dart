@@ -39,6 +39,7 @@ class _CoordinateOptimizerImpl implements Optimizer {
       for (int j = 0; j < coefficients.length; j++) {
         final coefficientsAsList = coefficients.asList();
         coefficientsAsList[j] = 0.0;
+        final coefficientsWithoutJ = new Float32x4Vector.from(coefficientsAsList);
 
         for (int i = 0; i < points.length; i++) {
           final pointAsList = points[i].asList();
@@ -47,7 +48,6 @@ class _CoordinateOptimizerImpl implements Optimizer {
 
           pointAsList[j] = 0.0;
 
-          final coefficientsWithoutJ = new Float32x4Vector.from(coefficientsAsList);
           final pointWithoutJ = new Float32x4Vector.from(pointAsList);
           final yHat = _scoreFunction.score(coefficientsWithoutJ, pointWithoutJ);
 
