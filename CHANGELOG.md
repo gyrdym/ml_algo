@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.28.0
+- Coordinate descent optimizer added
+- Lasso regressor added
+
 ## 0.27.0
 - Gradient calculation changed
 
