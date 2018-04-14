@@ -7,8 +7,10 @@ import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
-/// L1 regularization, as known as Lasso, is aimed to penalize unimportant coordinates, setting them the zero value,
-/// therefore, we can treat the objective of the LassoOptimizer like feature selection.
+/// L1 regularization, as known as Lasso, is aimed to penalize unimportant features, setting their weights to the zero,
+/// therefore, we can treat the objective of the Lasso Optimizer like feature selection. Since lasso optimizer regularizes
+/// coefficients by adding to their magnitude their L1-norm, we cannot use gradient methods any longer. Instead, we can
+/// use coordinate descent optimization.
 
 void main() {
   group('Coordinate descent optimizer (unregularized case)', () {
@@ -187,7 +189,7 @@ void main() {
     /// Regularized weights vector after the 1st iteration: [210.0, 280.0, 350.0]
     ///
     /// 2nd iteration:
-    /// j = 0:                                    j = 1:                                    j = 2:
+    /// j = 0:                                        j = 1:                                        j = 2:
     /// 10.0 * (2.0 - (20.0 * 280.0 + 30.0 * 350.0))  20.0 * (2.0 - (10.0 * 210.0 + 30.0 * 350.0))  30.0 * (2.0 - (10.0 * 210.0 + 20.0 * 280.0))
     /// 20.0 * (3.0 - (30.0 * 280.0 + 40.0 * 350.0))  30.0 * (3.0 - (20.0 * 210.0 + 40.0 * 350.0))  40.0 * (3.0 - (20.0 * 210.0 + 30.0 * 280.0))
     /// 70.0 * (2.0 - (80.0 * 280.0 + 90.0 * 350.0))  80.0 * (2.0 - (70.0 * 210.0 + 90.0 * 350.0))  90.0 * (2.0 - (70.0 * 210.0 + 80.0 * 280.0))
