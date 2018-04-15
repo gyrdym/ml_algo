@@ -1,9 +1,12 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/optimizer.dart';
+import 'package:dart_ml/src/core/optimizer/regularization.dart';
+import 'package:dart_ml/src/di/injector.dart';
 
-class _SGDOptimizerImpl extends _GradientOptimizerImpl {
+class SGDOptimizerImpl extends GradientOptimizerImpl {
   final Randomizer _randomizer = coreInjector.get(Randomizer);
 
-  _SGDOptimizerImpl({
+  SGDOptimizerImpl({
     double learningRate,
     double minWeightsDistance,
     int iterationLimit,
@@ -19,7 +22,7 @@ class _SGDOptimizerImpl extends _GradientOptimizerImpl {
   );
 
   @override
-  Iterable<int> _getBatchRange(int numberOfPoints) {
+  Iterable<int> getBatchRange(int numberOfPoints) {
     int k = _randomizer.getIntegerFromInterval(0, numberOfPoints);
     return [k, k + 1];
   }

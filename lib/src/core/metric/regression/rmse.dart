@@ -1,8 +1,10 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:math' as math;
+import 'package:dart_ml/src/core/metric/regression/metric.dart';
+import 'package:simd_vector/vector.dart';
 
-class _RMSEMetric implements RegressionMetric {
-  const _RMSEMetric();
+class RMSEMetric implements RegressionMetric {
+  const RMSEMetric();
 
   double getError(Float32x4Vector predictedLabels, Float32x4Vector origLabels) =>
-    sqrt(((predictedLabels - origLabels).intPow(2)).mean());
+    math.sqrt(((predictedLabels - origLabels).intPow(2)).mean());
 }

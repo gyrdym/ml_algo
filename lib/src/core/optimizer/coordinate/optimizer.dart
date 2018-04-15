@@ -1,6 +1,12 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:typed_data';
 
-class _CoordinateOptimizerImpl implements Optimizer {
+import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/core/optimizer/optimizer.dart';
+import 'package:dart_ml/src/core/score_function/score_function.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:simd_vector/vector.dart';
+
+class CoordinateOptimizerImpl implements Optimizer {
   final ScoreFunction _scoreFunction = coreInjector.get(ScoreFunction);
   final InitialWeightsGenerator _initialCoefficientsGenerator = coreInjector.get(InitialWeightsGenerator);
 
@@ -10,7 +16,7 @@ class _CoordinateOptimizerImpl implements Optimizer {
   final double _lambda;
   //hyper parameters declaration end
 
-  _CoordinateOptimizerImpl({
+  CoordinateOptimizerImpl({
     double minCoefficientsDiff,
     int iterationLimit,
     double lambda

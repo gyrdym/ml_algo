@@ -1,6 +1,15 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:typed_data';
 
-class _PredictorBase implements Predictor {
+import 'package:dart_ml/src/core/metric/factory.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/metric/type.dart';
+import 'package:dart_ml/src/core/optimizer/optimizer.dart';
+import 'package:dart_ml/src/core/predictor/predictor.dart';
+import 'package:dart_ml/src/core/score_function/score_function.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:simd_vector/vector.dart';
+
+class PredictorBase implements Predictor {
   @override
   final Metric metric = coreInjector.get(Metric);
   final ScoreFunction scoreFunction = coreInjector.get(ScoreFunction);

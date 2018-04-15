@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/core/implementation.dart' show LossFunctionFactory;
-import 'package:dart_ml/src/core/interface.dart' show LossFunction;
+import 'package:dart_ml/src/core/loss_function/loss_function.dart';
+import 'package:dart_ml/src/core/loss_function/loss_function_factory.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
@@ -20,7 +20,7 @@ void main() {
     }, skip: true);
 
     test('should return proper value', () {
-      LossFunction logisticLoss = LossFunctionFactory.LogisticLoss();
+      LossFunction logisticLoss = LossFunctionFactory.Logistic();
 
       w = new Float32x4Vector.from([1.2, 1.3, 1.4, 1.5]);
       x = new Float32x4Vector.from([1.0, 2.0, 3.0, 4.0]);

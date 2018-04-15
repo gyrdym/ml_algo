@@ -1,13 +1,15 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:math' as math;
 
-class _CrossEntropy implements LossFunction {
-  const _CrossEntropy();
+import 'package:dart_ml/src/core/loss_function/loss_function.dart';
+
+class CrossEntropyLoss implements LossFunction {
+  const CrossEntropyLoss();
 
   @override
   double loss(double predictedLabel, double originalLabel) {
     double sigmoidValue = _sigmoid(predictedLabel);
-    return -(originalLabel * log(sigmoidValue) + (1 - originalLabel) * log(1 - sigmoidValue));
+    return -(originalLabel * math.log(sigmoidValue) + (1 - originalLabel) * math.log(1 - sigmoidValue));
   }
 
-  double _sigmoid(double z) => exp(z) / (1 + exp(z));
+  double _sigmoid(double z) => math.exp(z) / (1 + math.exp(z));
 }

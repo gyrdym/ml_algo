@@ -1,7 +1,8 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/metric/classification/metric.dart';
+import 'package:simd_vector/vector.dart';
 
-class _AccuracyMetric implements ClassificationMetric {
-  const _AccuracyMetric();
+class AccuracyMetric implements ClassificationMetric {
+  const AccuracyMetric();
 
   double getError(Float32x4Vector predictedLabels, Float32x4Vector origLabels) =>
       1 - getScore(predictedLabels, origLabels);
