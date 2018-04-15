@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.29.0
+- `part ... part of` directives removed
+
 ## 0.28.0
 - Coordinate descent optimizer added
 - Lasso regressor added

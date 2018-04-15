@@ -1,8 +1,9 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/optimizer.dart';
+import 'package:dart_ml/src/core/optimizer/regularization.dart';
 
-class _BGDOptimizerImpl extends _GradientOptimizerImpl {
+class BGDOptimizerImpl extends GradientOptimizerImpl {
 
-  _BGDOptimizerImpl({
+  BGDOptimizerImpl({
     double learningRate,
     double minWeightsDistance,
     int iterationLimit,
@@ -18,5 +19,5 @@ class _BGDOptimizerImpl extends _GradientOptimizerImpl {
   );
 
   @override
-  Iterable<int> _getBatchRange(int numberOfPoints) => [0, numberOfPoints];
+  Iterable<int> getBatchRange(int numberOfPoints) => [0, numberOfPoints];
 }

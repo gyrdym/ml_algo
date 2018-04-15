@@ -1,11 +1,17 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/classifier/classifier.dart';
+import 'package:dart_ml/src/core/classifier/classifier_base.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/metric/type.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:di/di.dart';
+import 'package:simd_vector/vector.dart';
 
-class _ClassifierImpl implements Classifier {
-  _ClassifierBase _classifier;
+class ClassifierImpl implements Classifier {
+  ClassifierBase _classifier;
 
-  _ClassifierImpl(Module module) {
+  ClassifierImpl(Module module) {
     coreInjector ??= new ModuleInjector([module]);
-    _classifier = new _ClassifierBase();
+    _classifier = new ClassifierBase();
   }
 
   @override

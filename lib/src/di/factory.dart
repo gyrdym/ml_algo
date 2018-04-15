@@ -1,4 +1,26 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/data_splitter/factory.dart';
+import 'package:dart_ml/src/core/data_splitter/splitter.dart';
+import 'package:dart_ml/src/core/data_splitter/type.dart';
+import 'package:dart_ml/src/core/loss_function/loss_function.dart';
+import 'package:dart_ml/src/core/loss_function/loss_function_factory.dart';
+import 'package:dart_ml/src/core/math/math.dart';
+import 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
+import 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
+import 'package:dart_ml/src/core/metric/classification/metric_factory.dart';
+import 'package:dart_ml/src/core/metric/classification/type.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/metric/regression/metric_factory.dart';
+import 'package:dart_ml/src/core/metric/regression/type.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/factory.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
+import 'package:dart_ml/src/core/optimizer/optimizer.dart';
+import 'package:dart_ml/src/core/optimizer/regularization.dart';
+import 'package:dart_ml/src/core/score_function/score_function.dart';
+import 'package:dart_ml/src/core/score_function/score_function_factory.dart';
+import 'package:di/di.dart';
 
 class ModuleFactory {
   static Module modelSelectionModule(
@@ -21,7 +43,7 @@ class ModuleFactory {
       ..bind(Metric, toValue: metricType == null ? ClassificationMetricFactory.Accuracy() :
                               ClassificationMetricFactory.createByType(metricType))
 
-      ..bind(LossFunction, toFactory: () => LossFunctionFactory.LogisticLoss())
+      ..bind(LossFunction, toFactory: () => LossFunctionFactory.Logistic())
       ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
       ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())

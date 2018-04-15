@@ -1,5 +1,3 @@
-part of 'package:dart_ml/src/core/interface.dart';
-
 abstract class Randomizer {
   ///returns random interval constrained by [lowerBound] (include) and [upperBound] (exclude)
   Iterable<int> getIntegerInterval(int lowerBound, int upperBound);
