@@ -1,4 +1,8 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/batch.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/mini_batch.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/stochastic.dart';
+import 'package:dart_ml/src/core/optimizer/optimizer.dart';
+import 'package:dart_ml/src/core/optimizer/regularization.dart';
 
 class GradientOptimizerFactory {
   static Optimizer createBatchOptimizer(
@@ -9,7 +13,7 @@ class GradientOptimizerFactory {
     double lambda,
     double argumentIncrement
   ) =>
-    new _BGDOptimizerImpl(
+    new BGDOptimizerImpl(
       learningRate: learningRate,
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,
@@ -26,7 +30,7 @@ class GradientOptimizerFactory {
     double lambda,
     double argumentIncrement
   ) =>
-    new _MBGDOptimizerImpl(
+    new MBGDOptimizerImpl(
       learningRate: learningRate,
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,
@@ -43,7 +47,7 @@ class GradientOptimizerFactory {
     double lambda,
     double argumentIncrement
   ) =>
-    new _SGDOptimizerImpl(
+    new SGDOptimizerImpl(
       learningRate: learningRate,
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,

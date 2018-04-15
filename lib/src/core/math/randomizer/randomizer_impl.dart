@@ -1,9 +1,11 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:math';
 
-class _RandomizerImpl implements Randomizer {
+import 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
+
+class RandomizerImpl implements Randomizer {
   final Random _generator;
 
-  _RandomizerImpl({int seed}) : _generator = new Random(seed);
+  RandomizerImpl({int seed}) : _generator = new Random(seed);
 
   ///returns random interval constrained by [lowerBound] (include) and [upperBound] (exclude)
   List<int> getIntegerInterval(int lowerBound, int upperBound) {

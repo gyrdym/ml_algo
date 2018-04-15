@@ -1,9 +1,12 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/data_splitter/k_fold.dart';
+import 'package:dart_ml/src/core/data_splitter/leave_p_out.dart';
+import 'package:dart_ml/src/core/data_splitter/splitter.dart';
+import 'package:dart_ml/src/core/data_splitter/type.dart';
 
 class DataSplitterFactory {
-  static Splitter KFold(int numberOfFolds) => new _KFoldSplitterImpl(numberOfFolds);
+  static Splitter KFold(int numberOfFolds) => new KFoldSplitterImpl(numberOfFolds);
 
-  static Splitter LPO(int p) => new _LeavePOutSplitterImpl(p);
+  static Splitter LPO(int p) => new LeavePOutSplitterImpl(p);
 
   static Splitter createByType(SplitterType type, int value) {
     Splitter splitter;

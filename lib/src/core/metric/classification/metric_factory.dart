@@ -1,7 +1,9 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/metric/classification/accuracy.dart';
+import 'package:dart_ml/src/core/metric/classification/metric.dart';
+import 'package:dart_ml/src/core/metric/classification/type.dart';
 
 abstract class ClassificationMetricFactory {
-  static ClassificationMetric Accuracy() => const _AccuracyMetric();
+  static ClassificationMetric Accuracy() => const AccuracyMetric();
 
   static ClassificationMetric createByType(ClassificationMetricType type) {
     ClassificationMetric metric;

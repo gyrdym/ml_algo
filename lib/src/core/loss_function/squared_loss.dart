@@ -1,8 +1,10 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:math' as math;
 
-class _SquaredLoss implements LossFunction {
-  const _SquaredLoss();
+import 'package:dart_ml/src/core/loss_function/loss_function.dart';
+
+class SquaredLoss implements LossFunction {
+  const SquaredLoss();
 
   @override
-  double loss(double predictedLabel, double originalLabel) => pow(predictedLabel - originalLabel, 2);
+  double loss(double predictedLabel, double originalLabel) => math.pow(predictedLabel - originalLabel, 2);
 }
