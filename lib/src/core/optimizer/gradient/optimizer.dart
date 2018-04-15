@@ -1,6 +1,15 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:typed_data';
 
-class _GradientOptimizerImpl implements Optimizer {
+import 'package:dart_ml/src/core/loss_function/loss_function.dart';
+import 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
+import 'package:dart_ml/src/core/optimizer/optimizer.dart';
+import 'package:dart_ml/src/core/score_function/score_function.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:simd_vector/vector.dart';
+
+class GradientOptimizerImpl implements Optimizer {
   final LossFunction _lossFunction = coreInjector.get(LossFunction);
   final ScoreFunction _scoreFunction = coreInjector.get(ScoreFunction);
   final GradientCalculator _gradientCalculator = coreInjector.get(GradientCalculator);
@@ -14,7 +23,7 @@ class _GradientOptimizerImpl implements Optimizer {
   final double _argumentIncrement;
   //hyper parameters declaration end
 
-  _GradientOptimizerImpl({
+  GradientOptimizerImpl({
     double learningRate,
     double minWeightsDiff,
     int iterationLimit,
@@ -53,7 +62,7 @@ class _GradientOptimizerImpl implements Optimizer {
     return weights;
   }
 
-  Iterable<int> _getBatchRange(int numberOfPoints) =>
+  Iterable<int> getBatchRange(int numberOfPoints) =>
       throw new UnimplementedError('it is necesssary to implement this method in a heir class');
 
   Float32x4Vector _generateNewWeights(
@@ -63,7 +72,7 @@ class _GradientOptimizerImpl implements Optimizer {
     double eta,
     {bool isMinimization: true}
   ) {
-    final range = _getBatchRange(features.length);
+    final range = getBatchRange(features.length);
     final start = range.first;
     final end = range.last;
     final featuresBatch = features.sublist(start, end);

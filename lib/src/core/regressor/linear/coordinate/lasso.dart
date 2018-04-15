@@ -1,6 +1,9 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/regressor/regressor_impl.dart';
+import 'package:dart_ml/src/core/score_function/score_function.dart';
+import 'package:dart_ml/src/di/lasso_regressor_module.dart';
 
-class LassoRegressor extends _RegressorImpl {
+class LassoRegressor extends RegressorImpl {
   LassoRegressor({
     int iterationLimit,
     double minWeightsDistance,

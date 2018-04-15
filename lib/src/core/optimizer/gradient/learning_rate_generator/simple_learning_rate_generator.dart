@@ -1,6 +1,6 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 
-class _SimpleLearningRateGenerator implements LearningRateGenerator {
+class SimpleLearningRateGenerator implements LearningRateGenerator {
   double _initialValue;
   int _iterationCounter = 0;
 

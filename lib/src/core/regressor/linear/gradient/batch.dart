@@ -1,6 +1,9 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/metric/regression/type.dart';
+import 'package:dart_ml/src/core/optimizer/regularization.dart';
+import 'package:dart_ml/src/core/regressor/regressor_impl.dart';
+import 'package:dart_ml/src/di/factory.dart';
 
-class BGDRegressor extends _RegressorImpl {
+class BGDRegressor extends RegressorImpl {
   BGDRegressor({
     int iterationLimit,
     double learningRate,

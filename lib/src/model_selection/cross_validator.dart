@@ -1,5 +1,8 @@
-import 'package:dart_ml/src/core/interface.dart' show Splitter, SplitterType, MetricType, Predictor;
-import 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/data_splitter/splitter.dart';
+import 'package:dart_ml/src/core/data_splitter/type.dart';
+import 'package:dart_ml/src/core/metric/type.dart';
+import 'package:dart_ml/src/core/predictor/predictor.dart';
+import 'package:dart_ml/src/di/factory.dart';
 import 'package:dart_ml/src/di/injector.dart';
 import 'package:simd_vector/vector.dart' show Float32x4Vector;
 import 'package:di/di.dart';

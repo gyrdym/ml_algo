@@ -1,7 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/core/implementation.dart';
-import 'package:dart_ml/src/core/interface.dart';
+import 'package:dart_ml/src/core/loss_function/loss_function.dart';
+import 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/factory.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
+import 'package:dart_ml/src/core/optimizer/optimizer.dart';
+import 'package:dart_ml/src/core/optimizer/regularization.dart';
+import 'package:dart_ml/src/core/score_function/score_function.dart';
 import 'package:dart_ml/src/di/injector.dart' show coreInjector;
 import 'package:di/di.dart';
 import 'package:mockito/mockito.dart';

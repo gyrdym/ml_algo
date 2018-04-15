@@ -1,7 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/core/implementation.dart';
-import 'package:dart_ml/src/core/interface.dart';
+import 'package:dart_ml/src/core/optimizer/coordinate/factory.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:dart_ml/src/core/optimizer/optimizer.dart';
+import 'package:dart_ml/src/core/score_function/score_function.dart';
+import 'package:dart_ml/src/core/score_function/score_function_factory.dart';
 import 'package:dart_ml/src/di/injector.dart' show coreInjector;
 import 'package:di/di.dart';
 import 'package:simd_vector/vector.dart';

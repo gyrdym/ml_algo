@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/regressor/linear/gradient/stochastic.dart';
 import 'package:dart_ml/src/model_selection/cross_validator.dart';
 import 'package:matcher/matcher.dart';
 import 'package:simd_vector/vector.dart';

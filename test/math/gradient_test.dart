@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:dart_ml/dart_ml.dart';
-import 'package:dart_ml/src/core/implementation.dart';
-import 'package:dart_ml/src/core/interface.dart';
+import 'package:dart_ml/src/core/math/math.dart';
+import 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
 import 'package:matcher/matcher.dart';
 import 'package:test/test.dart';
 

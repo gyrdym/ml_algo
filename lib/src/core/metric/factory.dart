@@ -1,4 +1,7 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/metric/classification/metric_factory.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/metric/regression/metric_factory.dart';
+import 'package:dart_ml/src/core/metric/type.dart';
 
 class MetricFactory {
   static Metric createByType(MetricType type) {

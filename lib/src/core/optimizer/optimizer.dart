@@ -1,4 +1,6 @@
-part of 'package:dart_ml/src/core/interface.dart';
+import 'dart:typed_data';
+
+import 'package:simd_vector/vector.dart';
 
 abstract class Optimizer {
   Float32x4Vector findExtrema(

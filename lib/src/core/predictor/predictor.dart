@@ -1,4 +1,6 @@
-part of 'package:dart_ml/src/core/interface.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/metric/type.dart';
+import 'package:simd_vector/vector.dart';
 
 abstract class Predictor {
   Metric get metric;

@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/core/interface.dart';
-import 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/math/math.dart';
+import 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 

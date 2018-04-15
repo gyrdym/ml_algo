@@ -1,6 +1,11 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'dart:typed_data';
+import 'package:dart_ml/src/core/metric/factory.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/metric/type.dart';
+import 'package:dart_ml/src/core/predictor/predictor_base.dart';
+import 'package:simd_vector/vector.dart';
 
-class _ClassifierBase extends _PredictorBase {
+class ClassifierBase extends PredictorBase {
   @override
   double test(List<Float32x4Vector> features, List<double> origLabels, {MetricType metric}) {
     Metric _metric = metric == null ? metric : MetricFactory.createByType(metric);

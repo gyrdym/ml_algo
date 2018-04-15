@@ -1,11 +1,17 @@
-part of 'package:dart_ml/src/core/implementation.dart';
+import 'package:dart_ml/src/core/metric/metric.dart';
+import 'package:dart_ml/src/core/metric/type.dart';
+import 'package:dart_ml/src/core/predictor/predictor.dart';
+import 'package:dart_ml/src/core/predictor/predictor_base.dart';
+import 'package:dart_ml/src/di/injector.dart';
+import 'package:di/di.dart';
+import 'package:simd_vector/vector.dart';
 
-class _RegressorImpl implements Predictor {
-  _PredictorBase _predictor;
+class RegressorImpl implements Predictor {
+  PredictorBase _predictor;
 
-  _RegressorImpl(Module module) {
+  RegressorImpl(Module module) {
     coreInjector ??= new ModuleInjector([module]);
-    _predictor = new _PredictorBase();
+    _predictor = new PredictorBase();
   }
 
   Metric get metric => _predictor.metric;
