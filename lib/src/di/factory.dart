@@ -17,7 +17,6 @@ import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/in
 import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:dart_ml/src/core/optimizer/optimizer.dart';
-import 'package:dart_ml/src/core/optimizer/regularization.dart';
 import 'package:dart_ml/src/core/score_function/score_function.dart';
 import 'package:dart_ml/src/core/score_function/score_function_factory.dart';
 import 'package:di/di.dart';
@@ -35,7 +34,6 @@ class ModuleFactory {
     double minWeightsDistance,
     int iterationLimit,
     ClassificationMetricType metricType,
-    Regularization regularization,
     double lambda,
     double argumentIncrement
   }) {
@@ -48,43 +46,19 @@ class ModuleFactory {
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
       ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
-      ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer(
-        learningRate, minWeightsDistance, iterationLimit, regularization, lambda, argumentIncrement
-      ))
+      ..bind(Optimizer, toFactory: () => gradientOptimizerFactory(learningRate, minWeightsDistance, iterationLimit,
+          lambda, argumentIncrement, 1))
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 
-  static Module SGDRegressionModule({
+  static Module GradientRegressionModule({
     double learningRate,
     double minWeightsDistance,
     int iterationLimit,
     RegressionMetricType metric,
-    Regularization regularization, alpha,
-    double argumentIncrement
-  }) {
-    return new Module()
-      ..bind(Metric, toValue: metric == null ? RegressionMetricFactory.RMSE() :
-                              RegressionMetricFactory.createByType(metric))
-
-      ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
-      ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
-      ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
-      ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
-      ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
-      ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createStochasticOptimizer(
-          learningRate, minWeightsDistance, iterationLimit, regularization, alpha, argumentIncrement
-        ))
-      ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
-  }
-
-  static Module MBGDRegressionModule({
-    double learningRate,
-    double minWeightsDistance,
-    int iterationLimit,
-    RegressionMetricType metric,
-    Regularization regularization,
     double lambda,
-    double argumentIncrement
+    double argumentIncrement,
+    int batchSize
   }) {
     return new Module()
       ..bind(Metric, toValue: metric == null ? RegressionMetricFactory.RMSE() :
@@ -95,31 +69,8 @@ class ModuleFactory {
       ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
       ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
       ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
-      ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createMiniBatchOptimizer(learningRate,
-          minWeightsDistance, iterationLimit, regularization, lambda, argumentIncrement))
-      ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
-  }
-
-  static Module BGDRegressionModule({
-    double learningRate,
-    double minWeightsDistance,
-    int iterationLimit,
-    RegressionMetricType metric,
-    Regularization regularization,
-    double lambda,
-    double argumentIncrement
-  }) {
-    return new Module()
-      ..bind(Metric, toValue: metric == null ? RegressionMetricFactory.RMSE() :
-                              RegressionMetricFactory.createByType(metric))
-
-      ..bind(LossFunction, toFactory: () => LossFunctionFactory.Squared())
-      ..bind(ScoreFunction, toFactory: () => ScoreFunctionFactory.Linear())
-      ..bind(InitialWeightsGenerator, toFactory: () => InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
-      ..bind(GradientCalculator, toFactory: () => MathUtils.createGradientCalculator())
-      ..bind(LearningRateGenerator, toFactory: () => LearningRateGeneratorFactory.createSimpleGenerator())
-      ..bind(Optimizer, toFactory: () => GradientOptimizerFactory.createBatchOptimizer(learningRate,
-          minWeightsDistance, iterationLimit, regularization, lambda, argumentIncrement))
+      ..bind(Optimizer, toFactory: () => gradientOptimizerFactory(learningRate, minWeightsDistance, iterationLimit,
+          lambda, argumentIncrement, batchSize))
       ..bind(Randomizer, toFactory: () => MathUtils.createRandomizer());
   }
 }

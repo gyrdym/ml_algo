@@ -6,7 +6,6 @@ import 'package:dart_ml/src/core/optimizer/gradient/factory.dart';
 import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/core/optimizer/optimizer.dart';
-import 'package:dart_ml/src/core/optimizer/regularization.dart';
 import 'package:dart_ml/src/core/score_function/score_function.dart';
 import 'package:dart_ml/src/di/injector.dart' show coreInjector;
 import 'package:di/di.dart';
@@ -76,6 +75,8 @@ void main() {
     const iterationsNumber = 2;
     const eta = 2.0; // learning rate
     const delta = .0001; // the value an argument is increased by
+    const lambda = .00001; // regularization term
+    const batchSize = 2;
 
     LearningRateGeneratorMock learningRateGeneratorMock;
     GradientCalculatorMock gradientCalculatorMock;
@@ -103,13 +104,13 @@ void main() {
           ..bind(ScoreFunction, toValue: scoreFunctionMock)
       ]);
 
-      optimizer = GradientOptimizerFactory
-          .createBatchOptimizer(eta, null, iterationsNumber, Regularization.L2, .00001, delta);
       data = [
         new Float32x4Vector.from([5.0, 10.0, 15.0]),
         new Float32x4Vector.from([1.0, 2.0, 3.0])
       ];
       labels = new Float32List.fromList([10.0, 20.0]);
+
+      optimizer = gradientOptimizerFactory(eta, null, iterationsNumber, lambda, delta, batchSize);
     });
 
     tearDown(() {

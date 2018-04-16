@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:dart_ml/src/core/loss_function/loss_function.dart';
 import 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
+import 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
 import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/core/optimizer/optimizer.dart';
@@ -10,6 +11,8 @@ import 'package:dart_ml/src/di/injector.dart';
 import 'package:simd_vector/vector.dart';
 
 class GradientOptimizerImpl implements Optimizer {
+
+  final Randomizer _randomizer = coreInjector.get(Randomizer);
   final LossFunction _lossFunction = coreInjector.get(LossFunction);
   final ScoreFunction _scoreFunction = coreInjector.get(ScoreFunction);
   final GradientCalculator _gradientCalculator = coreInjector.get(GradientCalculator);
@@ -17,82 +20,103 @@ class GradientOptimizerImpl implements Optimizer {
   final InitialWeightsGenerator _initialWeightsGenerator = coreInjector.get(InitialWeightsGenerator);
 
   //hyper parameters declaration
-  final double _weightsDiffThreshold;
+  final double _minCoefficientsUpdate;
   final int _iterationLimit;
   final double _lambda;
   final double _argumentIncrement;
   //hyper parameters declaration end
 
+  final int _batchSize;
+
+  List<Float32x4Vector> _points;
+
   GradientOptimizerImpl({
     double learningRate,
-    double minWeightsDiff,
+    double minCoefficientsUpdate,
     int iterationLimit,
     double lambda,
-    double argumentIncrement
+    double argumentIncrement,
+    int batchSize
   }) :
-    _weightsDiffThreshold = minWeightsDiff ?? 1e-8,
+    _minCoefficientsUpdate = minCoefficientsUpdate ?? 1e-8,
     _iterationLimit = iterationLimit ?? 10000,
     _lambda = lambda ?? 1e-5,
-    _argumentIncrement = argumentIncrement ?? 1e-5
+    _argumentIncrement = argumentIncrement ?? 1e-5,
+    _batchSize = batchSize ?? 1 // by default the optimizer has stochastic gradient descent behaviour
   {
     _learningRateGenerator.init(learningRate ?? 1e-5);
   }
 
+  @override
   Float32x4Vector findExtrema(
-    List<Float32x4Vector> features,
-    Float32List labels,
+    covariant List<Float32x4Vector> points,
+    covariant Float32List labels,
     {
-      Float32x4Vector initialWeights,
+      covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true
     }
   ) {
-    Float32x4Vector weights = initialWeights ?? _initialWeightsGenerator.generate(features.first.length);
-    double weightsDistance = double.MAX_FINITE;
+    _points = points;
+
+    Float32x4Vector coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
+    double coefficientsUpdate = double.MAX_FINITE;
     int iterationCounter = 0;
 
-    while (weightsDistance > _weightsDiffThreshold && iterationCounter++ < _iterationLimit) {
+    while (coefficientsUpdate > _minCoefficientsUpdate && iterationCounter++ < _iterationLimit) {
       final eta = _learningRateGenerator.getNextValue();
-      final newWeights = _generateNewWeights(weights, features, labels, eta, isMinimization: isMinimizingObjective);
-      weightsDistance = newWeights.distanceTo(weights);
-      weights = newWeights;
+      final updatedCoefficients = _generateCoefficients(coefficients, labels, eta, isMinimization: isMinimizingObjective);
+      coefficientsUpdate = updatedCoefficients.distanceTo(coefficients);
+      coefficients = updatedCoefficients;
     }
 
     _learningRateGenerator.stop();
 
-    return weights;
+    return coefficients;
   }
 
-  Iterable<int> getBatchRange(int numberOfPoints) =>
-      throw new UnimplementedError('it is necesssary to implement this method in a heir class');
-
-  Float32x4Vector _generateNewWeights(
-    Float32x4Vector weights,
-    List<Float32x4Vector> features,
+  Float32x4Vector _generateCoefficients(
+    Float32x4Vector currentCoefficients,
     Float32List labels,
     double eta,
     {bool isMinimization: true}
   ) {
-    final range = getBatchRange(features.length);
+    final range = _getBatchRange();
     final start = range.first;
     final end = range.last;
-    final featuresBatch = features.sublist(start, end);
+    final pointsBatch = _points.sublist(start, end);
     final labelsBatch = labels.sublist(start, end);
 
-    return _makeGradientStep(weights, featuresBatch, labelsBatch, eta, isMinimization: isMinimization);
+    return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
+  }
+
+  Iterable<int> _getBatchRange() {
+    // batch gradient descent
+    if (_batchSize >= _points.length) {
+      return [0, _points.length];
+    }
+
+    // mini batch gradient descent
+    if (_batchSize > 1) {
+      _randomizer.getIntegerInterval(0, _batchSize);
+    }
+
+    // stochastic gradient descent
+    int k = _randomizer.getIntegerFromInterval(0, _batchSize);
+    return [k, k + 1];
   }
 
   Float32x4Vector _makeGradientStep(
-    Float32x4Vector weights,
-    List<Float32x4Vector> data,
-    Float32List target,
+    Float32x4Vector coefficients,
+    List<Float32x4Vector> points,
+    Float32List labels,
     double eta,
     {bool isMinimization: true}
   ) {
-    Float32x4Vector gradientSumVector = _getGradient(weights, data[0], target[0]);
-    for (int i = 1; i < data.length; i++) {
-      gradientSumVector += _getGradient(weights, data[i], target[i]);
+    Float32x4Vector gradient = _getGradient(coefficients, points[0], labels[0]);
+    for (int i = 1; i < points.length; i++) {
+      gradient += _getGradient(coefficients, points[i], labels[i]);
     }
-    return isMinimization ? weights - gradientSumVector.scalarMul(eta) : weights + gradientSumVector.scalarMul(eta);
+    return isMinimization ? coefficients - gradient.scalarMul(eta) : coefficients + gradient.scalarMul(eta);
   }
 
   Float32x4Vector _getGradient(
