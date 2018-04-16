@@ -27,10 +27,10 @@ class CoordinateOptimizerImpl implements Optimizer {
 
   @override
   Float32x4Vector findExtrema(
-    List<Float32x4Vector> points,
-    Float32List labels,
+    covariant List<Float32x4Vector> points,
+    covariant Float32List labels,
     {
-      Float32x4Vector initialWeights,
+      covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true
     }
   ) {

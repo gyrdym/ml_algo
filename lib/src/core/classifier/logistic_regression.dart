@@ -1,24 +1,23 @@
-import 'package:dart_ml/src/core/metric/regression/type.dart';
+import 'package:dart_ml/src/core/classifier/classifier_impl.dart';
+import 'package:dart_ml/src/core/metric/classification/type.dart';
 import 'package:dart_ml/src/core/optimizer/regularization.dart';
-import 'package:dart_ml/src/core/regressor/regressor_impl.dart';
 import 'package:dart_ml/src/di/factory.dart';
 
-class BGDRegressor extends RegressorImpl {
-  BGDRegressor({
+class LogisticRegressor extends ClassifierImpl {
+  LogisticRegressor({
     int iterationLimit,
     double learningRate,
     double minWeightsDistance,
     double alpha,
     double argumentIncrement,
-    RegressionMetricType metric,
+    ClassificationMetricType metric,
     Regularization regularization
   }) : super(
-    ModuleFactory.BGDRegressionModule(
+    ModuleFactory.logisticRegressionModule(
       learningRate: learningRate,
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,
-      metric: metric,
-      regularization: regularization,
+      metricType: metric,
       lambda: alpha,
       argumentIncrement: argumentIncrement
     )

@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/core/regressor/linear/gradient/stochastic.dart';
+import 'package:dart_ml/src/core/regressor/gradient.dart';
 import 'package:dart_ml/src/model_selection/cross_validator.dart';
 import 'package:matcher/matcher.dart';
 import 'package:simd_vector/vector.dart';
@@ -9,12 +9,12 @@ const int NUMBER_OF_SAMPLES = 12;
 void main() {
   List<Float32x4Vector> features;
   List<double> labels;
-  SGDRegressor predictor;
+  GradientRegressor predictor;
 
   setUp(() {
     features = new List<Float32x4Vector>.generate(NUMBER_OF_SAMPLES, (_) => new Float32x4Vector.randomFilled(4));
     labels = new Float32x4Vector.randomFilled(NUMBER_OF_SAMPLES).asList();
-    predictor = new SGDRegressor();
+    predictor = new GradientRegressor();
   });
 
   group('K-fold cross validator', () {

@@ -1,26 +1,25 @@
 import 'package:dart_ml/src/core/metric/regression/type.dart';
-import 'package:dart_ml/src/core/optimizer/regularization.dart';
 import 'package:dart_ml/src/core/regressor/regressor_impl.dart';
 import 'package:dart_ml/src/di/factory.dart';
 
-class MBGDRegressor extends RegressorImpl {
-  MBGDRegressor({
+class GradientRegressor extends RegressorImpl {
+  GradientRegressor({
     int iterationLimit,
     double learningRate,
     double minWeightsDistance,
-    double alpha,
+    double lambda = 0.0,
     double argumentIncrement,
     RegressionMetricType metric,
-    Regularization regularization
+    int batchSize = 1,
   }) : super(
-    ModuleFactory.MBGDRegressionModule(
+    ModuleFactory.GradientRegressionModule(
       learningRate: learningRate,
       minWeightsDistance: minWeightsDistance,
       iterationLimit: iterationLimit,
       metric: metric,
-      regularization: regularization,
-      lambda: alpha,
-      argumentIncrement: argumentIncrement
+      lambda: lambda,
+      argumentIncrement: argumentIncrement,
+      batchSize: batchSize
     )
   );
 }
