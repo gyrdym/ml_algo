@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.30.0
+- Redundant gradient optimizers removed
+
 ## 0.29.0
 - `part ... part of` directives removed
 
