@@ -14,9 +14,7 @@ import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
-const int ITERATIONS_NUMBER = 3;
-
-class MBGDRandomizerMock extends Mock implements Randomizer {}
+class RandomizerMock extends Mock implements Randomizer {}
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
@@ -25,8 +23,11 @@ class ScoreFunctionMock extends Mock implements ScoreFunction {}
 
 void main() {
   group('Mini batch gradient descent optimizer', () {
+    const int iterationsLimit = 3;
     const lambda = .000001;
     const delta = .00001;
+    const eta = 1e-5;
+    const batchSize = 2;
 
     final point1 = new Float32x4Vector.from([230.1, 37.8, 69.2]);
     final point2 = new Float32x4Vector.from([44.5, 39.3, 45.7]);
@@ -44,7 +45,7 @@ void main() {
     Float32List labels;
 
     setUp(() {
-      randomizerMock = new MBGDRandomizerMock();
+      randomizerMock = new RandomizerMock();
       learningRateGeneratorMock = new LearningRateGeneratorMock();
       gradientCalculator = new GradientCalculatorMock();
 
@@ -58,7 +59,7 @@ void main() {
           ..bind(ScoreFunction, toValue: scoreFunctionMock)
       ]);
 
-      optimizer = GradientOptimizerFactory.createMiniBatchOptimizer(1e-5, null, ITERATIONS_NUMBER, null, lambda, delta);
+      optimizer = gradientOptimizerFactory(eta, null, iterationsLimit, lambda, delta, batchSize);
 
       data = [point1, point2, point3, point4];
       labels = new Float32List.fromList([22.1, 10.4, 20.0, 30.0]);
@@ -75,37 +76,37 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([0, 4]);
+      when(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).thenReturn([0, 4]);
 
       optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
-      verify(randomizerMock.getIntegerInterval(0, 4)).called(ITERATIONS_NUMBER);
-      verify(learningRateGeneratorMock.getNextValue()).called(ITERATIONS_NUMBER);
+      verify(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).called(iterationsLimit);
+      verify(learningRateGeneratorMock.getNextValue()).called(iterationsLimit);
 
       verify(gradientCalculator.getGradient(any, any, [point1], [labels[0], lambda], delta))
-          .called(ITERATIONS_NUMBER);
+          .called(iterationsLimit);
       verify(gradientCalculator.getGradient(any, any, [point2], [labels[1], lambda], delta))
-          .called(ITERATIONS_NUMBER);
+          .called(iterationsLimit);
       verify(gradientCalculator.getGradient(any, any, [point3], [labels[2], lambda], delta))
-          .called(ITERATIONS_NUMBER);
+          .called(iterationsLimit);
       verify(gradientCalculator.getGradient(any, any, [point4], [labels[3], lambda], delta))
-          .called(ITERATIONS_NUMBER);
+          .called(iterationsLimit);
     });
 
     test('should cut off a piece of certain size from the given data', () {
-      when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([1, 3]);
+      when(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).thenReturn([1, 3]);
 
       optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
       verifyNever(gradientCalculator.getGradient(any, any, [point1], [labels[0], lambda], delta));
       verifyNever(gradientCalculator.getGradient(any, any, [point4], [labels[3], lambda], delta));
 
-      verify(gradientCalculator.getGradient(any, any, [point2], [labels[1], lambda], delta)).called(ITERATIONS_NUMBER);
-      verify(gradientCalculator.getGradient(any, any, [point3], [labels[2], lambda], delta)).called(ITERATIONS_NUMBER);
+      verify(gradientCalculator.getGradient(any, any, [point2], [labels[1], lambda], delta)).called(iterationsLimit);
+      verify(gradientCalculator.getGradient(any, any, [point3], [labels[2], lambda], delta)).called(iterationsLimit);
     });
 
     test('should throw range error if a random range is bigger than data length', () {
-      when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([0, 5]);
+      when(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).thenReturn([0, 5]);
 
       expect(() {
         optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
