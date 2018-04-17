@@ -14,7 +14,7 @@ import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
-class MBGDRandomizerMock extends Mock implements Randomizer {}
+class RandomizerMock extends Mock implements Randomizer {}
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
@@ -45,7 +45,7 @@ void main() {
     Float32List labels;
 
     setUp(() {
-      randomizerMock = new MBGDRandomizerMock();
+      randomizerMock = new RandomizerMock();
       learningRateGeneratorMock = new LearningRateGeneratorMock();
       gradientCalculator = new GradientCalculatorMock();
 
@@ -76,11 +76,11 @@ void main() {
     });
 
     test('should find optimal weights for the given data', () {
-      when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([0, 4]);
+      when(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).thenReturn([0, 4]);
 
       optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
-      verify(randomizerMock.getIntegerInterval(0, 4)).called(iterationsLimit);
+      verify(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).called(iterationsLimit);
       verify(learningRateGeneratorMock.getNextValue()).called(iterationsLimit);
 
       verify(gradientCalculator.getGradient(any, any, [point1], [labels[0], lambda], delta))
