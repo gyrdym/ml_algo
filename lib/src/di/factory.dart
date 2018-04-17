@@ -58,7 +58,7 @@ class ModuleFactory {
     RegressionMetricType metric,
     double lambda,
     double argumentIncrement,
-    int batchSize
+    int batchSize = 1
   }) {
     return new Module()
       ..bind(Metric, toValue: metric == null ? RegressionMetricFactory.RMSE() :

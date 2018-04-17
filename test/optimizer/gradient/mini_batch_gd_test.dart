@@ -94,7 +94,7 @@ void main() {
     });
 
     test('should cut off a piece of certain size from the given data', () {
-      when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([1, 3]);
+      when(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).thenReturn([1, 3]);
 
       optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
@@ -106,7 +106,7 @@ void main() {
     });
 
     test('should throw range error if a random range is bigger than data length', () {
-      when(randomizerMock.getIntegerInterval(0, 4)).thenReturn([0, 5]);
+      when(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).thenReturn([0, 5]);
 
       expect(() {
         optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));

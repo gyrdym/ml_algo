@@ -22,8 +22,9 @@ class LossFunctionMock extends Mock implements LossFunction {}
 class ScoreFunctionMock extends Mock implements ScoreFunction {}
 
 void main() {
-  group('Mini batch gradient descent optimizer', () {
-    const int iterationsNumber = 3;
+  group('Stochastic gradient descent optimizer', () {
+    const int iterationsLimit = 3;
+    const eta = 1e-5;
     const lambda = .00001;
     const delta = .0001;
 
@@ -52,7 +53,7 @@ void main() {
           ..bind(ScoreFunction, toValue: scoreFunctionMock)
       ]);
 
-      optimizer = GradientOptimizerFactory.createStochasticOptimizer(1e-5, null, iterationsNumber, null, lambda, delta);
+      optimizer = gradientOptimizerFactory(eta, null, iterationsLimit, lambda, delta);
 
       data = [
         new Float32x4Vector.from([230.1, 37.8, 69.2]),
@@ -79,11 +80,11 @@ void main() {
     test('should find optimal weights for the given data', () {
       optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
 
-      verify(randomizerMock.getIntegerFromInterval(0, 4)).called(iterationsNumber);
-      verify(learningRateGeneratorMock.getNextValue()).called(iterationsNumber);
+      verify(randomizerMock.getIntegerFromInterval(0, 4)).called(iterationsLimit);
+      verify(learningRateGeneratorMock.getNextValue()).called(iterationsLimit);
 
       verify(gradientCalculator.getGradient(any, any, [data[0]], [labels[0], lambda], 0.0001))
-          .called(iterationsNumber);
+          .called(iterationsLimit);
 
       verifyNever(gradientCalculator.getGradient(any, any, [data[1]], [labels[1], lambda], 0.0001));
       verifyNever(gradientCalculator.getGradient(any, any, [data[2]], [labels[2], lambda], 0.0001));
