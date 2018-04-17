@@ -42,7 +42,7 @@ class GradientOptimizerImpl implements Optimizer {
     _iterationLimit = iterationLimit ?? 10000,
     _lambda = lambda ?? 1e-5,
     _argumentIncrement = argumentIncrement ?? 1e-5,
-    _batchSize = batchSize ?? 1 // by default the optimizer has stochastic gradient descent behaviour
+    _batchSize = batchSize
   {
     _learningRateGenerator.init(learningRate ?? 1e-5);
   }
@@ -89,21 +89,7 @@ class GradientOptimizerImpl implements Optimizer {
     return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
   }
 
-  Iterable<int> _getBatchRange() {
-    // batch gradient descent
-    if (_batchSize >= _points.length) {
-      return [0, _points.length];
-    }
-
-    // mini batch gradient descent
-    if (_batchSize > 1) {
-      _randomizer.getIntegerInterval(0, _batchSize);
-    }
-
-    // stochastic gradient descent
-    int k = _randomizer.getIntegerFromInterval(0, _batchSize);
-    return [k, k + 1];
-  }
+  Iterable<int> _getBatchRange() => _randomizer.getIntegerInterval(0, _points.length, intervalLength: _batchSize);
 
   Float32x4Vector _makeGradientStep(
     Float32x4Vector coefficients,

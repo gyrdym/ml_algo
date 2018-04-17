@@ -7,7 +7,7 @@ Optimizer gradientOptimizerFactory(
   int iterationLimit,
   double lambda,
   double argumentIncrement,
-  int batchSize
+  [int batchSize = 1]
 ) =>
   new GradientOptimizerImpl(
     learningRate: learningRate,

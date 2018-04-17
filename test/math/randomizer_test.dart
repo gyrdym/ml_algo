@@ -1,53 +1,114 @@
-import 'package:dart_ml/src/core/math/math.dart';
+import 'dart:math';
+
 import 'package:dart_ml/src/core/math/randomizer/randomizer.dart';
-import 'package:test/test.dart';
+import 'package:dart_ml/src/core/math/randomizer/randomizer_impl.dart';
 import 'package:matcher/matcher.dart';
+import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
+
+class RandomMock extends Mock implements Random {}
 
 void main() {
-  const int MAX_EPOCH = 200;
+  const int maxEpoch = 400;
 
+  Random baseGenerator;
   Randomizer randomizer;
 
-  group('Randomizer ', () {
+  group('Randomizer (with predefined generator)', () {
     setUp(() {
-      randomizer = MathUtils.createRandomizer();
+      baseGenerator = new RandomMock();
+      randomizer = new RandomizerImpl(generator: baseGenerator);
+    });
+
+    tearDown(() {
+      baseGenerator = null;
+    });
+
+    // tests to check calls proxying should be here...
+  });
+
+  group('Randomizer (without predefined generator)', () {
+    setUp(() {
+      randomizer = new RandomizerImpl();
+    });
+
+    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1', () {
+      final lowerBound = 0;
+      final upperBound = 1;
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound);
+
+      expect(interval, equals([0, 1]));
+    });
+
+    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
+             'exactly the `intervalLength` value, zero `lowerBound` case', () {
+
+      final lowerBound = 0;
+      final upperBound = 1;
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 1);
+
+      expect(interval, equals([0, 1]));
+    });
+
+    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
+             'exactly the `intervalLength` value, zero `lowerBound` case, double check', () {
+
+      final lowerBound = 0;
+      final upperBound = 2;
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 2);
+
+      expect(interval, equals([0, 2]));
+    });
+
+    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1, '
+             'non-zero `lowerBound` case', () {
+
+      final lowerBound = 1;
+      final upperBound = 2;
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound);
+
+      expect(interval, equals([1, 2]));
+    });
+
+    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
+             'exactly the `intervalLength` value, non-zero `lowerBound` case', () {
+
+      final lowerBound = 3;
+      final upperBound = 5;
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 2);
+
+      expect(interval, equals([3, 5]));
+    });
+
+    test('should throw an error if `intervalLength` exceeds the total interval', () {
+      final lowerBound = 2;
+      final upperBound = 4;
+
+      expect(() => randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 3), throwsRangeError);
     });
 
     test('should return a proper integer value from the given interval', () {
       final start = 2;
       final end = 13;
 
-      for (int i = 0; i < MAX_EPOCH; i++) {
+      for (int i = 0; i < maxEpoch; i++) {
         int value = randomizer.getIntegerFromInterval(start, end);
         expect(start <= value && value < end, isTrue);
       }
     });
 
     test('should return a proper integer interval constrained by given bounds', () {
-      int start;
-      int end;
+      final intervalLength = 3;
+      final start = 6;
+      final end = 17;
 
-      for (int i = 0; i < MAX_EPOCH; i++) {
-        start = 6;
-        end = 17;
+      for (int i = 0; i < maxEpoch; i++) {
+        final interval = randomizer.getIntegerInterval(start, end, intervalLength: intervalLength);
 
-        final interval = randomizer.getIntegerInterval(start, end);
         expect(start <= interval.first && interval.first < end, isTrue);
         expect(start < interval.last && interval.last < end, isTrue);
         expect(interval.first < interval.last, isTrue);
       }
-
-      start = 6;
-      end = 8;
-
-      expect(randomizer.getIntegerInterval(start, end), [6, 7]);
-    });
-
-    test('should throw a range error if difference of lower and upper bounds is 1', () {
-      final start = 6;
-      final end = 7;
-
-      expect(() => randomizer.getIntegerInterval(start, end), throwsRangeError);
     });
 
     test('should return range error if start and end values are equal (integer interval generation)', () {
@@ -61,7 +122,7 @@ void main() {
       final start = 0;
       final end = 1;
 
-      for (int i = 0; i < MAX_EPOCH; i++) {
+      for (int i = 0; i < maxEpoch; i++) {
         final value = randomizer.getIntegerFromInterval(start, end);
         expect(value, isZero);
       }
@@ -78,7 +139,7 @@ void main() {
       final start = 5.3;
       final end = 123.4;
 
-      for (int i = 0; i < MAX_EPOCH; i++) {
+      for (int i = 0; i < maxEpoch; i++) {
         final value = randomizer.getDoubleFromInterval(start, end);
         expect(start <= value && value < end, isTrue);
       }
