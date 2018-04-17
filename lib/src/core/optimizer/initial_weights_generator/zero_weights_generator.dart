@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/core/optimizer/gradient/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/core/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:simd_vector/vector.dart';
 
 class ZeroWeightsGenerator implements InitialWeightsGenerator {

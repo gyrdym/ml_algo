@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.30.1
+- File structure flattened
+
 ## 0.30.0
 - Redundant gradient optimizers removed
 
