@@ -21,7 +21,7 @@ main() async {
       .toList(growable: false);
 
   final labels = fields.map((List<num> item) => item.last.toDouble()).toList();
-  final sgdRegressor = new SGDRegressor();
+  final sgdRegressor = new GradientRegressor();
   final lassoRegressor = new LassoRegressor();
   final validator = new CrossValidator.KFold();
 

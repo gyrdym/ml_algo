@@ -54,22 +54,22 @@ List<double> labels = fields.map((List<num> item) => item.last.toDouble()).toLis
 
 Create an instance of `CrossValidator` class for evaluating quality of our predictor
 ````dart
-CrossValidator validator = new CrossValidator.KFold();
+final validator = new CrossValidator.KFold();
 ````
 
 Create a linear regressor instance with stochastic gradient descent optimizer:
 ````dart
-SGDRegressor sgdRegressor = new SGDRegressor();
+final sgdRegressor = new GradientRegressor();
 ````
 
 Evaluate our model via RMSE-metric (default metric for cross validation):
 ````dart
-Float32x4Vector scoreRMSE = validator.evaluate(sgdRegressor, features, labels, metric: MetricType.RMSE);
+final scoreRMSE = validator.evaluate(sgdRegressor, features, labels, metric: MetricType.RMSE);
 ````
 
 ...and via MAPE-metric:
 ````dart
-Float32x4Vector scoreMAPE = validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE);
+final scoreMAPE = validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE);
 ````
 
 Let's print score:
