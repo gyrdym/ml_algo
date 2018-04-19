@@ -13,7 +13,7 @@ class RandomizerImpl implements Randomizer {
       throw new RangeError('Lower bound and upper bound must be different');
     }
 
-    List<int> boundaries = _normalizeBoundaries(lowerBound, upperBound);
+    final boundaries = _normalizeBoundaries(lowerBound, upperBound);
 
     if (boundaries.last - boundaries.first < intervalLength) {
       throw new RangeError('Wrong interval given');

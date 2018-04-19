@@ -115,10 +115,10 @@ class GradientOptimizer implements Optimizer {
     double y
   ) {
     final gradient = _gradientCalculator.getGradient(
-      (Float32x4Vector k, List<Float32x4Vector> vectorArgs, List<double> scalarArgs) {
-        final x = vectorArgs[0];
-        final y = scalarArgs[0];
-        final lambda = scalarArgs[1];
+      (Vector k, Iterable<Vector> vectorArgs, Iterable<double> scalarArgs) {
+        final x = (vectorArgs as List<Float32x4Vector>)[0];
+        final y = (scalarArgs as List<double>)[0];
+        final lambda = (scalarArgs as List<double>)[1];
         return _lossFunction.loss(k.dot(x), y) + lambda * k.norm(Norm.EUCLIDEAN);
       }, k, [x], [y, _lambda], _argumentIncrement
     );
