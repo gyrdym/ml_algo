@@ -20,7 +20,7 @@ class Classifier implements Evaluable {
       covariant Float32x4Vector initialWeights
     }
   ) {
-
+    _optimizer.findExtrema(features, origLabels, initialWeights: initialWeights);
   }
 
   @override
