@@ -18,7 +18,7 @@ class RandomizerMock extends Mock implements Randomizer {}
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
-class LossFunctionMock extends Mock implements LossFunction {}
+class LossFunctionMock extends Mock implements CostFunction {}
 class ScoreFunctionMock extends Mock implements ScoreFunction {}
 
 void main() {
@@ -55,7 +55,7 @@ void main() {
           ..bind(InitialWeightsGenerator, toFactory: () => new InitialWeightsGeneratorMock())
           ..bind(LearningRateGenerator, toValue: learningRateGeneratorMock)
           ..bind(GradientCalculator, toValue: gradientCalculator)
-          ..bind(LossFunction, toValue: lossFunctionMock)
+          ..bind(CostFunction, toValue: lossFunctionMock)
           ..bind(ScoreFunction, toValue: scoreFunctionMock)
       ]);
 

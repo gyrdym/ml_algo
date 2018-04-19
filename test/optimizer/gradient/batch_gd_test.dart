@@ -15,7 +15,7 @@ import 'package:test/test.dart';
 
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
-class LossFunctionMock extends Mock implements LossFunction {}
+class LossFunctionMock extends Mock implements CostFunction {}
 class ScoreFunctionMock extends Mock implements ScoreFunction {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
 
@@ -100,7 +100,7 @@ void main() {
           ..bind(LearningRateGenerator, toValue: learningRateGeneratorMock)
           ..bind(GradientCalculator, toValue: gradientCalculatorMock)
           ..bind(InitialWeightsGenerator, toValue: initialWeightsGenerator)
-          ..bind(LossFunction, toValue: lossFunctionMock)
+          ..bind(CostFunction, toValue: lossFunctionMock)
           ..bind(ScoreFunction, toValue: scoreFunctionMock)
       ]);
 

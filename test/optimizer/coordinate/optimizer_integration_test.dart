@@ -33,7 +33,7 @@ void main() {
     setUp(() {
       coreInjector = new ModuleInjector([
         new Module()
-          ..bind(InitialWeightsGenerator, toValue: InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
+          ..bind(InitialWeightsGenerator, toValue: InitialWeightsGeneratorFactory.ZeroWeights())
           ..bind(ScoreFunction, toValue: ScoreFunctionFactory.Linear())
       ]);
 
@@ -132,7 +132,7 @@ void main() {
     setUp(() {
       coreInjector = new ModuleInjector([
         new Module()
-          ..bind(InitialWeightsGenerator, toValue: InitialWeightsGeneratorFactory.createZeroWeightsGenerator())
+          ..bind(InitialWeightsGenerator, toValue: InitialWeightsGeneratorFactory.ZeroWeights())
           ..bind(ScoreFunction, toValue: ScoreFunctionFactory.Linear())
       ]);
 

@@ -1,14 +1,12 @@
-import 'package:dart_ml/src/core/data_splitter/splitter.dart';
-import 'package:dart_ml/src/core/data_splitter/type.dart';
-import 'package:dart_ml/src/core/metric/type.dart';
-import 'package:dart_ml/src/core/predictor/predictor.dart';
-import 'package:dart_ml/src/di/factory.dart';
-import 'package:dart_ml/src/di/injector.dart';
-import 'package:simd_vector/vector.dart' show Float32x4Vector;
-import 'package:di/di.dart';
+import 'package:dart_ml/src/data_splitter/factory.dart';
+import 'package:dart_ml/src/data_splitter/splitter.dart';
+import 'package:dart_ml/src/data_splitter/type.dart';
+import 'package:dart_ml/src/metric/type.dart';
+import 'package:dart_ml/src/model_selection/evaluable.dart';
+import 'package:simd_vector/vector.dart' show Vector;
 
 class CrossValidator {
-  Splitter _splitter;
+  final Splitter _splitter;
 
   factory CrossValidator.KFold({int numberOfFolds = 5}) =>
       new CrossValidator._(SplitterType.KFOLD, numberOfFolds);
@@ -16,31 +14,29 @@ class CrossValidator {
   factory CrossValidator.LPO({int p = 5}) =>
       new CrossValidator._(SplitterType.LPO, p);
 
-  CrossValidator._(SplitterType splitterType, int value) {
-    modelSelectionInjector ??= new ModuleInjector(<Module>[ModuleFactory
-        .modelSelectionModule(value, splitter: splitterType)]);
+  CrossValidator._(SplitterType splitterType, int value) :
+        _splitter = DataSplitterFactory.createByType(splitterType, value);
 
-    _splitter = modelSelectionInjector.get(Splitter);
-  }
-
-  Float32x4Vector evaluate(Predictor predictor, List<Float32x4Vector> features, List<double> labels,
-                           {MetricType metric}) {
+  double evaluate(
+    Evaluable predictor,
+    List<Vector> features,
+    List<double> labels,
+    {MetricType metric}
+  ) {
 
     if (features.length != labels.length) {
       throw new Exception('Number of features objects must be equal to the number of labels!');
     }
 
-    Iterable<Iterable<int>> allIndices = _splitter.split(features.length);
-    List<double> scores = new List<double>(allIndices.length);
+    final allIndicesGroups = _splitter.split(features.length);
+    final scores = new List<double>(allIndicesGroups.length);
     int scoreCounter = 0;
 
-    for (Iterable<int> testIndices in allIndices) {
-      List<Float32x4Vector> trainFeatures = new List<Float32x4Vector>(features.length - testIndices.length);
-      List<double> trainLabels = new List<double>.filled(features.length - testIndices.length, 0.0);
-
-      List<Float32x4Vector> testFeatures = new List<Float32x4Vector>(testIndices.length);
-      List<double> testLabels = new List<double>.filled(testIndices.length, 0.0);
-
+    for (final testIndices in allIndicesGroups) {
+      final trainFeatures = new List<Vector>(features.length - testIndices.length);
+      final trainLabels = new List<double>.filled(features.length - testIndices.length, 0.0);
+      final testFeatures = new List<Vector>(testIndices.length);
+      final testLabels = new List<double>.filled(testIndices.length, 0.0);
       int trainSamplesCounter = 0;
       int testSamplesCounter = 0;
 
@@ -56,11 +52,11 @@ class CrossValidator {
         }
       }
 
-      predictor.train(trainFeatures, trainLabels);
+      predictor.fit(trainFeatures, trainLabels);
 
-      scores[scoreCounter++] = predictor.test(testFeatures, testLabels, metric: metric);
+      scores[scoreCounter++] = predictor.test(testFeatures, testLabels, metric);
     }
 
-    return new Float32x4Vector.from(scores);
+    return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;
   }
 }
