@@ -19,11 +19,10 @@ Future main() async {
       .map((List item) => new Float32x4Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
       .toList(growable: false);
 
-  List<double> labels = fields.map((List<num> item) => item.last * 1.0).toList(growable: false);
-
+  final labels = fields.map((List<num> item) => item.last * 1.0).toList(growable: false);
   final logisticRegressor = new LogisticRegressor(alpha: 0.0);
-  final validator = new CrossValidator.KFold();
+  final validator = new CrossValidator<Float32x4Vector>.KFold();
 
   print('Ratio of incorrect answers on a cross validation: ');
-  print(validator.evaluate(logisticRegressor, features, labels).mean());
+  print(validator.evaluate(logisticRegressor, features, labels, MetricType.ACCURACY));
 }

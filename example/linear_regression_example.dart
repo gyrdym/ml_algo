@@ -23,14 +23,14 @@ main() async {
   final labels = fields.map((List<num> item) => item.last.toDouble()).toList();
   final sgdRegressor = new GradientRegressor();
   final lassoRegressor = new LassoRegressor();
-  final validator = new CrossValidator.KFold();
+  final validator = new CrossValidator<Float32x4Vector>.KFold();
 
   print('K-fold cross validation:');
   print('\nRMSE:');
-  print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels, metric: MetricType.RMSE).mean()}');
-  print('Lasso regressor: ${validator.evaluate(lassoRegressor, features, labels, metric: MetricType.RMSE).mean()}');
+  print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels, MetricType.RMSE)}');
+  print('Lasso regressor: ${validator.evaluate(lassoRegressor, features, labels, MetricType.RMSE)}');
 
   print('\nMAPE:');
-  print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE).mean()}');
-  print('Lasso regressor: ${validator.evaluate(lassoRegressor, features, labels, metric: MetricType.MAPE).mean()}');
+  print('SGD regressor: ${validator.evaluate(sgdRegressor, features, labels, MetricType.MAPE)}');
+  print('Lasso regressor: ${validator.evaluate(lassoRegressor, features, labels, MetricType.MAPE)}');
 }

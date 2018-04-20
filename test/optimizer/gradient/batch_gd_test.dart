@@ -1,22 +1,20 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/core/loss_function/loss_function.dart';
-import 'package:dart_ml/src/core/math/math_analysis/gradient_calculator.dart';
-import 'package:dart_ml/src/core/optimizer/gradient/factory.dart';
-import 'package:dart_ml/src/core/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
-import 'package:dart_ml/src/core/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:dart_ml/src/core/optimizer/optimizer.dart';
-import 'package:dart_ml/src/core/score_function/score_function.dart';
-import 'package:dart_ml/src/di/injector.dart' show coreInjector;
-import 'package:di/di.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
+import 'package:dart_ml/src/math/randomizer/randomizer.dart';
+import 'package:dart_ml/src/optimizer/gradient.dart';
+import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
+import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:mockito/mockito.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
+class RandomizerMock extends Mock implements Randomizer {}
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
-class LossFunctionMock extends Mock implements CostFunction {}
-class ScoreFunctionMock extends Mock implements ScoreFunction {}
+class LossFunctionMock extends Mock implements LossFunction {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
 
 //@TODO: reanimate the test when Float32xrVector will implement an iterable
@@ -78,31 +76,22 @@ void main() {
     const lambda = .00001; // regularization term
     const batchSize = 2;
 
-    LearningRateGeneratorMock learningRateGeneratorMock;
-    GradientCalculatorMock gradientCalculatorMock;
-    InitialWeightsGeneratorMock initialWeightsGenerator;
-    LossFunctionMock lossFunctionMock;
-    ScoreFunctionMock scoreFunctionMock;
+    Randomizer randomizerMock;
+    LearningRateGenerator learningRateGeneratorMock;
+    GradientCalculator gradientCalculatorMock;
+    LossFunction lossFunctionMock;
+    InitialWeightsGenerator initialWeightsGeneratorMock;
 
     Optimizer optimizer;
     List<Float32x4Vector> data;
     Float32List labels;
 
     setUp(() {
+      randomizerMock = new RandomizerMock();
       learningRateGeneratorMock = createLearningRateGenerator();
       gradientCalculatorMock = createGradientCalculator();
-      initialWeightsGenerator = createInitialWeightsGenerator();
+      initialWeightsGeneratorMock = createInitialWeightsGenerator();
       lossFunctionMock = new LossFunctionMock();
-      scoreFunctionMock = new ScoreFunctionMock();
-
-      coreInjector = new ModuleInjector([
-        new Module()
-          ..bind(LearningRateGenerator, toValue: learningRateGeneratorMock)
-          ..bind(GradientCalculator, toValue: gradientCalculatorMock)
-          ..bind(InitialWeightsGenerator, toValue: initialWeightsGenerator)
-          ..bind(CostFunction, toValue: lossFunctionMock)
-          ..bind(ScoreFunction, toValue: scoreFunctionMock)
-      ]);
 
       data = [
         new Float32x4Vector.from([5.0, 10.0, 15.0]),
@@ -110,7 +99,20 @@ void main() {
       ];
       labels = new Float32List.fromList([10.0, 20.0]);
 
-      optimizer = gradientOptimizerFactory(eta, null, iterationsNumber, lambda, delta, batchSize);
+      optimizer = new GradientOptimizer(
+        randomizerMock,
+        lossFunctionMock,
+        gradientCalculatorMock,
+        learningRateGeneratorMock,
+        initialWeightsGeneratorMock,
+
+        learningRate: eta,
+        minCoefficientsUpdate: null,
+        iterationLimit: iterationsNumber,
+        lambda: lambda,
+        argumentIncrement: delta,
+        batchSize: batchSize
+      );
     });
 
     tearDown(() {

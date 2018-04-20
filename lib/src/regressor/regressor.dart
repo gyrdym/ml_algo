@@ -15,9 +15,10 @@ class Regressor implements Evaluable {
 
   Regressor(this._optimizer);
 
+  @override
   void fit(
     covariant List<Float32x4Vector> features,
-    covariant Float32List labels,
+    covariant List<double> labels,
     {
       covariant Float32x4Vector initialWeights
     }
@@ -25,6 +26,7 @@ class Regressor implements Evaluable {
     _weights = _optimizer.findExtrema(features, labels, initialWeights: initialWeights, isMinimizingObjective: true);
   }
 
+  @override
   double test(
     covariant List<Float32x4Vector> features,
     covariant List<double> origLabels,
@@ -35,7 +37,7 @@ class Regressor implements Evaluable {
     return metric.getError(prediction, new Float32x4Vector.from(origLabels));
   }
 
-  Float32x4Vector predict(covariant List<Float32x4Vector> features) {
+  Float32x4Vector predict(List<Float32x4Vector> features) {
     final labels = new List<double>(features.length);
     for (int i = 0; i < features.length; i++) {
       labels[i] = _weights.dot(features[i]);

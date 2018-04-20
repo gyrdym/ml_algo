@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
@@ -28,7 +26,7 @@ class CoordinateOptimizer implements Optimizer {
   @override
   Float32x4Vector findExtrema(
     covariant List<Float32x4Vector> points,
-    covariant Float32List labels,
+    covariant List<double> labels,
     {
       covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true

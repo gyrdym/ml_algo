@@ -5,7 +5,7 @@ import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:simd_vector/vector.dart' show Vector;
 
-class CrossValidator {
+class CrossValidator<T extends Vector> {
   final Splitter _splitter;
 
   factory CrossValidator.KFold({int numberOfFolds = 5}) =>
@@ -19,9 +19,9 @@ class CrossValidator {
 
   double evaluate(
     Evaluable predictor,
-    List<Vector> features,
+    List<T> features,
     List<double> labels,
-    {MetricType metric}
+    MetricType metric
   ) {
 
     if (features.length != labels.length) {
@@ -33,9 +33,9 @@ class CrossValidator {
     int scoreCounter = 0;
 
     for (final testIndices in allIndicesGroups) {
-      final trainFeatures = new List<Vector>(features.length - testIndices.length);
+      final trainFeatures = new List<T>(features.length - testIndices.length);
       final trainLabels = new List<double>.filled(features.length - testIndices.length, 0.0);
-      final testFeatures = new List<Vector>(testIndices.length);
+      final testFeatures = new List<T>(testIndices.length);
       final testLabels = new List<double>.filled(testIndices.length, 0.0);
       int trainSamplesCounter = 0;
       int testSamplesCounter = 0;
