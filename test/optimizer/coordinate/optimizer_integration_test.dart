@@ -1,13 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/core/optimizer/coordinate/factory.dart';
-import 'package:dart_ml/src/core/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:dart_ml/src/core/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:dart_ml/src/core/optimizer/optimizer.dart';
-import 'package:dart_ml/src/core/score_function/score_function.dart';
-import 'package:dart_ml/src/core/score_function/score_function_factory.dart';
-import 'package:dart_ml/src/di/injector.dart' show coreInjector;
-import 'package:di/di.dart';
+import 'package:dart_ml/src/optimizer/coordinate.dart';
+import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
@@ -31,13 +26,11 @@ void main() {
     Float32List labels;
 
     setUp(() {
-      coreInjector = new ModuleInjector([
-        new Module()
-          ..bind(InitialWeightsGenerator, toValue: InitialWeightsGeneratorFactory.ZeroWeights())
-          ..bind(ScoreFunction, toValue: ScoreFunctionFactory.Linear())
-      ]);
-
-      optimizer = CoordinateOptimizerFactory.createCoordinateOptimizer(1e-5, iterationsNumber, lambda);
+      optimizer = new CoordinateOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
+        minCoefficientsDiff: 1e-5,
+        iterationLimit: iterationsNumber,
+        lambda: lambda
+      );
 
       data = [point1, point2, point3, point4];
       labels = new Float32List.fromList([20.0, 30.0, 20.0, 40.0]);
@@ -130,13 +123,11 @@ void main() {
     Float32List labels;
 
     setUp(() {
-      coreInjector = new ModuleInjector([
-        new Module()
-          ..bind(InitialWeightsGenerator, toValue: InitialWeightsGeneratorFactory.ZeroWeights())
-          ..bind(ScoreFunction, toValue: ScoreFunctionFactory.Linear())
-      ]);
-
-      optimizer = CoordinateOptimizerFactory.createCoordinateOptimizer(1e-5, iterationsNumber, lambda);
+      optimizer = new CoordinateOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
+        minCoefficientsDiff: 1e-5,
+        iterationLimit: iterationsNumber,
+        lambda: lambda
+      );
 
       data = [point1, point2, point3];
       labels = new Float32List.fromList([2.0, 3.0, 2.0]);

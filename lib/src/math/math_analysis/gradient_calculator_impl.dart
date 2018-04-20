@@ -5,10 +5,10 @@ class GradientCalculatorImpl implements GradientCalculator {
   List<Float32x4Vector> _argumentDeltaMatrix;
   double _argumentDelta;
 
-  Vector getGradient(
+  Float32x4Vector getGradient(
     OptimizationFunction function,
-    Vector targetVector,
-    Iterable<Vector> vectorArgs,
+    covariant Float32x4Vector targetVector,
+    covariant Iterable<Float32x4Vector> vectorArgs,
     Iterable<double> scalarArgs,
     double argumentDelta
   ) {
@@ -32,8 +32,8 @@ class GradientCalculatorImpl implements GradientCalculator {
   double _partialDerivative(
     OptimizationFunction function,
     double argumentDelta,
-    Vector targetVector,
-    Iterable<Vector> vectorArgs,
+    Float32x4Vector targetVector,
+    Iterable<Float32x4Vector> vectorArgs,
     Iterable<double> scalarArgs,
     targetArgPosition
   ) {
@@ -43,7 +43,7 @@ class GradientCalculatorImpl implements GradientCalculator {
   }
 
   List<Float32x4Vector> _generateArgumentsDeltaMatrix(double delta, int length) {
-    final matrix = new List<Vector>(length);
+    final matrix = new List<Float32x4Vector>(length);
     for (int i = 0; i < length; i++) {
       matrix[i] = new Float32x4Vector.from(new List<double>.generate(length, (int idx) => idx == i ? delta : 0.0));
     }

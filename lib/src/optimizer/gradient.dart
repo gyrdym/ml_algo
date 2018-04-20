@@ -54,7 +54,7 @@ class GradientOptimizer implements Optimizer {
   @override
   Float32x4Vector findExtrema(
     covariant List<Float32x4Vector> points,
-    covariant Float32List labels,
+    covariant List<double> labels,
     {
       covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true
@@ -80,7 +80,7 @@ class GradientOptimizer implements Optimizer {
 
   Float32x4Vector _generateCoefficients(
     Float32x4Vector currentCoefficients,
-    Float32List labels,
+    List<double> labels,
     double eta,
     {bool isMinimization: true}
   ) {
@@ -98,7 +98,7 @@ class GradientOptimizer implements Optimizer {
   Float32x4Vector _makeGradientStep(
     Float32x4Vector coefficients,
     List<Float32x4Vector> points,
-    Float32List labels,
+    List<double> labels,
     double eta,
     {bool isMinimization: true}
   ) {

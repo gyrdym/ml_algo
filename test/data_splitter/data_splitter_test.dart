@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/core/data_splitter/factory.dart';
-import 'package:dart_ml/src/core/data_splitter/splitter.dart';
+import 'package:dart_ml/src/data_splitter/factory.dart';
+import 'package:dart_ml/src/data_splitter/splitter.dart';
 import 'package:test/test.dart';
 import 'package:matcher/matcher.dart';
 

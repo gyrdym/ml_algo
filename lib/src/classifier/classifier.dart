@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:dart_ml/src/metric/factory.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
@@ -9,6 +7,8 @@ import 'package:simd_vector/vector.dart';
 class Classifier implements Evaluable {
 
   final Optimizer _optimizer;
+
+  Float32x4Vector _weights;
 
   Classifier(this._optimizer);
 
@@ -20,7 +20,7 @@ class Classifier implements Evaluable {
       covariant Float32x4Vector initialWeights
     }
   ) {
-    _optimizer.findExtrema(features, origLabels, initialWeights: initialWeights);
+    _weights = _optimizer.findExtrema(features, origLabels, initialWeights: initialWeights);
   }
 
   @override
@@ -34,8 +34,16 @@ class Classifier implements Evaluable {
     return metric.getError(prediction, new Float32x4Vector.from(origLabels));
   }
 
+  Float32x4Vector predictProbabilities(List<Float32x4Vector> features) {
+    final labels = new List<double>(features.length);
+    for (int i = 0; i < features.length; i++) {
+      labels[i] = _weights.dot(features[i]);
+    }
+    return new Float32x4Vector.from(labels);
+  }
+
   Float32x4Vector predictClasses(List<Float32x4Vector> features) {
-    Float32List probabilities = predict(features).asList();
+    final probabilities = predictProbabilities(features).asList();
     return new Float32x4Vector.from(probabilities.map((double value) => value.round() * 1.0));
   }
 }
