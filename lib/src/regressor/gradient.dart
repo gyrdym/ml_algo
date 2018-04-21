@@ -4,7 +4,7 @@ import 'package:dart_ml/src/loss_function/loss_function_factory.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator_factory.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer_factory.dart';
 import 'package:dart_ml/src/metric/regression/type.dart';
-import 'package:dart_ml/src/optimizer/gradient.dart';
+import 'package:dart_ml/src/optimizer/gradient_descent.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:dart_ml/src/regressor/regressor.dart';
@@ -22,7 +22,7 @@ class GradientRegressor extends Regressor {
     RegressionMetricType metric,
     int batchSize = 1
   }) : super(
-      new GradientOptimizer(
+      new GradientDescentOptimizer(
         RandomizerFactory.Default(),
         LossFunctionFactory.Squared(),
         GradientCalculatorFactory.Default(),

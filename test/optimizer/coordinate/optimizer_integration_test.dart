@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/optimizer/coordinate.dart';
+import 'package:dart_ml/src/optimizer/coordinate_descent.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
@@ -26,7 +26,7 @@ void main() {
     Float32List labels;
 
     setUp(() {
-      optimizer = new CoordinateOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
+      optimizer = new CoordinateDescentOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
         minCoefficientsDiff: 1e-5,
         iterationLimit: iterationsNumber,
         lambda: lambda
@@ -123,7 +123,7 @@ void main() {
     Float32List labels;
 
     setUp(() {
-      optimizer = new CoordinateOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
+      optimizer = new CoordinateDescentOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
         minCoefficientsDiff: 1e-5,
         iterationLimit: iterationsNumber,
         lambda: lambda

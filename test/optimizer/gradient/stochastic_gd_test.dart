@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/gradient.dart';
+import 'package:dart_ml/src/optimizer/gradient_descent.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
@@ -41,7 +41,7 @@ void main() {
       lossFunctionMock = new LossFunctionMock();
       initialWeightsGeneratorMock = new InitialWeightsGeneratorMock();
 
-      optimizer = new GradientOptimizer(
+      optimizer = new GradientDescentOptimizer(
         randomizerMock,
         lossFunctionMock,
         gradientCalculatorMock,

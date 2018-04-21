@@ -2,7 +2,7 @@ import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 
-class CoordinateOptimizer implements Optimizer {
+class CoordinateDescentOptimizer implements Optimizer {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
 
   //hyper parameters declaration
@@ -11,7 +11,7 @@ class CoordinateOptimizer implements Optimizer {
   final double _lambda;
   //hyper parameters declaration end
 
-  CoordinateOptimizer(
+  CoordinateDescentOptimizer(
     this._initialCoefficientsGenerator,
     {
       double minCoefficientsDiff,
