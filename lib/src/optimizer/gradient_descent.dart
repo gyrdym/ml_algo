@@ -1,14 +1,12 @@
-import 'dart:typed_data';
-
 import 'package:dart_ml/src/loss_function/loss_function.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
+import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 
-class GradientOptimizer implements Optimizer {
+class GradientDescentOptimizer implements Optimizer {
 
   final Randomizer _randomizer;
   final LossFunction _lossFunction;
@@ -27,7 +25,7 @@ class GradientOptimizer implements Optimizer {
 
   List<Float32x4Vector> _points;
 
-  GradientOptimizer(
+  GradientDescentOptimizer(
     this._randomizer,
     this._lossFunction,
     this._gradientCalculator,
