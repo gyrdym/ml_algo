@@ -1,5 +1,5 @@
-import 'package:dart_ml/src/core/loss_function/loss_function.dart';
-import 'package:dart_ml/src/core/loss_function/loss_function_factory.dart';
+import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/loss_function/loss_function_factory.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
