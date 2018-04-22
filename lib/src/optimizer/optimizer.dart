@@ -6,7 +6,8 @@ abstract class Optimizer {
     Iterable<double> labels,
     {
       Vector initialWeights,
-      bool isMinimizingObjective
+      bool isMinimizingObjective,
+      bool arePointsNormalized
     }
   );
 }

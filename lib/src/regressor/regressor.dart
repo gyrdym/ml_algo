@@ -18,10 +18,14 @@ class Regressor implements Evaluable {
     covariant List<Float32x4Vector> features,
     covariant List<double> labels,
     {
-      covariant Float32x4Vector initialWeights
+      covariant Float32x4Vector initialWeights,
+      bool isDataNormalized = false
     }
   ) {
-    _weights = _optimizer.findExtrema(features, labels, initialWeights: initialWeights, isMinimizingObjective: true);
+    _weights = _optimizer.findExtrema(features, labels,
+      initialWeights: initialWeights,
+      isMinimizingObjective: true,
+      arePointsNormalized: isDataNormalized);
   }
 
   @override

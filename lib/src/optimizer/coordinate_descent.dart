@@ -11,6 +11,8 @@ class CoordinateDescentOptimizer implements Optimizer {
   final double _lambda;
   //hyper parameters declaration end
 
+  List<Float32x4Vector> _points;
+
   CoordinateDescentOptimizer(
     this._initialCoefficientsGenerator,
     {
@@ -29,9 +31,12 @@ class CoordinateDescentOptimizer implements Optimizer {
     covariant List<double> labels,
     {
       covariant Float32x4Vector initialWeights,
-      bool isMinimizingObjective = true
+      bool isMinimizingObjective = true,
+      bool arePointsNormalized = false
     }
   ) {
+    _points = points;
+
     Float32x4Vector coefficients = initialWeights ?? _initialCoefficientsGenerator.generate(points.first.length);
 
     double coefficientsDiff = double.INFINITY;
@@ -59,7 +64,7 @@ class CoordinateDescentOptimizer implements Optimizer {
         }
       }
 
-      final regularizedCoefficients = _regularize(updatedCoefficients, _lambda);
+      final regularizedCoefficients = _regularize(updatedCoefficients, _lambda, arePointsNormalized);
       final newCoefficients = new Float32x4Vector.from(regularizedCoefficients);
 
       coefficientsDiff = newCoefficients.distanceTo(coefficients);
@@ -71,21 +76,26 @@ class CoordinateDescentOptimizer implements Optimizer {
     return coefficients;
   }
 
-  List<double> _regularize(List<double> coefficients, double lambda) {
+  List<double> _regularize(List<double> coefficients, double lambda, bool arePointsNormalized) {
     if (lambda == 0.0) {
       return coefficients;
     }
 
-    final regularized = new List<double>.filled(coefficients.length, 0.0, growable: false);
+    final numOfDimensions = coefficients.length;
+    final normalizer = arePointsNormalized ?
+      new Float32x4Vector.filled(numOfDimensions, 1.0) :
+      _points.reduce((final combine, final vector) => (combine + vector * vector));
+    final regularized = new List<double>.filled(numOfDimensions, 0.0, growable: false);
+    final normalizerAsList = normalizer.asList();
 
     for (int i = 0; i < coefficients.length; i++) {
       double coefficient = coefficients[i];
       double delta = lambda / 2;
 
       if (coefficient > delta) {
-        coefficient -= delta;
+        coefficient = (coefficient - delta) / normalizerAsList[i];
       } else if (coefficient < -delta) {
-        coefficient += delta;
+        coefficient = (coefficient + delta) / normalizerAsList[i];
       } else {
         coefficient = 0.0;
       }

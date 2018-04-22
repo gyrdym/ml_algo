@@ -21,7 +21,8 @@ class CrossValidator<T extends Vector> {
     Evaluable predictor,
     List<T> features,
     List<double> labels,
-    MetricType metric
+    MetricType metric,
+    {bool isDataNormalized = false}
   ) {
 
     if (features.length != labels.length) {
@@ -52,7 +53,7 @@ class CrossValidator<T extends Vector> {
         }
       }
 
-      predictor.fit(trainFeatures, trainLabels);
+      predictor.fit(trainFeatures, trainLabels, isDataNormalized: isDataNormalized);
 
       scores[scoreCounter++] = predictor.test(testFeatures, testLabels, metric);
     }
