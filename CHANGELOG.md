@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.31.0
+- Get rid of di package usage
+
 ## 0.30.1
 - File structure flattened
 
