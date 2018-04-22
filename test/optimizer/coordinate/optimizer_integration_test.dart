@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:dart_ml/src/optimizer/coordinate_descent.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 import 'package:test/test.dart';
 
@@ -21,7 +20,7 @@ void main() {
     final point3 = new Float32x4Vector.from([70.0, 80.0, 90.0]);
     final point4 = new Float32x4Vector.from([20.0, 30.0, 10.0]);
 
-    Optimizer optimizer;
+    CoordinateDescentOptimizer optimizer;
     List<Float32x4Vector> data;
     Float32List labels;
 
@@ -118,7 +117,7 @@ void main() {
     final point2 = new Float32x4Vector.from([20.0, 30.0, 40.0]);
     final point3 = new Float32x4Vector.from([70.0, 80.0, 90.0]);
 
-    Optimizer optimizer;
+    CoordinateDescentOptimizer optimizer;
     List<Float32x4Vector> data;
     Float32List labels;
 
@@ -203,7 +202,8 @@ void main() {
     /// w_3 = -4073640 < 20 / 2 => -4073640 + 20 / 2 = -4073630.0
     ///
     test('should find optimal weights for the given data', () {
-      final weights = optimizer.findExtrema(data, labels).asList();
+      // actually, points in this example are not normalized
+      final weights = optimizer.findExtrema(data, labels, arePointsNormalized: true).asList();
       final w1 = weights[0];
       final w2 = weights[1];
       final w3 = weights[2];

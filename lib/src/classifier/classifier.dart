@@ -17,10 +17,14 @@ class Classifier implements Evaluable {
     covariant List<Float32x4Vector> features,
     covariant List<double> origLabels,
     {
-      covariant Float32x4Vector initialWeights
+      covariant Float32x4Vector initialWeights,
+      bool isDataNormalized
     }
   ) {
-    _weights = _optimizer.findExtrema(features, origLabels, initialWeights: initialWeights);
+    _weights = _optimizer.findExtrema(features, origLabels,
+      initialWeights: initialWeights,
+      arePointsNormalized: isDataNormalized
+    );
   }
 
   @override

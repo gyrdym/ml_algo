@@ -55,7 +55,8 @@ class GradientDescentOptimizer implements Optimizer {
     covariant List<double> labels,
     {
       covariant Float32x4Vector initialWeights,
-      bool isMinimizingObjective = true
+      bool isMinimizingObjective = true,
+      bool arePointsNormalized = false
     }
   ) {
     _points = points;
