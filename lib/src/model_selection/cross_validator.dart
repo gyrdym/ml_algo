@@ -1,6 +1,6 @@
-import 'package:dart_ml/src/data_splitter/factory.dart';
+import 'package:dart_ml/src/data_splitter/k_fold.dart';
+import 'package:dart_ml/src/data_splitter/leave_p_out.dart';
 import 'package:dart_ml/src/data_splitter/splitter.dart';
-import 'package:dart_ml/src/data_splitter/type.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:simd_vector/vector.dart' show Vector;
@@ -9,18 +9,17 @@ class CrossValidator<T extends Vector> {
   final Splitter _splitter;
 
   factory CrossValidator.KFold({int numberOfFolds = 5}) =>
-      new CrossValidator._(SplitterType.KFOLD, numberOfFolds);
+      new CrossValidator._(new KFoldSplitter(numberOfFolds));
 
   factory CrossValidator.LPO({int p = 5}) =>
-      new CrossValidator._(SplitterType.LPO, p);
+      new CrossValidator._(new LeavePOutSplitter(p));
 
-  CrossValidator._(SplitterType splitterType, int value) :
-        _splitter = DataSplitterFactory.createByType(splitterType, value);
+  CrossValidator._(this._splitter);
 
   double evaluate(
     Evaluable predictor,
     List<T> features,
-    List<double> labels,
+    T labels,
     MetricType metric,
     {bool isDataNormalized = false}
   ) {

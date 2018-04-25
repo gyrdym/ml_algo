@@ -28,7 +28,7 @@ class CoordinateDescentOptimizer implements Optimizer {
   @override
   Float32x4Vector findExtrema(
     covariant List<Float32x4Vector> points,
-    covariant List<double> labels,
+    covariant Float32x4Vector labels,
     {
       covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true,
@@ -89,8 +89,8 @@ class CoordinateDescentOptimizer implements Optimizer {
     final normalizerAsList = normalizer.toList();
 
     for (int i = 0; i < coefficients.length; i++) {
+      final delta = lambda / 2;
       double coefficient = coefficients[i];
-      double delta = lambda / 2;
 
       if (coefficient > delta) {
         coefficient = (coefficient - delta) / normalizerAsList[i];

@@ -84,7 +84,7 @@ void main() {
 
     Optimizer optimizer;
     List<Float32x4Vector> data;
-    Float32List labels;
+    Float32x4Vector labels;
 
     setUp(() {
       randomizerMock = new RandomizerMock();
@@ -97,7 +97,7 @@ void main() {
         new Float32x4Vector.from([5.0, 10.0, 15.0]),
         new Float32x4Vector.from([1.0, 2.0, 3.0])
       ];
-      labels = new Float32List.fromList([10.0, 20.0]);
+      labels = new Float32x4Vector.from([10.0, 20.0]);
 
       optimizer = new GradientDescentOptimizer(
         randomizerMock,

@@ -1,9 +1,9 @@
 import 'package:dart_ml/src/data_splitter/splitter.dart';
 
-class KFoldSplitterImpl implements Splitter {
+class KFoldSplitter implements Splitter {
   final int _numberOfFolds;
 
-  KFoldSplitterImpl(this._numberOfFolds);
+  KFoldSplitter(this._numberOfFolds);
 
   @override
   Iterable<Iterable<int>> split(int numberOfSamples) sync* {

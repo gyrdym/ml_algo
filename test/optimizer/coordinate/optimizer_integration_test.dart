@@ -22,7 +22,7 @@ void main() {
 
     CoordinateDescentOptimizer optimizer;
     List<Float32x4Vector> data;
-    Float32List labels;
+    Float32x4Vector labels;
 
     setUp(() {
       optimizer = new CoordinateDescentOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
@@ -32,7 +32,7 @@ void main() {
       );
 
       data = [point1, point2, point3, point4];
-      labels = new Float32List.fromList([20.0, 30.0, 20.0, 40.0]);
+      labels = new Float32x4Vector.from([20.0, 30.0, 20.0, 40.0]);
     });
 
     /// Given matrix X:
@@ -119,7 +119,7 @@ void main() {
 
     CoordinateDescentOptimizer optimizer;
     List<Float32x4Vector> data;
-    Float32List labels;
+    Float32x4Vector labels;
 
     setUp(() {
       optimizer = new CoordinateDescentOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
@@ -129,7 +129,7 @@ void main() {
       );
 
       data = [point1, point2, point3];
-      labels = new Float32List.fromList([2.0, 3.0, 2.0]);
+      labels = new Float32x4Vector.from([2.0, 3.0, 2.0]);
     });
 
     /// Given matrix x:
