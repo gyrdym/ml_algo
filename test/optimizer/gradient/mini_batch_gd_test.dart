@@ -38,7 +38,7 @@ void main() {
 
     Optimizer optimizer;
     List<Float32x4Vector> data;
-    Float32List labels;
+    Float32x4Vector labels;
 
     setUp(() {
       randomizerMock = new RandomizerMock();
@@ -62,7 +62,7 @@ void main() {
       );
 
       data = [point1, point2, point3, point4];
-      labels = new Float32List.fromList([22.1, 10.4, 20.0, 30.0]);
+      labels = new Float32x4Vector.from([22.1, 10.4, 20.0, 30.0]);
 
       when(learningRateGeneratorMock.getNextValue()).thenReturn(1.0);
       when(gradientCalculatorMock.getGradient(any, any, [point1], [labels[0], lambda], delta))

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
@@ -9,7 +11,7 @@ import 'package:simd_vector/vector.dart';
 class GradientDescentOptimizer implements Optimizer {
 
   final Randomizer _randomizer;
-  final CostFunction _lossFunction;
+  final CostFunction _costFunction;
   final GradientCalculator _gradientCalculator;
   final LearningRateGenerator _learningRateGenerator;
   final InitialWeightsGenerator _initialWeightsGenerator;
@@ -27,7 +29,7 @@ class GradientDescentOptimizer implements Optimizer {
 
   GradientDescentOptimizer(
     this._randomizer,
-    this._lossFunction,
+    this._costFunction,
     this._gradientCalculator,
     this._learningRateGenerator,
     this._initialWeightsGenerator,
@@ -52,7 +54,7 @@ class GradientDescentOptimizer implements Optimizer {
   @override
   Float32x4Vector findExtrema(
     covariant List<Float32x4Vector> points,
-    covariant List<double> labels,
+    covariant Float32x4Vector labels,
     {
       covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true,
@@ -79,7 +81,7 @@ class GradientDescentOptimizer implements Optimizer {
 
   Float32x4Vector _generateCoefficients(
     Float32x4Vector currentCoefficients,
-    List<double> labels,
+    Float32x4Vector labels,
     double eta,
     {bool isMinimization: true}
   ) {
@@ -97,7 +99,7 @@ class GradientDescentOptimizer implements Optimizer {
   Float32x4Vector _makeGradientStep(
     Float32x4Vector coefficients,
     List<Float32x4Vector> points,
-    List<double> labels,
+    Float32List labels,
     double eta,
     {bool isMinimization: true}
   ) {
@@ -118,7 +120,7 @@ class GradientDescentOptimizer implements Optimizer {
         final x = (vectorArgs as List<Float32x4Vector>)[0];
         final y = (scalarArgs as List<double>)[0];
         final lambda = (scalarArgs as List<double>)[1];
-        return _lossFunction.getCost(k.dot(x), y) + lambda * k.norm(Norm.EUCLIDEAN);
+        return _costFunction.getCost(k.dot(x), y) + lambda * k.norm(Norm.EUCLIDEAN);
       }, k, [x], [y, _lambda], _argumentIncrement
     );
 

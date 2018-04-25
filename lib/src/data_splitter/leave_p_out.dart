@@ -1,9 +1,9 @@
 import 'package:dart_ml/src/data_splitter/splitter.dart';
 
-class LeavePOutSplitterImpl implements Splitter {
+class LeavePOutSplitter implements Splitter {
   int _p = 2;
 
-  LeavePOutSplitterImpl(int p) {
+  LeavePOutSplitter(int p) {
     if (p == 0) {
       throw new UnsupportedError('Value `$p` for parameter `p` is unsupported');
     }
