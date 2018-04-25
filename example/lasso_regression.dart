@@ -27,5 +27,5 @@ main() async {
   print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, features, labels, MetricType.MAPE)}');
 
   print('Feature weights (possibly, some weights are downgraded to zero, cause it is an objective of Lasso Regression):');
-  print(lassoRegressionModel.weights.asList());
+  print(lassoRegressionModel.weights);
 }

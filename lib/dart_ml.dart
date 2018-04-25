@@ -1,7 +1,7 @@
 library dart_ml;
 
 export 'package:dart_ml/src/classifier/logistic_regression.dart';
-export 'package:dart_ml/src/loss_function/type.dart';
+export 'package:dart_ml/src/cost_function/type.dart';
 export 'package:dart_ml/src/metric/classification/type.dart';
 export 'package:dart_ml/src/metric/regression/type.dart';
 export 'package:dart_ml/src/metric/type.dart';

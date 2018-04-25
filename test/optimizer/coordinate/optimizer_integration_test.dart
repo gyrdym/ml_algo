@@ -97,7 +97,7 @@ void main() {
     /// some delta for comparision
     ///
     test('should find optimal weights for the given data', () {
-      final weights = optimizer.findExtrema(data, labels).asList();
+      final weights = optimizer.findExtrema(data, labels);
       final w1 = weights[0];
       final w2 = weights[1];
       final w3 = weights[2];
@@ -203,7 +203,7 @@ void main() {
     ///
     test('should find optimal weights for the given data', () {
       // actually, points in this example are not normalized
-      final weights = optimizer.findExtrema(data, labels, arePointsNormalized: true).asList();
+      final weights = optimizer.findExtrema(data, labels, arePointsNormalized: true);
       final w1 = weights[0];
       final w2 = weights[1];
       final w3 = weights[2];

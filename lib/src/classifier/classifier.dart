@@ -47,7 +47,7 @@ class Classifier implements Evaluable {
   }
 
   Float32x4Vector predictClasses(List<Float32x4Vector> features) {
-    final probabilities = predictProbabilities(features).asList();
+    final probabilities = predictProbabilities(features);
     return new Float32x4Vector.from(probabilities.map((double value) => value.round() * 1.0));
   }
 }
