@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
@@ -9,7 +9,7 @@ import 'package:simd_vector/vector.dart';
 class GradientDescentOptimizer implements Optimizer {
 
   final Randomizer _randomizer;
-  final LossFunction _lossFunction;
+  final CostFunction _lossFunction;
   final GradientCalculator _gradientCalculator;
   final LearningRateGenerator _learningRateGenerator;
   final InitialWeightsGenerator _initialWeightsGenerator;
@@ -118,7 +118,7 @@ class GradientDescentOptimizer implements Optimizer {
         final x = (vectorArgs as List<Float32x4Vector>)[0];
         final y = (scalarArgs as List<double>)[0];
         final lambda = (scalarArgs as List<double>)[1];
-        return _lossFunction.loss(k.dot(x), y) + lambda * k.norm(Norm.EUCLIDEAN);
+        return _lossFunction.getCost(k.dot(x), y) + lambda * k.norm(Norm.EUCLIDEAN);
       }, k, [x], [y, _lambda], _argumentIncrement
     );
 

@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/gradient_descent.dart';
+import 'package:dart_ml/src/optimizer/gradient.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
@@ -15,7 +15,7 @@ class RandomizerMock extends Mock implements Randomizer {}
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
-class LossFunctionMock extends Mock implements LossFunction {}
+class LossFunctionMock extends Mock implements CostFunction {}
 
 void main() {
   group('Stochastic gradient descent optimizer', () {

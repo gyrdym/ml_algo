@@ -46,12 +46,12 @@ class CoordinateDescentOptimizer implements Optimizer {
       final updatedCoefficients = new List<double>.filled(coefficients.length, 0.0, growable: false);
 
       for (int j = 0; j < coefficients.length; j++) {
-        final coefficientsAsList = coefficients.asList();
+        final coefficientsAsList = coefficients.toList();
         coefficientsAsList[j] = 0.0;
         final coefficientsWithoutJ = new Float32x4Vector.from(coefficientsAsList);
 
         for (int i = 0; i < points.length; i++) {
-          final pointAsList = points[i].asList();
+          final pointAsList = points[i].toList();
           final x = pointAsList[j];
           final y = labels[i];
 
@@ -86,7 +86,7 @@ class CoordinateDescentOptimizer implements Optimizer {
       new Float32x4Vector.filled(numOfDimensions, 1.0) :
       _points.reduce((final combine, final vector) => (combine + vector * vector));
     final regularized = new List<double>.filled(numOfDimensions, 0.0, growable: false);
-    final normalizerAsList = normalizer.asList();
+    final normalizerAsList = normalizer.toList();
 
     for (int i = 0; i < coefficients.length; i++) {
       double coefficient = coefficients[i];

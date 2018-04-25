@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/loss_function/loss_function.dart';
+import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/gradient_descent.dart';
+import 'package:dart_ml/src/optimizer/gradient.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
@@ -14,7 +14,7 @@ import 'package:test/test.dart';
 class RandomizerMock extends Mock implements Randomizer {}
 class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
-class LossFunctionMock extends Mock implements LossFunction {}
+class LossFunctionMock extends Mock implements CostFunction {}
 class GradientCalculatorMock extends Mock implements GradientCalculator {}
 
 //@TODO: reanimate the test when Float32xrVector will implement an iterable
@@ -79,7 +79,7 @@ void main() {
     Randomizer randomizerMock;
     LearningRateGenerator learningRateGeneratorMock;
     GradientCalculator gradientCalculatorMock;
-    LossFunction lossFunctionMock;
+    CostFunction lossFunctionMock;
     InitialWeightsGenerator initialWeightsGeneratorMock;
 
     Optimizer optimizer;
@@ -141,7 +141,7 @@ void main() {
     /// 6. update w with the value - [-20.0, -28.0, -36.0]
     test('should find optimal weights for the given data', () {
       Float32x4Vector weights = optimizer.findExtrema(data, labels);
-      List<double> formattedWeights = weights.asList().map((double value) => double.parse(value.toStringAsFixed(2)))
+      List<double> formattedWeights = weights.map((double value) => double.parse(value.toStringAsFixed(2)))
           .toList();
       expect(formattedWeights, equals([-20.0, -28.0, -36.0]));
     }, skip: true);
