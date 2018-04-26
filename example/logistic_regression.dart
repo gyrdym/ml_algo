@@ -19,7 +19,7 @@ Future main() async {
       .map((List item) => new Float32x4Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
       .toList(growable: false);
 
-  final labels = fields.map((List<num> item) => item.last * 1.0).toList(growable: false);
+  final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
   final logisticRegressor = new LogisticRegressor(alpha: 0.0);
   final validator = new CrossValidator<Float32x4Vector>.KFold();
 

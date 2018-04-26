@@ -18,43 +18,40 @@ class CrossValidator<T extends Vector> {
 
   double evaluate(
     Evaluable predictor,
-    List<T> features,
+    List<T> points,
     T labels,
     MetricType metric,
     {bool isDataNormalized = false}
   ) {
 
-    if (features.length != labels.length) {
-      throw new Exception('Number of features objects must be equal to the number of labels!');
+    if (points.length != labels.length) {
+      throw new Exception('Number of feature objects must be equal to the number of labels!');
     }
 
-    final allIndicesGroups = _splitter.split(features.length);
+    final allIndicesGroups = _splitter.split(points.length);
     final scores = new List<double>(allIndicesGroups.length);
     int scoreCounter = 0;
 
     for (final testIndices in allIndicesGroups) {
-      final trainFeatures = new List<T>(features.length - testIndices.length);
-      final trainLabels = new List<double>.filled(features.length - testIndices.length, 0.0);
+      final trainFeatures = new List<T>(points.length - testIndices.length);
       final testFeatures = new List<T>(testIndices.length);
-      final testLabels = new List<double>.filled(testIndices.length, 0.0);
-      int trainSamplesCounter = 0;
-      int testSamplesCounter = 0;
+      final trainIndices = new List<int>(points.length - testIndices.length);
 
-      for (int index = 0; index < features.length; index++) {
+      int trainPointsCounter = 0;
+      int testPointsCounter = 0;
+
+      for (int index = 0; index < points.length; index++) {
         if (testIndices.contains(index)) {
-          testFeatures[testSamplesCounter] = features[index];
-          testLabels[testSamplesCounter] = labels[index];
-          testSamplesCounter++;
+          testFeatures[testPointsCounter++] = points[index];
         } else {
-          trainFeatures[trainSamplesCounter] = features[index];
-          trainLabels[trainSamplesCounter] = labels[index];
-          trainSamplesCounter++;
+          trainIndices[trainPointsCounter] = index;
+          trainFeatures[trainPointsCounter] = points[index];
+          trainPointsCounter++;
         }
       }
 
-      predictor.fit(trainFeatures, trainLabels, isDataNormalized: isDataNormalized);
-
-      scores[scoreCounter++] = predictor.test(testFeatures, testLabels, metric);
+      predictor.fit(trainFeatures, labels.query(trainIndices), isDataNormalized: isDataNormalized);
+      scores[scoreCounter++] = predictor.test(testFeatures, labels.query(testIndices), metric);
     }
 
     return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;
