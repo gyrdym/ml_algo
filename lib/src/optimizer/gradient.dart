@@ -99,7 +99,7 @@ class GradientDescentOptimizer implements Optimizer {
   Float32x4Vector _makeGradientStep(
     Float32x4Vector coefficients,
     List<Float32x4Vector> points,
-    Float32List labels,
+    Float32x4Vector labels,
     double eta,
     {bool isMinimization: true}
   ) {

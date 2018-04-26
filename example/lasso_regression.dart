@@ -19,7 +19,7 @@ main() async {
       .map((List<num> item) => new Float32x4Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  final labels = fields.map((List<num> item) => item.last.toDouble()).toList();
+  final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
   final lassoRegressionModel = new LassoRegressor(iterationLimit: 500, lambda: 74290.0);
   final validator = new CrossValidator<Float32x4Vector>.KFold();
 
