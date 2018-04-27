@@ -99,7 +99,7 @@ void main() {
       ];
       labels = new Float32x4Vector.from([10.0, 20.0]);
 
-      optimizer = new GradientDescentOptimizer(
+      optimizer = new GradientOptimizer(
         randomizerMock,
         lossFunctionMock,
         gradientCalculatorMock,

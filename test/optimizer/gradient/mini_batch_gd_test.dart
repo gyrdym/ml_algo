@@ -46,7 +46,7 @@ void main() {
       gradientCalculatorMock = new GradientCalculatorMock();
       initialWeightsGeneratorMock = new InitialWeightsGeneratorMock();
 
-      optimizer = new GradientDescentOptimizer(
+      optimizer = new GradientOptimizer(
         randomizerMock,
         lossFunctionMock,
         gradientCalculatorMock,

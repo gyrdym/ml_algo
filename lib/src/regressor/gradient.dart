@@ -1,5 +1,4 @@
 import 'package:dart_ml/src/cost_function/cost_function_factory.dart';
-import 'package:dart_ml/src/math/math_analysis/gradient_calculator_factory.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer_factory.dart';
 import 'package:dart_ml/src/optimizer/gradient.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
@@ -15,10 +14,9 @@ class GradientRegressor extends Regressor {
     double argumentIncrement,
     int batchSize = 1
   }) : super(
-      new GradientDescentOptimizer(
+      new GradientOptimizer(
         RandomizerFactory.Default(),
         CostFunctionFactory.Squared(),
-        GradientCalculatorFactory.Default(),
         LearningRateGeneratorFactory.Simple(),
         InitialWeightsGeneratorFactory.ZeroWeights(),
 
