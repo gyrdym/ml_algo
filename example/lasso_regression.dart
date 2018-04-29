@@ -19,7 +19,7 @@ main() async {
       .map((List<num> item) => new Float32x4Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  final labels = fields.map((List<num> item) => item.last.toDouble()).toList();
+  final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
   final lassoRegressionModel = new LassoRegressor(iterationLimit: 500, lambda: 74290.0);
   final validator = new CrossValidator<Float32x4Vector>.KFold();
 
@@ -27,5 +27,5 @@ main() async {
   print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, features, labels, MetricType.MAPE)}');
 
   print('Feature weights (possibly, some weights are downgraded to zero, cause it is an objective of Lasso Regression):');
-  print(lassoRegressionModel.weights.asList());
+  print(lassoRegressionModel.weights);
 }

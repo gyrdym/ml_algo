@@ -9,8 +9,8 @@ class AccuracyMetric implements ClassificationMetric {
 
   double getScore(Vector predictedLabels, Vector origLabels) {
     double score = 0.0;
-    final _origLabels = origLabels.asList();
-    final _predictedLabels = predictedLabels.asList();
+    final _origLabels = origLabels;
+    final _predictedLabels = predictedLabels;
 
     for (int i = 0; i < origLabels.length; i++) {
       if (_origLabels[i] == _predictedLabels[i]) {

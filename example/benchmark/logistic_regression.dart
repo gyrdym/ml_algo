@@ -1,9 +1,34 @@
+// 3.134 sec
+
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
+
+List<Float32x4Vector> features;
+Float32x4Vector labels;
+LogisticRegressor regressor;
+
+class LogisticRegressorBenchmark extends BenchmarkBase {
+  const LogisticRegressorBenchmark() : super('Logistic regressor');
+
+  static void main() {
+    new LogisticRegressorBenchmark().report();
+  }
+
+  void run() {
+    regressor.fit(features, labels);
+  }
+
+  void setup() {
+    regressor = new LogisticRegressor(batchSize: 1);
+  }
+
+  void tearDown() {}
+}
 
 Future main() async {
   final csvCodec = new csv.CsvCodec();
@@ -15,14 +40,10 @@ Future main() async {
   List<double> extractFeatures(item) =>
       item.map((Object feature) => (feature as num).toDouble()).toList();
 
-  List<Float32x4Vector> features = fields
+  features = fields
       .map((List item) => new Float32x4Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
       .toList(growable: false);
+  labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
 
-  final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
-  final logisticRegressor = new LogisticRegressor(minWeightsUpdate: 1e-4, batchSize: 1);
-  final validator = new CrossValidator<Float32x4Vector>.KFold();
-
-  print('Logistic regression, error on cross validation: ');
-  print('${(validator.evaluate(logisticRegressor, features, labels, MetricType.ACCURACY) * 100).toStringAsFixed(2)}%');
+  LogisticRegressorBenchmark.main();
 }

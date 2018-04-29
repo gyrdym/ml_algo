@@ -16,7 +16,7 @@ class Regressor implements Evaluable {
   @override
   void fit(
     covariant List<Float32x4Vector> features,
-    covariant List<double> labels,
+    covariant Float32x4Vector labels,
     {
       covariant Float32x4Vector initialWeights,
       bool isDataNormalized = false
@@ -31,12 +31,12 @@ class Regressor implements Evaluable {
   @override
   double test(
     covariant List<Float32x4Vector> features,
-    covariant List<double> origLabels,
+    covariant Float32x4Vector origLabels,
     MetricType metricType
   ) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
-    return metric.getError(prediction, new Float32x4Vector.from(origLabels));
+    return metric.getError(prediction, origLabels);
   }
 
   Float32x4Vector predict(List<Float32x4Vector> features) {

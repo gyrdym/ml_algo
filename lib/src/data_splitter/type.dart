@@ -1,3 +1,0 @@
-enum SplitterType {
-  KFOLD, LPO
-}
