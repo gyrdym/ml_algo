@@ -6,5 +6,5 @@ class RMSEMetric implements RegressionMetric {
   const RMSEMetric();
 
   double getError(Vector predictedLabels, Vector origLabels) =>
-    math.sqrt(((predictedLabels - origLabels).intPow(2)).mean());
+    math.sqrt(((predictedLabels - origLabels).toIntegerPower(2)).mean());
 }

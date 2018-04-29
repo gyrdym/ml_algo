@@ -19,14 +19,13 @@ void main() {
       final x = new Float32x4Vector.from([1.0, 2.0, 3.0]);
       final y = 1.0;
 
-      final gradient = calculator.getGradient(
+      final gradient = (calculator.getGradient(
         (Vector a, Iterable<Vector> vectorArgs, Iterable<double> scalarArgs) {
           final b = (vectorArgs as List)[0];
           final c = (scalarArgs as List)[0];
           return math.pow(a.dot(b) - c, 2);
         }, k, [x], [y], 0.00001
-      )
-      .asList()
+      ) as List)
       .map((double value) => double.parse(value.toStringAsFixed(2))).toList();
 
       expect(gradient, equals([3.81, 7.61, 11.42]));
