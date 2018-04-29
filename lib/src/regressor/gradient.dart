@@ -9,9 +9,8 @@ class GradientRegressor extends Regressor {
   GradientRegressor({
     int iterationLimit,
     double learningRate,
-    double minWeightsDistance,
+    double minWeightsUpdate,
     double lambda = 0.0,
-    double argumentIncrement,
     int batchSize = 1
   }) : super(
       new GradientOptimizer(
@@ -21,10 +20,9 @@ class GradientRegressor extends Regressor {
         InitialWeightsGeneratorFactory.ZeroWeights(),
 
         learningRate: learningRate,
-        minCoefficientsUpdate: minWeightsDistance,
+        minCoefficientsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
-        argumentIncrement: argumentIncrement,
         batchSize: batchSize
       )
     );

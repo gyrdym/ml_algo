@@ -9,10 +9,8 @@ class LogisticRegressor extends Classifier {
   LogisticRegressor({
     int iterationLimit,
     double learningRate,
-    double minWeightsDistance,
-    double alpha,
+    double minWeightsUpdate,
     double lambda,
-    double argumentIncrement,
     int batchSize = 1
   }) : super(
     new GradientOptimizer(
@@ -22,10 +20,9 @@ class LogisticRegressor extends Classifier {
       InitialWeightsGeneratorFactory.ZeroWeights(),
 
       learningRate: learningRate,
-      minCoefficientsUpdate: minWeightsDistance,
+      minCoefficientsUpdate: minWeightsUpdate,
       iterationLimit: iterationLimit,
       lambda: lambda,
-      argumentIncrement: argumentIncrement,
       batchSize: batchSize
     )
   );
