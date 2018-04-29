@@ -23,6 +23,6 @@ main() async {
   final sgdRegressionModel = new GradientRegressor();
   final validator = new CrossValidator<Float32x4Vector>.KFold();
 
-  print('K-fold cross validation with MAPE metric:');
-  print('SGD regressor: ${validator.evaluate(sgdRegressionModel, features, labels, MetricType.MAPE)}');
+  print('K-fold cross validation with MAPE metric (percent error):');
+  print('${(validator.evaluate(sgdRegressionModel, features, labels, MetricType.MAPE)).toStringAsFixed(2)}%');
 }

@@ -32,7 +32,6 @@ class GradientOptimizer implements Optimizer {
       double minCoefficientsUpdate,
       int iterationLimit,
       double lambda,
-      double argumentIncrement,
       int batchSize
     }
   ) :
@@ -60,7 +59,7 @@ class GradientOptimizer implements Optimizer {
     double coefficientsUpdate = double.MAX_FINITE;
     int iterationCounter = 0;
 
-    while (coefficientsUpdate > _minCoefficientsUpdate && iterationCounter++ < _iterationLimit) {
+    while (!_isConverged(coefficientsUpdate, iterationCounter)) {
       final eta = _learningRateGenerator.getNextValue();
       final updatedCoefficients = _generateCoefficients(coefficients, labels, eta, isMinimization: isMinimizingObjective);
       coefficientsUpdate = updatedCoefficients.distanceTo(coefficients);
@@ -70,6 +69,12 @@ class GradientOptimizer implements Optimizer {
     _learningRateGenerator.stop();
 
     return coefficients;
+  }
+
+  bool _isConverged(double coefficientsUpdate, int iterationCounter) {
+    return
+      _minCoefficientsUpdate != null ? coefficientsUpdate < _minCoefficientsUpdate : false ||
+      _iterationLimit != null ? iterationCounter++ >= _iterationLimit : false;
   }
 
   Float32x4Vector _generateCoefficients(

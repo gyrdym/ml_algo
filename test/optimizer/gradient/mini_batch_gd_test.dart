@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
@@ -21,7 +19,6 @@ void main() {
   group('Mini batch gradient descent optimizer', () {
     const int iterationsLimit = 3;
     const lambda = .000001;
-    const delta = .00001;
     const eta = 1e-5;
     const batchSize = 2;
 
@@ -32,7 +29,6 @@ void main() {
 
     LearningRateGenerator learningRateGeneratorMock;
     Randomizer randomizerMock;
-    GradientCalculator gradientCalculatorMock;
     CostFunction lossFunctionMock;
     InitialWeightsGenerator initialWeightsGeneratorMock;
 
@@ -43,13 +39,11 @@ void main() {
     setUp(() {
       randomizerMock = new RandomizerMock();
       learningRateGeneratorMock = new LearningRateGeneratorMock();
-      gradientCalculatorMock = new GradientCalculatorMock();
       initialWeightsGeneratorMock = new InitialWeightsGeneratorMock();
 
       optimizer = new GradientOptimizer(
         randomizerMock,
         lossFunctionMock,
-        gradientCalculatorMock,
         learningRateGeneratorMock,
         initialWeightsGeneratorMock,
 
@@ -57,7 +51,6 @@ void main() {
         minCoefficientsUpdate: null,
         iterationLimit: iterationsLimit,
         lambda: lambda,
-        argumentIncrement: delta,
         batchSize: batchSize
       );
 
@@ -65,14 +58,6 @@ void main() {
       labels = new Float32x4Vector.from([22.1, 10.4, 20.0, 30.0]);
 
       when(learningRateGeneratorMock.getNextValue()).thenReturn(1.0);
-      when(gradientCalculatorMock.getGradient(any, any, [point1], [labels[0], lambda], delta))
-          .thenReturn(new Float32x4Vector.from([1.0, 1.0, 1.0]));
-      when(gradientCalculatorMock.getGradient(any, any, [point2], [labels[1], lambda], delta))
-          .thenReturn(new Float32x4Vector.from([0.0, 0.0, 0.0]));
-      when(gradientCalculatorMock.getGradient(any, any, [point3], [labels[2], lambda], delta))
-          .thenReturn(new Float32x4Vector.from([0.01, 0.01, 0.01]));
-      when(gradientCalculatorMock.getGradient(any, any, [point4], [labels[3], lambda], delta))
-          .thenReturn(new Float32x4Vector.from([100.0, 100.0, 0.00001]));
     });
 
     test('should find optimal weights for the given data', () {
@@ -82,27 +67,11 @@ void main() {
 
       verify(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).called(iterationsLimit);
       verify(learningRateGeneratorMock.getNextValue()).called(iterationsLimit);
-
-      verify(gradientCalculatorMock.getGradient(any, any, [point1], [labels[0], lambda], delta))
-          .called(iterationsLimit);
-      verify(gradientCalculatorMock.getGradient(any, any, [point2], [labels[1], lambda], delta))
-          .called(iterationsLimit);
-      verify(gradientCalculatorMock.getGradient(any, any, [point3], [labels[2], lambda], delta))
-          .called(iterationsLimit);
-      verify(gradientCalculatorMock.getGradient(any, any, [point4], [labels[3], lambda], delta))
-          .called(iterationsLimit);
     });
 
     test('should cut off a piece of certain size from the given data', () {
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: batchSize)).thenReturn([1, 3]);
-
       optimizer.findExtrema(data, labels, initialWeights: new Float32x4Vector.from([0.0, 0.0, 0.0]));
-
-      verifyNever(gradientCalculatorMock.getGradient(any, any, [point1], [labels[0], lambda], delta));
-      verifyNever(gradientCalculatorMock.getGradient(any, any, [point4], [labels[3], lambda], delta));
-
-      verify(gradientCalculatorMock.getGradient(any, any, [point2], [labels[1], lambda], delta)).called(iterationsLimit);
-      verify(gradientCalculatorMock.getGradient(any, any, [point3], [labels[2], lambda], delta)).called(iterationsLimit);
     });
 
     test('should throw range error if a random range is bigger than data length', () {

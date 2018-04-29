@@ -26,7 +26,6 @@ void main() {
 
     LearningRateGenerator learningRateGeneratorMock;
     Randomizer randomizerMock;
-    GradientCalculator gradientCalculatorMock;
     LossFunctionMock lossFunctionMock;
     InitialWeightsGenerator initialWeightsGeneratorMock;
 
@@ -37,14 +36,12 @@ void main() {
     setUp(() {
       randomizerMock = new RandomizerMock();
       learningRateGeneratorMock = new LearningRateGeneratorMock();
-      gradientCalculatorMock = new GradientCalculatorMock();
       lossFunctionMock = new LossFunctionMock();
       initialWeightsGeneratorMock = new InitialWeightsGeneratorMock();
 
       optimizer = new GradientOptimizer(
         randomizerMock,
         lossFunctionMock,
-        gradientCalculatorMock,
         learningRateGeneratorMock,
         initialWeightsGeneratorMock,
 
@@ -52,7 +49,6 @@ void main() {
         minCoefficientsUpdate: null,
         iterationLimit: iterationsLimit,
         lambda: lambda,
-        argumentIncrement: delta,
         batchSize: 1
       );
 
@@ -66,15 +62,6 @@ void main() {
       labels = new Float32x4Vector.from([22.1, 10.4, 20.0, 30.0]);
 
       when(learningRateGeneratorMock.getNextValue()).thenReturn(1.0);
-      when(gradientCalculatorMock.getGradient(any, any, [data[0]], [labels[0], lambda], 0.0001))
-          .thenReturn(new Float32x4Vector.from([1.0, 1.0, 1.0]));
-      when(gradientCalculatorMock.getGradient(any, any, [data[1]], [labels[1], lambda], 0.0001))
-          .thenReturn(new Float32x4Vector.from([0.0, 0.0, 0.0]));
-      when(gradientCalculatorMock.getGradient(any, any, [data[2]], [labels[2], lambda], 0.0001))
-          .thenReturn(new Float32x4Vector.from([0.01, 0.01, 0.01]));
-      when(gradientCalculatorMock.getGradient(any, any, [data[3]], [labels[3], lambda], 0.0001))
-          .thenReturn(new Float32x4Vector.from([100.0, 100.0, 0.00001]));
-
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1)).thenReturn([0, 1]);
     });
 
@@ -83,13 +70,6 @@ void main() {
 
       verify(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1)).called(iterationsLimit);
       verify(learningRateGeneratorMock.getNextValue()).called(iterationsLimit);
-
-      verify(gradientCalculatorMock.getGradient(any, any, [data[0]], [labels[0], lambda], 0.0001))
-          .called(iterationsLimit);
-
-      verifyNever(gradientCalculatorMock.getGradient(any, any, [data[1]], [labels[1], lambda], 0.0001));
-      verifyNever(gradientCalculatorMock.getGradient(any, any, [data[2]], [labels[2], lambda], 0.0001));
-      verifyNever(gradientCalculatorMock.getGradient(any, any, [data[3]], [labels[3], lambda], 0.0001));
     });
   });
 }
