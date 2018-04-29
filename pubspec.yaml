@@ -1,6 +1,6 @@
 name: dart_ml
 description: Machine learning with dart
-version: 0.31.0
+version: 0.32.0
 author: Ilya Gyrdymov <ilgyrd@gmail.com>
 
 environment:
@@ -11,7 +11,6 @@ dependencies:
   csv: "^3.1.2"
   simd_vector:
     git:
-      ref: iterator-implementation
       url: https://github.com/gyrdym/simd_vector.git
 
 dev_dependencies:

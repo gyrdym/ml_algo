@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.32.0
+- Get rid of derivative computation
+
 ## 0.31.0
 - Get rid of di package usage
 

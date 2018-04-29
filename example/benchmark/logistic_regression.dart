@@ -1,3 +1,5 @@
+// 3.134 sec
+
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -11,7 +13,7 @@ Float32x4Vector labels;
 LogisticRegressor regressor;
 
 class LogisticRegressorBenchmark extends BenchmarkBase {
-  const LogisticRegressorBenchmark() : super('Gradient descent regressor');
+  const LogisticRegressorBenchmark() : super('Logistic regressor');
 
   static void main() {
     new LogisticRegressorBenchmark().report();
