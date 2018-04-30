@@ -71,7 +71,7 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is equal to `1` (stochastic case)', () {
       final points = getMeaninglessData();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
-      final optimizer = createOptimizer(minCoeffUpdate: 1e10, iterationsLimit: 3, batchSize: 1);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 1);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1)).thenReturn([2, 3]);
       when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
@@ -84,13 +84,13 @@ void main() {
       verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]));
 
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
-          .called(3);
+          .called(3 * 3); // 3 iterations 3 times in each iteration
     });
 
     test('should properly process `batchSize` parameter when the latter is equal to `2` (mini batch case)', () {
       final points = getMeaninglessData();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
-      final optimizer = createOptimizer(minCoeffUpdate: 1e10, iterationsLimit: 3, batchSize: 2);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2)).thenReturn([0, 2]);
 
@@ -105,15 +105,15 @@ void main() {
       verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]));
 
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
-          .called(3);
+          .called(3 * 3); // 3 iterations 3 times in each iteration
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
-          .called(3);
+          .called(3 * 3); // 3 iterations 3 times in each iteration
     });
 
     test('should properly process `batchSize` parameter when the latter is equal to `4` (batch case)', () {
       final points = getMeaninglessData();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
-      final optimizer = createOptimizer(minCoeffUpdate: 1e10, iterationsLimit: 3, batchSize: 4);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 4);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4)).thenReturn([0, 4]);
 
@@ -129,13 +129,55 @@ void main() {
       optimizer.findExtrema(points, labels);
 
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
-          .called(3);
+          .called(3 * 3); // 3 iterations 3 times in each iteration
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
-          .called(3);
+          .called(3 * 3); // 3 iterations 3 times in each iteration
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
-          .called(3);
+          .called(3 * 3); // 3 iterations 3 times in each iteration
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]))
-          .called(3);
+          .called(3 * 3); // 3 iterations 3 times in each iteration
+    });
+
+    test('should find optimal coefficient values', () {
+      final points = <Float32x4Vector>[
+        new Float32x4Vector.from([1.0, 2.0, 3.0]),
+        new Float32x4Vector.from([4.0, 5.0, 6.0])
+      ];
+      final labels = new Float32x4Vector.from([7.0, 8.0]);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 2, batchSize: 2, lambda: 0.0);
+
+      when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0,2]);
+
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+          .thenReturn(5.0);
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+          .thenReturn(3.0);
+
+      final optimalCoefficients = optimizer.findExtrema(points, labels);
+
+      // iteration 1:
+      // gradient_1 = [5, 5, 5]
+      // gradient_2 = [3, 3, 3]
+      // gradient = [8, 8, 8]
+      //
+      // c_1 = c_1_prev - eta * partial = 0 - 2 * 8 = -16
+      // c_2 = c_2_prev - eta * partial = 0 - 2 * 8 = -16
+      // c_3 = c_3_prev - eta * partial = 0 - 2 * 8 = -16
+      //
+      // c = [-16, -16, -16]
+      //
+      // iteration 2:
+      // gradient_1 = [5, 5, 5]
+      // gradient_2 = [3, 3, 3]
+      // gradient = [8, 8, 8]
+      //
+      // c_1 = c_1_prev - eta * partial_1 = -16 - 2 * 8 = -32
+      // c_2 = c_2_prev - eta * partial_2 = -16 - 2 * 8 = -32
+      // c_3 = c_3_prev - eta * partial_3 = -16 - 2 * 8 = -32
+      //
+      // c = [-32, -32, -32]
+      //
+      expect(optimalCoefficients, equals([-32.0, -32.0, -32.0]));
     });
   });
 }
