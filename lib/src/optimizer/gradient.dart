@@ -28,7 +28,7 @@ class GradientOptimizer implements Optimizer {
     this._learningRateGenerator,
     this._initialWeightsGenerator,
     {
-      double learningRate,
+      double initialLearningRate,
       double minCoefficientsUpdate,
       int iterationLimit,
       double lambda,
@@ -40,7 +40,7 @@ class GradientOptimizer implements Optimizer {
     _lambda = lambda ?? 1e-5,
     _batchSize = batchSize
   {
-    _learningRateGenerator.init(learningRate ?? 1e-5);
+    _learningRateGenerator.init(initialLearningRate ?? 1e-5);
   }
 
   @override
@@ -53,6 +53,11 @@ class GradientOptimizer implements Optimizer {
       bool arePointsNormalized = false
     }
   ) {
+    if (_batchSize > points.length) {
+      throw new RangeError.range(_batchSize, 0, points.length, null,
+        'batch size parameter is greater than actual number of given points');
+    }
+
     _points = points;
 
     Float32x4Vector coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
@@ -64,6 +69,7 @@ class GradientOptimizer implements Optimizer {
       final updatedCoefficients = _generateCoefficients(coefficients, labels, eta, isMinimization: isMinimizingObjective);
       coefficientsUpdate = updatedCoefficients.distanceTo(coefficients);
       coefficients = updatedCoefficients;
+      iterationCounter++;
     }
 
     _learningRateGenerator.stop();
@@ -73,8 +79,8 @@ class GradientOptimizer implements Optimizer {
 
   bool _isConverged(double coefficientsUpdate, int iterationCounter) {
     return
-      _minCoefficientsUpdate != null ? coefficientsUpdate < _minCoefficientsUpdate : false ||
-      _iterationLimit != null ? iterationCounter++ >= _iterationLimit : false;
+      (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
+      (_iterationLimit != null ? iterationCounter >= _iterationLimit : false);
   }
 
   Float32x4Vector _generateCoefficients(
@@ -102,17 +108,26 @@ class GradientOptimizer implements Optimizer {
     {bool isMinimization: true}
   ) {
     Float32x4Vector gradient = new Float32x4Vector.from(new List.generate(coefficients.length,
-      (int j) =>
-        _costFunction.getPartialDerivative(j, points[0], coefficients, labels[0]) + _lambda * 2 * coefficients[j]
+      (int j) => _costFunction.getPartialDerivative(j, points[0], coefficients, labels[0])
     ));
 
     for (int i = 1; i < points.length; i++) {
       gradient += new Float32x4Vector.from(new List.generate(coefficients.length,
-        (int j) =>
-          _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i]) + _lambda * 2 * coefficients[j]
+        (int j) => _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i])
       ));
     }
 
-    return isMinimization ? coefficients - gradient.scalarMul(eta) : coefficients + gradient.scalarMul(eta);
+    final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
+    return isMinimization ?
+      regularizedCoefficients - gradient.scalarMul(eta) :
+      regularizedCoefficients + gradient.scalarMul(eta);
+  }
+
+  Float32x4Vector _regularize(double eta, double lambda, Float32x4Vector coefficients) {
+    if (lambda == 0) {
+      return coefficients;
+    }
+
+    return coefficients.scalarMul(1 - 2 * eta * lambda);
   }
 }
