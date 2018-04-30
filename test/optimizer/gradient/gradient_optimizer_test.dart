@@ -253,15 +253,60 @@ void main() {
       verify(learningRateGeneratorMock.getNextValue()).called(maxIteration);
     });
 
-//    test('should consider `minCoefficientsUpdate` parameter', () {
-//      final points = <Float32x4Vector>[new Float32x4Vector.from([1.0, 2.0, 3.0])];
-//      final labels = new Float32x4Vector.from([1.0]);
-//      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 1e100, batchSize: 2, lambda: 0.0);
-//
-//      when(randomizerMock.getIntegerInterval(0, 1, intervalLength: 1)).thenReturn([0,1]);
-//      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
-//          .thenReturn(5.0);
-//      optimizer.findExtrema(points, labels);
-//    });
+    test('should consider `minCoefficientsUpdate` parameter', () {
+      const minCoefficientsUpdate = 4.0;
+
+      final points = <Float32x4Vector>[new Float32x4Vector.from([1.0, 2.0, 3.0])];
+      final labels = new Float32x4Vector.from([1.0]);
+      final optimizer = createOptimizer(minCoeffUpdate: minCoefficientsUpdate, iterationsLimit: 1000000, batchSize: 1, lambda: 0.0);
+
+      when(randomizerMock.getIntegerInterval(0, 1, intervalLength: 1)).thenReturn([0,1]);
+
+      when(costFunctionMock.getPartialDerivative(
+        argThat(inInclusiveRange(0, 3)),
+        points[0],
+        argThat(equals([0.0, 0.0, 0.0])),
+        labels[0])
+      ).thenReturn(5.0);
+
+      when(costFunctionMock.getPartialDerivative(
+        argThat(inInclusiveRange(0, 3)),
+        points[0],
+        argThat(equals([-10.0, -10.0, -10.0])),
+        labels[0])
+      ).thenReturn(2.0);
+
+      when(costFunctionMock.getPartialDerivative(
+        argThat(inInclusiveRange(0, 3)),
+        points[0],
+        argThat(equals([-14.0, -14.0, -14.0])),
+        labels[0])
+      ).thenReturn(1.0);
+
+      // c_1 = c_1_prev - eta * partial = 0 - 2 * 5 = -10
+      // c_2 = c_2_prev - eta * partial = 0 - 2 * 5 = -10
+      // c_3 = c_3_prev - eta * partial = 0 - 2 * 5 = -10
+      //
+      // c = [-10, -10, -10]
+      // distance = sqrt((0 - (-10))^2 + (0 - (-10))^2 + (0 - (-10))^2) = sqrt(300) ~~ 17.32
+      //
+      // c_1 = c_1_prev - eta * partial = -10 - 2 * 2 = -14
+      // c_2 = c_2_prev - eta * partial = -10 - 2 * 2 = -14
+      // c_3 = c_3_prev - eta * partial = -10 - 2 * 2 = -14
+      //
+      // c = [-14, -14, -14]
+      // distance = sqrt((-10 - (-14))^2 + (-10 - (-14))^2 + (-10 - (-14))^2) = sqrt(48) ~~ 6.92
+      //
+      // c_1 = c_1_prev - eta * partial = -14 - 2 * 1 = -16
+      // c_2 = c_2_prev - eta * partial = -14 - 2 * 1 = -16
+      // c_3 = c_3_prev - eta * partial = -14 - 2 * 1 = -16
+      //
+      // c = [-16, -16, -16]
+      // distance = sqrt((-14 - (-16))^2 + (-14 - (-16))^2 + (-14 - (-16))^2) = sqrt(12) ~~ 3.46
+      final coefficients = optimizer.findExtrema(points, labels);
+
+      verify(learningRateGeneratorMock.getNextValue()).called(3);
+      expect(coefficients, equals([-16.0, -16.0, -16.0]));
+    });
   });
 }
