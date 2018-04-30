@@ -28,7 +28,7 @@ class GradientOptimizer implements Optimizer {
     this._learningRateGenerator,
     this._initialWeightsGenerator,
     {
-      double learningRate,
+      double initialLearningRate,
       double minCoefficientsUpdate,
       int iterationLimit,
       double lambda,
@@ -40,7 +40,7 @@ class GradientOptimizer implements Optimizer {
     _lambda = lambda ?? 1e-5,
     _batchSize = batchSize
   {
-    _learningRateGenerator.init(learningRate ?? 1e-5);
+    _learningRateGenerator.init(initialLearningRate ?? 1e-5);
   }
 
   @override
