@@ -202,9 +202,9 @@ void main() {
       // gradient_2 = [3, 3, 3]
       // gradient = [8, 8, 8]
       //
-      // c_1 = c_1_prev - eta * partial = 0 - 2 * 8 = -16
-      // c_2 = c_2_prev - eta * partial = 0 - 2 * 8 = -16
-      // c_3 = c_3_prev - eta * partial = 0 - 2 * 8 = -16
+      // c_1 = (1 - 2 * eta * lambda) * c_1_prev - eta * partial = 0 - 2 * 8 = -16
+      // c_2 = (1 - 2 * eta * lambda) * c_2_prev - eta * partial = 0 - 2 * 8 = -16
+      // c_3 = (1 - 2 * eta * lambda) * c_3_prev - eta * partial = 0 - 2 * 8 = -16
       //
       // c = [-16, -16, -16]
       //
@@ -213,13 +213,13 @@ void main() {
       // gradient_2 = [3, 3, 3]
       // gradient = [8, 8, 8]
       //
-      // c_1 = c_1_prev - eta * partial_1 = -16 - 2 * 8 = -32
-      // c_2 = c_2_prev - eta * partial_2 = -16 - 2 * 8 = -32
-      // c_3 = c_3_prev - eta * partial_3 = -16 - 2 * 8 = -32
+      // c_1 = (1 - 2 * eta * lambda) * c_1_prev - eta * partial_1 = (1 - 2 * 2 * 10) * -16 - 2 * 8 = -39 * -16 - 16 = 608
+      // c_2 = (1 - 2 * eta * lambda) * c_2_prev - eta * partial_2 = (1 - 2 * 2 * 10) * -16 - 2 * 8 = -39 * -16 - 16 = 608
+      // c_3 = (1 - 2 * eta * lambda) * c_3_prev - eta * partial_3 = (1 - 2 * 2 * 10) * -16 - 2 * 8 = -39 * -16 - 16 = 608
       //
-      // c = [-32, -32, -32]
+      // c = [608.0, 608.0, 608.0]
       //
-      expect(optimalCoefficients, equals([-32.0, -32.0, -32.0]));
+      expect(optimalCoefficients, equals([608.0, 608.0, 608.0]));
     });
   });
 }
