@@ -19,7 +19,7 @@ class GradientRegressor extends Regressor {
         LearningRateGeneratorFactory.Simple(),
         InitialWeightsGeneratorFactory.ZeroWeights(),
 
-        learningRate: learningRate,
+        initialLearningRate: learningRate,
         minCoefficientsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,

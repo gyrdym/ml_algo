@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.32.1
+- Gradient optimizer unit tests
+
 ## 0.32.0
 - Get rid of derivative computation
 
