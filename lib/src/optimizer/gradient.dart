@@ -103,17 +103,26 @@ class GradientOptimizer implements Optimizer {
     {bool isMinimization: true}
   ) {
     Float32x4Vector gradient = new Float32x4Vector.from(new List.generate(coefficients.length,
-      (int j) =>
-        _costFunction.getPartialDerivative(j, points[0], coefficients, labels[0]) + _lambda * 2 * coefficients[j]
+      (int j) => _costFunction.getPartialDerivative(j, points[0], coefficients, labels[0])
     ));
 
     for (int i = 1; i < points.length; i++) {
       gradient += new Float32x4Vector.from(new List.generate(coefficients.length,
-        (int j) =>
-          _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i]) + _lambda * 2 * coefficients[j]
+        (int j) => _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i])
       ));
     }
 
-    return isMinimization ? coefficients - gradient.scalarMul(eta) : coefficients + gradient.scalarMul(eta);
+    final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
+    return isMinimization ?
+      regularizedCoefficients - gradient.scalarMul(eta) :
+      regularizedCoefficients + gradient.scalarMul(eta);
+  }
+
+  Float32x4Vector _regularize(double eta, double lambda, Float32x4Vector coefficients) {
+    if (lambda == 0) {
+      return coefficients;
+    }
+
+    return coefficients.scalarMul(1 - 2 * eta * lambda);
   }
 }
