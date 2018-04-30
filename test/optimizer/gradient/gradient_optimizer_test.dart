@@ -29,7 +29,7 @@ InitialWeightsGenerator createInitialWeightsGenerator() {
   return mock;
 }
 
-List<Float32x4Vector> getMeaninglessData() {
+List<Float32x4Vector> getPoints() {
   return [
     new Float32x4Vector.from([5.0, 10.0, 15.0]),
     new Float32x4Vector.from([1.0, 2.0, 3.0]),
@@ -69,7 +69,7 @@ void main() {
     });
 
     test('should properly process `batchSize` parameter when the latter is equal to `1` (stochastic case)', () {
-      final points = getMeaninglessData();
+      final points = getPoints();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 1);
 
@@ -88,7 +88,7 @@ void main() {
     });
 
     test('should properly process `batchSize` parameter when the latter is equal to `2` (mini batch case)', () {
-      final points = getMeaninglessData();
+      final points = getPoints();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2);
 
@@ -111,7 +111,7 @@ void main() {
     });
 
     test('should properly process `batchSize` parameter when the latter is equal to `4` (batch case)', () {
-      final points = getMeaninglessData();
+      final points = getPoints();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 4);
 
@@ -136,6 +136,14 @@ void main() {
           .called(3 * 3); // 3 iterations 3 times in each iteration
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
+    });
+
+    test('should throw an error if `batchSize` is greater than number of given points', () {
+      final points = getPoints();
+      final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 10);
+
+      expect(() => optimizer.findExtrema(points, labels), throwsRangeError);
     });
 
     test('should find optimal coefficient values', () {
