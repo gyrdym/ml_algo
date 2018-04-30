@@ -51,7 +51,7 @@ GradientOptimizer createOptimizer({
     learningRateGeneratorMock,
     initialWeightsGeneratorMock,
 
-    learningRate: eta,
+    initialLearningRate: eta,
     minCoefficientsUpdate: minCoeffUpdate,
     iterationLimit: iterationsLimit,
     lambda: lambda,
@@ -315,6 +315,15 @@ void main() {
 
       verify(learningRateGeneratorMock.getNextValue()).called(3);
       expect(coefficients, equals([-16.0, -16.0, -16.0]));
+    });
+
+    test('should consider `learningRate` parameter', () {
+      const initialLearningRate = 10.0;
+
+      createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 2, batchSize: 1, lambda: 0.0,
+        eta: initialLearningRate);
+
+      verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
     });
   });
 }
