@@ -186,7 +186,7 @@ void main() {
         new Float32x4Vector.from([4.0, 5.0, 6.0])
       ];
       final labels = new Float32x4Vector.from([7.0, 8.0]);
-      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 2, batchSize: 2, lambda: 10.0);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2, lambda: 10.0);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0,2]);
 
@@ -219,7 +219,49 @@ void main() {
       //
       // c = [608.0, 608.0, 608.0]
       //
-      expect(optimalCoefficients, equals([608.0, 608.0, 608.0]));
+      // iteration 3:
+      // gradient_1 = [5, 5, 5]
+      // gradient_2 = [3, 3, 3]
+      // gradient = [8, 8, 8]
+      //
+      // c_1 = (1 - 2 * eta * lambda) * c_1_prev - eta * partial_1 = (1 - 2 * 2 * 10) * 608 - 2 * 8 = -39 * 608 - 16 = -23728
+      // c_2 = (1 - 2 * eta * lambda) * c_2_prev - eta * partial_2 = (1 - 2 * 2 * 10) * 608 - 2 * 8 = -39 * 608 - 16 = -23728
+      // c_3 = (1 - 2 * eta * lambda) * c_3_prev - eta * partial_3 = (1 - 2 * 2 * 10) * 608 - 2 * 8 = -39 * 608 - 16 = -23728
+      //
+      // c = [-23728.0, -23728.0, -23728.0]
+      //
+      expect(optimalCoefficients, equals([-23728.0, -23728.0, -23728.0]));
     });
+
+    test('should consider `iterationLimit` parameter', () {
+      const maxIteration = 2000;
+
+      final points = <Float32x4Vector>[
+        new Float32x4Vector.from([1.0, 2.0, 3.0]),
+        new Float32x4Vector.from([4.0, 5.0, 6.0])
+      ];
+      final labels = new Float32x4Vector.from([7.0, 8.0]);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: maxIteration, batchSize: 2, lambda: 0.0);
+      when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0,2]);
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+          .thenReturn(5.0);
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+          .thenReturn(3.0);
+
+      optimizer.findExtrema(points, labels);
+
+      verify(learningRateGeneratorMock.getNextValue()).called(maxIteration);
+    });
+
+//    test('should consider `minCoefficientsUpdate` parameter', () {
+//      final points = <Float32x4Vector>[new Float32x4Vector.from([1.0, 2.0, 3.0])];
+//      final labels = new Float32x4Vector.from([1.0]);
+//      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 1e100, batchSize: 2, lambda: 0.0);
+//
+//      when(randomizerMock.getIntegerInterval(0, 1, intervalLength: 1)).thenReturn([0,1]);
+//      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+//          .thenReturn(5.0);
+//      optimizer.findExtrema(points, labels);
+//    });
   });
 }
