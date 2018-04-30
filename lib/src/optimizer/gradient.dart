@@ -53,6 +53,11 @@ class GradientOptimizer implements Optimizer {
       bool arePointsNormalized = false
     }
   ) {
+    if (_batchSize > points.length) {
+      throw new RangeError.range(_batchSize, 0, points.length, null,
+        'batch size parameter is greater than actual number of given points');
+    }
+
     _points = points;
 
     Float32x4Vector coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
