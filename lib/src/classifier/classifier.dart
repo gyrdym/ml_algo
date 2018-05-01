@@ -64,7 +64,8 @@ abstract class Classifier implements Evaluable {
     final probabilities = predictProbabilities(features);
     final classes = new Float32x4Vector.zero(features.length);
     for (int i = 0; i< probabilities.length; i++) {
-      classes[i] = probabilities[i].indexOf(probabilities[i].max()) * 1.0;
+      final _probabilities = probabilities[i];
+      classes[i] = _probabilities.indexOf(_probabilities.max()) * 1.0;
     }
     return classes;
   }
