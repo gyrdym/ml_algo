@@ -16,9 +16,10 @@ class GradientOptimizer implements Optimizer {
   final double _minCoefficientsUpdate;
   final int _iterationLimit;
   final double _lambda;
+  final int _batchSize;
   //hyper parameters declaration end
 
-  final int _batchSize;
+  int get batchSize => _batchSize;
 
   List<Float32x4Vector> _points;
 

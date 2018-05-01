@@ -24,7 +24,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
   }
 
   void setup() {
-    regressor = new LogisticRegressor(batchSize: 1);
+    regressor = new LogisticRegressor();
   }
 
   void tearDown() {}
