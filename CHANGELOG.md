@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.33.0
+- Gradient descent regressor type enum added
+
 ## 0.32.1
 - Gradient optimizer unit tests
 
