@@ -20,9 +20,9 @@ main() async {
       .toList(growable: false);
 
   final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
-  final sgdRegressionModel = new GradientRegressor();
+  final sgdRegressionModel = new GradientRegressor(type: GradientType.Stochastic);
   final validator = new CrossValidator<Float32x4Vector>.KFold();
 
-  print('K-fold cross validation with MAPE metric (percent error):');
+  print('K-fold cross validation with MAPE metric (error in percents):');
   print('${(validator.evaluate(sgdRegressionModel, features, labels, MetricType.MAPE)).toStringAsFixed(2)}%');
 }
