@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:dart_ml/src/classifier/classifier.dart';
 import 'package:dart_ml/src/cost_function/cost_function_factory.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer_factory.dart';
@@ -12,8 +10,10 @@ class LogisticRegressor extends Classifier {
     int iterationLimit,
     double learningRate,
     double minWeightsUpdate,
-    double lambda
+    double lambda,
+    int numberOfClasses = 2
   }) : super(
+    numberOfClasses,
     new GradientOptimizer(
       RandomizerFactory.Default(),
       CostFunctionFactory.LogLikelihood(),
