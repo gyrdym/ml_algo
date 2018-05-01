@@ -90,7 +90,8 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is equal to `2` (mini batch case)', () {
       final points = getPoints();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
-      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3,
+        batchSize: 2);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2)).thenReturn([0, 2]);
 
@@ -138,12 +139,22 @@ void main() {
           .called(3 * 3); // 3 iterations 3 times in each iteration
     });
 
-    test('should throw an error if `batchSize` is greater than number of given points', () {
+    test('should cut the batch size parameter to make it equal to the number of given points', () {
+      const maxIterations = 3;
       final points = getPoints();
       final labels = new Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
-      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 10);
+      final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: maxIterations, batchSize: 15);
 
-      expect(() => optimizer.findExtrema(points, labels), throwsRangeError);
+      when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4)).thenReturn([0, 4]);
+      when(costFunctionMock.getPartialDerivative(any, any, any, any)).thenReturn(10.0);
+
+      optimizer.findExtrema(points, labels);
+
+      verify(costFunctionMock.getPartialDerivative(any, points[0], any, labels[0])).called(3 * maxIterations);
+      verify(costFunctionMock.getPartialDerivative(any, points[1], any, labels[1])).called(3 * maxIterations);
+      verify(costFunctionMock.getPartialDerivative(any, points[2], any, labels[2])).called(3 * maxIterations);
+      verify(costFunctionMock.getPartialDerivative(any, points[3], any, labels[3])).called(3 * maxIterations);
+      verify(learningRateGeneratorMock.getNextValue()).called(maxIterations);
     });
 
     test('should find optimal coefficient values', () {
