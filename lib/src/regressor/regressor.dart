@@ -4,7 +4,7 @@ import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 
-class Regressor implements Evaluable {
+abstract class Regressor implements Evaluable {
 
   final Optimizer _optimizer;
 

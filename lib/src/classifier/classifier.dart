@@ -4,13 +4,15 @@ import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 
-class Classifier implements Evaluable {
+abstract class Classifier implements Evaluable {
 
   final Optimizer _optimizer;
+  final int _numberOfClasses;
 
-  Float32x4Vector _weights;
+  final List<Float32x4Vector> _weightsByClass;
 
-  Classifier(this._optimizer);
+  Classifier(this._numberOfClasses, this._optimizer) :
+    _weightsByClass = new List<Float32x4Vector>(_numberOfClasses);
 
   @override
   void fit(
@@ -21,11 +23,17 @@ class Classifier implements Evaluable {
       bool isDataNormalized
     }
   ) {
-    _weights = _optimizer.findExtrema(features, origLabels,
-      initialWeights: initialWeights,
-      arePointsNormalized: isDataNormalized
-    );
+    for (int classId = 0; classId < _numberOfClasses; classId++) {
+      final labels = _makeLabelsOneVsAll(origLabels, classId);
+      _weightsByClass[classId] = _optimizer.findExtrema(features, labels,
+        initialWeights: initialWeights,
+        arePointsNormalized: isDataNormalized
+      );
+    }
   }
+
+  Float32x4Vector _makeLabelsOneVsAll(Float32x4Vector origLabels, int targetLabel) =>
+    new Float32x4Vector.from(origLabels.map((int label) => label == targetLabel ? 1 : -1));
 
   @override
   double test(
@@ -38,16 +46,26 @@ class Classifier implements Evaluable {
     return metric.getError(prediction, new Float32x4Vector.from(origLabels));
   }
 
-  Float32x4Vector predictProbabilities(List<Float32x4Vector> features) {
-    final labels = new List<double>(features.length);
-    for (int i = 0; i < features.length; i++) {
-      labels[i] = _weights.dot(features[i]);
+  List<Float32x4Vector> predictProbabilities(List<Float32x4Vector> points) {
+    List<Float32x4Vector> probabilitiesByClass = new List<Float32x4Vector>(_numberOfClasses);
+
+    for (int i = 0; i < points.length; i++) {
+      final labels = new List<double>(points.length);
+        for (int classId = 0; classId < _numberOfClasses; classId++) {
+          labels[classId] = _weightsByClass[classId].dot(points[i]);
+        }
+        probabilitiesByClass[i] = labels;
     }
-    return new Float32x4Vector.from(labels);
+
+    return probabilitiesByClass;
   }
 
   Float32x4Vector predictClasses(List<Float32x4Vector> features) {
     final probabilities = predictProbabilities(features);
-    return new Float32x4Vector.from(probabilities.map((double value) => value.round() * 1.0));
+    final classes = new Float32x4Vector.zero(features.length);
+    for (int i = 0; i< probabilities.length; i++) {
+      classes[i] = probabilities[i].indexOf(probabilities[i].max()) * 1.0;
+    }
+    return classes;
   }
 }
