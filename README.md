@@ -1,10 +1,9 @@
 # Machine learning with dart
 
-Following models are implemented:
+Following algorithms are implemented:
 - Linear regression:
-    - with stochastic gradient descent
-    - with mini batch gradient descent
-    - with batch gradient descent
+    - gradient descent - based models
+    - lasso model
 
 - Linear classifier:
     - Logistic regression
@@ -32,8 +31,8 @@ List<List<num>> fields = (await input.transform(UTF8.decoder)
   .sublist(1);
 ````
 
-Data in this file is represented by 200 lines, every line contains 4 elements. First 3 elements of every line are features and the last is label.
-Let's extract features from the data. Declare utility method `extractFeatures`, which extracts 3 elements of an every line:
+Data in this file is represented by 200 lines, every line contains 4 elements. First 3 elements of every line are features and the last one is label.
+Let's extract features from the data. Declare utility method `extractFeatures`, that extracts 3 elements from every line:
 ````dart
 List<double> extractFeatures(item) => item.sublist(0, 3)
   .map((num feature) => feature.toDouble())
@@ -59,28 +58,21 @@ final validator = new CrossValidator.KFold();
 
 Create a linear regressor instance with stochastic gradient descent optimizer:
 ````dart
-final sgdRegressor = new GradientRegressor();
+final sgdRegressor = new GradientRegressor(type: GradientType.Stochastic);
 ````
 
-Evaluate our model via RMSE-metric (default metric for cross validation):
-````dart
-final scoreRMSE = validator.evaluate(sgdRegressor, features, labels, metric: MetricType.RMSE);
-````
-
-...and via MAPE-metric:
+Evaluate our model via MAPE-metric:
 ````dart
 final scoreMAPE = validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE);
 ````
 
 Let's print score:
 ````dart
-print("score (RMSE): ${scoreRMSE.mean()}");
-print("score (MAPE): ${scoreMAPE.mean()}");
+print("score (MAPE): ${scoreMAPE}");
 ````
 
 We will see something like this:
 ````
-score (RMSE): 4.91429797944094
 score (MAPE): 31.221150755882263
 ````
 

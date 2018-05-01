@@ -16,9 +16,10 @@ class GradientOptimizer implements Optimizer {
   final double _minCoefficientsUpdate;
   final int _iterationLimit;
   final double _lambda;
+  final int _batchSize;
   //hyper parameters declaration end
 
-  final int _batchSize;
+  int get batchSize => _batchSize;
 
   List<Float32x4Vector> _points;
 
@@ -53,10 +54,8 @@ class GradientOptimizer implements Optimizer {
       bool arePointsNormalized = false
     }
   ) {
-    if (_batchSize > points.length) {
-      throw new RangeError.range(_batchSize, 0, points.length, null,
-        'batch size parameter is greater than actual number of given points');
-    }
+
+    final batchSize = _batchSize >= points.length ? points.length : _batchSize;
 
     _points = points;
 
@@ -66,7 +65,8 @@ class GradientOptimizer implements Optimizer {
 
     while (!_isConverged(coefficientsUpdate, iterationCounter)) {
       final eta = _learningRateGenerator.getNextValue();
-      final updatedCoefficients = _generateCoefficients(coefficients, labels, eta, isMinimization: isMinimizingObjective);
+      final updatedCoefficients = _generateCoefficients(coefficients, labels, eta, batchSize,
+        isMinimization: isMinimizingObjective);
       coefficientsUpdate = updatedCoefficients.distanceTo(coefficients);
       coefficients = updatedCoefficients;
       iterationCounter++;
@@ -77,19 +77,19 @@ class GradientOptimizer implements Optimizer {
     return coefficients;
   }
 
-  bool _isConverged(double coefficientsUpdate, int iterationCounter) {
-    return
-      (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
-      (_iterationLimit != null ? iterationCounter >= _iterationLimit : false);
-  }
+  bool _isConverged(double coefficientsUpdate, int iterationCounter) =>
+    (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
+    (_iterationLimit != null ? iterationCounter >= _iterationLimit : false);
+
 
   Float32x4Vector _generateCoefficients(
     Float32x4Vector currentCoefficients,
     Float32x4Vector labels,
     double eta,
+    int batchSize,
     {bool isMinimization: true}
   ) {
-    final range = _getBatchRange();
+    final range = _getBatchRange(batchSize);
     final start = range.first;
     final end = range.last;
     final pointsBatch = _points.sublist(start, end);
@@ -98,7 +98,7 @@ class GradientOptimizer implements Optimizer {
     return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
   }
 
-  Iterable<int> _getBatchRange() => _randomizer.getIntegerInterval(0, _points.length, intervalLength: _batchSize);
+  Iterable<int> _getBatchRange(int batchSize) => _randomizer.getIntegerInterval(0, _points.length, intervalLength: batchSize);
 
   Float32x4Vector _makeGradientStep(
     Float32x4Vector coefficients,
