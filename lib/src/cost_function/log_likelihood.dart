@@ -8,19 +8,20 @@ class LogLikelihoodCost implements CostFunction {
 
   @override
   double getCost(double score, double yOrig) {
-    final probability = _sigmoidMap(score);
+    final probability = linkScoreToProbability(score);
     return _indicator(yOrig, -1.0) * math.log(1 - probability) + _indicator(yOrig, 1.0) * math.log(probability);
   }
 
   @override
   double getPartialDerivative(
     int wIdx,
-    covariant Float32x4Vector x,
-    covariant Float32x4Vector w,
+    covariant Float64x2Vector x,
+    covariant Float64x2Vector w,
     double y
-  ) =>  x[wIdx] * (_indicator(y, 1.0) - _sigmoidMap(x.dot(w)));
+  ) =>  x[wIdx] * (_indicator(y, 1.0) - linkScoreToProbability(x.dot(w)));
 
-  int _indicator(double y, double sign) => sign == y ? 1 : 0;
+  int _indicator(double y, double target) => target == y ? 1 : 0;
 
-  double _sigmoidMap(double score) => 1 / (1.0 + math.exp(-score));
+  @override
+  double linkScoreToProbability(double score) => 1 / (1.0 + math.exp(-score));
 }

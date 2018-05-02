@@ -19,9 +19,10 @@ class GradientOptimizer implements Optimizer {
   final int _batchSize;
   //hyper parameters declaration end
 
-  int get batchSize => _batchSize;
+  @override
+  CostFunction get costFunction => _costFunction;
 
-  List<Float32x4Vector> _points;
+  List<Float64x2Vector> _points;
 
   GradientOptimizer(
     this._randomizer,
@@ -45,11 +46,11 @@ class GradientOptimizer implements Optimizer {
   }
 
   @override
-  Float32x4Vector findExtrema(
-    covariant List<Float32x4Vector> points,
-    covariant Float32x4Vector labels,
+  Float64x2Vector findExtrema(
+    covariant List<Float64x2Vector> points,
+    covariant Float64x2Vector labels,
     {
-      covariant Float32x4Vector initialWeights,
+      covariant Float64x2Vector initialWeights,
       bool isMinimizingObjective = true,
       bool arePointsNormalized = false
     }
@@ -59,7 +60,7 @@ class GradientOptimizer implements Optimizer {
 
     _points = points;
 
-    Float32x4Vector coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
+    Float64x2Vector coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
     double coefficientsUpdate = double.MAX_FINITE;
     int iterationCounter = 0;
 
@@ -82,9 +83,9 @@ class GradientOptimizer implements Optimizer {
     (_iterationLimit != null ? iterationCounter >= _iterationLimit : false);
 
 
-  Float32x4Vector _generateCoefficients(
-    Float32x4Vector currentCoefficients,
-    Float32x4Vector labels,
+  Float64x2Vector _generateCoefficients(
+    Float64x2Vector currentCoefficients,
+    Float64x2Vector labels,
     double eta,
     int batchSize,
     {bool isMinimization: true}
@@ -100,19 +101,19 @@ class GradientOptimizer implements Optimizer {
 
   Iterable<int> _getBatchRange(int batchSize) => _randomizer.getIntegerInterval(0, _points.length, intervalLength: batchSize);
 
-  Float32x4Vector _makeGradientStep(
-    Float32x4Vector coefficients,
-    List<Float32x4Vector> points,
-    Float32x4Vector labels,
+  Float64x2Vector _makeGradientStep(
+    Float64x2Vector coefficients,
+    List<Float64x2Vector> points,
+    Float64x2Vector labels,
     double eta,
     {bool isMinimization: true}
   ) {
-    Float32x4Vector gradient = new Float32x4Vector.from(new List.generate(coefficients.length,
+    Float64x2Vector gradient = new Float64x2Vector.from(new List.generate(coefficients.length,
       (int j) => _costFunction.getPartialDerivative(j, points[0], coefficients, labels[0])
     ));
 
     for (int i = 1; i < points.length; i++) {
-      gradient += new Float32x4Vector.from(new List.generate(coefficients.length,
+      gradient += new Float64x2Vector.from(new List.generate(coefficients.length,
         (int j) => _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i])
       ));
     }
@@ -123,7 +124,7 @@ class GradientOptimizer implements Optimizer {
       regularizedCoefficients + gradient.scalarMul(eta);
   }
 
-  Float32x4Vector _regularize(double eta, double lambda, Float32x4Vector coefficients) {
+  Float64x2Vector _regularize(double eta, double lambda, Float64x2Vector coefficients) {
     if (lambda == 0) {
       return coefficients;
     }

@@ -9,64 +9,65 @@ abstract class Classifier implements Evaluable {
   final Optimizer _optimizer;
   final int _numberOfClasses;
 
-  final List<Float32x4Vector> _weightsByClass;
+  final List<Float64x2Vector> _weightsByClasses;
 
   Classifier(this._numberOfClasses, this._optimizer) :
-    _weightsByClass = new List<Float32x4Vector>(_numberOfClasses);
+    _weightsByClasses = new List<Float64x2Vector>(_numberOfClasses);
 
   @override
   void fit(
-    covariant List<Float32x4Vector> features,
+    covariant List<Float64x2Vector> features,
     covariant List<double> origLabels,
     {
-      covariant Float32x4Vector initialWeights,
+      covariant Float64x2Vector initialWeights,
       bool isDataNormalized
     }
   ) {
     for (int classId = 0; classId < _numberOfClasses; classId++) {
       final labels = _makeLabelsOneVsAll(origLabels, classId);
-      _weightsByClass[classId] = _optimizer.findExtrema(features, labels,
+      _weightsByClasses[classId] = _optimizer.findExtrema(features, labels,
         initialWeights: initialWeights,
         arePointsNormalized: isDataNormalized
       );
     }
   }
 
-  Float32x4Vector _makeLabelsOneVsAll(Float32x4Vector origLabels, int targetLabel) =>
-    new Float32x4Vector.from(origLabels.map((int label) => label == targetLabel ? 1 : -1));
+  Float64x2Vector _makeLabelsOneVsAll(Float64x2Vector origLabels, int targetLabel) =>
+    new Float64x2Vector.from(origLabels.map((double label) => label == targetLabel ? 1.0 : 0.0));
 
   @override
   double test(
-    covariant List<Float32x4Vector> features,
+    covariant List<Float64x2Vector> features,
     covariant List<double> origLabels,
     MetricType metricType
   ) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predictClasses(features);
-    return metric.getError(prediction, new Float32x4Vector.from(origLabels));
+    return metric.getError(prediction, new Float64x2Vector.from(origLabels));
   }
 
-  List<Float32x4Vector> predictProbabilities(List<Float32x4Vector> points) {
-    List<Float32x4Vector> probabilitiesByClass = new List<Float32x4Vector>(_numberOfClasses);
+  List<Float64x2Vector> predictProbabilities(List<Float64x2Vector> points) {
+    final distribution = new List<Float64x2Vector>(points.length);
 
     for (int i = 0; i < points.length; i++) {
-      final labels = new List<double>(points.length);
-        for (int classId = 0; classId < _numberOfClasses; classId++) {
-          labels[classId] = _weightsByClass[classId].dot(points[i]);
-        }
-        probabilitiesByClass[i] = labels;
+      final probabilities = new List<double>(_numberOfClasses);
+      for (int classId = 0; classId < _numberOfClasses; classId++) {
+        final score = _weightsByClasses[classId].dot(points[i]);
+        probabilities[classId] = _optimizer.costFunction.linkScoreToProbability(score);
+      }
+      distribution[i] = new Float64x2Vector.from(probabilities);
+      print(distribution[i].sum());
     }
-
-    return probabilitiesByClass;
+    return distribution;
   }
 
-  Float32x4Vector predictClasses(List<Float32x4Vector> features) {
+  Float64x2Vector predictClasses(List<Float64x2Vector> features) {
     final probabilities = predictProbabilities(features);
-    final classes = new Float32x4Vector.zero(features.length);
-    for (int i = 0; i< probabilities.length; i++) {
+    final classes = new List<double>(features.length);
+    for (int i = 0; i < probabilities.length; i++) {
       final _probabilities = probabilities[i];
       classes[i] = _probabilities.indexOf(_probabilities.max()) * 1.0;
     }
-    return classes;
+    return new Float64x2Vector.from(classes);
   }
 }
