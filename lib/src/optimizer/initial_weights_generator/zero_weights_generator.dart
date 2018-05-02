@@ -2,5 +2,5 @@ import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:simd_vector/vector.dart';
 
 class ZeroWeightsGenerator implements InitialWeightsGenerator {
-  Float64x2Vector generate(int length) => new Float64x2Vector.from(new List.filled(length, 0.0));
+  Float32x4Vector generate(int length) => new Float32x4Vector.from(new List.filled(length, 0.0));
 }
