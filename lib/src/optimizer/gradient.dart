@@ -19,9 +19,6 @@ class GradientOptimizer implements Optimizer {
   final int _batchSize;
   //hyper parameters declaration end
 
-  @override
-  CostFunction get costFunction => _costFunction;
-
   List<Float32x4Vector> _points;
 
   GradientOptimizer(

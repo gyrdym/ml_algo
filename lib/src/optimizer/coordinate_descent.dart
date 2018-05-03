@@ -12,9 +12,6 @@ class CoordinateDescentOptimizer implements Optimizer {
   final double _lambda;
   //hyper parameters declaration end
 
-  @override
-  CostFunction get costFunction => null;
-
   List<Float32x4Vector> _points;
 
   CoordinateDescentOptimizer(
