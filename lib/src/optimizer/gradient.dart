@@ -1,7 +1,7 @@
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:dart_ml/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
+import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 
@@ -34,12 +34,12 @@ class GradientOptimizer implements Optimizer {
       int batchSize
     }
   ) :
-    _minCoefficientsUpdate = minCoefficientsUpdate ?? 1e-8,
+    _minCoefficientsUpdate = minCoefficientsUpdate,
     _iterationLimit = iterationLimit ?? 10000,
-    _lambda = lambda ?? 1e-5,
+    _lambda = lambda ?? 0.0,
     _batchSize = batchSize
   {
-    _learningRateGenerator.init(initialLearningRate ?? 1e-5);
+    _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 
   @override
