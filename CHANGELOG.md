@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.34.0
+- One versus all classifier
+
 ## 0.33.0
 - Gradient descent regressor type enum added
 

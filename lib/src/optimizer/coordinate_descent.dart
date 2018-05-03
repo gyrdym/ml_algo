@@ -1,3 +1,4 @@
+import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';

@@ -2,11 +2,11 @@
 
 Following algorithms are implemented:
 - Linear regression:
-    - gradient descent - based models
-    - lasso model
+    - gradient descent models (batch, mini-batch, stochastic) with ridge regularization
+    - lasso model (feature selection model)
 
 - Linear classifier:
-    - Logistic regression
+    - Logistic regression (with "one-vs-all" multinomial classification)
     
 ## Usage
 
