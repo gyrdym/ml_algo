@@ -77,7 +77,7 @@ class GradientOptimizer implements Optimizer {
 
   bool _isConverged(double coefficientsUpdate, int iterationCounter) =>
     (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
-    (_iterationLimit != null ? iterationCounter >= _iterationLimit : false);
+    (iterationCounter >= _iterationLimit);
 
 
   Float32x4Vector _generateCoefficients(
