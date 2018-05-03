@@ -9,6 +9,9 @@ void main() {
     LeavePOutSplitter leavePOutSplitter;
 
     test('K fold splitter test', () {
+      expect(() => new KFoldSplitter(0), throwsRangeError);
+      expect(() => new KFoldSplitter(1), throwsRangeError);
+
       kfoldSplitter = new KFoldSplitter(5);
 
       expect(kfoldSplitter.split(12), equals([[0,1,2],[3,4,5],[6,7],[8,9],[10,11]]));
@@ -18,9 +21,6 @@ void main() {
 
       kfoldSplitter = new KFoldSplitter(3);
       expect(kfoldSplitter.split(12), equals([[0,1,2,3],[4,5,6,7],[8,9,10,11]]));
-
-      kfoldSplitter = new KFoldSplitter(1);
-      expect(kfoldSplitter.split(12), equals([[0,1,2,3,4,5,6,7,8,9,10,11]]));
 
       kfoldSplitter = new KFoldSplitter(12);
       expect(kfoldSplitter.split(12), equals([[0],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11]]));

@@ -1,0 +1,3 @@
+enum LearningRateType {
+  decreasing, constant
+}
