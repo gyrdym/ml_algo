@@ -21,7 +21,7 @@ Future main() async {
 
   final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
   final logisticRegressor = new LogisticRegressor(minWeightsUpdate: 1e-4);
-  final validator = new CrossValidator<Float32x4Vector>.KFold(numberOfFolds: 2);
+  final validator = new CrossValidator<Float32x4Vector>.KFold(numberOfFolds: 5);
 
   print('Logistic regression, error on cross validation: ');
   print('${(validator.evaluate(logisticRegressor, features, labels, MetricType.ACCURACY) * 100).toStringAsFixed(2)}%');

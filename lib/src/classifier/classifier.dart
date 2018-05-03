@@ -1,3 +1,4 @@
+import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
 import 'package:dart_ml/src/metric/factory.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
@@ -8,10 +9,11 @@ abstract class Classifier implements Evaluable {
 
   final Optimizer _optimizer;
   final int _numberOfClasses;
+  final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
 
   final List<Float32x4Vector> _weightsByClasses;
 
-  Classifier(this._numberOfClasses, this._optimizer) :
+  Classifier(this._numberOfClasses, this._optimizer, this._linkScoreToProbability) :
     _weightsByClasses = new List<Float32x4Vector>(_numberOfClasses);
 
   @override
@@ -53,7 +55,7 @@ abstract class Classifier implements Evaluable {
       final probabilities = new List<double>(_numberOfClasses);
       for (int classId = 0; classId < _numberOfClasses; classId++) {
         final score = _weightsByClasses[classId].dot(points[i]);
-        probabilities[classId] = _optimizer.costFunction.linkScoreToProbability(score);
+        probabilities[classId] = _linkScoreToProbability(score);
       }
       distributions[i] = new Float32x4Vector.from(probabilities);
     }
