@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.35.0
+- `One versus all` refactored, tests for logistic regression added 
+
 ## 0.34.0
 - One versus all classifier
 
