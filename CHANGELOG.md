@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.35.1
+- Logistic regression tests improved
+
 ## 0.35.0
 - `One versus all` refactored, tests for logistic regression added 
 
