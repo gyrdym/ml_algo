@@ -20,7 +20,7 @@ Future main() async {
       .toList(growable: false);
 
   final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
-  final logisticRegressor = new LogisticRegressor(iterationLimit: 1e4~/1, learningRate: 1.0, batchSize: 2,
+  final logisticRegressor = new LogisticRegressor(iterationLimit: 100, learningRate: 1.5, batchSize: 768,
     learningRateType: LearningRateType.constant, randomSeed: new DateTime.now().millisecondsSinceEpoch);
   final validator = new CrossValidator<Float32x4Vector>.KFold(numberOfFolds: 5);
 

@@ -10,6 +10,22 @@ void main() {
       classifier = new LogisticRegressor(batchSize: 5, iterationLimit: 1);
     });
 
+    test('shoudl extract class labels from the data', () {
+      final features = [
+        new Float32x4Vector.from([5.0, 7.0, 6.0]),
+        new Float32x4Vector.from([1.0, 2.0, 3.0]),
+        new Float32x4Vector.from([10.0, 12.0, 31.0]),
+        new Float32x4Vector.from([9.0, 8.0, 5.0]),
+        new Float32x4Vector.from([4.0, 0.0, 1.0]),
+        new Float32x4Vector.from([4.0, 0.0, 1.0]),
+        new Float32x4Vector.from([4.0, 0.0, 1.0])
+      ];
+      final labels = new Float32x4Vector.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
+      classifier.fit(features, labels);
+
+      expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
+    });
+
     test('should properly fit given data', () {
       final features = [
         new Float32x4Vector.from([5.0, 7.0, 6.0]),
@@ -152,7 +168,6 @@ void main() {
       // update:
       // [0.0, 0.0, 0.0] + eta * [-5.5, -6.5, -18.0] = [0.0, 0.0, 0.0] + 1.0 * [-5.5, -6.5, -18.0] = [-5.5, -6.5, -18.0]
 
-      expect(classifier.classLabels, equals([0.0, 1.0, 2.0]));
       expect(classifier.weightsByClasses, equals([
         [-5.5, -7.5, -16.0],
         [-3.5, -0.5, 11.0],
