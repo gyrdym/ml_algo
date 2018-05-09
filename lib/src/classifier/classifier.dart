@@ -32,7 +32,8 @@ abstract class Classifier implements Evaluable {
       final labels = _makeLabelsOneVsAll(origLabels, classLabel);
       _weightsByClasses.add(_optimizer.findExtrema(features, labels,
         initialWeights: initialWeights,
-        arePointsNormalized: isDataNormalized
+        arePointsNormalized: isDataNormalized,
+        isMinimizingObjective: false
       ));
     }
   }
