@@ -16,7 +16,7 @@ void main() {
       // probability(y=1|x,w) = 1 / (1 + e^(-score))
       // score = x.w (dot product)
       // so, common formula for this test: x_i * (1 - (1 / (1 + e^(-1 * [3.0, 1.2, 5.6].[1.5, 2.3, 3.2])))) =
-      // x_i * (1 - (1 / (1 + e^-25.08))) = x_1 * 1.2820189354556533e-11
+      // x_i * (1 - (1 / (1 + e^-25.08))) = x_i * 1.2820189354556533e-11
 
       expect(logLikelihood.getPartialDerivative(0, x, w, y), closeTo(3.8e-11, precision));
       expect(logLikelihood.getPartialDerivative(1, x, w, y), closeTo(1.5e-11, precision));
@@ -33,7 +33,7 @@ void main() {
       // probability(y=1|x,w) = 1 / (1 + e^(-score))
       // score = x.w (dot product)
       // so, common formula for this test: x_i * (0 - (1 / (1 + e^(-1 * [3.0, 1.2, 5.6].[1.5, 2.3, 3.2])))) =
-      // x_i * (0 - (1 / (1 + e^-25.08))) = x_1 * -0.9999999999871798
+      // x_i * (0 - (1 / (1 + e^-25.08))) = x_i * -0.9999999999871798
 
       expect(logLikelihood.getPartialDerivative(0, x, w, y), closeTo(-3.0, precision));
       expect(logLikelihood.getPartialDerivative(1, x, w, y), closeTo(-1.2, precision));
