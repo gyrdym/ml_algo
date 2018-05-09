@@ -15,11 +15,11 @@ class LogLikelihoodCost implements CostFunction {
 
   @override
   double getPartialDerivative(
-    int wIdx,
+    int idx,
     covariant Float32x4Vector x,
     covariant Float32x4Vector w,
     double y
-  ) =>  x[wIdx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
+  ) =>  x[idx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
 
   int _indicator(double y, double target) => target == y ? 1 : 0;
 }
