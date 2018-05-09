@@ -8,33 +8,36 @@ import 'package:simd_vector/vector.dart';
 abstract class Classifier implements Evaluable {
 
   final Optimizer _optimizer;
-  final int _numberOfClasses;
+  final _weightsByClasses = <Float32x4Vector>[];
   final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
 
-  final List<Float32x4Vector> _weightsByClasses;
+  List<Float32x4Vector> get weightsByClasses => _weightsByClasses;
 
-  Classifier(this._numberOfClasses, this._optimizer, this._linkScoreToProbability) :
-    _weightsByClasses = new List<Float32x4Vector>(_numberOfClasses);
+  Float32x4Vector get classLabels => _classLabels;
+  Float32x4Vector _classLabels;
+
+  Classifier(this._optimizer, this._linkScoreToProbability);
 
   @override
   void fit(
     covariant List<Float32x4Vector> features,
-    covariant List<double> origLabels,
+    covariant Float32x4Vector origLabels,
     {
       covariant Float32x4Vector initialWeights,
       bool isDataNormalized
     }
   ) {
-    for (int classId = 0; classId < _numberOfClasses; classId++) {
-      final labels = _makeLabelsOneVsAll(origLabels, classId);
-      _weightsByClasses[classId] = _optimizer.findExtrema(features, labels,
+    _classLabels = origLabels.unique();
+    for (final classLabel in _classLabels) {
+      final labels = _makeLabelsOneVsAll(origLabels, classLabel);
+      _weightsByClasses.add(_optimizer.findExtrema(features, labels,
         initialWeights: initialWeights,
         arePointsNormalized: isDataNormalized
-      );
+      ));
     }
   }
 
-  Float32x4Vector _makeLabelsOneVsAll(Float32x4Vector origLabels, int targetLabel) =>
+  Float32x4Vector _makeLabelsOneVsAll(Float32x4Vector origLabels, double targetLabel) =>
     new Float32x4Vector.from(origLabels.map((double label) => label == targetLabel ? 1.0 : 0.0));
 
   @override
@@ -52,10 +55,10 @@ abstract class Classifier implements Evaluable {
     final distributions = new List<Float32x4Vector>(points.length);
 
     for (int i = 0; i < points.length; i++) {
-      final probabilities = new List<double>(_numberOfClasses);
-      for (int classId = 0; classId < _numberOfClasses; classId++) {
-        final score = _weightsByClasses[classId].dot(points[i]);
-        probabilities[classId] = _linkScoreToProbability(score);
+      final probabilities = new List<double>(_weightsByClasses.length);
+      for (int i = 0; i < _weightsByClasses.length; i++) {
+        final score = _weightsByClasses[i].dot(points[i]);
+        probabilities[i] = _linkScoreToProbability(score);
       }
       distributions[i] = new Float32x4Vector.from(probabilities);
     }
