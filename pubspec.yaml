@@ -1,6 +1,6 @@
 name: dart_ml
 description: Machine learning with dart
-version: 0.34.0
+version: 0.35.0
 author: Ilya Gyrdymov <ilgyrd@gmail.com>
 
 environment:
