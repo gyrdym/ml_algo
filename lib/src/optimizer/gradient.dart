@@ -49,7 +49,8 @@ class GradientOptimizer implements Optimizer {
     {
       covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true,
-      bool arePointsNormalized = false
+      bool arePointsNormalized = false,
+      bool fitIntercept = true
     }
   ) {
 

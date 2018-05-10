@@ -37,7 +37,7 @@ void main() {
         new Float32x4Vector.from([4.0, 0.0, 1.0])
       ];
       final labels = new Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
-      classifier.fit(features, labels);
+      classifier.fit(features, labels, fitIntercept: false);
 
       // given data
       // -----------------------------------------

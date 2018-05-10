@@ -15,7 +15,7 @@ Future main() async {
   List<double> extractFeatures(item) =>
       item.map((Object feature) => (feature as num).toDouble()).toList();
 
-  List<Float32x4Vector> features = fields
+  final features = fields
       .map((List item) => new Float32x4Vector.from(extractFeatures(item.sublist(0, item.length - 1))))
       .toList(growable: false);
 
