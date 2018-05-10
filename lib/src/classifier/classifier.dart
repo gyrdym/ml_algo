@@ -24,7 +24,8 @@ abstract class Classifier implements Evaluable {
     covariant Float32x4Vector origLabels,
     {
       covariant Float32x4Vector initialWeights,
-      bool isDataNormalized
+      bool isDataNormalized = false,
+      bool fitIntercept = true
     }
   ) {
     _classLabels = origLabels.unique();
@@ -33,7 +34,8 @@ abstract class Classifier implements Evaluable {
       _weightsByClasses.add(_optimizer.findExtrema(features, labels,
         initialWeights: initialWeights,
         arePointsNormalized: isDataNormalized,
-        isMinimizingObjective: false
+        isMinimizingObjective: false,
+        fitIntercept: fitIntercept
       ));
     }
   }

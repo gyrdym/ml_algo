@@ -19,13 +19,16 @@ abstract class Regressor implements Evaluable {
     covariant Float32x4Vector labels,
     {
       covariant Float32x4Vector initialWeights,
-      bool isDataNormalized = false
+      bool isDataNormalized = false,
+      bool fitIntercept = true
     }
   ) {
     _weights = _optimizer.findExtrema(features, labels,
       initialWeights: initialWeights,
       isMinimizingObjective: true,
-      arePointsNormalized: isDataNormalized);
+      arePointsNormalized: isDataNormalized,
+      fitIntercept: fitIntercept
+    );
   }
 
   @override
