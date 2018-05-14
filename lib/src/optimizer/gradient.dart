@@ -35,7 +35,7 @@ class GradientOptimizer implements Optimizer {
     }
   ) :
     _minCoefficientsUpdate = minCoefficientsUpdate,
-    _iterationLimit = iterationLimit ?? 10000,
+    _iterationLimit = iterationLimit ?? 1000,
     _lambda = lambda ?? 0.0,
     _batchSize = batchSize
   {
@@ -49,14 +49,12 @@ class GradientOptimizer implements Optimizer {
     {
       covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true,
-      bool arePointsNormalized = false,
-      bool fitIntercept = true
+      bool arePointsNormalized = false
     }
   ) {
-
-    final batchSize = _batchSize >= points.length ? points.length : _batchSize;
-
     _points = points;
+
+    final batchSize = _batchSize >= _points.length ? _points.length : _batchSize;
 
     Float32x4Vector coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
     double coefficientsUpdate = double.MAX_FINITE;

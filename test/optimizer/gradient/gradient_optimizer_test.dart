@@ -77,7 +77,7 @@ void main() {
       when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
           .thenReturn(10.0);
 
-      optimizer.findExtrema(points, labels, fitIntercept: false);
+      optimizer.findExtrema(points, labels);
 
       verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]));
       verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]));
@@ -100,7 +100,7 @@ void main() {
       when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
           .thenReturn(20.0);
 
-      optimizer.findExtrema(points, labels, fitIntercept: false);
+      optimizer.findExtrema(points, labels);
 
       verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]));
       verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]));
@@ -127,7 +127,7 @@ void main() {
       when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]))
           .thenReturn(40.0);
 
-      optimizer.findExtrema(points, labels, fitIntercept: false);
+      optimizer.findExtrema(points, labels);
 
       verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
@@ -148,7 +148,7 @@ void main() {
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4)).thenReturn([0, 4]);
       when(costFunctionMock.getPartialDerivative(any, any, any, any)).thenReturn(10.0);
 
-      optimizer.findExtrema(points, labels, fitIntercept: false);
+      optimizer.findExtrema(points, labels);
 
       verify(costFunctionMock.getPartialDerivative(any, points[0], any, labels[0])).called(3 * maxIterations);
       verify(costFunctionMock.getPartialDerivative(any, points[1], any, labels[1])).called(3 * maxIterations);
@@ -172,7 +172,7 @@ void main() {
       when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
           .thenReturn(3.0);
 
-      final optimalCoefficients = optimizer.findExtrema(points, labels, fitIntercept: false);
+      final optimalCoefficients = optimizer.findExtrema(points, labels);
 
       // iteration 1:
       // gradient_1 = [5, 5, 5]
@@ -214,7 +214,7 @@ void main() {
       when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
           .thenReturn(3.0);
 
-      final optimalCoefficients = optimizer.findExtrema(points, labels, fitIntercept: false);
+      final optimalCoefficients = optimizer.findExtrema(points, labels);
 
       // iteration 1:
       // gradient_1 = [5, 5, 5]
@@ -267,7 +267,7 @@ void main() {
       when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
           .thenReturn(3.0);
 
-      optimizer.findExtrema(points, labels, fitIntercept: false);
+      optimizer.findExtrema(points, labels);
 
       verify(learningRateGeneratorMock.getNextValue()).called(maxIteration);
     });
@@ -322,7 +322,7 @@ void main() {
       //
       // c = [-16, -16, -16]
       // distance = sqrt((-14 - (-16))^2 + (-14 - (-16))^2 + (-14 - (-16))^2) = sqrt(12) ~~ 3.46
-      final coefficients = optimizer.findExtrema(points, labels, fitIntercept: false);
+      final coefficients = optimizer.findExtrema(points, labels);
 
       verify(learningRateGeneratorMock.getNextValue()).called(3);
       expect(coefficients, equals([-16.0, -16.0, -16.0]));

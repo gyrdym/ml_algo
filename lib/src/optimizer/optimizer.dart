@@ -7,8 +7,7 @@ abstract class Optimizer {
     {
       Vector initialWeights,
       bool isMinimizingObjective,
-      bool arePointsNormalized,
-      bool fitIntercept
+      bool arePointsNormalized
     }
   );
 }
