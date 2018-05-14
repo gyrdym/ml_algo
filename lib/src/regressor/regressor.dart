@@ -26,8 +26,7 @@ abstract class Regressor implements Evaluable {
     _weights = _optimizer.findExtrema(features, labels,
       initialWeights: initialWeights,
       isMinimizingObjective: true,
-      arePointsNormalized: isDataNormalized,
-      fitIntercept: fitIntercept
+      arePointsNormalized: isDataNormalized
     );
   }
 

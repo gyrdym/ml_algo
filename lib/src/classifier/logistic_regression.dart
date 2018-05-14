@@ -16,6 +16,7 @@ class LogisticRegressor extends Classifier {
     double lambda,
     int batchSize = 1,
     int randomSeed,
+    bool fitIntercept = false,
     MultinomialType multinomialType = MultinomialType.oneVsAll,
     LearningRateType learningRateType = LearningRateType.decreasing
   }) : super(
@@ -31,6 +32,7 @@ class LogisticRegressor extends Classifier {
       lambda: lambda,
       batchSize: batchSize
     ),
-    scoreToProbabilityLink.logitLink
+    scoreToProbabilityLink.logitLink,
+    fitIntercept
   );
 }
