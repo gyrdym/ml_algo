@@ -17,6 +17,7 @@ class LogisticRegressor extends Classifier {
     int batchSize = 1,
     int randomSeed,
     bool fitIntercept = false,
+    double interceptScale = 1.0,
     MultinomialType multinomialType = MultinomialType.oneVsAll,
     LearningRateType learningRateType = LearningRateType.decreasing
   }) : super(
@@ -33,6 +34,6 @@ class LogisticRegressor extends Classifier {
       batchSize: batchSize
     ),
     scoreToProbabilityLink.logitLink,
-    fitIntercept
+    fitIntercept ? interceptScale : 0.0
   );
 }

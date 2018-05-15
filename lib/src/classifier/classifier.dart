@@ -1,3 +1,4 @@
+import 'package:dart_ml/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
 import 'package:dart_ml/src/metric/factory.dart';
 import 'package:dart_ml/src/metric/type.dart';
@@ -10,14 +11,15 @@ abstract class Classifier implements Evaluable {
   final Optimizer _optimizer;
   final _weightsByClasses = <Float32x4Vector>[];
   final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
-  final bool _fitIntercept;
+  final InterceptPreprocessor _interceptPreprocessor;
 
   List<Float32x4Vector> get weightsByClasses => _weightsByClasses;
 
   Float32x4Vector get classLabels => _classLabels;
   Float32x4Vector _classLabels;
 
-  Classifier(this._optimizer, this._linkScoreToProbability, this._fitIntercept);
+  Classifier(this._optimizer, this._linkScoreToProbability, double interceptScale) :
+    _interceptPreprocessor = new InterceptPreprocessor(interceptScale: interceptScale);
 
   @override
   void fit(
@@ -30,7 +32,7 @@ abstract class Classifier implements Evaluable {
   ) {
     _classLabels = origLabels.unique();
 
-    final _features = _fitIntercept ? _addIntercept(features) : features;
+    final _features = _interceptPreprocessor.addIntercept(features);
 
     for (final targetLabel in _classLabels) {
       final labels = _makeLabelsOneVsAll(origLabels, targetLabel);
@@ -68,7 +70,7 @@ abstract class Classifier implements Evaluable {
   }
 
   List<Float32x4Vector> predictProbabilities(List<Float32x4Vector> features, {interceptConsidered: false}) {
-    final _features = _fitIntercept && !interceptConsidered ? _addIntercept(features) : features;
+    final _features = !interceptConsidered ? _interceptPreprocessor.addIntercept(features) : features;
     final distributions = new List<Float32x4Vector>(_features.length);
 
     for (int i = 0; i < _features.length; i++) {
@@ -83,7 +85,7 @@ abstract class Classifier implements Evaluable {
   }
 
   Float32x4Vector predictClasses(List<Float32x4Vector> features, {interceptConsidered: false}) {
-    final _features = _fitIntercept && !interceptConsidered ? _addIntercept(features) : features;
+    final _features = !interceptConsidered ? _interceptPreprocessor.addIntercept(features) : features;
     final distributions = predictProbabilities(_features, interceptConsidered: true);
     final classes = new List<double>(_features.length);
     for (int i = 0; i < distributions.length; i++) {
