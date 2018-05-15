@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.36.0
+- Intercept term considered (`fitIntercept` and `interceptScale` parameters)
+
 ## 0.35.1
 - Logistic regression tests improved
 
