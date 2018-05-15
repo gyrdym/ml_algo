@@ -5,9 +5,9 @@ import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:dart_ml/src/optimizer/learning_rate_generator/generator_factory.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/type.dart';
 import 'package:dart_ml/src/regressor/gradient_type.dart';
-import 'package:dart_ml/src/regressor/regressor.dart';
+import 'package:dart_ml/src/regressor/linear_regressor.dart';
 
-class GradientRegressor extends Regressor {
+class GradientRegressor extends LinearRegressor {
   GradientRegressor({
     int iterationLimit,
     LearningRateType learningRateType = LearningRateType.decreasing,
@@ -15,6 +15,8 @@ class GradientRegressor extends Regressor {
     double minWeightsUpdate,
     double lambda,
     GradientType type = GradientType.MiniBatch,
+    bool fitIntercept = false,
+    double interceptScale = 1.0,
     int randomSeed,
     int batchSize = 1
   }) : super(
@@ -29,6 +31,7 @@ class GradientRegressor extends Regressor {
         iterationLimit: iterationLimit,
         lambda: lambda,
         batchSize: type == GradientType.Stochastic ? 1 : type == GradientType.MiniBatch ? batchSize : double.INFINITY
-      )
+      ),
+      fitIntercept ? interceptScale : 0.0
     );
 }
