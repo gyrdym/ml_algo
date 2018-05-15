@@ -1,17 +1,20 @@
+import 'package:dart_ml/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:dart_ml/src/metric/factory.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 
-abstract class Regressor implements Evaluable {
+abstract class LinearRegressor implements Evaluable {
 
   final Optimizer _optimizer;
+  final InterceptPreprocessor _interceptPreprocessor;
 
   Float32x4Vector get weights => _weights;
   Float32x4Vector _weights;
 
-  Regressor(this._optimizer);
+  LinearRegressor(this._optimizer, double interceptScale) :
+    _interceptPreprocessor = new InterceptPreprocessor(interceptScale: interceptScale);
 
   @override
   void fit(
@@ -22,10 +25,13 @@ abstract class Regressor implements Evaluable {
       bool isDataNormalized = false
     }
   ) {
-    _weights = _optimizer.findExtrema(features, labels,
+    _weights = _optimizer.findExtrema(
+      _interceptPreprocessor.addIntercept(features),
+      labels,
       initialWeights: initialWeights,
       isMinimizingObjective: true,
-      arePointsNormalized: isDataNormalized);
+      arePointsNormalized: isDataNormalized
+    );
   }
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:dart_ml/src/optimizer/coordinate_descent.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:simd_vector/vector.dart';
@@ -203,7 +201,7 @@ void main() {
     ///
     test('should find optimal weights for the given data', () {
       // actually, points in this example are not normalized
-      final weights = optimizer.findExtrema(data, labels, arePointsNormalized: true);
+      final weights = optimizer.findExtrema(data, labels, arePointsNormalized: true, fitIntercept: false);
       final w1 = weights[0];
       final w2 = weights[1];
       final w3 = weights[2];
