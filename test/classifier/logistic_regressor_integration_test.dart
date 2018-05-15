@@ -373,5 +373,87 @@ void main() {
         [0.0, -2.0, -2.5, -1.5]
       ]));
     });
+
+    test('should consider intercept scale if intercept term is going to be fitted', () {
+      final classifier = new LogisticRegressor(batchSize: 3, iterationLimit: 1,
+        learningRateType: LearningRateType.constant, learningRate: 1.0, fitIntercept: true, interceptScale: 2.0);
+      final features = [
+        new Float32x4Vector.from([5.0, 7.0, 6.0]),
+        new Float32x4Vector.from([1.0, 2.0, 3.0]),
+        new Float32x4Vector.from([3.0, 4.0, 5.0])
+      ];
+      final labels = new Float32x4Vector.from([0.0, 1.0, 0.0]);
+      classifier.fit(features, labels);
+
+      // as the intercept is required to be fitted, our data should look as follows:
+      //
+      // [5.0, 7.0, 6.0] => [2.0, 5.0, 7.0, 6.0]
+      // [1.0, 2.0, 3.0] => [2.0, 1.0, 2.0, 3.0]
+      // [3.0, 4.0, 5.0] => [2.0, 3.0, 4.0, 5.0]
+      //
+      // we add a new column to the data, the column is consisted of just ones, so we considered that our fitted line will
+      // start not right at the origin, but at the origin + intercept equal to 2.0. What is the value of the intercept? To answer
+      // this question, we have to find out the intercept's weight
+      //
+      // given data
+      // ----------------------------------------------
+      // | X (features):           | Y (class labels):|
+      // ---------------------------------------------|
+      // | [2.0, 5.0, 7.0, 6.0]    | [0.0]            |
+      // | [2.0, 1.0, 2.0, 3.0]    | [1.0]            |
+      // | [2.0, 3.0, 4.0, 5.0]    | [0.0]            |
+      // ----------------------------------------------
+      //
+      // formula for derivative:
+      // sum(x_i_j * (indicator(y=1) - P(y=1|x_i,w)))
+      //
+      // formula for the update:
+      // w_new = w_prev + eta * derivative (gradient ascent)
+      //
+      // ===============================================================================================================
+      // ITERATION 1, weights = [0.0, 0.0, 0.0, 0.0]
+      // ===============================================================================================================
+      // weights for class label 0.0:
+      // 2.0 * (1 - (1 / (1 + e^0))) = 1.0
+      // 5.0 * (1 - (1 / (1 + e^0))) = 2.5
+      // 7.0 * (1 - (1 / (1 + e^0))) = 3.5
+      // 6.0 * (1 - (1 / (1 + e^0))) = 3.0
+      //
+      // 2.0 * (0 - (1 / (1 + e^0))) = -1.0
+      // 1.0 * (0 - (1 / (1 + e^0))) = -0.5
+      // 2.0 * (0 - (1 / (1 + e^0))) = -1.0
+      // 3.0 * (0 - (1 / (1 + e^0))) = -1.5
+      //
+      // 2.0 * (1 - (1 / (1 + e^0))) = 1.0
+      // 3.0 * (1 - (1 / (1 + e^0))) = 1.5
+      // 4.0 * (1 - (1 / (1 + e^0))) = 2.0
+      // 5.0 * (1 - (1 / (1 + e^0))) = 2.5
+      //
+      // derivative: [1.0, 3.5, 4.5, 4.0]
+      // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [1.0, 3.5, 4.5, 4.0] = [1.0, 3.5, 4.5, 4.0]
+      //
+      // weights for class label 1.0:
+      // 2.0 * (0 - (1 / (1 + e^0))) = -1.0
+      // 5.0 * (0 - (1 / (1 + e^0))) = -2.5
+      // 7.0 * (0 - (1 / (1 + e^0))) = -3.5
+      // 6.0 * (0 - (1 / (1 + e^0))) = -3.0
+      //
+      // 2.0 * (1 - (1 / (1 + e^0))) = 1.0
+      // 1.0 * (1 - (1 / (1 + e^0))) = 0.5
+      // 2.0 * (1 - (1 / (1 + e^0))) = 1.0
+      // 3.0 * (1 - (1 / (1 + e^0))) = 1.5
+      //
+      // 2.0 * (0 - (1 / (1 + e^0))) = -1.0
+      // 3.0 * (0 - (1 / (1 + e^0))) = -1.5
+      // 4.0 * (0 - (1 / (1 + e^0))) = -2.0
+      // 5.0 * (0 - (1 / (1 + e^0))) = -2.5
+      //
+      // derivative: [-1.0, -3.5, -4.5, -4.0]
+      // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [-1.0, -3.5, -4.5, -4.0] = [-1.0, -3.5, -4.5, -4.0]
+      expect(classifier.weightsByClasses, equals([
+        [1.0, 3.5, 4.5, 4.0],
+        [-1.0, -3.5, -4.5, -4.0]
+      ]));
+    });
   });
 }
