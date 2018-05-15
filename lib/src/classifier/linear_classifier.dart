@@ -6,7 +6,7 @@ import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:simd_vector/vector.dart';
 
-abstract class Classifier implements Evaluable {
+abstract class LinearClassifier implements Evaluable {
 
   final Optimizer _optimizer;
   final _weightsByClasses = <Float32x4Vector>[];
@@ -18,7 +18,7 @@ abstract class Classifier implements Evaluable {
   Float32x4Vector get classLabels => _classLabels;
   Float32x4Vector _classLabels;
 
-  Classifier(this._optimizer, this._linkScoreToProbability, double interceptScale) :
+  LinearClassifier(this._optimizer, this._linkScoreToProbability, double interceptScale) :
     _interceptPreprocessor = new InterceptPreprocessor(interceptScale: interceptScale);
 
   @override

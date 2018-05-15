@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/classifier/classifier.dart';
+import 'package:dart_ml/src/classifier/linear_classifier.dart';
 import 'package:dart_ml/src/classifier/multinomial_type.dart';
 import 'package:dart_ml/src/cost_function/cost_function_factory.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/type.dart';
@@ -8,7 +8,7 @@ import 'package:dart_ml/src/optimizer/gradient.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/generator_factory.dart';
 
-class LogisticRegressor extends Classifier {
+class LogisticRegressor extends LinearClassifier {
   LogisticRegressor({
     int iterationLimit,
     double learningRate,
