@@ -1,4 +1,4 @@
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 abstract class CostFunction {
   double getCost(double predictedLabel, double originalLabel);

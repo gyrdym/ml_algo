@@ -1,6 +1,6 @@
 import 'package:dart_ml/src/classifier/logistic_regression.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/type.dart';
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 import 'package:test/test.dart';
 
 void main() {

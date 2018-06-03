@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 import 'package:dart_ml/src/metric/regression/metric.dart';
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 class RMSEMetric implements RegressionMetric {
   const RMSEMetric();

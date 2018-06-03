@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.37.0
+- Support of linalg package (former simd_vector) 
+
 ## 0.36.0
 - Intercept term considered (`fitIntercept` and `interceptScale` parameters)
 

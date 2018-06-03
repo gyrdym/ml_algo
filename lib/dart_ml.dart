@@ -9,4 +9,4 @@ export 'package:dart_ml/src/optimizer/learning_rate_generator/type.dart';
 export 'package:dart_ml/src/regressor/gradient.dart';
 export 'package:dart_ml/src/regressor/gradient_type.dart';
 export 'package:dart_ml/src/regressor/lasso.dart';
-export 'package:simd_vector/vector.dart';
+export 'package:linalg/vector.dart';

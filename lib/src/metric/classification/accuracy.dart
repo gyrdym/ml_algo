@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/metric/classification/metric.dart';
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 class AccuracyMetric implements ClassificationMetric {
   const AccuracyMetric();
