@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as linkFunctions;
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 class LogLikelihoodCost implements CostFunction {
   const LogLikelihoodCost();

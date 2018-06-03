@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:dart_ml/src/cost_function/cost_function.dart';
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 class SquaredCost implements CostFunction {
   const SquaredCost();

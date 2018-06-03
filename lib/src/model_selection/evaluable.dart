@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/metric/type.dart';
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 abstract class Evaluable {
   void fit(Iterable<Vector> features, Vector origLabels, {Vector initialWeights, bool isDataNormalized});

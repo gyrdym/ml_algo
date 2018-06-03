@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/data_preprocessing/intercept_preprocessor.dart';
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 import 'package:test/test.dart';
 
 void main() {

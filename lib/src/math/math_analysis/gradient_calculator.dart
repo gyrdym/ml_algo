@@ -1,4 +1,4 @@
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 typedef double OptimizationFunction(
   Vector targetVector,

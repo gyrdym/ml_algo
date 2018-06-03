@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
-import 'package:simd_vector/vector.dart';
+import 'package:linalg/vector.dart';
 
 class GradientCalculatorImpl implements GradientCalculator {
   List<Float32x4Vector> _argumentDeltaMatrix;
