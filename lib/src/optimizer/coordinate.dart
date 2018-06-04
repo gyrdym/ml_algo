@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
@@ -6,6 +7,7 @@ import 'package:linalg/vector.dart';
 
 class CoordinateOptimizer implements Optimizer {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
+  final CostFunction _costFn;
 
   //hyper parameters declaration
   final double _coefficientDiffThreshold;
@@ -17,14 +19,15 @@ class CoordinateOptimizer implements Optimizer {
 
   CoordinateOptimizer(
     this._initialCoefficientsGenerator,
+    this._costFn,
     {
       double minCoefficientsDiff,
       int iterationLimit,
       double lambda
     }
   ) :
-    _coefficientDiffThreshold = minCoefficientsDiff ?? 1e-8,
-    _iterationLimit = iterationLimit ?? 10000,
+    _iterationLimit = iterationLimit ?? 1000,
+    _coefficientDiffThreshold = minCoefficientsDiff,
     _lambda = lambda ?? 0.0;
 
   @override
@@ -34,8 +37,7 @@ class CoordinateOptimizer implements Optimizer {
     {
       covariant Float32x4Vector initialWeights,
       bool isMinimizingObjective = true,
-      bool arePointsNormalized = false,
-      bool fitIntercept = true
+      bool arePointsNormalized = false
     }
   ) {
     final numOfDimensions = points.first.length;
@@ -77,10 +79,8 @@ class CoordinateOptimizer implements Optimizer {
 
     for (int rowNum = 0; rowNum < points.length; rowNum++) {
       final point = points[rowNum];
-      final coordinateValue = point[coefficientNum];
       final output = labels[rowNum];
-      final prediction = coefficients.dot(point);
-      updatedCoefficient += coordinateValue * (output - prediction + currentCoefficient * coordinateValue);
+      updatedCoefficient += _costFn.getSparseSolutionPartial(coefficientNum, point, coefficients, output);
     }
 
     return _regularize(updatedCoefficient, _lambda, coefficientNum);
