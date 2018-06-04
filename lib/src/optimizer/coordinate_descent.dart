@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
@@ -7,12 +8,12 @@ class CoordinateDescentOptimizer implements Optimizer {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
 
   //hyper parameters declaration
-  final double _coefficientsDiffThreshold;
+  final double _coefficientDiffThreshold;
   final int _iterationLimit;
   final double _lambda;
   //hyper parameters declaration end
 
-  List<Float32x4Vector> _points;
+  Float32x4Vector _normalizer;
 
   CoordinateDescentOptimizer(
     this._initialCoefficientsGenerator,
@@ -22,7 +23,7 @@ class CoordinateDescentOptimizer implements Optimizer {
       double lambda
     }
   ) :
-    _coefficientsDiffThreshold = minCoefficientsDiff ?? 1e-8,
+    _coefficientDiffThreshold = minCoefficientsDiff ?? 1e-8,
     _iterationLimit = iterationLimit ?? 10000,
     _lambda = lambda ?? 0.0;
 
@@ -37,40 +38,25 @@ class CoordinateDescentOptimizer implements Optimizer {
       bool fitIntercept = true
     }
   ) {
-    _points = points;
+    final numOfDimensions = points.first.length;
+    _normalizer = arePointsNormalized
+      ? new Float32x4Vector.filled(numOfDimensions, 1.0)
+      : points.reduce((final combine, final vector) => (combine + vector * vector) as Float32x4Vector);
 
     Float32x4Vector coefficients = initialWeights ?? _initialCoefficientsGenerator.generate(points.first.length);
-
-    double coefficientsDiff = double.INFINITY;
+    final changes = new List<double>.filled(numOfDimensions, double.INFINITY);
     int iteration = 0;
 
-    while (coefficientsDiff > _coefficientsDiffThreshold && iteration < _iterationLimit) {
+    while (!_isConverged(changes, iteration)) {
       final updatedCoefficients = new List<double>.filled(coefficients.length, 0.0, growable: false);
 
       for (int j = 0; j < coefficients.length; j++) {
-        final coefficientsAsList = coefficients.toList();
-        coefficientsAsList[j] = 0.0;
-        final coefficientsWithoutJ = new Float32x4Vector.from(coefficientsAsList);
-
-        for (int i = 0; i < points.length; i++) {
-          final pointAsList = points[i].toList();
-          final x = pointAsList[j];
-          final y = labels[i];
-
-          pointAsList[j] = 0.0;
-
-          final pointWithoutJ = new Float32x4Vector.from(pointAsList);
-          final yHat = coefficientsWithoutJ.dot(pointWithoutJ);
-
-          updatedCoefficients[j] += x * (y - yHat);
-        }
+        final oldWeight = updatedCoefficients[j];
+        final newWeight = _coordinateDescentStep(j, points, labels, coefficients);
+        changes[j] = (oldWeight - newWeight).abs();
+        updatedCoefficients[j] = newWeight;
+        coefficients = new Float32x4Vector.from(updatedCoefficients);
       }
-
-      final regularizedCoefficients = _regularize(updatedCoefficients, _lambda, arePointsNormalized);
-      final newCoefficients = new Float32x4Vector.from(regularizedCoefficients);
-
-      coefficientsDiff = newCoefficients.distanceTo(coefficients);
-      coefficients = newCoefficients;
 
       iteration++;
     }
@@ -78,33 +64,44 @@ class CoordinateDescentOptimizer implements Optimizer {
     return coefficients;
   }
 
-  List<double> _regularize(List<double> coefficients, double lambda, bool arePointsNormalized) {
-    if (lambda == 0.0) {
-      return coefficients;
+  bool _isConverged(List<double> changes, int iterationCount) =>
+      _coefficientDiffThreshold != null &&
+      changes.reduce((double maxValue, double value) => math.max<double>(maxValue ?? 0.0, value)) <= _coefficientDiffThreshold ||
+      iterationCount >= _iterationLimit;
+
+  double _coordinateDescentStep(int coefficientNum, List<Float32x4Vector> points, Float32x4Vector labels,
+    Float32x4Vector coefficients) {
+
+    final currentCoefficient = coefficients[coefficientNum];
+    double updatedCoefficient = currentCoefficient;
+
+    for (int rowNum = 0; rowNum < points.length; rowNum++) {
+      final point = points[rowNum];
+      final coordinateValue = point[coefficientNum];
+      final output = labels[rowNum];
+      final prediction = coefficients.dot(point);
+      updatedCoefficient += coordinateValue * (output - prediction + currentCoefficient * coordinateValue);
     }
 
-    final numOfDimensions = coefficients.length;
-    final normalizer = arePointsNormalized ?
-      new Float32x4Vector.filled(numOfDimensions, 1.0) :
-      _points.reduce((final combine, final vector) => (combine + vector * vector) as Float32x4Vector);
-    final regularized = new List<double>.filled(numOfDimensions, 0.0, growable: false);
-    final normalizerAsList = normalizer.toList();
+    return _regularize(updatedCoefficient, _lambda, coefficientNum);
+  }
 
-    for (int i = 0; i < coefficients.length; i++) {
-      final delta = lambda / 2;
-      double coefficient = coefficients[i];
+  double _regularize(double coefficient, double lambda, int coefNum) {
+    if (lambda == 0.0) {
+      return coefficient;
+    }
 
-      if (coefficient > delta) {
-        coefficient = (coefficient - delta) / normalizerAsList[i];
-      } else if (coefficient < -delta) {
-        coefficient = (coefficient + delta) / normalizerAsList[i];
-      } else {
-        coefficient = 0.0;
-      }
+    final delta = lambda / 2;
+    double regularized;
 
-      regularized[i] = coefficient;
-     }
+    if (coefficient > delta) {
+      regularized = (coefficient - delta) / _normalizer[coefNum];
+    } else if (coefficient < -delta) {
+      regularized = (coefficient + delta) / _normalizer[coefNum];
+    } else {
+      regularized = 0.0;
+    }
 
-     return regularized;
+    return regularized;
   }
 }
