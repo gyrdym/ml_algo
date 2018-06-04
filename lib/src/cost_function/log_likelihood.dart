@@ -22,4 +22,12 @@ class LogLikelihoodCost implements CostFunction {
   ) =>  x[idx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
 
   int _indicator(double y, double target) => target == y ? 1 : 0;
+
+  @override
+  double getSparseSolutionPartial(
+    int wIdx,
+    covariant Float32x4Vector x,
+    covariant Float32x4Vector w,
+    double y
+  ) => throw new UnimplementedError();
 }

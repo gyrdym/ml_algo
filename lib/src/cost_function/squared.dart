@@ -16,4 +16,12 @@ class SquaredCost implements CostFunction {
     covariant Float32x4Vector w,
     double y
   ) => -2.0 * x[wIdx] * (y - x.dot(w));
+
+  @override
+  double getSparseSolutionPartial(
+    int wIdx,
+    covariant Float32x4Vector x,
+    covariant Float32x4Vector w,
+    double y
+  ) => x[wIdx] * (y - x.dot(w) + x[wIdx] * w[wIdx]);
 }
