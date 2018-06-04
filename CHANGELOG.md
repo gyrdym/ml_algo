@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.38.0
+- Lasso solution refactored
+
 ## 0.37.0
 - Support of linalg package (former simd_vector) 
 
