@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/optimizer/coordinate_descent.dart';
+import 'package:dart_ml/src/optimizer/coordinate.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:linalg/vector.dart';
 import 'package:test/test.dart';
@@ -18,12 +18,12 @@ void main() {
     final point3 = new Float32x4Vector.from([70.0, 80.0, 90.0]);
     final point4 = new Float32x4Vector.from([20.0, 30.0, 10.0]);
 
-    CoordinateDescentOptimizer optimizer;
+    CoordinateOptimizer optimizer;
     List<Float32x4Vector> data;
     Float32x4Vector labels;
 
     setUp(() {
-      optimizer = new CoordinateDescentOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
+      optimizer = new CoordinateOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
         minCoefficientsDiff: 1e-5,
         iterationLimit: iterationsNumber,
         lambda: lambda
@@ -115,12 +115,12 @@ void main() {
     final point2 = new Float32x4Vector.from([20.0, 30.0, 40.0]);
     final point3 = new Float32x4Vector.from([70.0, 80.0, 90.0]);
 
-    CoordinateDescentOptimizer optimizer;
+    CoordinateOptimizer optimizer;
     List<Float32x4Vector> data;
     Float32x4Vector labels;
 
     setUp(() {
-      optimizer = new CoordinateDescentOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
+      optimizer = new CoordinateOptimizer(InitialWeightsGeneratorFactory.ZeroWeights(),
         minCoefficientsDiff: 1e-5,
         iterationLimit: iterationsNumber,
         lambda: lambda

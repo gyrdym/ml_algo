@@ -4,7 +4,7 @@ import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/vector.dart';
 
-class CoordinateDescentOptimizer implements Optimizer {
+class CoordinateOptimizer implements Optimizer {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
 
   //hyper parameters declaration
@@ -15,7 +15,7 @@ class CoordinateDescentOptimizer implements Optimizer {
 
   Float32x4Vector _normalizer;
 
-  CoordinateDescentOptimizer(
+  CoordinateOptimizer(
     this._initialCoefficientsGenerator,
     {
       double minCoefficientsDiff,
