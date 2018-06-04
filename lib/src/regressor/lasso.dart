@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/optimizer/coordinate_descent.dart';
+import 'package:dart_ml/src/optimizer/coordinate.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:dart_ml/src/regressor/linear_regressor.dart';
 
@@ -10,7 +10,7 @@ class LassoRegressor extends LinearRegressor {
     bool fitIntercept = false,
     double interceptScale = 1.0
   }) : super(
-    new CoordinateDescentOptimizer(
+    new CoordinateOptimizer(
       InitialWeightsGeneratorFactory.ZeroWeights(),
       minCoefficientsDiff: minWeightUpdate,
       iterationLimit: iterationLimit,
