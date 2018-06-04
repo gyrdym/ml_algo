@@ -20,7 +20,7 @@ main() async {
       .toList(growable: false);
 
   final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
-  final lassoRegressionModel = new LassoRegressor(iterationLimit: 150, lambda: 74289.0);
+  final lassoRegressionModel = new LassoRegressor(iterationLimit: 100, lambda: 6750.0);
   final validator = new CrossValidator<Float32x4Vector>.KFold();
 
   print('K-fold cross validation with MAPE metric:');
