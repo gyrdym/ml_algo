@@ -91,13 +91,13 @@ class CoordinateOptimizer implements Optimizer {
       return coefficient;
     }
 
-    final delta = lambda / 2;
+    final threshold = lambda / 2;
     double regularized;
 
-    if (coefficient > delta) {
-      regularized = (coefficient - delta) / _normalizer[coefNum];
-    } else if (coefficient < -delta) {
-      regularized = (coefficient + delta) / _normalizer[coefNum];
+    if (coefficient > threshold) {
+      regularized = (coefficient - threshold) / _normalizer[coefNum];
+    } else if (coefficient < -threshold) {
+      regularized = (coefficient + threshold) / _normalizer[coefNum];
     } else {
       regularized = 0.0;
     }

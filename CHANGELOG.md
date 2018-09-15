@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.38.1
+- [issue](https://github.com/gyrdym/dart_ml/issues/41) solved
+
 ## 0.38.0
 - Lasso solution refactored
 
