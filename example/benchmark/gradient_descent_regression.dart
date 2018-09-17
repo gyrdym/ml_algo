@@ -15,36 +15,38 @@ class GDRegressorBenchmark extends BenchmarkBase {
   const GDRegressorBenchmark() : super('Gradient descent regressor');
 
   static void main() {
-    new GDRegressorBenchmark().report();
+    const GDRegressorBenchmark().report();
   }
 
+  @override
   void run() {
     regressor.fit(features, labels);
   }
 
+  @override
   void setup() {
-    regressor = new GradientRegressor();
+    regressor = GradientRegressor();
   }
 
   void tearDown() {}
 }
 
 Future main() async {
-  final csvCodec = new csv.CsvCodec();
-  final input = new File('example/datasets/advertising.csv').openRead();
-  final fields = (await input.transform(UTF8.decoder)
+  final csvCodec = csv.CsvCodec();
+  final input = File('example/datasets/advertising.csv').openRead();
+  final fields = (await input.transform(utf8.decoder)
       .transform(csvCodec.decoder).toList() as List<List<num>>)
       .sublist(1);
 
-  List<double> extractFeatures(item) => item.sublist(0, 3)
+  List<double> extractFeatures(List<num> item) => item.sublist(0, 3)
       .map((num feature) => feature.toDouble())
       .toList();
 
   features = fields
-      .map((List<num> item) => new Float32x4Vector.from(extractFeatures(item)))
+      .map((List<num> item) => Float32x4Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
+  labels = Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
 
   GDRegressorBenchmark.main();
 }
