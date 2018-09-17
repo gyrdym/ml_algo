@@ -1,27 +1,28 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
 import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
-main() async {
-  final csvCodec = new csv.CsvCodec();
-  final input = new File('example/datasets/advertising.csv').openRead();
-  final fields = (await input.transform(UTF8.decoder)
+Future main() async {
+  final csvCodec = csv.CsvCodec();
+  final input = File('example/datasets/advertising.csv').openRead();
+  final fields = (await input.transform(utf8.decoder)
       .transform(csvCodec.decoder).toList() as List<List<num>>)
       .sublist(1);
 
-  List<double> extractFeatures(item) => item.sublist(0, 3)
+  List<double> extractFeatures(List<num> item) => item.sublist(0, 3)
       .map((num feature) => feature.toDouble())
       .toList();
 
   final features = fields
-      .map((List<num> item) => new Float32x4Vector.from(extractFeatures(item)))
+      .map((List<num> item) => Float32x4Vector.from(extractFeatures(item)))
       .toList(growable: false);
 
-  final labels = new Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
-  final lassoRegressionModel = new LassoRegressor(iterationLimit: 100, lambda: 6750.0);
-  final validator = new CrossValidator<Float32x4Vector>.KFold();
+  final labels = Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
+  final lassoRegressionModel = LassoRegressor(iterationLimit: 100, lambda: 6750.0);
+  final validator = CrossValidator<Float32x4Vector>.KFold();
 
   print('K-fold cross validation with MAPE metric:');
   print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, features, labels, MetricType.MAPE)}');

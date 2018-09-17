@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.0
+- Migration to dart 2.0
+
 ## 0.38.1
 - [issue](https://github.com/gyrdym/dart_ml/issues/41) solved
 
