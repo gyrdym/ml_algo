@@ -20,7 +20,6 @@ linter:
     - unnecessary_statements
     - unrelated_type_equality_checks
     - always_put_required_named_parameters_first
-    - avoid_bool_literals_in_conditional_expressions
     - avoid_classes_with_only_static_members
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters

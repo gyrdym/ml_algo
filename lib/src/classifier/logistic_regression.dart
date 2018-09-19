@@ -21,7 +21,7 @@ class LogisticRegressor extends LinearClassifier {
     MultinomialType multinomialType = MultinomialType.oneVsAll,
     LearningRateType learningRateType = LearningRateType.decreasing
   }) : super(
-    new GradientOptimizer(
+    GradientOptimizer(
       RandomizerFactory.Default(randomSeed),
       CostFunctionFactory.LogLikelihood(),
       LearningRateGeneratorFactory.createByType(learningRateType),

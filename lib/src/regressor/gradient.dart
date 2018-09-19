@@ -20,7 +20,7 @@ class GradientRegressor extends LinearRegressor {
     int randomSeed,
     int batchSize = 1
   }) : super(
-      new GradientOptimizer(
+      GradientOptimizer(
         RandomizerFactory.Default(randomSeed),
         CostFunctionFactory.Squared(),
         LearningRateGeneratorFactory.createByType(learningRateType),
@@ -30,7 +30,11 @@ class GradientRegressor extends LinearRegressor {
         minCoefficientsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
-        batchSize: type == GradientType.Stochastic ? 1 : type == GradientType.MiniBatch ? batchSize : double.INFINITY
+        batchSize: type == GradientType.Stochastic
+          ? 1
+          : type == GradientType.MiniBatch
+            ? batchSize
+            : double.infinity.toInt()
       ),
       fitIntercept ? interceptScale : 0.0
     );
