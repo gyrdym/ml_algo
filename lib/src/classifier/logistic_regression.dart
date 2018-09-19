@@ -23,7 +23,7 @@ class LogisticRegressor extends LinearClassifier {
   }) : super(
     GradientOptimizer(
       RandomizerFactory.Default(randomSeed),
-      CostFunctionFactory.LogLikelihood(),
+      CostFunctionFactory.logLikelihood(),
       LearningRateGeneratorFactory.createByType(learningRateType),
       InitialWeightsGeneratorFactory.ZeroWeights(),
 

@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Log-likelihood cost function', () {
-    final logLikelihood = CostFunctionFactory.LogLikelihood();
+    final logLikelihood = CostFunctionFactory.logLikelihood();
 
     test('should calculate correct value of the partial derivative (in case of True-label)', () {
       final x = new Float32x4Vector.from([3.0, 1.2, 5.6]);

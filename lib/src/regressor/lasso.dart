@@ -13,7 +13,7 @@ class LassoRegressor extends LinearRegressor {
   }) : super(
     new CoordinateOptimizer(
       InitialWeightsGeneratorFactory.ZeroWeights(),
-      CostFunctionFactory.Squared(),
+      CostFunctionFactory.squared(),
       minCoefficientsDiff: minWeightUpdate,
       iterationLimit: iterationLimit,
       lambda: lambda
