@@ -3,12 +3,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
-List<Float32x4Vector> features;
-Float32x4Vector labels;
+List<SIMDVector<Float32x4List, Float32List, Float32x4>> features;
+SIMDVector<Float32x4List, Float32List, Float32x4> labels;
 GradientRegressor regressor;
 
 class GDRegressorBenchmark extends BenchmarkBase {
@@ -43,10 +44,10 @@ Future main() async {
       .toList();
 
   features = fields
-      .map((List<num> item) => Float32x4Vector.from(extractFeatures(item)))
+      .map((List<num> item) => Float32x4VectorFactory.from(extractFeatures(item)))
       .toList(growable: false);
 
-  labels = Float32x4Vector.from(fields.map((List<num> item) => item.last.toDouble()));
+  labels = Float32x4VectorFactory.from(fields.map((List<num> item) => item.last.toDouble()));
 
   GDRegressorBenchmark.main();
 }

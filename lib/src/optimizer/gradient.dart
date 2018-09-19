@@ -10,7 +10,7 @@ import 'package:linalg/vector.dart';
 class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32List> {
 
   final Randomizer _randomizer;
-  final CostFunction _costFunction;
+  final CostFunction<Float32x4List, Float32List, Float32x4> _costFunction;
   final LearningRateGenerator _learningRateGenerator;
   final InitialWeightsGenerator _initialWeightsGenerator;
 
@@ -21,7 +21,7 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
   final int _batchSize;
   //hyper parameters declaration end
 
-  List<SIMDVector> _points;
+  List<SIMDVector<Float32x4List, Float32List, Float32x4>> _points;
 
   GradientOptimizer(
     this._randomizer,
