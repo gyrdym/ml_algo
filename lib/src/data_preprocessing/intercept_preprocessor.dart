@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:linalg/vector.dart';
 
 class InterceptPreprocessor {
@@ -5,15 +7,17 @@ class InterceptPreprocessor {
 
   const InterceptPreprocessor({double interceptScale = 1.0}) : _interceptScale = interceptScale;
 
-  List<Float32x4Vector> addIntercept(List<Float32x4Vector> points) {
+  List<SIMDVector<Float32x4List, Float32List, Float32x4>> addIntercept(
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> points
+  ) {
     if (_interceptScale == 0.0) {
       return points;
     }
 
-    final _points = new List<Float32x4Vector>(points.length);
+    final _points = List<SIMDVector<Float32x4List, Float32List, Float32x4>>(points.length);
     for (int i = 0; i < points.length; i++) {
-      _points[i] = new Float32x4Vector.from(
-        points[i].toList(growable: true)
+      _points[i] = Float32x4VectorFactory.from(
+        points[i].toList()
           ..insert(0, 1.0 * _interceptScale)
       );
     }

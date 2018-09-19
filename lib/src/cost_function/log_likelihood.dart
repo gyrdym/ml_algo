@@ -1,10 +1,11 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as linkFunctions;
 import 'package:linalg/vector.dart';
 
-class LogLikelihoodCost implements CostFunction {
+class LogLikelihoodCost implements CostFunction<Float32x4List, Float32List, Float32x4> {
   const LogLikelihoodCost();
 
   @override
@@ -16,8 +17,8 @@ class LogLikelihoodCost implements CostFunction {
   @override
   double getPartialDerivative(
     int idx,
-    covariant Float32x4Vector x,
-    covariant Float32x4Vector w,
+    SIMDVector x,
+    SIMDVector w,
     double y
   ) =>  x[idx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
 
@@ -26,8 +27,8 @@ class LogLikelihoodCost implements CostFunction {
   @override
   double getSparseSolutionPartial(
     int wIdx,
-    covariant Float32x4Vector x,
-    covariant Float32x4Vector w,
+    SIMDVector x,
+    SIMDVector w,
     double y
-  ) => throw new UnimplementedError();
+  ) => throw UnimplementedError();
 }

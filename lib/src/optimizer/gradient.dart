@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/math/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
@@ -5,7 +7,7 @@ import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/vector.dart';
 
-class GradientOptimizer implements Optimizer {
+class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32List> {
 
   final Randomizer _randomizer;
   final CostFunction _costFunction;
@@ -19,7 +21,7 @@ class GradientOptimizer implements Optimizer {
   final int _batchSize;
   //hyper parameters declaration end
 
-  List<Float32x4Vector> _points;
+  List<SIMDVector> _points;
 
   GradientOptimizer(
     this._randomizer,
@@ -43,11 +45,11 @@ class GradientOptimizer implements Optimizer {
   }
 
   @override
-  Float32x4Vector findExtrema(
-    covariant List<Float32x4Vector> points,
-    covariant Float32x4Vector labels,
+  SIMDVector<Float32x4List, Float32List, Float32x4> findExtrema(
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> points,
+    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
     {
-      covariant Float32x4Vector initialWeights,
+      SIMDVector<Float32x4List, Float32List, Float32x4> initialWeights,
       bool isMinimizingObjective = true,
       bool arePointsNormalized = false
     }
@@ -56,8 +58,9 @@ class GradientOptimizer implements Optimizer {
 
     final batchSize = _batchSize >= _points.length ? _points.length : _batchSize;
 
-    Float32x4Vector coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
-    double coefficientsUpdate = double.MAX_FINITE;
+    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients =
+        initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
+    double coefficientsUpdate = double.maxFinite;
     int iterationCounter = 0;
 
     while (!_isConverged(coefficientsUpdate, iterationCounter)) {
@@ -79,9 +82,9 @@ class GradientOptimizer implements Optimizer {
     (iterationCounter >= _iterationLimit);
 
 
-  Float32x4Vector _generateCoefficients(
-    Float32x4Vector currentCoefficients,
-    Float32x4Vector labels,
+  SIMDVector<Float32x4List, Float32List, Float32x4> _generateCoefficients(
+    SIMDVector<Float32x4List, Float32List, Float32x4> currentCoefficients,
+    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
     double eta,
     int batchSize,
     {bool isMinimization: true}
@@ -97,21 +100,18 @@ class GradientOptimizer implements Optimizer {
 
   Iterable<int> _getBatchRange(int batchSize) => _randomizer.getIntegerInterval(0, _points.length, intervalLength: batchSize);
 
-  Float32x4Vector _makeGradientStep(
-    Float32x4Vector coefficients,
-    List<Float32x4Vector> points,
-    Float32x4Vector labels,
+  SIMDVector<Float32x4List, Float32List, Float32x4> _makeGradientStep(
+    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients,
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> points,
+    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
     double eta,
-    {bool isMinimization: true}
+    {bool isMinimization = true}
   ) {
-    Float32x4Vector gradient = new Float32x4Vector.from(new List.generate(coefficients.length,
-      (int j) => _costFunction.getPartialDerivative(j, points[0], coefficients, labels[0])
-    ));
-
-    for (int i = 1; i < points.length; i++) {
-      gradient += new Float32x4Vector.from(new List.generate(coefficients.length,
-        (int j) => _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i])
-      ));
+    SIMDVector<Float32x4List, Float32List, Float32x4> gradient = Float32x4VectorFactory.zero(coefficients.length);
+    for (int i = 0; i < points.length; i++) {
+      final derivatives = List.generate(coefficients.length,
+        (int j) => _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i]));
+      gradient += Float32x4VectorFactory.from(derivatives);
     }
 
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
@@ -120,7 +120,11 @@ class GradientOptimizer implements Optimizer {
       regularizedCoefficients + gradient.scalarMul(eta);
   }
 
-  Float32x4Vector _regularize(double eta, double lambda, Float32x4Vector coefficients) {
+  SIMDVector<Float32x4List, Float32List, Float32x4> _regularize(
+    double eta,
+    double lambda,
+    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients
+  ) {
     if (lambda == 0) {
       return coefficients;
     }

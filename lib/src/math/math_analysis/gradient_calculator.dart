@@ -9,8 +9,8 @@ typedef double OptimizationFunction(
 abstract class GradientCalculator {
   Vector getGradient(
     OptimizationFunction function,
-    Vector targetVector,
-    Iterable<Vector> vectorArgs,
+    SIMDVector targetVector,
+    Iterable<SIMDVector> vectorArgs,
     Iterable<double> scalarArgs,
     double argumentDelta
   );
