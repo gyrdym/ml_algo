@@ -22,10 +22,10 @@ class LogisticRegressor extends LinearClassifier {
     LearningRateType learningRateType = LearningRateType.decreasing
   }) : super(
     GradientOptimizer(
-      RandomizerFactory.Default(randomSeed),
+      RandomizerFactory.defaultRandomizer(randomSeed),
       CostFunctionFactory.logLikelihood(),
       LearningRateGeneratorFactory.createByType(learningRateType),
-      InitialWeightsGeneratorFactory.ZeroWeights(),
+      InitialWeightsGeneratorFactory.zeroWeights(),
 
       initialLearningRate: learningRate,
       minCoefficientsUpdate: minWeightsUpdate,

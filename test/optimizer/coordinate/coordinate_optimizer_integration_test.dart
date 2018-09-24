@@ -25,7 +25,7 @@ void main() {
 
     setUp(() {
       optimizer = new CoordinateOptimizer(
-        InitialWeightsGeneratorFactory.ZeroWeights(),
+        InitialWeightsGeneratorFactory.zeroWeights(),
         const SquaredCost(),
         minCoefficientsDiff: 1e-5,
         iterationLimit: iterationsNumber,
@@ -124,7 +124,7 @@ void main() {
 
     setUp(() {
       optimizer = new CoordinateOptimizer(
-        InitialWeightsGeneratorFactory.ZeroWeights(),
+        InitialWeightsGeneratorFactory.zeroWeights(),
         const SquaredCost(),
         minCoefficientsDiff: 1e-5,
         iterationLimit: iterationsNumber,
