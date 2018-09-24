@@ -12,7 +12,7 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
   final Randomizer _randomizer;
   final CostFunction<Float32x4List, Float32List, Float32x4> _costFunction;
   final LearningRateGenerator _learningRateGenerator;
-  final InitialWeightsGenerator _initialWeightsGenerator;
+  final InitialWeightsGenerator<Float32x4List, Float32List, Float32x4> _initialWeightsGenerator;
 
   //hyper parameters declaration
   final double _minCoefficientsUpdate;
@@ -57,11 +57,9 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
     _points = points;
 
     final batchSize = _batchSize >= _points.length ? _points.length : _batchSize;
-
-    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients =
-        initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
-    double coefficientsUpdate = double.maxFinite;
-    int iterationCounter = 0;
+    var coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
+    var coefficientsUpdate = double.maxFinite;
+    var iterationCounter = 0;
 
     while (!_isConverged(coefficientsUpdate, iterationCounter)) {
       final eta = _learningRateGenerator.getNextValue();
@@ -93,7 +91,7 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
     final start = range.first;
     final end = range.last;
     final pointsBatch = _points.sublist(start, end);
-    final labelsBatch = labels.sublist(start, end);
+    final labelsBatch = labels.subVector(start, end);
 
     return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
   }
@@ -107,8 +105,8 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
     double eta,
     {bool isMinimization = true}
   ) {
-    SIMDVector<Float32x4List, Float32List, Float32x4> gradient = Float32x4VectorFactory.zero(coefficients.length);
-    for (int i = 0; i < points.length; i++) {
+    var gradient = Float32x4VectorFactory.zero(coefficients.length);
+    for (var i = 0; i < points.length; i++) {
       final derivatives = List.generate(coefficients.length,
         (int j) => _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i]));
       gradient += Float32x4VectorFactory.from(derivatives);

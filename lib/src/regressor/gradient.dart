@@ -21,10 +21,10 @@ class GradientRegressor extends LinearRegressor {
     int batchSize = 1
   }) : super(
       GradientOptimizer(
-        RandomizerFactory.Default(randomSeed),
+        RandomizerFactory.defaultRandomizer(randomSeed),
         CostFunctionFactory.squared(),
         LearningRateGeneratorFactory.createByType(learningRateType),
-        InitialWeightsGeneratorFactory.ZeroWeights(),
+        InitialWeightsGeneratorFactory.zeroWeights(),
 
         initialLearningRate: learningRate,
         minCoefficientsUpdate: minWeightsUpdate,
