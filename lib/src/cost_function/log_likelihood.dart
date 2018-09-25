@@ -17,8 +17,8 @@ class LogLikelihoodCost implements CostFunction<Float32x4List, Float32List, Floa
   @override
   double getPartialDerivative(
     int idx,
-    SIMDVector x,
-    SIMDVector w,
+    SIMDVector<Float32x4List, Float32List, Float32x4> x,
+    SIMDVector<Float32x4List, Float32List, Float32x4> w,
     double y
   ) =>  x[idx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
 
@@ -27,8 +27,8 @@ class LogLikelihoodCost implements CostFunction<Float32x4List, Float32List, Floa
   @override
   double getSparseSolutionPartial(
     int wIdx,
-    SIMDVector x,
-    SIMDVector w,
+    SIMDVector<Float32x4List, Float32List, Float32x4> x,
+    SIMDVector<Float32x4List, Float32List, Float32x4> w,
     double y
   ) => throw UnimplementedError();
 }

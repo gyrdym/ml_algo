@@ -5,7 +5,7 @@ class LeavePOutSplitter implements Splitter {
 
   LeavePOutSplitter(int p) {
     if (p == 0) {
-      throw new UnsupportedError('Value `$p` for parameter `p` is unsupported');
+      throw UnsupportedError('Value `$p` for parameter `p` is unsupported');
     }
 
     _p = p;

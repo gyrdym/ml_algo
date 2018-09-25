@@ -10,8 +10,8 @@ import 'package:linalg/vector.dart';
 
 abstract class LinearClassifier implements Evaluable<Float32x4, Float32x4List, Float32List> {
 
-  final Optimizer _optimizer;
-  final _weightsByClasses = <SIMDVector>[];
+  final Optimizer<Float32x4, Float32x4List, Float32List> _optimizer;
+  final _weightsByClasses = <SIMDVector<Float32x4List, Float32List, Float32x4>>[];
   final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
   final InterceptPreprocessor _interceptPreprocessor;
 
@@ -27,7 +27,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4, Float32x4List, F
     List<SIMDVector<Float32x4List, Float32List, Float32x4>> features,
     SIMDVector<Float32x4List, Float32List, Float32x4> origLabels,
     {
-      SIMDVector initialWeights,
+      SIMDVector<Float32x4List, Float32List, Float32x4> initialWeights,
       bool isDataNormalized = false
     }
   ) {
@@ -44,7 +44,9 @@ abstract class LinearClassifier implements Evaluable<Float32x4, Float32x4List, F
     }
   }
 
-  SIMDVector _makeLabelsOneVsAll(SIMDVector<Float32x4List, Float32List, Float32x4> origLabels, double targetLabel) {
+  SIMDVector<Float32x4List, Float32List, Float32x4> _makeLabelsOneVsAll(
+      SIMDVector<Float32x4List, Float32List, Float32x4> origLabels, double targetLabel) {
+
     final target = Float32x4.splat(targetLabel);
     final zero = Float32x4.zero();
     return origLabels.vectorizedMap((Float32x4 element) => element.equal(target).select(element, zero));

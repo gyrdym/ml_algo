@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:linalg/vector.dart';
 
 abstract class CostFunction<S extends List<E>, T extends List<double>, E> {

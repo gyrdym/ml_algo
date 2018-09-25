@@ -14,16 +14,16 @@ class SquaredCost implements CostFunction<Float32x4List, Float32List, Float32x4>
   @override
   double getPartialDerivative(
     int wIdx,
-    SIMDVector x,
-    SIMDVector w,
+    SIMDVector<Float32x4List, Float32List, Float32x4> x,
+    SIMDVector<Float32x4List, Float32List, Float32x4> w,
     double y
   ) => -2.0 * x[wIdx] * (y - x.dot(w));
 
   @override
   double getSparseSolutionPartial(
     int wIdx,
-    SIMDVector x,
-    SIMDVector w,
+    SIMDVector<Float32x4List, Float32List, Float32x4> x,
+    SIMDVector<Float32x4List, Float32List, Float32x4> w,
     double y
   ) => x[wIdx] * (y - x.dot(w) + x[wIdx] * w[wIdx]);
 }
