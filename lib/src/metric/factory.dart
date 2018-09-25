@@ -17,7 +17,7 @@ class MetricFactory {
         break;
 
       case MetricType.ACCURACY:
-        metric = ClassificationMetricFactory.Accuracy();
+        metric = ClassificationMetricFactory.accuracy();
         break;
 
       default:

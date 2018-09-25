@@ -1,16 +1,16 @@
 import 'package:linalg/vector.dart';
 
-typedef double OptimizationFunction(
-  Vector targetVector,
-  Iterable<Vector> vectorArgs,
+typedef double OptimizationFunction<S extends List<E>, T extends List<double>, E> (
+  SIMDVector<S, T, E> targetVector,
+  Iterable<SIMDVector<S, T, E>> vectorArgs,
   Iterable<double> scalarArgs
 );
 
-abstract class GradientCalculator {
-  Vector getGradient(
-    OptimizationFunction function,
-    SIMDVector targetVector,
-    Iterable<SIMDVector> vectorArgs,
+abstract class GradientCalculator<S extends List<E>, T extends List<double>, E> {
+  SIMDVector<S, T, E> getGradient(
+    OptimizationFunction<S, T, E> function,
+    SIMDVector<S, T, E> targetVector,
+    Iterable<SIMDVector<S, T, E>> vectorArgs,
     Iterable<double> scalarArgs,
     double argumentDelta
   );
