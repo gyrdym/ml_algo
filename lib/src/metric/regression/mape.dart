@@ -1,9 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:dart_ml/src/metric/regression/metric.dart';
 import 'package:linalg/vector.dart';
 
-class MAPEMetric implements RegressionMetric {
+class MAPEMetric implements RegressionMetric<Float32x4List, Float32List, Float32x4> {
+
   const MAPEMetric();
 
-  double getError(Vector predictedLabels, Vector origLabels) =>
-      100 / predictedLabels.length * ((origLabels - predictedLabels) / origLabels).abs().sum();
+  @override
+  double getError(
+    SIMDVector<Float32x4List, Float32List, Float32x4> predictedLabels,
+    SIMDVector<Float32x4List, Float32List, Float32x4> origLabels
+  ) => 100 / predictedLabels.length * ((origLabels - predictedLabels) / origLabels).abs().sum();
 }

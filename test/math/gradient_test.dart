@@ -11,7 +11,7 @@ void main() {
 
   group('GradientCalculator', () {
     setUp(() {
-      calculator = new GradientCalculatorImpl();
+      calculator = GradientCalculatorImpl();
     });
 
     test('should return a proper gradient vector', () {

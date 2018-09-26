@@ -26,5 +26,5 @@ Future main() async {
   final validator = CrossValidator<Float32x4List, Float32List, Float32x4>.kFold(numberOfFolds: 7);
 
   print('Logistic regression, error on cross validation: ');
-  print('${(validator.evaluate(logisticRegressor, features, labels, MetricType.ACCURACY) * 100).toStringAsFixed(2)}%');
+  print('${(validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy) * 100).toStringAsFixed(2)}%');
 }

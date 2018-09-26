@@ -9,7 +9,7 @@ abstract class ClassificationMetricFactory {
     ClassificationMetric metric;
 
     switch (type) {
-      case ClassificationMetricType.ACCURACY:
+      case ClassificationMetricType.accuracy:
         metric = accuracy();
         break;
 

@@ -26,7 +26,7 @@ Future main() async {
   final validator = CrossValidator<Float32x4List, Float32List, Float32x4>.kFold();
 
   print('K-fold cross validation with MAPE metric:');
-  print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, features, labels, MetricType.MAPE)}');
+  print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, features, labels, MetricType.mape)}');
 
   print('Feature weights (possibly, some weights are downgraded to zero, cause it is an objective of Lasso Regression):');
   print(lassoRegressionModel.weights);

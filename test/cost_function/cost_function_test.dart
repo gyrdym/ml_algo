@@ -7,8 +7,8 @@ void main() {
     final logLikelihood = CostFunctionFactory.logLikelihood();
 
     test('should calculate correct value of the partial derivative (in case of True-label)', () {
-      final x = new Float32x4Vector.from([3.0, 1.2, 5.6]);
-      final w = new Float32x4Vector.from([1.5, 2.3, 3.2]);
+      final x = Float32x4VectorFactory.from([3.0, 1.2, 5.6]);
+      final w = Float32x4VectorFactory.from([1.5, 2.3, 3.2]);
       final precision = 0.00001;
       final y = 1.0;
 
@@ -24,8 +24,8 @@ void main() {
     });
 
     test('should calculate correct value of the partial derivative (in case of False-label)', () {
-      final x = new Float32x4Vector.from([3.0, 1.2, 5.6]);
-      final w = new Float32x4Vector.from([1.5, 2.3, 3.2]);
+      final x = Float32x4VectorFactory.from([3.0, 1.2, 5.6]);
+      final w = Float32x4VectorFactory.from([1.5, 2.3, 3.2]);
       final precision = 0.00001;
       final y = 0.0;
 
