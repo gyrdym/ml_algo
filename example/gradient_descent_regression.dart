@@ -27,5 +27,5 @@ Future main() async {
   final validator = CrossValidator<Float32x4List, Float32List, Float32x4>.kFold();
 
   print('K-fold cross validation with MAPE metric (error in percents):');
-  print('${(validator.evaluate(sgdRegressionModel, features, labels, MetricType.MAPE)).toStringAsFixed(2)}%');
+  print('${(validator.evaluate(sgdRegressionModel, features, labels, MetricType.mape)).toStringAsFixed(2)}%');
 }

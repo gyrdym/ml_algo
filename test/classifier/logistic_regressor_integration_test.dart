@@ -8,21 +8,21 @@ void main() {
 
   group('Logistic regressor', () {
     setUp(() {
-      classifier = new LogisticRegressor(batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant,
+      classifier = LogisticRegressor(batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant,
         learningRate: 1.0);
     });
 
     test('should extract class labels from the data', () {
       final features = [
-        new Float32x4Vector.from([5.0, 7.0, 6.0]),
-        new Float32x4Vector.from([1.0, 2.0, 3.0]),
-        new Float32x4Vector.from([10.0, 12.0, 31.0]),
-        new Float32x4Vector.from([9.0, 8.0, 5.0]),
-        new Float32x4Vector.from([4.0, 0.0, 1.0]),
-        new Float32x4Vector.from([4.0, 0.0, 1.0]),
-        new Float32x4Vector.from([4.0, 0.0, 1.0])
+        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
+        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
+        Float32x4VectorFactory.from([10.0, 12.0, 31.0]),
+        Float32x4VectorFactory.from([9.0, 8.0, 5.0]),
+        Float32x4VectorFactory.from([4.0, 0.0, 1.0]),
+        Float32x4VectorFactory.from([4.0, 0.0, 1.0]),
+        Float32x4VectorFactory.from([4.0, 0.0, 1.0])
       ];
-      final labels = new Float32x4Vector.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
+      final labels = Float32x4VectorFactory.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
       classifier.fit(features, labels);
 
       expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
@@ -30,13 +30,13 @@ void main() {
 
     test('should properly fit given data', () {
       final features = [
-        new Float32x4Vector.from([5.0, 7.0, 6.0]),
-        new Float32x4Vector.from([1.0, 2.0, 3.0]),
-        new Float32x4Vector.from([10.0, 12.0, 31.0]),
-        new Float32x4Vector.from([9.0, 8.0, 5.0]),
-        new Float32x4Vector.from([4.0, 0.0, 1.0])
+        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
+        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
+        Float32x4VectorFactory.from([10.0, 12.0, 31.0]),
+        Float32x4VectorFactory.from([9.0, 8.0, 5.0]),
+        Float32x4VectorFactory.from([4.0, 0.0, 1.0])
       ];
-      final labels = new Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
       // given data
@@ -306,13 +306,13 @@ void main() {
     });
 
     test('should consider intercept term', () {
-      final classifier = new LogisticRegressor(batchSize: 2, iterationLimit: 1,
+      final classifier = LogisticRegressor(batchSize: 2, iterationLimit: 1,
         learningRateType: LearningRateType.constant, learningRate: 1.0, fitIntercept: true);
       final features = [
-        new Float32x4Vector.from([5.0, 7.0, 6.0]),
-        new Float32x4Vector.from([1.0, 2.0, 3.0])
+        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
+        Float32x4VectorFactory.from([1.0, 2.0, 3.0])
       ];
-      final labels = new Float32x4Vector.from([0.0, 1.0]);
+      final labels = Float32x4VectorFactory.from([0.0, 1.0]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our data should look as follows:
@@ -375,14 +375,14 @@ void main() {
     });
 
     test('should consider intercept scale if intercept term is going to be fitted', () {
-      final classifier = new LogisticRegressor(batchSize: 3, iterationLimit: 1,
+      final classifier = LogisticRegressor(batchSize: 3, iterationLimit: 1,
         learningRateType: LearningRateType.constant, learningRate: 1.0, fitIntercept: true, interceptScale: 2.0);
       final features = [
-        new Float32x4Vector.from([5.0, 7.0, 6.0]),
-        new Float32x4Vector.from([1.0, 2.0, 3.0]),
-        new Float32x4Vector.from([3.0, 4.0, 5.0])
+        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
+        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
+        Float32x4VectorFactory.from([3.0, 4.0, 5.0])
       ];
-      final labels = new Float32x4Vector.from([0.0, 1.0, 0.0]);
+      final labels = Float32x4VectorFactory.from([0.0, 1.0, 0.0]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our data should look as follows:

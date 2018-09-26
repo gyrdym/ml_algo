@@ -8,20 +8,20 @@ class MetricFactory {
     Metric metric;
 
     switch (type) {
-      case MetricType.RMSE:
-        metric = RegressionMetricFactory.RMSE();
+      case MetricType.rmse:
+        metric = RegressionMetricFactory.rmse();
         break;
 
-      case MetricType.MAPE:
-        metric = RegressionMetricFactory.MAPE();
+      case MetricType.mape:
+        metric = RegressionMetricFactory.mape();
         break;
 
-      case MetricType.ACCURACY:
+      case MetricType.accuracy:
         metric = ClassificationMetricFactory.accuracy();
         break;
 
       default:
-        throw new UnsupportedError('Unsupported metric type $type');
+        throw UnsupportedError('Unsupported metric type $type');
     }
 
     return metric;

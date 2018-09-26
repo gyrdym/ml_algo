@@ -85,7 +85,7 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
     SIMDVector<Float32x4List, Float32List, Float32x4> labels,
     double eta,
     int batchSize,
-    {bool isMinimization: true}
+    {bool isMinimization = true}
   ) {
     final range = _getBatchRange(batchSize);
     final start = range.first;
