@@ -16,8 +16,8 @@ void main() {
 
   group('Randomizer (with predefined generator)', () {
     setUp(() {
-      baseGenerator = new RandomMock();
-      randomizer = new RandomizerImpl(generator: baseGenerator);
+      baseGenerator = RandomMock();
+      randomizer = RandomizerImpl(generator: baseGenerator);
     });
 
     tearDown(() {
@@ -29,7 +29,7 @@ void main() {
 
   group('Randomizer (without predefined generator)', () {
     setUp(() {
-      randomizer = new RandomizerImpl();
+      randomizer = RandomizerImpl();
     });
 
     test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1', () {
@@ -92,7 +92,7 @@ void main() {
       final end = 13;
 
       for (int i = 0; i < maxEpoch; i++) {
-        int value = randomizer.getIntegerFromInterval(start, end);
+        final value = randomizer.getIntegerFromInterval(start, end);
         expect(start <= value && value < end, isTrue);
       }
     });
