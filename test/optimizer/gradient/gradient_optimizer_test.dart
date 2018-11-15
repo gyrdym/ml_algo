@@ -194,7 +194,7 @@ void main() {
       //
       // c = [-32, -32, -32]
       //
-      expect(optimalCoefficients, equals([-32.0, -32.0, -32.0]));
+      expect(optimalCoefficients.toList(), equals([-32.0, -32.0, -32.0]));
     });
 
     test('should find optimal coefficient values and regularize it', () {
@@ -247,7 +247,7 @@ void main() {
       //
       // c = [-23728.0, -23728.0, -23728.0]
       //
-      expect(optimalCoefficients, equals([-23728.0, -23728.0, -23728.0]));
+      expect(optimalCoefficients.toList(), equals([-23728.0, -23728.0, -23728.0]));
     });
 
     test('should consider `iterationLimit` parameter', () {
@@ -273,7 +273,9 @@ void main() {
     test('should consider `minCoefficientsUpdate` parameter', () {
       const minCoefficientsUpdate = 4.0;
 
-      final points = <SIMDVector<Float32x4List, Float32List, Float32x4>>[Float32x4VectorFactory.from([1.0, 2.0, 3.0])];
+      final points = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+        Float32x4VectorFactory.from([1.0, 2.0, 3.0])
+      ];
       final labels = Float32x4VectorFactory.from([1.0]);
       final optimizer = createOptimizer(minCoeffUpdate: minCoefficientsUpdate, iterationsLimit: 1000000, batchSize: 1, lambda: 0.0);
 
@@ -323,7 +325,7 @@ void main() {
       final coefficients = optimizer.findExtrema(points, labels);
 
       verify(learningRateGeneratorMock.getNextValue()).called(3);
-      expect(coefficients, equals([-16.0, -16.0, -16.0]));
+      expect(coefficients.toList(), equals([-16.0, -16.0, -16.0]));
     });
 
     test('should consider `learningRate` parameter', () {

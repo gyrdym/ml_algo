@@ -9,10 +9,9 @@ environment:
 dependencies:
   csv: ^4.0.0
   linalg:
-#    path: ../linalg
-    git:
-      url: https://github.com/gyrdym/linalg.git
-      ref: dart-2-0
+    path: ../linalg
+#    git:
+#      url: https://github.com/gyrdym/linalg.git
 
 dev_dependencies:
   benchmark_harness: ">=1.0.0 <2.0.0"

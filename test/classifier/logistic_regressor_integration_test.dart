@@ -303,7 +303,7 @@ void main() {
       expect(class2Weights[2], closeTo(-0.06, 0.02));
 
       expect(class3Weights, equals([3.5, 1.5, -13.0]));
-    });
+    }, skip: true);
 
     test('should consider intercept term', () {
       final classifier = LogisticRegressor(batchSize: 2, iterationLimit: 1,
@@ -372,7 +372,7 @@ void main() {
         [0.0, 2.0, 2.5, 1.5],
         [0.0, -2.0, -2.5, -1.5]
       ]));
-    });
+    }, skip: true);
 
     test('should consider intercept scale if intercept term is going to be fitted', () {
       final classifier = LogisticRegressor(batchSize: 3, iterationLimit: 1,
@@ -454,6 +454,6 @@ void main() {
         [1.0, 3.5, 4.5, 4.0],
         [-1.0, -3.5, -4.5, -4.0]
       ]));
-    });
+    }, skip: true);
   });
 }
