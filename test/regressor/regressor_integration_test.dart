@@ -6,9 +6,9 @@ GradientRegressor regressor;
 void main() {
   group('Gradient regressor', () {
     setUp(() {
-      regressor = new GradientRegressor();
+      regressor = GradientRegressor();
     });
 
-    // implement gradient regressor integration test...
+    //@TODO: implement gradient regressor integration test...
   });
 }
