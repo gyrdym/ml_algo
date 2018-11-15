@@ -5,19 +5,19 @@ class KFoldSplitter implements Splitter {
 
   KFoldSplitter(this._numberOfFolds) {
     if (_numberOfFolds == 0 || _numberOfFolds == 1) {
-      throw new RangeError('Number of folds must be greater than 1 and less than number of samples');
+      throw RangeError('Number of folds must be greater than 1 and less than number of samples');
     }
   }
 
   @override
   Iterable<Iterable<int>> split(int numberOfSamples) sync* {
     if (_numberOfFolds > numberOfSamples) {
-      throw new RangeError.range(_numberOfFolds, 0, numberOfSamples, null, 'Number of folds must be less than number of samples!');
+      throw RangeError.range(_numberOfFolds, 0, numberOfSamples, null, 'Number of folds must be less than number of samples!');
     }
 
     final remainder = numberOfSamples % _numberOfFolds;
     final size = (numberOfSamples / _numberOfFolds).truncate();
-    final sizes = new List<int>.filled(_numberOfFolds, 1).map((int el) => el * size).toList(growable: false);
+    final sizes = List<int>.filled(_numberOfFolds, 1).map((int el) => el * size).toList(growable: false);
 
     if (remainder > 0) {
       final range = sizes.take(remainder).map((int el) => ++el).toList(growable: false);

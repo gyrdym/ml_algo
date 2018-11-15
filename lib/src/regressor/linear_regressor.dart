@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dart_ml/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:dart_ml/src/metric/factory.dart';
 import 'package:dart_ml/src/metric/type.dart';
@@ -5,23 +7,23 @@ import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/vector.dart';
 
-abstract class LinearRegressor implements Evaluable {
+abstract class LinearRegressor implements Evaluable<Float32x4, Float32x4List, Float32List> {
 
-  final Optimizer _optimizer;
+  final Optimizer<Float32x4, Float32x4List, Float32List> _optimizer;
   final InterceptPreprocessor _interceptPreprocessor;
 
-  Float32x4Vector get weights => _weights;
-  Float32x4Vector _weights;
-
   LinearRegressor(this._optimizer, double interceptScale) :
-    _interceptPreprocessor = new InterceptPreprocessor(interceptScale: interceptScale);
+    _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
+
+  SIMDVector<Float32x4List, Float32List, Float32x4> get weights => _weights;
+  SIMDVector<Float32x4List, Float32List, Float32x4> _weights;
 
   @override
   void fit(
-    covariant List<Float32x4Vector> features,
-    covariant Float32x4Vector labels,
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> features,
+    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
     {
-      covariant Float32x4Vector initialWeights,
+      SIMDVector<Float32x4List, Float32List, Float32x4> initialWeights,
       bool isDataNormalized = false
     }
   ) {
@@ -36,8 +38,8 @@ abstract class LinearRegressor implements Evaluable {
 
   @override
   double test(
-    covariant List<Float32x4Vector> features,
-    covariant Float32x4Vector origLabels,
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> features,
+    SIMDVector<Float32x4List, Float32List, Float32x4> origLabels,
     MetricType metricType
   ) {
     final metric = MetricFactory.createByType(metricType);
@@ -45,11 +47,13 @@ abstract class LinearRegressor implements Evaluable {
     return metric.getError(prediction, origLabels);
   }
 
-  Float32x4Vector predict(List<Float32x4Vector> features) {
-    final labels = new List<double>(features.length);
+  SIMDVector<Float32x4List, Float32List, Float32x4> predict(
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> features
+  ) {
+    final labels = List<double>(features.length);
     for (int i = 0; i < features.length; i++) {
       labels[i] = _weights.dot(features[i]);
     }
-    return new Float32x4Vector.from(labels);
+    return Float32x4VectorFactory.from(labels);
   }
 }

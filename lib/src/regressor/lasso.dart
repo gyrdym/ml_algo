@@ -12,8 +12,8 @@ class LassoRegressor extends LinearRegressor {
     double interceptScale = 1.0
   }) : super(
     new CoordinateOptimizer(
-      InitialWeightsGeneratorFactory.ZeroWeights(),
-      CostFunctionFactory.Squared(),
+      InitialWeightsGeneratorFactory.zeroWeights(),
+      CostFunctionFactory.squared(),
       minCoefficientsDiff: minWeightUpdate,
       iterationLimit: iterationLimit,
       lambda: lambda

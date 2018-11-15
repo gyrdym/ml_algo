@@ -4,23 +4,23 @@ import 'package:dart_ml/src/metric/regression/rmse.dart';
 import 'package:dart_ml/src/metric/regression/type.dart';
 
 class RegressionMetricFactory {
-  static RegressionMetric RMSE() => const RMSEMetric();
-  static RegressionMetric MAPE() => const MAPEMetric();
+  static RegressionMetric rmse() => const RMSEMetric();
+  static RegressionMetric mape() => const MAPEMetric();
 
   static RegressionMetric createByType(RegressionMetricType type) {
     RegressionMetric metric;
 
     switch (type) {
-      case RegressionMetricType.MAPE:
-        metric = MAPE();
+      case RegressionMetricType.mape:
+        metric = mape();
         break;
 
-      case RegressionMetricType.RMSE:
-        metric = RMSE();
+      case RegressionMetricType.rmse:
+        metric = rmse();
         break;
 
       default:
-        throw new UnsupportedError('Unsupported regression metric type: ${type}');
+        throw UnsupportedError('Unsupported regression metric type: ${type}');
     }
 
     return metric;

@@ -14,23 +14,27 @@ class GradientRegressor extends LinearRegressor {
     double learningRate,
     double minWeightsUpdate,
     double lambda,
-    GradientType type = GradientType.MiniBatch,
+    GradientType type = GradientType.miniBatch,
     bool fitIntercept = false,
     double interceptScale = 1.0,
     int randomSeed,
     int batchSize = 1
   }) : super(
-      new GradientOptimizer(
-        RandomizerFactory.Default(randomSeed),
-        CostFunctionFactory.Squared(),
+      GradientOptimizer(
+        RandomizerFactory.defaultRandomizer(randomSeed),
+        CostFunctionFactory.squared(),
         LearningRateGeneratorFactory.createByType(learningRateType),
-        InitialWeightsGeneratorFactory.ZeroWeights(),
+        InitialWeightsGeneratorFactory.zeroWeights(),
 
         initialLearningRate: learningRate,
         minCoefficientsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
-        batchSize: type == GradientType.Stochastic ? 1 : type == GradientType.MiniBatch ? batchSize : double.INFINITY
+        batchSize: type == GradientType.stochastic
+          ? 1
+          : type == GradientType.miniBatch
+            ? batchSize
+            : double.infinity.toInt()
       ),
       fitIntercept ? interceptScale : 0.0
     );
