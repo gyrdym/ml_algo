@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dart_ml/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
 import 'package:dart_ml/src/metric/factory.dart';
@@ -6,35 +8,33 @@ import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/vector.dart';
 
-abstract class LinearClassifier implements Evaluable {
+abstract class LinearClassifier implements Evaluable<Float32x4, Float32x4List, Float32List> {
 
-  final Optimizer _optimizer;
-  final _weightsByClasses = <Float32x4Vector>[];
+  final Optimizer<Float32x4, Float32x4List, Float32List> _optimizer;
+  final _weightsByClasses = <SIMDVector<Float32x4List, Float32List, Float32x4>>[];
   final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
   final InterceptPreprocessor _interceptPreprocessor;
 
-  List<Float32x4Vector> get weightsByClasses => _weightsByClasses;
-
-  Float32x4Vector get classLabels => _classLabels;
-  Float32x4Vector _classLabels;
-
   LinearClassifier(this._optimizer, this._linkScoreToProbability, double interceptScale) :
-    _interceptPreprocessor = new InterceptPreprocessor(interceptScale: interceptScale);
+        _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
+
+  List<SIMDVector> get weightsByClasses => _weightsByClasses;
+  SIMDVector get classLabels => _classLabels;
+  SIMDVector _classLabels;
 
   @override
   void fit(
-    covariant List<Float32x4Vector> features,
-    covariant Float32x4Vector origLabels,
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> features,
+    SIMDVector<Float32x4List, Float32List, Float32x4> origLabels,
     {
-      covariant Float32x4Vector initialWeights,
+      SIMDVector<Float32x4List, Float32List, Float32x4> initialWeights,
       bool isDataNormalized = false
     }
   ) {
     _classLabels = origLabels.unique();
-
     final _features = _interceptPreprocessor.addIntercept(features);
-
-    for (final targetLabel in _classLabels) {
+    for (int i = 0; i < _classLabels.length; i++) {
+      final targetLabel =_classLabels[i];
       final labels = _makeLabelsOneVsAll(origLabels, targetLabel);
       _weightsByClasses.add(_optimizer.findExtrema(_features, labels,
         initialWeights: initialWeights,
@@ -44,24 +44,18 @@ abstract class LinearClassifier implements Evaluable {
     }
   }
 
-  Float32x4Vector _makeLabelsOneVsAll(Float32x4Vector origLabels, double targetLabel) =>
-    new Float32x4Vector.from(origLabels.map((double label) => label == targetLabel ? 1.0 : 0.0));
+  SIMDVector<Float32x4List, Float32List, Float32x4> _makeLabelsOneVsAll(
+      SIMDVector<Float32x4List, Float32List, Float32x4> origLabels, double targetLabel) {
 
-  List<Float32x4Vector> _addIntercept(List<Float32x4Vector> points) {
-    final _points = new List<Float32x4Vector>(points.length);
-    for (int i = 0; i < points.length; i++) {
-      _points[i] = new Float32x4Vector.from(
-          points[i].toList(growable: true)
-            ..insert(0, 1.0)
-          );
-    }
-    return _points;
+    final target = Float32x4.splat(targetLabel);
+    final zero = Float32x4.zero();
+    return origLabels.vectorizedMap((Float32x4 element) => element.equal(target).select(element, zero));
   }
 
   @override
   double test(
-    covariant List<Float32x4Vector> features,
-    covariant Float32x4Vector origLabels,
+    List<SIMDVector<Float32x4List, Float32List, Float32x4>> features,
+    SIMDVector<Float32x4List, Float32List, Float32x4> origLabels,
     MetricType metricType
   ) {
     final metric = MetricFactory.createByType(metricType);
@@ -69,29 +63,34 @@ abstract class LinearClassifier implements Evaluable {
     return metric.getError(prediction, origLabels);
   }
 
-  List<Float32x4Vector> predictProbabilities(List<Float32x4Vector> features, {interceptConsidered: false}) {
+  List<SIMDVector<Float32x4List, Float32List, Float32x4>> predictProbabilities(
+      List<SIMDVector<Float32x4List, Float32List, Float32x4>> features,
+      {bool interceptConsidered = false}
+  ) {
     final _features = !interceptConsidered ? _interceptPreprocessor.addIntercept(features) : features;
-    final distributions = new List<Float32x4Vector>(_features.length);
-
+    final distributions = List<SIMDVector<Float32x4List, Float32List, Float32x4>>(_features.length);
     for (int i = 0; i < _features.length; i++) {
-      final probabilities = new List<double>(_weightsByClasses.length);
+      final probabilities = List<double>(_weightsByClasses.length);
       for (int i = 0; i < _weightsByClasses.length; i++) {
         final score = _weightsByClasses[i].dot(_features[i]);
         probabilities[i] = _linkScoreToProbability(score);
       }
-      distributions[i] = new Float32x4Vector.from(probabilities);
+      distributions[i] = Float32x4VectorFactory.from(probabilities);
     }
     return distributions;
   }
 
-  Float32x4Vector predictClasses(List<Float32x4Vector> features, {interceptConsidered: false}) {
-    final _features = !interceptConsidered ? _interceptPreprocessor.addIntercept(features) : features;
+  SIMDVector<Float32x4List, Float32List, Float32x4> predictClasses(
+      List<SIMDVector<Float32x4List, Float32List, Float32x4>> features,
+      {bool interceptConsidered = false}
+  ) {
+    final _features = interceptConsidered ? features : _interceptPreprocessor.addIntercept(features);
     final distributions = predictProbabilities(_features, interceptConsidered: true);
-    final classes = new List<double>(_features.length);
+    final classes = List<double>(_features.length);
     for (int i = 0; i < distributions.length; i++) {
       final probabilities = distributions[i];
-      classes[i] = probabilities.indexOf(probabilities.max()) * 1.0;
+      classes[i] = probabilities.toList().indexOf(probabilities.max()) * 1.0;
     }
-    return new Float32x4Vector.from(classes);
+    return Float32x4VectorFactory.from(classes);
   }
 }
