@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.1
+- Readme updated, dependencies fixed
+
 ## 1.0.0
 - Migration to dart 2.0
 

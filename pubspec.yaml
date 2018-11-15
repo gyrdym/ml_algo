@@ -1,6 +1,6 @@
 name: dart_ml
 description: Machine learning with dart
-version: 1.0.0
+version: 1.0.1
 author: Ilya Gyrdymov <ilgyrd@gmail.com>
 
 environment:
@@ -9,9 +9,8 @@ environment:
 dependencies:
   csv: ^4.0.0
   linalg:
-    path: ../linalg
-#    git:
-#      url: https://github.com/gyrdym/linalg.git
+    git:
+      url: https://github.com/gyrdym/linalg.git
 
 dev_dependencies:
   benchmark_harness: ">=1.0.0 <2.0.0"
