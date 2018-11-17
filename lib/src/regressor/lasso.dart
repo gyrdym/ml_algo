@@ -11,7 +11,7 @@ class LassoRegressor extends LinearRegressor {
     bool fitIntercept = false,
     double interceptScale = 1.0
   }) : super(
-    new CoordinateOptimizer(
+    CoordinateOptimizer(
       InitialWeightsGeneratorFactory.zeroWeights(),
       CostFunctionFactory.squared(),
       minCoefficientsDiff: minWeightUpdate,

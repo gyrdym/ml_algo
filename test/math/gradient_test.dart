@@ -8,7 +8,7 @@ import 'package:matcher/matcher.dart';
 import 'package:test/test.dart';
 
 void main() {
-  GradientCalculator<Float32x4List, Float32List, Float32x4> calculator;
+  GradientCalculator<Float32x4> calculator;
 
   group('GradientCalculator', () {
     setUp(() {
@@ -22,11 +22,11 @@ void main() {
 
       final gradient = calculator.getGradient(
         (
-          SIMDVector<Float32x4List, Float32List, Float32x4> a,
-          Iterable<SIMDVector<Float32x4List, Float32List, Float32x4>> vectorArgs,
+          Vector<Float32x4> a,
+          Iterable<Vector<Float32x4>> vectorArgs,
           Iterable<double> scalarArgs
         ) {
-          final b = (vectorArgs as List<SIMDVector<Float32x4List, Float32List, Float32x4>>)[0];
+          final b = (vectorArgs as List<Vector<Float32x4>>)[0];
           final c = (scalarArgs as List<double>)[0];
           return math.pow(a.dot(b) - c, 2).toDouble();
         }, k, [x], [y], 0.00001)

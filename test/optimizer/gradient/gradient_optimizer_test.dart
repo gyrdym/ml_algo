@@ -10,14 +10,14 @@ import 'package:linalg/vector.dart';
 import 'package:test/test.dart';
 
 class RandomizerMock extends Mock implements Randomizer {}
-class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator<Float32x4List, Float32List, Float32x4> {}
+class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator<Float32x4> {}
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
-class CostFunctionMock extends Mock implements CostFunction<Float32x4List, Float32List, Float32x4> {}
+class CostFunctionMock extends Mock implements CostFunction<Float32x4> {}
 
 Randomizer randomizerMock;
 LearningRateGenerator learningRateGeneratorMock;
-CostFunction<Float32x4List, Float32List, Float32x4> costFunctionMock;
-InitialWeightsGenerator<Float32x4List, Float32List, Float32x4> initialWeightsGeneratorMock;
+CostFunction<Float32x4> costFunctionMock;
+InitialWeightsGenerator<Float32x4> initialWeightsGeneratorMock;
 
 LearningRateGenerator createLearningRateGenerator() {
   final mock = LearningRateGeneratorMock();
@@ -25,13 +25,13 @@ LearningRateGenerator createLearningRateGenerator() {
   return mock;
 }
 
-InitialWeightsGenerator<Float32x4List, Float32List, Float32x4> createInitialWeightsGenerator() {
+InitialWeightsGenerator<Float32x4> createInitialWeightsGenerator() {
   final mock = InitialWeightsGeneratorMock();
   when(mock.generate(3)).thenReturn(Float32x4VectorFactory.from([0.0, 0.0, 0.0]));
   return mock;
 }
 
-List<SIMDVector<Float32x4List, Float32List, Float32x4>> getPoints() => [
+List<Vector<Float32x4>> getPoints() => [
   Float32x4VectorFactory.from([5.0, 10.0, 15.0]),
   Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
   Float32x4VectorFactory.from([10.0, 20.0, 30.0]),
@@ -156,7 +156,7 @@ void main() {
     });
 
     test('should find optimal coefficient values', () {
-      final points = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+      final points = <Vector<Float32x4>>[
         Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
         Float32x4VectorFactory.from([4.0, 5.0, 6.0])
       ];
@@ -198,7 +198,7 @@ void main() {
     });
 
     test('should find optimal coefficient values and regularize it', () {
-      final points = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+      final points = <Vector<Float32x4>>[
         Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
         Float32x4VectorFactory.from([4.0, 5.0, 6.0])
       ];
@@ -253,7 +253,7 @@ void main() {
     test('should consider `iterationLimit` parameter', () {
       const maxIteration = 2000;
 
-      final points = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+      final points = <Vector<Float32x4>>[
         Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
         Float32x4VectorFactory.from([4.0, 5.0, 6.0])
       ];
@@ -273,7 +273,7 @@ void main() {
     test('should consider `minCoefficientsUpdate` parameter', () {
       const minCoefficientsUpdate = 4.0;
 
-      final points = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+      final points = <Vector<Float32x4>>[
         Float32x4VectorFactory.from([1.0, 2.0, 3.0])
       ];
       final labels = Float32x4VectorFactory.from([1.0]);

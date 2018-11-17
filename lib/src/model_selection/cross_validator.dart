@@ -5,7 +5,8 @@ import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:linalg/vector.dart';
 
-class CrossValidator<S extends List<E>, T extends List<double>, E> {
+class CrossValidator<E> {
+
   final Splitter _splitter;
 
   factory CrossValidator.kFold({int numberOfFolds = 5}) =>
@@ -18,8 +19,8 @@ class CrossValidator<S extends List<E>, T extends List<double>, E> {
 
   double evaluate(
     Evaluable predictor,
-    List<SIMDVector<S, T, E>> points,
-    SIMDVector<S, T, E> labels,
+    List<Vector<E>> points,
+    Vector<E> labels,
     MetricType metric,
     {bool isDataNormalized = false}
   ) {
@@ -33,8 +34,8 @@ class CrossValidator<S extends List<E>, T extends List<double>, E> {
     int scoreCounter = 0;
 
     for (final testIndices in allIndicesGroups) {
-      final trainFeatures = List<SIMDVector<S, T, E>>(points.length - testIndices.length);
-      final testFeatures = List<SIMDVector<S, T, E>>(testIndices.length);
+      final trainFeatures = List<Vector<E>>(points.length - testIndices.length);
+      final testFeatures = List<Vector<E>>(testIndices.length);
       final trainIndices = List<int>(points.length - testIndices.length);
 
       int trainPointsCounter = 0;

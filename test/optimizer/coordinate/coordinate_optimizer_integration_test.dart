@@ -22,8 +22,8 @@ void main() {
     final point4 = Float32x4VectorFactory.from([20.0, 30.0, 10.0]);
 
     CoordinateOptimizer optimizer;
-    List<SIMDVector<Float32x4List, Float32List, Float32x4>> data;
-    SIMDVector<Float32x4List, Float32List, Float32x4> labels;
+    List<Vector<Float32x4>> data;
+    Vector<Float32x4> labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -121,8 +121,8 @@ void main() {
     final point3 = Float32x4VectorFactory.from([70.0, 80.0, 90.0]);
 
     CoordinateOptimizer optimizer;
-    List<SIMDVector<Float32x4List, Float32List, Float32x4>> data;
-    SIMDVector<Float32x4List, Float32List, Float32x4> labels;
+    List<Vector<Float32x4>> data;
+    Vector<Float32x4> labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
