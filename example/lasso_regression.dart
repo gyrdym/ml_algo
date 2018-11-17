@@ -23,7 +23,7 @@ Future main() async {
 
   final labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
   final lassoRegressionModel = LassoRegressor(iterationLimit: 100, lambda: 6750.0);
-  final validator = CrossValidator<Float32x4List, Float32List, Float32x4>.kFold();
+  final validator = CrossValidator<Float32x4>.kFold();
 
   print('K-fold cross validation with MAPE metric:');
   print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, features, labels, MetricType.mape)}');

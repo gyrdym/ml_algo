@@ -23,7 +23,7 @@ Future main() async {
   final labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
   final logisticRegressor = LogisticRegressor(iterationLimit: 100, learningRate: 0.0531, batchSize: 768,
     learningRateType: LearningRateType.constant, fitIntercept: true);
-  final validator = CrossValidator<Float32x4List, Float32List, Float32x4>.kFold(numberOfFolds: 7);
+  final validator = CrossValidator<Float32x4>.kFold(numberOfFolds: 7);
 
   print('Logistic regression, error on cross validation: ');
   print('${(validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy) * 100).toStringAsFixed(2)}%');
