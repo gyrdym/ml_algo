@@ -1,12 +1,11 @@
 import 'package:linalg/vector.dart';
 
-abstract class Optimizer<E, S extends List<E>, T extends List<double>> {
-
-  SIMDVector<S, T, E> findExtrema(
-    List<SIMDVector<S, T, E>> points,
-    SIMDVector<S, T, E> labels,
+abstract class Optimizer<E> {
+  Vector<E> findExtrema(
+    List<Vector<E>> points,
+    Vector<E> labels,
     {
-      SIMDVector<S, T, E> initialWeights,
+      Vector<E> initialWeights,
       bool isMinimizingObjective,
       bool arePointsNormalized
     }

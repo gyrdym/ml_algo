@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.0
+- Support of updated `linalg` package
+
 ## 1.0.1
 - Readme updated, dependencies fixed
 

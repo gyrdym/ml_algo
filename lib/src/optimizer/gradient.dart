@@ -7,12 +7,12 @@ import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/vector.dart';
 
-class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32List> {
+class GradientOptimizer implements Optimizer<Float32x4> {
 
   final Randomizer _randomizer;
-  final CostFunction<Float32x4List, Float32List, Float32x4> _costFunction;
+  final CostFunction<Float32x4> _costFunction;
   final LearningRateGenerator _learningRateGenerator;
-  final InitialWeightsGenerator<Float32x4List, Float32List, Float32x4> _initialWeightsGenerator;
+  final InitialWeightsGenerator<Float32x4> _initialWeightsGenerator;
 
   //hyper parameters declaration
   final double _minCoefficientsUpdate;
@@ -21,7 +21,7 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
   final int _batchSize;
   //hyper parameters declaration end
 
-  List<SIMDVector<Float32x4List, Float32List, Float32x4>> _points;
+  List<Vector<Float32x4>> _points;
 
   GradientOptimizer(
     this._randomizer,
@@ -45,11 +45,11 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
   }
 
   @override
-  SIMDVector<Float32x4List, Float32List, Float32x4> findExtrema(
-    List<SIMDVector<Float32x4List, Float32List, Float32x4>> points,
-    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
+  Vector<Float32x4> findExtrema(
+    List<Vector<Float32x4>> points,
+    Vector<Float32x4> labels,
     {
-      SIMDVector<Float32x4List, Float32List, Float32x4> initialWeights,
+      Vector<Float32x4> initialWeights,
       bool isMinimizingObjective = true,
       bool arePointsNormalized = false
     }
@@ -80,9 +80,9 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
     (iterationCounter >= _iterationLimit);
 
 
-  SIMDVector<Float32x4List, Float32List, Float32x4> _generateCoefficients(
-    SIMDVector<Float32x4List, Float32List, Float32x4> currentCoefficients,
-    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
+  Vector<Float32x4> _generateCoefficients(
+    Vector<Float32x4> currentCoefficients,
+    Vector<Float32x4> labels,
     double eta,
     int batchSize,
     {bool isMinimization = true}
@@ -96,12 +96,13 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
     return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
   }
 
-  Iterable<int> _getBatchRange(int batchSize) => _randomizer.getIntegerInterval(0, _points.length, intervalLength: batchSize);
+  Iterable<int> _getBatchRange(int batchSize) =>
+      _randomizer.getIntegerInterval(0, _points.length, intervalLength: batchSize);
 
-  SIMDVector<Float32x4List, Float32List, Float32x4> _makeGradientStep(
-    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients,
-    List<SIMDVector<Float32x4List, Float32List, Float32x4>> points,
-    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
+  Vector<Float32x4> _makeGradientStep(
+    Vector<Float32x4> coefficients,
+    List<Vector<Float32x4>> points,
+    Vector<Float32x4> labels,
     double eta,
     {bool isMinimization = true}
   ) {
@@ -118,11 +119,7 @@ class GradientOptimizer implements Optimizer<Float32x4, Float32x4List, Float32Li
       regularizedCoefficients + gradient.scalarMul(eta);
   }
 
-  SIMDVector<Float32x4List, Float32List, Float32x4> _regularize(
-    double eta,
-    double lambda,
-    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients
-  ) {
+  Vector<Float32x4> _regularize(double eta, double lambda, Vector<Float32x4> coefficients) {
     if (lambda == 0) {
       return coefficients;
     }

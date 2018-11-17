@@ -5,7 +5,7 @@ import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as linkFunctions;
 import 'package:linalg/vector.dart';
 
-class LogLikelihoodCost implements CostFunction<Float32x4List, Float32List, Float32x4> {
+class LogLikelihoodCost implements CostFunction<Float32x4> {
   const LogLikelihoodCost();
 
   @override
@@ -15,20 +15,12 @@ class LogLikelihoodCost implements CostFunction<Float32x4List, Float32List, Floa
   }
 
   @override
-  double getPartialDerivative(
-    int idx,
-    SIMDVector<Float32x4List, Float32List, Float32x4> x,
-    SIMDVector<Float32x4List, Float32List, Float32x4> w,
-    double y
-  ) =>  x[idx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
+  double getPartialDerivative(int idx, Vector<Float32x4> x, Vector<Float32x4> w, double y) =>
+      x[idx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
 
   int _indicator(double y, double target) => target == y ? 1 : 0;
 
   @override
-  double getSparseSolutionPartial(
-    int wIdx,
-    SIMDVector<Float32x4List, Float32List, Float32x4> x,
-    SIMDVector<Float32x4List, Float32List, Float32x4> w,
-    double y
-  ) => throw UnimplementedError();
+  double getSparseSolutionPartial(int wIdx, Vector<Float32x4> x, Vector<Float32x4> w, double y) =>
+      throw UnimplementedError();
 }

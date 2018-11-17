@@ -6,7 +6,7 @@ import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/vector.dart';
 
-class CoordinateOptimizer implements Optimizer<Float32x4, Float32x4List, Float32List> {
+class CoordinateOptimizer implements Optimizer<Float32x4> {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
   final CostFunction _costFn;
 
@@ -16,7 +16,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Float32x4List, Float32
   final double _lambda;
   //hyper parameters declaration end
 
-  SIMDVector _normalizer;
+  Vector _normalizer;
 
   CoordinateOptimizer(
     this._initialCoefficientsGenerator,
@@ -32,11 +32,11 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Float32x4List, Float32
     _lambda = lambda ?? 0.0;
 
   @override
-  SIMDVector<Float32x4List, Float32List, Float32x4> findExtrema(
-    List<SIMDVector<Float32x4List, Float32List, Float32x4>> points,
-    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
+  Vector<Float32x4> findExtrema(
+    List<Vector<Float32x4>> points,
+    Vector<Float32x4> labels,
     {
-      SIMDVector<Float32x4List, Float32List, Float32x4> initialWeights,
+      Vector<Float32x4> initialWeights,
       bool isMinimizingObjective = true,
       bool arePointsNormalized = false
     }
@@ -46,7 +46,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Float32x4List, Float32
       ? Float32x4VectorFactory.filled(numOfDimensions, 1.0)
       : points.reduce((combine, vector) => (combine + vector * vector));
 
-    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients =
+    Vector<Float32x4> coefficients =
         initialWeights ?? _initialCoefficientsGenerator.generate(points.first.length);
     final changes = List<double>.filled(numOfDimensions, double.infinity);
     int iteration = 0;
@@ -75,9 +75,9 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Float32x4List, Float32
 
   double _coordinateDescentStep(
     int coefficientNum,
-    List<SIMDVector<Float32x4List, Float32List, Float32x4>> points,
-    SIMDVector<Float32x4List, Float32List, Float32x4> labels,
-    SIMDVector<Float32x4List, Float32List, Float32x4> coefficients
+    List<Vector<Float32x4>> points,
+    Vector<Float32x4> labels,
+    Vector<Float32x4> coefficients
   ) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;

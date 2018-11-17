@@ -10,7 +10,7 @@ void main() {
     test('should add intercept to the given points', () {
       final preprocessor = const InterceptPreprocessor(interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(
-        <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+        <Vector<Float32x4>>[
           Float32x4VectorFactory.from([4.0, 5.0, 10.0]),
           Float32x4VectorFactory.from([14.0, 49.0, 33.0]),
           Float32x4VectorFactory.from([41.0, 52.0, 101.0])
@@ -25,7 +25,7 @@ void main() {
     });
 
     test('should not mutate given data if processing takes place', () {
-      final data = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+      final data = <Vector<Float32x4>>[
         Float32x4VectorFactory.from([4.0, 5.0, 10.0]),
         Float32x4VectorFactory.from([14.0, 49.0, 33.0]),
         Float32x4VectorFactory.from([41.0, 52.0, 101.0])
@@ -37,7 +37,7 @@ void main() {
     });
 
     test('should return the same data if scale is 0.0 (processing does nnot take place)', () {
-      final data = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+      final data = <Vector<Float32x4>>[
         Float32x4VectorFactory.from([4.0, 5.0, 10.0]),
         Float32x4VectorFactory.from([14.0, 49.0, 33.0]),
         Float32x4VectorFactory.from([41.0, 52.0, 101.0])
@@ -50,7 +50,7 @@ void main() {
     });
 
     test('should consider scale parameter (if scale is not equal to 0.0)', () {
-      final data = <SIMDVector<Float32x4List, Float32List, Float32x4>>[
+      final data = <Vector<Float32x4>>[
         Float32x4VectorFactory.from([4.0, 5.0, 10.0]),
         Float32x4VectorFactory.from([14.0, 49.0, 33.0]),
         Float32x4VectorFactory.from([41.0, 52.0, 101.0])

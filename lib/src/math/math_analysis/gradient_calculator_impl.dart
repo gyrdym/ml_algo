@@ -3,16 +3,16 @@ import 'dart:typed_data';
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
 import 'package:linalg/vector.dart';
 
-class GradientCalculatorImpl implements GradientCalculator<Float32x4List, Float32List, Float32x4> {
+class GradientCalculatorImpl implements GradientCalculator<Float32x4> {
 
-  List<SIMDVector<Float32x4List, Float32List, Float32x4>> _argumentDeltaMatrix;
+  List<Vector<Float32x4>> _argumentDeltaMatrix;
   double _argumentDelta;
 
   @override
-  SIMDVector<Float32x4List, Float32List, Float32x4> getGradient(
-    OptimizationFunction<Float32x4List, Float32List, Float32x4> function,
-    SIMDVector<Float32x4List, Float32List, Float32x4> targetVector,
-    Iterable<SIMDVector<Float32x4List, Float32List, Float32x4>> vectorArgs,
+  Vector<Float32x4> getGradient(
+    OptimizationFunction<Float32x4> function,
+    Vector<Float32x4> targetVector,
+    Iterable<Vector<Float32x4>> vectorArgs,
     Iterable<double> scalarArgs,
     double argumentDelta
   ) {
@@ -34,10 +34,10 @@ class GradientCalculatorImpl implements GradientCalculator<Float32x4List, Float3
   }
 
   double _partialDerivative(
-    OptimizationFunction<Float32x4List, Float32List, Float32x4> function,
+    OptimizationFunction<Float32x4> function,
     double argumentDelta,
-    SIMDVector<Float32x4List, Float32List, Float32x4> targetVector,
-    Iterable<SIMDVector<Float32x4List, Float32List, Float32x4>> vectorArgs,
+    Vector<Float32x4> targetVector,
+    Iterable<Vector<Float32x4>> vectorArgs,
     Iterable<double> scalarArgs,
     int targetArgPosition
   ) {
@@ -46,8 +46,8 @@ class GradientCalculatorImpl implements GradientCalculator<Float32x4List, Float3
             function(targetVector - deltaK, vectorArgs, scalarArgs)) / 2 / argumentDelta;
   }
 
-  List<SIMDVector<Float32x4List, Float32List, Float32x4>> _generateArgumentsDeltaMatrix(double delta, int length) {
-    final matrix = List<SIMDVector<Float32x4List, Float32List, Float32x4>>(length);
+  List<Vector<Float32x4>> _generateArgumentsDeltaMatrix(double delta, int length) {
+    final matrix = List<Vector<Float32x4>>(length);
     for (int i = 0; i < length; i++) {
       matrix[i] = Float32x4VectorFactory.from(List<double>.generate(length, (int idx) => idx == i ? delta : 0.0));
     }
