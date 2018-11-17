@@ -1,4 +1,4 @@
-// 0.161 sec
+// 0.02346 sec (MacBook Air mid 2017)
 
 import 'dart:async';
 import 'dart:convert';
@@ -8,8 +8,8 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
-List<SIMDVector<Float32x4List, Float32List, Float32x4>> features;
-SIMDVector<Float32x4List, Float32List, Float32x4> labels;
+List<Vector<Float32x4>> features;
+Vector<Float32x4> labels;
 GradientRegressor regressor;
 
 class GDRegressorBenchmark extends BenchmarkBase {
@@ -33,21 +33,21 @@ class GDRegressorBenchmark extends BenchmarkBase {
 }
 
 Future main() async {
-  final csvCodec = csv.CsvCodec();
+  final csvCodec = csv.CsvCodec(eol: '\n');
   final input = File('example/datasets/advertising.csv').openRead();
   final fields = (await input.transform(utf8.decoder)
-      .transform(csvCodec.decoder).toList() as List<List<num>>)
+      .transform(csvCodec.decoder).toList())
       .sublist(1);
 
-  List<double> extractFeatures(List<num> item) => item.sublist(0, 3)
-      .map((num feature) => feature.toDouble())
+  List<double> extractFeatures(List item) => item.sublist(0, 3)
+      .map<double>((dynamic feature) => (feature as num).toDouble())
       .toList();
 
   features = fields
-      .map((List<num> item) => Float32x4VectorFactory.from(extractFeatures(item)))
+      .map<Vector<Float32x4>>((List item) => Float32x4VectorFactory.from(extractFeatures(item)))
       .toList(growable: false);
 
-  labels = Float32x4VectorFactory.from(fields.map((List<num> item) => item.last.toDouble()));
+  labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
 
   GDRegressorBenchmark.main();
 }
