@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class GradientCalculatorImpl implements GradientCalculator<Float32x4> {
 

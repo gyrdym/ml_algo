@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:dart_ml/src/cost_function/cost_function.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class SquaredCost implements CostFunction<Float32x4> {
   const SquaredCost();

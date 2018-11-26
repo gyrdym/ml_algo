@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/metric/type.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 abstract class Evaluable<E> {
   void fit(List<Vector<E>> features, Vector<E> origLabels, {

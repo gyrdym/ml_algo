@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class CoordinateOptimizer implements Optimizer<Float32x4> {
   final InitialWeightsGenerator _initialCoefficientsGenerator;

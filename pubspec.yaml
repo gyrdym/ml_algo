@@ -10,6 +10,7 @@ dependencies:
   csv: ^4.0.0
   linalg:
     git:
+      ref: implement-matrix-class
       url: https://github.com/gyrdym/linalg.git
 
 dev_dependencies:

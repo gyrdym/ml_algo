@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dart_ml/src/metric/regression/metric.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class MAPEMetric implements RegressionMetric<Float32x4> {
 

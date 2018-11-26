@@ -6,7 +6,7 @@ import 'package:dart_ml/src/optimizer/gradient.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:mockito/mockito.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 import 'package:test/test.dart';
 
 class RandomizerMock extends Mock implements Randomizer {}

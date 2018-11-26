@@ -6,7 +6,7 @@ import 'package:dart_ml/src/metric/factory.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 abstract class LinearClassifier implements Evaluable<Float32x4> {
 
