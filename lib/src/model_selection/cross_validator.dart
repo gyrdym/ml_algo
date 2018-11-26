@@ -3,7 +3,7 @@ import 'package:dart_ml/src/data_splitter/leave_p_out.dart';
 import 'package:dart_ml/src/data_splitter/splitter.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class CrossValidator<E> {
 

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class InterceptPreprocessor {
   final double _interceptScale;

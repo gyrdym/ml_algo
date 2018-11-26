@@ -5,7 +5,7 @@ import 'package:dart_ml/src/math/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class GradientOptimizer implements Optimizer<Float32x4> {
 

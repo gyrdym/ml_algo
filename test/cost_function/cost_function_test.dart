@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/cost_function/cost_function_factory.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 import 'package:test/test.dart';
 
 void main() {
