@@ -6,7 +6,7 @@ import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/linalg.dart';
 
-class CoordinateOptimizer implements Optimizer<Float32x4> {
+class CoordinateOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
   final CostFunction _costFn;
 
@@ -33,7 +33,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
 
   @override
   Vector<Float32x4> findExtrema(
-    List<Vector<Float32x4>> points,
+    Matrix<Float32x4, Vector<Float32x4>> points,
     Vector<Float32x4> labels,
     {
       Vector<Float32x4> initialWeights,
@@ -41,14 +41,13 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
       bool arePointsNormalized = false
     }
   ) {
-    final numOfDimensions = points.first.length;
     _normalizer = arePointsNormalized
-      ? Float32x4VectorFactory.filled(numOfDimensions, 1.0)
+      ? Float32x4VectorFactory.filled(points.columnsNum, 1.0)
       : points.reduce((combine, vector) => (combine + vector * vector));
 
     Vector<Float32x4> coefficients =
-        initialWeights ?? _initialCoefficientsGenerator.generate(points.first.length);
-    final changes = List<double>.filled(numOfDimensions, double.infinity);
+        initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
+    final changes = List<double>.filled(points.columnsNum, double.infinity);
     int iteration = 0;
 
     while (!_isConverged(changes, iteration)) {
@@ -75,15 +74,15 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
 
   double _coordinateDescentStep(
     int coefficientNum,
-    List<Vector<Float32x4>> points,
+    Matrix<Float32x4, Vector<Float32x4>> points,
     Vector<Float32x4> labels,
     Vector<Float32x4> coefficients
   ) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;
 
-    for (int rowNum = 0; rowNum < points.length; rowNum++) {
-      final point = points[rowNum];
+    for (int rowNum = 0; rowNum < points.rowsNum; rowNum++) {
+      final point = points.getRowVector(rowNum);
       final output = labels[rowNum];
       updatedCoefficient += _costFn.getSparseSolutionPartial(coefficientNum, point, coefficients, output);
     }
