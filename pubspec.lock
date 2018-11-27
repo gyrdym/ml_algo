@@ -244,7 +244,7 @@ packages:
     description:
       path: "."
       ref: implement-matrix-class
-      resolved-ref: e267369246e145fd0ef03cf9e78b26a82a823f5e
+      resolved-ref: "36fe3e6a52196aaac9490d1a571271b3dcacabd9"
       url: "https://github.com/gyrdym/linalg.git"
     source: git
     version: "0.13.0"

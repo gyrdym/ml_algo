@@ -7,8 +7,8 @@ import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
 import 'package:linalg/linalg.dart';
 
-abstract class LinearRegressor implements Evaluable<Float32x4> {
-  final Optimizer<Float32x4> _optimizer;
+abstract class LinearRegressor implements Evaluable<Float32x4, Vector<Float32x4>> {
+  final Optimizer<Float32x4, Vector<Float32x4>> _optimizer;
   final InterceptPreprocessor _interceptPreprocessor;
 
   LinearRegressor(this._optimizer, double interceptScale) :
@@ -18,7 +18,7 @@ abstract class LinearRegressor implements Evaluable<Float32x4> {
   Vector<Float32x4> _weights;
 
   @override
-  void fit(List<Vector<Float32x4>> features, Vector<Float32x4> labels, {
+  void fit(Matrix<Float32x4, Vector<Float32x4>> features, Vector<Float32x4> labels, {
       Vector<Float32x4> initialWeights,
       bool isDataNormalized = false
     }) {
@@ -32,16 +32,16 @@ abstract class LinearRegressor implements Evaluable<Float32x4> {
   }
 
   @override
-  double test(List<Vector<Float32x4>> features, Vector<Float32x4> origLabels, MetricType metricType) {
+  double test(Matrix<Float32x4, Vector<Float32x4>> features, Vector<Float32x4> origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getError(prediction, origLabels);
   }
 
-  Vector<Float32x4> predict(List<Vector<Float32x4>> features) {
-    final labels = List<double>(features.length);
-    for (int i = 0; i < features.length; i++) {
-      labels[i] = _weights.dot(features[i]);
+  Vector<Float32x4> predict(Matrix<Float32x4, Vector<Float32x4>> features) {
+    final labels = List<double>(features.rowsNum);
+    for (int i = 0; i < features.rowsNum; i++) {
+      labels[i] = _weights.dot(features.getRowVector(i));
     }
     return Float32x4VectorFactory.from(labels);
   }
