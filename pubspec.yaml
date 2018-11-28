@@ -1,7 +1,7 @@
 name: dart_ml
 description: Machine learning with dart
-version: 1.1.0
-author: Ilya Gyrdymov <ilgyrd@gmail.com>
+version: 1.2.0
+author: Ilia Gyrdymov <ilgyrd@gmail.com>
 
 environment:
   sdk: '>=2.0.0 <3.0.0'
@@ -10,7 +10,6 @@ dependencies:
   csv: ^4.0.0
   linalg:
     git:
-      ref: implement-matrix-class
       url: https://github.com/gyrdym/linalg.git
 
 dev_dependencies:
