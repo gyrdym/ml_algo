@@ -18,7 +18,7 @@ Future main() async {
       .toList();
 
   final features = fields
-      .map((List item) => Float32x4VectorFactory.from(extractFeatures(item)))
+      .map(extractFeatures)
       .toList(growable: false);
 
   final labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
@@ -26,7 +26,8 @@ Future main() async {
   final validator = CrossValidator<Float32x4>.kFold();
 
   print('K-fold cross validation with MAPE metric:');
-  print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, features, labels, MetricType.mape)}');
+  print('Lasso regressor: ${validator.evaluate(lassoRegressionModel, Float32x4MatrixFactory.from(features),
+      labels, MetricType.mape)}');
 
   print('Feature weights (possibly, some weights are downgraded to zero, cause it is an objective of Lasso Regression):');
   print(lassoRegressionModel.weights);

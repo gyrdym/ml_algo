@@ -13,15 +13,15 @@ void main() {
     });
 
     test('should extract class labels from the data', () {
-      final features = [
-        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
-        Float32x4VectorFactory.from([10.0, 12.0, 31.0]),
-        Float32x4VectorFactory.from([9.0, 8.0, 5.0]),
-        Float32x4VectorFactory.from([4.0, 0.0, 1.0]),
-        Float32x4VectorFactory.from([4.0, 0.0, 1.0]),
-        Float32x4VectorFactory.from([4.0, 0.0, 1.0])
-      ];
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+        [10.0, 12.0, 31.0],
+        [9.0, 8.0, 5.0],
+        [4.0, 0.0, 1.0],
+        [4.0, 0.0, 1.0],
+        [4.0, 0.0, 1.0],
+      ]);
       final labels = Float32x4VectorFactory.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
       classifier.fit(features, labels);
 
@@ -29,13 +29,13 @@ void main() {
     });
 
     test('should properly fit given data', () {
-      final features = [
-        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
-        Float32x4VectorFactory.from([10.0, 12.0, 31.0]),
-        Float32x4VectorFactory.from([9.0, 8.0, 5.0]),
-        Float32x4VectorFactory.from([4.0, 0.0, 1.0])
-      ];
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+        [10.0, 12.0, 31.0],
+        [9.0, 8.0, 5.0],
+        [4.0, 0.0, 1.0],
+      ]);
       final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
@@ -308,10 +308,10 @@ void main() {
     test('should consider intercept term', () {
       final classifier = LogisticRegressor(batchSize: 2, iterationLimit: 1,
         learningRateType: LearningRateType.constant, learningRate: 1.0, fitIntercept: true);
-      final features = [
-        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0])
-      ];
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+      ]);
       final labels = Float32x4VectorFactory.from([0.0, 1.0]);
       classifier.fit(features, labels);
 
@@ -377,11 +377,11 @@ void main() {
     test('should consider intercept scale if intercept term is going to be fitted', () {
       final classifier = LogisticRegressor(batchSize: 3, iterationLimit: 1,
         learningRateType: LearningRateType.constant, learningRate: 1.0, fitIntercept: true, interceptScale: 2.0);
-      final features = [
-        Float32x4VectorFactory.from([5.0, 7.0, 6.0]),
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
-        Float32x4VectorFactory.from([3.0, 4.0, 5.0])
-      ];
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+        [3.0, 4.0, 5.0],
+      ]);
       final labels = Float32x4VectorFactory.from([0.0, 1.0, 0.0]);
       classifier.fit(features, labels);
 

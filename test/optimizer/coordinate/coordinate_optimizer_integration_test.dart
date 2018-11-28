@@ -16,13 +16,13 @@ void main() {
     const iterationsNumber = 2;
     const lambda = 0.0;
 
-    final point1 = Float32x4VectorFactory.from([10.0, 20.0, 30.0]);
-    final point2 = Float32x4VectorFactory.from([40.0, 50.0, 60.0]);
-    final point3 = Float32x4VectorFactory.from([70.0, 80.0, 90.0]);
-    final point4 = Float32x4VectorFactory.from([20.0, 30.0, 10.0]);
+    final point1 = [10.0, 20.0, 30.0];
+    final point2 = [40.0, 50.0, 60.0];
+    final point3 = [70.0, 80.0, 90.0];
+    final point4 = [20.0, 30.0, 10.0];
 
     CoordinateOptimizer optimizer;
-    List<Vector<Float32x4>> data;
+    Matrix<Float32x4, Vector<Float32x4>> data;
     Vector<Float32x4> labels;
 
     setUp(() {
@@ -34,7 +34,7 @@ void main() {
         lambda: lambda
       );
 
-      data = [point1, point2, point3, point4];
+      data = Float32x4MatrixFactory.from([point1, point2, point3, point4]);
       labels = Float32x4VectorFactory.from([20.0, 30.0, 20.0, 40.0]);
     });
 
@@ -116,12 +116,12 @@ void main() {
     const iterationsNumber = 2;
     const lambda = 20.0; //define the regularization coefficient
 
-    final point1 = Float32x4VectorFactory.from([10.0, 20.0, 30.0]);
-    final point2 = Float32x4VectorFactory.from([20.0, 30.0, 40.0]);
-    final point3 = Float32x4VectorFactory.from([70.0, 80.0, 90.0]);
+    final point1 = [10.0, 20.0, 30.0];
+    final point2 = [20.0, 30.0, 40.0];
+    final point3 = [70.0, 80.0, 90.0];
 
     CoordinateOptimizer optimizer;
-    List<Vector<Float32x4>> data;
+    Matrix<Float32x4, Vector<Float32x4>> data;
     Vector<Float32x4> labels;
 
     setUp(() {
@@ -133,7 +133,7 @@ void main() {
         lambda: lambda
       );
 
-      data = [point1, point2, point3];
+      data = Float32x4MatrixFactory.from([point1, point2, point3]);
       labels = Float32x4VectorFactory.from([2.0, 3.0, 2.0]);
     });
 
