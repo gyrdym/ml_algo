@@ -31,12 +31,12 @@ InitialWeightsGenerator<Float32x4> createInitialWeightsGenerator() {
   return mock;
 }
 
-List<Vector<Float32x4>> getPoints() => [
-  Float32x4VectorFactory.from([5.0, 10.0, 15.0]),
-  Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
-  Float32x4VectorFactory.from([10.0, 20.0, 30.0]),
-  Float32x4VectorFactory.from([100.0, 200.0, 300.0])
-];
+Matrix<Float32x4, Vector<Float32x4>> getPoints() => Float32x4MatrixFactory.from([
+  [5.0, 10.0, 15.0],
+  [1.0, 2.0, 3.0],
+  [10.0, 20.0, 30.0],
+  [100.0, 200.0, 300.0],
+]);
 
 GradientOptimizer createOptimizer({
   double eta,
@@ -72,16 +72,20 @@ void main() {
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 1);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1)).thenReturn([2, 3]);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(2), any,
+          labels[2]))
           .thenReturn(10.0);
 
       optimizer.findExtrema(points, labels);
 
-      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]));
-      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]));
-      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]));
+      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any,
+          labels[0]));
+      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any,
+          labels[1]));
+      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(3), any,
+          labels[3]));
 
-      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
+      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(2), any, labels[2]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
     });
 
@@ -93,19 +97,23 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2)).thenReturn([0, 2]);
 
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any,
+          labels[0]))
           .thenReturn(10.0);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any,
+          labels[1]))
           .thenReturn(20.0);
 
       optimizer.findExtrema(points, labels);
 
-      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]));
-      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]));
+      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(2), any,
+          labels[2]));
+      verifyNever(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(3), any,
+          labels[3]));
 
-      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any, labels[0]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
-      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any, labels[1]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
     });
 
@@ -116,24 +124,24 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4)).thenReturn([0, 4]);
 
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any, labels[0]))
           .thenReturn(10.0);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any, labels[1]))
           .thenReturn(20.0);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(2), any, labels[2]))
           .thenReturn(30.0);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(3), any, labels[3]))
           .thenReturn(40.0);
 
       optimizer.findExtrema(points, labels);
 
-      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any, labels[0]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
-      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any, labels[1]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
-      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[2], any, labels[2]))
+      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(2), any, labels[2]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
-      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[3], any, labels[3]))
+      verify(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(3), any, labels[3]))
           .called(3 * 3); // 3 iterations 3 times in each iteration
     });
 
@@ -148,26 +156,26 @@ void main() {
 
       optimizer.findExtrema(points, labels);
 
-      verify(costFunctionMock.getPartialDerivative(any, points[0], any, labels[0])).called(3 * maxIterations);
-      verify(costFunctionMock.getPartialDerivative(any, points[1], any, labels[1])).called(3 * maxIterations);
-      verify(costFunctionMock.getPartialDerivative(any, points[2], any, labels[2])).called(3 * maxIterations);
-      verify(costFunctionMock.getPartialDerivative(any, points[3], any, labels[3])).called(3 * maxIterations);
+      verify(costFunctionMock.getPartialDerivative(any, points.getRowVector(0), any, labels[0])).called(3 * maxIterations);
+      verify(costFunctionMock.getPartialDerivative(any, points.getRowVector(1), any, labels[1])).called(3 * maxIterations);
+      verify(costFunctionMock.getPartialDerivative(any, points.getRowVector(2), any, labels[2])).called(3 * maxIterations);
+      verify(costFunctionMock.getPartialDerivative(any, points.getRowVector(3), any, labels[3])).called(3 * maxIterations);
       verify(learningRateGeneratorMock.getNextValue()).called(maxIterations);
     });
 
     test('should find optimal coefficient values', () {
-      final points = <Vector<Float32x4>>[
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
-        Float32x4VectorFactory.from([4.0, 5.0, 6.0])
-      ];
+      final points = Float32x4MatrixFactory.from([
+        [1.0, 2.0, 3.0],
+        [4.0, 5.0, 6.0],
+      ]);
       final labels = Float32x4VectorFactory.from([7.0, 8.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 2, batchSize: 2, lambda: 0.0);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0,2]);
 
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any, labels[0]))
           .thenReturn(5.0);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any, labels[1]))
           .thenReturn(3.0);
 
       final optimalCoefficients = optimizer.findExtrema(points, labels);
@@ -198,18 +206,18 @@ void main() {
     });
 
     test('should find optimal coefficient values and regularize it', () {
-      final points = <Vector<Float32x4>>[
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
-        Float32x4VectorFactory.from([4.0, 5.0, 6.0])
-      ];
+      final points = Float32x4MatrixFactory.from([
+        [1.0, 2.0, 3.0],
+        [4.0, 5.0, 6.0],
+      ]);
       final labels = Float32x4VectorFactory.from([7.0, 8.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2, lambda: 10.0);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0,2]);
 
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any, labels[0]))
           .thenReturn(5.0);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any, labels[1]))
           .thenReturn(3.0);
 
       final optimalCoefficients = optimizer.findExtrema(points, labels);
@@ -253,16 +261,16 @@ void main() {
     test('should consider `iterationLimit` parameter', () {
       const maxIteration = 2000;
 
-      final points = <Vector<Float32x4>>[
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0]),
-        Float32x4VectorFactory.from([4.0, 5.0, 6.0])
-      ];
+      final points = Float32x4MatrixFactory.from([
+        [1.0, 2.0, 3.0],
+        [4.0, 5.0, 6.0],
+      ]);
       final labels = Float32x4VectorFactory.from([7.0, 8.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: maxIteration, batchSize: 2, lambda: 0.0);
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0,2]);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[0], any, labels[0]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(0), any, labels[0]))
           .thenReturn(5.0);
-      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points[1], any, labels[1]))
+      when(costFunctionMock.getPartialDerivative(argThat(inInclusiveRange(0, 3)), points.getRowVector(1), any, labels[1]))
           .thenReturn(3.0);
 
       optimizer.findExtrema(points, labels);
@@ -273,9 +281,9 @@ void main() {
     test('should consider `minCoefficientsUpdate` parameter', () {
       const minCoefficientsUpdate = 4.0;
 
-      final points = <Vector<Float32x4>>[
-        Float32x4VectorFactory.from([1.0, 2.0, 3.0])
-      ];
+      final points = Float32x4MatrixFactory.from([
+        [1.0, 2.0, 3.0],
+      ]);
       final labels = Float32x4VectorFactory.from([1.0]);
       final optimizer = createOptimizer(minCoeffUpdate: minCoefficientsUpdate, iterationsLimit: 1000000, batchSize: 1, lambda: 0.0);
 
@@ -283,21 +291,21 @@ void main() {
 
       when(costFunctionMock.getPartialDerivative(
         argThat(inInclusiveRange(0, 3)),
-        points[0],
+        points.getRowVector(0),
         argThat(equals([0.0, 0.0, 0.0])),
         labels[0])
       ).thenReturn(5.0);
 
       when(costFunctionMock.getPartialDerivative(
         argThat(inInclusiveRange(0, 3)),
-        points[0],
+        points.getRowVector(0),
         argThat(equals([-10.0, -10.0, -10.0])),
         labels[0])
       ).thenReturn(2.0);
 
       when(costFunctionMock.getPartialDerivative(
         argThat(inInclusiveRange(0, 3)),
-        points[0],
+        points.getRowVector(0),
         argThat(equals([-14.0, -14.0, -14.0])),
         labels[0])
       ).thenReturn(1.0);
