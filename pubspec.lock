@@ -243,11 +243,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: implement-matrix-class
-      resolved-ref: a4f40ccde920fbf56489ab6465b61377b66ef0ab
+      ref: HEAD
+      resolved-ref: ad1acf12d704c91c2e2d3253162881cdd10d4cc3
       url: "https://github.com/gyrdym/linalg.git"
     source: git
-    version: "0.13.0"
+    version: "1.0.0"
   logging:
     dependency: transitive
     description:
