@@ -24,46 +24,47 @@ import 'package:csv/csv.dart' as csv;
 
 Read `csv`-file `advertising.csv` with test data:
 ````dart
-csv.CsvCodec csvCodec = new csv.CsvCodec();
-Stream<List<int>> input = new File('example/advertising.csv').openRead();
-List<List<num>> fields = (await input.transform(UTF8.decoder)
-  .transform(csvCodec.decoder).toList() as List<List<num>>)
+final csvCodec = csv.CsvCodec(eol: '\n');
+final input = File('example/datasets/advertising.csv').openRead();
+final fields = (await input.transform(utf8.decoder)
+  .transform(csvCodec.decoder).toList())
   .sublist(1);
 ````
 
 Data in this file is represented by 200 lines, every line contains 4 elements. First 3 elements of every line are features and the last one is label.
 Let's extract features from the data. Declare utility method `extractFeatures`, that extracts 3 elements from every line:
 ````dart
-List<double> extractFeatures(item) => item.sublist(0, 3)
-  .map((num feature) => feature.toDouble())
-  .toList();
+List<double> extractFeatures(List<dynamic> item) => item.sublist(0, 3)
+      .map((dynamic feature) => (feature as num).toDouble())
+      .toList();
 ````
 
 ...and finally get all features:
 ```dart
 final features = fields
-  .map((List<num> item) => Float32x4VectorFactory.from(extractFeatures(item)))
+  .map(extractFeatures)
   .toList(growable: false);
 ```
 
 ...and labels (last element of a every line)
 ````dart
-final labels = fields.map((List<num> item) => item.last.toDouble()).toList(growable: false);
+final labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
 ````
 
 Create an instance of `CrossValidator` class for evaluating quality of our predictor
 ````dart
-final validator = new CrossValidator.KFold();
+final validator = CrossValidator<Float32x4>.KFold();
 ````
 
 Create a linear regressor instance with stochastic gradient descent optimizer:
 ````dart
-final sgdRegressor = new GradientRegressor(type: GradientType.Stochastic);
+final sgdRegressor = GradientRegressor(type: GradientType.stochastic, iterationLimit: 100000,
+                         learningRate: 1e-5, learningRateType: LearningRateType.constant);
 ````
 
 Evaluate our model via MAPE-metric:
 ````dart
-final scoreMAPE = validator.evaluate(sgdRegressor, features, labels, metric: MetricType.MAPE);
+final scoreMAPE = validator.evaluate(sgdRegressor, Float32x4Matrix.from(features), labels, metric: MetricType.mape);
 ````
 
 Let's print score:

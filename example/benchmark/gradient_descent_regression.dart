@@ -1,4 +1,4 @@
-// 0.02346 sec (MacBook Air mid 2017)
+// 0.035 sec (MacBook Air mid 2017)
 
 import 'dart:async';
 import 'dart:convert';
@@ -8,7 +8,7 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
-List<Vector<Float32x4>> features;
+List<List<double>> features;
 Vector<Float32x4> labels;
 GradientRegressor regressor;
 
@@ -21,7 +21,7 @@ class GDRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    regressor.fit(features, labels);
+    regressor.fit(Float32x4MatrixFactory.from(features), labels);
   }
 
   @override
@@ -44,7 +44,7 @@ Future main() async {
       .toList();
 
   features = fields
-      .map<Vector<Float32x4>>((List item) => Float32x4VectorFactory.from(extractFeatures(item)))
+      .map<List<double>>(extractFeatures)
       .toList(growable: false);
 
   labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
