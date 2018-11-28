@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dart_ml/src/metric/classification/metric.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class AccuracyMetric implements ClassificationMetric<Float32x4> {
 

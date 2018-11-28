@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.0
+- Matrices support added
+
 ## 1.1.1
 - Examples fixed, dependencies fixed
 

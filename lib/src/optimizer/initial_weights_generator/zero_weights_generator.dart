@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 class ZeroWeightsGenerator implements InitialWeightsGenerator<Float32x4> {
   @override

@@ -1,4 +1,4 @@
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
 abstract class CostFunction<E> {
   double getCost(double predictedLabel, double originalLabel);

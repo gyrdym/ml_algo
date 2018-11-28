@@ -5,9 +5,9 @@ import 'package:dart_ml/src/math/randomizer/randomizer.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
-class GradientOptimizer implements Optimizer<Float32x4> {
+class GradientOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
 
   final Randomizer _randomizer;
   final CostFunction<Float32x4> _costFunction;
@@ -21,7 +21,7 @@ class GradientOptimizer implements Optimizer<Float32x4> {
   final int _batchSize;
   //hyper parameters declaration end
 
-  List<Vector<Float32x4>> _points;
+  Matrix<Float32x4, Vector<Float32x4>> _points;
 
   GradientOptimizer(
     this._randomizer,
@@ -46,7 +46,7 @@ class GradientOptimizer implements Optimizer<Float32x4> {
 
   @override
   Vector<Float32x4> findExtrema(
-    List<Vector<Float32x4>> points,
+    Matrix<Float32x4, Vector<Float32x4>> points,
     Vector<Float32x4> labels,
     {
       Vector<Float32x4> initialWeights,
@@ -56,8 +56,8 @@ class GradientOptimizer implements Optimizer<Float32x4> {
   ) {
     _points = points;
 
-    final batchSize = _batchSize >= _points.length ? _points.length : _batchSize;
-    var coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.first.length);
+    final batchSize = _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
+    var coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.columnsNum);
     var coefficientsUpdate = double.maxFinite;
     var iterationCounter = 0;
 
@@ -90,26 +90,26 @@ class GradientOptimizer implements Optimizer<Float32x4> {
     final range = _getBatchRange(batchSize);
     final start = range.first;
     final end = range.last;
-    final pointsBatch = _points.sublist(start, end);
+    final pointsBatch = _points.submatrix(rows: Range(start, end));
     final labelsBatch = labels.subVector(start, end);
 
     return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
   }
 
   Iterable<int> _getBatchRange(int batchSize) =>
-      _randomizer.getIntegerInterval(0, _points.length, intervalLength: batchSize);
+      _randomizer.getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
 
   Vector<Float32x4> _makeGradientStep(
     Vector<Float32x4> coefficients,
-    List<Vector<Float32x4>> points,
+    Matrix<Float32x4, Vector<Float32x4>> points,
     Vector<Float32x4> labels,
     double eta,
     {bool isMinimization = true}
   ) {
     var gradient = Float32x4VectorFactory.zero(coefficients.length);
-    for (var i = 0; i < points.length; i++) {
+    for (var i = 0; i < points.rowsNum; i++) {
       final derivatives = List.generate(coefficients.length,
-        (int j) => _costFunction.getPartialDerivative(j, points[i], coefficients, labels[i]));
+        (int j) => _costFunction.getPartialDerivative(j, points.getRowVector(i), coefficients, labels[i]));
       gradient += Float32x4VectorFactory.from(derivatives);
     }
 

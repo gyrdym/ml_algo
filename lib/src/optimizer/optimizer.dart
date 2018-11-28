@@ -1,8 +1,8 @@
-import 'package:linalg/vector.dart';
+import 'package:linalg/linalg.dart';
 
-abstract class Optimizer<E> {
+abstract class Optimizer<E, T extends Vector<E>> {
   Vector<E> findExtrema(
-    List<Vector<E>> points,
+    Matrix<E, T> points,
     Vector<E> labels,
     {
       Vector<E> initialWeights,
