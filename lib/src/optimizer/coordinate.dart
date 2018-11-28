@@ -43,7 +43,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
   ) {
     _normalizer = arePointsNormalized
       ? Float32x4VectorFactory.filled(points.columnsNum, 1.0)
-      : points.reduce((combine, vector) => (combine + vector * vector));
+      : points.reduceRows((combine, vector) => (combine + vector * vector));
 
     Vector<Float32x4> coefficients =
         initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
