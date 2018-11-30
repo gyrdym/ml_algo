@@ -91,7 +91,7 @@ class GradientOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
     final start = range.first;
     final end = range.last;
     final pointsBatch = _points.submatrix(rows: Range(start, end));
-    final labelsBatch = labels.subVector(start, end);
+    final labelsBatch = labels.subvector(start, end);
 
     return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
   }
