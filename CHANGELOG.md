@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.1
+- subVector -> subvector
+
 ## 1.2.0
 - Matrices support added
 
