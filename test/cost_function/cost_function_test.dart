@@ -40,4 +40,35 @@ void main() {
       expect(logLikelihood.getPartialDerivative(2, x, w, y), closeTo(-5.6, precision));
     });
   });
+
+  group('Squared cost function', () {
+    final squaredCost = CostFunctionFactory.squared();
+
+    test('should return a proper gradient vector', () {
+      // The formula in matrix notation:
+      // -2 * X^t * (y - X*w)
+      // where X^t - transposed X matrix
+      // y - labels matrix (vector-column)
+      // w - coefficients matrix (vector-column)
+      final x = Float32x4MatrixFactory.from([
+        [1.0, 2.0, 3.0],
+        [4.0, 5.0, 6.0],
+        [7.0, 8.0, 9.0],
+      ]);
+      final w = Float32x4MatrixFactory.columns([
+        Float32x4VectorFactory.from([-1.0, 2.0, -3.0]),
+      ]);
+      final y = Float32x4MatrixFactory.columns([
+        Float32x4VectorFactory.from([10.0, 20.0, 30.0]),
+      ]);
+      final expected = [
+        [-2 * (16 + 128 + 7 * 48)],
+        [-2 * (32 + 160 + 8 * 48)],
+        [-2 * (48 + 192 + 9 * 48)],
+      ];
+      final actual = squaredCost.getGradient(x, w, y);
+
+      expect(actual, equals(expected));
+    });
+  });
 }
