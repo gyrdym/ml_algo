@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.2.0
+- Matrix-based derivative calculation added
+
 ## 3.1.2
 - Description corrected
 
