@@ -21,7 +21,8 @@ class LeavePOutSplitter implements Splitter {
 
   int _count(int u) {
     int n;
-    for (n = 0; u > 0; ++n, u &= (u - 1)) {};
+    for (n = 0; u > 0; ++n, u &= (u - 1)) {}
+    ;
     return n;
   }
 

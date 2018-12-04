@@ -26,13 +26,8 @@ void main() {
     MLVector<Float32x4> labels;
 
     setUp(() {
-      optimizer = CoordinateOptimizer(
-        InitialWeightsGeneratorFactory.zeroWeights(),
-        const SquaredCost(),
-        minCoefficientsDiff: 1e-5,
-        iterationLimit: iterationsNumber,
-        lambda: lambda
-      );
+      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
+          minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
 
       data = Float32x4MatrixFactory.from([point1, point2, point3, point4]);
       labels = Float32x4VectorFactory.from([20.0, 30.0, 20.0, 40.0]);
@@ -125,13 +120,8 @@ void main() {
     MLVector<Float32x4> labels;
 
     setUp(() {
-      optimizer = CoordinateOptimizer(
-        InitialWeightsGeneratorFactory.zeroWeights(),
-        const SquaredCost(),
-        minCoefficientsDiff: 1e-5,
-        iterationLimit: iterationsNumber,
-        lambda: lambda
-      );
+      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
+          minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
 
       data = Float32x4MatrixFactory.from([point1, point2, point3]);
       labels = Float32x4VectorFactory.from([2.0, 3.0, 2.0]);

@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.1
+- `dartfm` tool applied
+
 ## 3.1.0
 - Get rid of MLVector's deprecated methods
 

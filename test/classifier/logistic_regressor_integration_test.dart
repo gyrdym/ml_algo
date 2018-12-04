@@ -8,8 +8,8 @@ void main() {
 
   group('Logistic regressor', () {
     setUp(() {
-      classifier = LogisticRegressor(batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant,
-        learningRate: 1.0);
+      classifier = LogisticRegressor(
+          batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant, learningRate: 1.0);
     });
 
     test('should extract class labels from the data', () {
@@ -306,8 +306,12 @@ void main() {
     }, skip: true);
 
     test('should consider intercept term', () {
-      final classifier = LogisticRegressor(batchSize: 2, iterationLimit: 1,
-        learningRateType: LearningRateType.constant, learningRate: 1.0, fitIntercept: true);
+      final classifier = LogisticRegressor(
+          batchSize: 2,
+          iterationLimit: 1,
+          learningRateType: LearningRateType.constant,
+          learningRate: 1.0,
+          fitIntercept: true);
       final features = Float32x4MatrixFactory.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -368,15 +372,22 @@ void main() {
       //
       // derivative: [0.0, -2.0, -2.5, -1.5]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [0.0, -2.0, -2.5, -1.5] = [0.0, -2.0, -2.5, -1.5]
-      expect(classifier.weightsByClasses, equals([
-        [0.0, 2.0, 2.5, 1.5],
-        [0.0, -2.0, -2.5, -1.5]
-      ]));
+      expect(
+          classifier.weightsByClasses,
+          equals([
+            [0.0, 2.0, 2.5, 1.5],
+            [0.0, -2.0, -2.5, -1.5]
+          ]));
     }, skip: true);
 
     test('should consider intercept scale if intercept term is going to be fitted', () {
-      final classifier = LogisticRegressor(batchSize: 3, iterationLimit: 1,
-        learningRateType: LearningRateType.constant, learningRate: 1.0, fitIntercept: true, interceptScale: 2.0);
+      final classifier = LogisticRegressor(
+          batchSize: 3,
+          iterationLimit: 1,
+          learningRateType: LearningRateType.constant,
+          learningRate: 1.0,
+          fitIntercept: true,
+          interceptScale: 2.0);
       final features = Float32x4MatrixFactory.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -450,10 +461,12 @@ void main() {
       //
       // derivative: [-1.0, -3.5, -4.5, -4.0]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [-1.0, -3.5, -4.5, -4.0] = [-1.0, -3.5, -4.5, -4.0]
-      expect(classifier.weightsByClasses, equals([
-        [1.0, 3.5, 4.5, 4.0],
-        [-1.0, -3.5, -4.5, -4.0]
-      ]));
+      expect(
+          classifier.weightsByClasses,
+          equals([
+            [1.0, 3.5, 4.5, 4.0],
+            [-1.0, -3.5, -4.5, -4.0]
+          ]));
     }, skip: true);
   });
 }

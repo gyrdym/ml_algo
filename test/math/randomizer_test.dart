@@ -31,7 +31,8 @@ void main() {
       randomizer = RandomizerImpl();
     });
 
-    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1', () {
+    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1',
+        () {
       final lowerBound = 0;
       final upperBound = 1;
       final interval = randomizer.getIntegerInterval(lowerBound, upperBound);
@@ -39,9 +40,9 @@ void main() {
       expect(interval, equals([0, 1]));
     });
 
-    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
-             'exactly the `intervalLength` value, zero `lowerBound` case', () {
-
+    test(
+        'should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
+        'exactly the `intervalLength` value, zero `lowerBound` case', () {
       final lowerBound = 0;
       final upperBound = 1;
       final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 1);
@@ -49,9 +50,9 @@ void main() {
       expect(interval, equals([0, 1]));
     });
 
-    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
-             'exactly the `intervalLength` value, zero `lowerBound` case, double check', () {
-
+    test(
+        'should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
+        'exactly the `intervalLength` value, zero `lowerBound` case, double check', () {
       final lowerBound = 0;
       final upperBound = 2;
       final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 2);
@@ -59,9 +60,9 @@ void main() {
       expect(interval, equals([0, 2]));
     });
 
-    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1, '
-             'non-zero `lowerBound` case', () {
-
+    test(
+        'should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1, '
+        'non-zero `lowerBound` case', () {
       final lowerBound = 1;
       final upperBound = 2;
       final interval = randomizer.getIntegerInterval(lowerBound, upperBound);
@@ -69,9 +70,9 @@ void main() {
       expect(interval, equals([1, 2]));
     });
 
-    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
-             'exactly the `intervalLength` value, non-zero `lowerBound` case', () {
-
+    test(
+        'should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
+        'exactly the `intervalLength` value, non-zero `lowerBound` case', () {
       final lowerBound = 3;
       final upperBound = 5;
       final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 2);

@@ -6,25 +6,16 @@ import 'package:ml_algo/src/model_selection/evaluable.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CrossValidator<E> {
-
   final Splitter _splitter;
 
-  factory CrossValidator.kFold({int numberOfFolds = 5}) =>
-      CrossValidator._(KFoldSplitter(numberOfFolds));
+  factory CrossValidator.kFold({int numberOfFolds = 5}) => CrossValidator._(KFoldSplitter(numberOfFolds));
 
-  factory CrossValidator.lpo({int p = 5}) =>
-      CrossValidator._(LeavePOutSplitter(p));
+  factory CrossValidator.lpo({int p = 5}) => CrossValidator._(LeavePOutSplitter(p));
 
   CrossValidator._(this._splitter);
 
-  double evaluate(
-    Evaluable predictor,
-    MLMatrix<E, MLVector<E>> points,
-    MLVector<E> labels,
-    MetricType metric,
-    {bool isDataNormalized = false}
-  ) {
-
+  double evaluate(Evaluable predictor, MLMatrix<E, MLVector<E>> points, MLVector<E> labels, MetricType metric,
+      {bool isDataNormalized = false}) {
     if (points.rowsNum != labels.length) {
       throw Exception('Number of feature objects must be equal to the number of labels!');
     }
@@ -51,14 +42,11 @@ class CrossValidator<E> {
         }
       }
 
-      predictor.fit(
-          Float32x4MatrixFactory.from(trainFeatures),
-          labels.query(trainIndices),
+      predictor.fit(Float32x4MatrixFactory.from(trainFeatures), labels.query(trainIndices),
           isDataNormalized: isDataNormalized);
 
-      scores[scoreCounter++] = predictor.test(
-          Float32x4MatrixFactory.from(testFeatures),
-          labels.query(testIndices), metric);
+      scores[scoreCounter++] =
+          predictor.test(Float32x4MatrixFactory.from(testFeatures), labels.query(testIndices), metric);
     }
 
     return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;

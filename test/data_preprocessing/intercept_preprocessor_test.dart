@@ -4,7 +4,6 @@ import 'package:test/test.dart';
 
 void main() {
   group('Intercept preprocessor', () {
-
     test('should add intercept to the given points', () {
       final preprocessor = const InterceptPreprocessor(interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(
@@ -15,11 +14,13 @@ void main() {
         ]),
       );
 
-      expect(processedPoints, equals([
-        [1.0, 4.0, 5.0, 10.0],
-        [1.0, 14.0, 49.0, 33.0],
-        [1.0, 41.0, 52.0, 101.0]
-      ]));
+      expect(
+          processedPoints,
+          equals([
+            [1.0, 4.0, 5.0, 10.0],
+            [1.0, 14.0, 49.0, 33.0],
+            [1.0, 41.0, 52.0, 101.0]
+          ]));
     });
 
     test('should not mutate given data if processing takes place', () {
@@ -44,7 +45,11 @@ void main() {
       final processedPoints = preprocessor.addIntercept(data);
 
       expect(processedPoints, same(data));
-      expect(processedPoints, [[4.0, 5.0, 10.0], [14.0, 49.0, 33.0], [41.0, 52.0, 101.0]]);
+      expect(processedPoints, [
+        [4.0, 5.0, 10.0],
+        [14.0, 49.0, 33.0],
+        [41.0, 52.0, 101.0]
+      ]);
     });
 
     test('should consider scale parameter (if scale is not equal to 0.0)', () {
@@ -56,7 +61,11 @@ void main() {
       final preprocessor = const InterceptPreprocessor(interceptScale: -5.0);
       final processedPoints = preprocessor.addIntercept(data);
 
-      expect(processedPoints, [[-5.0, 4.0, 5.0, 10.0], [-5.0, 14.0, 49.0, 33.0], [-5.0, 41.0, 52.0, 101.0]]);
+      expect(processedPoints, [
+        [-5.0, 4.0, 5.0, 10.0],
+        [-5.0, 14.0, 49.0, 33.0],
+        [-5.0, 41.0, 52.0, 101.0]
+      ]);
     });
   });
 }

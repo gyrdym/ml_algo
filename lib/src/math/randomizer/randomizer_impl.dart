@@ -21,7 +21,8 @@ class RandomizerImpl implements Randomizer {
     }
 
     final minPossibleEnd = boundaries.first + intervalLength;
-    final end = minPossibleEnd >= boundaries.last ? minPossibleEnd : getIntegerFromInterval(minPossibleEnd, boundaries.last);
+    final end =
+        minPossibleEnd >= boundaries.last ? minPossibleEnd : getIntegerFromInterval(minPossibleEnd, boundaries.last);
     final start = end - intervalLength;
 
     return [start, end];
