@@ -15,6 +15,13 @@ class SquaredCost implements CostFunction<Float32x4> {
       -2.0 * x[wIdx] * (y - x.dot(w));
 
   @override
+  MLMatrix<Float32x4, MLVector<Float32x4>> getGradient(
+    MLMatrix<Float32x4, MLVector<Float32x4>> x,
+    MLMatrix<Float32x4, MLVector<Float32x4>> w,
+    MLMatrix<Float32x4, MLVector<Float32x4>> y
+  ) => x.transpose() * -2 * (y - x * w);
+
+  @override
   double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
       x[wIdx] * (y - x.dot(w) + x[wIdx] * w[wIdx]);
 }
