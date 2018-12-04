@@ -18,7 +18,7 @@ Import all necessary packages:
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'package:ml_algo/dart_ml.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:csv/csv.dart' as csv;
 ````
 
