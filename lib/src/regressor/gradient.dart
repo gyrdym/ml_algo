@@ -8,34 +8,29 @@ import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
 
 class GradientRegressor extends LinearRegressor {
-  GradientRegressor({
-    int iterationLimit,
-    LearningRateType learningRateType = LearningRateType.decreasing,
-    double learningRate,
-    double minWeightsUpdate,
-    double lambda,
-    GradientType type = GradientType.miniBatch,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    int randomSeed,
-    int batchSize = 1
-  }) : super(
-      GradientOptimizer(
-        RandomizerFactory.defaultRandomizer(randomSeed),
-        CostFunctionFactory.squared(),
-        LearningRateGeneratorFactory.createByType(learningRateType),
-        InitialWeightsGeneratorFactory.zeroWeights(),
-
-        initialLearningRate: learningRate,
-        minCoefficientsUpdate: minWeightsUpdate,
-        iterationLimit: iterationLimit,
-        lambda: lambda,
-        batchSize: type == GradientType.stochastic
-          ? 1
-          : type == GradientType.miniBatch
-            ? batchSize
-            : double.infinity.toInt()
-      ),
-      fitIntercept ? interceptScale : 0.0
-    );
+  GradientRegressor(
+      {int iterationLimit,
+      LearningRateType learningRateType = LearningRateType.decreasing,
+      double learningRate,
+      double minWeightsUpdate,
+      double lambda,
+      GradientType type = GradientType.miniBatch,
+      bool fitIntercept = false,
+      double interceptScale = 1.0,
+      int randomSeed,
+      int batchSize = 1})
+      : super(
+            GradientOptimizer(
+                RandomizerFactory.defaultRandomizer(randomSeed),
+                CostFunctionFactory.squared(),
+                LearningRateGeneratorFactory.createByType(learningRateType),
+                InitialWeightsGeneratorFactory.zeroWeights(),
+                initialLearningRate: learningRate,
+                minCoefficientsUpdate: minWeightsUpdate,
+                iterationLimit: iterationLimit,
+                lambda: lambda,
+                batchSize: type == GradientType.stochastic
+                    ? 1
+                    : type == GradientType.miniBatch ? batchSize : double.infinity.toInt()),
+            fitIntercept ? interceptScale : 0.0);
 }

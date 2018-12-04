@@ -1,3 +1,1 @@
-enum MultinomialType {
-  oneVsAll
-}
+enum MultinomialType { oneVsAll }

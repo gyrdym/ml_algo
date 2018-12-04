@@ -1,3 +1,1 @@
-enum GradientType {
-  stochastic, miniBatch, batch
-}
+enum GradientType { stochastic, miniBatch, batch }

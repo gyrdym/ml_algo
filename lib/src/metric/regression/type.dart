@@ -1,3 +1,1 @@
-enum RegressionMetricType {
-  mape, rmse
-}
+enum RegressionMetricType { mape, rmse }
