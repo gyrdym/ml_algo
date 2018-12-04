@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.2
+- Description corrected
+
 ## 3.1.1
 - `dartfm` tool applied
 
