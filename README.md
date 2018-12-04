@@ -1,4 +1,4 @@
-# Machine learning with dart
+# Machine learning algorithms with dart
 
 Following algorithms are implemented:
 - Linear regression:
