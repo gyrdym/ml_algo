@@ -1,7 +1,7 @@
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
 abstract class CostFunction<E> {
   double getCost(double predictedLabel, double originalLabel);
-  double getPartialDerivative(int wIdx, Vector<E> x, Vector<E> w, double y);
-  double getSparseSolutionPartial(int wIdx, Vector<E> x, Vector<E> w, double y);
+  double getPartialDerivative(int wIdx, MLVector<E> x, MLVector<E> w, double y);
+  double getSparseSolutionPartial(int wIdx, MLVector<E> x, MLVector<E> w, double y);
 }

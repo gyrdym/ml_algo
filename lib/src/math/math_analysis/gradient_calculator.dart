@@ -1,16 +1,16 @@
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
 typedef double OptimizationFunction<E> (
-  Vector<E> targetVector,
-  Iterable<Vector<E>> vectorArgs,
+  MLVector<E> targetVector,
+  Iterable<MLVector<E>> vectorArgs,
   Iterable<double> scalarArgs
 );
 
 abstract class GradientCalculator<E> {
-  Vector<E> getGradient(
+  MLVector<E> getGradient(
     OptimizationFunction<E> function,
-    Vector<E> targetVector,
-    Iterable<Vector<E>> vectorArgs,
+    MLVector<E> targetVector,
+    Iterable<MLVector<E>> vectorArgs,
     Iterable<double> scalarArgs,
     double argumentDelta
   );

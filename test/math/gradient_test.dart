@@ -22,11 +22,11 @@ void main() {
 
       final gradient = calculator.getGradient(
         (
-          Vector<Float32x4> a,
-          Iterable<Vector<Float32x4>> vectorArgs,
+          MLVector<Float32x4> a,
+          Iterable<MLVector<Float32x4>> vectorArgs,
           Iterable<double> scalarArgs
         ) {
-          final b = (vectorArgs as List<Vector<Float32x4>>)[0];
+          final b = (vectorArgs as List<MLVector<Float32x4>>)[0];
           final c = (scalarArgs as List<double>)[0];
           return math.pow(a.dot(b) - c, 2).toDouble();
         }, k, [x], [y], 0.00001)

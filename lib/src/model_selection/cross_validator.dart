@@ -3,7 +3,7 @@ import 'package:dart_ml/src/data_splitter/leave_p_out.dart';
 import 'package:dart_ml/src/data_splitter/splitter.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
 class CrossValidator<E> {
 
@@ -19,8 +19,8 @@ class CrossValidator<E> {
 
   double evaluate(
     Evaluable predictor,
-    Matrix<E, Vector<E>> points,
-    Vector<E> labels,
+    MLMatrix<E, MLVector<E>> points,
+    MLVector<E> labels,
     MetricType metric,
     {bool isDataNormalized = false}
   ) {

@@ -6,28 +6,28 @@ import 'package:dart_ml/src/metric/factory.dart';
 import 'package:dart_ml/src/metric/type.dart';
 import 'package:dart_ml/src/model_selection/evaluable.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
-abstract class LinearClassifier implements Evaluable<Float32x4, Vector<Float32x4>> {
+abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32x4>> {
 
-  final Optimizer<Float32x4, Vector<Float32x4>> _optimizer;
-  final _weightsByClasses = <Vector<Float32x4>>[];
+  final Optimizer<Float32x4, MLVector<Float32x4>> _optimizer;
+  final _weightsByClasses = <MLVector<Float32x4>>[];
   final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
   final InterceptPreprocessor _interceptPreprocessor;
 
   LinearClassifier(this._optimizer, this._linkScoreToProbability, double interceptScale) :
         _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
 
-  List<Vector<Float32x4>> get weightsByClasses => _weightsByClasses;
-  Vector<Float32x4> get classLabels => _classLabels;
-  Vector<Float32x4> _classLabels;
+  List<MLVector<Float32x4>> get weightsByClasses => _weightsByClasses;
+  MLVector<Float32x4> get classLabels => _classLabels;
+  MLVector<Float32x4> _classLabels;
 
   @override
   void fit(
-    Matrix<Float32x4, Vector<Float32x4>> features,
-    Vector<Float32x4> origLabels,
+    MLMatrix<Float32x4, MLVector<Float32x4>> features,
+    MLVector<Float32x4> origLabels,
     {
-      Vector<Float32x4> initialWeights,
+      MLVector<Float32x4> initialWeights,
       bool isDataNormalized = false
     }
   ) {
@@ -44,7 +44,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4, Vector<Float32x4
     }
   }
 
-  Vector<Float32x4> _makeLabelsOneVsAll(Vector<Float32x4> origLabels, double targetLabel) {
+  MLVector<Float32x4> _makeLabelsOneVsAll(MLVector<Float32x4> origLabels, double targetLabel) {
     final target = Float32x4.splat(targetLabel);
     final zero = Float32x4.zero();
     return origLabels
@@ -53,8 +53,8 @@ abstract class LinearClassifier implements Evaluable<Float32x4, Vector<Float32x4
 
   @override
   double test(
-    Matrix<Float32x4, Vector<Float32x4>> features,
-    Vector<Float32x4> origLabels,
+    MLMatrix<Float32x4, MLVector<Float32x4>> features,
+    MLVector<Float32x4> origLabels,
     MetricType metricType
   ) {
     final metric = MetricFactory.createByType(metricType);
@@ -62,11 +62,11 @@ abstract class LinearClassifier implements Evaluable<Float32x4, Vector<Float32x4
     return metric.getError(prediction, origLabels);
   }
 
-  List<Vector<Float32x4>> predictProbabilities(Matrix<Float32x4, Vector<Float32x4>> features,
+  List<MLVector<Float32x4>> predictProbabilities(MLMatrix<Float32x4, MLVector<Float32x4>> features,
       {bool interceptConsidered = false}) {
 
     final _features = !interceptConsidered ? _interceptPreprocessor.addIntercept(features) : features;
-    final distributions = List<Vector<Float32x4>>(_features.rowsNum);
+    final distributions = List<MLVector<Float32x4>>(_features.rowsNum);
     for (int i = 0; i < _features.rowsNum; i++) {
       final probabilities = List<double>(_weightsByClasses.length);
       for (int i = 0; i < _weightsByClasses.length; i++) {
@@ -78,7 +78,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4, Vector<Float32x4
     return distributions;
   }
 
-  Vector<Float32x4> predictClasses(Matrix<Float32x4, Vector<Float32x4>> features, {bool interceptConsidered = false}) {
+  MLVector<Float32x4> predictClasses(MLMatrix<Float32x4, MLVector<Float32x4>> features, {bool interceptConsidered = false}) {
     final _features = interceptConsidered ? features : _interceptPreprocessor.addIntercept(features);
     final distributions = predictProbabilities(_features, interceptConsidered: true);
     final classes = List<double>(_features.rowsNum);
