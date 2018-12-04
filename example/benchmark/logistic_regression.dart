@@ -10,7 +10,7 @@ import 'package:dart_ml/dart_ml.dart';
 import 'package:csv/csv.dart' as csv;
 
 List<List<double>> features;
-Vector<Float32x4> labels;
+MLVector<Float32x4> labels;
 LogisticRegressor regressor;
 
 class LogisticRegressorBenchmark extends BenchmarkBase {

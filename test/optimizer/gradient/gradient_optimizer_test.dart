@@ -6,7 +6,7 @@ import 'package:dart_ml/src/optimizer/gradient.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:mockito/mockito.dart';
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
 class RandomizerMock extends Mock implements Randomizer {}
@@ -34,7 +34,7 @@ InitialWeightsGenerator<Float32x4> createInitialWeightsGenerator() {
   return mock;
 }
 
-Matrix<Float32x4, Vector<Float32x4>> getPoints() => Float32x4MatrixFactory.from([
+MLMatrix<Float32x4, MLVector<Float32x4>> getPoints() => Float32x4MatrixFactory.from([
       [5.0, 10.0, 15.0],
       [1.0, 2.0, 3.0],
       [10.0, 20.0, 30.0],

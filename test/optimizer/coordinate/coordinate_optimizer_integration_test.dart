@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:dart_ml/src/cost_function/squared.dart';
 import 'package:dart_ml/src/optimizer/coordinate.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
 /// L1 regularization, as known as Lasso, is aimed to penalize unimportant features, setting their weights to the zero,
@@ -22,8 +22,8 @@ void main() {
     final point4 = [20.0, 30.0, 10.0];
 
     CoordinateOptimizer optimizer;
-    Matrix<Float32x4, Vector<Float32x4>> data;
-    Vector<Float32x4> labels;
+    MLMatrix<Float32x4, MLVector<Float32x4>> data;
+    MLVector<Float32x4> labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -121,8 +121,8 @@ void main() {
     final point3 = [70.0, 80.0, 90.0];
 
     CoordinateOptimizer optimizer;
-    Matrix<Float32x4, Vector<Float32x4>> data;
-    Vector<Float32x4> labels;
+    MLMatrix<Float32x4, MLVector<Float32x4>> data;
+    MLVector<Float32x4> labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(

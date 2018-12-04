@@ -1,11 +1,11 @@
 import 'package:dart_ml/src/metric/type.dart';
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
-abstract class Evaluable<E, S extends Vector<E>> {
-  void fit(Matrix<E, Vector<E>> features, Vector<E> origLabels, {
-      Vector<E> initialWeights,
+abstract class Evaluable<E, S extends MLVector<E>> {
+  void fit(MLMatrix<E, MLVector<E>> features, MLVector<E> origLabels, {
+      MLVector<E> initialWeights,
       bool isDataNormalized
     });
 
-  double test(Matrix<E, Vector<E>> features, Vector<E> origLabels, MetricType metric);
+  double test(MLMatrix<E, MLVector<E>> features, MLVector<E> origLabels, MetricType metric);
 }

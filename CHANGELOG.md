@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.0
+- `ml_linalg` supported
+
 ## 1.2.1
 - subVector -> subvector
 

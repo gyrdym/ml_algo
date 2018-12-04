@@ -1,11 +1,11 @@
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
-abstract class Optimizer<E, T extends Vector<E>> {
-  Vector<E> findExtrema(
-    Matrix<E, T> points,
-    Vector<E> labels,
+abstract class Optimizer<E, T extends MLVector<E>> {
+  MLVector<E> findExtrema(
+    MLMatrix<E, T> points,
+    MLVector<E> labels,
     {
-      Vector<E> initialWeights,
+      MLVector<E> initialWeights,
       bool isMinimizingObjective,
       bool arePointsNormalized
     }

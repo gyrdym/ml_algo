@@ -84,7 +84,7 @@ packages:
       name: built_collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "4.1.0"
   built_value:
     dependency: transitive
     description:
@@ -239,15 +239,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.4+2"
-  linalg:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "7b95a8853929ab65663ed8b1f1effc833bef26c6"
-      url: "https://github.com/gyrdym/linalg.git"
-    source: git
-    version: "2.0.0"
   logging:
     dependency: transitive
     description:
@@ -276,6 +267,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.6+2"
+  ml_linalg:
+    dependency: "direct main"
+    description:
+      name: ml_linalg
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   mockito:
     dependency: "direct dev"
     description:

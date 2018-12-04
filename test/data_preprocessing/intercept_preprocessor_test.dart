@@ -1,5 +1,5 @@
 import 'package:dart_ml/src/data_preprocessing/intercept_preprocessor.dart';
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
 void main() {

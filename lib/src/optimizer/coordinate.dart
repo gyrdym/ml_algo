@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:dart_ml/src/cost_function/cost_function.dart';
 import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:dart_ml/src/optimizer/optimizer.dart';
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
-class CoordinateOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
+class CoordinateOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
   final CostFunction _costFn;
 
@@ -16,7 +16,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
   final double _lambda;
   //hyper parameters declaration end
 
-  Vector _normalizer;
+  MLVector _normalizer;
 
   CoordinateOptimizer(
     this._initialCoefficientsGenerator,
@@ -32,11 +32,11 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
     _lambda = lambda ?? 0.0;
 
   @override
-  Vector<Float32x4> findExtrema(
-    Matrix<Float32x4, Vector<Float32x4>> points,
-    Vector<Float32x4> labels,
+  MLVector<Float32x4> findExtrema(
+    MLMatrix<Float32x4, MLVector<Float32x4>> points,
+    MLVector<Float32x4> labels,
     {
-      Vector<Float32x4> initialWeights,
+      MLVector<Float32x4> initialWeights,
       bool isMinimizingObjective = true,
       bool arePointsNormalized = false
     }
@@ -45,7 +45,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
       ? Float32x4VectorFactory.filled(points.columnsNum, 1.0)
       : points.reduceRows((combine, vector) => (combine + vector * vector));
 
-    Vector<Float32x4> coefficients =
+    MLVector<Float32x4> coefficients =
         initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
     final changes = List<double>.filled(points.columnsNum, double.infinity);
     int iteration = 0;
@@ -74,9 +74,9 @@ class CoordinateOptimizer implements Optimizer<Float32x4, Vector<Float32x4>> {
 
   double _coordinateDescentStep(
     int coefficientNum,
-    Matrix<Float32x4, Vector<Float32x4>> points,
-    Vector<Float32x4> labels,
-    Vector<Float32x4> coefficients
+    MLMatrix<Float32x4, MLVector<Float32x4>> points,
+    MLVector<Float32x4> labels,
+    MLVector<Float32x4> coefficients
   ) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;

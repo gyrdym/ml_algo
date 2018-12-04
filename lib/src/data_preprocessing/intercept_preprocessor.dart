@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:linalg/linalg.dart';
+import 'package:ml_linalg/linalg.dart';
 
 class InterceptPreprocessor {
   final double _interceptScale;
 
   const InterceptPreprocessor({double interceptScale = 1.0}) : _interceptScale = interceptScale;
 
-  Matrix<Float32x4, Vector<Float32x4>> addIntercept(Matrix<Float32x4, Vector<Float32x4>> points) {
+  MLMatrix<Float32x4, MLVector<Float32x4>> addIntercept(MLMatrix<Float32x4, MLVector<Float32x4>> points) {
     if (_interceptScale == 0.0) {
       return points;
     }
