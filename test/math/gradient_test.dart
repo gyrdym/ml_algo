@@ -1,10 +1,9 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:dart_ml/dart_ml.dart';
-import 'package:dart_ml/src/math/math_analysis/gradient_calculator.dart';
-import 'package:dart_ml/src/math/math_analysis/gradient_calculator_impl.dart';
-import 'package:matcher/matcher.dart';
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/math/math_analysis/gradient_calculator.dart';
+import 'package:ml_algo/src/math/math_analysis/gradient_calculator_impl.dart';
 import 'package:test/test.dart';
 
 void main() {

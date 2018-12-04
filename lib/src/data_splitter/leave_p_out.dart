@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/data_splitter/splitter.dart';
+import 'package:ml_algo/src/data_splitter/splitter.dart';
 
 class LeavePOutSplitter implements Splitter {
   int _p = 2;

@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 

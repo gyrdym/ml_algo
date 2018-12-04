@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/data_preprocessing/intercept_preprocessor.dart';
-import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
-import 'package:dart_ml/src/metric/factory.dart';
-import 'package:dart_ml/src/metric/type.dart';
-import 'package:dart_ml/src/model_selection/evaluable.dart';
-import 'package:dart_ml/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
+import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
+import 'package:ml_algo/src/metric/factory.dart';
+import 'package:ml_algo/src/metric/type.dart';
+import 'package:ml_algo/src/model_selection/evaluable.dart';
+import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
 abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32x4>> {

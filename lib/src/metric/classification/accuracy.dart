@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/metric/classification/metric.dart';
+import 'package:ml_algo/src/metric/classification/metric.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class AccuracyMetric implements ClassificationMetric<Float32x4> {

@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/cost_function/cost_function.dart';
-import 'package:dart_ml/src/score_to_prob_link_function/link_function.dart' as linkFunctions;
+import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart' as linkFunctions;
 import 'package:ml_linalg/linalg.dart';
 
 class LogLikelihoodCost implements CostFunction<Float32x4> {
