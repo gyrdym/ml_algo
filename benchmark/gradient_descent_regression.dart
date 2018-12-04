@@ -35,17 +35,12 @@ class GDRegressorBenchmark extends BenchmarkBase {
 Future main() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
   final input = File('example/datasets/advertising.csv').openRead();
-  final fields = (await input.transform(utf8.decoder)
-      .transform(csvCodec.decoder).toList())
-      .sublist(1);
+  final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
 
-  List<double> extractFeatures(List item) => item.sublist(0, 3)
-      .map<double>((dynamic feature) => (feature as num).toDouble())
-      .toList();
+  List<double> extractFeatures(List item) =>
+      item.sublist(0, 3).map<double>((dynamic feature) => (feature as num).toDouble()).toList();
 
-  features = fields
-      .map<List<double>>(extractFeatures)
-      .toList(growable: false);
+  features = fields.map<List<double>>(extractFeatures).toList(growable: false);
 
   labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
 

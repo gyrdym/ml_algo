@@ -14,8 +14,7 @@ class InterceptPreprocessor {
 
     final _points = List<List<double>>(points.rowsNum);
     for (int i = 0; i < points.rowsNum; i++) {
-      _points[i] = points[i].toList()
-          ..insert(0, 1.0 * _interceptScale);
+      _points[i] = points[i].toList()..insert(0, 1.0 * _interceptScale);
     }
     return Float32x4MatrixFactory.from(_points);
   }

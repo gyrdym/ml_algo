@@ -18,35 +18,20 @@ class CoordinateOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
 
   MLVector _normalizer;
 
-  CoordinateOptimizer(
-    this._initialCoefficientsGenerator,
-    this._costFn,
-    {
-      double minCoefficientsDiff,
-      int iterationLimit,
-      double lambda
-    }
-  ) :
-    _iterationLimit = iterationLimit ?? 1000,
-    _coefficientDiffThreshold = minCoefficientsDiff,
-    _lambda = lambda ?? 0.0;
+  CoordinateOptimizer(this._initialCoefficientsGenerator, this._costFn,
+      {double minCoefficientsDiff, int iterationLimit, double lambda})
+      : _iterationLimit = iterationLimit ?? 1000,
+        _coefficientDiffThreshold = minCoefficientsDiff,
+        _lambda = lambda ?? 0.0;
 
   @override
-  MLVector<Float32x4> findExtrema(
-    MLMatrix<Float32x4, MLVector<Float32x4>> points,
-    MLVector<Float32x4> labels,
-    {
-      MLVector<Float32x4> initialWeights,
-      bool isMinimizingObjective = true,
-      bool arePointsNormalized = false
-    }
-  ) {
+  MLVector<Float32x4> findExtrema(MLMatrix<Float32x4, MLVector<Float32x4>> points, MLVector<Float32x4> labels,
+      {MLVector<Float32x4> initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
     _normalizer = arePointsNormalized
-      ? Float32x4VectorFactory.filled(points.columnsNum, 1.0)
-      : points.reduceRows((combine, vector) => (combine + vector * vector));
+        ? Float32x4VectorFactory.filled(points.columnsNum, 1.0)
+        : points.reduceRows((combine, vector) => (combine + vector * vector));
 
-    MLVector<Float32x4> coefficients =
-        initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
+    MLVector<Float32x4> coefficients = initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
     final changes = List<double>.filled(points.columnsNum, double.infinity);
     int iteration = 0;
 
@@ -69,15 +54,12 @@ class CoordinateOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
 
   bool _isConverged(List<double> changes, int iterationCount) =>
       _coefficientDiffThreshold != null &&
-      changes.reduce((double maxValue, double value) => math.max<double>(maxValue ?? 0.0, value)) <= _coefficientDiffThreshold ||
+          changes.reduce((double maxValue, double value) => math.max<double>(maxValue ?? 0.0, value)) <=
+              _coefficientDiffThreshold ||
       iterationCount >= _iterationLimit;
 
-  double _coordinateDescentStep(
-    int coefficientNum,
-    MLMatrix<Float32x4, MLVector<Float32x4>> points,
-    MLVector<Float32x4> labels,
-    MLVector<Float32x4> coefficients
-  ) {
+  double _coordinateDescentStep(int coefficientNum, MLMatrix<Float32x4, MLVector<Float32x4>> points,
+      MLVector<Float32x4> labels, MLVector<Float32x4> coefficients) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;
 

@@ -8,7 +8,6 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
-
   final Randomizer _randomizer;
   final CostFunction<Float32x4> _costFunction;
   final LearningRateGenerator _learningRateGenerator;
@@ -23,37 +22,18 @@ class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
 
   MLMatrix<Float32x4, MLVector<Float32x4>> _points;
 
-  GradientOptimizer(
-    this._randomizer,
-    this._costFunction,
-    this._learningRateGenerator,
-    this._initialWeightsGenerator,
-    {
-      double initialLearningRate,
-      double minCoefficientsUpdate,
-      int iterationLimit,
-      double lambda,
-      int batchSize
-    }
-  ) :
-    _minCoefficientsUpdate = minCoefficientsUpdate,
-    _iterationLimit = iterationLimit ?? 1000,
-    _lambda = lambda ?? 0.0,
-    _batchSize = batchSize
-  {
+  GradientOptimizer(this._randomizer, this._costFunction, this._learningRateGenerator, this._initialWeightsGenerator,
+      {double initialLearningRate, double minCoefficientsUpdate, int iterationLimit, double lambda, int batchSize})
+      : _minCoefficientsUpdate = minCoefficientsUpdate,
+        _iterationLimit = iterationLimit ?? 1000,
+        _lambda = lambda ?? 0.0,
+        _batchSize = batchSize {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 
   @override
-  MLVector<Float32x4> findExtrema(
-    MLMatrix<Float32x4, MLVector<Float32x4>> points,
-    MLVector<Float32x4> labels,
-    {
-      MLVector<Float32x4> initialWeights,
-      bool isMinimizingObjective = true,
-      bool arePointsNormalized = false
-    }
-  ) {
+  MLVector<Float32x4> findExtrema(MLMatrix<Float32x4, MLVector<Float32x4>> points, MLVector<Float32x4> labels,
+      {MLVector<Float32x4> initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
     _points = points;
 
     final batchSize = _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
@@ -63,8 +43,8 @@ class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
 
     while (!_isConverged(coefficientsUpdate, iterationCounter)) {
       final eta = _learningRateGenerator.getNextValue();
-      final updatedCoefficients = _generateCoefficients(coefficients, labels, eta, batchSize,
-        isMinimization: isMinimizingObjective);
+      final updatedCoefficients =
+          _generateCoefficients(coefficients, labels, eta, batchSize, isMinimization: isMinimizingObjective);
       coefficientsUpdate = updatedCoefficients.distanceTo(coefficients);
       coefficients = updatedCoefficients;
       iterationCounter++;
@@ -76,16 +56,12 @@ class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
   }
 
   bool _isConverged(double coefficientsUpdate, int iterationCounter) =>
-    (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
-    (iterationCounter >= _iterationLimit);
+      (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
+      (iterationCounter >= _iterationLimit);
 
   MLVector<Float32x4> _generateCoefficients(
-    MLVector<Float32x4> currentCoefficients,
-    MLVector<Float32x4> labels,
-    double eta,
-    int batchSize,
-    {bool isMinimization = true}
-  ) {
+      MLVector<Float32x4> currentCoefficients, MLVector<Float32x4> labels, double eta, int batchSize,
+      {bool isMinimization = true}) {
     final range = _getBatchRange(batchSize);
     final start = range.first;
     final end = range.last;
@@ -98,24 +74,18 @@ class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
   Iterable<int> _getBatchRange(int batchSize) =>
       _randomizer.getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
 
-  MLVector<Float32x4> _makeGradientStep(
-    MLVector<Float32x4> coefficients,
-    MLMatrix<Float32x4, MLVector<Float32x4>> points,
-    MLVector<Float32x4> labels,
-    double eta,
-    {bool isMinimization = true}
-  ) {
+  MLVector<Float32x4> _makeGradientStep(MLVector<Float32x4> coefficients,
+      MLMatrix<Float32x4, MLVector<Float32x4>> points, MLVector<Float32x4> labels, double eta,
+      {bool isMinimization = true}) {
     var gradient = Float32x4VectorFactory.zero(coefficients.length);
     for (var i = 0; i < points.rowsNum; i++) {
       final derivatives = List.generate(coefficients.length,
-        (int j) => _costFunction.getPartialDerivative(j, points.getRowVector(i), coefficients, labels[i]));
+          (int j) => _costFunction.getPartialDerivative(j, points.getRowVector(i), coefficients, labels[i]));
       gradient += Float32x4VectorFactory.from(derivatives);
     }
 
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
-    return isMinimization ?
-      regularizedCoefficients - gradient * eta :
-      regularizedCoefficients + gradient * eta;
+    return isMinimization ? regularizedCoefficients - gradient * eta : regularizedCoefficients + gradient * eta;
   }
 
   MLVector<Float32x4> _regularize(double eta, double lambda, MLVector<Float32x4> coefficients) {
