@@ -9,31 +9,28 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/learning_rate_generator/generator_factory.dart';
 
 class LogisticRegressor extends LinearClassifier {
-  LogisticRegressor({
-    int iterationLimit,
-    double learningRate,
-    double minWeightsUpdate,
-    double lambda,
-    int batchSize = 1,
-    int randomSeed,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    MultinomialType multinomialType = MultinomialType.oneVsAll,
-    LearningRateType learningRateType = LearningRateType.decreasing
-  }) : super(
-    GradientOptimizer(
-      RandomizerFactory.defaultRandomizer(randomSeed),
-      CostFunctionFactory.logLikelihood(),
-      LearningRateGeneratorFactory.createByType(learningRateType),
-      InitialWeightsGeneratorFactory.zeroWeights(),
-
-      initialLearningRate: learningRate,
-      minCoefficientsUpdate: minWeightsUpdate,
-      iterationLimit: iterationLimit,
-      lambda: lambda,
-      batchSize: batchSize
-    ),
-    scoreToProbabilityLink.logitLink,
-    fitIntercept ? interceptScale : 0.0
-  );
+  LogisticRegressor(
+      {int iterationLimit,
+      double learningRate,
+      double minWeightsUpdate,
+      double lambda,
+      int batchSize = 1,
+      int randomSeed,
+      bool fitIntercept = false,
+      double interceptScale = 1.0,
+      MultinomialType multinomialType = MultinomialType.oneVsAll,
+      LearningRateType learningRateType = LearningRateType.decreasing})
+      : super(
+            GradientOptimizer(
+                RandomizerFactory.defaultRandomizer(randomSeed),
+                CostFunctionFactory.logLikelihood(),
+                LearningRateGeneratorFactory.createByType(learningRateType),
+                InitialWeightsGeneratorFactory.zeroWeights(),
+                initialLearningRate: learningRate,
+                minCoefficientsUpdate: minWeightsUpdate,
+                iterationLimit: iterationLimit,
+                lambda: lambda,
+                batchSize: batchSize),
+            scoreToProbabilityLink.logitLink,
+            fitIntercept ? interceptScale : 0.0);
 }

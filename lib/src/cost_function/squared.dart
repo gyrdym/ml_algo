@@ -8,8 +8,7 @@ class SquaredCost implements CostFunction<Float32x4> {
   const SquaredCost();
 
   @override
-  double getCost(double predictedLabel, double originalLabel) =>
-      math.pow(predictedLabel - originalLabel, 2).toDouble();
+  double getCost(double predictedLabel, double originalLabel) => math.pow(predictedLabel - originalLabel, 2).toDouble();
 
   @override
   double getPartialDerivative(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>

@@ -4,7 +4,6 @@ import 'package:ml_algo/src/metric/regression/metric.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class MAPEMetric implements RegressionMetric<Float32x4> {
-
   const MAPEMetric();
 
   @override

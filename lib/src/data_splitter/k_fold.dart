@@ -12,7 +12,8 @@ class KFoldSplitter implements Splitter {
   @override
   Iterable<Iterable<int>> split(int numberOfSamples) sync* {
     if (_numberOfFolds > numberOfSamples) {
-      throw RangeError.range(_numberOfFolds, 0, numberOfSamples, null, 'Number of folds must be less than number of samples!');
+      throw RangeError.range(
+          _numberOfFolds, 0, numberOfSamples, null, 'Number of folds must be less than number of samples!');
     }
 
     final remainder = numberOfSamples % _numberOfFolds;
@@ -35,6 +36,8 @@ class KFoldSplitter implements Splitter {
   }
 
   Iterable<int> _range(int start, int end) sync* {
-    for (int i = start ; i < end; i++) {yield i;}
+    for (int i = start; i < end; i++) {
+      yield i;
+    }
   }
 }

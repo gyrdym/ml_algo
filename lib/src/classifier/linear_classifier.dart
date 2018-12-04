@@ -9,54 +9,40 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
 abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32x4>> {
-
   final Optimizer<Float32x4, MLVector<Float32x4>> _optimizer;
   final _weightsByClasses = <MLVector<Float32x4>>[];
   final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
   final InterceptPreprocessor _interceptPreprocessor;
 
-  LinearClassifier(this._optimizer, this._linkScoreToProbability, double interceptScale) :
-        _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
+  LinearClassifier(this._optimizer, this._linkScoreToProbability, double interceptScale)
+      : _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
 
   List<MLVector<Float32x4>> get weightsByClasses => _weightsByClasses;
   MLVector<Float32x4> get classLabels => _classLabels;
   MLVector<Float32x4> _classLabels;
 
   @override
-  void fit(
-    MLMatrix<Float32x4, MLVector<Float32x4>> features,
-    MLVector<Float32x4> origLabels,
-    {
-      MLVector<Float32x4> initialWeights,
-      bool isDataNormalized = false
-    }
-  ) {
+  void fit(MLMatrix<Float32x4, MLVector<Float32x4>> features, MLVector<Float32x4> origLabels,
+      {MLVector<Float32x4> initialWeights, bool isDataNormalized = false}) {
     _classLabels = origLabels.unique();
     final _features = _interceptPreprocessor.addIntercept(features);
     for (int i = 0; i < _classLabels.length; i++) {
-      final targetLabel =_classLabels[i];
+      final targetLabel = _classLabels[i];
       final labels = _makeLabelsOneVsAll(origLabels, targetLabel);
       _weightsByClasses.add(_optimizer.findExtrema(_features, labels,
-        initialWeights: initialWeights,
-        arePointsNormalized: isDataNormalized,
-        isMinimizingObjective: false
-      ));
+          initialWeights: initialWeights, arePointsNormalized: isDataNormalized, isMinimizingObjective: false));
     }
   }
 
   MLVector<Float32x4> _makeLabelsOneVsAll(MLVector<Float32x4> origLabels, double targetLabel) {
     final target = Float32x4.splat(targetLabel);
     final zero = Float32x4.zero();
-    return origLabels
-        .vectorizedMap((Float32x4 element) => element.equal(target).select(element, zero));
+    return origLabels.vectorizedMap((Float32x4 element) => element.equal(target).select(element, zero));
   }
 
   @override
   double test(
-    MLMatrix<Float32x4, MLVector<Float32x4>> features,
-    MLVector<Float32x4> origLabels,
-    MetricType metricType
-  ) {
+      MLMatrix<Float32x4, MLVector<Float32x4>> features, MLVector<Float32x4> origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predictClasses(features);
     return metric.getError(prediction, origLabels);
@@ -64,7 +50,6 @@ abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32
 
   List<MLVector<Float32x4>> predictProbabilities(MLMatrix<Float32x4, MLVector<Float32x4>> features,
       {bool interceptConsidered = false}) {
-
     final _features = !interceptConsidered ? _interceptPreprocessor.addIntercept(features) : features;
     final distributions = List<MLVector<Float32x4>>(_features.rowsNum);
     for (int i = 0; i < _features.rowsNum; i++) {
@@ -78,7 +63,8 @@ abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32
     return distributions;
   }
 
-  MLVector<Float32x4> predictClasses(MLMatrix<Float32x4, MLVector<Float32x4>> features, {bool interceptConsidered = false}) {
+  MLVector<Float32x4> predictClasses(MLMatrix<Float32x4, MLVector<Float32x4>> features,
+      {bool interceptConsidered = false}) {
     final _features = interceptConsidered ? features : _interceptPreprocessor.addIntercept(features);
     final distributions = predictProbabilities(_features, interceptConsidered: true);
     final classes = List<double>(_features.rowsNum);
