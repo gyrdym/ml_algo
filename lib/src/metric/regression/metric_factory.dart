@@ -1,7 +1,7 @@
-import 'package:dart_ml/src/metric/regression/mape.dart';
-import 'package:dart_ml/src/metric/regression/metric.dart';
-import 'package:dart_ml/src/metric/regression/rmse.dart';
-import 'package:dart_ml/src/metric/regression/type.dart';
+import 'package:ml_algo/src/metric/regression/mape.dart';
+import 'package:ml_algo/src/metric/regression/metric.dart';
+import 'package:ml_algo/src/metric/regression/rmse.dart';
+import 'package:ml_algo/src/metric/regression/type.dart';
 
 class RegressionMetricFactory {
   static RegressionMetric rmse() => const RMSEMetric();

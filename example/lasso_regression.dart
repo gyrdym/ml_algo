@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:dart_ml/dart_ml.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:csv/csv.dart' as csv;
 
 Future main() async {

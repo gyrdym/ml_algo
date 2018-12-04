@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import 'package:dart_ml/src/math/randomizer/randomizer.dart';
-import 'package:dart_ml/src/math/randomizer/randomizer_impl.dart';
-import 'package:matcher/matcher.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer_impl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

@@ -1,4 +1,4 @@
-import 'package:dart_ml/src/metric/type.dart';
+import 'package:ml_algo/src/metric/type.dart';
 import 'package:ml_linalg/linalg.dart';
 
 abstract class Evaluable<E, S extends MLVector<E>> {

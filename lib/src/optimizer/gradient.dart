@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/cost_function/cost_function.dart';
-import 'package:dart_ml/src/math/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
-import 'package:dart_ml/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/generator.dart';
+import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {

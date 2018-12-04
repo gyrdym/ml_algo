@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.0.0
+- Library public release
+
 ## 2.0.0
 - `ml_linalg` supported
 

@@ -1,6 +1,6 @@
-import 'package:dart_ml/src/metric/classification/accuracy.dart';
-import 'package:dart_ml/src/metric/classification/metric.dart';
-import 'package:dart_ml/src/metric/classification/type.dart';
+import 'package:ml_algo/src/metric/classification/accuracy.dart';
+import 'package:ml_algo/src/metric/classification/metric.dart';
+import 'package:ml_algo/src/metric/classification/type.dart';
 
 abstract class ClassificationMetricFactory {
   static ClassificationMetric accuracy() => const AccuracyMetric();

@@ -1,7 +1,7 @@
-import 'package:dart_ml/src/cost_function/cost_function_factory.dart';
-import 'package:dart_ml/src/optimizer/coordinate.dart';
-import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:dart_ml/src/regressor/linear_regressor.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/optimizer/coordinate.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/regressor/linear_regressor.dart';
 
 class LassoRegressor extends LinearRegressor {
   LassoRegressor({

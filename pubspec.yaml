@@ -1,14 +1,15 @@
-name: dart_ml
-description: Machine learning with dart
-version: 2.0.0
+name: ml_algo
+description: Machine learning algorithms with dart
+version: 3.0.0
 author: Ilia Gyrdymov <ilgyrd@gmail.com>
+homepage: https://github.com/gyrdym/ml_algo
 
 environment:
   sdk: '>=2.0.0 <3.0.0'
 
 dependencies:
   csv: ^4.0.0
-  ml_linalg: 1.0.0
+  ml_linalg: ^1.0.0
 
 dev_dependencies:
   benchmark_harness: ">=1.0.0 <2.0.0"

@@ -1,7 +1,6 @@
-import 'package:dart_ml/src/data_splitter/k_fold.dart';
-import 'package:dart_ml/src/data_splitter/leave_p_out.dart';
+import 'package:ml_algo/src/data_splitter/k_fold.dart';
+import 'package:ml_algo/src/data_splitter/leave_p_out.dart';
 import 'package:test/test.dart';
-import 'package:matcher/matcher.dart';
 
 void main() {
   group('Splitters test:\n', () {

@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:dart_ml/src/cost_function/cost_function.dart';
-import 'package:dart_ml/src/math/randomizer/randomizer.dart';
-import 'package:dart_ml/src/optimizer/gradient.dart';
-import 'package:dart_ml/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:dart_ml/src/optimizer/learning_rate_generator/generator.dart';
+import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer.dart';
+import 'package:ml_algo/src/optimizer/gradient.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/generator.dart';
 import 'package:mockito/mockito.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
