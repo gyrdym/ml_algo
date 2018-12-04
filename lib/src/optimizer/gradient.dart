@@ -114,8 +114,8 @@ class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
 
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
     return isMinimization ?
-      regularizedCoefficients - gradient.scalarMul(eta) :
-      regularizedCoefficients + gradient.scalarMul(eta);
+      regularizedCoefficients - gradient * eta :
+      regularizedCoefficients + gradient * eta;
   }
 
   MLVector<Float32x4> _regularize(double eta, double lambda, MLVector<Float32x4> coefficients) {
@@ -123,6 +123,6 @@ class GradientOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
       return coefficients;
     }
 
-    return coefficients.scalarMul(1 - 2 * eta * lambda);
+    return coefficients * (1 - 2 * eta * lambda);
   }
 }

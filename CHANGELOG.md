@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.1.0
+- Get rid of MLVector's deprecated methods
+
 ## 3.0.0
 - Library public release
 
