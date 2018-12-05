@@ -1,7 +1,10 @@
 # Changelog
 
+## 3.3.0
+- Matrix-based gradient calculation added for log likelihood cost function
+
 ## 3.2.0
-- Matrix-based derivative calculation added for squared cost function
+- Matrix-based gradient calculation added for squared cost function
 
 ## 3.1.2
 - Description corrected
