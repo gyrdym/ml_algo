@@ -21,11 +21,12 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
   int _indicator(double y, double target) => target == y ? 1 : 0;
 
   @override
-  MLMatrix<Float32x4, MLVector<Float32x4>> getGradient(MLMatrix<Float32x4, MLVector<Float32x4>> x,
-      MLMatrix<Float32x4, MLVector<Float32x4>> w, MLMatrix<Float32x4, MLVector<Float32x4>> y) {
-    // TODO: implement getGradient
-    throw UnimplementedError();
-  }
+  MLMatrix<Float32x4, MLVector<Float32x4>> getGradient(
+    MLMatrix<Float32x4, MLVector<Float32x4>> x,
+    MLMatrix<Float32x4, MLVector<Float32x4>> w,
+    MLMatrix<Float32x4, MLVector<Float32x4>> y
+  ) => x.transpose() *
+      (y.mapColumns(linkFunctions.vectorizedIndicator) - (x * w).mapColumns(linkFunctions.vectorizedLogitLink));
 
   @override
   double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
