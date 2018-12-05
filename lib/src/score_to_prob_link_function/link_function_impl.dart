@@ -12,7 +12,7 @@ ScoreToProbLinkFunction logitLink =
 
 VectorizedScoreToProbLinkFunction<Float32x4> vectorizedLogitLink =
     (Float32x4 scores) => ones / (ones + Float32x4(
-  //@TODO: find a more efficient way to raise exponent to the float power
+  //@TODO: find a more efficient way to raise exponent to the float power in SIMD way
   math.exp(-scores.x),
   math.exp(-scores.y),
   math.exp(-scores.z),
