@@ -2,11 +2,14 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
 import 'package:ml_algo/src/score_to_prob_link_function/link_function_impl.dart' as linkFunctions;
 import 'package:ml_linalg/linalg.dart';
 
 class LogLikelihoodCost implements CostFunction<Float32x4> {
-  const LogLikelihoodCost();
+  final VectorizedScoreToProbLinkFunction<Float32x4> linkFunction;
+
+  const LogLikelihoodCost(this.linkFunction);
 
   @override
   double getCost(double score, double yOrig) {
@@ -25,8 +28,10 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
     MLMatrix<Float32x4, MLVector<Float32x4>> x,
     MLMatrix<Float32x4, MLVector<Float32x4>> w,
     MLMatrix<Float32x4, MLVector<Float32x4>> y
-  ) => x.transpose() *
-      (y.mapColumns(linkFunctions.vectorizedIndicator) - (x * w).mapColumns(linkFunctions.vectorizedLogitLink));
+  ) {
+    final indicatorFn = (Float32x4 labels) => linkFunctions.vectorizedIndicator(labels, linkFunctions.ones);
+    return  x.transpose() * (y.mapColumns(indicatorFn) - (x * w).mapColumns(linkFunction));
+  }
 
   @override
   double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
