@@ -2,11 +2,14 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart' as linkFunctions;
+import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
+import 'package:ml_algo/src/score_to_prob_link_function/link_function_impl.dart' as linkFunctions;
 import 'package:ml_linalg/linalg.dart';
 
 class LogLikelihoodCost implements CostFunction<Float32x4> {
-  const LogLikelihoodCost();
+  final VectorizedScoreToProbLinkFunction<Float32x4> linkFunction;
+
+  const LogLikelihoodCost(this.linkFunction);
 
   @override
   double getCost(double score, double yOrig) {
@@ -21,10 +24,13 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
   int _indicator(double y, double target) => target == y ? 1 : 0;
 
   @override
-  MLMatrix<Float32x4, MLVector<Float32x4>> getGradient(MLMatrix<Float32x4, MLVector<Float32x4>> x,
-      MLMatrix<Float32x4, MLVector<Float32x4>> w, MLMatrix<Float32x4, MLVector<Float32x4>> y) {
-    // TODO: implement getGradient
-    throw UnimplementedError();
+  MLMatrix<Float32x4, MLVector<Float32x4>> getGradient(
+    MLMatrix<Float32x4, MLVector<Float32x4>> x,
+    MLMatrix<Float32x4, MLVector<Float32x4>> w,
+    MLMatrix<Float32x4, MLVector<Float32x4>> y
+  ) {
+    final indicatorFn = (Float32x4 labels) => linkFunctions.vectorizedIndicator(labels, linkFunctions.ones);
+    return  x.transpose() * (y.mapColumns(indicatorFn) - (x * w).mapColumns(linkFunction));
   }
 
   @override
