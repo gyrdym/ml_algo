@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.4.0
+- `ml_linalg` 2.0.0 supported
+
 ## 3.3.0
 - Matrix-based gradient calculation added for log likelihood cost function
 
