@@ -273,7 +273,7 @@ packages:
       name: ml_linalg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "2.0.0"
   mockito:
     dependency: "direct dev"
     description:
@@ -322,7 +322,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.0"
   plugin:
     dependency: transitive
     description:

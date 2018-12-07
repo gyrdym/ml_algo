@@ -24,11 +24,7 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
   int _indicator(double y, double target) => target == y ? 1 : 0;
 
   @override
-  MLMatrix<Float32x4, MLVector<Float32x4>> getGradient(
-    MLMatrix<Float32x4, MLVector<Float32x4>> x,
-    MLMatrix<Float32x4, MLVector<Float32x4>> w,
-    MLMatrix<Float32x4, MLVector<Float32x4>> y
-  ) {
+  MLMatrix<Float32x4> getGradient(MLMatrix<Float32x4> x, MLMatrix<Float32x4> w, MLMatrix<Float32x4> y) {
     final indicatorFn = (Float32x4 labels) => linkFunctions.vectorizedIndicator(labels, linkFunctions.ones);
     return  x.transpose() * (y.mapColumns(indicatorFn) - (x * w).mapColumns(linkFunction));
   }

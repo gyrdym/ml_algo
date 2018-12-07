@@ -8,8 +8,8 @@ import 'package:ml_algo/src/model_selection/evaluable.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
-abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32x4>> {
-  final Optimizer<Float32x4, MLVector<Float32x4>> _optimizer;
+abstract class LinearClassifier implements Evaluable<Float32x4> {
+  final Optimizer<Float32x4> _optimizer;
   final _weightsByClasses = <MLVector<Float32x4>>[];
   final scoreToProbLink.ScoreToProbLinkFunction _linkScoreToProbability;
   final InterceptPreprocessor _interceptPreprocessor;
@@ -22,7 +22,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32
   MLVector<Float32x4> _classLabels;
 
   @override
-  void fit(MLMatrix<Float32x4, MLVector<Float32x4>> features, MLVector<Float32x4> origLabels,
+  void fit(MLMatrix<Float32x4> features, MLVector<Float32x4> origLabels,
       {MLVector<Float32x4> initialWeights, bool isDataNormalized = false}) {
     _classLabels = origLabels.unique();
     final _features = _interceptPreprocessor.addIntercept(features);
@@ -42,13 +42,13 @@ abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32
 
   @override
   double test(
-      MLMatrix<Float32x4, MLVector<Float32x4>> features, MLVector<Float32x4> origLabels, MetricType metricType) {
+      MLMatrix<Float32x4> features, MLVector<Float32x4> origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predictClasses(features);
     return metric.getError(prediction, origLabels);
   }
 
-  List<MLVector<Float32x4>> predictProbabilities(MLMatrix<Float32x4, MLVector<Float32x4>> features,
+  List<MLVector<Float32x4>> predictProbabilities(MLMatrix<Float32x4> features,
       {bool interceptConsidered = false}) {
     final _features = !interceptConsidered ? _interceptPreprocessor.addIntercept(features) : features;
     final distributions = List<MLVector<Float32x4>>(_features.rowsNum);
@@ -63,7 +63,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4, MLVector<Float32
     return distributions;
   }
 
-  MLVector<Float32x4> predictClasses(MLMatrix<Float32x4, MLVector<Float32x4>> features,
+  MLVector<Float32x4> predictClasses(MLMatrix<Float32x4> features,
       {bool interceptConsidered = false}) {
     final _features = interceptConsidered ? features : _interceptPreprocessor.addIntercept(features);
     final distributions = predictProbabilities(_features, interceptConsidered: true);

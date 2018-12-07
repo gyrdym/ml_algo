@@ -6,7 +6,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class CoordinateOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
+class CoordinateOptimizer implements Optimizer<Float32x4> {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
   final CostFunction _costFn;
 
@@ -25,7 +25,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
         _lambda = lambda ?? 0.0;
 
   @override
-  MLVector<Float32x4> findExtrema(MLMatrix<Float32x4, MLVector<Float32x4>> points, MLVector<Float32x4> labels,
+  MLVector<Float32x4> findExtrema(MLMatrix<Float32x4> points, MLVector<Float32x4> labels,
       {MLVector<Float32x4> initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
     _normalizer = arePointsNormalized
         ? Float32x4VectorFactory.filled(points.columnsNum, 1.0)
@@ -58,7 +58,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4, MLVector<Float32x4>> {
               _coefficientDiffThreshold ||
       iterationCount >= _iterationLimit;
 
-  double _coordinateDescentStep(int coefficientNum, MLMatrix<Float32x4, MLVector<Float32x4>> points,
+  double _coordinateDescentStep(int coefficientNum, MLMatrix<Float32x4> points,
       MLVector<Float32x4> labels, MLVector<Float32x4> coefficients) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;

@@ -22,7 +22,7 @@ void main() {
     final point4 = [20.0, 30.0, 10.0];
 
     CoordinateOptimizer optimizer;
-    MLMatrix<Float32x4, MLVector<Float32x4>> data;
+    MLMatrix<Float32x4> data;
     MLVector<Float32x4> labels;
 
     setUp(() {
@@ -116,7 +116,7 @@ void main() {
     final point3 = [70.0, 80.0, 90.0];
 
     CoordinateOptimizer optimizer;
-    MLMatrix<Float32x4, MLVector<Float32x4>> data;
+    MLMatrix<Float32x4> data;
     MLVector<Float32x4> labels;
 
     setUp(() {
