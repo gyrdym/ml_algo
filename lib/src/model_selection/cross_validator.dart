@@ -14,7 +14,7 @@ class CrossValidator<E> {
 
   CrossValidator._(this._splitter);
 
-  double evaluate(Evaluable predictor, MLMatrix<E, MLVector<E>> points, MLVector<E> labels, MetricType metric,
+  double evaluate(Evaluable predictor, MLMatrix<E> points, MLVector<E> labels, MetricType metric,
       {bool isDataNormalized = false}) {
     if (points.rowsNum != labels.length) {
       throw Exception('Number of feature objects must be equal to the number of labels!');

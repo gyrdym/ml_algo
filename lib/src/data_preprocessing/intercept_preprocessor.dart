@@ -7,7 +7,7 @@ class InterceptPreprocessor {
 
   const InterceptPreprocessor({double interceptScale = 1.0}) : _interceptScale = interceptScale;
 
-  MLMatrix<Float32x4, MLVector<Float32x4>> addIntercept(MLMatrix<Float32x4, MLVector<Float32x4>> points) {
+  MLMatrix<Float32x4> addIntercept(MLMatrix<Float32x4> points) {
     if (_interceptScale == 0.0) {
       return points;
     }
