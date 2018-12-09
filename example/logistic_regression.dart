@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:csv/csv.dart' as csv;
 
-Future main() async {
+Future logisticRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
   final input = File('example/datasets/pima_indians_diabetes_database.csv').openRead();
   final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);

@@ -1,5 +1,3 @@
-// 0.14 sec (MacBook Air mid 2017)
-
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -33,7 +31,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future main() async {
+Future logisticRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
   final input = File('example/datasets/pima_indians_diabetes_database.csv').openRead();
   final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
