@@ -1,5 +1,3 @@
-// 0.035 sec (MacBook Air mid 2017)
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -32,7 +30,7 @@ class GDRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future main() async {
+Future gradientDescentRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
   final input = File('example/datasets/advertising.csv').openRead();
   final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
