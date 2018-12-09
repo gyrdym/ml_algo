@@ -22,9 +22,9 @@ void main() {
       final w = Float32x4VectorFactory.from([-1.0, 2.0, -3.0]);
       final y = Float32x4VectorFactory.from([10.0, 20.0, 30.0]);
       final expected = [
-        [-2 * (16 + 128 + 7 * 48)],
-        [-2 * (32 + 160 + 8 * 48)],
-        [-2 * (48 + 192 + 9 * 48)],
+        -2.0 * (16 + 128 + 7 * 48),
+        -2.0 * (32 + 160 + 8 * 48),
+        -2.0 * (48 + 192 + 9 * 48),
       ];
       final actual = squaredCost.getGradient(x, w, y);
 
@@ -51,11 +51,7 @@ void main() {
       ]);
       final w = Float32x4VectorFactory.from([-1.0, 2.0, -3.0]);
       final y = Float32x4VectorFactory.from([1.0, 1.0, 0.0]);
-      final expected = [
-        [-7],
-        [-8],
-        [-9],
-      ];
+      final expected = [-7.0, -8.0, -9.0];
       final actual = logLikelihoodCost.getGradient(x, w, y);
 
       expect(actual, equals(expected));
