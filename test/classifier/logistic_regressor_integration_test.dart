@@ -292,9 +292,9 @@ void main() {
       // update:
       // [-5.5, -6.5, -18.0] + eta * [9.0, 8.0, 5.0] = [-5.5, -6.5, -18.0] + 1.0 * [9.0, 8.0, 5.0] = [3.5, 1.5, -13.0]
 
-      final class1Weights = classifier.weightsByClasses[0];
-      final class2Weights = classifier.weightsByClasses[1];
-      final class3Weights = classifier.weightsByClasses[2];
+      final class1Weights = classifier.weightsByClasses.getRowVector(0).toList();
+      final class2Weights = classifier.weightsByClasses.getRowVector(1).toList();
+      final class3Weights = classifier.weightsByClasses.getRowVector(2).toList();
 
       expect(class1Weights, equals([3.5, -0.5, -9.0]));
 

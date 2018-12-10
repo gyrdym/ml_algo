@@ -13,17 +13,14 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
 
   @override
   double getCost(double score, double yOrig) {
-    final probability = linkFunctions.logitLink(score);
-    return _indicator(yOrig, -1.0) * math.log(1 - probability) + _indicator(yOrig, 1.0) * math.log(probability);
+//    final probability = linkFunctions.logitLink(score);
+//    return _indicator(yOrig, -1.0) * math.log(1 - probability) + _indicator(yOrig, 1.0) * math.log(probability);
+    throw UnimplementedError();
   }
-
-  int _indicator(double y, double target) => target == y ? 1 : 0;
 
   @override
-  MLVector<Float32x4> getGradient(MLMatrix<Float32x4> x, MLVector<Float32x4> w, MLVector<Float32x4> y) {
-    final indicatorFn = (Float32x4 labels) => linkFunctions.vectorizedIndicator(labels, linkFunctions.ones);
-    return  (x.transpose() * (y.vectorizedMap(indicatorFn) - (x * w).mapColumns(linkFunction))).toVector();
-  }
+  MLVector<Float32x4> getGradient(MLMatrix<Float32x4> x, MLVector<Float32x4> w, MLVector<Float32x4> y) =>
+    (x.transpose() * (y - (x * w).mapColumns(linkFunction))).toVector();
 
   @override
   double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
