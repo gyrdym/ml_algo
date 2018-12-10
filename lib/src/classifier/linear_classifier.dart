@@ -37,7 +37,8 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
   MLVector<Float32x4> _makeLabelsOneVsAll(MLVector<Float32x4> origLabels, double targetLabel) {
     final target = Float32x4.splat(targetLabel);
     final zero = Float32x4.zero();
-    return origLabels.vectorizedMap((Float32x4 element) => element.equal(target).select(element, zero));
+    final ones = Float32x4.splat(1.0);
+    return origLabels.vectorizedMap((Float32x4 element) => element.equal(target).select(ones, zero));
   }
 
   @override
