@@ -7,9 +7,6 @@ final zeroes = Float32x4.splat(0.0);
 final ones = Float32x4.splat(1.0);
 final exponents = Float32x4.splat(math.e);
 
-ScoreToProbLinkFunction logitLink =
-    (double score) => 1 / (1.0 + math.exp(-score));
-
 VectorizedScoreToProbLinkFunction<Float32x4> vectorizedLogitLink =
     (Float32x4 scores) => ones / (ones + Float32x4(
   //@TODO: find a more efficient way to raise exponent to the float power in SIMD way
