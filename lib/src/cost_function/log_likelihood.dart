@@ -17,10 +17,6 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
     return _indicator(yOrig, -1.0) * math.log(1 - probability) + _indicator(yOrig, 1.0) * math.log(probability);
   }
 
-  @override
-  double getPartialDerivative(int idx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
-      x[idx] * (_indicator(y, 1.0) - linkFunctions.logitLink(x.dot(w)));
-
   int _indicator(double y, double target) => target == y ? 1 : 0;
 
   @override
