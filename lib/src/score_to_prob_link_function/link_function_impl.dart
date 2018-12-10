@@ -5,7 +5,7 @@ import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
 
 final zeroes = Float32x4.splat(0.0);
 final ones = Float32x4.splat(1.0);
-final exps = Float32x4.splat(math.e);
+final exponents = Float32x4.splat(math.e);
 
 ScoreToProbLinkFunction logitLink =
     (double score) => 1 / (1.0 + math.exp(-score));
