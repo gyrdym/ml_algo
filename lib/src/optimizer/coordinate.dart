@@ -14,6 +14,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
   final double _coefficientDiffThreshold;
   final int _iterationLimit;
   final double _lambda;
+
   //hyper parameters declaration end
 
   MLVector _normalizer;
@@ -58,8 +59,8 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
               _coefficientDiffThreshold ||
       iterationCount >= _iterationLimit;
 
-  double _coordinateDescentStep(int coefficientNum, MLMatrix<Float32x4> points,
-      MLVector<Float32x4> labels, MLVector<Float32x4> coefficients) {
+  double _coordinateDescentStep(
+      int coefficientNum, MLMatrix<Float32x4> points, MLVector<Float32x4> labels, MLVector<Float32x4> coefficients) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;
 
