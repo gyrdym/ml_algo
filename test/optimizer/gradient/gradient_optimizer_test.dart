@@ -5,8 +5,8 @@ import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/optimizer/gradient.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/generator.dart';
-import 'package:mockito/mockito.dart';
 import 'package:ml_linalg/linalg.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 class RandomizerMock extends Mock implements Randomizer {}
@@ -50,12 +50,12 @@ GradientOptimizer createOptimizer(
         lambda: lambda,
         batchSize: batchSize);
 
-void mockGetGradient({Iterable<Iterable<double>> x, Iterable<double> w, Iterable<double> y,
-    Iterable<double> gradient}) {
+void mockGetGradient(
+    {Iterable<Iterable<double>> x, Iterable<double> w, Iterable<double> y, Iterable<double> gradient}) {
   when(costFunctionMock.getGradient(
-      x == null ? any : argThat(equals(x)),
-      w == null ? any : argThat(equals(w)),
-      y == null ? any : argThat(equals(y)),
+    x == null ? any : argThat(equals(x)),
+    w == null ? any : argThat(equals(w)),
+    y == null ? any : argThat(equals(y)),
   )).thenReturn(Float32x4VectorFactory.from(gradient ?? []));
 }
 
@@ -67,12 +67,11 @@ void verifyNeverGetGradientCall({Iterable<Iterable<double>> x, Iterable<double> 
   ));
 }
 
-void verifyGetGradientCall({Iterable<Iterable<double>> x, Iterable<double> w, Iterable<double> y,
-  int callCount}) {
+void verifyGetGradientCall({Iterable<Iterable<double>> x, Iterable<double> w, Iterable<double> y, int callCount}) {
   verify(costFunctionMock.getGradient(
-      argThat(equals(x)),
-      argThat(equals(w)),
-      argThat(equals(y)),
+    argThat(equals(x)),
+    argThat(equals(w)),
+    argThat(equals(y)),
   )).called(callCount);
 }
 
@@ -92,15 +91,75 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1)).thenReturn([2, 3]);
 
-      mockGetGradient(x: [[10.0, 20.0, 30.0]], w: [0.0, 0.0, 0.0], y: [30.0], gradient: [10.0, 10.0, 10.0]);
-      mockGetGradient(x: [[10.0, 20.0, 30.0]], w: [-20.0, -20.0, -20.0], y: [30.0], gradient: [10.0, 10.0, 10.0]);
-      mockGetGradient(x: [[10.0, 20.0, 30.0]], w: [-40.0, -40.0, -40.0], y: [30.0], gradient: [10.0, 10.0, 10.0]);
+      mockGetGradient(x: [
+        [10.0, 20.0, 30.0]
+      ], w: [
+        0.0,
+        0.0,
+        0.0
+      ], y: [
+        30.0
+      ], gradient: [
+        10.0,
+        10.0,
+        10.0
+      ]);
+      mockGetGradient(x: [
+        [10.0, 20.0, 30.0]
+      ], w: [
+        -20.0,
+        -20.0,
+        -20.0
+      ], y: [
+        30.0
+      ], gradient: [
+        10.0,
+        10.0,
+        10.0
+      ]);
+      mockGetGradient(x: [
+        [10.0, 20.0, 30.0]
+      ], w: [
+        -40.0,
+        -40.0,
+        -40.0
+      ], y: [
+        30.0
+      ], gradient: [
+        10.0,
+        10.0,
+        10.0
+      ]);
 
       optimizer.findExtrema(points, labels);
 
-      verifyGetGradientCall(x: [[10.0, 20.0, 30.0]], w: [0.0, 0.0, 0.0], y: [30.0], callCount: 1);
-      verifyGetGradientCall(x: [[10.0, 20.0, 30.0]], w: [-20.0, -20.0, -20.0], y: [30.0], callCount: 1);
-      verifyGetGradientCall(x: [[10.0, 20.0, 30.0]], w: [-40.0, -40.0, -40.0], y: [30.0], callCount: 1);
+      verifyGetGradientCall(x: [
+        [10.0, 20.0, 30.0]
+      ], w: [
+        0.0,
+        0.0,
+        0.0
+      ], y: [
+        30.0
+      ], callCount: 1);
+      verifyGetGradientCall(x: [
+        [10.0, 20.0, 30.0]
+      ], w: [
+        -20.0,
+        -20.0,
+        -20.0
+      ], y: [
+        30.0
+      ], callCount: 1);
+      verifyGetGradientCall(x: [
+        [10.0, 20.0, 30.0]
+      ], w: [
+        -40.0,
+        -40.0,
+        -40.0
+      ], y: [
+        30.0
+      ], callCount: 1);
     });
 
     test('should properly process `batchSize` parameter when the latter is equal to `2` (mini batch case)', () {
@@ -111,16 +170,22 @@ void main() {
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2)).thenReturn([0, 2]);
 
       when(costFunctionMock.getGradient(
-        argThat(equals([[5.0, 10.0, 15.0], [1.0, 2.0, 3.0]])), any, argThat(equals([10.0, 20.0])))
-      ).thenReturn(Float32x4VectorFactory.from([10.0, 10.0, 10.0]));
+          argThat(equals([
+            [5.0, 10.0, 15.0],
+            [1.0, 2.0, 3.0]
+          ])),
+          any,
+          argThat(equals([10.0, 20.0])))).thenReturn(Float32x4VectorFactory.from([10.0, 10.0, 10.0]));
 
       optimizer.findExtrema(points, labels);
 
-      verify(costFunctionMock.getGradient(argThat(equals([
-        points.getRowVector(0),
-        points.getRowVector(1),
-      ])), any, argThat(equals([10.0, 20.0]))))
-      .called(3); // 3 iterations
+      verify(costFunctionMock.getGradient(
+          argThat(equals([
+            points.getRowVector(0),
+            points.getRowVector(1),
+          ])),
+          any,
+          argThat(equals([10.0, 20.0])))).called(3); // 3 iterations
     });
 
     test('should properly process `batchSize` parameter when the latter is equal to `4` (batch case)', () {
@@ -149,7 +214,8 @@ void main() {
 
       optimizer.findExtrema(points, labels);
 
-      verify(costFunctionMock.getGradient(argThat(equals(points)), any, argThat(equals(labels)))).called(iterationLimit);
+      verify(costFunctionMock.getGradient(argThat(equals(points)), any, argThat(equals(labels))))
+          .called(iterationLimit);
       verify(learningRateGeneratorMock.getNextValue()).called(iterationLimit);
     });
 
@@ -162,11 +228,8 @@ void main() {
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 2, batchSize: 2, lambda: 0.0);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0, 2]);
-      when(costFunctionMock.getGradient(
-          argThat(equals(points)),
-          any,
-          argThat(equals(labels))
-      )).thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
+      when(costFunctionMock.getGradient(argThat(equals(points)), any, argThat(equals(labels))))
+          .thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
 
       final optimalCoefficients = optimizer.findExtrema(points, labels);
 
@@ -200,11 +263,8 @@ void main() {
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2, lambda: 10.0);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0, 2]);
-      when(costFunctionMock.getGradient(
-          argThat(equals(points)),
-          any,
-          argThat(equals(labels))
-      )).thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
+      when(costFunctionMock.getGradient(argThat(equals(points)), any, argThat(equals(labels))))
+          .thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
 
       final optimalCoefficients = optimizer.findExtrema(points, labels);
 
@@ -252,9 +312,9 @@ void main() {
           createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: maxIteration, batchSize: 2, lambda: 0.0);
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0, 2]);
       when(costFunctionMock.getGradient(
-          argThat(equals(points)),
-          any,
-          argThat(equals(labels)),
+        argThat(equals(points)),
+        any,
+        argThat(equals(labels)),
       )).thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
 
       optimizer.findExtrema(points, labels);
@@ -273,9 +333,9 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 1, intervalLength: 1)).thenReturn([0, 1]);
       when(costFunctionMock.getGradient(
-          argThat(equals(points)),
-          argThat(equals([0.0, 0.0, 0.0])),
-          argThat(equals(labels)),
+        argThat(equals(points)),
+        argThat(equals([0.0, 0.0, 0.0])),
+        argThat(equals(labels)),
       )).thenReturn(Float32x4VectorFactory.from([5.0, 5.0, 5.0]));
 
       when(costFunctionMock.getGradient(

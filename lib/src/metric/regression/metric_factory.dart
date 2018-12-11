@@ -5,6 +5,7 @@ import 'package:ml_algo/src/metric/regression/type.dart';
 
 class RegressionMetricFactory {
   static RegressionMetric rmse() => const RMSEMetric();
+
   static RegressionMetric mape() => const MAPEMetric();
 
   static RegressionMetric createByType(RegressionMetricType type) {

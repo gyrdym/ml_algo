@@ -324,7 +324,11 @@ void main() {
       final probabilities = classifier.predictProbabilities(newFeatures);
       final classes = classifier.predictClasses(newFeatures);
 
-      expect(probabilities, equals([[0.01798621006309986, 0.0, 0.5]]));
+      expect(
+          probabilities,
+          equals([
+            [0.01798621006309986, 0.0, 0.5]
+          ]));
       expect(classes, equals([2]));
     });
 

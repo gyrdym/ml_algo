@@ -1,11 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
-import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/type.dart';
 import 'package:ml_algo/src/model_selection/evaluable.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
 import 'package:ml_linalg/linalg.dart';
 
 abstract class LinearClassifier implements Evaluable<Float32x4> {
@@ -21,6 +21,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
 
   MLMatrix<Float32x4> get weightsByClasses => _weightsByClasses;
   MLMatrix<Float32x4> _weightsByClasses;
+
   MLVector<Float32x4> get classLabels => _classLabels;
   MLVector<Float32x4> _classLabels;
 
@@ -41,7 +42,8 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
   MLVector<Float32x4> _makeLabelsOneVsAll(MLVector<Float32x4> origLabels, double targetLabel) {
     _classesMap.putIfAbsent(targetLabel, () => Float32x4.splat(targetLabel));
     final target = _classesMap[targetLabel];
-    return origLabels.vectorizedMap((Float32x4 element) => element.equal(target).select(_vectorizedOne, _vectorizedZero));
+    return origLabels
+        .vectorizedMap((Float32x4 element) => element.equal(target).select(_vectorizedOne, _vectorizedZero));
   }
 
   @override

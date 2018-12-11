@@ -18,6 +18,7 @@ class GradientOptimizer implements Optimizer<Float32x4> {
   final int _iterationLimit;
   final double _lambda;
   final int _batchSize;
+
   //hyper parameters declaration end
 
   MLMatrix<Float32x4> _points;
@@ -74,8 +75,8 @@ class GradientOptimizer implements Optimizer<Float32x4> {
   Iterable<int> _getBatchRange(int batchSize) =>
       _randomizer.getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
 
-  MLVector<Float32x4> _makeGradientStep(MLVector<Float32x4> coefficients,
-      MLMatrix<Float32x4> points, MLVector<Float32x4> labels, double eta,
+  MLVector<Float32x4> _makeGradientStep(
+      MLVector<Float32x4> coefficients, MLMatrix<Float32x4> points, MLVector<Float32x4> labels, double eta,
       {bool isMinimization = true}) {
     final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);

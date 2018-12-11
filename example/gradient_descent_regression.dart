@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:ml_algo/ml_algo.dart';
 import 'package:csv/csv.dart' as csv;
+import 'package:ml_algo/ml_algo.dart';
 
 Future<double> gradientDescentRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
@@ -23,8 +23,8 @@ Future<double> gradientDescentRegression() async {
       learningRate: 1e-5,
       learningRateType: LearningRateType.constant);
   final validator = CrossValidator<Float32x4>.kFold();
-  final quality = validator.evaluate(sgdRegressionModel, Float32x4MatrixFactory.from(features), labels,
-      MetricType.mape);
+  final quality =
+      validator.evaluate(sgdRegressionModel, Float32x4MatrixFactory.from(features), labels, MetricType.mape);
 
   return quality;
 }

@@ -16,7 +16,7 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
 
   @override
   MLVector<Float32x4> getGradient(MLMatrix<Float32x4> x, MLVector<Float32x4> w, MLVector<Float32x4> y) =>
-    (x.transpose() * (y - (x * w).mapColumns(linkFunction))).toVector();
+      (x.transpose() * (y - (x * w).mapColumns(linkFunction))).toVector();
 
   @override
   double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>

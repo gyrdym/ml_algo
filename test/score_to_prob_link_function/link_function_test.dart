@@ -1,5 +1,3 @@
-
-
 import 'dart:typed_data';
 
 import 'package:ml_algo/src/score_to_prob_link_function/link_function_impl.dart';
