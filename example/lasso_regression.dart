@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:ml_algo/ml_algo.dart';
 import 'package:csv/csv.dart' as csv;
+import 'package:ml_algo/ml_algo.dart';
 
 Future<double> lassoRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');

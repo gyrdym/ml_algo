@@ -4,4 +4,3 @@ dart:
 dart_task:
   - test: --platform vm
   - dartanalyzer: true
-  - dartfmt
