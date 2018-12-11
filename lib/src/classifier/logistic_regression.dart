@@ -31,6 +31,6 @@ class LogisticRegressor extends LinearClassifier {
                 iterationLimit: iterationLimit,
                 lambda: lambda,
                 batchSize: batchSize),
-            scoreToProbabilityLink.logitLink,
+            scoreToProbabilityLink.vectorizedLogitLink,
             fitIntercept ? interceptScale : 0.0);
 }

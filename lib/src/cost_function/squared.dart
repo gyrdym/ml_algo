@@ -11,12 +11,8 @@ class SquaredCost implements CostFunction<Float32x4> {
   double getCost(double predictedLabel, double originalLabel) => math.pow(predictedLabel - originalLabel, 2).toDouble();
 
   @override
-  double getPartialDerivative(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
-      -2.0 * x[wIdx] * (y - x.dot(w));
-
-  @override
-  MLMatrix<Float32x4> getGradient(MLMatrix<Float32x4> x, MLMatrix<Float32x4> w, MLMatrix<Float32x4> y) =>
-      x.transpose() * -2 * (y - x * w);
+  MLVector<Float32x4> getGradient(MLMatrix<Float32x4> x, MLVector<Float32x4> w, MLVector<Float32x4> y) =>
+      (x.transpose() * -2 * (y - x * w)).toVector();
 
   @override
   double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>

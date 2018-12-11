@@ -77,13 +77,7 @@ class GradientOptimizer implements Optimizer<Float32x4> {
   MLVector<Float32x4> _makeGradientStep(MLVector<Float32x4> coefficients,
       MLMatrix<Float32x4> points, MLVector<Float32x4> labels, double eta,
       {bool isMinimization = true}) {
-    var gradient = Float32x4VectorFactory.zero(coefficients.length);
-    for (var i = 0; i < points.rowsNum; i++) {
-      final derivatives = List.generate(coefficients.length,
-          (int j) => _costFunction.getPartialDerivative(j, points.getRowVector(i), coefficients, labels[i]));
-      gradient += Float32x4VectorFactory.from(derivatives);
-    }
-
+    final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
     return isMinimization ? regularizedCoefficients - gradient * eta : regularizedCoefficients + gradient * eta;
   }
@@ -91,8 +85,8 @@ class GradientOptimizer implements Optimizer<Float32x4> {
   MLVector<Float32x4> _regularize(double eta, double lambda, MLVector<Float32x4> coefficients) {
     if (lambda == 0) {
       return coefficients;
+    } else {
+      return coefficients * (1 - 2 * eta * lambda);
     }
-
-    return coefficients * (1 - 2 * eta * lambda);
   }
 }

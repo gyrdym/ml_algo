@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/classifier/logistic_regression.dart';
+import 'package:ml_algo/src/metric/type.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
@@ -292,9 +293,10 @@ void main() {
       // update:
       // [-5.5, -6.5, -18.0] + eta * [9.0, 8.0, 5.0] = [-5.5, -6.5, -18.0] + 1.0 * [9.0, 8.0, 5.0] = [3.5, 1.5, -13.0]
 
-      final class1Weights = classifier.weightsByClasses[0];
-      final class2Weights = classifier.weightsByClasses[1];
-      final class3Weights = classifier.weightsByClasses[2];
+      final weights = classifier.weightsByClasses.transpose();
+      final class1Weights = weights.getRowVector(0).toList();
+      final class2Weights = weights.getRowVector(1).toList();
+      final class3Weights = weights.getRowVector(2).toList();
 
       expect(class1Weights, equals([3.5, -0.5, -9.0]));
 
@@ -303,7 +305,66 @@ void main() {
       expect(class2Weights[2], closeTo(-0.06, 0.02));
 
       expect(class3Weights, equals([3.5, 1.5, -13.0]));
-    }, skip: true);
+    });
+
+    test('should make prediction', () {
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+        [10.0, 12.0, 31.0],
+        [9.0, 8.0, 5.0],
+        [4.0, 0.0, 1.0],
+      ]);
+      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      classifier.fit(features, labels);
+
+      final newFeatures = Float32x4MatrixFactory.from([
+        [2.0, 4.0, 1.0],
+      ]);
+      final probabilities = classifier.predictProbabilities(newFeatures);
+      final classes = classifier.predictClasses(newFeatures);
+
+      expect(probabilities, equals([[0.01798621006309986, 0.0, 0.5]]));
+      expect(classes, equals([2]));
+    });
+
+    test('should evaluate prediction quality, error = 1', () {
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+        [10.0, 12.0, 31.0],
+        [9.0, 8.0, 5.0],
+        [4.0, 0.0, 1.0],
+      ]);
+      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      classifier.fit(features, labels);
+
+      final newFeatures = Float32x4MatrixFactory.from([
+        [2.0, 4.0, 1.0],
+      ]);
+      final origLabels = Float32x4VectorFactory.from([1.0]);
+      final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
+      expect(error, equals(1.0));
+    });
+
+    test('should evaluate prediction quality, error = 0', () {
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+        [10.0, 12.0, 31.0],
+        [9.0, 8.0, 5.0],
+        [4.0, 0.0, 1.0],
+      ]);
+      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      classifier.fit(features, labels);
+
+      final newFeatures = Float32x4MatrixFactory.from([
+        [2.0, 4.0, 1.0],
+      ]);
+      final origLabels = Float32x4VectorFactory.from([2.0]);
+      final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
+      expect(error, equals(0.0));
+    });
 
     test('should consider intercept term', () {
       final classifier = LogisticRegressor(
@@ -373,12 +434,12 @@ void main() {
       // derivative: [0.0, -2.0, -2.5, -1.5]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [0.0, -2.0, -2.5, -1.5] = [0.0, -2.0, -2.5, -1.5]
       expect(
-          classifier.weightsByClasses,
+          classifier.weightsByClasses.transpose(),
           equals([
             [0.0, 2.0, 2.5, 1.5],
             [0.0, -2.0, -2.5, -1.5]
           ]));
-    }, skip: true);
+    });
 
     test('should consider intercept scale if intercept term is going to be fitted', () {
       final classifier = LogisticRegressor(
@@ -462,11 +523,11 @@ void main() {
       // derivative: [-1.0, -3.5, -4.5, -4.0]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [-1.0, -3.5, -4.5, -4.0] = [-1.0, -3.5, -4.5, -4.0]
       expect(
-          classifier.weightsByClasses,
+          classifier.weightsByClasses.transpose(),
           equals([
             [1.0, 3.5, 4.5, 4.0],
             [-1.0, -3.5, -4.5, -4.0]
           ]));
-    }, skip: true);
+    });
   });
 }
