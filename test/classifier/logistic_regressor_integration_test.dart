@@ -305,6 +305,27 @@ void main() {
       expect(class3Weights, equals([3.5, 1.5, -13.0]));
     });
 
+    test('should make prediction', () {
+      final features = Float32x4MatrixFactory.from([
+        [5.0, 7.0, 6.0],
+        [1.0, 2.0, 3.0],
+        [10.0, 12.0, 31.0],
+        [9.0, 8.0, 5.0],
+        [4.0, 0.0, 1.0],
+      ]);
+      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      classifier.fit(features, labels);
+
+      final newFeatures = Float32x4MatrixFactory.from([
+        [2.0, 4.0, 1.0],
+      ]);
+      final probabilities = classifier.predictProbabilities(newFeatures);
+      final classes = classifier.predictClasses(newFeatures);
+
+      expect(probabilities, equals([[0.01798621006309986, 0.0, 0.5]]));
+      expect(classes, equals([2]));
+    });
+
     test('should consider intercept term', () {
       final classifier = LogisticRegressor(
           batchSize: 2,
