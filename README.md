@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/gyrdym/ml_algo.svg?branch=master)](https://travis-ci.com/gyrdym/ml_algo)
+
 # Machine learning algorithms with dart
 
 Following algorithms are implemented:
