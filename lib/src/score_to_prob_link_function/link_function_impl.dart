@@ -5,7 +5,6 @@ import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
 
 final zeroes = Float32x4.splat(0.0);
 final ones = Float32x4.splat(1.0);
-final exponents = Float32x4.splat(math.e);
 
 VectorizedScoreToProbLinkFunction<Float32x4> vectorizedLogitLink =
     (Float32x4 scores) => ones / (ones + Float32x4(
