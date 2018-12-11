@@ -35,7 +35,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
       return _optimizer.findExtrema(processedFeatures, labels,
           initialWeights: initialWeights, arePointsNormalized: isDataNormalized, isMinimizingObjective: false);
     });
-    _weightsByClasses = Float32x4MatrixFactory.rows(weights);
+    _weightsByClasses = Float32x4MatrixFactory.columns(weights);
   }
 
   MLVector<Float32x4> _makeLabelsOneVsAll(MLVector<Float32x4> origLabels, double targetLabel) {
@@ -46,9 +46,9 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
 
   @override
   double test(MLMatrix<Float32x4> features, MLVector<Float32x4> origLabels, MetricType metricType) {
-    final metric = MetricFactory.createByType(metricType);
+    final evaluator = MetricFactory.createByType(metricType);
     final prediction = predictClasses(features);
-    return metric.getError(prediction, origLabels);
+    return evaluator.getError(prediction, origLabels);
   }
 
   MLMatrix<Float32x4> predictProbabilities(MLMatrix<Float32x4> features) {
@@ -68,10 +68,9 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
   }
 
   MLMatrix<Float32x4> _predictProbabilities(MLMatrix<Float32x4> processedFeatures) {
-    final weights = _weightsByClasses.transpose();
-    final distributions = List<MLVector<Float32x4>>(weights.columnsNum);
-    for (int i = 0; i < weights.columnsNum; i++) {
-      final scores = (processedFeatures * weights.getColumnVector(i)).toVector();
+    final distributions = List<MLVector<Float32x4>>(_weightsByClasses.columnsNum);
+    for (int i = 0; i < _weightsByClasses.columnsNum; i++) {
+      final scores = (processedFeatures * _weightsByClasses.getColumnVector(i)).toVector();
       distributions[i] = scores.vectorizedMap(_linkScoreToProbability);
     }
     return Float32x4MatrixFactory.columns(distributions);
