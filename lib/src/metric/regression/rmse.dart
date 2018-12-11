@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
+
 import 'package:ml_algo/src/metric/regression/metric.dart';
 import 'package:ml_linalg/linalg.dart';
 

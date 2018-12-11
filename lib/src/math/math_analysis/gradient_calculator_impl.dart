@@ -28,7 +28,9 @@ class GradientCalculatorImpl implements GradientCalculator<Float32x4> {
       int targetArgPosition) {
     final deltaK = _argumentDeltaMatrix[targetArgPosition];
     return (function(targetVector + deltaK, vectorArgs, scalarArgs) -
-            function(targetVector - deltaK, vectorArgs, scalarArgs)) / 2 / argumentDelta;
+            function(targetVector - deltaK, vectorArgs, scalarArgs)) /
+        2 /
+        argumentDelta;
   }
 
   List<MLVector<Float32x4>> _generateArgumentsDeltaMatrix(double delta, int length) {

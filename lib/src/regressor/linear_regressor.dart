@@ -25,8 +25,7 @@ abstract class LinearRegressor implements Evaluable<Float32x4> {
   }
 
   @override
-  double test(
-      MLMatrix<Float32x4> features, MLVector<Float32x4> origLabels, MetricType metricType) {
+  double test(MLMatrix<Float32x4> features, MLVector<Float32x4> origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getError(prediction, origLabels);

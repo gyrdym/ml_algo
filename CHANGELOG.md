@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.5.3
+- `dartfmt` tool applied to all necessary files
+
 ## 3.5.2
 - Travis configuration file name corrected 
 
