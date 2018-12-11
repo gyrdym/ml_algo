@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.5.1
+- Travis integration added
+
 ## 3.5.0
 - Vectorized cost functions applied
 
