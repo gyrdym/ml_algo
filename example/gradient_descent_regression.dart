@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:csv/csv.dart' as csv;
 
-Future gradientDescentRegression() async {
+Future<double> gradientDescentRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
   final input = File('example/datasets/advertising.csv').openRead();
   final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
@@ -23,9 +23,8 @@ Future gradientDescentRegression() async {
       learningRate: 1e-5,
       learningRateType: LearningRateType.constant);
   final validator = CrossValidator<Float32x4>.kFold();
-  final quality = (validator.evaluate(sgdRegressionModel, Float32x4MatrixFactory.from(features), labels,
-      MetricType.mape)).toStringAsFixed(2);
+  final quality = validator.evaluate(sgdRegressionModel, Float32x4MatrixFactory.from(features), labels,
+      MetricType.mape);
 
-  print('Stochastic gradient descent regression, K-fold cross validation with MAPE metric (error in percents):');
-  print('${quality}%');
+  return quality;
 }

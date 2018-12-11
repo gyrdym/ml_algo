@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:csv/csv.dart' as csv;
 
-Future lassoRegression() async {
+Future<double> lassoRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
   final input = File('example/datasets/advertising.csv').openRead();
   final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
@@ -20,10 +20,5 @@ Future lassoRegression() async {
   final lassoRegressionModel = LassoRegressor(iterationLimit: 100, lambda: 6750.0);
   final validator = CrossValidator<Float32x4>.kFold();
 
-  print(
-      'Lasso regression, K-fold cross validation with MAPE metric:\n${validator.evaluate(lassoRegressionModel,
-          Float32x4MatrixFactory.from(features), labels, MetricType.mape)}');
-  print(
-      'Feature weights (possibly, some weights are downgraded to zero, cause it is an objective of Lasso Regression):');
-  print(lassoRegressionModel.weights);
+  return validator.evaluate(lassoRegressionModel, Float32x4MatrixFactory.from(features), labels, MetricType.mape);
 }
