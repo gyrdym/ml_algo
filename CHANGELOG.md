@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.5.0
+- Vectorized cost functions applied
+
 ## 3.4.0
 - `ml_linalg` 2.0.0 supported
 
