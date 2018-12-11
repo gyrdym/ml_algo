@@ -1,5 +1,8 @@
 # Changelog
 
+## 3.5.2
+- Travis configuration file name corrected 
+
 ## 3.5.1
 - Travis integration added
 

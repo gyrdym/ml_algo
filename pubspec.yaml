@@ -1,6 +1,6 @@
 name: ml_algo
 description: Popular machine learning algorithms with native dart (without bindings to any platforms)
-version: 3.5.1
+version: 3.5.2
 author: Ilia Gyrdymov <ilgyrd@gmail.com>
 homepage: https://github.com/gyrdym/ml_algo
 
