@@ -51,8 +51,23 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
     return metric.getError(prediction, origLabels);
   }
 
-  MLMatrix<Float32x4> predictProbabilities(MLMatrix<Float32x4> features, {bool interceptConsidered = false}) {
-    final processedFeatures = interceptConsidered ? features : _interceptPreprocessor.addIntercept(features);
+  MLMatrix<Float32x4> predictProbabilities(MLMatrix<Float32x4> features) {
+    final processedFeatures = _interceptPreprocessor.addIntercept(features);
+    return _predictProbabilities(processedFeatures);
+  }
+
+  MLVector<Float32x4> predictClasses(MLMatrix<Float32x4> features) {
+    final processedFeatures = _interceptPreprocessor.addIntercept(features);
+    final distributions = _predictProbabilities(processedFeatures);
+    final classes = List<double>(processedFeatures.rowsNum);
+    for (int i = 0; i < distributions.rowsNum; i++) {
+      final probabilities = distributions.getRowVector(i);
+      classes[i] = probabilities.toList().indexOf(probabilities.max()) * 1.0;
+    }
+    return Float32x4VectorFactory.from(classes);
+  }
+
+  MLMatrix<Float32x4> _predictProbabilities(MLMatrix<Float32x4> processedFeatures) {
     final weights = _weightsByClasses.transpose();
     final distributions = List<MLVector<Float32x4>>(weights.columnsNum);
     for (int i = 0; i < weights.columnsNum; i++) {
@@ -60,16 +75,5 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
       distributions[i] = scores.vectorizedMap(_linkScoreToProbability);
     }
     return Float32x4MatrixFactory.columns(distributions);
-  }
-
-  MLVector<Float32x4> predictClasses(MLMatrix<Float32x4> features) {
-    final processedFeatures = _interceptPreprocessor.addIntercept(features);
-    final distributions = predictProbabilities(processedFeatures, interceptConsidered: true);
-    final classes = List<double>(processedFeatures.rowsNum);
-    for (int i = 0; i < distributions.rowsNum; i++) {
-      final probabilities = distributions.getRowVector(i);
-      classes[i] = probabilities.toList().indexOf(probabilities.max()) * 1.0;
-    }
-    return Float32x4VectorFactory.from(classes);
   }
 }
