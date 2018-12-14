@@ -42,7 +42,7 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.8"
+    version: "1.0.2"
   build_config:
     dependency: transitive
     description:
@@ -63,14 +63,14 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.3"
+    version: "1.1.2"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.2"
   build_test:
     dependency: "direct dev"
     description:
@@ -91,7 +91,7 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.6"
+    version: "6.2.0"
   charcode:
     dependency: transitive
     description:
@@ -273,7 +273,7 @@ packages:
       name: ml_linalg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.3.0"
   mockito:
     dependency: "direct dev"
     description:

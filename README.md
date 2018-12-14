@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.com/gyrdym/ml_algo.svg?branch=master)](https://travis-ci.com/gyrdym/ml_algo)
+[![pub package](https://img.shields.io/pub/v/ml_algo.svg)](https://pub.dartlang.org/packages/ml_algo)
+[![Gitter Chat](https://badges.gitter.im/gyrdym/gyrdym.svg)](https://gitter.im/gyrdym/)
 
 # Machine learning algorithms with dart
 
@@ -80,3 +82,8 @@ score (MAPE): 31.221150755882263
 ````
 
 For more examples please see [examples folder](https://github.com/gyrdym/dart_ml/tree/master/example)
+
+### Contacts
+If you have questions, feel free to write me on 
+ - [Facebook](https://www.facebook.com/ilya.gyrdymov)
+ - [Linkedin](https://www.linkedin.com/in/gyrdym/)
