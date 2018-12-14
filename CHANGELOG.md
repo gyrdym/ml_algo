@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.5.4
+- README.md updated
+- build_runner dependency updated
+
 ## 3.5.3
 - `dartfmt` tool applied to all necessary files
 
