@@ -7,7 +7,7 @@ void main() {
     test('should add intercept to the given points', () {
       final preprocessor = const InterceptPreprocessor(interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(
-        Float32x4MatrixFactory.from([
+        Float32x4Matrix.from([
           [4.0, 5.0, 10.0],
           [14.0, 49.0, 33.0],
           [41.0, 52.0, 101.0],
@@ -24,7 +24,7 @@ void main() {
     });
 
     test('should not mutate given data if processing takes place', () {
-      final data = Float32x4MatrixFactory.from([
+      final data = Float32x4Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
@@ -36,7 +36,7 @@ void main() {
     });
 
     test('should return the same data if scale is 0.0 (processing does nnot take place)', () {
-      final data = Float32x4MatrixFactory.from([
+      final data = Float32x4Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
@@ -53,7 +53,7 @@ void main() {
     });
 
     test('should consider scale parameter (if scale is not equal to 0.0)', () {
-      final data = Float32x4MatrixFactory.from([
+      final data = Float32x4Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
