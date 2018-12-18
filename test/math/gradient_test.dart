@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/math/math_analysis/gradient_calculator.dart';
 import 'package:ml_algo/src/math/math_analysis/gradient_calculator_impl.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
 void main() {

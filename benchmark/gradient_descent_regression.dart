@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:csv/csv.dart' as csv;
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_linalg/linalg.dart';
 
 List<List<double>> features;
 MLVector<Float32x4> labels;
@@ -33,7 +34,7 @@ class GDRegressorBenchmark extends BenchmarkBase {
 
 Future gradientDescentRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
-  final input = File('example/datasets/advertising.csv').openRead();
+  final input = File('datasets/advertising.csv').openRead();
   final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
 
   List<double> extractFeatures(List item) =>
