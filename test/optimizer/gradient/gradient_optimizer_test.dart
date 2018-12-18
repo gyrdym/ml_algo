@@ -30,11 +30,11 @@ LearningRateGenerator createLearningRateGenerator() {
 
 InitialWeightsGenerator<Float32x4> createInitialWeightsGenerator() {
   final mock = InitialWeightsGeneratorMock();
-  when(mock.generate(3)).thenReturn(Float32x4VectorFactory.from([0.0, 0.0, 0.0]));
+  when(mock.generate(3)).thenReturn(Float32x4Vector.from([0.0, 0.0, 0.0]));
   return mock;
 }
 
-MLMatrix<Float32x4> getPoints() => Float32x4MatrixFactory.from([
+MLMatrix<Float32x4> getPoints() => Float32x4Matrix.from([
       [5.0, 10.0, 15.0],
       [1.0, 2.0, 3.0],
       [10.0, 20.0, 30.0],
@@ -56,7 +56,7 @@ void mockGetGradient(
     x == null ? any : argThat(equals(x)),
     w == null ? any : argThat(equals(w)),
     y == null ? any : argThat(equals(y)),
-  )).thenReturn(Float32x4VectorFactory.from(gradient ?? []));
+  )).thenReturn(Float32x4Vector.from(gradient ?? []));
 }
 
 void verifyNeverGetGradientCall({Iterable<Iterable<double>> x, Iterable<double> w, Iterable<double> y}) {
@@ -86,7 +86,7 @@ void main() {
 
     test('should properly process `batchSize` parameter when the latter is equal to `1` (stochastic case)', () {
       final points = getPoints();
-      final labels = Float32x4VectorFactory.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 1);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1)).thenReturn([2, 3]);
@@ -164,7 +164,7 @@ void main() {
 
     test('should properly process `batchSize` parameter when the latter is equal to `2` (mini batch case)', () {
       final points = getPoints();
-      final labels = Float32x4VectorFactory.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2)).thenReturn([0, 2]);
@@ -175,14 +175,14 @@ void main() {
             [1.0, 2.0, 3.0]
           ])),
           any,
-          argThat(equals([10.0, 20.0])))).thenReturn(Float32x4VectorFactory.from([10.0, 10.0, 10.0]));
+          argThat(equals([10.0, 20.0])))).thenReturn(Float32x4Vector.from([10.0, 10.0, 10.0]));
 
       optimizer.findExtrema(points, labels);
 
       verify(costFunctionMock.getGradient(
           argThat(equals([
-            points.getRowVector(0),
-            points.getRowVector(1),
+            points.getRow(0),
+            points.getRow(1),
           ])),
           any,
           argThat(equals([10.0, 20.0])))).called(3); // 3 iterations
@@ -190,12 +190,12 @@ void main() {
 
     test('should properly process `batchSize` parameter when the latter is equal to `4` (batch case)', () {
       final points = getPoints();
-      final labels = Float32x4VectorFactory.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 4);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4)).thenReturn([0, 4]);
       when(costFunctionMock.getGradient(argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(Float32x4VectorFactory.from([10.0, 10.0, 10.0]));
+          .thenReturn(Float32x4Vector.from([10.0, 10.0, 10.0]));
 
       optimizer.findExtrema(points, labels);
 
@@ -206,11 +206,11 @@ void main() {
     test('should cut the batch size parameter to make it equal to the number of given points', () {
       final iterationLimit = 3;
       final points = getPoints();
-      final labels = Float32x4VectorFactory.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = Float32x4Vector.from([10.0, 20.0, 30.0, 40.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: iterationLimit, batchSize: 15);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4)).thenReturn([0, 4]);
-      when(costFunctionMock.getGradient(any, any, any)).thenReturn(Float32x4VectorFactory.from([10.0, 10.0, 10.0]));
+      when(costFunctionMock.getGradient(any, any, any)).thenReturn(Float32x4Vector.from([10.0, 10.0, 10.0]));
 
       optimizer.findExtrema(points, labels);
 
@@ -220,16 +220,16 @@ void main() {
     });
 
     test('should find optimal coefficient values', () {
-      final points = Float32x4MatrixFactory.from([
+      final points = Float32x4Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = Float32x4VectorFactory.from([7.0, 8.0]);
+      final labels = Float32x4Vector.from([7.0, 8.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 2, batchSize: 2, lambda: 0.0);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0, 2]);
       when(costFunctionMock.getGradient(argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
+          .thenReturn(Float32x4Vector.from([8.0, 8.0, 8.0]));
 
       final optimalCoefficients = optimizer.findExtrema(points, labels);
 
@@ -255,16 +255,16 @@ void main() {
     });
 
     test('should find optimal coefficient values and regularize it', () {
-      final points = Float32x4MatrixFactory.from([
+      final points = Float32x4Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = Float32x4VectorFactory.from([7.0, 8.0]);
+      final labels = Float32x4Vector.from([7.0, 8.0]);
       final optimizer = createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 2, lambda: 10.0);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0, 2]);
       when(costFunctionMock.getGradient(argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
+          .thenReturn(Float32x4Vector.from([8.0, 8.0, 8.0]));
 
       final optimalCoefficients = optimizer.findExtrema(points, labels);
 
@@ -303,11 +303,11 @@ void main() {
     test('should consider `iterationLimit` parameter', () {
       const maxIteration = 2000;
 
-      final points = Float32x4MatrixFactory.from([
+      final points = Float32x4Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = Float32x4VectorFactory.from([7.0, 8.0]);
+      final labels = Float32x4Vector.from([7.0, 8.0]);
       final optimizer =
           createOptimizer(minCoeffUpdate: 1e-100, iterationsLimit: maxIteration, batchSize: 2, lambda: 0.0);
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2)).thenReturn([0, 2]);
@@ -315,7 +315,7 @@ void main() {
         argThat(equals(points)),
         any,
         argThat(equals(labels)),
-      )).thenReturn(Float32x4VectorFactory.from([8.0, 8.0, 8.0]));
+      )).thenReturn(Float32x4Vector.from([8.0, 8.0, 8.0]));
 
       optimizer.findExtrema(points, labels);
 
@@ -324,10 +324,10 @@ void main() {
 
     test('should consider `minCoefficientsUpdate` parameter', () {
       final minCoefficientsUpdate = 4.0;
-      final points = Float32x4MatrixFactory.from([
+      final points = Float32x4Matrix.from([
         [1.0, 2.0, 3.0],
       ]);
-      final labels = Float32x4VectorFactory.from([1.0]);
+      final labels = Float32x4Vector.from([1.0]);
       final optimizer =
           createOptimizer(minCoeffUpdate: minCoefficientsUpdate, iterationsLimit: 1000000, batchSize: 1, lambda: 0.0);
 
@@ -336,19 +336,19 @@ void main() {
         argThat(equals(points)),
         argThat(equals([0.0, 0.0, 0.0])),
         argThat(equals(labels)),
-      )).thenReturn(Float32x4VectorFactory.from([5.0, 5.0, 5.0]));
+      )).thenReturn(Float32x4Vector.from([5.0, 5.0, 5.0]));
 
       when(costFunctionMock.getGradient(
         argThat(equals(points)),
         argThat(equals([-10.0, -10.0, -10.0])),
         argThat(equals(labels)),
-      )).thenReturn(Float32x4VectorFactory.from([2.0, 2.0, 2.0]));
+      )).thenReturn(Float32x4Vector.from([2.0, 2.0, 2.0]));
 
       when(costFunctionMock.getGradient(
         argThat(equals(points)),
         argThat(equals([-14.0, -14.0, -14.0])),
         argThat(equals(labels)),
-      )).thenReturn(Float32x4VectorFactory.from([1.0, 1.0, 1.0]));
+      )).thenReturn(Float32x4Vector.from([1.0, 1.0, 1.0]));
 
       // c_1 = c_1_prev - eta * partial = 0 - 2 * 5 = -10
       // c_2 = c_2_prev - eta * partial = 0 - 2 * 5 = -10

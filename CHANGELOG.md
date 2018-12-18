@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.0.0
+- `ml_linal` ^4.0.0 supported
+
 ## 3.5.4
 - README.md updated
 - build_runner dependency updated

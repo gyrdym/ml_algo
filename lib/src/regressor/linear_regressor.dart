@@ -34,8 +34,8 @@ abstract class LinearRegressor implements Evaluable<Float32x4> {
   MLVector<Float32x4> predict(MLMatrix<Float32x4> features) {
     final labels = List<double>(features.rowsNum);
     for (int i = 0; i < features.rowsNum; i++) {
-      labels[i] = _weights.dot(features.getRowVector(i));
+      labels[i] = _weights.dot(features.getRow(i));
     }
-    return Float32x4VectorFactory.from(labels);
+    return Float32x4Vector.from(labels);
   }
 }

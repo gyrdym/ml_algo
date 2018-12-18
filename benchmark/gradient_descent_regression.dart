@@ -20,7 +20,7 @@ class GDRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    regressor.fit(Float32x4MatrixFactory.from(features), labels);
+    regressor.fit(Float32x4Matrix.from(features), labels);
   }
 
   @override
@@ -41,7 +41,7 @@ Future gradientDescentRegression() async {
 
   features = fields.map<List<double>>(extractFeatures).toList(growable: false);
 
-  labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
+  labels = Float32x4Vector.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
 
   GDRegressorBenchmark.main();
 }

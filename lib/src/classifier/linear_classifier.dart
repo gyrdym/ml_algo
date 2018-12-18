@@ -36,14 +36,15 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
       return _optimizer.findExtrema(processedFeatures, labels,
           initialWeights: initialWeights, arePointsNormalized: isDataNormalized, isMinimizingObjective: false);
     });
-    _weightsByClasses = Float32x4MatrixFactory.columns(weights);
+    _weightsByClasses = Float32x4Matrix.columns(weights);
   }
 
   MLVector<Float32x4> _makeLabelsOneVsAll(MLVector<Float32x4> origLabels, double targetLabel) {
     _classesMap.putIfAbsent(targetLabel, () => Float32x4.splat(targetLabel));
     final target = _classesMap[targetLabel];
     return origLabels
-        .vectorizedMap((Float32x4 element) => element.equal(target).select(_vectorizedOne, _vectorizedZero));
+        .vectorizedMap((Float32x4 element, [int start, int end]) => element.equal(target)
+        .select(_vectorizedOne, _vectorizedZero));
   }
 
   @override
@@ -63,18 +64,19 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
     final distributions = _predictProbabilities(processedFeatures);
     final classes = List<double>(processedFeatures.rowsNum);
     for (int i = 0; i < distributions.rowsNum; i++) {
-      final probabilities = distributions.getRowVector(i);
+      final probabilities = distributions.getRow(i);
       classes[i] = probabilities.toList().indexOf(probabilities.max()) * 1.0;
     }
-    return Float32x4VectorFactory.from(classes);
+    return Float32x4Vector.from(classes);
   }
 
   MLMatrix<Float32x4> _predictProbabilities(MLMatrix<Float32x4> processedFeatures) {
     final distributions = List<MLVector<Float32x4>>(_weightsByClasses.columnsNum);
     for (int i = 0; i < _weightsByClasses.columnsNum; i++) {
-      final scores = (processedFeatures * _weightsByClasses.getColumnVector(i)).toVector();
-      distributions[i] = scores.vectorizedMap(_linkScoreToProbability);
+      final scores = (processedFeatures * _weightsByClasses.getColumn(i)).toVector();
+      distributions[i] = scores.vectorizedMap((Float32x4 el, [int startOffset, int endOffset]) =>
+          _linkScoreToProbability(el));
     }
-    return Float32x4MatrixFactory.columns(distributions);
+    return Float32x4Matrix.columns(distributions);
   }
 }
