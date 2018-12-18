@@ -5,10 +5,11 @@ import 'dart:typed_data';
 
 import 'package:csv/csv.dart' as csv;
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_linalg/linalg.dart';
 
 Future<double> gradientDescentRegression() async {
   final csvCodec = csv.CsvCodec(eol: '\n');
-  final input = File('example/datasets/advertising.csv').openRead();
+  final input = File('datasets/advertising.csv').openRead();
   final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
 
   List<double> extractFeatures(List<dynamic> item) =>
