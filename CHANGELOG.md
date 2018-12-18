@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.1.0
+- `ml_linalg` removed from export file
+- README refreshed
+- General `datasets` directory created
+
 ## 4.0.0
 - `ml_linal` ^4.0.0 supported
 

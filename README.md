@@ -6,79 +6,153 @@
 
 Following algorithms are implemented:
 - Linear regression:
-    - gradient descent models (batch, mini-batch, stochastic) with ridge regularization
-    - lasso model (feature selection model)
+    - gradient descent algorithm (batch, mini-batch, stochastic) with ridge regularization
+    - lasso regression (feature selection model)
 
 - Linear classifier:
     - Logistic regression (with "one-vs-all" multinomial classification)
     
 ## Usage
 
-### A simple usage example (Linear regression with stochastic gradient descent):
+### Real life example
+
+Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
+via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regression.dart)
 
 Import all necessary packages: 
 
 ````dart  
-import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'package:ml_algo/ml_algo.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:csv/csv.dart' as csv;
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_linalg/linalg.dart';
 ````
 
-Read `csv`-file `advertising.csv` with test data:
+Read `csv`-file `pima_indians_diabetes_database.csv` with test data. You can use csv from the library's [datasets directory]():
 ````dart
 final csvCodec = csv.CsvCodec(eol: '\n');
-final input = File('example/datasets/advertising.csv').openRead();
-final fields = (await input.transform(utf8.decoder)
-  .transform(csvCodec.decoder).toList())
-  .sublist(1);
+final input = File('datasets/pima_indians_diabetes_database.csv').openRead();
+final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
 ````
 
-Data in this file is represented by 200 lines, every line contains 4 elements. First 3 elements of every line are features and the last one is label.
-Let's extract features from the data. Declare utility method `extractFeatures`, that extracts 3 elements from every line:
+Data in this file is represented by 768 records and 8 features. Let's do some data preprocessing.
+Let's extract features from the data. Declare utility function `extractFeatures`:
 ````dart
-List<double> extractFeatures(List<dynamic> item) => item.sublist(0, 3)
-      .map((dynamic feature) => (feature as num).toDouble())
-      .toList();
+final extractFeatures = (List<Object> item) => item.map((Object feature) => (feature as num).toDouble()).toList();
 ````
 
-...and finally get all features:
+...and get all features:
 ```dart
-final features = fields
-  .map(extractFeatures)
-  .toList(growable: false);
+final features = fields.map((List item) => extractFeatures(item.sublist(0, item.length - 1))).toList(growable: false);
 ```
 
-...and labels (last element of a every line)
+For now, our features are just a list. For further processing we should create a matrix, based on the feature list:
 ````dart
-final labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
+final featuresMatrix = Float32x4Matrix.from(features);
 ````
 
-Create an instance of `CrossValidator` class for evaluating quality of our predictor
+To get more information about `Float32x4Matrix`, please, see [ml_linal repo](https://github.com/gyrdym/ml_linalg)
+
+Also, we need to extract labels (last element of each line)
+````dart
+final labels = Float32x4Vector.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
+````
+
+Then, we should create an instance of `CrossValidator` class for fitting [hyper parameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) 
+of our model
 ````dart
 final validator = CrossValidator<Float32x4>.KFold();
 ````
 
-Create a linear regressor instance with stochastic gradient descent optimizer:
+All are set, so, we can perform our classification. For better hyperparameters fitting, let's create a loop in order to 
+try each value of a chosen hyperparameter in a defined range:
 ````dart
-final sgdRegressor = GradientRegressor(type: GradientType.stochastic, iterationLimit: 100000,
-                         learningRate: 1e-5, learningRateType: LearningRateType.constant);
+final step = 0.001;
+final limit = 0.6;
+double minError = double.infinity;
+double bestLearningRate = 0.0;
+for (double rate = step; rate < limit; rate += step) {
+  // ...
+}
+````    
+Let's create a logistic regression classifier instance with stochastic gradient descent optimizer in the loop's body:
+````dart
+final logisticRegressor = LogisticRegressor(
+        iterationLimit: 100,
+        learningRate: rate,
+        batchSize: 1,
+        learningRateType: LearningRateType.constant,
+        fitIntercept: true);
 ````
 
-Evaluate our model via MAPE-metric:
+Evaluate our model via accuracy metric:
 ````dart
-final scoreMAPE = validator.evaluate(sgdRegressor, Float32x4Matrix.from(features), labels, metric: MetricType.mape);
+final error = validator.evaluate(logisticRegressor, featuresMatrix, labels, MetricType.accuracy);
+if (error < minError) {
+  minError = error;
+  bestLearningRate = rate;
+}
 ````
 
 Let's print score:
 ````dart
-print("score (MAPE): ${scoreMAPE}");
+print('best error on classification: ${(minError * 100).toFixed(2)}');
+print('best learning rate: ${bestLearningRate.toFixed(3)}');
 ````
 
-We will see something like this:
+Best model parameters search takes much time so far, so be patient. After the search is over, we will see something like 
+this:
+
 ````
-score (MAPE): 31.221150755882263
+best error on classification: 35.5%
+best learning rate: 0.155
+````
+
+All the code above all together:
+````dart
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:csv/csv.dart' as csv;
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_linalg/linalg.dart';
+
+Future<double> main() async {
+  final csvCodec = csv.CsvCodec(eol: '\n');
+  final input = File('datasets/pima_indians_diabetes_database.csv').openRead();
+  final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
+  final extractFeatures = (List<Object> item) => item.map((Object feature) => (feature as num).toDouble()).toList();
+  final features = fields.map((List item) => extractFeatures(item.sublist(0, item.length - 1))).toList(growable: false);
+  final featuresMatrix = Float32x4Matrix.from(features);
+  final labels = Float32x4Vector.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
+  final validator = CrossValidator<Float32x4>.kFold(numberOfFolds: 7);
+  final step = 0.001;
+  final limit = 0.6;
+  double minError = double.infinity;
+  double bestLearningRate = 0.0;
+  for (double rate = step; rate < limit; rate += step) {
+    final logisticRegressor = LogisticRegressor(
+        iterationLimit: 100,
+        learningRate: rate,
+        batchSize: 1,
+        learningRateType: LearningRateType.constant,
+        fitIntercept: true);
+    final error = validator.evaluate(logisticRegressor, featuresMatrix, labels, MetricType.accuracy);
+    if (error < minError) {
+      minError = error;
+      bestLearningRate = rate;
+    }
+  }
+  
+  print('best error on classification: ${(minError * 100).toFixed(2)}');
+  print('best learning rate: ${bestLearningRate.toFixed(3)}');
+}
 ````
 
 For more examples please see [examples folder](https://github.com/gyrdym/dart_ml/tree/master/example)
