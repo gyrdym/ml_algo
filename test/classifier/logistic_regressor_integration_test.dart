@@ -14,7 +14,7 @@ void main() {
     });
 
     test('should extract class labels from the data', () {
-      final features = Float32x4MatrixFactory.from([
+      final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
@@ -23,21 +23,21 @@ void main() {
         [4.0, 0.0, 1.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4VectorFactory.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
+      final labels = Float32x4Vector.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
       classifier.fit(features, labels);
 
       expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
     });
 
     test('should properly fit given data', () {
-      final features = Float32x4MatrixFactory.from([
+      final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
       // given data
@@ -294,9 +294,9 @@ void main() {
       // [-5.5, -6.5, -18.0] + eta * [9.0, 8.0, 5.0] = [-5.5, -6.5, -18.0] + 1.0 * [9.0, 8.0, 5.0] = [3.5, 1.5, -13.0]
 
       final weights = classifier.weightsByClasses.transpose();
-      final class1Weights = weights.getRowVector(0).toList();
-      final class2Weights = weights.getRowVector(1).toList();
-      final class3Weights = weights.getRowVector(2).toList();
+      final class1Weights = weights.getRow(0).toList();
+      final class2Weights = weights.getRow(1).toList();
+      final class3Weights = weights.getRow(2).toList();
 
       expect(class1Weights, equals([3.5, -0.5, -9.0]));
 
@@ -308,17 +308,17 @@ void main() {
     });
 
     test('should make prediction', () {
-      final features = Float32x4MatrixFactory.from([
+      final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
-      final newFeatures = Float32x4MatrixFactory.from([
+      final newFeatures = Float32x4Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
@@ -333,39 +333,39 @@ void main() {
     });
 
     test('should evaluate prediction quality, error = 1', () {
-      final features = Float32x4MatrixFactory.from([
+      final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
-      final newFeatures = Float32x4MatrixFactory.from([
+      final newFeatures = Float32x4Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = Float32x4VectorFactory.from([1.0]);
+      final origLabels = Float32x4Vector.from([1.0]);
       final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(error, equals(1.0));
     });
 
     test('should evaluate prediction quality, error = 0', () {
-      final features = Float32x4MatrixFactory.from([
+      final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4VectorFactory.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
-      final newFeatures = Float32x4MatrixFactory.from([
+      final newFeatures = Float32x4Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = Float32x4VectorFactory.from([2.0]);
+      final origLabels = Float32x4Vector.from([2.0]);
       final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(error, equals(0.0));
     });
@@ -377,11 +377,11 @@ void main() {
           learningRateType: LearningRateType.constant,
           learningRate: 1.0,
           fitIntercept: true);
-      final features = Float32x4MatrixFactory.from([
+      final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
       ]);
-      final labels = Float32x4VectorFactory.from([0.0, 1.0]);
+      final labels = Float32x4Vector.from([0.0, 1.0]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our data should look as follows:
@@ -453,12 +453,12 @@ void main() {
           learningRate: 1.0,
           fitIntercept: true,
           interceptScale: 2.0);
-      final features = Float32x4MatrixFactory.from([
+      final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [3.0, 4.0, 5.0],
       ]);
-      final labels = Float32x4VectorFactory.from([0.0, 1.0, 0.0]);
+      final labels = Float32x4Vector.from([0.0, 1.0, 0.0]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our data should look as follows:

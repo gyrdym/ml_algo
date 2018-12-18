@@ -16,7 +16,7 @@ class GradientCalculatorImpl implements GradientCalculator<Float32x4> {
     }
     final gradient = List<double>.generate(targetVector.length,
         (int position) => _partialDerivative(function, argumentDelta, targetVector, vectorArgs, scalarArgs, position));
-    return Float32x4VectorFactory.from(gradient);
+    return Float32x4Vector.from(gradient);
   }
 
   double _partialDerivative(
@@ -36,7 +36,7 @@ class GradientCalculatorImpl implements GradientCalculator<Float32x4> {
   List<MLVector<Float32x4>> _generateArgumentsDeltaMatrix(double delta, int length) {
     final matrix = List<MLVector<Float32x4>>(length);
     for (int i = 0; i < length; i++) {
-      matrix[i] = Float32x4VectorFactory.from(List<double>.generate(length, (int idx) => idx == i ? delta : 0.0));
+      matrix[i] = Float32x4Vector.from(List<double>.generate(length, (int idx) => idx == i ? delta : 0.0));
     }
     return matrix;
   }

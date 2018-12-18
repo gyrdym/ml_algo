@@ -20,7 +20,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    regressor.fit(Float32x4MatrixFactory.from(features), labels);
+    regressor.fit(Float32x4Matrix.from(features), labels);
   }
 
   @override
@@ -39,7 +39,7 @@ Future logisticRegression() async {
   List<double> extractFeatures(List<Object> item) => item.map((Object feature) => (feature as num).toDouble()).toList();
 
   features = fields.map((List item) => extractFeatures(item.sublist(0, item.length - 1))).toList(growable: false);
-  labels = Float32x4VectorFactory.from(fields.map((List item) => (item.last as num).toDouble()));
+  labels = Float32x4Vector.from(fields.map((List item) => (item.last as num).toDouble()));
 
   LogisticRegressorBenchmark.main();
 }

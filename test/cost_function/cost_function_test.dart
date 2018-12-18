@@ -14,13 +14,13 @@ void main() {
       // where X^t - transposed X matrix
       // y - labels matrix (vector-column)
       // w - coefficients matrix (vector-column)
-      final x = Float32x4MatrixFactory.from([
+      final x = Float32x4Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
         [7.0, 8.0, 9.0],
       ]);
-      final w = Float32x4VectorFactory.from([-1.0, 2.0, -3.0]);
-      final y = Float32x4VectorFactory.from([10.0, 20.0, 30.0]);
+      final w = Float32x4Vector.from([-1.0, 2.0, -3.0]);
+      final y = Float32x4Vector.from([10.0, 20.0, 30.0]);
       final expected = [
         -2.0 * (16 + 128 + 7 * 48),
         -2.0 * (32 + 160 + 8 * 48),
@@ -44,13 +44,13 @@ void main() {
       // W - coefficients matrix (vector-column)
       // indicator - function, that returns 1 if y == 1, otherwise returns 0
       // P(y=+1|X,W) - score to link function
-      final x = Float32x4MatrixFactory.from([
+      final x = Float32x4Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
         [7.0, 8.0, 9.0],
       ]);
-      final w = Float32x4VectorFactory.from([-1.0, 2.0, -3.0]);
-      final y = Float32x4VectorFactory.from([1.0, 1.0, 0.0]);
+      final w = Float32x4Vector.from([-1.0, 2.0, -3.0]);
+      final y = Float32x4Vector.from([1.0, 1.0, 0.0]);
       final expected = [-7.0, -8.0, -9.0];
       final actual = logLikelihoodCost.getGradient(x, w, y);
 

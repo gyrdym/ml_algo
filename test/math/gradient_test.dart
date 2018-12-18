@@ -15,8 +15,8 @@ void main() {
     });
 
     test('should return a proper gradient vector', () {
-      final k = Float32x4VectorFactory.from([0.3, 0.7, 0.4]);
-      final x = Float32x4VectorFactory.from([1.0, 2.0, 3.0]);
+      final k = Float32x4Vector.from([0.3, 0.7, 0.4]);
+      final x = Float32x4Vector.from([1.0, 2.0, 3.0]);
       final y = 1.0;
 
       final gradient = calculator

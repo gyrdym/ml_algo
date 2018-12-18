@@ -16,9 +16,9 @@ Future<double> lassoRegression() async {
 
   final features = fields.map(extractFeatures).toList(growable: false);
 
-  final labels = Float32x4VectorFactory.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
+  final labels = Float32x4Vector.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
   final lassoRegressionModel = LassoRegressor(iterationLimit: 100, lambda: 6750.0);
   final validator = CrossValidator<Float32x4>.kFold();
 
-  return validator.evaluate(lassoRegressionModel, Float32x4MatrixFactory.from(features), labels, MetricType.mape);
+  return validator.evaluate(lassoRegressionModel, Float32x4Matrix.from(features), labels, MetricType.mape);
 }
