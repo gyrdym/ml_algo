@@ -29,8 +29,8 @@ void main() {
       optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
           minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
 
-      data = Float32x4MatrixFactory.from([point1, point2, point3, point4]);
-      labels = Float32x4VectorFactory.from([20.0, 30.0, 20.0, 40.0]);
+      data = Float32x4Matrix.from([point1, point2, point3, point4]);
+      labels = Float32x4Vector.from([20.0, 30.0, 20.0, 40.0]);
     });
 
     /// Given matrix X:
@@ -123,8 +123,8 @@ void main() {
       optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
           minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
 
-      data = Float32x4MatrixFactory.from([point1, point2, point3]);
-      labels = Float32x4VectorFactory.from([2.0, 3.0, 2.0]);
+      data = Float32x4Matrix.from([point1, point2, point3]);
+      labels = Float32x4Vector.from([2.0, 3.0, 2.0]);
     });
 
     /// Given matrix x:

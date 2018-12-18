@@ -5,5 +5,5 @@ import 'package:ml_linalg/linalg.dart';
 
 class ZeroWeightsGenerator implements InitialWeightsGenerator<Float32x4> {
   @override
-  MLVector<Float32x4> generate(int length) => Float32x4VectorFactory.from(List.filled(length, 0.0));
+  MLVector<Float32x4> generate(int length) => Float32x4Vector.from(List.filled(length, 0.0));
 }
