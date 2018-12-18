@@ -32,7 +32,8 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/linalg.dart';
 ````
 
-Read `csv`-file `pima_indians_diabetes_database.csv` with test data. You can use csv from the library's [datasets directory]():
+Read `csv`-file `pima_indians_diabetes_database.csv` with test data. You can use csv from the library's 
+[datasets directory](https://github.com/gyrdym/ml_algo/tree/master/datasets):
 ````dart
 final csvCodec = csv.CsvCodec(eol: '\n');
 final input = File('datasets/pima_indians_diabetes_database.csv').openRead();
