@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.2.0
+- csv-parser added
+
 ## 4.1.0
 - `ml_linalg` removed from export file
 - README refreshed
