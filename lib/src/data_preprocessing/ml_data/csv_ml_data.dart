@@ -10,7 +10,7 @@ import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class CsvMLData implements MLData<Float32x4> {
+class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   final CsvCodec _csvCodec;
   final File _file;
   final int _labelPos;
@@ -21,7 +21,7 @@ class CsvMLData implements MLData<Float32x4> {
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
 
-  CsvMLData(String fileName, {String eol = '\n', int labelPos, bool headerExists = true}) :
+  Float32x4CsvMLDataInternal.fromFile(String fileName, {String eol = '\n', int labelPos, bool headerExists = true}) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
         _labelPos = labelPos,

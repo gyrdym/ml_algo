@@ -11,7 +11,7 @@ import '../unit_test_helpers/float_iterable_almost_equal_to.dart';
 Future testCsv({String fileName, int labelPos, int colNum, int rowNum, void contentTestFn(MLMatrix<Float32x4> features,
     MLVector<Float32x4> labels)}) async {
 
-  final data = CsvMLData(fileName, labelPos: labelPos);
+  final data = Float32x4CsvMLDataInternal.fromFile(fileName, labelPos: labelPos);
   final features = await data.features;
   final labels = await data.labels;
 

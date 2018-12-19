@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 
 Future<double> logisticRegression() async {
-  final data = CsvMLData('datasets/pima_indians_diabetes_database.csv');
+  final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv');
 
   final features = await data.features;
   final labels = await data.labels;
@@ -29,6 +29,8 @@ Future<double> logisticRegression() async {
       bestLearningRate = rate;
     }
   }
+
+  print('Best learning rate: $bestLearningRate');
 
   return minError;
 }
