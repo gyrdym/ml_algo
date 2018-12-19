@@ -1,5 +1,5 @@
+export 'package:ml_algo/float32x4_csv_ml_data.dart';
 export 'package:ml_algo/src/classifier/logistic_regression.dart';
-export 'package:ml_algo/src/data_preprocessing/ml_data/csv_ml_data.dart';
 export 'package:ml_algo/src/data_preprocessing/ml_data/ml_data.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
 export 'package:ml_algo/src/metric/regression/type.dart';

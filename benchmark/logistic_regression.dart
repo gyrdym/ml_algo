@@ -8,7 +8,7 @@ import 'package:csv/csv.dart' as csv;
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/linalg.dart';
 
-List<List<double>> features;
+MLMatrix<Float32x4> features;
 MLVector<Float32x4> labels;
 LogisticRegressor regressor;
 
@@ -21,7 +21,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    regressor.fit(Float32x4Matrix.from(features), labels);
+    regressor.fit(features, labels);
   }
 
   @override
@@ -33,14 +33,9 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 }
 
 Future logisticRegression() async {
-  final csvCodec = csv.CsvCodec(eol: '\n');
-  final input = File('datasets/pima_indians_diabetes_database.csv').openRead();
-  final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
-
-  List<double> extractFeatures(List<Object> item) => item.map((Object feature) => (feature as num).toDouble()).toList();
-
-  features = fields.map((List item) => extractFeatures(item.sublist(0, item.length - 1))).toList(growable: false);
-  labels = Float32x4Vector.from(fields.map((List item) => (item.last as num).toDouble()));
+  final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv');
+  features = await data.features;
+  labels = await data.labels;
 
   LogisticRegressorBenchmark.main();
 }

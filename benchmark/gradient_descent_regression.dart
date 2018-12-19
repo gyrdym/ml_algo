@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:csv/csv.dart' as csv;
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/linalg.dart';
 
-List<List<double>> features;
+MLMatrix<Float32x4> features;
 MLVector<Float32x4> labels;
 GradientRegressor regressor;
 
@@ -21,7 +18,7 @@ class GDRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    regressor.fit(Float32x4Matrix.from(features), labels);
+    regressor.fit(features, labels);
   }
 
   @override
@@ -33,16 +30,9 @@ class GDRegressorBenchmark extends BenchmarkBase {
 }
 
 Future gradientDescentRegression() async {
-  final csvCodec = csv.CsvCodec(eol: '\n');
-  final input = File('datasets/advertising.csv').openRead();
-  final fields = (await input.transform(utf8.decoder).transform(csvCodec.decoder).toList()).sublist(1);
-
-  List<double> extractFeatures(List item) =>
-      item.sublist(0, 3).map<double>((dynamic feature) => (feature as num).toDouble()).toList();
-
-  features = fields.map<List<double>>(extractFeatures).toList(growable: false);
-
-  labels = Float32x4Vector.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
+  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv');
+  features = await data.features;
+  labels = await data.labels;
 
   GDRegressorBenchmark.main();
 }
