@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:csv/csv.dart' as csv;
 import 'package:ml_algo/ml_algo.dart';
@@ -19,7 +18,7 @@ Future<double> lassoRegression() async {
 
   final labels = Float32x4Vector.from(fields.map((List<dynamic> item) => (item.last as num).toDouble()));
   final lassoRegressionModel = LassoRegressor(iterationLimit: 100, lambda: 6750.0);
-  final validator = CrossValidator<Float32x4>.kFold();
+  final validator = CrossValidator.kFold();
 
   return validator.evaluate(lassoRegressionModel, Float32x4Matrix.from(features), labels, MetricType.mape);
 }
