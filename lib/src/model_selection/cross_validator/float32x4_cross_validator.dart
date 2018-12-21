@@ -1,21 +1,24 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/data_splitter/k_fold.dart';
-import 'package:ml_algo/src/data_splitter/leave_p_out.dart';
-import 'package:ml_algo/src/data_splitter/splitter.dart';
 import 'package:ml_algo/src/metric/type.dart';
+import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 import 'package:ml_algo/src/model_selection/evaluable.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class CrossValidator {
+class Float32x4CrossValidatorInternal implements CrossValidator<Float32x4> {
   final Splitter _splitter;
 
-  factory CrossValidator.kFold({int numberOfFolds = 5}) => CrossValidator._(KFoldSplitter(numberOfFolds));
+  factory Float32x4CrossValidatorInternal.kFold({int numberOfFolds = 5}) =>
+      Float32x4CrossValidatorInternal._(KFoldSplitter(numberOfFolds));
 
-  factory CrossValidator.lpo({int p = 5}) => CrossValidator._(LeavePOutSplitter(p));
+  factory Float32x4CrossValidatorInternal.lpo({int p = 5}) => Float32x4CrossValidatorInternal._(LeavePOutSplitter(p));
 
-  CrossValidator._(this._splitter);
+  Float32x4CrossValidatorInternal._(this._splitter);
 
+  @override
   double evaluate(Evaluable predictor, MLMatrix<Float32x4> points, MLVector<Float32x4> labels, MetricType metric,
       {bool isDataNormalized = false}) {
     if (points.rowsNum != labels.length) {

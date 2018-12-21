@@ -1,10 +1,11 @@
+export 'package:ml_algo/float32x4_cross_validator.dart';
 export 'package:ml_algo/float32x4_csv_ml_data.dart';
 export 'package:ml_algo/src/classifier/logistic_regression.dart';
 export 'package:ml_algo/src/data_preprocessing/ml_data/ml_data.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
 export 'package:ml_algo/src/metric/regression/type.dart';
 export 'package:ml_algo/src/metric/type.dart';
-export 'package:ml_algo/src/model_selection/cross_validator.dart';
+export 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 export 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
 export 'package:ml_algo/src/regressor/gradient.dart';
 export 'package:ml_algo/src/regressor/gradient_type.dart';

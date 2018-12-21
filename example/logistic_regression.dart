@@ -8,7 +8,7 @@ Future<double> logisticRegression() async {
   final features = await data.features;
   final labels = await data.labels;
 
-  final validator = CrossValidator.kFold(numberOfFolds: 7);
+  final validator = Float32x4CrossValidator.kFold(numberOfFolds: 7);
 
   final step = 0.001;
   final limit = 0.6;
