@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.0
+- Cross validator factory added
+- README updated
+
 ## 4.2.0
 - csv-parser added
 
