@@ -80,7 +80,7 @@ more information about these types, please, visit [ml_linal repo](https://github
 Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) 
 of our model
 ````dart
-final validator = CrossValidator.KFold();
+final validator = Float32x4CrossValidator.KFold();
 ````
 
 All are set, so, we can perform our classification. For better hyperparameters fitting, let's create a loop in order to 
@@ -138,7 +138,7 @@ Future<double> logisticRegression() async {
   final features = await data.features;
   final labels = await data.labels;
 
-  final validator = CrossValidator.kFold(numberOfFolds: 7);
+  final validator = Float32x4CrossValidator.kFold(numberOfFolds: 7);
 
   final step = 0.001;
   final limit = 0.6;
