@@ -13,7 +13,7 @@ Future<double> gradientDescentRegression() async {
       learningRate: 1e-5,
       learningRateType: LearningRateType.constant);
 
-  final validator = CrossValidator.kFold();
+  final validator = Float32x4CrossValidator.kFold();
   final quality = validator.evaluate(sgdRegressionModel, features, labels, MetricType.mape);
 
   return quality;

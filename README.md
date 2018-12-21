@@ -4,6 +4,17 @@
 
 # Machine learning algorithms with dart
 
+**Table of contents**
+- [Current state of the library](#current-state-of-the-library)
+- [Key entities of the library](#key-entities-of-the-library)
+- [Usage](#usage)
+
+## Current state of the library
+
+The main purpose of the library - give developers, interested both in Dart language and data science, native Dart 
+implementation of machine learning algorithms. This library targeted to dart vm, so, to get smoothest experience with 
+the lib, please, do not use it in a browser.
+
 Following algorithms are implemented:
 - Linear regression:
     - Gradient descent algorithm (batch, mini-batch, stochastic) with ridge regularization
@@ -12,6 +23,33 @@ Following algorithms are implemented:
 - Linear classifier:
     - Logistic regression (with "one-vs-all" multinomial classification)
     
+## Key entities of the library
+
+To provide main purposes of machine learning, the library exposes the following classes:
+
+-  [Float32x4CsvMLData](https://github.com/gyrdym/ml_algo/blob/master/lib/float32x4_csv_ml_data.dart). Factory, 
+that creates instances of a csv reader. The reader makes work with csv data easier: you just need to point, where 
+your dataset resides and then get features and labels in convenient data science friendly format. As you see, the reader 
+converts data into sequence of numbers of [Float32x4](https://api.dartlang.org/stable/2.1.0/dart-typed_data/Float32x4-class.html) 
+type, which makes machine learning process [faster](https://www.dartlang.org/articles/dart-vm/simd);
+
+- [Float32x4CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/float32x4_cross_validator.dart). Factory, that creates instances of a cross validator. In a few words, this entity allows researchers to fit
+different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
+algorithms, assessing prediction quality on different parts of a dataset. [Wiki article](https://en.wikipedia.org/wiki/Cross-validation_(statistics)) about cross validation process. 
+
+- [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regression.dart). A class,
+that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
+your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability)
+
+- [GradientRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/gradient.dart). A class, that 
+performs geometry-based linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
+function.
+
+- [LassoRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/lasso.dart) A class, that performs
+feature selection along with regression process. It uses [coordinate descent optimization]() and [subgradient vector]() 
+instead of [gradient descent optimization]() and [gradient vector]() like in `GradientRegressor` to provide regression.
+If you want to decide, which features are less important - go ahead and use this regressor. 
+
 ## Usage
 
 ### Real life example
@@ -35,12 +73,11 @@ final features = await data.features;
 final labels = await data.labels;
 ````
 
-Data in this file is represented by 768 records and 8 features. Processed features are contained in [Float32x4Matrix] 
-and processed labels are contained in [Float32x4Vector].
+Data in this file is represented by 768 records and 8 features. Processed features are contained in a data structure of 
+`MLMatrix<Float32x4>` type and processed labels are contained in a data structure of `MLVector<Float32x4>` type. To get 
+more information about these types, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
 
-To get more information about `Float32x4Matrix` or `Float32x4Vector`, please, see [ml_linal repo](https://github.com/gyrdym/ml_linalg)
-
-Then, we should create an instance of `CrossValidator` class for fitting [hyper parameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) 
+Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) 
 of our model
 ````dart
 final validator = CrossValidator.KFold();

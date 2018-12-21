@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/data_splitter/splitter.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 
 class KFoldSplitter implements Splitter {
   final int _numberOfFolds;
