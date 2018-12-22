@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.3.1
+- enum for categorical data encoding added
+
 ## 4.3.0
 - Cross validator factory added
 - README updated
