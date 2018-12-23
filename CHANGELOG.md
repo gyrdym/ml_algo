@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.3.2
+- One hot encoder implemented
+
 ## 4.3.1
 - enum for categorical data encoding added
 
