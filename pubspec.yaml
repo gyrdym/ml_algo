@@ -1,6 +1,6 @@
 name: ml_algo
 description: Machine learning algorithms written in native dart (without bindings to any popular ML libraries, pure Dart implementation)
-version: 4.3.1
+version: 4.3.2
 author: Ilia Gyrdymov <ilgyrd@gmail.com>
 homepage: https://github.com/gyrdym/ml_algo
 
