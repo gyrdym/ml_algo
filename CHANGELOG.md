@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.3.3
+- Performance test for one hot encoder added
+
 ## 4.3.2
 - One hot encoder implemented
 
