@@ -28,7 +28,8 @@ void main() {
       });
       final measurer = OneHotEncoderBenchmark(encoder, {'category': ['label_100']});
       final actual = measurer.measure();
-      expect(actual, lessThan(1500));
+      final maxTimeInMicroSeconds = 1500;
+      expect(actual, lessThan(maxTimeInMicroSeconds));
     });
   });
 }
