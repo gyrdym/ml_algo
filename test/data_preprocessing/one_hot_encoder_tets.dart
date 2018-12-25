@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/data_preprocessing/encoder/one_hot_encoder.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/one_hot_encoder.dart';
 import 'package:test/test.dart';
 
 void main() {

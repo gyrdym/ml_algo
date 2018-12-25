@@ -1,3 +1,3 @@
-enum CategoricalDataEncoder {
+enum CategoricalDataEncoderType {
   oneHot,
 }
