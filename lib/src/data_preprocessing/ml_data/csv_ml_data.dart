@@ -12,6 +12,7 @@ import 'package:ml_linalg/float32x4_matrix.dart';
 import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:tuple/tuple.dart';
 
 class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   final CsvCodec _csvCodec;
@@ -19,20 +20,24 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   final int _labelPos;
   final bool _headerExists;
 
+  static const String _errorPrefix = 'Csv ML Data';
+
   Future<List<List<dynamic>>> _textTransform;
   List<List<dynamic>> _records;
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
   List<String> _header;
   CategoricalDataEncoder _categoricalEncoder;
+  List<bool> _columnsToReadMask;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
     String eol = '\n',
     int labelPos,
     bool headerExists = true,
     CategoricalDataEncoderType encoderType = CategoricalDataEncoderType.oneHot,
-    Map<String, List<Object>> categoricalDataDescr,
-    CategoricalDataEncoder categoricalEncoderFactory(Map<String, List<Object>> dataDesrc),
+    Map<String, List<Object>> categories,
+    List<Tuple2<int, int>> columnsToRead,
+    CategoricalDataEncoder categoricalEncoderFactory(Map<String, Iterable<Object>> dataDesrc),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -41,11 +46,14 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
 
     final fileStream = _file.openRead();
     _textTransform = (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
+    if (columnsToRead != null) {
+      _columnsToReadMask = _createColumnsToReadMask(columnsToRead);
+    }
 
-    if (categoricalDataDescr != null) {
+    if (categories != null) {
       _categoricalEncoder = categoricalEncoderFactory != null
-          ? categoricalEncoderFactory(categoricalDataDescr)
-          : _createCategoricalDataEncoder(encoderType, categoricalDataDescr);
+          ? categoricalEncoderFactory(categories)
+          : _createCategoricalDataEncoder(encoderType, categories);
     }
   }
 
@@ -76,13 +84,22 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   Future _prepareToRead() async {
     _records ??= await _extractRecords();
     if (_labelPos != null && (_labelPos >= _records.first.length || _labelPos < 0)) {
-      throw RangeError.range(_labelPos, 0, _records.first.length - 1, null, 'Invalid label column position');
+      throw RangeError.range(_labelPos, 0, _records.first.length - 1, null,
+          getErrorMessage('Invalid label column number'));
     }
   }
 
-  Future<List<String>> _extractHeader() async => (await _textTransform)[0]
-      .map((dynamic label) => label.toString())
-      .toList(growable: false);
+  Future<List<String>> _extractHeader() async {
+    final headerRaw = (await _textTransform)[0];
+    // @TODO: replace with a fixed-length list
+    final header = <String>[];
+    for (int i = 0; i < headerRaw.length; i++) {
+      if (_columnsToReadMask == null || _columnsToReadMask[i] == true) {
+        header.add(headerRaw[i].toString());
+      }
+    }
+    return header;
+  }
 
   Future<List<List<dynamic>>> _extractRecords() async => (await _textTransform).sublist(_headerExists ? 1 : 0);
 
@@ -135,7 +152,25 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
       case CategoricalDataEncoderType.oneHot:
         return OneHotEncoder(categoricalDataDescr);
       default:
-        throw UnsupportedError('CSV data: unsupported categorical categorical_encoder type $encoderType');
+        throw UnsupportedError(getErrorMessage('unsupported categorical categorical_encoder type $encoderType'));
     }
   }
+
+  List<bool> _createColumnsToReadMask(List<Tuple2<int, int>> ranges) {
+    List<bool> mask;
+    Tuple2<int, int> prevRange;
+    ranges.forEach((Tuple2<int, int> range) {
+      if (range.item2 > range.item1) {
+        throw Exception(getErrorMessage('left boundary of the range $range is greater than the right one'));
+      }
+      if (prevRange != null && prevRange.item2 > range.item1) {
+        throw Exception(getErrorMessage('$prevRange and $range ranges are intersecting'));
+      }
+
+      prevRange = range;
+    });
+    return mask;
+  }
+
+  String getErrorMessage(String text) => '$_errorPrefix: $text';
 }
