@@ -140,7 +140,7 @@ void main() {
             ]
           },
           testContentFn: (features, labels, header) {
-
+            expect(header.length, 6);
           }
       );
     }, skip: true);
