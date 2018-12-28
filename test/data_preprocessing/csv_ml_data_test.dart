@@ -110,7 +110,7 @@ void main() {
       await testCsvWithCategories(
           fileName: 'test/data_preprocessing/data/elo_blatter.csv',
           labelPos: 1,
-          rowNum: 208,
+          rowNum: 209,
           columnsToRead: [
             const Tuple2(1, 7),
           ],
@@ -141,8 +141,9 @@ void main() {
           },
           testContentFn: (features, labels, header) {
             expect(header.length, 6);
+//            expect();
           }
       );
-    }, skip: true);
+    });
   });
 }
