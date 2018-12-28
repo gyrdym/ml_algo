@@ -19,13 +19,14 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   final File _file;
   final int _labelPos;
   final bool _headerExists;
-  final _dataReadyCompleter = Completer<Null>();
+  final _dataReadyCompleter = Completer<List<List<dynamic>>>();
 
   static const String _errorPrefix = 'Csv ML Data';
 
   List<List<dynamic>> _records;
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
+  List<String> _originalHeader;
   List<String> _header;
   CategoricalDataEncoder _categoricalEncoder;
   List<bool> _columnsToReadMask;
@@ -53,11 +54,12 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
     _prepareData(columnsToRead);
   }
 
-  Future get _dataReadiness => _dataReadyCompleter.future;
+  Future<List<List<dynamic>>> get _dataReadiness => _dataReadyCompleter.future;
 
   @override
   Future<List<String>> get header async {
-    await _dataReadiness;
+    final data = (await _dataReadiness);
+    _header ??= _headerExists ? _extractHeader(data) : null;
     return _header;
   }
 
@@ -84,7 +86,9 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
       _columnsToReadMask = _createColumnsToReadMask(columnsToRead, columnsNum);
     }
 
-    _header = _headerExists ? _extractHeader(data) : null;
+    _originalHeader = _headerExists
+        ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
+        : null;
     _records = _extractRecords(data);
 
     if (_labelPos != null && (_labelPos >= _records.first.length || _labelPos < 0)) {
@@ -92,7 +96,7 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
           getErrorMessage('Invalid label column number'));
     }
 
-    _dataReadyCompleter.complete();
+    _dataReadyCompleter.complete(data);
   }
 
   List<String> _extractHeader(List<List<dynamic>> data) {
@@ -113,41 +117,65 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
     final lastIdx = _records.first.length - 1;
     final labelIdx = labelPos ?? lastIdx;
     return _records.map((List item) {
-      final first = item.sublist(0, labelIdx);
-      final last = labelIdx < lastIdx ? item.sublist(labelIdx + 1) : <Object>[];
-      final featuresWithoutLabels = first..addAll(last);
       if (_categoricalEncoder != null) {
-        return _convertFeaturesWithCategoricalData(featuresWithoutLabels);
+        return _convertFeaturesWithCategoricalData(item, labelIdx);
       } else {
-        return _convertFeatures(featuresWithoutLabels);
+        return _convertFeatures(item, labelIdx);
       }
     }).toList(growable: false);
   }
 
   List<double> _extractLabels(int labelPos) {
     final labelIdx = labelPos ?? _records.first.length - 1;
-    return _records.map((List<dynamic> item) => (item[labelIdx] as num).toDouble()).toList(growable: false);
+    return _records
+        .map((List<dynamic> item) => _convertValueToDouble(item[labelIdx]))
+        .toList(growable: false);
   }
 
   /// Light-weight method for data encoding without any checks if the current feature is categorical
-  List<double> _convertFeatures(List<Object> item) => item.map((Object feature) =>
-      (feature as num).toDouble()).toList();
+  List<double> _convertFeatures(List<Object> features, int labelIdx) {
+    final converted = <double>[];
+    for (int i = 0; i < features.length; i++) {
+      final feature = features[i];
+      if (labelIdx == i || (_columnsToReadMask != null && _columnsToReadMask[i] == false)) {
+        continue;
+      }
+      converted.add(_convertValueToDouble(feature));
+    }
+    return converted;
+  }
 
   /// In order to avoid limitless checks if the current feature is categorical, let's create a separate method for
   /// data encoding if we know exactly that categories are presented in the data set
-  List<double> _convertFeaturesWithCategoricalData(List<Object> item) {
-    int columnNum = 0;
-    return item.expand((Object feature) {
-      final columnTitle = _header[columnNum];
+  List<double> _convertFeaturesWithCategoricalData(List<Object> features, int labelIdx) {
+    final converted = <double>[];
+    for (int i = 0; i < features.length; i++) {
+      if (labelIdx == i || (_columnsToReadMask != null  && _columnsToReadMask[i] == false)) {
+        continue;
+      }
+      final feature = features[i];
+      final columnTitle = _originalHeader[i];
       Iterable<double> expanded;
       if (_categoricalEncoder.categories.containsKey(columnTitle)) {
         expanded = _categoricalEncoder.encode(columnTitle, feature);
       } else {
-        expanded = [(feature as num).toDouble()];
+        expanded = [_convertValueToDouble(feature)];
       }
-      columnNum++;
-      return expanded;
-    }).toList();
+      converted.addAll(expanded);
+    }
+    return converted;
+  }
+
+  double _convertValueToDouble(dynamic value) {
+    if (value is String) {
+      if (value.isEmpty) {
+        return 0.0;
+      } else {
+        return double.parse(value);
+      }
+    } else {
+      return (value as num).toDouble();
+    }
   }
 
   CategoricalDataEncoder _createCategoricalDataEncoder(
