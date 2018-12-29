@@ -209,8 +209,7 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
       if (prevRange != null && prevRange.item2 >= range.item1) {
         throw Exception(getErrorMessage('$prevRange and $range ranges are intersecting'));
       }
-      final rangeLength = range.item2 - range.item1;
-      mask.setRange(range.item1, range.item2, List<bool>.filled(rangeLength, true));
+      mask.fillRange(range.item1, range.item2 + 1, true);
       prevRange = range;
     });
 
