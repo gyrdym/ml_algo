@@ -30,7 +30,7 @@ class GDRegressorBenchmark extends BenchmarkBase {
 }
 
 Future gradientDescentRegression() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv');
+  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv', 3);
   features = await data.features;
   labels = await data.labels;
 
