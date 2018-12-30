@@ -10,9 +10,9 @@ abstract class Float32x4CsvMLData {
   /// Creates a csv-data instance from file. Resulting instance uses [Float32x4] data type for features and labels
   /// representation
   /// [fileName] Target csv-file name
+  /// [labelIdx] Position of the label column (by default - the last column)
   /// [eol] End of line marker of the csv-file
-  /// [labelPos] Position of the label column (by default - the last column)
   /// [headerExists] Indicates, whether the csv-file header exists or not
-  static MLData<Float32x4> fromFile(String fileName, {String eol = '\n', int labelPos, bool headerExists = true}) =>
-      Float32x4CsvMLDataInternal.fromFile(fileName, eol: eol, labelPos: labelPos, headerExists: headerExists);
+  static MLData<Float32x4> fromFile(String fileName, int labelIdx, {String eol = '\n', bool headerExists = true}) =>
+      Float32x4CsvMLDataInternal.fromFile(fileName, labelIdx, eol: eol, headerExists: headerExists);
 }

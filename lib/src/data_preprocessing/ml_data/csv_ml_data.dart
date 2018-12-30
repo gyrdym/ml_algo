@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:math' as math;
 
 import 'package:csv/csv.dart';
 import 'package:ml_algo/categorical_data_encoder_type.dart';
@@ -17,7 +18,7 @@ import 'package:tuple/tuple.dart';
 class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   final CsvCodec _csvCodec;
   final File _file;
-  final int _labelPos;
+  final int _labelIdx;
   final bool _headerExists;
   final _dataReadyCompleter = Completer<List<List<dynamic>>>();
 
@@ -31,9 +32,8 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   CategoricalDataEncoder _categoricalEncoder;
   List<bool> _columnsToReadMask;
 
-  Float32x4CsvMLDataInternal.fromFile(String fileName, {
+  Float32x4CsvMLDataInternal.fromFile(String fileName, int labelIdx, {
     String eol = '\n',
-    int labelPos,
     bool headerExists = true,
     CategoricalDataEncoderType encoderType = CategoricalDataEncoderType.oneHot,
     Map<String, List<Object>> categories,
@@ -42,13 +42,18 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
-        _labelPos = labelPos,
+        _labelIdx = labelIdx,
         _headerExists = headerExists {
 
     if (categories != null) {
       _categoricalEncoder = categoricalEncoderFactory != null
           ? categoricalEncoderFactory(categories)
           : _createCategoricalDataEncoder(encoderType, categories);
+    }
+
+    final errorMsg = _validateColumnsRanges(columnsToRead, labelIdx);
+    if (errorMsg.isNotEmpty) {
+      throw Exception(errorMsg);
     }
 
     _prepareData(columnsToRead);
@@ -66,14 +71,14 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   @override
   Future<MLMatrix<Float32x4>> get features async {
     await _dataReadiness;
-    _features ??= Float32x4Matrix.from(_extractFeatures(_labelPos));
+    _features ??= Float32x4Matrix.from(_extractFeatures(_labelIdx));
     return _features;
   }
 
   @override
   Future<MLVector<Float32x4>> get labels async {
     await _dataReadiness;
-    _labels ??= Float32x4Vector.from(_extractLabels(_labelPos));
+    _labels ??= Float32x4Vector.from(_extractLabels(_labelIdx));
     return _labels;
   }
 
@@ -91,9 +96,9 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
         : null;
     _records = _extractRecords(data);
 
-    if (_labelPos != null && (_labelPos >= _records.first.length || _labelPos < 0)) {
-      throw RangeError.range(_labelPos, 0, _records.first.length - 1, null,
-          getErrorMessage('Invalid label column number'));
+    if (_labelIdx >= _records.first.length || _labelIdx < 0) {
+      throw RangeError.range(_labelIdx, 0, _records.first.length - 1, null,
+          _wrapErrorMessage('Invalid label column number'));
     }
 
     _dataReadyCompleter.complete(data);
@@ -186,35 +191,50 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
       case CategoricalDataEncoderType.oneHot:
         return OneHotEncoder(categoricalDataDescr);
       default:
-        throw UnsupportedError(getErrorMessage('unsupported categorical categorical_encoder type $encoderType'));
+        throw UnsupportedError(_wrapErrorMessage('unsupported categorical categorical_encoder type $encoderType'));
     }
   }
 
-  List<bool> _createColumnsToReadMask(Iterable<Tuple2<int, int>> ranges, int columnsNum) {
-    if (ranges.length > columnsNum) {
-      throw Exception(getErrorMessage('too many column ranges are provided'));
+  String _validateColumnsRanges(Iterable<Tuple2<int, int>> ranges, int labelIdx) {
+    if (ranges == null) {
+      return '';
     }
 
-    final mask = List<bool>.filled(columnsNum, false);
+    String errorMessage = '';
     Tuple2<int, int> prevRange;
+    bool isLabelInRanges = false;
 
     ranges.forEach((Tuple2<int, int> range) {
-      if (range.item1 >= columnsNum || range.item2 >= columnsNum) {
-        throw Exception(getErrorMessage('one of the range $range\'s boundaries is greater than the total dataset columns'
-            ' number ($columnsNum)'));
-      }
       if (range.item1 > range.item2) {
-        throw Exception(getErrorMessage('left boundary of the range $range is greater than the right one'));
+        errorMessage = _wrapErrorMessage('left boundary of the range $range is greater than the right one');
       }
       if (prevRange != null && prevRange.item2 >= range.item1) {
-        throw Exception(getErrorMessage('$prevRange and $range ranges are intersecting'));
+        errorMessage = _wrapErrorMessage('$prevRange and $range ranges are intersecting');
       }
-      mask.fillRange(range.item1, range.item2 + 1, true);
+      if (labelIdx >= range.item1 && labelIdx <= range.item2) {
+        isLabelInRanges = true;
+      }
       prevRange = range;
     });
 
+    if (!isLabelInRanges) {
+      errorMessage = _wrapErrorMessage('label index $_labelIdx is not in provided ranges $ranges');
+    }
+
+    return errorMessage;
+  }
+
+  List<bool> _createColumnsToReadMask(Iterable<Tuple2<int, int>> ranges, int columnsNum) {
+    final mask = List<bool>.filled(columnsNum, false);
+    ranges.take(columnsNum).forEach((Tuple2<int, int> range) {
+      if (range.item1 >= columnsNum) {
+        return false;
+      }
+      final end = math.min(columnsNum, range.item2 + 1);
+      mask.fillRange(range.item1, end, true);
+    });
     return mask;
   }
 
-  String getErrorMessage(String text) => '$_errorPrefix: $text';
+  String _wrapErrorMessage(String text) => '$_errorPrefix: $text';
 }
