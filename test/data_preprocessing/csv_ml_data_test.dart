@@ -13,7 +13,7 @@ Future testCsvWithoutCategories({String fileName, int labelIdx, int colNum, int 
   List<Tuple2<int, int>> columnsToRead,
   void testContentFn(MLMatrix<Float32x4> features, MLVector<Float32x4> labels, List<String> headers)}) async {
 
-  final data = Float32x4CsvMLDataInternal.fromFile(fileName, labelIdx, columnsToRead: columnsToRead);
+  final data = Float32x4CsvMLDataInternal.fromFile(fileName, labelIdx: labelIdx, columns: columnsToRead);
   final header = await data.header;
   final features = await data.features;
   final labels = await data.labels;
@@ -33,7 +33,7 @@ Future testCsvWithCategories({String fileName, int labelIdx, int rowNum, Map<Str
   List<Tuple2<int, int>> columnsToRead,
   void testContentFn(MLMatrix<Float32x4> features, MLVector<Float32x4> labels, List<String> headers)}) async {
 
-  final data = Float32x4CsvMLDataInternal.fromFile(fileName, labelIdx, columnsToRead: columnsToRead,
+  final data = Float32x4CsvMLDataInternal.fromFile(fileName, labelIdx: labelIdx, columns: columnsToRead,
       categories: categories);
   final header = await data.header;
   final features = await data.features;
@@ -174,8 +174,8 @@ void main() {
       expect(() =>
           Float32x4CsvMLDataInternal.fromFile(
             'test/data_preprocessing/data/elo_blatter.csv',
-            1,
-            columnsToRead: [const Tuple2(2, 3), const Tuple2(5, 7)],
+            labelIdx: 1,
+            columns: [const Tuple2(2, 3), const Tuple2(5, 7)],
           ),
           throwsException,
       );
@@ -194,6 +194,32 @@ void main() {
             expect([labels[0], labels[34], labels[63]], equals([1, 0, 0]));
           }
       );
+    });
+
+    test('should throw an error if there are intersecting column ranges while reading selected columns', () {
+      final actual = () => Float32x4CsvMLDataInternal.fromFile(
+          'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          labelIdx: 8,
+          columns: [
+            const Tuple2(0, 1), // first and
+            const Tuple2(1, 2), // second ranges are intersecting
+            const Tuple2(3, 4),
+            const Tuple2(6, 8)],
+      );
+      expect(actual, throwsException);
+    });
+
+    test('should throw an error if label index with null value passed to constructor', () {
+      final actual = () => Float32x4CsvMLDataInternal.fromFile(
+        'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+        labelIdx: null,
+        columns: [
+          const Tuple2(0, 1),
+          const Tuple2(2, 2),
+          const Tuple2(3, 4),
+          const Tuple2(6, 8)],
+      );
+      expect(actual, throwsException);
     });
   });
 }
