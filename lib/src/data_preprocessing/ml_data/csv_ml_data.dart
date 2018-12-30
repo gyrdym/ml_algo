@@ -32,12 +32,13 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
   CategoricalDataEncoder _categoricalEncoder;
   List<bool> _columnsToReadMask;
 
-  Float32x4CsvMLDataInternal.fromFile(String fileName, int labelIdx, {
+  Float32x4CsvMLDataInternal.fromFile(String fileName, {
     String eol = '\n',
+    int labelIdx,
     bool headerExists = true,
     CategoricalDataEncoderType encoderType = CategoricalDataEncoderType.oneHot,
     Map<String, List<Object>> categories,
-    List<Tuple2<int, int>> columnsToRead,
+    List<Tuple2<int, int>> columns,
     CategoricalDataEncoder categoricalEncoderFactory(Map<String, Iterable<Object>> dataDesrc),
   }) :
         _csvCodec = CsvCodec(eol: eol),
@@ -45,18 +46,18 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
         _labelIdx = labelIdx,
         _headerExists = headerExists {
 
+    _validateArgs(
+      labelIdx,
+      columns,
+    );
+
     if (categories != null) {
       _categoricalEncoder = categoricalEncoderFactory != null
           ? categoricalEncoderFactory(categories)
           : _createCategoricalDataEncoder(encoderType, categories);
     }
 
-    final errorMsg = _validateColumnsRanges(columnsToRead, labelIdx);
-    if (errorMsg.isNotEmpty) {
-      throw Exception(errorMsg);
-    }
-
-    _prepareData(columnsToRead);
+    _prepareData(columns);
   }
 
   Future<List<List<dynamic>>> get _dataReadiness => _dataReadyCompleter.future;
@@ -193,6 +194,27 @@ class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
       default:
         throw UnsupportedError(_wrapErrorMessage('unsupported categorical categorical_encoder type $encoderType'));
     }
+  }
+
+  void _validateArgs(int labelIdx, Iterable<Tuple2<int, int>> columns) {
+    final validators = [
+      () => _validateLabelIdx(labelIdx),
+      () => _validateColumnsRanges(columns, labelIdx),
+    ];
+    for (int i = 0; i < validators.length; i++) {
+      final errorMsg = validators[i]();
+      if (errorMsg != '') {
+        throw Exception(errorMsg);
+      }
+    }
+  }
+
+  String _validateLabelIdx(int labelIdx) {
+    if (labelIdx == null) {
+      return _wrapErrorMessage('label index must not be null');
+    }
+
+    return '';
   }
 
   String _validateColumnsRanges(Iterable<Tuple2<int, int>> ranges, int labelIdx) {
