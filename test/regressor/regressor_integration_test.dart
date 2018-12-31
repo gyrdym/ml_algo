@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/regressor/gradient.dart';
+import 'package:ml_algo/gradient_regressor.dart';
 import 'package:test/test.dart';
 
 GradientRegressor regressor;

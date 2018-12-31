@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 
 Future<double> logisticRegression() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv', 8);
+  final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv', labelIdx: 8);
 
   final features = await data.features;
   final labels = await data.labels;

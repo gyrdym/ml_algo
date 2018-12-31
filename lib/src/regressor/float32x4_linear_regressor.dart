@@ -3,15 +3,15 @@ import 'dart:typed_data';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/type.dart';
-import 'package:ml_algo/src/model_selection/evaluable.dart';
+import 'package:ml_algo/predictor.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
-abstract class LinearRegressor implements Evaluable<Float32x4> {
+abstract class Float32x4LinearRegressor implements Predictor<Float32x4> {
   final Optimizer<Float32x4> _optimizer;
   final InterceptPreprocessor _interceptPreprocessor;
 
-  LinearRegressor(this._optimizer, double interceptScale)
+  Float32x4LinearRegressor(this._optimizer, double interceptScale)
       : _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
 
   MLVector<Float32x4> get weights => _weights;

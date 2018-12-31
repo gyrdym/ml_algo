@@ -1,14 +1,14 @@
 import 'dart:typed_data';
 
+import 'package:ml_algo/float32x4_cross_validator.dart';
+import 'package:ml_algo/predictor.dart';
 import 'package:ml_algo/src/metric/type.dart';
-import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
-import 'package:ml_algo/src/model_selection/evaluable.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class Float32x4CrossValidatorInternal implements CrossValidator<Float32x4> {
+class Float32x4CrossValidatorInternal implements Float32x4CrossValidator {
   final Splitter _splitter;
 
   factory Float32x4CrossValidatorInternal.kFold({int numberOfFolds = 5}) =>
@@ -19,7 +19,7 @@ class Float32x4CrossValidatorInternal implements CrossValidator<Float32x4> {
   Float32x4CrossValidatorInternal._(this._splitter);
 
   @override
-  double evaluate(Evaluable predictor, MLMatrix<Float32x4> points, MLVector<Float32x4> labels, MetricType metric,
+  double evaluate(Predictor predictor, MLMatrix<Float32x4> points, MLVector<Float32x4> labels, MetricType metric,
       {bool isDataNormalized = false}) {
     if (points.rowsNum != labels.length) {
       throw Exception('Number of feature objects must be equal to the number of labels!');

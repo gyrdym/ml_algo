@@ -3,12 +3,12 @@ import 'dart:typed_data';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/type.dart';
-import 'package:ml_algo/src/model_selection/evaluable.dart';
+import 'package:ml_algo/predictor.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart' as scoreToProbLink;
 import 'package:ml_linalg/linalg.dart';
 
-abstract class LinearClassifier implements Evaluable<Float32x4> {
+abstract class Float32x4LinearClassifier implements Predictor<Float32x4> {
   final Optimizer<Float32x4> _optimizer;
   final scoreToProbLink.VectorizedScoreToProbLinkFunction<Float32x4> _linkScoreToProbability;
   final InterceptPreprocessor _interceptPreprocessor;
@@ -16,7 +16,7 @@ abstract class LinearClassifier implements Evaluable<Float32x4> {
   final _vectorizedOne = Float32x4.splat(1.0);
   final _classesMap = Map<double, Float32x4>();
 
-  LinearClassifier(this._optimizer, this._linkScoreToProbability, double interceptScale)
+  Float32x4LinearClassifier(this._optimizer, this._linkScoreToProbability, double interceptScale)
       : _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
 
   MLMatrix<Float32x4> get weightsByClasses => _weightsByClasses;

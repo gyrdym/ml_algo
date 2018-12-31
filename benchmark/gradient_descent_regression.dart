@@ -29,8 +29,8 @@ class GDRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future gradientDescentRegression() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv', 3);
+Future gradientDescentRegressionBenchmark() async {
+  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv', labelIdx: 3);
   features = await data.features;
   labels = await data.labels;
 
