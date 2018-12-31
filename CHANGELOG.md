@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.0.0
+- One hot encoder integrated into CSV ML data 
+
 ## 4.3.3
 - Performance test for one hot encoder added
 
