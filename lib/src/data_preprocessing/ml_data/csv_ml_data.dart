@@ -1,21 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:ml_algo/categorical_data_encoder_type.dart';
+import 'package:ml_algo/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/one_hot_encoder.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
 import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
 
-class Float32x4CsvMLDataInternal implements MLData<Float32x4> {
+class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final CsvCodec _csvCodec;
   final File _file;
   final int _labelIdx;

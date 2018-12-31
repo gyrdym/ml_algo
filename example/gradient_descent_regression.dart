@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 
 Future<double> gradientDescentRegression() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv', 4);
+  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv', labelIdx: 4);
   final features = await data.features;
   final labels = await data.labels;
 
