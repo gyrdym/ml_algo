@@ -5,9 +5,9 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/learning_rate_generator/generator_factory.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
-import 'package:ml_algo/src/regressor/linear_regressor.dart';
+import 'package:ml_algo/src/regressor/float32x4_linear_regressor.dart';
 
-class GradientRegressor extends LinearRegressor {
+class GradientRegressor extends Float32x4LinearRegressor {
   GradientRegressor(
       {int iterationLimit,
       LearningRateType learningRateType = LearningRateType.decreasing,
