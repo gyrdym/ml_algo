@@ -37,15 +37,15 @@ type, which makes machine learning process [faster](https://www.dartlang.org/art
 different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
 algorithms, assessing prediction quality on different parts of a dataset. [Wiki article](https://en.wikipedia.org/wiki/Cross-validation_(statistics)) about cross validation process. 
 
-- [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regression.dart). A class,
+- [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/logistic_regressor.dart). A class,
 that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
 your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability)
 
-- [GradientRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/gradient.dart). A class, that 
+- [GradientRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/gradient_regressor.dart). A class, that 
 performs geometry-based linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
 function.
 
-- [LassoRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/lasso.dart) A class, that performs
+- [LassoRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/lasso_regressor.dart) A class, that performs
 feature selection along with regression process. It uses [coordinate descent optimization]() and [subgradient vector]() 
 instead of [gradient descent optimization]() and [gradient vector]() like in `GradientRegressor` to provide regression.
 If you want to decide, which features are less important - go ahead and use this regressor. 
@@ -55,7 +55,7 @@ If you want to decide, which features are less important - go ahead and use this
 ### Real life example
 
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
-via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regression.dart)
+via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/logistic_regressor.dart)
 
 Import all necessary packages: 
 

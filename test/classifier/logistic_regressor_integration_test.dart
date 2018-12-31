@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/logistic_regression.dart';
+import 'package:ml_algo/logistic_regressor.dart';
 import 'package:ml_algo/src/metric/type.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
 import 'package:ml_linalg/linalg.dart';

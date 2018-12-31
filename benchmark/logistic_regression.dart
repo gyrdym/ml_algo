@@ -29,8 +29,8 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future logisticRegression() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv');
+Future logisticRegressionBenchmark() async {
+  final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv', labelIdx: 8);
   features = await data.features;
   labels = await data.labels;
 
