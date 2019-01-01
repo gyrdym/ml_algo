@@ -148,7 +148,7 @@ void main() {
           expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
             expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
-            expect(features.getRow(767), floatIterableAlmostEqualTo([1.0, 93.0, 70.0, 31.0, 0.0, 30.4 ,0.315, 23.0]));
+            expect(features.getRow(767), floatIterableAlmostEqualTo([1.0, 93.0, 70.0, 31.0, 0.0, 30.4, 0.315, 23.0]));
             expect(() => features.getRow(768), throwsRangeError);
             expect([labels[0], labels[34], labels[767]], equals([1, 0, 0]));
             expect(() => labels[768], throwsRangeError);
@@ -163,16 +163,29 @@ void main() {
           rows: [
             const Tuple2(0, 2),
             const Tuple2(3, 4),
-            const Tuple2(10, 29),
+            const Tuple2(10, 15),
           ],
           expectedColsNum: 8,
-          expectedRowsNum: 25,
+          expectedRowsNum: 11,
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
-            expect(() => features.getRow(25), throwsRangeError);
+            expect(features, matrixAlmostEqualTo([
+              [6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0], // 1.0
+              [1.0, 85.0, 66.0, 29.0, 0.0, 26.6, 0.351, 31.0], // 0.0
+              [8.0, 183.0, 64.0, 0.0, 0.0, 23.3, 0.672, 32.0], // 1.0
+              [1.0, 89.0, 66.0, 23.0, 94.0, 28.1, 0.167, 21.0], // 0.0
+              [0.0, 137.0, 40.0, 35.0, 168.0, 43.1, 2.288, 33.0], // 1.0
+              [4.0, 110.0, 92.0, 0.0, 0.0, 37.6, 0.191, 30.0], // 0.0
+              [10.0, 168.0, 74.0, 0.0, 0.0, 38.0, 0.537, 34.0], // 1.0
+              [10.0, 139.0, 80.0, 0.0, 0.0, 27.1, 1.441, 57.0], // 0.0
+              [1.0, 189.0, 60.0, 23.0, 846.0, 30.1, 0.398, 59.0], // 1.0
+              [5.0, 166.0, 72.0, 19.0, 175.0, 25.8, 0.587, 51.0], // 1.0
+              [7.0, 100.0, 0.0, 0.0, 0.0, 30.0, 0.484, 32.0], // 1.0
+            ]));
+            expect(() => features.getRow(11), throwsRangeError);
             expect(() => features.getRow(768), throwsRangeError);
-            expect([labels[0]], equals([1]));
-            expect(() => labels[25], throwsRangeError);
+
+            expect(labels, equals([1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1]));
+            expect(() => labels[11], throwsRangeError);
             expect(() => labels[768], throwsRangeError);
           }
       );
