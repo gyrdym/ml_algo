@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/metric/type.dart';
+import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/predictor.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';

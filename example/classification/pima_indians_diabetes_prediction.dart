@@ -1,6 +1,10 @@
 import 'dart:async';
 
-import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/float32x4_cross_validator.dart';
+import 'package:ml_algo/float32x4_csv_ml_data.dart';
+import 'package:ml_algo/learning_rate_type.dart';
+import 'package:ml_algo/logistic_regressor.dart';
+import 'package:ml_algo/metric_type.dart';
 
 Future<double> logisticRegression() async {
   final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv', labelIdx: 8);

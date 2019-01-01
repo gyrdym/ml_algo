@@ -23,6 +23,7 @@ abstract class Float32x4CsvMLData implements MLData<Float32x4> {
     String eol,
     bool headerExists,
     Map<String, List<Object>> categories,
+    List<Tuple2<int, int>> rows,
     List<Tuple2<int, int>> columns,
     CategoricalDataEncoderType encoderType,
   }) = Float32x4CsvMLDataInternal.fromFile;

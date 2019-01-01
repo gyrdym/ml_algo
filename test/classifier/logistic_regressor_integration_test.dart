@@ -1,6 +1,6 @@
 import 'package:ml_algo/logistic_regressor.dart';
-import 'package:ml_algo/src/metric/type.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
+import 'package:ml_algo/metric_type.dart';
+import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
