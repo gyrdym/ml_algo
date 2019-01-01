@@ -1,11 +1,11 @@
 import 'package:ml_algo/src/classifier/float32x4_linear_classifier.dart';
-import 'package:ml_algo/src/classifier/multinomial_type.dart';
+import 'package:ml_algo/multinomial_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/generator_factory.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
+import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/score_to_prob_link_function/float32x4_link_function.dart' as scoreToProbabilityLink;
 
 class LogisticRegressor extends Float32x4LinearClassifier {

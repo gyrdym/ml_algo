@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/optimizer/learning_rate_generator/constant.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/decreasing.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/generator.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
+import 'package:ml_algo/learning_rate_type.dart';
 
 class LearningRateGeneratorFactory {
   static LearningRateGenerator decreasing() => DecreasingLearningRateGenerator();

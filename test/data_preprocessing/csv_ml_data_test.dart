@@ -9,22 +9,27 @@ import 'package:tuple/tuple.dart';
 
 import '../unit_test_helpers/float_iterable_almost_equal_to.dart';
 
-Future testCsvWithoutCategories({String fileName, int labelIdx, int colNum, int rowNum,
-  List<Tuple2<int, int>> columnsToRead,
+Future testCsvWithoutCategories({String fileName, int labelIdx, int expectedColsNum, int expectedRowsNum,
+  List<Tuple2<int, int>> rows,
+  List<Tuple2<int, int>> columns,
   void testContentFn(MLMatrix<Float32x4> features, MLVector<Float32x4> labels, List<String> headers)}) async {
 
-  final data = Float32x4CsvMLDataInternal.fromFile(fileName, labelIdx: labelIdx, columns: columnsToRead);
+  final data = Float32x4CsvMLDataInternal.fromFile(fileName,
+    labelIdx: labelIdx,
+    columns: columns,
+    rows: rows,
+  );
   final header = await data.header;
   final features = await data.features;
   final labels = await data.labels;
 
-  if (columnsToRead == null) {
-    expect(header.length, equals(colNum + 1));
-    expect(features.columnsNum, equals(colNum));
+  if (columns == null) {
+    expect(header.length, equals(expectedColsNum + 1));
+    expect(features.columnsNum, equals(expectedColsNum));
   }
 
-  expect(features.rowsNum, equals(rowNum));
-  expect(labels.length, equals(rowNum));
+  expect(features.rowsNum, equals(expectedRowsNum));
+  expect(labels.length, equals(expectedRowsNum));
 
   testContentFn(features, labels, header);
 }
@@ -35,8 +40,8 @@ void main() {
       await testCsvWithoutCategories(
         fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
         labelIdx: 8,
-        colNum: 8,
-        rowNum: 768,
+        expectedColsNum: 8,
+        expectedRowsNum: 768,
         testContentFn: (features, labels, header) {
           expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
           expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0]));
@@ -49,8 +54,8 @@ void main() {
       await testCsvWithoutCategories(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 1,
-          colNum: 8,
-          rowNum: 768,
+          expectedColsNum: 8,
+          expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
             expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
             expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
@@ -63,8 +68,8 @@ void main() {
       await testCsvWithoutCategories(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
-          colNum: 8,
-          rowNum: 768,
+          expectedColsNum: 8,
+          expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
             expect(features.getRow(0), floatIterableAlmostEqualTo([148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
             expect(features.getRow(34), floatIterableAlmostEqualTo([122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
@@ -77,8 +82,8 @@ void main() {
       await testCsvWithoutCategories(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
-          colNum: 8,
-          rowNum: 768,
+          expectedColsNum: 8,
+          expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
         expect(header, equals([
           'number of times pregnant',
@@ -110,9 +115,9 @@ void main() {
       await testCsvWithoutCategories(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
-          colNum: 8,
-          rowNum: 768,
-          columnsToRead: [const Tuple2(0, 1), const Tuple2(2, 2), const Tuple2(3, 4), const Tuple2(6, 8)],
+          expectedColsNum: 8,
+          expectedRowsNum: 768,
+          columns: [const Tuple2(0, 1), const Tuple2(2, 2), const Tuple2(3, 4), const Tuple2(6, 8)],
           testContentFn: (features, labels, header) {
             expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 0.627, 50.0]));
             expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 0.512, 45.0]));
@@ -134,7 +139,46 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should throw an error if label index with null value passed to constructor', () {
+    test('should cut out selected rows, all rows in one range', () async {
+      await testCsvWithoutCategories(
+          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          labelIdx: 8,
+          rows: [const Tuple2(0, 767)],
+          expectedColsNum: 8,
+          expectedRowsNum: 768,
+          testContentFn: (features, labels, header) {
+            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
+            expect(features.getRow(767), floatIterableAlmostEqualTo([1.0, 93.0, 70.0, 31.0, 0.0, 30.4 ,0.315, 23.0]));
+            expect(() => features.getRow(768), throwsRangeError);
+            expect([labels[0], labels[34], labels[767]], equals([1, 0, 0]));
+            expect(() => labels[768], throwsRangeError);
+          }
+      );
+    });
+
+    test('should cut out selected rows, several row ranges', () async {
+      await testCsvWithoutCategories(
+          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          labelIdx: 8,
+          rows: [
+            const Tuple2(0, 2),
+            const Tuple2(3, 4),
+            const Tuple2(10, 29),
+          ],
+          expectedColsNum: 8,
+          expectedRowsNum: 25,
+          testContentFn: (features, labels, header) {
+            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
+            expect(() => features.getRow(25), throwsRangeError);
+            expect(() => features.getRow(768), throwsRangeError);
+            expect([labels[0]], equals([1]));
+            expect(() => labels[25], throwsRangeError);
+            expect(() => labels[768], throwsRangeError);
+          }
+      );
+    });
+
+    test('should throw an error if label index with null value passed to the constructor', () {
       final actual = () => Float32x4CsvMLDataInternal.fromFile(
         'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
         labelIdx: null,
