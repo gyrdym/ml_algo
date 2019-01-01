@@ -68,7 +68,7 @@ void main() {
             expect(features.getRow(0), floatIterableAlmostEqualTo(<double>[
               1116.0, // elo15
               0.0, 0.0, 1.0, 0.0, 0.0, 0.0, // confederation
-              1076.461378, // gdp06
+              1076.461425, // gdp06
               25631282.0, // popu06
               1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // gdp_source
               0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, // popu_source
