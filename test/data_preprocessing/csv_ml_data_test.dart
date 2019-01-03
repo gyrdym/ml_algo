@@ -7,7 +7,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../unit_test_helpers/float_iterable_almost_equal_to.dart';
+import '../unit_test_helpers/floating_point_iterable_matchers.dart';
 
 Future testCsvWithoutCategories({String fileName, int labelIdx, int expectedColsNum, int expectedRowsNum,
   List<Tuple2<int, int>> rows,

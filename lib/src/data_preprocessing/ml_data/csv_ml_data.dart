@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:ml_algo/categorical_data_encoder_type.dart';
+import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:ml_algo/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/one_hot_encoder.dart';
@@ -38,10 +39,11 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     int labelIdx,
     bool headerExists = true,
     CategoricalDataEncoderType encoderType = CategoricalDataEncoderType.oneHot,
+    EncodeUnknownValueStrategy encodeUnknownStrategy = EncodeUnknownValueStrategy.error,
     Map<String, List<Object>> categories,
     List<Tuple2<int, int>> rows,
     List<Tuple2<int, int>> columns,
-    CategoricalDataEncoder categoricalEncoderFactory(Map<String, Iterable<Object>> dataDesrc),
+    CategoricalDataEncoder categoricalEncoderFactory(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -56,8 +58,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     if (categories != null) {
       _categoricalEncoder = categoricalEncoderFactory != null
-          ? categoricalEncoderFactory(categories)
-          : _createCategoricalDataEncoder(encoderType, categories);
+          ? categoricalEncoderFactory()
+          : _createCategoricalDataEncoder(encoderType, categories, encodeUnknownStrategy);
     }
 
     _prepareData(rows, columns);
@@ -210,10 +212,11 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   CategoricalDataEncoder _createCategoricalDataEncoder(
       CategoricalDataEncoderType encoderType,
       Map<String, List<Object>> categoricalDataDescr,
+      EncodeUnknownValueStrategy encodeUnknownStrategy,
   ) {
     switch (encoderType) {
       case CategoricalDataEncoderType.oneHot:
-        return OneHotEncoder(categoricalDataDescr);
+        return OneHotEncoder(categoricalDataDescr, encodeUnknownStrategy);
       default:
         throw UnsupportedError(_wrapErrorMessage('unsupported categorical categorical_encoder type $encoderType'));
     }

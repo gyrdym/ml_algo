@@ -31,11 +31,12 @@ abstract class Float32x4LinearRegressor implements Predictor<Float32x4> {
     return metric.getError(prediction, origLabels);
   }
 
-  MLVector<Float32x4> predict(MLMatrix<Float32x4> features) {
-    final labels = List<double>(features.rowsNum);
-    for (int i = 0; i < features.rowsNum; i++) {
-      labels[i] = _weights.dot(features.getRow(i));
-    }
-    return Float32x4Vector.from(labels);
-  }
+  MLVector<Float32x4> predict(MLMatrix<Float32x4> features) =>
+//    final labels = List<double>(features.rowsNum);
+//    for (int i = 0; i < features.rowsNum; i++) {
+//      labels[i] = _weights.dot(features.getRow(i));
+//    }
+//
+//    return Float32x4Vector.from(labels);
+    (features * _weights).toVector();
 }
