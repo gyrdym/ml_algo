@@ -6,35 +6,32 @@ import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/logistic_regressor.dart';
 import 'package:ml_algo/metric_type.dart';
 
-Future<double> logisticRegression() async {
+Future main() async {
   final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv', labelIdx: 8);
 
   final features = await data.features;
   final labels = await data.labels;
 
-  final validator = Float32x4CrossValidator.kFold(numberOfFolds: 7);
+  final validator = Float32x4CrossValidator.kFold(numberOfFolds: 5);
 
-  final step = 0.001;
-  final limit = 0.6;
+  final step = 0.00001;
+  final start = 0.0001;
+  final limit = 0.001;
 
   double minError = double.infinity;
   double bestLearningRate = 0.0;
 
-  for (double rate = step; rate < limit; rate += step) {
+  for (double rate = start; rate < limit; rate += step) {
     final logisticRegressor = LogisticRegressor(
-        iterationLimit: 100,
+        iterationLimit: 100000,
         learningRate: rate,
-        batchSize: 1,
         learningRateType: LearningRateType.constant,
         fitIntercept: true);
     final error = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
     if (error < minError) {
       minError = error;
       bestLearningRate = rate;
+      print('error: $minError, learning rate: $bestLearningRate');
     }
   }
-
-  print('Best learning rate: $bestLearningRate');
-
-  return minError;
 }
