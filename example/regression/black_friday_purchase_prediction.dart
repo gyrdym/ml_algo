@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:ml_algo/float32x4_cross_validator.dart';
 import 'package:ml_algo/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/gradient_regressor.dart';
@@ -22,33 +23,22 @@ Future main() async {
       'Product_Category_1': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
       'Product_Category_2': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
       'Product_Category_3': [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-    }
+    },
+    encodeUnknownStrategy: EncodeUnknownValueStrategy.ignore,
   );
+
   final features = await data.features;
   final labels = await data.labels;
 
   final validator = Float32x4CrossValidator.kFold(numberOfFolds: 5);
 
-  final step = 0.00001;
-  final start = 0.0001;
-  final limit = 0.02;
+  final regressor = GradientRegressor(
+      type: GradientType.stochastic,
+      iterationLimit: 100000,
+      learningRate: 0.001,
+      learningRateType: LearningRateType.constant);
 
-  double minError = double.infinity;
-  double bestLearningRate = 0.0;
+  final error = validator.evaluate(regressor, features, labels, MetricType.mape);
 
-  for (double rate = start; rate < limit; rate += step) {
-    final regressor = GradientRegressor(
-        type: GradientType.stochastic,
-        iterationLimit: 100000,
-        learningRate: rate,
-        learningRateType: LearningRateType.constant);
-
-    final error = validator.evaluate(regressor, features, labels, MetricType.mape);
-
-    if (error < minError) {
-      minError = error;
-      bestLearningRate = rate;
-      print('error: $minError, learning rate: $bestLearningRate');
-    }
-  }
+  print('MAPE error on k-fold validation: $error');
 }
