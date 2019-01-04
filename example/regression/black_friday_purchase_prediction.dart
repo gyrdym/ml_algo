@@ -24,7 +24,7 @@ Future main() async {
       'Product_Category_2': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
       'Product_Category_3': [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
     },
-    encodeUnknownStrategy: EncodeUnknownValueStrategy.ignore,
+    encodeUnknownStrategy: EncodeUnknownValueStrategy.returnZeroes,
   );
 
   final features = await data.features;

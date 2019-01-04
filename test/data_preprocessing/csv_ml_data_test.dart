@@ -7,7 +7,8 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../unit_test_helpers/floating_point_iterable_matchers.dart';
+import '../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../test_utils/mocks.dart';
 
 Future testCsvWithoutCategories({String fileName, int labelIdx, int expectedColsNum, int expectedRowsNum,
   List<Tuple2<int, int>> rows,
@@ -18,6 +19,7 @@ Future testCsvWithoutCategories({String fileName, int labelIdx, int expectedCols
     labelIdx: labelIdx,
     columns: columns,
     rows: rows,
+    categoricalEncoderFactory: () => CategoricalDataEncoderMock(),
   );
   final header = await data.header;
   final features = await data.features;

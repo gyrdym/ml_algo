@@ -11,7 +11,7 @@ class OneHotEncoder implements CategoricalDataEncoder {
   final Map<String, Map<Object, int>> _categoriesIndexed;
 
   OneHotEncoder(Map<String, List<Object>> dataDescr,
-      [this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.error]) :
+      [this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
     categories = Map<String, List<Object>>.unmodifiable(dataDescr),
     _categoriesIndexed = Map.unmodifiable(
       Map<String, Map<Object, int>>.fromIterable(dataDescr.keys,
@@ -32,7 +32,7 @@ class OneHotEncoder implements CategoricalDataEncoder {
     final values = _categoriesIndexed[categoryLabel];
 
     if (!values.containsKey(value)) {
-      if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.error) {
+      if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
         throw UnsupportedError('One hot encoding: unsupported value `$value` for the category `$categoryLabel`');
       } else {
         return List<double>.filled(values.length, 0.0);

@@ -7,7 +7,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../unit_test_helpers/floating_point_iterable_matchers.dart';
+import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 Future testCsvWithCategories({String fileName, int labelIdx, int rowNum, Map<String, List<Object>> categories,
   List<Tuple2<int, int>> columnsToRead,
