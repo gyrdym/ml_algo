@@ -1,3 +1,3 @@
 enum EncodeUnknownValueStrategy {
-  error, ignore,
+  throwError, returnZeroes,
 }
