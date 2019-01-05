@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/metric/type.dart';
+import 'package:ml_algo/metric_type.dart';
 import 'package:ml_linalg/linalg.dart';
 
 abstract class Predictor<E> {

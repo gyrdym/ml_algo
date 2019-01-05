@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:ml_algo/categorical_data_encoder_type.dart';
+import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:ml_algo/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/one_hot_encoder.dart';
@@ -30,16 +31,19 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   List<String> _originalHeader;
   List<String> _header;
   CategoricalDataEncoder _categoricalEncoder;
-  List<bool> _columnsToReadMask;
+  List<bool> _rowsMask;
+  List<bool> _columnsMask;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
     String eol = '\n',
     int labelIdx,
     bool headerExists = true,
     CategoricalDataEncoderType encoderType = CategoricalDataEncoderType.oneHot,
+    EncodeUnknownValueStrategy encodeUnknownStrategy = EncodeUnknownValueStrategy.throwError,
     Map<String, List<Object>> categories,
+    List<Tuple2<int, int>> rows,
     List<Tuple2<int, int>> columns,
-    CategoricalDataEncoder categoricalEncoderFactory(Map<String, Iterable<Object>> dataDesrc),
+    CategoricalDataEncoder categoricalEncoderFactory(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -48,16 +52,17 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     _validateArgs(
       labelIdx,
+      rows,
       columns,
     );
 
     if (categories != null) {
       _categoricalEncoder = categoricalEncoderFactory != null
-          ? categoricalEncoderFactory(categories)
-          : _createCategoricalDataEncoder(encoderType, categories);
+          ? categoricalEncoderFactory()
+          : _createCategoricalDataEncoder(encoderType, categories, encodeUnknownStrategy);
     }
 
-    _prepareData(columns);
+    _prepareData(rows, columns);
   }
 
   Future<List<List<dynamic>>> get _dataReadiness => _dataReadyCompleter.future;
@@ -83,13 +88,18 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     return _labels;
   }
 
-  Future _prepareData(Iterable<Tuple2<int, int>> columnsToRead) async {
+  Future _prepareData(Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns) async {
     final fileStream = _file.openRead();
     final data = await (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
+    final rowsNum = data.length;
     final columnsNum = data.first.length;
 
-    if (columnsToRead != null) {
-      _columnsToReadMask = _createColumnsToReadMask(columnsToRead, columnsNum);
+    if (rows != null) {
+      _rowsMask = _createDataReadMask(rows, rowsNum);
+    }
+
+    if (columns != null) {
+      _columnsMask = _createDataReadMask(columns, columnsNum);
     }
 
     _originalHeader = _headerExists
@@ -110,7 +120,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     // @TODO: replace with a fixed-length list
     final header = <String>[];
     for (int i = 0; i < headerRaw.length; i++) {
-      if (_columnsToReadMask == null || _columnsToReadMask[i] == true) {
+      if (_columnsMask == null || _columnsMask[i] == true) {
         header.add(headerRaw[i].toString());
       }
     }
@@ -122,20 +132,35 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   List<List<double>> _extractFeatures(int labelPos) {
     final lastIdx = _records.first.length - 1;
     final labelIdx = labelPos ?? lastIdx;
-    return _records.map((List item) {
-      if (_categoricalEncoder != null) {
-        return _convertFeaturesWithCategoricalData(item, labelIdx);
-      } else {
-        return _convertFeatures(item, labelIdx);
+    final result = <List<double>>[];
+    for (int i = 0; i < _records.length; i++) {
+      if (_rowsMask != null && _rowsMask[i] == false) {
+        continue;
       }
-    }).toList(growable: false);
+      final featuresRaw = _records[i];
+      List<double> featuresConverted;
+      if (_categoricalEncoder != null) {
+        featuresConverted = _convertFeaturesWithCategoricalData(featuresRaw, labelIdx);
+      } else {
+        featuresConverted = _convertFeatures(featuresRaw, labelIdx);
+      }
+      result.add(featuresConverted);
+    }
+    return result;
   }
 
   List<double> _extractLabels(int labelPos) {
     final labelIdx = labelPos ?? _records.first.length - 1;
-    return _records
-        .map((List<dynamic> item) => _convertValueToDouble(item[labelIdx]))
-        .toList(growable: false);
+    final result = <double>[];
+    for (int i = 0; i < _records.length; i++) {
+      if (_rowsMask != null && _rowsMask[i] == false) {
+        continue;
+      }
+      final dynamic rawValue = _records[i][labelIdx];
+      final convertedValue = _convertValueToDouble(rawValue);
+      result.add(convertedValue);
+    }
+    return result;
   }
 
   /// Light-weight method for data encoding without any checks if the current feature is categorical
@@ -143,7 +168,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     final converted = <double>[];
     for (int i = 0; i < features.length; i++) {
       final feature = features[i];
-      if (labelIdx == i || (_columnsToReadMask != null && _columnsToReadMask[i] == false)) {
+      if (labelIdx == i || (_columnsMask != null && _columnsMask[i] == false)) {
         continue;
       }
       converted.add(_convertValueToDouble(feature));
@@ -156,7 +181,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   List<double> _convertFeaturesWithCategoricalData(List<Object> features, int labelIdx) {
     final converted = <double>[];
     for (int i = 0; i < features.length; i++) {
-      if (labelIdx == i || (_columnsToReadMask != null  && _columnsToReadMask[i] == false)) {
+      if (labelIdx == i || (_columnsMask != null  && _columnsMask[i] == false)) {
         continue;
       }
       final feature = features[i];
@@ -187,19 +212,21 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   CategoricalDataEncoder _createCategoricalDataEncoder(
       CategoricalDataEncoderType encoderType,
       Map<String, List<Object>> categoricalDataDescr,
+      EncodeUnknownValueStrategy encodeUnknownStrategy,
   ) {
     switch (encoderType) {
       case CategoricalDataEncoderType.oneHot:
-        return OneHotEncoder(categoricalDataDescr);
+        return OneHotEncoder(categoricalDataDescr, encodeUnknownStrategy);
       default:
         throw UnsupportedError(_wrapErrorMessage('unsupported categorical categorical_encoder type $encoderType'));
     }
   }
 
-  void _validateArgs(int labelIdx, Iterable<Tuple2<int, int>> columns) {
+  void _validateArgs(int labelIdx, Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns) {
     final validators = [
       () => _validateLabelIdx(labelIdx),
-      () => _validateColumnsRanges(columns, labelIdx),
+      () => _validateReadRanges(rows),
+      () => _validateReadRanges(columns, labelIdx),
     ];
     for (int i = 0; i < validators.length; i++) {
       final errorMsg = validators[i]();
@@ -213,11 +240,10 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     if (labelIdx == null) {
       return _wrapErrorMessage('label index must not be null');
     }
-
     return '';
   }
 
-  String _validateColumnsRanges(Iterable<Tuple2<int, int>> ranges, int labelIdx) {
+  String _validateReadRanges(Iterable<Tuple2<int, int>> ranges, [int labelIdx]) {
     if (ranges == null) {
       return '';
     }
@@ -233,26 +259,26 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
       if (prevRange != null && prevRange.item2 >= range.item1) {
         errorMessage = _wrapErrorMessage('$prevRange and $range ranges are intersecting');
       }
-      if (labelIdx >= range.item1 && labelIdx <= range.item2) {
+      if (labelIdx != null && labelIdx >= range.item1 && labelIdx <= range.item2) {
         isLabelInRanges = true;
       }
       prevRange = range;
     });
 
-    if (!isLabelInRanges) {
+    if (labelIdx != null && !isLabelInRanges) {
       errorMessage = _wrapErrorMessage('label index $_labelIdx is not in provided ranges $ranges');
     }
 
     return errorMessage;
   }
 
-  List<bool> _createColumnsToReadMask(Iterable<Tuple2<int, int>> ranges, int columnsNum) {
-    final mask = List<bool>.filled(columnsNum, false);
-    ranges.take(columnsNum).forEach((Tuple2<int, int> range) {
-      if (range.item1 >= columnsNum) {
+  List<bool> _createDataReadMask(Iterable<Tuple2<int, int>> ranges, int limit) {
+    final mask = List<bool>.filled(limit, false);
+    ranges.take(limit).forEach((Tuple2<int, int> range) {
+      if (range.item1 >= limit) {
         return false;
       }
-      final end = math.min(columnsNum, range.item2 + 1);
+      final end = math.min(limit, range.item2 + 1);
       mask.fillRange(range.item1, end, true);
     });
     return mask;

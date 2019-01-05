@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
 import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/metric/type.dart';
+import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/predictor.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -31,11 +31,12 @@ abstract class Float32x4LinearRegressor implements Predictor<Float32x4> {
     return metric.getError(prediction, origLabels);
   }
 
-  MLVector<Float32x4> predict(MLMatrix<Float32x4> features) {
-    final labels = List<double>(features.rowsNum);
-    for (int i = 0; i < features.rowsNum; i++) {
-      labels[i] = _weights.dot(features.getRow(i));
-    }
-    return Float32x4Vector.from(labels);
-  }
+  MLVector<Float32x4> predict(MLMatrix<Float32x4> features) =>
+//    final labels = List<double>(features.rowsNum);
+//    for (int i = 0; i < features.rowsNum; i++) {
+//      labels[i] = _weights.dot(features.getRow(i));
+//    }
+//
+//    return Float32x4Vector.from(labels);
+    (features * _weights).toVector();
 }

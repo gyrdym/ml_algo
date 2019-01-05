@@ -7,7 +7,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../unit_test_helpers/float_iterable_almost_equal_to.dart';
+import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 Future testCsvWithCategories({String fileName, int labelIdx, int rowNum, Map<String, List<Object>> categories,
   List<Tuple2<int, int>> columnsToRead,
@@ -68,7 +68,7 @@ void main() {
             expect(features.getRow(0), floatIterableAlmostEqualTo(<double>[
               1116.0, // elo15
               0.0, 0.0, 1.0, 0.0, 0.0, 0.0, // confederation
-              1076.461378, // gdp06
+              1076.461425, // gdp06
               25631282.0, // popu06
               1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, // gdp_source
               0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, // popu_source

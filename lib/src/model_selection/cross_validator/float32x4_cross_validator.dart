@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:ml_algo/float32x4_cross_validator.dart';
+import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/predictor.dart';
-import 'package:ml_algo/src/metric/type.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
