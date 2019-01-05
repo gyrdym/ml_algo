@@ -1,12 +1,17 @@
+import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 
 class OneHotEncoder implements CategoricalDataEncoder {
   @override
   final Map<String, List<Object>> categories;
 
+  @override
+  final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
+
   final Map<String, Map<Object, int>> _categoriesIndexed;
 
-  OneHotEncoder(Map<String, List<Object>> dataDescr) :
+  OneHotEncoder(Map<String, List<Object>> dataDescr,
+      [this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
     categories = Map<String, List<Object>>.unmodifiable(dataDescr),
     _categoriesIndexed = Map.unmodifiable(
       Map<String, Map<Object, int>>.fromIterable(dataDescr.keys,
@@ -27,7 +32,11 @@ class OneHotEncoder implements CategoricalDataEncoder {
     final values = _categoriesIndexed[categoryLabel];
 
     if (!values.containsKey(value)) {
-      throw UnsupportedError('One hot encoding: unsupported value `$value` for the category `$categoryLabel`');
+      if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
+        throw UnsupportedError('One hot encoding: unsupported value `$value` for the category `$categoryLabel`');
+      } else {
+        return List<double>.filled(values.length, 0.0);
+      }
     }
 
     final targetIdx = values[value];

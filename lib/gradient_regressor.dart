@@ -3,8 +3,8 @@ import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/generator_factory.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
-import 'package:ml_algo/src/regressor/gradient_type.dart';
+import 'package:ml_algo/learning_rate_type.dart';
+import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/src/regressor/float32x4_linear_regressor.dart';
 
 class GradientRegressor extends Float32x4LinearRegressor {
@@ -31,6 +31,6 @@ class GradientRegressor extends Float32x4LinearRegressor {
                 lambda: lambda,
                 batchSize: type == GradientType.stochastic
                     ? 1
-                    : type == GradientType.miniBatch ? batchSize : double.infinity.toInt()),
+                    : type == GradientType.miniBatch ? batchSize : double.maxFinite.toInt()),
             fitIntercept ? interceptScale : 0.0);
 }

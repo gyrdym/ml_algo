@@ -1,34 +1,35 @@
 import 'dart:async';
 
-import 'gradient_descent_regression.dart';
-import 'lasso_regression.dart';
-import 'logistic_regression.dart';
+import 'package:ml_algo/gradient_regressor.dart';
+import 'package:ml_algo/gradient_type.dart';
+import 'package:ml_algo/learning_rate_type.dart';
+import 'package:ml_linalg/float32x4_matrix.dart';
+import 'package:ml_linalg/float32x4_vector.dart';
 
+/// A simple usage example using synthetic data. To see more complex examples, please, visit other directories in this
+/// folder
 Future main() async {
-  print('Learning in process, wait a bit...');
-  print('\n');
+  // Let's create a feature matrix (a set of independent variables)
+  final features = Float32x4Matrix.from([
+    [2.0, 3.0, 4.0, 5.0],
+    [12.0, 32.0, 1.0, 3.0],
+    [27.0, 3.0, 0.0, 59.0],
+  ]);
 
-  final sgdQuality = await gradientDescentRegression();
-  print('========================================================================================================');
-  print('|| Stochastic gradient descent regression, K-fold cross validation with MAPE metric (error in percents):');
-  print('|| ${sgdQuality.toStringAsFixed(2)}%');
-  print('========================================================================================================');
+  // Let's create dependent variables vector. It will be used as `true` values to adjust regression coefficients
+  final labels = Float32x4Vector.from([4.3, 3.5, 2.1]);
 
-  print('\n');
+  // Let's create a regressor itself. With its help we can train some linear model to predict a label value for a new
+  // features
+  final regressor = GradientRegressor(
+      type: GradientType.stochastic,
+      iterationLimit: 100,
+      learningRate: 0.0005,
+      learningRateType: LearningRateType.constant);
 
-  final lassoQuality = await lassoRegression();
-  print('========================================================================================================');
-  print('|| Lasso regression, K-fold cross validation with MAPE metric (error in percent):');
-  print('|| ${lassoQuality.toStringAsFixed(2)}%');
-  print('=========================================================================================================');
+  // Let's train our model (training or fitting is a coefficients adjusting process)
+  regressor.fit(features, labels);
 
-  print('\n');
-  print('Learning of logistic regressor in progress, wait a bit... (best possible parameters are being fitted)');
-  print('\n');
-
-  final logisticRegressionError = await logisticRegression();
-  print('=========================================================================================================');
-  print('|| Logistic regression, error on cross validation: ');
-  print('|| ${(logisticRegressionError * 100).toStringAsFixed(2)}%,');
-  print('=========================================================================================================');
+  // Let's see adjusted coefficients
+  print('Regression coefficients: ${regressor.weights}');
 }

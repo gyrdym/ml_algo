@@ -1,12 +1,13 @@
+export 'package:ml_algo/encode_unknown_value_strategy.dart';
 export 'package:ml_algo/float32x4_cross_validator.dart';
 export 'package:ml_algo/float32x4_csv_ml_data.dart';
 export 'package:ml_algo/gradient_regressor.dart';
+export 'package:ml_algo/gradient_type.dart';
 export 'package:ml_algo/lasso_regressor.dart';
+export 'package:ml_algo/learning_rate_type.dart';
 export 'package:ml_algo/logistic_regressor.dart';
+export 'package:ml_algo/metric_type.dart';
 export 'package:ml_algo/src/data_preprocessing/ml_data/ml_data.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
 export 'package:ml_algo/src/metric/regression/type.dart';
-export 'package:ml_algo/src/metric/type.dart';
 export 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
-export 'package:ml_algo/src/optimizer/learning_rate_generator/type.dart';
-export 'package:ml_algo/src/regressor/gradient_type.dart';
