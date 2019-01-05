@@ -15,17 +15,19 @@ Future main() async {
   final validator = Float32x4CrossValidator.kFold(numberOfFolds: 5);
 
   final step = 0.00001;
-  final start = 0.0001;
-  final limit = 0.001;
+  final start = 0.001;
+  final limit = 0.01;
 
   double minError = double.infinity;
   double bestLearningRate = 0.0;
 
+  // Let's find optimal learningRate. WARNING: it may take very much time!
   for (double rate = start; rate < limit; rate += step) {
     final logisticRegressor = LogisticRegressor(
-        iterationLimit: 100000,
+        iterationLimit: 100,
         learningRate: rate,
         learningRateType: LearningRateType.constant,
+        batchSize: 768,
         fitIntercept: true);
     final error = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
     if (error < minError) {

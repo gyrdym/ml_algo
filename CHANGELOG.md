@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.1.0
+- Real-life example added (black friday dataset)
+- `rows` parameter added to `Float32x4CsvMlData`
+- Unknown categorical values handling strategy types added
+
 ## 5.0.0
 - One hot encoder integrated into CSV ML data 
 
