@@ -8,30 +8,19 @@ class OneHotEncoder implements CategoricalDataEncoder {
   @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
-  final Map<String, Map<Object, int>> _categoriesIndexed;
-
-  OneHotEncoder(Map<String, List<Object>> dataDescr,
+  OneHotEncoder(Map<String, List<Object>> categories,
       [this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
-    categories = Map<String, List<Object>>.unmodifiable(dataDescr),
-    _categoriesIndexed = Map.unmodifiable(
-      Map<String, Map<Object, int>>.fromIterable(dataDescr.keys,
-        key: (dynamic key) => key as String,
-        value: (dynamic key) => Map<Object, int>.fromIterable(dataDescr[key],
-            key: (dynamic value) => value,
-            value: (dynamic value) => dataDescr[key].indexOf(value),
-        ),
-      ),
-    );
+    categories = Map<String, List<Object>>.unmodifiable(categories);
 
   @override
   List<double> encode(String categoryLabel, Object value) {
-    if (!_categoriesIndexed.containsKey(categoryLabel)) {
+    if (!categories.containsKey(categoryLabel)) {
       throw UnsupportedError('One hot encoding: unsupported category `$categoryLabel`');
     }
 
-    final values = _categoriesIndexed[categoryLabel];
+    final values = categories[categoryLabel];
 
-    if (!values.containsKey(value)) {
+    if (!values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
         throw UnsupportedError('One hot encoding: unsupported value `$value` for the category `$categoryLabel`');
       } else {
@@ -39,7 +28,7 @@ class OneHotEncoder implements CategoricalDataEncoder {
       }
     }
 
-    final targetIdx = values[value];
+    final targetIdx = values.indexOf(value);
     return List<double>.generate(values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
   }
 }

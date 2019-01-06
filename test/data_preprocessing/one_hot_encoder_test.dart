@@ -1,9 +1,9 @@
 import 'package:ml_algo/encode_unknown_value_strategy.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/one_hot_encoder.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:test/test.dart';
 
-OneHotEncoder createEncoder(EncodeUnknownValueStrategy strategy) =>
-  OneHotEncoder({
+CategoricalDataEncoder createEncoder(EncodeUnknownValueStrategy strategy) =>
+    CategoricalDataEncoder.oneHot({
     'gender': ['male', 'female'],
     'race/ethnicity': ['group A', 'group B', 'group C', 'group D'],
     'married': [true, false],

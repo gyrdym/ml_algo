@@ -19,7 +19,7 @@ Future testCsvData({String fileName, int labelIdx, int expectedColsNum, int expe
     labelIdx: labelIdx,
     columns: columns,
     rows: rows,
-    categoricalEncoderFactory: () => CategoricalDataEncoderMock(),
+    encoderFactory: createCategoricalDataEncoderFactoryMock(),
   );
   final header = await data.header;
   final features = await data.features;
