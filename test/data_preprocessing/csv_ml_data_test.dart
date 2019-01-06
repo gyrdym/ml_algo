@@ -10,7 +10,7 @@ import 'package:tuple/tuple.dart';
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 import '../test_utils/mocks.dart';
 
-Future testCsvWithoutCategories({String fileName, int labelIdx, int expectedColsNum, int expectedRowsNum,
+Future testCsvData({String fileName, int labelIdx, int expectedColsNum, int expectedRowsNum,
   List<Tuple2<int, int>> rows,
   List<Tuple2<int, int>> columns,
   void testContentFn(MLMatrix<Float32x4> features, MLVector<Float32x4> labels, List<String> headers)}) async {
@@ -39,7 +39,7 @@ Future testCsvWithoutCategories({String fileName, int labelIdx, int expectedCols
 void main() {
   group('CsvMLData', () {
     test('should properly parse csv file', () async {
-      await testCsvWithoutCategories(
+      await testCsvData(
         fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
         labelIdx: 8,
         expectedColsNum: 8,
@@ -53,7 +53,7 @@ void main() {
     });
 
     test('should parse csv file with specified label column position', () async {
-      await testCsvWithoutCategories(
+      await testCsvData(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 1,
           expectedColsNum: 8,
@@ -67,7 +67,7 @@ void main() {
     });
 
     test('should parse csv file with specified label column position, position is 0', () async {
-      await testCsvWithoutCategories(
+      await testCsvData(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
           expectedColsNum: 8,
@@ -81,7 +81,7 @@ void main() {
     });
 
     test('should extract header data if the latter is specified', () async {
-      await testCsvWithoutCategories(
+      await testCsvData(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
           expectedColsNum: 8,
@@ -114,7 +114,7 @@ void main() {
     });
 
     test('should cut out selected columns', () async {
-      await testCsvWithoutCategories(
+      await testCsvData(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           expectedColsNum: 8,
@@ -142,7 +142,7 @@ void main() {
     });
 
     test('should cut out selected rows, all rows in one range', () async {
-      await testCsvWithoutCategories(
+      await testCsvData(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           rows: [const Tuple2(0, 767)],
@@ -159,7 +159,7 @@ void main() {
     });
 
     test('should cut out selected rows, several row ranges', () async {
-      await testCsvWithoutCategories(
+      await testCsvData(
           fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           rows: [

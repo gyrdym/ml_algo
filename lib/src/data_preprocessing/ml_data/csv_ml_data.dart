@@ -21,10 +21,12 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final File _file;
   final int _labelIdx;
   final bool _headerExists;
-  final _dataReadyCompleter = Completer<List<List<dynamic>>>();
+  final List<Tuple2<int, int>> _rows;
+  final List<Tuple2<int, int>> _columns;
 
   static const String _errorPrefix = 'Csv ML Data';
 
+  List<List<dynamic>> _data;
   List<List<dynamic>> _records;
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
@@ -32,7 +34,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   List<String> _header;
   CategoricalDataEncoder _categoricalEncoder;
   List<bool> _rowsMask;
+  int _actualRowsNum;
   List<bool> _columnsMask;
+  int _actualColumnsNum;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
     String eol = '\n',
@@ -51,7 +55,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
         _labelIdx = labelIdx,
-        _headerExists = headerExists {
+        _headerExists = headerExists,
+        _rows = rows,
+        _columns = columns {
 
     _validateArgs(
       labelIdx,
@@ -64,46 +70,49 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
           ? categoricalEncoderFactory()
           : _createCategoricalDataEncoder(encoderType, categories, encodeUnknownStrategy);
     }
-
-    _prepareData(rows, columns);
   }
-
-  Future<List<List<dynamic>>> get _dataReadiness => _dataReadyCompleter.future;
 
   @override
   Future<List<String>> get header async {
-    final data = (await _dataReadiness);
-    _header ??= _headerExists ? _extractHeader(data) : null;
+    _data ??= (await _prepareData(_rows, _columns));
+    _header ??= _headerExists ? _extractHeader(_data) : null;
     return _header;
   }
 
   @override
   Future<MLMatrix<Float32x4>> get features async {
-    await _dataReadiness;
+    _data ??= (await _prepareData(_rows, _columns));
     _features ??= Float32x4Matrix.from(_extractFeatures(_labelIdx));
     return _features;
   }
 
   @override
   Future<MLVector<Float32x4>> get labels async {
-    await _dataReadiness;
+    _data ??= (await _prepareData(_rows, _columns));
     _labels ??= Float32x4Vector.from(_extractLabels(_labelIdx));
     return _labels;
   }
 
-  Future _prepareData(Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns) async {
+  Future<List<List<dynamic>>> _prepareData(Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns) async {
     final fileStream = _file.openRead();
     final data = await (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
     final rowsNum = data.length;
     final columnsNum = data.first.length;
 
     if (rows != null) {
-      _rowsMask = _createDataReadMask(rows, rowsNum);
+      final rowsData = _createDataReadMask(rows, rowsNum);
+      _rowsMask = rowsData.item1;
+      _actualRowsNum = rowsData.item2;
     }
 
     if (columns != null) {
-      _columnsMask = _createDataReadMask(columns, columnsNum);
+      final columnData = _createDataReadMask(columns, columnsNum);
+      _columnsMask = columnData.item1;
+      _actualColumnsNum = columnData.item2;
     }
+
+    _actualRowsNum ??= rowsNum - (_headerExists ? 1 : 0);
+    _actualColumnsNum ??= columnsNum;
 
     _originalHeader = _headerExists
         ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
@@ -115,16 +124,17 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
           _wrapErrorMessage('Invalid label column number'));
     }
 
-    _dataReadyCompleter.complete(data);
+    return data;
   }
 
   List<String> _extractHeader(List<List<dynamic>> data) {
-    final headerRaw = data[0];
-    // @TODO: replace with a fixed-length list
-    final header = <String>[];
-    for (int i = 0; i < headerRaw.length; i++) {
+    final headerRow = data[0];
+    final header = List<String>(_actualColumnsNum);
+    int _i = 0;
+    for (int i = 0; i < headerRow.length; i++) {
       if (_columnsMask == null || _columnsMask[i] == true) {
-        header.add(headerRaw[i].toString());
+        header[_i] = headerRow[i].toString();
+        _i++;
       }
     }
     return header;
@@ -135,21 +145,17 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   List<List<double>> _extractFeatures(int labelPos) {
     final lastIdx = _records.first.length - 1;
     final labelIdx = labelPos ?? lastIdx;
-    final result = <List<double>>[];
+    final features = List<List<double>>(_actualRowsNum);
+    int _i = 0;
     for (int i = 0; i < _records.length; i++) {
-      if (_rowsMask != null && _rowsMask[i] == false) {
-        continue;
+      if (_rowsMask == null || _rowsMask[i] == true) {
+        final featuresRaw = _records[i];
+        features[_i++] = _categoricalEncoder != null
+            ? _convertFeaturesWithCategoricalData(featuresRaw, labelIdx)
+            : _convertFeatures(featuresRaw, labelIdx);
       }
-      final featuresRaw = _records[i];
-      List<double> featuresConverted;
-      if (_categoricalEncoder != null) {
-        featuresConverted = _convertFeaturesWithCategoricalData(featuresRaw, labelIdx);
-      } else {
-        featuresConverted = _convertFeatures(featuresRaw, labelIdx);
-      }
-      result.add(featuresConverted);
     }
-    return result;
+    return features;
   }
 
   List<double> _extractLabels(int labelPos) {
@@ -275,16 +281,18 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     return errorMessage;
   }
 
-  List<bool> _createDataReadMask(Iterable<Tuple2<int, int>> ranges, int limit) {
+  Tuple2<List<bool>, int> _createDataReadMask(Iterable<Tuple2<int, int>> ranges, int limit) {
     final mask = List<bool>.filled(limit, false);
+    int numOfElements = 0;
     ranges.take(limit).forEach((Tuple2<int, int> range) {
       if (range.item1 >= limit) {
         return false;
       }
       final end = math.min(limit, range.item2 + 1);
       mask.fillRange(range.item1, end, true);
+      numOfElements += end - range.item1;
     });
-    return mask;
+    return Tuple2<List<bool>, int>(mask, numOfElements);
   }
 
   String _wrapErrorMessage(String text) => '$_errorPrefix: $text';
