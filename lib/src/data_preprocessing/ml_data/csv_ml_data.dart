@@ -5,11 +5,11 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
-import 'package:ml_algo/categorical_data_encoder_type.dart';
-import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:ml_algo/float32x4_csv_ml_data.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
 import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -71,7 +71,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     );
 
     if (categories != null) {
-      _fallbackEncoder = encoderFactory.fromType(encoderType, categories, encodeUnknownStrategy);
+      _fallbackEncoder = _encoderFactory.fromType(encoderType, categories, encodeUnknownStrategy);
     }
   }
 
