@@ -9,7 +9,7 @@ import 'package:ml_algo/categorical_data_encoder_type.dart';
 import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:ml_algo/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/one_hot_encoder.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
 import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -23,6 +23,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final bool _headerExists;
   final List<Tuple2<int, int>> _rows;
   final List<Tuple2<int, int>> _columns;
+  final CategoricalDataEncoderFactory _encoderFactory;
 
   static const String _errorPrefix = 'Csv ML Data';
 
@@ -32,13 +33,14 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   MLVector<Float32x4> _labels;
   List<String> _originalHeader;
   List<String> _header;
-  CategoricalDataEncoder _categoricalEncoder;
+  CategoricalDataEncoder _fallbackEncoder;
   List<bool> _rowsMask;
   int _actualRowsNum;
   List<bool> _columnsMask;
   int _actualColumnsNum;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
+    // public parameters
     String eol = '\n',
     int labelIdx,
     bool headerExists = true,
@@ -50,14 +52,17 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
     List<Tuple2<int, int>> rows,
     List<Tuple2<int, int>> columns,
-    CategoricalDataEncoder categoricalEncoderFactory(),
+
+    // private parameters, they are hidden by the factory
+    CategoricalDataEncoderFactory encoderFactory = const CategoricalDataEncoderFactory(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
         _labelIdx = labelIdx,
         _headerExists = headerExists,
         _rows = rows,
-        _columns = columns {
+        _columns = columns,
+        _encoderFactory = encoderFactory {
 
     _validateArgs(
       labelIdx,
@@ -66,9 +71,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     );
 
     if (categories != null) {
-      _categoricalEncoder = categoricalEncoderFactory != null
-          ? categoricalEncoderFactory()
-          : _createCategoricalDataEncoder(encoderType, categories, encodeUnknownStrategy);
+      _fallbackEncoder = encoderFactory.fromType(encoderType, categories, encodeUnknownStrategy);
     }
   }
 
@@ -150,7 +153,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     for (int i = 0; i < _records.length; i++) {
       if (_rowsMask == null || _rowsMask[i] == true) {
         final featuresRaw = _records[i];
-        features[_i++] = _categoricalEncoder != null
+        features[_i++] = _fallbackEncoder != null
             ? _convertFeaturesWithCategoricalData(featuresRaw, labelIdx)
             : _convertFeatures(featuresRaw, labelIdx);
       }
@@ -160,27 +163,27 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
   List<double> _extractLabels(int labelPos) {
     final labelIdx = labelPos ?? _records.first.length - 1;
-    final result = <double>[];
+    final result = List<double>(_actualRowsNum);
+    int _i = 0;
     for (int i = 0; i < _records.length; i++) {
-      if (_rowsMask != null && _rowsMask[i] == false) {
-        continue;
+      if (_rowsMask == null || _rowsMask[i] == true) {
+        final dynamic rawValue = _records[i][labelIdx];
+        final convertedValue = _convertValueToDouble(rawValue);
+        result[_i++] = convertedValue;
       }
-      final dynamic rawValue = _records[i][labelIdx];
-      final convertedValue = _convertValueToDouble(rawValue);
-      result.add(convertedValue);
     }
     return result;
   }
 
   /// Light-weight method for data encoding without any checks if the current feature is categorical
   List<double> _convertFeatures(List<Object> features, int labelIdx) {
-    final converted = <double>[];
+    final converted = List<double>(_actualColumnsNum - 1); // minus one column for label values
+    int _i = 0;
     for (int i = 0; i < features.length; i++) {
       final feature = features[i];
-      if (labelIdx == i || (_columnsMask != null && _columnsMask[i] == false)) {
-        continue;
+      if (labelIdx != i && (_columnsMask == null || _columnsMask[i] == true)) {
+        converted[_i++] = _convertValueToDouble(feature);
       }
-      converted.add(_convertValueToDouble(feature));
     }
     return converted;
   }
@@ -196,8 +199,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
       final feature = features[i];
       final columnTitle = _originalHeader[i];
       Iterable<double> expanded;
-      if (_categoricalEncoder.categories.containsKey(columnTitle)) {
-        expanded = _categoricalEncoder.encode(columnTitle, feature);
+      if (_fallbackEncoder.categories.containsKey(columnTitle)) {
+        expanded = _fallbackEncoder.encode(columnTitle, feature);
       } else {
         expanded = [_convertValueToDouble(feature)];
       }
@@ -215,19 +218,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
       }
     } else {
       return (value as num).toDouble();
-    }
-  }
-
-  CategoricalDataEncoder _createCategoricalDataEncoder(
-      CategoricalDataEncoderType encoderType,
-      Map<String, List<Object>> categoricalDataDescr,
-      EncodeUnknownValueStrategy encodeUnknownStrategy,
-  ) {
-    switch (encoderType) {
-      case CategoricalDataEncoderType.oneHot:
-        return OneHotEncoder(categoricalDataDescr, encodeUnknownStrategy);
-      default:
-        throw UnsupportedError(_wrapErrorMessage('unsupported categorical categorical_encoder type $encoderType'));
     }
   }
 

@@ -1,19 +1,19 @@
 import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 
-class OneHotEncoder implements CategoricalDataEncoder {
+class OrdinalEncoder implements CategoricalDataEncoder {
   @override
   final Map<String, List<Object>> categories;
 
   @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
-  OneHotEncoder(Map<String, List<Object>> categories,
+  OrdinalEncoder(Map<String, Iterable<Object>> categories,
       [this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
-    categories = Map<String, List<Object>>.unmodifiable(categories);
+        categories = Map<String, List<Object>>.unmodifiable(categories);
 
   @override
-  List<double> encode(String categoryLabel, Object value) {
+  Iterable<double> encode(String categoryLabel, Object value) {
     if (!categories.containsKey(categoryLabel)) {
       throw UnsupportedError('One hot encoding: unsupported category `$categoryLabel`');
     }
@@ -22,13 +22,13 @@ class OneHotEncoder implements CategoricalDataEncoder {
 
     if (!values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
-        throw UnsupportedError('One hot encoding: unsupported value `$value` for the category `$categoryLabel`');
+        throw UnsupportedError('Ordinal encoding: unsupported value `$value` for the category `$categoryLabel`');
       } else {
-        return List<double>.filled(values.length, 0.0);
+        return [0.0];
       }
     }
 
-    final targetIdx = values.indexOf(value);
-    return List<double>.generate(values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
+    final ordinalNum = values.indexOf(value).toDouble();
+    return [ordinalNum + 1]; // plus one - to avoid zero value. Zero is reserved for unknown values
   }
 }
