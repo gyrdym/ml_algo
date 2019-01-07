@@ -5,15 +5,13 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.
 class CategoricalDataEncoderFactory {
   const CategoricalDataEncoderFactory();
 
-  CategoricalDataEncoder fromType(CategoricalDataEncoderType encoderType, Map<String, List<Object>> categories,
-      [EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
+  CategoricalDataEncoder fromType(CategoricalDataEncoderType encoderType, [List<Object> categories,
+      EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
       CategoricalDataEncoder.fromType(encoderType, categories, encodeUnknownValueStrategy);
 
-  CategoricalDataEncoder oneHot(Map<String, List<Object>> categories,
-      [EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
+  CategoricalDataEncoder oneHot([List<Object> categories, EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
       CategoricalDataEncoder.oneHot(categories, encodeUnknownValueStrategy);
 
-  CategoricalDataEncoder ordinal(Map<String, List<Object>> categories,
-      [EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
+  CategoricalDataEncoder ordinal([List<Object> categories, EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
       CategoricalDataEncoder.ordinal(categories, encodeUnknownValueStrategy);
 }

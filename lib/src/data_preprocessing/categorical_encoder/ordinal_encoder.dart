@@ -3,32 +3,23 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart'
 
 class OrdinalEncoder implements CategoricalDataEncoder {
   @override
-  final Map<String, List<Object>> categories;
-
-  @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
-  OrdinalEncoder(Map<String, Iterable<Object>> categories,
-      [this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
-        categories = Map<String, List<Object>>.unmodifiable(categories);
+  final List<Object> _values;
+
+  OrdinalEncoder([List<Object> values, this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
+        _values = values;
 
   @override
-  Iterable<double> encode(String categoryLabel, Object value) {
-    if (!categories.containsKey(categoryLabel)) {
-      throw UnsupportedError('One hot encoding: unsupported category `$categoryLabel`');
-    }
-
-    final values = categories[categoryLabel];
-
-    if (!values.contains(value)) {
+  Iterable<double> encode(Object value) {
+    if (!_values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
-        throw UnsupportedError('Ordinal encoding: unsupported value `$value` for the category `$categoryLabel`');
+        throw UnsupportedError('Ordinal encoding: unsupported value `$value`');
       } else {
         return [0.0];
       }
     }
-
-    final ordinalNum = values.indexOf(value).toDouble();
+    final ordinalNum = _values.indexOf(value).toDouble();
     return [ordinalNum + 1]; // plus one - to avoid zero value. Zero is reserved for unknown values
   }
 }
