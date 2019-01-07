@@ -24,6 +24,10 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final List<Tuple2<int, int>> _rows;
   final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
+  final Map<int, CategoricalDataEncoder> _indexToEncoder = {};
+  final Map<String, CategoricalDataEncoderType> _categoryNameToEncoderType;
+  final Map<int, CategoricalDataEncoderType> _categoryIndexToEncoderType;
+  final Map<String, List<Object>> _categories;
 
   static const String _errorPrefix = 'Csv ML Data';
 
@@ -31,13 +35,12 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   List<List<dynamic>> _records;
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
-  List<String> _originalHeader;
   List<String> _header;
-  CategoricalDataEncoder _fallbackEncoder;
   List<bool> _rowsMask;
   int _actualRowsNum;
   List<bool> _columnsMask;
   int _actualColumnsNum;
+  bool _isCategoricalDataExist = false;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
     // public parameters
@@ -48,7 +51,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     EncodeUnknownValueStrategy encodeUnknownStrategy = EncodeUnknownValueStrategy.throwError,
     Map<String, List<Object>> categories,
     Map<int, List<Object>> categoriesByIndexes,
-    Map<String, CategoricalDataEncoderType> categoryToEncoder,
+    Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
     List<Tuple2<int, int>> rows,
     List<Tuple2<int, int>> columns,
@@ -62,6 +65,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _headerExists = headerExists,
         _rows = rows,
         _columns = columns,
+        _categories = categories,
+        _categoryNameToEncoderType = categoryNameToEncoder,
+        _categoryIndexToEncoderType = categoryIndexToEncoder,
         _encoderFactory = encoderFactory {
 
     _validateArgs(
@@ -69,10 +75,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
       rows,
       columns,
     );
-
-    if (categories != null) {
-      _fallbackEncoder = _encoderFactory.fromType(encoderType, categories, encodeUnknownStrategy);
-    }
   }
 
   @override
@@ -117,9 +119,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     _actualRowsNum ??= rowsNum - (_headerExists ? 1 : 0);
     _actualColumnsNum ??= columnsNum;
 
-    _originalHeader = _headerExists
-        ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
-        : null;
     _records = _extractRecords(data);
 
     if (_labelIdx >= _records.first.length || _labelIdx < 0) {
@@ -127,8 +126,32 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
           _wrapErrorMessage('Invalid label column number'));
     }
 
+    _setEncoders(_records);
+
+    _isCategoricalDataExist = _indexToEncoder.isNotEmpty;
+
     return data;
   }
+
+  void _setEncoders(List<List<dynamic>> data) {
+    if (_headerExists && _isCategoryNameToEncoderTypeDefined && !_isCategoryIndexToEncoderTypeDefined) {
+      // create category index to encoder map from category name to encoder map
+    }
+
+    if (!_isCategoryIndexToEncoderTypeDefined && _categories.isNotEmpty) {
+      // create fallback encoders
+    }
+
+    if (_isCategoryIndexToEncoderTypeDefined) {
+      
+    }
+  }
+
+  bool get _isCategoryNameToEncoderTypeDefined =>
+      _categoryNameToEncoderType != null && _categoryNameToEncoderType.isNotEmpty;
+
+  bool get _isCategoryIndexToEncoderTypeDefined =>
+      _categoryIndexToEncoderType != null && _categoryIndexToEncoderType.isNotEmpty;
 
   List<String> _extractHeader(List<List<dynamic>> data) {
     final headerRow = data[0];
@@ -153,7 +176,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     for (int i = 0; i < _records.length; i++) {
       if (_rowsMask == null || _rowsMask[i] == true) {
         final featuresRaw = _records[i];
-        features[_i++] = _fallbackEncoder != null
+        features[_i++] = _isCategoricalDataExist
             ? _convertFeaturesWithCategoricalData(featuresRaw, labelIdx)
             : _convertFeatures(featuresRaw, labelIdx);
       }
@@ -197,10 +220,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         continue;
       }
       final feature = features[i];
-      final columnTitle = _originalHeader[i];
       Iterable<double> expanded;
-      if (_fallbackEncoder.categories.containsKey(columnTitle)) {
-        expanded = _fallbackEncoder.encode(columnTitle, feature);
+      if (_indexToEncoder.containsKey(i)) {
+        expanded = _indexToEncoder[i].encode(feature);
       } else {
         expanded = [_convertValueToDouble(feature)];
       }
