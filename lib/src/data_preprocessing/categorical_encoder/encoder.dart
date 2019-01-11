@@ -7,26 +7,27 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/ordinal_encod
 /// method for data encoding
 abstract class CategoricalDataEncoder {
   factory CategoricalDataEncoder.fromType(CategoricalDataEncoderType type,
-      [List<Object> values, EncodeUnknownValueStrategy encodeUnknownValueStrategy]) {
+      [EncodeUnknownValueStrategy encodeUnknownValueStrategy]) {
     switch (type) {
       case CategoricalDataEncoderType.ordinal:
-        return CategoricalDataEncoder.ordinal(values, encodeUnknownValueStrategy);
+        return CategoricalDataEncoder.ordinal(encodeUnknownValueStrategy: encodeUnknownValueStrategy);
       case CategoricalDataEncoderType.oneHot:
-        return CategoricalDataEncoder.oneHot(values, encodeUnknownValueStrategy);
+        return CategoricalDataEncoder.oneHot(encodeUnknownValueStrategy: encodeUnknownValueStrategy);
       default:
         throw Error();
     }
   }
 
-  factory CategoricalDataEncoder.oneHot([List<Object> values,
-    EncodeUnknownValueStrategy encodeUnknownValueStrategy]) = OneHotEncoder;
+  factory CategoricalDataEncoder.oneHot({EncodeUnknownValueStrategy encodeUnknownValueStrategy}) = OneHotEncoder;
 
-  factory CategoricalDataEncoder.ordinal([List<Object> categories,
-    EncodeUnknownValueStrategy encodeUnknownValueStrategy]) = OrdinalEncoder;
+  factory CategoricalDataEncoder.ordinal({EncodeUnknownValueStrategy encodeUnknownValueStrategy}) = OrdinalEncoder;
 
   /// Specifies what to do with NaN(in numeric context)/null/empty or other unknown values for the particular category
   EncodeUnknownValueStrategy get encodeUnknownValueStrategy;
 
   /// Encodes passed categorical value to a numerical representation
   Iterable<double> encode(Object value);
+
+  /// Find all unique values in the given list
+  void setCategoryValues(List<Object> values);
 }

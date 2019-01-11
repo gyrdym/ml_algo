@@ -7,11 +7,11 @@ class CategoricalDataEncoderFactory {
 
   CategoricalDataEncoder fromType(CategoricalDataEncoderType encoderType, [List<Object> categories,
       EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
-      CategoricalDataEncoder.fromType(encoderType, categories, encodeUnknownValueStrategy);
+      CategoricalDataEncoder.fromType(encoderType, encodeUnknownValueStrategy);
 
-  CategoricalDataEncoder oneHot([List<Object> categories, EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
-      CategoricalDataEncoder.oneHot(categories, encodeUnknownValueStrategy);
+  CategoricalDataEncoder oneHot([EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
+      CategoricalDataEncoder.oneHot(encodeUnknownValueStrategy: encodeUnknownValueStrategy);
 
-  CategoricalDataEncoder ordinal([List<Object> categories, EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
-      CategoricalDataEncoder.ordinal(categories, encodeUnknownValueStrategy);
+  CategoricalDataEncoder ordinal([EncodeUnknownValueStrategy encodeUnknownValueStrategy]) =>
+      CategoricalDataEncoder.ordinal(encodeUnknownValueStrategy: encodeUnknownValueStrategy);
 }
