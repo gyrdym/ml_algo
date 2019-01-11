@@ -37,16 +37,16 @@ abstract class Float32x4CsvMLData implements MLData<Float32x4> {
   /// encountered. E.g., if the strategy is [EncodeUnknownValueStrategy.returnZeroes], an unknown value just will be converted
   /// to the sequence of `0`
   factory Float32x4CsvMLData.fromFile(String fileName, {
-    int labelIdx,
     String eol,
+    int labelIdx,
     bool headerExists,
+    CategoricalDataEncoderType encoderType,
+    EncodeUnknownValueStrategy encodeUnknownStrategy,
     Map<String, List<Object>> categories,
     Map<int, List<Object>> categoriesByIndexes,
-    Map<String, CategoricalDataEncoderType> categoryToEncoder,
+    Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
     List<Tuple2<int, int>> rows,
     List<Tuple2<int, int>> columns,
-    CategoricalDataEncoderType encoderType,
-    EncodeUnknownValueStrategy encodeUnknownStrategy,
   }) = Float32x4CsvMLDataInternal.fromFile;
 }

@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 
@@ -5,10 +6,14 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
-  final List<Object> _values;
+  final CategoryValuesExtractor _valuesExtractor;
 
-  OrdinalEncoder([List<Object> values, this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
-        _values = values;
+  List<Object> _values;
+
+  OrdinalEncoder({
+    this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
+    CategoryValuesExtractor valuesExtractor,
+  }) : _valuesExtractor = valuesExtractor;
 
   @override
   Iterable<double> encode(Object value) {
@@ -21,5 +26,10 @@ class OrdinalEncoder implements CategoricalDataEncoder {
     }
     final ordinalNum = _values.indexOf(value).toDouble();
     return [ordinalNum + 1]; // plus one - to avoid zero value. Zero is reserved for unknown values
+  }
+
+  @override
+  void setCategoryValues(List<Object> values) {
+    _values ??= _valuesExtractor.extractCategoryValues(values);
   }
 }
