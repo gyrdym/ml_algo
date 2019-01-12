@@ -1,23 +1,10 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data_params_validator.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/validator/error_messages.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:tuple/tuple.dart';
 
 class MLDataParamsValidatorImpl implements MLDataParamsValidator {
   const MLDataParamsValidatorImpl();
-
-  static const noErrorMsg = '';
-
-  static String labelIndexMustNotBeNullMsg() =>
-      'label index must not be null';
-
-  static String leftBoundGreaterThanRightMsg(Tuple2<int, int> range) =>
-      'left boundary of the range $range is greater than the right one';
-
-  static String intersectingRangesMsg(Tuple2<int, int> range1, Tuple2<int, int> range2) =>
-      '$range1 and $range2 ranges are intersecting';
-
-  static String labelIsNotInRanges(int labelIdx, Iterable<Tuple2<int, int>> ranges) =>
-      'label index $labelIdx is not in provided ranges $ranges';
 
   @override
   String validate({
@@ -30,6 +17,8 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
     Map<int, CategoricalDataEncoderType> indexToEncoder
   }) {
     final validators = [
+          () => _validatePredefinedCategories(predefinedCategories, headerExists),
+          () => _validateEncoders(nameToEncoder, indexToEncoder, headerExists),
           () => _validateLabelIdx(labelIdx),
           () => _validateReadRanges(rows),
           () => _validateReadRanges(columns, labelIdx),
@@ -43,39 +32,48 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
     return '';
   }
 
+  String _validatePredefinedCategories(Map<String, Iterable<Object>> categories, bool headerExists) {
+    if (!headerExists && categories?.isNotEmpty == true) {
+      return MLDataValidationErrorMessages.noHeaderProvided(categories);
+    }
+    return MLDataValidationErrorMessages.noErrorMsg;
+  }
+
+  String _validateEncoders(Map<String, CategoricalDataEncoderType> nameToEncoder,
+      Map<int, CategoricalDataEncoderType> indexToEncoder, bool headerExists) {
+    return MLDataValidationErrorMessages.noErrorMsg;
+  }
+
   String _validateLabelIdx(int labelIdx) {
     if (labelIdx == null) {
-      return labelIndexMustNotBeNullMsg();
+      return MLDataValidationErrorMessages.labelIndexMustNotBeNullMsg();
     }
-    return noErrorMsg;
+    return MLDataValidationErrorMessages.noErrorMsg;
   }
 
   String _validateReadRanges(Iterable<Tuple2<int, int>> ranges, [int labelIdx]) {
     if (ranges == null) {
-      return '';
+      return MLDataValidationErrorMessages.noErrorMsg;
     }
-
-    String errorMessage = '';
     Tuple2<int, int> prevRange;
     bool isLabelInRanges = false;
 
-    ranges.forEach((Tuple2<int, int> range) {
+    for (final range in ranges) {
       if (range.item1 > range.item2) {
-        errorMessage = leftBoundGreaterThanRightMsg(range);
+        return MLDataValidationErrorMessages.leftBoundGreaterThanRightMsg(range);
       }
       if (prevRange != null && prevRange.item2 >= range.item1) {
-        errorMessage = intersectingRangesMsg(prevRange, range);
+        return MLDataValidationErrorMessages.intersectingRangesMsg(prevRange, range);
       }
       if (labelIdx != null && labelIdx >= range.item1 && labelIdx <= range.item2) {
         isLabelInRanges = true;
       }
       prevRange = range;
-    });
-
-    if (labelIdx != null && !isLabelInRanges) {
-      errorMessage = labelIsNotInRanges(labelIdx, ranges);
     }
 
-    return errorMessage;
+    if (labelIdx != null && !isLabelInRanges) {
+      return MLDataValidationErrorMessages.labelIsNotInRanges(labelIdx, ranges);
+    }
+    return MLDataValidationErrorMessages.noErrorMsg;
   }
 }

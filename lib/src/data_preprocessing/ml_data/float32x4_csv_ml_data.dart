@@ -10,8 +10,8 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknow
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data_params_validator.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data_params_validator_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
 import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
