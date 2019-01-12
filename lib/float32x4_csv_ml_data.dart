@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/categorical_data_encoder_type.dart';
 import 'package:ml_algo/encode_unknown_value_strategy.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/csv_ml_data.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data.dart';
 import 'package:tuple/tuple.dart';
 
