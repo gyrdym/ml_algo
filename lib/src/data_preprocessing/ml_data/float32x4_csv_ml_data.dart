@@ -10,6 +10,8 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknow
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data_params_validator.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data_params_validator_impl.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
 import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -24,6 +26,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final List<Tuple2<int, int>> _rows;
   final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
+  final MLDataParamsValidator _paramsValidator;
   final Map<int, CategoricalDataEncoder> _indexToEncoder = {};
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
   final Map<int, CategoricalDataEncoderType> _indexToEncoderType;
@@ -60,6 +63,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     // private parameters, they are hidden by the factory
     CategoricalDataEncoderFactory encoderFactory = const CategoricalDataEncoderFactory(),
+    MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -71,13 +75,21 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _nameToEncoderType = categoryNameToEncoder,
         _indexToEncoderType = categoryIndexToEncoder,
         _encoderFactory = encoderFactory,
-        _fallbackEncoderType = encoderType {
+        _fallbackEncoderType = encoderType,
+        _paramsValidator = paramsValidator {
 
-    _validateArgs(
-      labelIdx,
-      rows,
-      columns,
+    final errorMsg = _paramsValidator.validate(
+      labelIdx: labelIdx,
+      rows: rows,
+      columns: columns,
+      headerExists: headerExists,
+      predefinedCategories: categories,
+      nameToEncoder: categoryNameToEncoder,
+      indexToEncoder: categoryIndexToEncoder,
     );
+    if (errorMsg.isNotEmpty) {
+      throw Exception(_wrapErrorMessage(errorMsg));
+    }
   }
 
   @override
@@ -155,7 +167,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     }
 
     // create map "column index" -> "encoder" from fully-predefined categories data - _categories
-    if (!_isCategoryIndexToEncoderTypeDefined && _categories.isNotEmpty) {
+    if (!_isCategoryIndexToEncoderTypeDefined && _categories?.isNotEmpty == true) {
       _fillIndexToEncoderMapFromCategories();
     // create map "column index" -> "encoder" from map "column index" -> "encoder type"
     } else if (_isCategoryIndexToEncoderTypeDefined) {
@@ -295,56 +307,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     } else {
       return (value as num).toDouble();
     }
-  }
-
-  void _validateArgs(int labelIdx, Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns) {
-    final validators = [
-      () => _validateLabelIdx(labelIdx),
-      () => _validateReadRanges(rows),
-      () => _validateReadRanges(columns, labelIdx),
-    ];
-    for (int i = 0; i < validators.length; i++) {
-      final errorMsg = validators[i]();
-      if (errorMsg != '') {
-        throw Exception(errorMsg);
-      }
-    }
-  }
-
-  String _validateLabelIdx(int labelIdx) {
-    if (labelIdx == null) {
-      return _wrapErrorMessage('label index must not be null');
-    }
-    return '';
-  }
-
-  String _validateReadRanges(Iterable<Tuple2<int, int>> ranges, [int labelIdx]) {
-    if (ranges == null) {
-      return '';
-    }
-
-    String errorMessage = '';
-    Tuple2<int, int> prevRange;
-    bool isLabelInRanges = false;
-
-    ranges.forEach((Tuple2<int, int> range) {
-      if (range.item1 > range.item2) {
-        errorMessage = _wrapErrorMessage('left boundary of the range $range is greater than the right one');
-      }
-      if (prevRange != null && prevRange.item2 >= range.item1) {
-        errorMessage = _wrapErrorMessage('$prevRange and $range ranges are intersecting');
-      }
-      if (labelIdx != null && labelIdx >= range.item1 && labelIdx <= range.item2) {
-        isLabelInRanges = true;
-      }
-      prevRange = range;
-    });
-
-    if (labelIdx != null && !isLabelInRanges) {
-      errorMessage = _wrapErrorMessage('label index $_labelIdx is not in provided ranges $ranges');
-    }
-
-    return errorMessage;
   }
 
   Tuple2<List<bool>, int> _createDataReadMask(Iterable<Tuple2<int, int>> ranges, int limit) {

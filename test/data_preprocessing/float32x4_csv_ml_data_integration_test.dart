@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/data_preprocessing/ml_data/csv_ml_data.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
