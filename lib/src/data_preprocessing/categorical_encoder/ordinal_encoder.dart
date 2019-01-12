@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 
@@ -12,7 +13,7 @@ class OrdinalEncoder implements CategoricalDataEncoder {
 
   OrdinalEncoder({
     this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
-    CategoryValuesExtractor valuesExtractor,
+    CategoryValuesExtractor valuesExtractor = const CategoryValuesExtractorImpl<Object>(),
   }) : _valuesExtractor = valuesExtractor;
 
   @override
