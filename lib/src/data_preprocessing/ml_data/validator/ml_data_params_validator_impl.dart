@@ -14,11 +14,11 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
     bool headerExists,
     Map<String, Iterable<Object>> predefinedCategories,
     Map<String, CategoricalDataEncoderType> nameToEncoder,
-    Map<int, CategoricalDataEncoderType> indexToEncoder
+    Map<int, CategoricalDataEncoderType> indexToEncoder,
   }) {
     final validators = [
           () => _validatePredefinedCategories(predefinedCategories, headerExists),
-          () => _validateEncoders(nameToEncoder, indexToEncoder, headerExists),
+          () => _validateNamesToEncoders(nameToEncoder, headerExists),
           () => _validateLabelIdx(labelIdx),
           () => _validateReadRanges(rows),
           () => _validateReadRanges(columns, labelIdx),
@@ -39,8 +39,10 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
     return MLDataValidationErrorMessages.noErrorMsg;
   }
 
-  String _validateEncoders(Map<String, CategoricalDataEncoderType> nameToEncoder,
-      Map<int, CategoricalDataEncoderType> indexToEncoder, bool headerExists) {
+  String _validateNamesToEncoders(Map<String, CategoricalDataEncoderType> namesToEncoders, bool headerExists) {
+    if (!headerExists && namesToEncoders?.isEmpty == true) {
+      return MLDataValidationErrorMessages.noHeaderProvidedForColumnEncoders(namesToEncoders);
+    }
     return MLDataValidationErrorMessages.noErrorMsg;
   }
 
@@ -52,7 +54,7 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
   }
 
   String _validateReadRanges(Iterable<Tuple2<int, int>> ranges, [int labelIdx]) {
-    if (ranges == null) {
+    if (ranges == null || ranges.isEmpty == true) {
       return MLDataValidationErrorMessages.noErrorMsg;
     }
     Tuple2<int, int> prevRange;
