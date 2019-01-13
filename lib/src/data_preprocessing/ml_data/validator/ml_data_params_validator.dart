@@ -8,7 +8,7 @@ abstract class MLDataParamsValidator {
     Iterable<Tuple2<int, int>> columns,
     bool headerExists,
     Map<String, Iterable<Object>> predefinedCategories,
-    Map<String, CategoricalDataEncoderType> nameToEncoder,
+    Map<String, CategoricalDataEncoderType> namesToEncoders,
     Map<int, CategoricalDataEncoderType> indexToEncoder,
   });
 }
