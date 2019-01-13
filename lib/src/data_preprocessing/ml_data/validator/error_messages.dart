@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:tuple/tuple.dart';
 
 abstract class MLDataValidationErrorMessages {
@@ -5,6 +6,9 @@ abstract class MLDataValidationErrorMessages {
 
   static String noHeaderProvided(Map<String, Iterable<Object>> categories) =>
       'no header provided to define, which columns belongs to given categories $categories';
+
+  static String noHeaderProvidedForColumnEncoders(Map<dynamic, CategoricalDataEncoderType> encoders) =>
+      'no header provided to define, which columns belongs to given ecnoders $encoders';
 
   static String labelIndexMustNotBeNullMsg() =>
       'label index must not be null';
