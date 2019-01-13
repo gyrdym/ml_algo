@@ -84,7 +84,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
       columns: columns,
       headerExists: headerExists,
       predefinedCategories: categories,
-      nameToEncoder: categoryNameToEncoder,
+      namesToEncoders: categoryNameToEncoder,
       indexToEncoder: categoryIndexToEncoder,
     );
     if (errorMsg.isNotEmpty) {
