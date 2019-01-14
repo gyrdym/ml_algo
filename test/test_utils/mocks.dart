@@ -1,12 +1,14 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:mockito/mockito.dart';
 
 class OneHotEncoderMock extends Mock implements CategoricalDataEncoder {}
 class OrdinalEncoderMock extends Mock implements CategoricalDataEncoder {}
 class CategoricalDataEncoderFactoryMock extends Mock implements CategoricalDataEncoderFactory {}
 class CategoryValuesExtractorMock extends Mock implements CategoryValuesExtractor<dynamic> {}
+class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
 
 CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   CategoricalDataEncoder oneHotEncoderMock,
@@ -19,4 +21,20 @@ CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   when(factory.oneHot(any)).thenReturn(oneHotEncoderMock);
   when(factory.ordinal(any)).thenReturn(ordinalEncoderMock);
   return factory;
+}
+
+MLDataParamsValidator createMLDataParamsValidatorMock({bool validationShouldBeFailed}) {
+  final validator = MLDataParamsValidatorMock();
+  if (validationShouldBeFailed != null) {
+    when(validator.validate(
+      labelIdx: anyNamed('labelIdx'),
+      rows: anyNamed('rows'),
+      columns: anyNamed('columns'),
+      headerExists: anyNamed('headerExists'),
+      predefinedCategories: anyNamed('predefinedCategories'),
+      namesToEncoders: anyNamed('namesToEncoders'),
+      indexToEncoder: anyNamed('indexToEncoder'),
+    )).thenReturn(validationShouldBeFailed ? 'error' : '');
+  }
+  return validator;
 }
