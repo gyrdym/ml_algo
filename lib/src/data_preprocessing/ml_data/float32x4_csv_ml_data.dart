@@ -19,6 +19,8 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_e
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
@@ -36,6 +38,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
   final MLDataParamsValidator _paramsValidator;
+  final MLDataReadMaskCreator _readMaskCreator;
   final MLDataHeaderExtractorFactory _headerExtractorFactory;
   final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
   final MLDataLabelsExtractorFactory _labelsExtractorFactory;
@@ -52,8 +55,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
   List<String> _header;
-  List<bool> _rowsMask;
-  List<bool> _columnsMask;
   bool categoricalDataExists = false;
   List<String> _originalHeader;
   MLDataHeaderExtractor _headerExtractor;
@@ -80,6 +81,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     MLDataHeaderExtractorFactory headerExtractorFactory = const MLDataHeaderExtractorFactoryImpl(),
     MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
     MLDataLabelsExtractorFactory labelsExtractorFactory = const MLDataLabelsExtractorFactoryImpl(),
+    MLDataReadMaskCreator readMaskCreator = const MLDataReadMaskCreatorImpl(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -95,7 +97,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _paramsValidator = paramsValidator,
         _headerExtractorFactory = headerExtractorFactory,
         _featuresExtractorFactory = featuresExtractorFactory,
-        _labelsExtractorFactory = labelsExtractorFactory {
+        _labelsExtractorFactory = labelsExtractorFactory,
+        _readMaskCreator = readMaskCreator {
 
     final errorMsg = _paramsValidator.validate(
       labelIdx: labelIdx,
@@ -137,8 +140,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     final data = await (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
     final rowsNum = data.length;
     final columnsNum = data.first.length;
-    final _rowsMask = _createDataReadMask(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
-    final _columnsMask = _createDataReadMask(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
+    final _rowsMask = _readMaskCreator.create(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
+    final _columnsMask = _readMaskCreator.create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
 
     _records = _extractRecords(data);
 
@@ -230,18 +233,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   }
 
   List<List<dynamic>> _extractRecords(List<List<dynamic>> data) => data.sublist(_headerExists ? 1 : 0);
-
-  List<bool> _createDataReadMask(Iterable<Tuple2<int, int>> ranges, int limit) {
-    final mask = List<bool>.filled(limit, false);
-    ranges.take(limit).forEach((Tuple2<int, int> range) {
-      if (range.item1 >= limit) {
-        return false;
-      }
-      final end = math.min(limit, range.item2 + 1);
-      mask.fillRange(range.item1, end, true);
-    });
-    return mask;
-  }
 
   String _wrapErrorMessage(String text) => '$_errorPrefix: $text';
 }
