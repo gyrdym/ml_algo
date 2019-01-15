@@ -14,6 +14,8 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/feature
 import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
@@ -32,7 +34,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
   final MLDataParamsValidator _paramsValidator;
-  final MLDataHeaderExtractor _headerExtractor;
+  final MLDataHeaderExtractorFactory _headerExtractorFactory;
   final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
   final Map<int, CategoricalDataEncoder> _indexToEncoder = {};
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
@@ -53,6 +55,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   int _actualColumnsNum;
   bool categoricalDataExists = false;
   List<String> _originalHeader;
+  MLDataHeaderExtractor _headerExtractor;
   MLDataFeaturesExtractor _featuresExtractor;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
@@ -72,7 +75,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     // private parameters, they are hidden by the factory
     CategoricalDataEncoderFactory encoderFactory = const CategoricalDataEncoderFactory(),
     MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
-    MLDataHeaderExtractor headerExtractor = const MLDataHeaderExtractorImpl(),
+    MLDataHeaderExtractorFactory headerExtractorFactory = const MLDataHeaderExtractorFactoryImpl(),
     MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
@@ -87,7 +90,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _encoderFactory = encoderFactory,
         _fallbackEncoderType = encoderType,
         _paramsValidator = paramsValidator,
-        _headerExtractor = headerExtractor,
+        _headerExtractorFactory = headerExtractorFactory,
         _featuresExtractorFactory = featuresExtractorFactory {
 
     final errorMsg = _paramsValidator.validate(
@@ -107,9 +110,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   @override
   Future<List<String>> get header async {
     _data ??= (await _prepareData(_rows, _columns));
-    _header ??= _headerExists
-        ? _headerExtractor.extract(_data, _actualColumnsNum, _columnsMask)
-        : null;
+    _header ??= _headerExists ? _headerExtractor.extract(_data) : null;
     return _header;
   }
 
@@ -153,6 +154,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     _setEncoders(_records);
 
+    _headerExtractor = _headerExtractorFactory.create(_columnsMask);
     _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, _indexToEncoder, _labelIdx);
 
     categoricalDataExists = _indexToEncoder.isNotEmpty;
