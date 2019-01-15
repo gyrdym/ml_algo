@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
 
 class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
   final List<bool> rowsMask;

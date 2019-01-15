@@ -10,13 +10,15 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknow
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor_factory_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor_factory_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
@@ -36,6 +38,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final MLDataParamsValidator _paramsValidator;
   final MLDataHeaderExtractorFactory _headerExtractorFactory;
   final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
+  final MLDataLabelsExtractorFactory _labelsExtractorFactory;
   final Map<int, CategoricalDataEncoder> _indexToEncoder = {};
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
   final Map<int, CategoricalDataEncoderType> _indexToEncoderType;
@@ -50,13 +53,12 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   MLVector<Float32x4> _labels;
   List<String> _header;
   List<bool> _rowsMask;
-  int _actualRowsNum;
   List<bool> _columnsMask;
-  int _actualColumnsNum;
   bool categoricalDataExists = false;
   List<String> _originalHeader;
   MLDataHeaderExtractor _headerExtractor;
   MLDataFeaturesExtractor _featuresExtractor;
+  MLDataLabelsExtractor _labelsExtractor;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
     // public parameters
@@ -77,6 +79,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
     MLDataHeaderExtractorFactory headerExtractorFactory = const MLDataHeaderExtractorFactoryImpl(),
     MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
+    MLDataLabelsExtractorFactory labelsExtractorFactory = const MLDataLabelsExtractorFactoryImpl(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -91,7 +94,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _fallbackEncoderType = encoderType,
         _paramsValidator = paramsValidator,
         _headerExtractorFactory = headerExtractorFactory,
-        _featuresExtractorFactory = featuresExtractorFactory {
+        _featuresExtractorFactory = featuresExtractorFactory,
+        _labelsExtractorFactory = labelsExtractorFactory {
 
     final errorMsg = _paramsValidator.validate(
       labelIdx: labelIdx,
@@ -124,7 +128,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   @override
   Future<MLVector<Float32x4>> get labels async {
     _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= Float32x4Vector.from(_extractLabels(_labelIdx));
+    _labels ??= Float32x4Vector.from(_labelsExtractor.extract(_records));
     return _labels;
   }
 
@@ -132,14 +136,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     final fileStream = _file.openRead();
     final data = await (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
     final rowsNum = data.length;
-    final rowsData = _createDataReadMask(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
     final columnsNum = data.first.length;
-    final columnData = _createDataReadMask(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
-
-    _rowsMask = rowsData.item1;
-    _columnsMask = columnData.item1;
-    _actualRowsNum = rowsData.item2;
-    _actualColumnsNum = columnData.item2;
+    final _rowsMask = _createDataReadMask(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
+    final _columnsMask = _createDataReadMask(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
 
     _records = _extractRecords(data);
 
@@ -156,6 +155,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     _headerExtractor = _headerExtractorFactory.create(_columnsMask);
     _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, _indexToEncoder, _labelIdx);
+    _labelsExtractor = _labelsExtractorFactory.create(_rowsMask, _labelIdx);
 
     categoricalDataExists = _indexToEncoder.isNotEmpty;
 
@@ -231,44 +231,16 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
   List<List<dynamic>> _extractRecords(List<List<dynamic>> data) => data.sublist(_headerExists ? 1 : 0);
 
-  List<double> _extractLabels(int labelPos) {
-    final labelIdx = labelPos ?? _records.first.length - 1;
-    final result = List<double>(_actualRowsNum);
-    int _i = 0;
-    for (int i = 0; i < _records.length; i++) {
-      if (_rowsMask == null || _rowsMask[i] == true) {
-        final dynamic rawValue = _records[i][labelIdx];
-        final convertedValue = _convertValueToDouble(rawValue);
-        result[_i++] = convertedValue;
-      }
-    }
-    return result;
-  }
-
-  double _convertValueToDouble(dynamic value) {
-    if (value is String) {
-      if (value.isEmpty) {
-        return 0.0;
-      } else {
-        return double.parse(value);
-      }
-    } else {
-      return (value as num).toDouble();
-    }
-  }
-
-  Tuple2<List<bool>, int> _createDataReadMask(Iterable<Tuple2<int, int>> ranges, int limit) {
+  List<bool> _createDataReadMask(Iterable<Tuple2<int, int>> ranges, int limit) {
     final mask = List<bool>.filled(limit, false);
-    int numOfElements = 0;
     ranges.take(limit).forEach((Tuple2<int, int> range) {
       if (range.item1 >= limit) {
         return false;
       }
       final end = math.min(limit, range.item2 + 1);
       mask.fillRange(range.item1, end, true);
-      numOfElements += end - range.item1;
     });
-    return Tuple2<List<bool>, int>(mask, numOfElements);
+    return mask;
   }
 
   String _wrapErrorMessage(String text) => '$_errorPrefix: $text';
