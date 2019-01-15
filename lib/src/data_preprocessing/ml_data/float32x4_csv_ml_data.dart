@@ -10,6 +10,11 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknow
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/feature_extractor/features_extractor_factory_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_extractor_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
@@ -27,6 +32,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
   final MLDataParamsValidator _paramsValidator;
+  final MLDataHeaderExtractor _headerExtractor;
+  final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
   final Map<int, CategoricalDataEncoder> _indexToEncoder = {};
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
   final Map<int, CategoricalDataEncoderType> _indexToEncoderType;
@@ -44,8 +51,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   int _actualRowsNum;
   List<bool> _columnsMask;
   int _actualColumnsNum;
-  bool _isCategoricalDataExist = false;
+  bool categoricalDataExists = false;
   List<String> _originalHeader;
+  MLDataFeaturesExtractor _featuresExtractor;
 
   Float32x4CsvMLDataInternal.fromFile(String fileName, {
     // public parameters
@@ -64,6 +72,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     // private parameters, they are hidden by the factory
     CategoricalDataEncoderFactory encoderFactory = const CategoricalDataEncoderFactory(),
     MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
+    MLDataHeaderExtractor headerExtractor = const MLDataHeaderExtractorImpl(),
+    MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -76,7 +86,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _indexToEncoderType = categoryIndexToEncoder,
         _encoderFactory = encoderFactory,
         _fallbackEncoderType = encoderType,
-        _paramsValidator = paramsValidator {
+        _paramsValidator = paramsValidator,
+        _headerExtractor = headerExtractor,
+        _featuresExtractorFactory = featuresExtractorFactory {
 
     final errorMsg = _paramsValidator.validate(
       labelIdx: labelIdx,
@@ -95,14 +107,16 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   @override
   Future<List<String>> get header async {
     _data ??= (await _prepareData(_rows, _columns));
-    _header ??= _headerExists ? _extractHeader(_data) : null;
+    _header ??= _headerExists
+        ? _headerExtractor.extract(_data, _actualColumnsNum, _columnsMask)
+        : null;
     return _header;
   }
 
   @override
   Future<MLMatrix<Float32x4>> get features async {
     _data ??= (await _prepareData(_rows, _columns));
-    _features ??= Float32x4Matrix.from(_extractFeatures(_labelIdx));
+    _features ??= Float32x4Matrix.from(_featuresExtractor.extract(_records, hasCategoricalData: categoricalDataExists));
     return _features;
   }
 
@@ -113,26 +127,18 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     return _labels;
   }
 
-  Future<List<List<dynamic>>> _prepareData(Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns) async {
+  Future<List<List<dynamic>>> _prepareData([Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns]) async {
     final fileStream = _file.openRead();
     final data = await (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
     final rowsNum = data.length;
+    final rowsData = _createDataReadMask(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
     final columnsNum = data.first.length;
+    final columnData = _createDataReadMask(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
 
-    if (rows != null) {
-      final rowsData = _createDataReadMask(rows, rowsNum);
-      _rowsMask = rowsData.item1;
-      _actualRowsNum = rowsData.item2;
-    }
-
-    if (columns != null) {
-      final columnData = _createDataReadMask(columns, columnsNum);
-      _columnsMask = columnData.item1;
-      _actualColumnsNum = columnData.item2;
-    }
-
-    _actualRowsNum ??= rowsNum - (_headerExists ? 1 : 0);
-    _actualColumnsNum ??= columnsNum;
+    _rowsMask = rowsData.item1;
+    _columnsMask = columnData.item1;
+    _actualRowsNum = rowsData.item2;
+    _actualColumnsNum = columnData.item2;
 
     _records = _extractRecords(data);
 
@@ -147,7 +153,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     _setEncoders(_records);
 
-    _isCategoricalDataExist = _indexToEncoder.isNotEmpty;
+    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, _indexToEncoder, _labelIdx);
+
+    categoricalDataExists = _indexToEncoder.isNotEmpty;
 
     return data;
   }
@@ -219,36 +227,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     });
   }
 
-  List<String> _extractHeader(List<List<dynamic>> data) {
-    final headerRow = data[0];
-    final header = List<String>(_actualColumnsNum);
-    int _i = 0;
-    for (int i = 0; i < headerRow.length; i++) {
-      if (_columnsMask == null || _columnsMask[i] == true) {
-        header[_i] = headerRow[i].toString();
-        _i++;
-      }
-    }
-    return header;
-  }
-
   List<List<dynamic>> _extractRecords(List<List<dynamic>> data) => data.sublist(_headerExists ? 1 : 0);
-
-  List<List<double>> _extractFeatures(int labelPos) {
-    final lastIdx = _records.first.length - 1;
-    final labelIdx = labelPos ?? lastIdx;
-    final features = List<List<double>>(_actualRowsNum);
-    int _i = 0;
-    for (int i = 0; i < _records.length; i++) {
-      if (_rowsMask == null || _rowsMask[i] == true) {
-        final featuresRaw = _records[i];
-        features[_i++] = _isCategoricalDataExist
-            ? _convertFeaturesWithCategoricalData(featuresRaw, labelIdx)
-            : _convertFeatures(featuresRaw, labelIdx);
-      }
-    }
-    return features;
-  }
 
   List<double> _extractLabels(int labelPos) {
     final labelIdx = labelPos ?? _records.first.length - 1;
@@ -262,39 +241,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
       }
     }
     return result;
-  }
-
-  /// Light-weight method for data encoding without any checks if the current feature is categorical
-  List<double> _convertFeatures(List<Object> features, int labelIdx) {
-    final converted = List<double>(_actualColumnsNum - 1); // minus one column for label values
-    int _i = 0;
-    for (int i = 0; i < features.length; i++) {
-      final feature = features[i];
-      if (labelIdx != i && (_columnsMask == null || _columnsMask[i] == true)) {
-        converted[_i++] = _convertValueToDouble(feature);
-      }
-    }
-    return converted;
-  }
-
-  /// In order to avoid limitless checks if the current feature is categorical, let's create a separate method for
-  /// data encoding if we know exactly that categories are presented in the data set
-  List<double> _convertFeaturesWithCategoricalData(List<Object> features, int labelIdx) {
-    final converted = <double>[];
-    for (int i = 0; i < features.length; i++) {
-      if (labelIdx == i || (_columnsMask != null  && _columnsMask[i] == false)) {
-        continue;
-      }
-      final feature = features[i];
-      Iterable<double> expanded;
-      if (_indexToEncoder.containsKey(i)) {
-        expanded = _indexToEncoder[i].encode(feature);
-      } else {
-        expanded = [_convertValueToDouble(feature)];
-      }
-      converted.addAll(expanded);
-    }
-    return converted;
   }
 
   double _convertValueToDouble(dynamic value) {
