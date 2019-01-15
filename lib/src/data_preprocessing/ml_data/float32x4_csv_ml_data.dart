@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
@@ -10,6 +9,9 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknow
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/encoders_processor/encoders_processor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/encoders_processor/encoders_processor_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/encoders_processor/encoders_processor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor_factory_impl.dart';
@@ -42,7 +44,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final MLDataHeaderExtractorFactory _headerExtractorFactory;
   final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
   final MLDataLabelsExtractorFactory _labelsExtractorFactory;
-  final Map<int, CategoricalDataEncoder> _indexToEncoder = {};
+  final MLDataEncodersProcessorFactory _encodersProcessorFactory;
+
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
   final Map<int, CategoricalDataEncoderType> _indexToEncoderType;
   final Map<String, List<Object>> _categories;
@@ -56,7 +59,6 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   MLVector<Float32x4> _labels;
   List<String> _header;
   bool categoricalDataExists = false;
-  List<String> _originalHeader;
   MLDataHeaderExtractor _headerExtractor;
   MLDataFeaturesExtractor _featuresExtractor;
   MLDataLabelsExtractor _labelsExtractor;
@@ -82,6 +84,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
     MLDataLabelsExtractorFactory labelsExtractorFactory = const MLDataLabelsExtractorFactoryImpl(),
     MLDataReadMaskCreator readMaskCreator = const MLDataReadMaskCreatorImpl(),
+    MLDataEncodersProcessorFactory encodersProcessorFactory = const MLDataEncodersProcessorFactoryImpl(),
   }) :
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
@@ -98,7 +101,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _headerExtractorFactory = headerExtractorFactory,
         _featuresExtractorFactory = featuresExtractorFactory,
         _labelsExtractorFactory = labelsExtractorFactory,
-        _readMaskCreator = readMaskCreator {
+        _readMaskCreator = readMaskCreator,
+        _encodersProcessorFactory = encodersProcessorFactory {
 
     final errorMsg = _paramsValidator.validate(
       labelIdx: labelIdx,
@@ -145,91 +149,25 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     _records = _extractRecords(data);
 
-    _originalHeader = _headerExists
-        ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
-        : null;
-
     if (_labelIdx >= _records.first.length || _labelIdx < 0) {
       throw RangeError.range(_labelIdx, 0, _records.first.length - 1, null,
           _wrapErrorMessage('Invalid label column number'));
     }
 
-    _setEncoders(_records);
+    final originalHeader = _headerExists
+        ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
+        : null;
+
+    final encodersProcessor = _encodersProcessorFactory.create(originalHeader, _encoderFactory, _fallbackEncoderType);
+    final indexToEncoder = encodersProcessor.createEncoders(_indexToEncoderType, _nameToEncoderType, _categories);
 
     _headerExtractor = _headerExtractorFactory.create(_columnsMask);
-    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, _indexToEncoder, _labelIdx);
+    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, indexToEncoder, _labelIdx);
     _labelsExtractor = _labelsExtractorFactory.create(_rowsMask, _labelIdx);
 
-    categoricalDataExists = _indexToEncoder.isNotEmpty;
+    categoricalDataExists = indexToEncoder.isNotEmpty;
 
     return data;
-  }
-
-  void _setEncoders(List<List<dynamic>> data) {
-    final _isCategoryNameToEncoderTypeDefined =
-        _nameToEncoderType != null && _nameToEncoderType.isNotEmpty;
-
-    final _isCategoryIndexToEncoderTypeDefined =
-      _indexToEncoderType != null && _indexToEncoderType.isNotEmpty;
-
-    // let's cast all categorical data to column index-based format
-
-    // create _categoryIndexToEncoderType from category names
-    if (_headerExists && _isCategoryNameToEncoderTypeDefined && !_isCategoryIndexToEncoderTypeDefined) {
-      _fillIndexToEncoderTypeMap();
-    }
-
-    // create map "column index" -> "encoder" from fully-predefined categories data - _categories
-    if (!_isCategoryIndexToEncoderTypeDefined && _categories?.isNotEmpty == true) {
-      _fillIndexToEncoderMapFromCategories();
-    // create map "column index" -> "encoder" from map "column index" -> "encoder type"
-    } else if (_isCategoryIndexToEncoderTypeDefined) {
-      _fillIndexToEncoderMapFromEncoderTypes();
-    }
-
-    _setCategoryValues();
-  }
-
-  void _fillIndexToEncoderTypeMap() {
-    for (int i = 0; i < _originalHeader.length; i++) {
-      final name = _originalHeader[i];
-      if (_nameToEncoderType.containsKey(name)) {
-        _indexToEncoderType.putIfAbsent(i, () => _nameToEncoderType[name]);
-      }
-    }
-  }
-
-  void _fillIndexToEncoderMapFromCategories() {
-    for (int i = 0; i < _originalHeader.length; i++) {
-      final name = _originalHeader[i];
-      if (_categories.containsKey(name)) {
-        _indexToEncoder[i] = _encoderFactory.fromType(_fallbackEncoderType);
-      }
-    }
-  }
-
-  void _fillIndexToEncoderMapFromEncoderTypes() {
-    for (int i = 0; i < _originalHeader.length; i++) {
-      if (_indexToEncoderType.containsKey(i)) {
-        final encoderType = _indexToEncoderType[i];
-        _indexToEncoder[i] = _encoderFactory.fromType(encoderType);
-      }
-    }
-  }
-
-  void _setCategoryValues() {
-    final values = <int, List<Object>>{};
-    for (int i = 0; i < _records.length; i++) {
-      for (int j = 0; j < _records[i].length; j++) {
-        if (_indexToEncoder.containsKey(j)) {
-          values.putIfAbsent(j, () => List<Object>(_records.length));
-          values[j][i] = _records[i][j];
-        }
-      }
-    }
-    values.forEach((int column, List<Object> values) {
-      _indexToEncoder[column].setCategoryValues(values);
-    });
   }
 
   List<List<dynamic>> _extractRecords(List<List<dynamic>> data) => data.sublist(_headerExists ? 1 : 0);
