@@ -4,19 +4,19 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.
 import 'package:ml_algo/src/data_preprocessing/ml_data/encoders_processor/encoders_processor.dart';
 
 class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
-  final List<List<Object>> data;
+  final List<List<Object>> records;
   final List<String> header;
   final CategoricalDataEncoderFactory encoderFactory;
   final CategoricalDataEncoderType fallbackEncoderType;
 
-  MLDataEncodersProcessorImpl(this.data, this.header, this.encoderFactory, this.fallbackEncoderType);
+  MLDataEncodersProcessorImpl(this.records, this.header, this.encoderFactory, this.fallbackEncoderType);
 
   @override
   Map<int, CategoricalDataEncoder> createEncoders(Map<int, CategoricalDataEncoderType> indexesToEncoderTypes,
       Map<String, CategoricalDataEncoderType> namesToEncoderTypes, Map<String, List<Object>> categories) {
 
-    final isCategoryNameToEncoderTypeDefined = namesToEncoderTypes?.isNotEmpty == true;
-    final isCategoryIndexToEncoderTypeDefined = indexesToEncoderTypes?.isNotEmpty == true;
+    final isCategoryNameToEncoderTypeDefined = namesToEncoderTypes.isNotEmpty == true;
+    final isCategoryIndexToEncoderTypeDefined = indexesToEncoderTypes.isNotEmpty == true;
     Map<int, CategoricalDataEncoder> encoders = {};
 
     if (isCategoryIndexToEncoderTypeDefined) {
@@ -57,12 +57,13 @@ class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
   Map<int, CategoricalDataEncoder> _createEncoders(CategoricalDataEncoderType getEncoderType(int colIdx)) {
     final indexToEncoder = <int, CategoricalDataEncoder>{};
     final encodersValues = <int, List<Object>>{};
-    for (int rowIdx = 0; rowIdx < data.length; rowIdx++) {
-      for (int colIdx = 0; colIdx < header.length; colIdx++) {
+    for (int rowIdx = 0; rowIdx < records.length; rowIdx++) {
+      for (int colIdx = 0; colIdx < records[rowIdx].length; colIdx++) {
           final encoderType = getEncoderType(colIdx);
           if (encoderType != null) {
             indexToEncoder.putIfAbsent(colIdx, () => encoderFactory.fromType(encoderType));
-            encodersValues.putIfAbsent(colIdx, () => List<Object>(data.length));
+            encodersValues.putIfAbsent(colIdx, () => List<Object>(records.length));
+            encodersValues[colIdx][rowIdx] = records[rowIdx][colIdx];
           }
       }
     }

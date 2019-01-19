@@ -4,6 +4,7 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_facto
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:mockito/mockito.dart';
 
+class EncoderMock extends Mock implements CategoricalDataEncoder {}
 class OneHotEncoderMock extends Mock implements CategoricalDataEncoder {}
 class OrdinalEncoderMock extends Mock implements CategoricalDataEncoder {}
 class CategoricalDataEncoderFactoryMock extends Mock implements CategoricalDataEncoderFactory {}

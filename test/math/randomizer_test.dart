@@ -23,7 +23,7 @@ void main() {
       baseGenerator = null;
     });
 
-    // tests to check calls proxying should be here...
+    // tests to check proxy calls should be here...
   });
 
   group('Randomizer (without predefined generator)', () {

@@ -2,8 +2,8 @@ import 'package:ml_algo/encode_unknown_value_strategy.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../test_utils/mocks.dart';
-import 'test_helpers/create_encoder.dart';
+import '../../test_utils/mocks.dart';
+import '../test_helpers/create_encoder.dart';
 
 void main() {
   group('OneHotEncoder', () {
@@ -13,7 +13,7 @@ void main() {
       clearInteractions(valuesExtractor);
     });
 
-    test('should encode numeric categorical data', () {
+    test('should encode numeric categorical test_data', () {
       when(valuesExtractor.extractCategoryValues(any)).thenReturn(<int>[1, 2]);
       final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.returnZeroes, extractor: valuesExtractor,
           values: []);
@@ -21,7 +21,7 @@ void main() {
       expect(encoder.encode(2), equals([0, 1]));
     });
 
-    test('should encode string categorical data', () {
+    test('should encode string categorical test_data', () {
       when(valuesExtractor.extractCategoryValues(any))
           .thenReturn(<String>['group A', 'group B', 'group C', 'group D']);
       final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.returnZeroes, extractor: valuesExtractor,
@@ -32,7 +32,7 @@ void main() {
       expect(encoder.encode('group D'), equals([0, 0, 0, 1]));
     });
 
-    test('should encode boolean categorical data', () {
+    test('should encode boolean categorical test_data', () {
       when(valuesExtractor.extractCategoryValues(any))
           .thenReturn(<bool>[true, false]);
       final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.returnZeroes, extractor: valuesExtractor,
