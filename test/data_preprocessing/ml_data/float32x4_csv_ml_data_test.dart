@@ -2,15 +2,15 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dar
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../test_utils/helpers/floating_point_iterable_matchers.dart';
-import '../test_utils/mocks.dart';
-import 'test_helpers/test_csv_data.dart';
+import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../../test_utils/mocks.dart';
+import '../test_helpers/test_csv_data.dart';
 
 void main() {
   group('Float32x4CsvMLData (categories-less)', () {
     test('should properly parse csv file', () async {
       await testCsvData(
-        fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+        fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
         labelIdx: 8,
         expectedColsNum: 8,
         expectedRowsNum: 768,
@@ -24,7 +24,7 @@ void main() {
 
     test('should parse csv file with specified label column position', () async {
       await testCsvData(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 1,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -38,7 +38,7 @@ void main() {
 
     test('should parse csv file with specified label column position, position is 0', () async {
       await testCsvData(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -50,9 +50,9 @@ void main() {
       );
     });
 
-    test('should extract header data if the latter is specified', () async {
+    test('should extract header test_data if the latter is specified', () async {
       await testCsvData(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -75,7 +75,7 @@ void main() {
     test('should throw an error if label index is not in provided ranges', () async {
       expect(() =>
           Float32x4CsvMLDataInternal.fromFile(
-            'test/data_preprocessing/data/elo_blatter.csv',
+            'test/data_preprocessing/test_data/elo_blatter.csv',
             labelIdx: 1,
             columns: [const Tuple2(2, 3), const Tuple2(5, 7)],
           ),
@@ -85,7 +85,7 @@ void main() {
 
     test('should cut out selected columns', () async {
       await testCsvData(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -100,7 +100,7 @@ void main() {
 
     test('should throw an error if there are intersecting column ranges while parsing csv file', () {
       final actual = () => Float32x4CsvMLDataInternal.fromFile(
-          'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           columns: [
             const Tuple2(0, 1), // first and
@@ -113,7 +113,7 @@ void main() {
 
     test('should cut out selected rows, all rows in one range', () async {
       await testCsvData(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           rows: [const Tuple2(0, 767)],
           expectedColsNum: 8,
@@ -130,7 +130,7 @@ void main() {
 
     test('should cut out selected rows, several row ranges', () async {
       await testCsvData(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           rows: [
             const Tuple2(0, 2),
@@ -166,7 +166,7 @@ void main() {
     test('should throw an error if params validation fails', () {
       final validatorMock = createMLDataParamsValidatorMock(validationShouldBeFailed: true);
       final actual = () => Float32x4CsvMLDataInternal.fromFile(
-        'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+        'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
         paramsValidator: validatorMock,
       );
       expect(actual, throwsException);

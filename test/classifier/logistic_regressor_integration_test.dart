@@ -13,7 +13,7 @@ void main() {
           batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant, learningRate: 1.0);
     });
 
-    test('should extract class labels from the data', () {
+    test('should extract class labels from the test_data', () {
       final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -29,7 +29,7 @@ void main() {
       expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
     });
 
-    test('should properly fit given data', () {
+    test('should properly fit given test_data', () {
       final features = Float32x4Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -40,7 +40,7 @@ void main() {
       final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
-      // given data
+      // given test_data
       // -----------------------------------------
       // | X (features):      | Y (class labels):|
       // ----------------------------------------|
@@ -384,16 +384,16 @@ void main() {
       final labels = Float32x4Vector.from([0.0, 1.0]);
       classifier.fit(features, labels);
 
-      // as the intercept is required to be fitted, our data should look as follows:
+      // as the intercept is required to be fitted, our test_data should look as follows:
       //
       // [5.0, 7.0, 6.0] => [1.0, 5.0, 7.0, 6.0]
       // [1.0, 2.0, 3.0] => [1.0, 1.0, 2.0, 3.0]
       //
-      // we add a new column to the data, the column is consisted of just ones, so we considered that our fitted line will
+      // we add a new column to the test_data, the column is consisted of just ones, so we considered that our fitted line will
       // start not right at the origin, but at the origin + some intercept. What is the value of the intercept? To answer
       // this question, we have to find out the intercept's weight
       //
-      // given data
+      // given test_data
       // ----------------------------------------------
       // | X (features):           | Y (class labels):|
       // ---------------------------------------------|
@@ -461,17 +461,17 @@ void main() {
       final labels = Float32x4Vector.from([0.0, 1.0, 0.0]);
       classifier.fit(features, labels);
 
-      // as the intercept is required to be fitted, our data should look as follows:
+      // as the intercept is required to be fitted, our test_data should look as follows:
       //
       // [5.0, 7.0, 6.0] => [2.0, 5.0, 7.0, 6.0]
       // [1.0, 2.0, 3.0] => [2.0, 1.0, 2.0, 3.0]
       // [3.0, 4.0, 5.0] => [2.0, 3.0, 4.0, 5.0]
       //
-      // we add a new column to the data, the column is consisted of just ones, so we considered that our fitted line will
+      // we add a new column to the test_data, the column is consisted of just ones, so we considered that our fitted line will
       // start not right at the origin, but at the origin + intercept equal to 2.0. What is the value of the intercept? To answer
       // this question, we have to find out the intercept's weight
       //
-      // given data
+      // given test_data
       // ----------------------------------------------
       // | X (features):           | Y (class labels):|
       // ---------------------------------------------|

@@ -23,7 +23,7 @@ void main() {
           ]));
     });
 
-    test('should not mutate given data if processing takes place', () {
+    test('should not mutate given test_data if processing takes place', () {
       final data = Float32x4Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
@@ -35,7 +35,7 @@ void main() {
       expect(processedPoints, isNot(same(data)));
     });
 
-    test('should return the same data if scale is 0.0 (processing does nnot take place)', () {
+    test('should return the same test_data if scale is 0.0 (processing does nnot take place)', () {
       final data = Float32x4Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],

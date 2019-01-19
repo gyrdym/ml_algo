@@ -6,7 +6,6 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dar
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
