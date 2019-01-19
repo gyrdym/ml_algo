@@ -8,7 +8,7 @@ class MLDataEncodersProcessorFactoryImpl implements MLDataEncodersProcessorFacto
   const MLDataEncodersProcessorFactoryImpl();
 
   @override
-  MLDataEncodersProcessor create(List<String> header, CategoricalDataEncoderFactory encoderFactory,
-      CategoricalDataEncoderType fallbackEncoderType) =>
-      MLDataEncodersProcessorImpl(header, encoderFactory, fallbackEncoderType);
+  MLDataEncodersProcessor create(List<List<Object>> data, List<String> header,
+      CategoricalDataEncoderFactory encoderFactory, CategoricalDataEncoderType fallbackEncoderType) =>
+      MLDataEncodersProcessorImpl(data, header, encoderFactory, fallbackEncoderType);
 }

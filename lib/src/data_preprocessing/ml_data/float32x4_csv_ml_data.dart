@@ -53,8 +53,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
   static const String _errorPrefix = 'Csv ML Data';
 
-  List<List<dynamic>> _data;
-  List<List<dynamic>> _records;
+  List<List<dynamic>> _data; // the whole dataset including header
+  List<List<dynamic>> _records; // dataset without header
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
   List<String> _header;
@@ -147,7 +147,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     final _rowsMask = _readMaskCreator.create(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
     final _columnsMask = _readMaskCreator.create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
 
-    _records = _extractRecords(data);
+    _records = data.sublist(_headerExists ? 1 : 0);
 
     if (_labelIdx >= _records.first.length || _labelIdx < 0) {
       throw RangeError.range(_labelIdx, 0, _records.first.length - 1, null,
@@ -156,21 +156,18 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
 
     final originalHeader = _headerExists
         ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
-        : null;
-
-    final encodersProcessor = _encodersProcessorFactory.create(originalHeader, _encoderFactory, _fallbackEncoderType);
-    final indexToEncoder = encodersProcessor.createEncoders(_indexToEncoderType, _nameToEncoderType, _categories);
+        : <String>[];
+    final encodersProcessor = _encodersProcessorFactory.create(_records, originalHeader, _encoderFactory, _fallbackEncoderType);
+    final encoders = encodersProcessor.createEncoders(_indexToEncoderType, _nameToEncoderType, _categories);
 
     _headerExtractor = _headerExtractorFactory.create(_columnsMask);
-    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, indexToEncoder, _labelIdx);
+    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, encoders, _labelIdx);
     _labelsExtractor = _labelsExtractorFactory.create(_rowsMask, _labelIdx);
 
-    categoricalDataExists = indexToEncoder.isNotEmpty;
+    categoricalDataExists = encoders.isNotEmpty;
 
     return data;
   }
-
-  List<List<dynamic>> _extractRecords(List<List<dynamic>> data) => data.sublist(_headerExists ? 1 : 0);
 
   String _wrapErrorMessage(String text) => '$_errorPrefix: $text';
 }
