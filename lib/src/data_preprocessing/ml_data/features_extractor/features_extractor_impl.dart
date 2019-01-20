@@ -16,12 +16,12 @@ class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
       columnsNum = columnsMask.where((bool flag) => flag).length;
 
   @override
-  List<List<double>> extract(List<List> data, {bool hasCategoricalData = false}) {
+  List<List<double>> extract(List<List> records, {bool hasCategoricalData = false}) {
     final features = List<List<double>>(rowsNum);
     int _i = 0;
-    for (int i = 0; i < data.length; i++) {
+    for (int i = 0; i < records.length; i++) {
       if (rowsMask[i] == true) {
-        final featuresRaw = data[i];
+        final featuresRaw = records[i];
         features[_i++] = hasCategoricalData
             ? _convertFeaturesWithCategoricalData(featuresRaw)
             : _convertFeatures(featuresRaw);
