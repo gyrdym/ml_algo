@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/encoders_processor/encoders_processor_impl.dart';
 import 'package:test_api/test_api.dart';
@@ -140,6 +141,15 @@ void main() {
       verifyNever(oneHotEncoderMock.setCategoryValues(argThat(equals([35, 27, 21, 25]))));
 
       verify(loggerMock.warning(MLDataEncodersProcessorImpl.noHeaderProvidedWarningMsg)).called(1);
+    });
+
+    test('should return an empty encoders map if no categoriies data is provided', () {
+      final encoderFactory = createCategoricalDataEncoderFactoryMock();
+      final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
+      final encoderProcessor = MLDataEncodersProcessorImpl(records, [], encoderFactory, fallbackEncoderType, loggerMock);
+      final encoders = encoderProcessor.createEncoders({}, {}, {});
+
+      expect(encoders, equals(<int, CategoricalDataEncoder>{}));
     });
   });
 }

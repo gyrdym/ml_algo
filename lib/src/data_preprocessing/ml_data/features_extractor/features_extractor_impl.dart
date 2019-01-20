@@ -1,15 +1,17 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
 class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
   final List<bool> rowsMask;
   final List<bool> columnsMask;
-  final Map<int, CategoricalDataEncoder> indexToEncoder;
+  final Map<int, CategoricalDataEncoder> encoders;
   final int rowsNum;
   final int columnsNum;
   final int labelIdx;
+  final MLDataValueConverter valueConverter;
 
-  MLDataFeaturesExtractorImpl(this.rowsMask, this.columnsMask, this.indexToEncoder, this.labelIdx) :
+  MLDataFeaturesExtractorImpl(this.rowsMask, this.columnsMask, this.encoders, this.labelIdx, this.valueConverter) :
       rowsNum = rowsMask.where((bool flag) => flag).length,
       columnsNum = columnsMask.where((bool flag) => flag).length;
 
@@ -35,7 +37,7 @@ class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
     for (int i = 0; i < features.length; i++) {
       final feature = features[i];
       if (labelIdx != i && (columnsMask == null || columnsMask[i] == true)) {
-        converted[_i++] = _convertValueToDouble(feature);
+        converted[_i++] = valueConverter.convert(feature);
       }
     }
     return converted;
@@ -51,25 +53,13 @@ class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
       }
       final feature = features[i];
       Iterable<double> expanded;
-      if (indexToEncoder.containsKey(i)) {
-        expanded = indexToEncoder[i].encode(feature);
+      if (encoders.containsKey(i)) {
+        expanded = encoders[i].encode(feature);
       } else {
-        expanded = [_convertValueToDouble(feature)];
+        expanded = [valueConverter.convert(feature)];
       }
       converted.addAll(expanded);
     }
     return converted;
-  }
-
-  double _convertValueToDouble(dynamic value) {
-    if (value is String) {
-      if (value.isEmpty) {
-        return 0.0;
-      } else {
-        return double.parse(value);
-      }
-    } else {
-      return (value as num).toDouble();
-    }
   }
 }
