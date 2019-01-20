@@ -3,6 +3,7 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_valu
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 import 'package:mockito/mockito.dart';
 
 class EncoderMock extends Mock implements CategoricalDataEncoder {}
@@ -12,6 +13,7 @@ class CategoricalDataEncoderFactoryMock extends Mock implements CategoricalDataE
 class CategoryValuesExtractorMock extends Mock implements CategoryValuesExtractor<dynamic> {}
 class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
 class LoggerMock extends Mock implements Logger {}
+class MLDataValueConverterMock extends Mock implements MLDataValueConverter {}
 
 CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   CategoricalDataEncoder oneHotEncoderMock,
