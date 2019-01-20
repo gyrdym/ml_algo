@@ -24,6 +24,8 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_ma
 import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter_impl.dart';
 import 'package:ml_linalg/float32x4_matrix.dart';
 import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -40,6 +42,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final CategoricalDataEncoderFactory _encoderFactory;
   final MLDataParamsValidator _paramsValidator;
   final MLDataReadMaskCreator _readMaskCreator;
+  final MLDataValueConverter _valueConverter;
   final MLDataHeaderExtractorFactory _headerExtractorFactory;
   final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
   final MLDataLabelsExtractorFactory _labelsExtractorFactory;
@@ -80,6 +83,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     // private parameters, they are hidden by the factory
     CategoricalDataEncoderFactory encoderFactory = const CategoricalDataEncoderFactory(),
     MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
+    MLDataValueConverter valueConverter = const MLDataValueConverterImpl(),
     MLDataHeaderExtractorFactory headerExtractorFactory = const MLDataHeaderExtractorFactoryImpl(),
     MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
     MLDataLabelsExtractorFactory labelsExtractorFactory = const MLDataLabelsExtractorFactoryImpl(),
@@ -99,6 +103,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _encoderFactory = encoderFactory,
         _fallbackEncoderType = encoderType,
         _paramsValidator = paramsValidator,
+        _valueConverter = valueConverter,
         _headerExtractorFactory = headerExtractorFactory,
         _featuresExtractorFactory = featuresExtractorFactory,
         _labelsExtractorFactory = labelsExtractorFactory,
@@ -164,8 +169,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     final encoders = encodersProcessor.createEncoders(_indexToEncoderType, _nameToEncoderType, _categories);
 
     _headerExtractor = _headerExtractorFactory.create(_columnsMask);
-    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, encoders, _labelIdx);
-    _labelsExtractor = _labelsExtractorFactory.create(_rowsMask, _labelIdx);
+    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, encoders, _labelIdx, _valueConverter);
+    _labelsExtractor = _labelsExtractorFactory.create(_rowsMask, _labelIdx, _valueConverter);
 
     categoricalDataExists = encoders.isNotEmpty;
 
