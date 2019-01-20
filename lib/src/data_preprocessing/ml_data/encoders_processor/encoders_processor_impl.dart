@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
@@ -8,27 +9,28 @@ class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
   final List<String> header;
   final CategoricalDataEncoderFactory encoderFactory;
   final CategoricalDataEncoderType fallbackEncoderType;
+  final Logger logger;
 
-  MLDataEncodersProcessorImpl(this.records, this.header, this.encoderFactory, this.fallbackEncoderType);
+  static const String noHeaderProvidedWarningMsg =
+      'Column names with categorical values are provided, but there are no header with column names!';
+
+  MLDataEncodersProcessorImpl(this.records, this.header, this.encoderFactory, this.fallbackEncoderType, this.logger);
 
   @override
   Map<int, CategoricalDataEncoder> createEncoders(Map<int, CategoricalDataEncoderType> indexesToEncoderTypes,
       Map<String, CategoricalDataEncoderType> namesToEncoderTypes, Map<String, List<Object>> categories) {
-
-    final isCategoryNameToEncoderTypeDefined = namesToEncoderTypes.isNotEmpty == true;
-    final isCategoryIndexToEncoderTypeDefined = indexesToEncoderTypes.isNotEmpty == true;
     Map<int, CategoricalDataEncoder> encoders = {};
-
-    if (isCategoryIndexToEncoderTypeDefined) {
+    if (indexesToEncoderTypes.isNotEmpty) {
       encoders = _createEncodersFromIndexToEncoder(indexesToEncoderTypes);
     } else if (header.isNotEmpty) {
-      if (isCategoryNameToEncoderTypeDefined) {
+      if (namesToEncoderTypes.isNotEmpty) {
         encoders = _createEncodersFromNameToEncoder(namesToEncoderTypes);
-      } else if (categories?.isNotEmpty == true) {
+      } else if (categories.isNotEmpty) {
         encoders = _createEncodersFromCategories(categories);
       }
+    } else if (namesToEncoderTypes.isNotEmpty || categories.isNotEmpty) {
+      logger.warning(noHeaderProvidedWarningMsg);
     }
-
     return encoders;
   }
 

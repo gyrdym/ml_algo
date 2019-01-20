@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
@@ -10,6 +11,7 @@ class OrdinalEncoderMock extends Mock implements CategoricalDataEncoder {}
 class CategoricalDataEncoderFactoryMock extends Mock implements CategoricalDataEncoderFactory {}
 class CategoryValuesExtractorMock extends Mock implements CategoryValuesExtractor<dynamic> {}
 class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
+class LoggerMock extends Mock implements Logger {}
 
 CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   CategoricalDataEncoder oneHotEncoderMock,
