@@ -1,3 +1,4 @@
+import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor_factory.dart';
@@ -8,7 +9,7 @@ class MLDataFeaturesExtractorFactoryImpl implements MLDataFeaturesExtractorFacto
   const MLDataFeaturesExtractorFactoryImpl();
 
   @override
-  MLDataFeaturesExtractor create(List<bool> rowMask, List<bool> columnsMask,
-      Map<int, CategoricalDataEncoder> encoders, int labelIdx, MLDataValueConverter valueConverter) =>
-      MLDataFeaturesExtractorImpl(rowMask, columnsMask, encoders, labelIdx, valueConverter);
+  MLDataFeaturesExtractor create(List<List<Object>> records, List<bool> rowMask, List<bool> columnsMask,
+      Map<int, CategoricalDataEncoder> encoders, int labelIdx, MLDataValueConverter valueConverter, Logger logger) =>
+      MLDataFeaturesExtractorImpl(records, rowMask, columnsMask, encoders, labelIdx, valueConverter, logger);
 }

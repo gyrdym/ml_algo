@@ -1,8 +1,16 @@
+import 'package:logging/logging.dart';
+import 'package:ml_algo/src/common/error_logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
-class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
+class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implements MLDataFeaturesExtractor {
+  static const String rowsMaskWrongLengthMsg =
+      'Rows mask length should be equal to actual rows number in the dataset!';
+
+  static const String columnsMaskWrongLengthMsg =
+      'Columns mask length should be equal to actual columns number in the dataset!';
+
   final List<bool> rowsMask;
   final List<bool> columnsMask;
   final Map<int, CategoricalDataEncoder> encoders;
@@ -10,19 +18,33 @@ class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
   final int columnsNum;
   final int labelIdx;
   final MLDataValueConverter valueConverter;
-
-  MLDataFeaturesExtractorImpl(this.rowsMask, this.columnsMask, this.encoders, this.labelIdx, this.valueConverter) :
-      rowsNum = rowsMask.where((bool flag) => flag).length,
-      columnsNum = columnsMask.where((bool flag) => flag).length;
+  final List<List<Object>> records;
 
   @override
-  List<List<double>> extract(List<List> records, {bool hasCategoricalData = false}) {
+  final Logger logger;
+
+  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask, this.encoders, this.labelIdx,
+      this.valueConverter, this.logger) :
+      rowsNum = rowsMask.where((bool flag) => flag).length,
+      columnsNum = columnsMask.where((bool flag) => flag).length {
+
+    if (columnsMask.length != records.first.length) {
+      throwException(columnsMaskWrongLengthMsg);
+    }
+
+    if (rowsMask.length != records.length) {
+      throwException(rowsMaskWrongLengthMsg);
+    }
+  }
+
+  @override
+  List<List<double>> getFeatures() {
     final features = List<List<double>>(rowsNum);
     int _i = 0;
     for (int i = 0; i < records.length; i++) {
       if (rowsMask[i] == true) {
         final featuresRaw = records[i];
-        features[_i++] = hasCategoricalData
+        features[_i++] = encoders.isNotEmpty
             ? _convertFeaturesWithCategoricalData(featuresRaw)
             : _convertFeatures(featuresRaw);
       }
@@ -36,7 +58,7 @@ class MLDataFeaturesExtractorImpl implements MLDataFeaturesExtractor {
     int _i = 0;
     for (int i = 0; i < features.length; i++) {
       final feature = features[i];
-      if (labelIdx != i && (columnsMask == null || columnsMask[i] == true)) {
+      if (labelIdx != i && columnsMask[i] == true) {
         converted[_i++] = valueConverter.convert(feature);
       }
     }

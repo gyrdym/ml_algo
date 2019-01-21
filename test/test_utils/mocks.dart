@@ -15,6 +15,11 @@ class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
 class LoggerMock extends Mock implements Logger {}
 class MLDataValueConverterMock extends Mock implements MLDataValueConverter {}
 
+class MLDataValueConverterMockWithImpl extends Mock implements MLDataValueConverter {
+  @override
+  double convert(Object value, [double fallbackValue]) => value as double;
+}
+
 CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   CategoricalDataEncoder oneHotEncoderMock,
   CategoricalDataEncoder ordinalEncoderMock,
