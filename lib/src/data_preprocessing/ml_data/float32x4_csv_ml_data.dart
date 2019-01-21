@@ -57,11 +57,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   static const String _loggerPrefix = 'Float32x4CsvMLData';
 
   List<List<dynamic>> _data; // the whole dataset including header
-  List<List<dynamic>> _records; // dataset without header
   MLMatrix<Float32x4> _features;
   MLVector<Float32x4> _labels;
   List<String> _header;
-  bool categoricalDataExists = false;
   MLDataHeaderExtractor _headerExtractor;
   MLDataFeaturesExtractor _featuresExtractor;
   MLDataLabelsExtractor _labelsExtractor;
@@ -135,14 +133,14 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   @override
   Future<MLMatrix<Float32x4>> get features async {
     _data ??= (await _prepareData(_rows, _columns));
-    _features ??= Float32x4Matrix.from(_featuresExtractor.extract(_records, hasCategoricalData: categoricalDataExists));
+    _features ??= Float32x4Matrix.from(_featuresExtractor.getFeatures());
     return _features;
   }
 
   @override
   Future<MLVector<Float32x4>> get labels async {
     _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= Float32x4Vector.from(_labelsExtractor.extract(_records));
+    _labels ??= Float32x4Vector.from(_labelsExtractor.getLabels());
     return _labels;
   }
 
@@ -153,26 +151,24 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     final columnsNum = data.first.length;
     final _rowsMask = _readMaskCreator.create(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
     final _columnsMask = _readMaskCreator.create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
+    final records = data.sublist(_headerExists ? 1 : 0);
 
-    _records = data.sublist(_headerExists ? 1 : 0);
-
-    if (_labelIdx >= _records.first.length || _labelIdx < 0) {
-      throw RangeError.range(_labelIdx, 0, _records.first.length - 1, null,
+    if (_labelIdx >= records.first.length || _labelIdx < 0) {
+      throw RangeError.range(_labelIdx, 0, records.first.length - 1, null,
           _wrapErrorMessage('Invalid label column number'));
     }
 
     final originalHeader = _headerExists
         ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
         : <String>[];
-    final encodersProcessor = _encodersProcessorFactory.create(_records, originalHeader, _encoderFactory,
+    final encodersProcessor = _encodersProcessorFactory.create(records, originalHeader, _encoderFactory,
         _fallbackEncoderType, _logger);
     final encoders = encodersProcessor.createEncoders(_indexToEncoderType, _nameToEncoderType, _categories);
 
     _headerExtractor = _headerExtractorFactory.create(_columnsMask);
-    _featuresExtractor = _featuresExtractorFactory.create(_rowsMask, _columnsMask, encoders, _labelIdx, _valueConverter);
-    _labelsExtractor = _labelsExtractorFactory.create(_rowsMask, _labelIdx, _valueConverter);
-
-    categoricalDataExists = encoders.isNotEmpty;
+    _featuresExtractor = _featuresExtractorFactory.create(records, _rowsMask, _columnsMask, encoders, _labelIdx,
+        _valueConverter, _logger);
+    _labelsExtractor = _labelsExtractorFactory.create(records, _rowsMask, _labelIdx, _valueConverter, _logger);
 
     return data;
   }

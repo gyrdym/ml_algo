@@ -4,12 +4,11 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_con
 import 'package:mockito/mockito.dart';
 import 'package:test_api/test_api.dart';
 
-class MLDataValueConverterMock extends Mock implements MLDataValueConverter {
-  @override
-  double convert(Object value, [double fallbackValue]) => value as double;
-}
+import '../../test_utils/mocks.dart' as mocks;
 
 void main() {
+  final loggerMock = mocks.LoggerMock();
+
   final data = [
     [10.0, 20.0, 30.0, 40.0, 50.0],
     [100.0, 200.0, 300.0, 400.0, 500.0],
@@ -23,10 +22,11 @@ void main() {
       final columnsMask = <bool>[true, false, true, false, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
-      final valueConverter = MLDataValueConverterMock();
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = MLDataFeaturesExtractorImpl(rowMask, columnsMask, encoders, labelIdx, valueConverter);
-      final features = extractor.extract(data, hasCategoricalData: false);
+      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock);
+      final features = extractor.getFeatures();
 
       expect(features, equals([
         [10.0, 30.0],
@@ -41,15 +41,107 @@ void main() {
       final columnsMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
-      final valueConverter = MLDataValueConverterMock();
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = MLDataFeaturesExtractorImpl(rowMask, columnsMask, encoders, labelIdx, valueConverter);
-      final features = extractor.extract(data, hasCategoricalData: false);
+      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock);
+      final features = extractor.getFeatures();
 
       expect(features, equals([
         [10.0, 20.0, 30.0, 40.0],
         [210.0, 220.0, 230.0, 240.0],
       ]));
+    });
+
+    test('should consider index of a label column while extracting fratures', () {
+      final rowMask = <bool>[true, true, true, true];
+      final columnsMask = <bool>[true, true, true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{};
+      final labelIdx = 1;
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+
+      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock);
+      final features = extractor.getFeatures();
+
+      expect(features, equals([
+        [10.0, 30.0, 40.0, 50.0],
+        [100.0, 300.0, 400.0, 500.0],
+        [110.0, 130.0, 140.0, 150.0],
+        [210.0, 230.0, 240.0, 250.0],
+      ]));
+    });
+
+    test('should encode categorical features', () {
+      final encoderMock = mocks.OneHotEncoderMock();
+      when(encoderMock.encode(any)).thenReturn([1000.0, 2000.0]);
+
+      final rowMask = <bool>[true, true, true, true];
+      final columnsMask = <bool>[true, true, true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{
+        2: encoderMock,
+      };
+      final labelIdx = 4;
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+
+      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock);
+      final features = extractor.getFeatures();
+
+      expect(features, equals([
+        [10.0, 20.0, 1000.0, 2000.0, 40.0],
+        [100.0, 200.0, 1000.0, 2000.0, 400.0],
+        [110.0, 120.0, 1000.0, 2000.0, 140.0],
+        [210.0, 220.0, 1000.0, 2000.0, 240.0],
+      ]));
+    });
+
+    test('should throw an error if length of columns mask is less than number of elements in a feature row', () {
+      final rowMask = <bool>[true, true, true, true];
+      final columnsMask = <bool>[true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{};
+      final labelIdx = 4;
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+
+      expect(() => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock), throwsException);
+      verify(loggerMock.severe(MLDataFeaturesExtractorImpl.columnsMaskWrongLengthMsg, any)).called(1);
+    });
+
+    test('should throw an error if length of columns mask is greater than number of elements in a feature row', () {
+      final rowMask = <bool>[true, true, true, true];
+      final columnsMask = <bool>[true, true, true, true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{};
+      final labelIdx = 4;
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+
+      expect(() => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock), throwsException);
+      verify(loggerMock.severe(MLDataFeaturesExtractorImpl.columnsMaskWrongLengthMsg, any)).called(1);
+    });
+
+    test('should throw an error if length of rows mask is less than number of rows in dataset', () {
+      final rowMask = <bool>[true, true, true];
+      final columnsMask = <bool>[true, true, true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{};
+      final labelIdx = 4;
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+
+      expect(() => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock), throwsException);
+      verify(loggerMock.severe(MLDataFeaturesExtractorImpl.rowsMaskWrongLengthMsg, any)).called(1);
+    });
+
+    test('should throw an error if length of rows mask is greater than number of rows in dataset', () {
+      final rowMask = <bool>[true, true, true, true, true, true];
+      final columnsMask = <bool>[true, true, true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{};
+      final labelIdx = 4;
+      final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+
+      expect(() => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock), throwsException);
+      verify(loggerMock.severe(MLDataFeaturesExtractorImpl.rowsMaskWrongLengthMsg, any)).called(1);
     });
   });
 }
