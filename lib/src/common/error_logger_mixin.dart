@@ -1,7 +1,7 @@
 import 'package:logging/logging.dart';
 
 abstract class ErrorLoggerMixin {
-  Logger logger;
+  Logger get logger;
 
   void throwException(String msg) {
     final exception = Exception(msg);

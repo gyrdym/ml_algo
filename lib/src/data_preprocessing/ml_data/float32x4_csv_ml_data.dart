@@ -20,8 +20,8 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_e
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
@@ -41,8 +41,8 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
   final MLDataParamsValidator _paramsValidator;
-  final MLDataReadMaskCreator _readMaskCreator;
   final MLDataValueConverter _valueConverter;
+  final MLDataReadMaskCreatorFactory _readMaskCreatorFactory;
   final MLDataHeaderExtractorFactory _headerExtractorFactory;
   final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
   final MLDataLabelsExtractorFactory _labelsExtractorFactory;
@@ -85,7 +85,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     MLDataHeaderExtractorFactory headerExtractorFactory = const MLDataHeaderExtractorFactoryImpl(),
     MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
     MLDataLabelsExtractorFactory labelsExtractorFactory = const MLDataLabelsExtractorFactoryImpl(),
-    MLDataReadMaskCreator readMaskCreator = const MLDataReadMaskCreatorImpl(),
+    MLDataReadMaskCreatorFactory readMaskCreatorFactory = const MLDataReadMaskCreatorFactoryImpl(),
     MLDataEncodersProcessorFactory encodersProcessorFactory = const MLDataEncodersProcessorFactoryImpl(),
     Logger logger,
   }) :
@@ -105,7 +105,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _headerExtractorFactory = headerExtractorFactory,
         _featuresExtractorFactory = featuresExtractorFactory,
         _labelsExtractorFactory = labelsExtractorFactory,
-        _readMaskCreator = readMaskCreator,
+        _readMaskCreatorFactory = readMaskCreatorFactory,
         _encodersProcessorFactory = encodersProcessorFactory,
         _logger = logger ?? Logger(_loggerPrefix) {
 
@@ -149,8 +149,9 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     final data = await (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
     final rowsNum = data.length;
     final columnsNum = data.first.length;
-    final _rowsMask = _readMaskCreator.create(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))], rowsNum);
-    final _columnsMask = _readMaskCreator.create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)], columnsNum);
+    final readMaskCreator = _readMaskCreatorFactory.create(_logger);
+    final rowsMask = readMaskCreator.create(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))]);
+    final columnsMask = readMaskCreator.create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)]);
     final records = data.sublist(_headerExists ? 1 : 0);
 
     if (_labelIdx >= records.first.length || _labelIdx < 0) {
@@ -165,10 +166,10 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
         _fallbackEncoderType, _logger);
     final encoders = encodersProcessor.createEncoders(_indexToEncoderType, _nameToEncoderType, _categories);
 
-    _headerExtractor = _headerExtractorFactory.create(_columnsMask);
-    _featuresExtractor = _featuresExtractorFactory.create(records, _rowsMask, _columnsMask, encoders, _labelIdx,
+    _headerExtractor = _headerExtractorFactory.create(columnsMask);
+    _featuresExtractor = _featuresExtractorFactory.create(records, rowsMask, columnsMask, encoders, _labelIdx,
         _valueConverter, _logger);
-    _labelsExtractor = _labelsExtractorFactory.create(records, _rowsMask, _labelIdx, _valueConverter, _logger);
+    _labelsExtractor = _labelsExtractorFactory.create(records, rowsMask, _labelIdx, _valueConverter, _logger);
 
     return data;
   }
