@@ -1,45 +1,36 @@
-import 'package:ml_algo/encode_unknown_value_strategy.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 
 class OneHotEncoder implements CategoricalDataEncoder {
   @override
-  final Map<String, List<Object>> categories;
-
-  @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
-  final Map<String, Map<Object, int>> _categoriesIndexed;
+  final CategoryValuesExtractor _valuesExtractor;
 
-  OneHotEncoder(Map<String, List<Object>> dataDescr,
-      [this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError]) :
-    categories = Map<String, List<Object>>.unmodifiable(dataDescr),
-    _categoriesIndexed = Map.unmodifiable(
-      Map<String, Map<Object, int>>.fromIterable(dataDescr.keys,
-        key: (dynamic key) => key as String,
-        value: (dynamic key) => Map<Object, int>.fromIterable(dataDescr[key],
-            key: (dynamic value) => value,
-            value: (dynamic value) => dataDescr[key].indexOf(value),
-        ),
-      ),
-    );
+  List<Object> _values;
+
+  OneHotEncoder({
+    this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
+    CategoryValuesExtractor valuesExtractor = const CategoryValuesExtractorImpl<Object>(),
+  }) : _valuesExtractor = valuesExtractor;
 
   @override
-  List<double> encode(String categoryLabel, Object value) {
-    if (!_categoriesIndexed.containsKey(categoryLabel)) {
-      throw UnsupportedError('One hot encoding: unsupported category `$categoryLabel`');
-    }
-
-    final values = _categoriesIndexed[categoryLabel];
-
-    if (!values.containsKey(value)) {
+  List<double> encode(Object value) {
+    if (!_values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
-        throw UnsupportedError('One hot encoding: unsupported value `$value` for the category `$categoryLabel`');
+        throw UnsupportedError('One hot encoding: unknown value `$value`');
       } else {
-        return List<double>.filled(values.length, 0.0);
+        return List<double>.filled(_values.length, 0.0);
       }
     }
+    final targetIdx = _values.indexOf(value);
+    return List<double>.generate(_values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
+  }
 
-    final targetIdx = values[value];
-    return List<double>.generate(values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
+  @override
+  void setCategoryValues(List<Object> values) {
+    _values ??= _valuesExtractor.extractCategoryValues(values);
   }
 }

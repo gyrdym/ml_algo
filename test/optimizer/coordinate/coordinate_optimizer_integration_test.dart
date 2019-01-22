@@ -94,7 +94,7 @@ void main() {
     /// precision to store precisely, so the binary number 100 (4 in decimal) will be cut off. Thus we should deposit
     /// some delta for comparision
     ///
-    test('should find optimal weights for the given data', () {
+    test('should find optimal weights for the given test_data', () {
       final weights = optimizer.findExtrema(data, labels);
       final w1 = weights[0];
       final w2 = weights[1];
@@ -196,7 +196,7 @@ void main() {
     /// w_2 = -4493710 < 20 / 2 => -4493710 + 20 / 2 = -4493700.0
     /// w_3 = -4073640 < 20 / 2 => -4073640 + 20 / 2 = -4073630.0
     ///
-    test('should find optimal weights for the given data', () {
+    test('should find optimal weights for the given test_data', () {
       // actually, points in this example are not normalized
       final weights = optimizer.findExtrema(data, labels, arePointsNormalized: true);
       final w1 = weights[0];

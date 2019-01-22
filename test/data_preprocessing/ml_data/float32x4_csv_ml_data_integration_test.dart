@@ -1,46 +1,16 @@
-import 'dart:async';
-import 'dart:typed_data';
-
-import 'package:ml_algo/src/data_preprocessing/ml_data/csv_ml_data.dart';
-import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../test_utils/helpers/floating_point_iterable_matchers.dart';
-import '../test_utils/mocks.dart';
-
-Future testCsvWithoutCategories({String fileName, int labelIdx, int expectedColsNum, int expectedRowsNum,
-  List<Tuple2<int, int>> rows,
-  List<Tuple2<int, int>> columns,
-  void testContentFn(MLMatrix<Float32x4> features, MLVector<Float32x4> labels, List<String> headers)}) async {
-
-  final data = Float32x4CsvMLDataInternal.fromFile(fileName,
-    labelIdx: labelIdx,
-    columns: columns,
-    rows: rows,
-    categoricalEncoderFactory: () => CategoricalDataEncoderMock(),
-  );
-  final header = await data.header;
-  final features = await data.features;
-  final labels = await data.labels;
-
-  if (columns == null) {
-    expect(header.length, equals(expectedColsNum + 1));
-    expect(features.columnsNum, equals(expectedColsNum));
-  }
-
-  expect(features.rowsNum, equals(expectedRowsNum));
-  expect(labels.length, equals(expectedRowsNum));
-
-  testContentFn(features, labels, header);
-}
+import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../../test_utils/mocks.dart';
+import '../test_helpers/test_csv_data.dart';
 
 void main() {
-  group('CsvMLData', () {
+  group('Float32x4CsvMLData (categories-less)', () {
     test('should properly parse csv file', () async {
-      await testCsvWithoutCategories(
-        fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+      await testCsvData(
+        fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
         labelIdx: 8,
         expectedColsNum: 8,
         expectedRowsNum: 768,
@@ -53,8 +23,8 @@ void main() {
     });
 
     test('should parse csv file with specified label column position', () async {
-      await testCsvWithoutCategories(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+      await testCsvData(
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 1,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -67,8 +37,8 @@ void main() {
     });
 
     test('should parse csv file with specified label column position, position is 0', () async {
-      await testCsvWithoutCategories(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+      await testCsvData(
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -80,9 +50,9 @@ void main() {
       );
     });
 
-    test('should extract header data if the latter is specified', () async {
-      await testCsvWithoutCategories(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+    test('should extract header test_data if the latter is specified', () async {
+      await testCsvData(
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -105,7 +75,7 @@ void main() {
     test('should throw an error if label index is not in provided ranges', () async {
       expect(() =>
           Float32x4CsvMLDataInternal.fromFile(
-            'test/data_preprocessing/data/elo_blatter.csv',
+            'test/data_preprocessing/test_data/elo_blatter.csv',
             labelIdx: 1,
             columns: [const Tuple2(2, 3), const Tuple2(5, 7)],
           ),
@@ -114,8 +84,8 @@ void main() {
     });
 
     test('should cut out selected columns', () async {
-      await testCsvWithoutCategories(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+      await testCsvData(
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -130,7 +100,7 @@ void main() {
 
     test('should throw an error if there are intersecting column ranges while parsing csv file', () {
       final actual = () => Float32x4CsvMLDataInternal.fromFile(
-          'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+          'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           columns: [
             const Tuple2(0, 1), // first and
@@ -142,8 +112,8 @@ void main() {
     });
 
     test('should cut out selected rows, all rows in one range', () async {
-      await testCsvWithoutCategories(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+      await testCsvData(
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           rows: [const Tuple2(0, 767)],
           expectedColsNum: 8,
@@ -159,8 +129,8 @@ void main() {
     });
 
     test('should cut out selected rows, several row ranges', () async {
-      await testCsvWithoutCategories(
-          fileName: 'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
+      await testCsvData(
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           rows: [
             const Tuple2(0, 2),
@@ -193,49 +163,11 @@ void main() {
       );
     });
 
-    test('should throw an error if there are intersecting row ranges while reading parsing csv file', () {
+    test('should throw an error if params validation fails', () {
+      final validatorMock = createMLDataParamsValidatorMock(validationShouldBeFailed: true);
       final actual = () => Float32x4CsvMLDataInternal.fromFile(
-        'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
-        labelIdx: 8,
-        rows: [
-          const Tuple2(0, 7), // first and
-          const Tuple2(2, 5), // second ranges are intersecting
-          const Tuple2(6, 20),
-        ],
-      );
-      expect(actual, throwsException);
-    });
-
-    test('should throw an error if there are intersecting row ranges while reading parsing csv file, corner case', () {
-      final actual = () => Float32x4CsvMLDataInternal.fromFile(
-        'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
-        labelIdx: 8,
-        rows: [
-          const Tuple2(0, 7),
-          const Tuple2(7, 10),
-        ],
-      );
-      expect(actual, throwsException);
-    });
-
-    test('should throw an error if there are some ranges where end value is less han start value', () {
-      final actual = () => Float32x4CsvMLDataInternal.fromFile(
-        'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
-        labelIdx: 8,
-        rows: [const Tuple2(10, 0)],
-      );
-      expect(actual, throwsException);
-    });
-
-    test('should throw an error if label index with null value passed to the constructor', () {
-      final actual = () => Float32x4CsvMLDataInternal.fromFile(
-        'test/data_preprocessing/data/pima_indians_diabetes_database.csv',
-        labelIdx: null,
-        columns: [
-          const Tuple2(0, 1),
-          const Tuple2(2, 2),
-          const Tuple2(3, 4),
-          const Tuple2(6, 8)],
+        'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
+        paramsValidator: validatorMock,
       );
       expect(actual, throwsException);
     });

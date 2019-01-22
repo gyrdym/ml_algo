@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/data_preprocessing/ml_data/csv_ml_data.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 Future testCsvWithCategories({String fileName, int labelIdx, int rowNum, Map<String, List<Object>> categories,
   List<Tuple2<int, int>> columnsToRead,
@@ -27,9 +27,9 @@ Future testCsvWithCategories({String fileName, int labelIdx, int rowNum, Map<Str
 
 void main() {
   group('CsvMLData', () {
-    test('should encode categorical data via provided encoder', () async {
+    test('should encode categorical test_data via provided encoder', () async {
       await testCsvWithCategories(
-          fileName: 'test/data_preprocessing/data/elo_blatter.csv',
+          fileName: 'test/data_preprocessing/test_data/elo_blatter.csv',
           labelIdx: 1,
           rowNum: 209,
           columnsToRead: [
