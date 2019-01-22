@@ -4,8 +4,8 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_e
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
 class MLDataLabelsExtractorImpl extends Object with ErrorLoggerMixin implements MLDataLabelsExtractor {
-  static const String wrongReadMaskLengthMsg = 'Rows read mask for label column should be equal to the number of labels'
-      ' in the column!';
+  static const String wrongReadMaskLengthMsg = 'Rows read mask for label column should not be greater than the number '
+      'of labels in the column!';
 
   static const String wrongLabelIndexMsg = 'Labels column index should be less than actual columns number of the '
       'dataset!';
@@ -21,7 +21,7 @@ class MLDataLabelsExtractorImpl extends Object with ErrorLoggerMixin implements 
 
   MLDataLabelsExtractorImpl(this.records, this.readMask, this.labelIdx, this.valueConverter, this.logger)
       : rowsNum = readMask.where((bool flag) => flag).length {
-    if (readMask.length != records.length) {
+    if (readMask.length > records.length) {
       throwException(wrongReadMaskLengthMsg);
     }
     if (labelIdx >= records.first.length) {
@@ -33,7 +33,7 @@ class MLDataLabelsExtractorImpl extends Object with ErrorLoggerMixin implements 
   List<double> getLabels() {
     final result = List<double>(rowsNum);
     int _i = 0;
-    for (int i = 0; i < records.length; i++) {
+    for (int i = 0; i < readMask.length; i++) {
       if (readMask[i] == true) {
         final dynamic rawValue = records[i][labelIdx];
         final convertedValue = valueConverter.convert(rawValue);
