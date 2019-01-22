@@ -6,10 +6,10 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_con
 
 class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implements MLDataFeaturesExtractor {
   static const String rowsMaskWrongLengthMsg =
-      'Rows mask length should be equal to actual rows number in the dataset!';
+      'Rows mask length should not be greater than actual rows number in the dataset!';
 
   static const String columnsMaskWrongLengthMsg =
-      'Columns mask length should be equal to actual columns number in the dataset!';
+      'Columns mask length should not be greater than actual columns number in the dataset!';
 
   final List<bool> rowsMask;
   final List<bool> columnsMask;
@@ -28,11 +28,11 @@ class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implement
       rowsNum = rowsMask.where((bool flag) => flag).length,
       columnsNum = columnsMask.where((bool flag) => flag).length {
 
-    if (columnsMask.length != records.first.length) {
+    if (columnsMask.length > records.first.length) {
       throwException(columnsMaskWrongLengthMsg);
     }
 
-    if (rowsMask.length != records.length) {
+    if (rowsMask.length > records.length) {
       throwException(rowsMaskWrongLengthMsg);
     }
   }
@@ -41,7 +41,7 @@ class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implement
   List<List<double>> getFeatures() {
     final features = List<List<double>>(rowsNum);
     int _i = 0;
-    for (int i = 0; i < records.length; i++) {
+    for (int i = 0; i < rowsMask.length; i++) {
       if (rowsMask[i] == true) {
         final featuresRaw = records[i];
         features[_i++] = encoders.isNotEmpty
@@ -54,12 +54,11 @@ class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implement
 
   /// Light-weight method for data encoding without any checks if the current feature is categorical
   List<double> _convertFeatures(List<Object> features) {
-    final converted = List<double>(columnsNum - 1); // minus one column for label values
-    int _i = 0;
-    for (int i = 0; i < features.length; i++) {
+    final converted = <double>[];
+    for (int i = 0; i < columnsMask.length; i++) {
       final feature = features[i];
       if (labelIdx != i && columnsMask[i] == true) {
-        converted[_i++] = valueConverter.convert(feature);
+        converted.add(valueConverter.convert(feature));
       }
     }
     return converted;
@@ -69,7 +68,7 @@ class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implement
   /// data encoding if we know exactly that categories are presented in the data set
   List<double> _convertFeaturesWithCategoricalData(List<Object> features) {
     final converted = <double>[];
-    for (int i = 0; i < features.length; i++) {
+    for (int i = 0; i < columnsMask.length; i++) {
       if (labelIdx == i || columnsMask[i] == false) {
         continue;
       }

@@ -1,6 +1,5 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test_api/test_api.dart';
 
@@ -96,16 +95,22 @@ void main() {
       ]));
     });
 
-    test('should throw an error if length of columns mask is less than number of elements in a feature row', () {
+    test('should not throw an error if length of columns mask is less than number of elements in a feature row', () {
       final rowMask = <bool>[true, true, true, true];
       final columnsMask = <bool>[true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock);
+      final actual = extractor.getFeatures();
 
-      expect(() => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
-          loggerMock), throwsException);
-      verify(loggerMock.severe(MLDataFeaturesExtractorImpl.columnsMaskWrongLengthMsg, any)).called(1);
+      expect(actual, equals([
+        [10.0, 20.0, 30.0],
+        [100.0, 200.0, 300.0],
+        [110.0, 120.0, 130.0],
+        [210.0, 220.0, 230.0],
+      ]));
     });
 
     test('should throw an error if length of columns mask is greater than number of elements in a feature row', () {
@@ -120,16 +125,21 @@ void main() {
       verify(loggerMock.severe(MLDataFeaturesExtractorImpl.columnsMaskWrongLengthMsg, any)).called(1);
     });
 
-    test('should throw an error if length of rows mask is less than number of rows in dataset', () {
+    test('should not throw an error if length of rows mask is less than number of rows in dataset', () {
       final rowMask = <bool>[true, true, true];
       final columnsMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
+      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
+          loggerMock);
+      final actual = extractor.getFeatures();
 
-      expect(() => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask, encoders, labelIdx, valueConverter,
-          loggerMock), throwsException);
-      verify(loggerMock.severe(MLDataFeaturesExtractorImpl.rowsMaskWrongLengthMsg, any)).called(1);
+      expect(actual, equals([
+        [10.0, 20.0, 30.0, 40.0],
+        [100.0, 200.0, 300.0, 400.0],
+        [110.0, 120.0, 130.0, 140.0],
+      ]));
     });
 
     test('should throw an error if length of rows mask is greater than number of rows in dataset', () {
