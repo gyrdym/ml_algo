@@ -3,7 +3,7 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_valu
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 
-class OneHotEncoder implements CategoricalDataEncoder {
+class OrdinalEncoder implements CategoricalDataEncoder {
   @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
@@ -11,22 +11,22 @@ class OneHotEncoder implements CategoricalDataEncoder {
 
   List<Object> _values;
 
-  OneHotEncoder({
+  OrdinalEncoder({
     this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
     CategoryValuesExtractor valuesExtractor = const CategoryValuesExtractorImpl<Object>(),
   }) : _valuesExtractor = valuesExtractor;
 
   @override
-  List<double> encode(Object value) {
+  Iterable<double> encode(Object value) {
     if (!_values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
-        throw UnsupportedError('One hot encoding: unknown value `$value`');
+        throw UnsupportedError('Ordinal encoding: unsupported value `$value`');
       } else {
-        return List<double>.filled(_values.length, 0.0);
+        return [0.0];
       }
     }
-    final targetIdx = _values.indexOf(value);
-    return List<double>.generate(_values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
+    final ordinalNum = _values.indexOf(value).toDouble();
+    return [ordinalNum + 1]; // plus one - to avoid zero value. Zero is reserved for unknown values
   }
 
   @override

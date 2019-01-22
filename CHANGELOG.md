@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.0
+- Ordinal encoder added
+- `Float32x4CsvMlData` significantly extended
+
 ## 5.1.0
 - Real-life example added (black friday dataset)
 - `rows` parameter added to `Float32x4CsvMlData`
