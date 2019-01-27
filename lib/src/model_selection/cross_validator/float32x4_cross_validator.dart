@@ -47,11 +47,11 @@ class Float32x4CrossValidatorInternal implements Float32x4CrossValidator {
         }
       }
 
-      predictor.fit(Float32x4Matrix.from(trainFeatures), labels.query(trainIndices),
+      predictor.fit(MLMatrix<Float32x4>.from(trainFeatures), labels.query(trainIndices),
           isDataNormalized: isDataNormalized);
 
       scores[scoreCounter++] =
-          predictor.test(Float32x4Matrix.from(testFeatures), labels.query(testIndices), metric);
+          predictor.test(MLMatrix<Float32x4>.from(testFeatures), labels.query(testIndices), metric);
     }
 
     return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:ml_algo/float32x4_cross_validator.dart';
 import 'package:ml_algo/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/logistic_regressor.dart';
+import 'package:ml_algo/linear_classifier.dart';
 import 'package:ml_algo/metric_type.dart';
 
 Future main() async {
