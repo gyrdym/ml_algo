@@ -1,11 +1,11 @@
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
+import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_impl.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Intercept preprocessor', () {
     test('should add intercept to the given points', () {
-      final preprocessor = const InterceptPreprocessor(interceptScale: 1.0);
+      final preprocessor = const InterceptPreprocessorImpl(interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(
         Float32x4Matrix.from([
           [4.0, 5.0, 10.0],
@@ -29,7 +29,7 @@ void main() {
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
       ]);
-      final preprocessor = const InterceptPreprocessor(interceptScale: 1.0);
+      final preprocessor = const InterceptPreprocessorImpl(interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(data);
 
       expect(processedPoints, isNot(same(data)));
@@ -41,7 +41,7 @@ void main() {
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
       ]);
-      final preprocessor = const InterceptPreprocessor(interceptScale: 0.0);
+      final preprocessor = const InterceptPreprocessorImpl(interceptScale: 0.0);
       final processedPoints = preprocessor.addIntercept(data);
 
       expect(processedPoints, same(data));
@@ -58,7 +58,7 @@ void main() {
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
       ]);
-      final preprocessor = const InterceptPreprocessor(interceptScale: -5.0);
+      final preprocessor = const InterceptPreprocessorImpl(interceptScale: -5.0);
       final processedPoints = preprocessor.addIntercept(data);
 
       expect(processedPoints, [

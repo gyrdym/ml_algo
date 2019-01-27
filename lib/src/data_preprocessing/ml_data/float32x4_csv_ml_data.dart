@@ -26,8 +26,6 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter_impl.dart';
-import 'package:ml_linalg/float32x4_matrix.dart';
-import 'package:ml_linalg/float32x4_vector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
@@ -133,14 +131,14 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   @override
   Future<MLMatrix<Float32x4>> get features async {
     _data ??= (await _prepareData(_rows, _columns));
-    _features ??= Float32x4Matrix.from(_featuresExtractor.getFeatures());
+    _features ??= MLMatrix<Float32x4>.from(_featuresExtractor.getFeatures());
     return _features;
   }
 
   @override
   Future<MLVector<Float32x4>> get labels async {
     _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= Float32x4Vector.from(_labelsExtractor.getLabels());
+    _labels ??= MLVector<Float32x4>.from(_labelsExtractor.getLabels());
     return _labels;
   }
 

@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor.dart';
+import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_impl.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/predictor.dart';
@@ -9,10 +9,10 @@ import 'package:ml_linalg/linalg.dart';
 
 abstract class Float32x4LinearRegressor implements Predictor<Float32x4> {
   final Optimizer<Float32x4> _optimizer;
-  final InterceptPreprocessor _interceptPreprocessor;
+  final InterceptPreprocessorImpl _interceptPreprocessor;
 
   Float32x4LinearRegressor(this._optimizer, double interceptScale)
-      : _interceptPreprocessor = InterceptPreprocessor(interceptScale: interceptScale);
+      : _interceptPreprocessor = InterceptPreprocessorImpl(interceptScale: interceptScale);
 
   MLVector<Float32x4> get weights => _weights;
   MLVector<Float32x4> _weights;

@@ -29,7 +29,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
   MLVector<Float32x4> findExtrema(MLMatrix<Float32x4> points, MLVector<Float32x4> labels,
       {MLVector<Float32x4> initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
     _normalizer = arePointsNormalized
-        ? Float32x4Vector.filled(points.columnsNum, 1.0)
+        ? MLVector<Float32x4>.filled(points.columnsNum, 1.0)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
     MLVector<Float32x4> coefficients = initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
@@ -44,7 +44,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
         final newWeight = _coordinateDescentStep(j, points, labels, coefficients);
         changes[j] = (oldWeight - newWeight).abs();
         updatedCoefficients[j] = newWeight;
-        coefficients = Float32x4Vector.from(updatedCoefficients);
+        coefficients = MLVector<Float32x4>.from(updatedCoefficients);
       }
 
       iteration++;

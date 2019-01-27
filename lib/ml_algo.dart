@@ -5,7 +5,7 @@ export 'package:ml_algo/gradient_regressor.dart';
 export 'package:ml_algo/gradient_type.dart';
 export 'package:ml_algo/lasso_regressor.dart';
 export 'package:ml_algo/learning_rate_type.dart';
-export 'package:ml_algo/logistic_regressor.dart';
+export 'package:ml_algo/linear_classifier.dart';
 export 'package:ml_algo/metric_type.dart';
 export 'package:ml_algo/src/data_preprocessing/ml_data/ml_data.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
