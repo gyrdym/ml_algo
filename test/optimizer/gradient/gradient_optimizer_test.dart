@@ -4,7 +4,7 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/optimizer/gradient.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/generator.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

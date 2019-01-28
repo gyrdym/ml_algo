@@ -20,7 +20,7 @@ class LabelsProcessorImpl<T> implements LabelsProcessor<T> {
   MLVector<Float32x4> _makeFloat32x4LabelsOneVsAll(MLVector<Float32x4> origLabels, double targetLabel) {
     final targetAsFloat32x4 = Float32x4.splat(targetLabel);
     return origLabels
-        .vectorizedMap((Float32x4 element, [int start, int end]) => element.equal(targetAsFloat32x4)
+        .fastMap((Float32x4 element, int start, int end) => element.equal(targetAsFloat32x4)
         .select(_float32x4Ones, _float32x4Zeroes));
   }
 }

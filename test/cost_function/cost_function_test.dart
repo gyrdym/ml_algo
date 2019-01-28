@@ -1,12 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Squared cost function', () {
-    final squaredCost = CostFunctionFactory.squared();
+    final squaredCost = CostFunctionFactoryImpl.squared();
 
     test('should return a proper gradient vector', () {
       // The formula in matrix notation:
@@ -34,7 +34,7 @@ void main() {
 
   group('Log likelihood cost function', () {
     final mockedLinkFn = (Float32x4 scores) => Float32x4.splat(1.0);
-    final logLikelihoodCost = CostFunctionFactory.logLikelihood(mockedLinkFn);
+    final logLikelihoodCost = CostFunctionFactoryImpl.logLikelihood(mockedLinkFn);
 
     test('should return a proper gradient vector', () {
       // The formula in matrix notation:
