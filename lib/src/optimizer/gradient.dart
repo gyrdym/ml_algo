@@ -1,8 +1,20 @@
+import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
+import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/generator.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/range.dart';
 import 'package:ml_linalg/vector.dart';
@@ -22,12 +34,30 @@ class GradientOptimizer<T> implements Optimizer<T> {
 
   MLMatrix<T> _points;
 
-  GradientOptimizer(this._randomizer, this._costFunction, this._learningRateGenerator, this._initialWeightsGenerator,
-      {double initialLearningRate, double minCoefficientsUpdate, int iterationLimit, double lambda, int batchSize})
-      : _minCoefficientsUpdate = minCoefficientsUpdate,
-        _iterationLimit = iterationLimit ?? 1000,
-        _lambda = lambda ?? 0.0,
-        _batchSize = batchSize {
+  GradientOptimizer({
+    RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
+    CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
+    LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    CostFunctionType costFnType,
+    LearningRateType learningRateType,
+    InitialWeightsType initialWeightsType,
+    ScoreToProbLinkFunction<T> scoreToProbLink,
+    double initialLearningRate,
+    double minCoefficientsUpdate,
+    int iterationLimit,
+    double lambda,
+    int batchSize,
+    int randomSeed,
+  }) :
+    _minCoefficientsUpdate = minCoefficientsUpdate,
+    _iterationLimit = iterationLimit ?? 1000,
+    _lambda = lambda ?? 0.0,
+    _batchSize = batchSize,
+    _initialWeightsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
+    _learningRateGenerator = learningRateGeneratorFactory.fromType(learningRateType),
+    _costFunction = costFunctionFactory.fromType(costFnType, scoreToProbLink: scoreToProbLink),
+    _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 

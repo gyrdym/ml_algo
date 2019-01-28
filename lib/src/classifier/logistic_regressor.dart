@@ -5,15 +5,13 @@ import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/optimizer/gradient.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/generator_factory.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
 import 'package:ml_algo/src/score_to_prob_link_function/link_function_factory.dart';
 import 'package:ml_algo/src/score_to_prob_link_function/link_function_factory_impl.dart';
@@ -38,6 +36,7 @@ class LogisticRegressor<T> implements LinearClassifier<T> {
     double interceptScale = 1.0,
     MultinomialType multinomialType = MultinomialType.oneVsAll,
     LearningRateType learningRateType = LearningRateType.decreasing,
+    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
     // private arguments
     LabelsProcessorFactory labelsProcessorFactory = const LabelsProcessorFactoryImpl(),
@@ -48,15 +47,16 @@ class LogisticRegressor<T> implements LinearClassifier<T> {
     interceptPreprocessor = interceptPreprocessorFactory.create<T>(scale: interceptScale),
     scoreToProbabilityLinkFn = scoreToProbFnFactory.create<T>(),
     optimizer = GradientOptimizer<T>(
-        RandomizerFactory.defaultRandomizer(randomSeed),
-        CostFunctionFactory.logLikelihood<T>(scoreToProbFnFactory.create<T>()),
-        LearningRateGeneratorFactory.createByType(learningRateType),
-        InitialWeightsGeneratorFactory.zeroWeights(),
+        costFnType: CostFunctionType.logLikelihood,
+        scoreToProbLink: scoreToProbFnFactory.create<T>(),
+        learningRateType: learningRateType,
+        initialWeightsType: initialWeightsType,
         initialLearningRate: learningRate,
         minCoefficientsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
-        batchSize: batchSize
+        batchSize: batchSize,
+        randomSeed: randomSeed,
     );
 
   MLMatrix<T> get weightsByClasses => _weightsByClasses;
@@ -107,7 +107,7 @@ class LogisticRegressor<T> implements LinearClassifier<T> {
     final distributions = List<MLVector<T>>(_weightsByClasses.columnsNum);
     for (int i = 0; i < _weightsByClasses.columnsNum; i++) {
       final scores = (processedFeatures * _weightsByClasses.getColumn(i)).toVector();
-      distributions[i] = scores.vectorizedMap((T el, [int startOffset, int endOffset]) =>
+      distributions[i] = scores.fastMap((T el, int startOffset, int endOffset) =>
           scoreToProbabilityLinkFn(el));
     }
     return MLMatrix<T>.columns(distributions);

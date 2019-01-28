@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/gradient.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/optimizer/learning_rate_generator/generator_factory.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory_impl.dart';
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/src/regressor/float32x4_linear_regressor.dart';
@@ -21,10 +21,10 @@ class GradientRegressor extends Float32x4LinearRegressor {
       int batchSize = 1})
       : super(
             GradientOptimizer(
-                RandomizerFactory.defaultRandomizer(randomSeed),
-                CostFunctionFactory.squared(),
-                LearningRateGeneratorFactory.createByType(learningRateType),
-                InitialWeightsGeneratorFactory.zeroWeights(),
+                RandomizerFactoryImpl.create(randomSeed),
+                CostFunctionFactoryImpl.squared(),
+                LearningRateGeneratorFactoryImpl.fromType(learningRateType),
+                InitialWeightsGeneratorFactoryImpl.zeroes(),
                 initialLearningRate: learningRate,
                 minCoefficientsUpdate: minWeightsUpdate,
                 iterationLimit: iterationLimit,

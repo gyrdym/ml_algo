@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/optimizer/coordinate.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
@@ -26,7 +26,7 @@ void main() {
     MLVector<Float32x4> labels;
 
     setUp(() {
-      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
+      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactoryImpl.zeroes(), const SquaredCost(),
           minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
 
       data = Float32x4Matrix.from([point1, point2, point3, point4]);
@@ -120,7 +120,7 @@ void main() {
     MLVector<Float32x4> labels;
 
     setUp(() {
-      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
+      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactoryImpl.zeroes(), const SquaredCost(),
           minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
 
       data = Float32x4Matrix.from([point1, point2, point3]);
