@@ -270,10 +270,12 @@ packages:
   ml_linalg:
     dependency: "direct main"
     description:
-      path: "../linalg"
-      relative: true
-    source: path
-    version: "4.2.0"
+      path: "."
+      ref: generic-types-refactoring
+      resolved-ref: "0eb4374297886c6462baac7464ec47de9bf0fd51"
+      url: "https://github.com/gyrdym/ml_linalg"
+    source: git
+    version: "5.0.0"
   mockito:
     dependency: "direct dev"
     description:
