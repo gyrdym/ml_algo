@@ -22,7 +22,7 @@ dev_dependencies:
 
 dependency_overrides:
   ml_linalg:
-    git:
-      url: https://github.com/gyrdym/ml_linalg
-      ref: generic-types-refactoring
-    #path: ../linalg
+#    git:
+#      url: https://github.com/gyrdym/ml_linalg
+#      ref: generic-types-refactoring
+    path: ../linalg

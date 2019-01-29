@@ -5,7 +5,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-abstract class LinearClassifier<T> implements Predictor<T> {
+abstract class LinearClassifier implements Predictor {
   factory LinearClassifier.logisticRegressor({
     int iterationLimit,
     double learningRate,
@@ -16,11 +16,13 @@ abstract class LinearClassifier<T> implements Predictor<T> {
     bool fitIntercept,
     double interceptScale,
     MultinomialType multinomialType,
-    LearningRateType learningRateType}) = LogisticRegressor<T>;
+    LearningRateType learningRateType,
+    Type dtype,
+  }) = LogisticRegressor;
 
   factory LinearClassifier.SVM() => throw UnimplementedError();
   factory LinearClassifier.NaiveBayes() => throw UnimplementedError();
 
-  MLMatrix<T> predictProbabilities(MLMatrix<T> features);
-  MLVector<T> predictClasses(MLMatrix<T> features);
+  MLMatrix predictProbabilities(MLMatrix features);
+  MLVector predictClasses(MLMatrix features);
 }

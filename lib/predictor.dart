@@ -1,11 +1,14 @@
 import 'package:ml_algo/metric_type.dart';
 import 'package:ml_linalg/linalg.dart';
 
-abstract class Predictor<E> {
+abstract class Predictor {
+  /// Learned coefficients (or weights) for given features
+  MLVector get weights;
+
   /// Fits the given data ([features]) to true labels ([origLabels]). It's possible to provide [initialWeights]
   /// and specify, whether the [features] normalized or not
-  void fit(MLMatrix<E> features, MLVector<E> origLabels, {MLVector<E> initialWeights, bool isDataNormalized});
+  void fit(MLMatrix features, MLVector origLabels, {MLVector initialWeights, bool isDataNormalized});
 
   /// Assesses model according to provided [metric]
-  double test(MLMatrix<E> features, MLVector<E> origLabels, MetricType metric);
+  double test(MLMatrix features, MLVector origLabels, MetricType metric);
 }

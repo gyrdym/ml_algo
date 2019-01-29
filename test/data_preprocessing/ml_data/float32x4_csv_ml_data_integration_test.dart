@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/csv_data.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -74,7 +74,7 @@ void main() {
 
     test('should throw an error if label index is not in provided ranges', () async {
       expect(() =>
-          Float32x4CsvMLDataInternal.fromFile(
+          CsvData.fromFile(
             'test/data_preprocessing/test_data/elo_blatter.csv',
             labelIdx: 1,
             columns: [const Tuple2(2, 3), const Tuple2(5, 7)],
@@ -99,7 +99,7 @@ void main() {
     });
 
     test('should throw an error if there are intersecting column ranges while parsing csv file', () {
-      final actual = () => Float32x4CsvMLDataInternal.fromFile(
+      final actual = () => CsvData.fromFile(
           'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           columns: [
@@ -165,7 +165,7 @@ void main() {
 
     test('should throw an error if params validation fails', () {
       final validatorMock = createMLDataParamsValidatorMock(validationShouldBeFailed: true);
-      final actual = () => Float32x4CsvMLDataInternal.fromFile(
+      final actual = () => CsvData.fromFile(
         'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
         paramsValidator: validatorMock,
       );

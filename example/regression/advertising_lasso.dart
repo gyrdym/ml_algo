@@ -1,16 +1,17 @@
 import 'dart:async';
+import 'dart:typed_data';
 
-import 'package:ml_algo/float32x4_cross_validator.dart';
-import 'package:ml_algo/float32x4_csv_ml_data.dart';
-import 'package:ml_algo/lasso_regressor.dart';
+import 'package:ml_algo/cross_validator.dart';
+import 'package:ml_algo/linear_regressor.dart';
 import 'package:ml_algo/metric_type.dart';
+import 'package:ml_algo/ml_data.dart';
 
 Future main() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv', labelIdx: 4);
+  final data = MLData.fromCsvFile('datasets/advertising.csv', labelIdx: 4, dtype: Float32x4);
   final features = await data.features;
   final labels = await data.labels;
-  final model = LassoRegressor(iterationLimit: 100, lambda: 6750.0);
-  final validator = Float32x4CrossValidator.kFold();
+  final model = LinearRegressor.lasso(iterationLimit: 100, lambda: 6750.0);
+  final validator = CrossValidator.kFold();
   final error = validator.evaluate(model, features, labels, MetricType.mape);
 
   print('coefficients: ${model.weights}');

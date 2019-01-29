@@ -1,25 +1,27 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/float32x4_cross_validator.dart';
+import 'package:ml_algo/cross_validator.dart';
 import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/predictor.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
-class Float32x4CrossValidatorInternal implements Float32x4CrossValidator {
+class CrossValidatorImpl implements CrossValidator {
+  final Type dtype;
   final Splitter _splitter;
 
-  factory Float32x4CrossValidatorInternal.kFold({int numberOfFolds = 5}) =>
-      Float32x4CrossValidatorInternal._(KFoldSplitter(numberOfFolds));
+  factory CrossValidatorImpl.kFold({Type dtype, int numberOfFolds = 5}) =>
+      CrossValidatorImpl._(dtype, KFoldSplitter(numberOfFolds));
 
-  factory Float32x4CrossValidatorInternal.lpo({int p = 5}) => Float32x4CrossValidatorInternal._(LeavePOutSplitter(p));
+  factory CrossValidatorImpl.lpo({Type dtype, int p}) => CrossValidatorImpl._(dtype, LeavePOutSplitter(p));
 
-  Float32x4CrossValidatorInternal._(this._splitter);
+  CrossValidatorImpl._(Type dtype, this._splitter) : dtype = dtype ?? Float32x4;
 
   @override
-  double evaluate(Predictor predictor, MLMatrix<Float32x4> points, MLVector<Float32x4> labels, MetricType metric,
+  double evaluate(Predictor predictor, MLMatrix points, MLVector labels, MetricType metric,
       {bool isDataNormalized = false}) {
     if (points.rowsNum != labels.length) {
       throw Exception('Number of feature objects must be equal to the number of labels!');
@@ -47,11 +49,11 @@ class Float32x4CrossValidatorInternal implements Float32x4CrossValidator {
         }
       }
 
-      predictor.fit(MLMatrix<Float32x4>.from(trainFeatures), labels.query(trainIndices),
+      predictor.fit(MLMatrix.from(trainFeatures, dtype: dtype), labels.query(trainIndices),
           isDataNormalized: isDataNormalized);
 
       scores[scoreCounter++] =
-          predictor.test(MLMatrix<Float32x4>.from(testFeatures), labels.query(testIndices), metric);
+          predictor.test(MLMatrix.from(testFeatures, dtype: dtype), labels.query(testIndices), metric);
     }
 
     return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;

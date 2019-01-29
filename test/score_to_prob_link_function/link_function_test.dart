@@ -1,13 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/score_to_prob_link_function/float32x4_link_function.dart';
+import 'package:ml_algo/src/score_to_prob_link_function/float32x4_logit_link_function_factory.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Vectorized logit link function', () {
     test('should properly translate score to probability', () {
       final scores = Float32x4(1.0, 2.0, 3.0, 4.0);
-      final probabilities = vectorizedLogitLink(scores);
+      final probabilities = float32x4LogitLinkFunctionFactory(scores);
 
       expect(probabilities.x, inInclusiveRange(0.731, 0.732));
       expect(probabilities.y, inInclusiveRange(0.88, 0.881));

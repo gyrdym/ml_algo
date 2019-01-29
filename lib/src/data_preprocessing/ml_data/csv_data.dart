@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:logging/logging.dart';
-import 'package:ml_algo/float32x4_csv_ml_data.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
@@ -20,6 +19,7 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/header_extractor/header_e
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_factory_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/ml_data.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
@@ -30,7 +30,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
 
-class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
+class CsvData implements MLData {
+  final Type _dtype;
   final CsvCodec _csvCodec;
   final File _file;
   final int _labelIdx;
@@ -52,18 +53,19 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   final Map<String, List<Object>> _categories;
   final CategoricalDataEncoderType _fallbackEncoderType;
 
-  static const String _loggerPrefix = 'Float32x4CsvMLData';
+  static const String _loggerPrefix = 'MLData';
 
   List<List<dynamic>> _data; // the whole dataset including header
-  MLMatrix<Float32x4> _features;
-  MLVector<Float32x4> _labels;
+  MLMatrix _features;
+  MLVector _labels;
   List<String> _header;
   MLDataHeaderExtractor _headerExtractor;
   MLDataFeaturesExtractor _featuresExtractor;
   MLDataLabelsExtractor _labelsExtractor;
 
-  Float32x4CsvMLDataInternal.fromFile(String fileName, {
+  CsvData.fromFile(String fileName, {
     // public parameters
+    Type dtype,
     String eol = '\n',
     int labelIdx,
     bool headerExists = true,
@@ -87,6 +89,7 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
     MLDataEncodersProcessorFactory encodersProcessorFactory = const MLDataEncodersProcessorFactoryImpl(),
     Logger logger,
   }) :
+        _dtype = dtype ?? Float32x4,
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
         _labelIdx = labelIdx,
@@ -129,16 +132,16 @@ class Float32x4CsvMLDataInternal implements Float32x4CsvMLData {
   }
 
   @override
-  Future<MLMatrix<Float32x4>> get features async {
+  Future<MLMatrix> get features async {
     _data ??= (await _prepareData(_rows, _columns));
-    _features ??= MLMatrix<Float32x4>.from(_featuresExtractor.getFeatures());
+    _features ??= MLMatrix.from(_featuresExtractor.getFeatures(), dtype: _dtype);
     return _features;
   }
 
   @override
-  Future<MLVector<Float32x4>> get labels async {
+  Future<MLVector> get labels async {
     _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= MLVector<Float32x4>.from(_labelsExtractor.getLabels());
+    _labels ??= MLVector.from(_labelsExtractor.getLabels(), dtype: _dtype);
     return _labels;
   }
 

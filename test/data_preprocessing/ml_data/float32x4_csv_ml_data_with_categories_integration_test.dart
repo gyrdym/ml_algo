@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:ml_algo/categorical_data_encoder_type.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/csv_data.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
@@ -21,7 +21,7 @@ Future testCsvWithCategories({
   Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
   void testContentFn(MLMatrix<Float32x4> features, MLVector<Float32x4> labels, List<String> headers)}) async {
 
-  final data = Float32x4CsvMLDataInternal.fromFile(fileName,
+  final data = CsvData.fromFile(fileName,
       labelIdx: labelIdx,
       columns: columns,
       headerExists: headerExist,

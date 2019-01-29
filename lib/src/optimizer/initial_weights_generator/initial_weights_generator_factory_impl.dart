@@ -7,10 +7,10 @@ class InitialWeightsGeneratorFactoryImpl implements InitialWeightsGeneratorFacto
   const InitialWeightsGeneratorFactoryImpl();
 
   @override
-  InitialWeightsGenerator<T> zeroes<T>() => ZeroWeightsGenerator<T>();
+  InitialWeightsGenerator zeroes() => ZeroWeightsGenerator();
 
   @override
-  InitialWeightsGenerator<T> fromType<T>(InitialWeightsType type) {
+  InitialWeightsGenerator fromType(InitialWeightsType type) {
     switch (type) {
       case InitialWeightsType.zeroes:
         return zeroes();
