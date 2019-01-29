@@ -1,38 +1,54 @@
 import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
+import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class CoordinateOptimizer implements Optimizer<Float32x4> {
+class CoordinateOptimizer implements Optimizer {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
   final CostFunction _costFn;
+  final Type _dtype;
 
   //hyper parameters declaration
   final double _coefficientDiffThreshold;
   final int _iterationLimit;
   final double _lambda;
-
   //hyper parameters declaration end
 
   MLVector _normalizer;
 
-  CoordinateOptimizer(this._initialCoefficientsGenerator, this._costFn,
-      {double minCoefficientsDiff, int iterationLimit, double lambda})
-      : _iterationLimit = iterationLimit ?? 1000,
+  CoordinateOptimizer({
+    Type dtype,
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
+    double minCoefficientsDiff,
+    int iterationLimit,
+    double lambda,
+    InitialWeightsType initialWeightsType,
+    CostFunctionType costFunctionType,
+  })
+      : _dtype = dtype,
+        _iterationLimit = iterationLimit ?? 1000,
         _coefficientDiffThreshold = minCoefficientsDiff,
-        _lambda = lambda ?? 0.0;
+        _lambda = lambda ?? 0.0,
+        _initialCoefficientsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
+        _costFn = costFunctionFactory.fromType(costFunctionType);
 
   @override
-  MLVector<Float32x4> findExtrema(MLMatrix<Float32x4> points, MLVector<Float32x4> labels,
-      {MLVector<Float32x4> initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
+  MLVector findExtrema(MLMatrix points, MLVector labels,
+      {MLVector initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
     _normalizer = arePointsNormalized
-        ? MLVector<Float32x4>.filled(points.columnsNum, 1.0)
+        ? MLVector.filled(points.columnsNum, 1.0, dtype: _dtype)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
-    MLVector<Float32x4> coefficients = initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
+    MLVector coefficients = initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
     final changes = List<double>.filled(points.columnsNum, double.infinity);
     int iteration = 0;
 
@@ -44,7 +60,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
         final newWeight = _coordinateDescentStep(j, points, labels, coefficients);
         changes[j] = (oldWeight - newWeight).abs();
         updatedCoefficients[j] = newWeight;
-        coefficients = MLVector<Float32x4>.from(updatedCoefficients);
+        coefficients = MLVector.from(updatedCoefficients, dtype: _dtype);
       }
 
       iteration++;
@@ -60,7 +76,7 @@ class CoordinateOptimizer implements Optimizer<Float32x4> {
       iterationCount >= _iterationLimit;
 
   double _coordinateDescentStep(
-      int coefficientNum, MLMatrix<Float32x4> points, MLVector<Float32x4> labels, MLVector<Float32x4> coefficients) {
+      int coefficientNum, MLMatrix points, MLVector labels, MLVector coefficients) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;
 

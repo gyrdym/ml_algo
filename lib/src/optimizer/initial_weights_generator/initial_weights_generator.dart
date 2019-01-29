@@ -1,5 +1,5 @@
 import 'package:ml_linalg/linalg.dart';
 
-abstract class InitialWeightsGenerator<E> {
-  MLVector<E> generate(int length);
+abstract class InitialWeightsGenerator {
+  MLVector generate(int length);
 }

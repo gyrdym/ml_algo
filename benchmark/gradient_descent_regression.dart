@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_algo/linear_regressor.dart';
+import 'package:ml_algo/ml_data.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
-MLMatrix<Float32x4> features;
-MLVector<Float32x4> labels;
-GradientRegressor regressor;
+MLMatrix features;
+MLVector labels;
+LinearRegressor regressor;
 
 class GDRegressorBenchmark extends BenchmarkBase {
   const GDRegressorBenchmark() : super('Gradient descent regressor');
@@ -23,14 +25,14 @@ class GDRegressorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    regressor = GradientRegressor();
+    regressor = LinearRegressor.gradient(dtype: Float32x4);
   }
 
   void tearDown() {}
 }
 
 Future gradientDescentRegressionBenchmark() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/advertising.csv', labelIdx: 3);
+  final data = MLData.fromCsvFile('datasets/advertising.csv', dtype: Float32x4, labelIdx: 3);
   features = await data.features;
   labels = await data.labels;
 

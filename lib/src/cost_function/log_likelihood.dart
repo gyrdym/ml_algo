@@ -1,9 +1,8 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class LogLikelihoodCost<T> implements CostFunction<T> {
-  final ScoreToProbLinkFunction<T> linkFunction;
+class LogLikelihoodCost implements CostFunction {
+  final Function linkFunction;
 
   const LogLikelihoodCost(this.linkFunction);
 
@@ -13,10 +12,10 @@ class LogLikelihoodCost<T> implements CostFunction<T> {
   }
 
   @override
-  MLVector<T> getGradient(MLMatrix<T> x, MLVector<T> w, MLVector<T> y) =>
+  MLVector getGradient(MLMatrix x, MLVector w, MLVector y) =>
       (x.transpose() * (y - (x * w).vectorizedMap(linkFunction))).toVector();
 
   @override
-  double getSparseSolutionPartial(int wIdx, MLVector<T> x, MLVector<T> w, double y) =>
+  double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y) =>
       throw UnimplementedError();
 }

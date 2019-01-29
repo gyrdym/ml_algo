@@ -1,7 +1,8 @@
-import 'package:ml_algo/linear_classifier.dart';
-import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_algo/metric_type.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -9,12 +10,12 @@ void main() {
 
   group('Logistic regressor', () {
     setUp(() {
-      classifier = LogisticRegressor(
-          batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant, learningRate: 1.0);
+      classifier = LogisticRegressor(batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant,
+          learningRate: 1.0);
     });
 
     test('should extract class labels from the test_data', () {
-      final features = Float32x4Matrix.from([
+      final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
@@ -23,21 +24,21 @@ void main() {
         [4.0, 0.0, 1.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4Vector.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
+      final labels = MLVector.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
       classifier.fit(features, labels);
 
       expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
     });
 
     test('should properly fit given test_data', () {
-      final features = Float32x4Matrix.from([
+      final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
       // given test_data
@@ -308,17 +309,17 @@ void main() {
     });
 
     test('should make prediction', () {
-      final features = Float32x4Matrix.from([
+      final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
-      final newFeatures = Float32x4Matrix.from([
+      final newFeatures = MLMatrix.from([
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
@@ -333,39 +334,39 @@ void main() {
     });
 
     test('should evaluate prediction quality, error = 1', () {
-      final features = Float32x4Matrix.from([
+      final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
-      final newFeatures = Float32x4Matrix.from([
+      final newFeatures = MLMatrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = Float32x4Vector.from([1.0]);
+      final origLabels = MLVector.from([1.0]);
       final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(error, equals(1.0));
     });
 
     test('should evaluate prediction quality, error = 0', () {
-      final features = Float32x4Matrix.from([
+      final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Float32x4Vector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
       classifier.fit(features, labels);
 
-      final newFeatures = Float32x4Matrix.from([
+      final newFeatures = MLMatrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = Float32x4Vector.from([2.0]);
+      final origLabels = MLVector.from([2.0]);
       final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(error, equals(0.0));
     });
@@ -377,11 +378,11 @@ void main() {
           learningRateType: LearningRateType.constant,
           learningRate: 1.0,
           fitIntercept: true);
-      final features = Float32x4Matrix.from([
+      final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
       ]);
-      final labels = Float32x4Vector.from([0.0, 1.0]);
+      final labels = MLVector.from([0.0, 1.0]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our test_data should look as follows:
@@ -453,12 +454,12 @@ void main() {
           learningRate: 1.0,
           fitIntercept: true,
           interceptScale: 2.0);
-      final features = Float32x4Matrix.from([
+      final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [3.0, 4.0, 5.0],
       ]);
-      final labels = Float32x4Vector.from([0.0, 1.0, 0.0]);
+      final labels = MLVector.from([0.0, 1.0, 0.0]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our test_data should look as follows:

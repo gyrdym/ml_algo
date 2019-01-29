@@ -14,16 +14,15 @@ import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_gene
 import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
-import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/range.dart';
 import 'package:ml_linalg/vector.dart';
 
-class GradientOptimizer<T> implements Optimizer<T> {
+class GradientOptimizer implements Optimizer {
   final Randomizer _randomizer;
-  final CostFunction<T> _costFunction;
+  final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
-  final InitialWeightsGenerator<T> _initialWeightsGenerator;
+  final InitialWeightsGenerator _initialWeightsGenerator;
 
   //hyper parameters declaration
   final double _minCoefficientsUpdate;
@@ -32,7 +31,7 @@ class GradientOptimizer<T> implements Optimizer<T> {
   final int _batchSize;
   //hyper parameters declaration end
 
-  MLMatrix<T> _points;
+  MLMatrix _points;
 
   GradientOptimizer({
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
@@ -42,7 +41,7 @@ class GradientOptimizer<T> implements Optimizer<T> {
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
-    ScoreToProbLinkFunction<T> scoreToProbLink,
+    Function scoreToProbLink,
     double initialLearningRate,
     double minCoefficientsUpdate,
     int iterationLimit,
@@ -62,8 +61,8 @@ class GradientOptimizer<T> implements Optimizer<T> {
   }
 
   @override
-  MLVector<T> findExtrema(MLMatrix<T> points, MLVector<T> labels,
-      {MLVector<T> initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
+  MLVector findExtrema(MLMatrix points, MLVector labels,
+      {MLVector initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
     _points = points;
 
     final batchSize = _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
@@ -89,8 +88,8 @@ class GradientOptimizer<T> implements Optimizer<T> {
       (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
       (iterationCounter >= _iterationLimit);
 
-  MLVector<T> _generateCoefficients(
-      MLVector<T> currentCoefficients, MLVector<T> labels, double eta, int batchSize,
+  MLVector _generateCoefficients(
+      MLVector currentCoefficients, MLVector labels, double eta, int batchSize,
       {bool isMinimization = true}) {
     final range = _getBatchRange(batchSize);
     final start = range.first;
@@ -104,15 +103,15 @@ class GradientOptimizer<T> implements Optimizer<T> {
   Iterable<int> _getBatchRange(int batchSize) =>
       _randomizer.getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
 
-  MLVector<T> _makeGradientStep(
-      MLVector<T> coefficients, MLMatrix<T> points, MLVector<T> labels, double eta,
+  MLVector _makeGradientStep(
+      MLVector coefficients, MLMatrix points, MLVector labels, double eta,
       {bool isMinimization = true}) {
     final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
     return isMinimization ? regularizedCoefficients - gradient * eta : regularizedCoefficients + gradient * eta;
   }
 
-  MLVector<T> _regularize(double eta, double lambda, MLVector<T> coefficients) {
+  MLVector _regularize(double eta, double lambda, MLVector coefficients) {
     if (lambda == 0) {
       return coefficients;
     } else {
