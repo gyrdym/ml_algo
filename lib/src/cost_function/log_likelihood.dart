@@ -13,7 +13,7 @@ class LogLikelihoodCost implements CostFunction {
 
   @override
   MLVector getGradient(MLMatrix x, MLVector w, MLVector y) =>
-      (x.transpose() * (y - (x * w).vectorizedMap(linkFunction))).toVector();
+      (x.transpose() * (y - (x * w).fastMap(linkFunction))).toVector();
 
   @override
   double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y) =>
