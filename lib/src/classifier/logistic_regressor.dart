@@ -11,18 +11,20 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/optimizer/gradient.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/score_to_prob_link_function/link_function_factory.dart';
-import 'package:ml_algo/src/score_to_prob_link_function/link_function_factory_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class LogisticRegressor implements LinearClassifier {
   final Type dtype;
   final GradientOptimizer optimizer;
-  final Function scoreToProbabilityLinkFn;
+  final LinkFunction linkFunction;
   final InterceptPreprocessor interceptPreprocessor;
   final LabelsProcessor labelsProcessor;
 
@@ -39,6 +41,7 @@ class LogisticRegressor implements LinearClassifier {
     MultinomialType multinomialType = MultinomialType.oneVsAll,
     LearningRateType learningRateType = LearningRateType.decreasing,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+    LinkFunctionType linkFunctionType = LinkFunctionType.logit,
     this.dtype = Float32x4,
 
     // private arguments
@@ -46,12 +49,12 @@ class LogisticRegressor implements LinearClassifier {
     InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
     ScoreToProbLinkFunctionFactory scoreToProbFnFactory = const ScoreToProbLinkFunctionFactoryImpl(),
   }) :
-    labelsProcessor = labelsProcessorFactory.create(),
+    labelsProcessor = labelsProcessorFactory.create(dtype),
     interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: interceptScale),
-    scoreToProbabilityLinkFn = scoreToProbFnFactory.fromDataType(dtype),
+    linkFunction = scoreToProbFnFactory.fromType(linkFunctionType, dtype),
     optimizer = GradientOptimizer(
         costFnType: CostFunctionType.logLikelihood,
-        scoreToProbLink: scoreToProbFnFactory.fromDataType(dtype),
+        scoreToProbLink: scoreToProbFnFactory.fromType(linkFunctionType, dtype),
         learningRateType: learningRateType,
         initialWeightsType: initialWeightsType,
         initialLearningRate: learningRate,

@@ -6,5 +6,5 @@ class LabelsProcessorFactoryImpl implements LabelsProcessorFactory {
   const LabelsProcessorFactoryImpl();
 
   @override
-  LabelsProcessor create() => LabelsProcessorImpl();
+  LabelsProcessor create(Type dtype) => LabelsProcessorImpl(dtype);
 }
