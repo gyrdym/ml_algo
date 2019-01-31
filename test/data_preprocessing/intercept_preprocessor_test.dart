@@ -7,7 +7,7 @@ void main() {
     test('should add intercept to the given points', () {
       final preprocessor = const InterceptPreprocessorImpl(interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(
-        Float32x4Matrix.from([
+        MLMatrix.from([
           [4.0, 5.0, 10.0],
           [14.0, 49.0, 33.0],
           [41.0, 52.0, 101.0],
