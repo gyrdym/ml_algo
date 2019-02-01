@@ -5,6 +5,8 @@ import 'package:ml_algo/src/link_function/logit_link_function/float32x4_logit_li
 import 'package:ml_algo/src/link_function/logit_link_function/logit_link_function_factory.dart';
 
 class LogitLinkFunctionFactoryImpl implements LogitLinkFunctionFactory {
+  const LogitLinkFunctionFactoryImpl();
+
   @override
   LinkFunction fromDataType(Type dtype) {
     switch (dtype) {

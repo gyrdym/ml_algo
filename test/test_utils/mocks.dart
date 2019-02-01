@@ -1,9 +1,14 @@
 import 'package:logging/logging.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:mockito/mockito.dart';
 
 class EncoderMock extends Mock implements CategoricalDataEncoder {}
@@ -14,6 +19,11 @@ class CategoryValuesExtractorMock extends Mock implements CategoryValuesExtracto
 class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
 class LoggerMock extends Mock implements Logger {}
 class MLDataValueConverterMock extends Mock implements MLDataValueConverter {}
+class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
+class CostFunctionFactoryMock extends Mock implements CostFunctionFactory {}
+class LearningRateGeneratorFactoryMock extends Mock implements LearningRateGeneratorFactory {}
+class InitialWeightsGeneratorFactoryMock extends Mock implements InitialWeightsGeneratorFactory {}
+class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
 
 class MLDataValueConverterMockWithImpl extends Mock implements MLDataValueConverter {
   @override

@@ -20,7 +20,7 @@ Future testCsvData({
   List<Tuple2<int, int>> columns,
   CategoricalDataEncoderFactory categoricalDataFactoryMock,
   MLDataParamsValidator validatorMock,
-  void testContentFn(MLMatrix<Float32x4> features, MLVector<Float32x4> labels, List<String> headers)}) async {
+  void testContentFn(MLMatrix features, MLVector labels, List<String> headers)}) async {
 
   categoricalDataFactoryMock ??= createCategoricalDataEncoderFactoryMock();
   validatorMock ??= createMLDataParamsValidatorMock(validationShouldBeFailed: false);

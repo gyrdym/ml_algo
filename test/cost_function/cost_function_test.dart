@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
@@ -33,7 +34,7 @@ void main() {
   });
 
   group('Log likelihood cost function', () {
-    final mockedLinkFn = (Float32x4 scores) => Float32x4.splat(1.0);
+    final mockedLinkFn = ((Float32x4 scores) => Float32x4.splat(1.0)) as LinkFunction;
     final logLikelihoodCost = const CostFunctionFactoryImpl().logLikelihood(mockedLinkFn);
 
     test('should return a proper gradient vector', () {
