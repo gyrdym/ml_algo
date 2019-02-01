@@ -3,6 +3,9 @@ import 'dart:typed_data';
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/multinomial_type.dart';
+import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
+import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory.dart';
+import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory_impl.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
@@ -27,6 +30,7 @@ class LogisticRegressor implements LinearClassifier {
   final LinkFunction linkFunction;
   final InterceptPreprocessor interceptPreprocessor;
   final LabelsProcessor labelsProcessor;
+  final LabelsProbabilityCalculator probabilityCalculator;
 
   LogisticRegressor({
     // public arguments
@@ -48,10 +52,13 @@ class LogisticRegressor implements LinearClassifier {
     LabelsProcessorFactory labelsProcessorFactory = const LabelsProcessorFactoryImpl(),
     InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
     ScoreToProbLinkFunctionFactory scoreToProbFnFactory = const ScoreToProbLinkFunctionFactoryImpl(),
+    LabelsProbabilityCalculatorFactory probabilityCalculatorFactory = const LabelsProbabilityCalculatorFactoryImpl(),
   }) :
     labelsProcessor = labelsProcessorFactory.create(dtype),
     interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: interceptScale),
     linkFunction = scoreToProbFnFactory.fromType(linkFunctionType, dtype),
+    probabilityCalculator = probabilityCalculatorFactory
+        .create(scoreToProbFnFactory.fromType(linkFunctionType, dtype), dtype),
     optimizer = GradientOptimizer(
         costFnType: CostFunctionType.logLikelihood,
         scoreToProbLink: scoreToProbFnFactory.fromType(linkFunctionType, dtype),
@@ -116,8 +123,7 @@ class LogisticRegressor implements LinearClassifier {
     final distributions = List<MLVector>(_weightsByClasses.columnsNum);
     for (int i = 0; i < _weightsByClasses.columnsNum; i++) {
       final scores = (processedFeatures * _weightsByClasses.getColumn(i)).toVector();
-//      distributions[i] = scores.fastMap((T el, int startOffset, int endOffset) =>
-//          scoreToProbabilityLinkFn(el));
+      distributions[i] = probabilityCalculator.getProbabilities(scores);
     }
     return MLMatrix.columns(distributions, dtype: dtype);
   }

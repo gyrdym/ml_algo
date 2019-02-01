@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -25,7 +26,7 @@ class CoordinateOptimizer implements Optimizer {
   MLVector _normalizer;
 
   CoordinateOptimizer({
-    Type dtype,
+    Type dtype = Float32x4,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     double minCoefficientsDiff,
