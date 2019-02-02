@@ -14,9 +14,10 @@ class LabelsProbabilityCalculatorImpl implements LabelsProbabilityCalculator {
   MLVector getProbabilities(MLVector scores) {
       switch (dtype) {
         case Float32x4:
-          return scores.fastMap<Float32x4>((Float32x4 el, int startOffset, int endOffset) => linkFunction(el));
+          return scores.fastMap<Float32x4>((Float32x4 el, int startOffset, int endOffset) =>
+              linkFunction.float32x4Link(el));
         default:
-          throw UnimplementedError();
+          throw UnsupportedError('Unsupported data type - $dtype');
       }
   }
 }

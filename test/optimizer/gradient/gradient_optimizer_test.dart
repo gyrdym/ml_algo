@@ -43,10 +43,20 @@ MLMatrix getPoints() => MLMatrix.from([
 
 GradientOptimizer createOptimizer(
         {double eta, double minCoeffUpdate, int iterationsLimit, double lambda, int batchSize}) {
+  randomizerMock = RandomizerMock();
+  learningRateGeneratorMock = createLearningRateGenerator();
+  initialWeightsGeneratorMock = createInitialWeightsGenerator();
+  costFunctionMock = CostFunctionMock();
+
   final randomizerFactoryMock = RandomizerFactoryMock();
   final costFunctionFactoryMock = CostFunctionFactoryMock();
   final learningRateGeneratorFactoryMock = LearningRateGeneratorFactoryMock();
   final initialWeightsGeneratorFactory = InitialWeightsGeneratorFactoryMock();
+
+  when(randomizerFactoryMock.create(any)).thenReturn(randomizerMock);
+  when(costFunctionFactoryMock.fromType(any)).thenReturn(costFunctionMock);
+  when(learningRateGeneratorFactoryMock.fromType(any)).thenReturn(learningRateGeneratorMock);
+  when(initialWeightsGeneratorFactory.fromType(any)).thenReturn(initialWeightsGeneratorMock);
 
   return GradientOptimizer(
       randomizerFactory: randomizerFactoryMock,
@@ -87,13 +97,6 @@ void verifyGetGradientCall({Iterable<Iterable<double>> x, Iterable<double> w, It
 
 void main() {
   group('Gradient descent optimizer', () {
-    setUp(() {
-      randomizerMock = RandomizerMock();
-      learningRateGeneratorMock = createLearningRateGenerator();
-      initialWeightsGeneratorMock = createInitialWeightsGenerator();
-      costFunctionMock = CostFunctionMock();
-    });
-
     test('should properly process `batchSize` parameter when the latter is equal to `1` (stochastic case)', () {
       final points = getPoints();
       final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);

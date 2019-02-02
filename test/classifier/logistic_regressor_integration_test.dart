@@ -327,9 +327,7 @@ void main() {
 
       expect(
           probabilities,
-          equals([
-            [0.01798621006309986, 0.0, 0.5]
-          ]));
+          equals([[0.01798621006309986, 0.0, 0.5]]));
       expect(classes, equals([2]));
     });
 
