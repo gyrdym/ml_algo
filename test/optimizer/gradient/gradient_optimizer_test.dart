@@ -9,14 +9,6 @@ import 'package:test/test.dart';
 
 import '../../test_utils/mocks.dart';
 
-class RandomizerMock extends Mock implements Randomizer {}
-
-class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
-
-class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
-
-class CostFunctionMock extends Mock implements CostFunction {}
-
 Randomizer randomizerMock;
 LearningRateGenerator learningRateGeneratorMock;
 CostFunction costFunctionMock;

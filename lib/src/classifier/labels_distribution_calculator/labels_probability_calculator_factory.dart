@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
 
 abstract class LabelsProbabilityCalculatorFactory {
-  LabelsProbabilityCalculator create(LinkFunction linkFunction, Type dtype);
+  LabelsProbabilityCalculator create(LinkFunctionType linkFunctionType, Type dtype);
 }

@@ -14,20 +14,18 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/optimizer/gradient.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
+import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class LogisticRegressor implements LinearClassifier {
   final Type dtype;
-  final GradientOptimizer optimizer;
-  final LinkFunction linkFunction;
+  final Optimizer optimizer;
   final InterceptPreprocessor interceptPreprocessor;
   final LabelsProcessor labelsProcessor;
   final LabelsProbabilityCalculator probabilityCalculator;
@@ -51,17 +49,15 @@ class LogisticRegressor implements LinearClassifier {
     // private arguments
     LabelsProcessorFactory labelsProcessorFactory = const LabelsProcessorFactoryImpl(),
     InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
-    ScoreToProbLinkFunctionFactory scoreToProbFnFactory = const ScoreToProbLinkFunctionFactoryImpl(),
     LabelsProbabilityCalculatorFactory probabilityCalculatorFactory = const LabelsProbabilityCalculatorFactoryImpl(),
+    OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
   }) :
     labelsProcessor = labelsProcessorFactory.create(dtype),
     interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: interceptScale),
-    linkFunction = scoreToProbFnFactory.fromType(linkFunctionType, dtype),
-    probabilityCalculator = probabilityCalculatorFactory
-        .create(scoreToProbFnFactory.fromType(linkFunctionType, dtype), dtype),
-    optimizer = GradientOptimizer(
+    probabilityCalculator = probabilityCalculatorFactory.create(linkFunctionType, dtype),
+    optimizer = optimizerFactory.gradient(
         costFnType: CostFunctionType.logLikelihood,
-        scoreToProbLink: scoreToProbFnFactory.fromType(linkFunctionType, dtype),
+        linkFunctionType: linkFunctionType,
         learningRateType: learningRateType,
         initialWeightsType: initialWeightsType,
         initialLearningRate: learningRate,
