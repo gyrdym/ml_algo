@@ -3,8 +3,8 @@ import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/link_function/logit_link_function.dart';
 
-class ScoreToProbLinkFunctionFactoryImpl implements ScoreToProbLinkFunctionFactory {
-  const ScoreToProbLinkFunctionFactoryImpl();
+class LinkFunctionFactoryImpl implements LinkFunctionFactory {
+  const LinkFunctionFactoryImpl();
 
   @override
   LinkFunction fromType(LinkFunctionType type, Type dtype) {
@@ -12,7 +12,7 @@ class ScoreToProbLinkFunctionFactoryImpl implements ScoreToProbLinkFunctionFacto
       case LinkFunctionType.logit:
         return LogitLinkFunction();
       default:
-        throw UnimplementedError();
+        throw UnsupportedError('Unsupported link function type - $type');
     }
   }
 }

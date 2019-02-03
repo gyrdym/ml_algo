@@ -3,7 +3,7 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
@@ -42,7 +42,7 @@ class GradientOptimizer implements Optimizer {
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
-    LinkFunction scoreToProbLink,
+    LinkFunctionType linkFunctionType,
     double initialLearningRate,
     double minCoefficientsUpdate,
     int iterationLimit,
@@ -56,7 +56,7 @@ class GradientOptimizer implements Optimizer {
     _batchSize = batchSize,
     _initialWeightsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
     _learningRateGenerator = learningRateGeneratorFactory.fromType(learningRateType),
-    _costFunction = costFunctionFactory.fromType(costFnType, linkFunction: scoreToProbLink),
+    _costFunction = costFunctionFactory.fromType(costFnType, linkFunctionType: linkFunctionType),
     _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }

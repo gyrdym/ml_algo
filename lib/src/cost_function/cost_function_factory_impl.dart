@@ -5,7 +5,7 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
 
 class CostFunctionFactoryImpl implements CostFunctionFactory {
   const CostFunctionFactoryImpl();
@@ -14,14 +14,14 @@ class CostFunctionFactoryImpl implements CostFunctionFactory {
   CostFunction squared() => SquaredCost();
 
   @override
-  CostFunction logLikelihood(LinkFunction linkFunction, {Type dtype = Float32x4}) =>
-      LogLikelihoodCost(linkFunction, dtype: dtype);
+  CostFunction logLikelihood(LinkFunctionType linkFunctionType, {Type dtype = Float32x4}) =>
+      LogLikelihoodCost(linkFunctionType, dtype: dtype);
 
   @override
-  CostFunction fromType(CostFunctionType type, {Type dtype = Float32x4, LinkFunction linkFunction}) {
+  CostFunction fromType(CostFunctionType type, {Type dtype = Float32x4, LinkFunctionType linkFunctionType}) {
     switch (type) {
       case CostFunctionType.logLikelihood:
-        return logLikelihood(linkFunction, dtype: dtype);
+        return logLikelihood(linkFunctionType, dtype: dtype);
       case CostFunctionType.squared:
         return squared();
       default:
