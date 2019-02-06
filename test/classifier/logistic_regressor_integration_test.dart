@@ -10,7 +10,7 @@ void main() {
 
   group('Logistic regressor', () {
     setUp(() {
-      classifier = LogisticRegressor(batchSize: 5, iterationLimit: 2, learningRateType: LearningRateType.constant,
+      classifier = LogisticRegressor(iterationLimit: 2, learningRateType: LearningRateType.constant,
           learningRate: 1.0);
     });
 
@@ -371,7 +371,6 @@ void main() {
 
     test('should consider intercept term', () {
       final classifier = LogisticRegressor(
-          batchSize: 2,
           iterationLimit: 1,
           learningRateType: LearningRateType.constant,
           learningRate: 1.0,
@@ -446,7 +445,6 @@ void main() {
 
     test('should consider intercept scale if intercept term is going to be fitted', () {
       final classifier = LogisticRegressor(
-          batchSize: 3,
           iterationLimit: 1,
           learningRateType: LearningRateType.constant,
           learningRate: 1.0,
