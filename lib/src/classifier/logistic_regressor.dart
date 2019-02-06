@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/metric_type.dart';
-import 'package:ml_algo/multinomial_type.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory_impl.dart';
@@ -36,11 +35,9 @@ class LogisticRegressor implements LinearClassifier {
     double learningRate,
     double minWeightsUpdate,
     double lambda,
-    int batchSize = 1,
     int randomSeed,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    MultinomialType multinomialType = MultinomialType.oneVsAll,
     LearningRateType learningRateType = LearningRateType.decreasing,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     LinkFunctionType linkFunctionType = LinkFunctionType.logit,
@@ -64,7 +61,7 @@ class LogisticRegressor implements LinearClassifier {
         minCoefficientsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
-        batchSize: batchSize,
+        batchSize: 1,
         randomSeed: randomSeed,
     );
 

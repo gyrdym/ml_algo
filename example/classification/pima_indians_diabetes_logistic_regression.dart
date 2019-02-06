@@ -28,7 +28,6 @@ Future main() async {
         iterationLimit: 100,
         learningRate: rate,
         learningRateType: LearningRateType.constant,
-        batchSize: 768,
         fitIntercept: true);
     final error = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
     if (error < minError) {
