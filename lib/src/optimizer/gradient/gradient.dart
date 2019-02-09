@@ -54,7 +54,7 @@ class GradientOptimizer implements Optimizer {
     int randomSeed,
   }) :
     _minCoefficientsUpdate = minCoefficientsUpdate,
-    _iterationLimit = iterationLimit ?? 1000,
+    _iterationLimit = iterationLimit ?? 100,
     _lambda = lambda ?? 0.0,
     _batchSize = batchSize,
     _initialWeightsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
