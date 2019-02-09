@@ -34,8 +34,8 @@ Future main() async {
 
   final regressor = LinearRegressor.gradient(
       gradientType: GradientType.stochastic,
-      iterationLimit: 100000,
-      learningRate: 0.001,
+      iterationsLimit: 100000,
+      initialLearningRate: 0.001,
       learningRateType: LearningRateType.constant);
 
   final error = validator.evaluate(regressor, features, labels, MetricType.mape);

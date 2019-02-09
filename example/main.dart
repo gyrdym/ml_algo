@@ -21,8 +21,8 @@ Future main() async {
   // Let's create a regressor itself. With its help we can train some linear model to predict a label value for a new
   // features
   final regressor = LinearRegressor.gradient(
-      iterationLimit: 100,
-      learningRate: 0.0005,
+      iterationsLimit: 100,
+      initialLearningRate: 0.0005,
       learningRateType: LearningRateType.constant);
 
   // Let's train our model (training or fitting is a coefficients adjusting process)

@@ -19,8 +19,8 @@ class GradientRegressor implements LinearRegressor {
 
   GradientRegressor({
     // public arguments
-    int iterationLimit = DefaultParameterValues.iterationsLimit,
-    double learningRate = DefaultParameterValues.initialLearningRate,
+    int iterationsLimit = DefaultParameterValues.iterationsLimit,
+    double initialLearningRate = DefaultParameterValues.initialLearningRate,
     double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
     double lambda,
     GradientType gradientType = GradientType.stochastic,
@@ -40,9 +40,9 @@ class GradientRegressor implements LinearRegressor {
         costFnType: CostFunctionType.squared,
         learningRateType: learningRateType,
         initialWeightsType: initialWeightsType,
-        initialLearningRate: learningRate,
+        initialLearningRate: initialLearningRate,
         minWeightsUpdate: minWeightsUpdate,
-        iterationLimit: iterationLimit,
+        iterationLimit: iterationsLimit,
         lambda: lambda,
         batchSize: gradientType == GradientType.stochastic
             ? 1
