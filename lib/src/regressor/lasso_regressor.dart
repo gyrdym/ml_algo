@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
@@ -15,12 +16,12 @@ class LassoRegressor implements LinearRegressor {
 
   LassoRegressor({
     // public arguments
-    int iterationLimit,
-    double minWeightUpdate,
+    int iterationsLimit = DefaultParameterValues.iterationsLimit,
+    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
     double lambda,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    Type dtype,
+    Type dtype = DefaultParameterValues.dtype,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
     // hidden arguments
@@ -30,8 +31,8 @@ class LassoRegressor implements LinearRegressor {
       _optimizer = CoordinateOptimizer(
           initialWeightsType: initialWeightsType,
           costFunctionType: CostFunctionType.squared,
-          iterationsLimit: iterationLimit,
-          minCoefficientsDiff: minWeightUpdate,
+          iterationsLimit: iterationsLimit,
+          minCoefficientsDiff: minWeightsUpdate,
           lambda: lambda,
           dtype: dtype,
       );

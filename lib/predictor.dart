@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_linalg/linalg.dart';
 
+/// An interface for all the predicting entities: regressor, classifiers, etc.
 abstract class Predictor {
   /// Learned coefficients (or weights) for given features
   MLVector get weights;
