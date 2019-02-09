@@ -35,12 +35,12 @@ class LogisticRegressor implements LinearClassifier {
 
   LogisticRegressor({
     // public arguments
-    int iterationLimit,
-    double learningRate,
-    double minWeightsUpdate,
+    int iterationsLimit = 100,
+    double initialLearningRate = 1e-3,
+    double minWeightsUpdate = 1e-12,
     double lambda,
     int randomSeed,
-    int batchSize,
+    int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
     OptimizerType optimizer = OptimizerType.gradientDescent,
@@ -66,9 +66,9 @@ class LogisticRegressor implements LinearClassifier {
         linkFunctionType: linkFunctionType,
         learningRateType: learningRateType,
         initialWeightsType: initialWeightsType,
-        initialLearningRate: learningRate,
+        initialLearningRate: initialLearningRate,
         minCoefficientsUpdate: minWeightsUpdate,
-        iterationLimit: iterationLimit,
+        iterationLimit: iterationsLimit,
         lambda: lambda,
         batchSize: gradientType != null ? batchSizeCalculator.calculate(gradientType, batchSize) : null,
         randomSeed: randomSeed,
@@ -90,7 +90,6 @@ class LogisticRegressor implements LinearClassifier {
     _classLabels = labels.unique().toList();
     final labelsAsList = _classLabels.toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-
     _weightsByClasses = Map<double, MLVector>.fromIterable(labelsAsList,
         key: (dynamic label) => label as double,
         value: (dynamic label) => _fitBinaryClassifier(processedFeatures, labels, label as double, initialWeights,

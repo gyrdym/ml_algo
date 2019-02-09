@@ -13,8 +13,8 @@ void main() {
 
   group('Logistic regressor', () {
     setUp(() {
-      classifier = LogisticRegressor(iterationLimit: 2, learningRateType: LearningRateType.constant,
-          learningRate: 1.0, fitIntercept: false, gradientType: GradientType.batch);
+      classifier = LogisticRegressor(iterationsLimit: 2, learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0, fitIntercept: false, gradientType: GradientType.batch);
     });
 
     test('should extract class labels from the test_data', () {
@@ -370,9 +370,9 @@ void main() {
 
     test('should consider intercept term', () {
       final classifier = LogisticRegressor(
-          iterationLimit: 1,
+          iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
-          learningRate: 1.0,
+          initialLearningRate: 1.0,
           gradientType: GradientType.batch,
           fitIntercept: true);
       final features = MLMatrix.from([
@@ -448,9 +448,9 @@ void main() {
 
     test('should consider intercept scale if intercept term is going to be fitted', () {
       final classifier = LogisticRegressor(
-          iterationLimit: 1,
+          iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
-          learningRate: 1.0,
+          initialLearningRate: 1.0,
           gradientType: GradientType.batch,
           fitIntercept: true,
           interceptScale: 2.0);

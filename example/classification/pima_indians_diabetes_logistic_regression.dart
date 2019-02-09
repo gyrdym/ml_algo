@@ -18,9 +18,9 @@ Future main() async {
   // lr=0.0102, randomSeed=134, minWeightsUpdate: 0.000000000001, iterationLimit: 100 => error = 0.3449
 
   final logisticRegressor = LinearClassifier.logisticRegressor(
-      iterationLimit: 100,
+      iterationsLimit: 100,
       minWeightsUpdate: 1e-12,
-      learningRate: 0.0102,
+      initialLearningRate: 0.0102,
       learningRateType: LearningRateType.constant,
       randomSeed: 134);
 
