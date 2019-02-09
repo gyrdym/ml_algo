@@ -2,10 +2,9 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
-import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory.dart';
-import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory_impl.dart';
+import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator.dart';
+import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator_factory.dart';
+import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator_factory_impl.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
@@ -16,8 +15,9 @@ import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/optimizer/batch_size_calculator/batch_size_calculator.dart';
-import 'package:ml_algo/src/optimizer/batch_size_calculator/batch_size_calculator_impl.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
+import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';

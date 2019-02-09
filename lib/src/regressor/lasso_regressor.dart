@@ -4,7 +4,7 @@ import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
 import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/optimizer/coordinate.dart';
+import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
 import 'package:ml_linalg/linalg.dart';
