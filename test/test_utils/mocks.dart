@@ -26,6 +26,7 @@ import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_gene
 import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
+import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:mockito/mockito.dart';
 
 class EncoderMock extends Mock implements CategoricalDataEncoder {}
@@ -139,38 +140,29 @@ LabelsProbabilityCalculatorFactoryMock createLabelsProbabilityCalculatorFactoryM
 }
 
 OptimizerFactoryMock createOptimizerFactoryMock({
-  Optimizer gradient,
-  Optimizer coordinate,
+  Map<OptimizerType, Optimizer> optimizers,
 }) {
   final factory = OptimizerFactoryMock();
 
-  when(factory.gradient(
-    randomizerFactory: anyNamed('randomizerFactory'),
-    costFunctionFactory: anyNamed('costFunctionFactory'),
-    learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
-    initialWeightsGeneratorFactory: anyNamed('initialWeightsGeneratorFactory'),
-    costFnType: anyNamed('costFnType'),
-    learningRateType: anyNamed('learningRateType'),
-    initialWeightsType: anyNamed('initialWeightsType'),
-    linkFunctionType: anyNamed('linkFunctionType'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    iterationLimit: anyNamed('iterationLimit'),
-    lambda: anyNamed('lambda'),
-    batchSize: anyNamed('batchSize'),
-    randomSeed: anyNamed('randomSeed'),
-  )).thenReturn(gradient);
-
-  when(factory.coordinate(
-    dtype: anyNamed('dtype'),
-    initialWeightsGeneratorFactory: anyNamed('initialWeightsGeneratorFactory'),
-    costFunctionFactory: anyNamed('costFunctionFactory'),
-    minCoefficientsDiff: anyNamed('minCoefficientsDiff'),
-    iterationLimit: anyNamed('iterationLimit'),
-    lambda: anyNamed('lambda'),
-    initialWeightsType: anyNamed('initialWeightsType'),
-    costFunctionType: anyNamed('costFunctionType'),
-  )).thenReturn(coordinate);
+  optimizers.forEach((OptimizerType type, Optimizer optimizer) {
+    when(factory.fromType(type,
+      dtype: anyNamed('dtype'),
+      randomizerFactory: anyNamed('randomizerFactory'),
+      costFunctionFactory: anyNamed('costFunctionFactory'),
+      learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
+      initialWeightsGeneratorFactory: anyNamed('initialWeightsGeneratorFactory'),
+      costFunctionType: anyNamed('costFunctionType'),
+      learningRateType: anyNamed('learningRateType'),
+      initialWeightsType: anyNamed('initialWeightsType'),
+      linkFunctionType: anyNamed('linkFunctionType'),
+      initialLearningRate: anyNamed('initialLearningRate'),
+      minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+      iterationLimit: anyNamed('iterationLimit'),
+      lambda: anyNamed('lambda'),
+      batchSize: anyNamed('batchSize'),
+      randomSeed: anyNamed('randomSeed'),
+    )).thenReturn(optimizer);
+  });
 
   return factory;
 }

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
@@ -15,10 +16,13 @@ import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/metric/factory.dart';
+import 'package:ml_algo/src/optimizer/batch_size_calculator/batch_size_calculator.dart';
+import 'package:ml_algo/src/optimizer/batch_size_calculator/batch_size_calculator_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -36,9 +40,12 @@ class LogisticRegressor implements LinearClassifier {
     double minWeightsUpdate,
     double lambda,
     int randomSeed,
+    int batchSize,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    LearningRateType learningRateType = LearningRateType.decreasing,
+    OptimizerType optimizer = OptimizerType.gradientDescent,
+    GradientType gradientType = GradientType.stochastic,
+    LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     LinkFunctionType linkFunctionType = LinkFunctionType.logit,
     this.dtype = Float32x4,
@@ -48,12 +55,14 @@ class LogisticRegressor implements LinearClassifier {
     InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
     LabelsProbabilityCalculatorFactory probabilityCalculatorFactory = const LabelsProbabilityCalculatorFactoryImpl(),
     OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
+    BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
   }) :
     labelsProcessor = labelsProcessorFactory.create(dtype),
-    interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: interceptScale),
+    interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: fitIntercept ? interceptScale : 0.0),
     probabilityCalculator = probabilityCalculatorFactory.create(linkFunctionType, dtype),
-    optimizer = optimizerFactory.gradient(
-        costFnType: CostFunctionType.logLikelihood,
+    optimizer = optimizerFactory.fromType(optimizer,
+        dtype: dtype,
+        costFunctionType: CostFunctionType.logLikelihood,
         linkFunctionType: linkFunctionType,
         learningRateType: learningRateType,
         initialWeightsType: initialWeightsType,
@@ -61,7 +70,7 @@ class LogisticRegressor implements LinearClassifier {
         minCoefficientsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
-        batchSize: 1,
+        batchSize: gradientType != null ? batchSizeCalculator.calculate(gradientType, batchSize) : null,
         randomSeed: randomSeed,
     );
 

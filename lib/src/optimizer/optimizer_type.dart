@@ -1,0 +1,3 @@
+enum OptimizerType {
+  gradientDescent, coordinateDescent,
+}

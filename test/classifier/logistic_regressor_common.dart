@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory.dart';
@@ -12,6 +13,7 @@ import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
+import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 
 import '../test_utils/mocks.dart';
 
@@ -46,7 +48,7 @@ void setUpProbabilityCalculatorFactory() {
 
 void setUpOptimizerFactory() {
   optimizerMock = OptimizerMock();
-  optimizerFactoryMock = createOptimizerFactoryMock(gradient: optimizerMock);
+  optimizerFactoryMock = createOptimizerFactoryMock(optimizers: {OptimizerType.gradientDescent: optimizerMock});
 }
 
 LogisticRegressor createRegressor({
@@ -57,6 +59,7 @@ LogisticRegressor createRegressor({
   int randomSeed = 123,
 }) =>
   LogisticRegressor(
+      dtype: Float32x4,
       learningRateType: LearningRateType.constant,
       initialWeightsType: InitialWeightsType.zeroes,
       iterationLimit: iterationLimit,
@@ -67,6 +70,8 @@ LogisticRegressor createRegressor({
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
       linkFunctionType: LinkFunctionType.logit,
       probabilityCalculatorFactory: probabilityCalculatorFactoryMock,
+      optimizer: OptimizerType.gradientDescent,
       optimizerFactory: optimizerFactoryMock,
+      gradientType: GradientType.stochastic,
       randomSeed: randomSeed,
   );

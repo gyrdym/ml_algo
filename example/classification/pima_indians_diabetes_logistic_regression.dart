@@ -15,25 +15,16 @@ Future main() async {
 
   final validator = CrossValidator.kFold(numberOfFolds: 5, dtype: Float32x4);
 
-  final step = 0.00001;
-  final start = 0.001;
-  final limit = 0.01;
+  // lr=0.0102, randomSeed=134, minWeightsUpdate: 0.000000000001, iterationLimit: 100 => error = 0.3449
 
-  double minError = double.infinity;
-  double bestLearningRate = 0.0;
+  final logisticRegressor = LinearClassifier.logisticRegressor(
+      iterationLimit: 100,
+      minWeightsUpdate: 1e-12,
+      learningRate: 0.0102,
+      learningRateType: LearningRateType.constant,
+      randomSeed: 134);
 
-  // Let's find optimal learningRate. WARNING: it may take very much time!
-  for (double rate = start; rate < limit; rate += step) {
-    final logisticRegressor = LinearClassifier.logisticRegressor(
-        iterationLimit: 100,
-        learningRate: rate,
-        learningRateType: LearningRateType.constant,
-        fitIntercept: true);
-    final error = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
-    if (error < minError) {
-      minError = error;
-      bestLearningRate = rate;
-      print('error: $minError, learning rate: $bestLearningRate');
-    }
-  }
+  final error = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
+
+  print('Error is ${(error * 100).toStringAsFixed(2)}%');
 }

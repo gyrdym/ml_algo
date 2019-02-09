@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
+import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
@@ -10,8 +10,8 @@ import 'package:test/test.dart';
 import '../test_utils/mocks.dart';
 
 void main() {
-  group('Squared cost function', () {
-    final squaredCost = const CostFunctionFactoryImpl().squared();
+  group('SquaredCost', () {
+    final squaredCost = SquaredCost();
 
     test('should return a proper gradient vector', () {
       // The formula in matrix notation:
@@ -37,13 +37,12 @@ void main() {
     });
   });
 
-  group('Log likelihood cost function', () {
+  group('LogLikelihoodCost', () {
     final mockedLinkFn = LinkFunctionMock();
     final linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctions: {
       LinkFunctionType.logit: mockedLinkFn,
     });
-    final logLikelihoodCost = LogLikelihoodCost(LinkFunctionType.logit,
-        linkFunctionFactory: linkFunctionFactoryMock);
+    final logLikelihoodCost = LogLikelihoodCost(LinkFunctionType.logit, linkFunctionFactory: linkFunctionFactoryMock);
 
     when(mockedLinkFn.float32x4Link(any)).thenReturn(Float32x4.splat(1.0));
 
@@ -60,6 +59,9 @@ void main() {
         [4.0, 5.0, 6.0],
         [7.0, 8.0, 9.0],
       ]);
+      // 1 4 7
+      // 2 5 8
+      // 3 6 9
       final w = MLVector.from([-1.0, 2.0, -3.0]);
       final y = MLVector.from([1.0, 1.0, 0.0]);
       final expected = [-7.0, -8.0, -9.0];

@@ -4,6 +4,7 @@ import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -25,10 +26,11 @@ void main() {
       createRegressor();
 
       verify(labelsProcessorFactoryMock.create(Float32x4)).called(1);
-      verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 1.0)).called(1);
+      verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0)).called(1);
       verify(probabilityCalculatorFactoryMock.create(LinkFunctionType.logit, Float32x4)).called(1);
-      verify(optimizerFactoryMock.gradient(
-        costFnType: CostFunctionType.logLikelihood,
+      verify(optimizerFactoryMock.fromType(OptimizerType.gradientDescent,
+        dtype: Float32x4,
+        costFunctionType: CostFunctionType.logLikelihood,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         linkFunctionType: LinkFunctionType.logit,

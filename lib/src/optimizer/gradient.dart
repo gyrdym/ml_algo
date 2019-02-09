@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -35,6 +37,7 @@ class GradientOptimizer implements Optimizer {
   MLMatrix _points;
 
   GradientOptimizer({
+    Type dtype = Float32x4,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),
@@ -56,7 +59,7 @@ class GradientOptimizer implements Optimizer {
     _batchSize = batchSize,
     _initialWeightsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
     _learningRateGenerator = learningRateGeneratorFactory.fromType(learningRateType),
-    _costFunction = costFunctionFactory.fromType(costFnType, linkFunctionType: linkFunctionType),
+    _costFunction = costFunctionFactory.fromType(costFnType, dtype: dtype, linkFunctionType: linkFunctionType),
     _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
