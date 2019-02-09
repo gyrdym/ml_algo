@@ -13,8 +13,7 @@ class LabelsProbabilityCalculatorImpl implements LabelsProbabilityCalculator {
 
   LabelsProbabilityCalculatorImpl(LinkFunctionType linkFunctionType, this.dtype, {
     LinkFunctionFactory linkFnFactory = const LinkFunctionFactoryImpl(),
-  }) :
-      linkFunction = linkFnFactory.fromType(linkFunctionType, dtype);
+  }) : linkFunction = linkFnFactory.fromType(linkFunctionType);
 
   @override
   MLVector getProbabilities(MLVector scores) {

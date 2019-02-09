@@ -106,7 +106,7 @@ LinkFunctionFactoryMock createLinkFunctionFactoryMock({
 }) {
   final factory = LinkFunctionFactoryMock();
   linkFunctions.forEach((LinkFunctionType type, LinkFunction fn) {
-    when(factory.fromType(type, any)).thenReturn(fn);
+    when(factory.fromType(type)).thenReturn(fn);
   });
   return factory;
 }

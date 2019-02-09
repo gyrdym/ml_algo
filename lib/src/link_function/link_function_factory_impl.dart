@@ -7,7 +7,7 @@ class LinkFunctionFactoryImpl implements LinkFunctionFactory {
   const LinkFunctionFactoryImpl();
 
   @override
-  LinkFunction fromType(LinkFunctionType type, Type dtype) {
+  LinkFunction fromType(LinkFunctionType type) {
     switch (type) {
       case LinkFunctionType.logit:
         return LogitLinkFunction();
