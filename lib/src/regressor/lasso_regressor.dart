@@ -30,7 +30,7 @@ class LassoRegressor implements LinearRegressor {
       _optimizer = CoordinateOptimizer(
           initialWeightsType: initialWeightsType,
           costFunctionType: CostFunctionType.squared,
-          iterationLimit: iterationLimit,
+          iterationsLimit: iterationLimit,
           minCoefficientsDiff: minWeightUpdate,
           lambda: lambda,
           dtype: dtype,

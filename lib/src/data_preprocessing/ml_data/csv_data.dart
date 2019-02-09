@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
 import 'package:logging/logging.dart';
@@ -26,6 +25,7 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter_impl.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
@@ -89,7 +89,7 @@ class CsvData implements MLData {
     MLDataEncodersProcessorFactory encodersProcessorFactory = const MLDataEncodersProcessorFactoryImpl(),
     Logger logger,
   }) :
-        _dtype = dtype ?? Float32x4,
+        _dtype = dtype ?? DefaultParameterValues.dtype,
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
         _labelIdx = labelIdx,

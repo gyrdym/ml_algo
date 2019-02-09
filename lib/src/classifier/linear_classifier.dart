@@ -6,6 +6,7 @@ import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
+/// A factory for all the classifiers
 abstract class LinearClassifier implements Classifier {
   /// Returns a logistic regressor classifier. Logistic regression is an algorithm that solves a binary classification
   /// problem. The algorithm can be used also for multiclass classification - in this case multiclass labels encoded as

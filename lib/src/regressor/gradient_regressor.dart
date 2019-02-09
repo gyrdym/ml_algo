@@ -1,5 +1,6 @@
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
@@ -18,17 +19,17 @@ class GradientRegressor implements LinearRegressor {
 
   GradientRegressor({
     // public arguments
-    int iterationLimit,
-    double learningRate,
-    double minWeightsUpdate,
+    int iterationLimit = DefaultParameterValues.iterationsLimit,
+    double learningRate = DefaultParameterValues.initialLearningRate,
+    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
     double lambda,
     GradientType gradientType = GradientType.stochastic,
     bool fitIntercept = false,
     double interceptScale = 1.0,
     int randomSeed,
-    int batchSize,
-    Type dtype,
-    LearningRateType learningRateType = LearningRateType.decreasing,
+    int batchSize = 1,
+    Type dtype = DefaultParameterValues.dtype,
+    LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
     // hidden arguments
@@ -40,7 +41,7 @@ class GradientRegressor implements LinearRegressor {
         learningRateType: learningRateType,
         initialWeightsType: initialWeightsType,
         initialLearningRate: learningRate,
-        minCoefficientsUpdate: minWeightsUpdate,
+        minWeightsUpdate: minWeightsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
         batchSize: gradientType == GradientType.stochastic

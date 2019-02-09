@@ -42,7 +42,7 @@ void main() {
           initialWeightsType: InitialWeightsType.zeroes,
           costFunctionType: CostFunctionType.squared,
           minCoefficientsDiff: 1e-5,
-          iterationLimit: iterationsNumber,
+          iterationsLimit: iterationsNumber,
           lambda: lambda
       );
 
@@ -148,7 +148,7 @@ void main() {
           initialWeightsGeneratorFactory: initialWeightsGeneratorFactoryMock,
           costFunctionFactory: costFunctionFactoryMock,
           minCoefficientsDiff: 1e-5,
-          iterationLimit: iterationsNumber,
+          iterationsLimit: iterationsNumber,
           lambda: lambda
       );
 

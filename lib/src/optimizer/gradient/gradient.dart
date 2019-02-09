@@ -1,9 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
@@ -37,7 +36,7 @@ class GradientOptimizer implements Optimizer {
   MLMatrix _points;
 
   GradientOptimizer({
-    Type dtype = Float32x4,
+    Type dtype = DefaultParameterValues.dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),
@@ -46,15 +45,15 @@ class GradientOptimizer implements Optimizer {
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
     LinkFunctionType linkFunctionType,
-    double initialLearningRate,
-    double minCoefficientsUpdate,
-    int iterationLimit,
+    double initialLearningRate = DefaultParameterValues.initialLearningRate,
+    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
+    int iterationLimit = DefaultParameterValues.iterationsLimit,
     double lambda,
     int batchSize,
     int randomSeed,
   }) :
-    _minCoefficientsUpdate = minCoefficientsUpdate,
-    _iterationLimit = iterationLimit ?? 100,
+    _minCoefficientsUpdate = minWeightsUpdate,
+    _iterationLimit = iterationLimit,
     _lambda = lambda ?? 0.0,
     _batchSize = batchSize,
     _initialWeightsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),

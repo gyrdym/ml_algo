@@ -1,8 +1,7 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/cross_validator.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/predictor.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
@@ -18,7 +17,7 @@ class CrossValidatorImpl implements CrossValidator {
 
   factory CrossValidatorImpl.lpo({Type dtype, int p}) => CrossValidatorImpl._(dtype, LeavePOutSplitter(p));
 
-  CrossValidatorImpl._(Type dtype, this._splitter) : dtype = dtype ?? Float32x4;
+  CrossValidatorImpl._(Type dtype, this._splitter) : dtype = dtype ?? DefaultParameterValues.dtype;
 
   @override
   double evaluate(Predictor predictor, MLMatrix points, MLVector labels, MetricType metric,

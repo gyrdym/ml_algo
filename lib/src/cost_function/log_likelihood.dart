@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
@@ -12,9 +13,9 @@ class LogLikelihoodCost implements CostFunction {
   final Type dtype;
 
   LogLikelihoodCost(LinkFunctionType linkFunctionType, {
-    this.dtype = Float32x4,
+    this.dtype = DefaultParameterValues.dtype,
     LinkFunctionFactory linkFunctionFactory = const LinkFunctionFactoryImpl(),
-  }) : linkFunction = linkFunctionFactory.fromType(linkFunctionType, dtype);
+  }) : linkFunction = linkFunctionFactory.fromType(linkFunctionType);
 
   @override
   double getCost(double score, double yOrig) {

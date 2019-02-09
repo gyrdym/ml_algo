@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator.dart';
@@ -13,6 +11,7 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
@@ -35,9 +34,9 @@ class LogisticRegressor implements LinearClassifier {
 
   LogisticRegressor({
     // public arguments
-    int iterationsLimit = 100,
-    double initialLearningRate = 1e-3,
-    double minWeightsUpdate = 1e-12,
+    int iterationsLimit = DefaultParameterValues.iterationsLimit,
+    double initialLearningRate = DefaultParameterValues.initialLearningRate,
+    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
     double lambda,
     int randomSeed,
     int batchSize = 1,
@@ -48,7 +47,7 @@ class LogisticRegressor implements LinearClassifier {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     LinkFunctionType linkFunctionType = LinkFunctionType.logit,
-    this.dtype = Float32x4,
+    this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
     LabelsProcessorFactory labelsProcessorFactory = const LabelsProcessorFactoryImpl(),

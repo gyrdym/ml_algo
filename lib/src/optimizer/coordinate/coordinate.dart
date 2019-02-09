@@ -1,10 +1,10 @@
 import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
@@ -26,17 +26,17 @@ class CoordinateOptimizer implements Optimizer {
   MLVector _normalizer;
 
   CoordinateOptimizer({
-    Type dtype = Float32x4,
+    Type dtype = DefaultParameterValues.dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
-    double minCoefficientsDiff,
-    int iterationLimit,
+    double minCoefficientsDiff = DefaultParameterValues.minWeightsUpdate,
+    int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double lambda,
     InitialWeightsType initialWeightsType,
     CostFunctionType costFunctionType,
   })
       : _dtype = dtype,
-        _iterationLimit = iterationLimit ?? 1000,
+        _iterationLimit = iterationsLimit,
         _coefficientDiffThreshold = minCoefficientsDiff,
         _lambda = lambda ?? 0.0,
         _initialCoefficientsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
