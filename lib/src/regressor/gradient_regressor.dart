@@ -1,17 +1,20 @@
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/src/default_parameter_values.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/factory.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
+import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator_impl.dart';
 import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
 class GradientRegressor implements LinearRegressor {
   final GradientOptimizer _optimizer;
@@ -34,6 +37,7 @@ class GradientRegressor implements LinearRegressor {
 
     // hidden arguments
     InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
+    BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
   }) :
       _interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: fitIntercept ? interceptScale : 0.0),
       _optimizer = GradientOptimizer(
@@ -44,9 +48,7 @@ class GradientRegressor implements LinearRegressor {
         minWeightsUpdate: minWeightsUpdate,
         iterationLimit: iterationsLimit,
         lambda: lambda,
-        batchSize: gradientType == GradientType.stochastic
-            ? 1
-            : gradientType == GradientType.miniBatch ? batchSize : double.maxFinite.toInt(),
+        batchSize: batchSizeCalculator.calculate(gradientType, batchSize),
         randomSeed: randomSeed,
       );
 

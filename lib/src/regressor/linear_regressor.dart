@@ -9,7 +9,7 @@ import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 /// space to make a prediction. Each `x` in the equation has its own coefficient or weight and the combination of these
 /// `x`-es and its coefficients gives the `y` term. The latter is a thing, that the regressor should predict, and
 /// as one knows all the `x` values (since it is the input for the algorithm), the regressor should find the best
-/// coefficients or weights to make a best prediction of `y` term.
+/// coefficients or weights (they are unknown) to make a best prediction of `y` term.
 abstract class LinearRegressor implements Predictor {
   /// Returns gradient linear regressor. Uses gradient descent optimizer to find the weights
   /// Parameters:
