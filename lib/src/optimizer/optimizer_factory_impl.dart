@@ -16,9 +16,65 @@ import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_gene
 import 'package:ml_algo/src/optimizer/learning_rate_generator/learning_rate_generator_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
+import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 
 class OptimizerFactoryImpl implements OptimizerFactory {
   const OptimizerFactoryImpl();
+
+  @override
+  Optimizer fromType(OptimizerType type, {
+    Type dtype,
+    RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
+    CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
+    LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    CostFunctionType costFunctionType,
+    LearningRateType learningRateType,
+    InitialWeightsType initialWeightsType,
+    LinkFunctionType linkFunctionType,
+    double initialLearningRate,
+    double minCoefficientsUpdate,
+    int iterationLimit,
+    double lambda,
+    int batchSize,
+    int randomSeed,
+  }) {
+    switch (type) {
+      case OptimizerType.coordinateDescent:
+        return coordinate(
+          dtype: dtype,
+          initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
+          costFunctionFactory: costFunctionFactory,
+          minCoefficientsDiff: minCoefficientsUpdate,
+          iterationLimit: iterationLimit,
+          lambda: lambda,
+          initialWeightsType: initialWeightsType,
+          costFunctionType: costFunctionType,
+        );
+
+      case OptimizerType.gradientDescent:
+        return gradient(
+          dtype: dtype,
+          randomizerFactory: randomizerFactory,
+          costFunctionFactory: costFunctionFactory,
+          learningRateGeneratorFactory: learningRateGeneratorFactory,
+          initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
+          costFnType: costFunctionType,
+          learningRateType: learningRateType,
+          initialWeightsType: initialWeightsType,
+          linkFunctionType: linkFunctionType,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minCoefficientsUpdate,
+          iterationLimit: iterationLimit,
+          lambda: lambda,
+          batchSize: batchSize,
+          randomSeed: randomSeed,
+        );
+
+      default:
+        throw UnimplementedError('Unimplemented optimizer type - $type');
+    }
+  }
 
   @override
   Optimizer coordinate({
@@ -43,6 +99,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
 
   @override
   Optimizer gradient({
+    Type dtype = Float32x4,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),

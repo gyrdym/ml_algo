@@ -1,6 +1,8 @@
+import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/predictor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
+import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -11,9 +13,12 @@ abstract class LinearClassifier implements Predictor {
     double minWeightsUpdate,
     double lambda,
     int randomSeed,
+    int batchSize,
     bool fitIntercept,
     double interceptScale,
     LearningRateType learningRateType,
+    OptimizerType optimizer,
+    GradientType gradientType,
     Type dtype,
   }) = LogisticRegressor;
 

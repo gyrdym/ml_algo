@@ -1,3 +1,4 @@
+import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/metric_type.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
@@ -11,7 +12,7 @@ void main() {
   group('Logistic regressor', () {
     setUp(() {
       classifier = LogisticRegressor(iterationLimit: 2, learningRateType: LearningRateType.constant,
-          learningRate: 1.0);
+          learningRate: 1.0, fitIntercept: false, gradientType: GradientType.batch);
     });
 
     test('should extract class labels from the test_data', () {
@@ -374,6 +375,7 @@ void main() {
           iterationLimit: 1,
           learningRateType: LearningRateType.constant,
           learningRate: 1.0,
+          gradientType: GradientType.batch,
           fitIntercept: true);
       final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
@@ -448,6 +450,7 @@ void main() {
           iterationLimit: 1,
           learningRateType: LearningRateType.constant,
           learningRate: 1.0,
+          gradientType: GradientType.batch,
           fitIntercept: true,
           interceptScale: 2.0);
       final features = MLMatrix.from([
