@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/batch_size_calculator/batch_size_calculator.dart';
+import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 
 class BatchSizeCalculatorImpl implements BatchSizeCalculator {

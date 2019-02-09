@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
+import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
