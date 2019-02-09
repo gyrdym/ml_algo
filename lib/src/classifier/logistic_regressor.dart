@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/metric_type.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory.dart';
 import 'package:ml_algo/src/classifier/labels_distribution_calculator/labels_probability_calculator_factory_impl.dart';
