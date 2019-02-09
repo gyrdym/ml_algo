@@ -6,6 +6,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
+import '../test_utils/helpers/floating_point_iterable_matchers.dart';
+
 void main() {
   LogisticRegressor classifier;
 
@@ -295,18 +297,14 @@ void main() {
       // update:
       // [-5.5, -6.5, -18.0] + eta * [9.0, 8.0, 5.0] = [-5.5, -6.5, -18.0] + 1.0 * [9.0, 8.0, 5.0] = [3.5, 1.5, -13.0]
 
-      final weights = classifier.weightsByClasses.transpose();
-      final class1Weights = weights.getRow(0).toList();
-      final class2Weights = weights.getRow(1).toList();
-      final class3Weights = weights.getRow(2).toList();
+      final weights = classifier.weightsByClasses;
+      final class1Weights = weights.values.elementAt(0);
+      final class2Weights = weights.values.elementAt(1);
+      final class3Weights = weights.values.elementAt(2);
 
-      expect(class1Weights, equals([3.5, -0.5, -9.0]));
-
-      expect(class2Weights[0], closeTo(-17.68, 0.01));
-      expect(class2Weights[1], closeTo(-15.4, 0.1));
-      expect(class2Weights[2], closeTo(-0.06, 0.02));
-
-      expect(class3Weights, equals([3.5, 1.5, -13.0]));
+      expect(class1Weights, vectorAlmostEqualTo([3.5, -0.5, -9.0]));
+      expect(class2Weights, vectorAlmostEqualTo([-17.68, -15.5, -0.04], 1e-2));
+      expect(class3Weights, vectorAlmostEqualTo([3.5, 1.5, -13.0]));
     });
 
     test('should make prediction', () {
@@ -438,7 +436,10 @@ void main() {
       // derivative: [0.0, -2.0, -2.5, -1.5]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [0.0, -2.0, -2.5, -1.5] = [0.0, -2.0, -2.5, -1.5]
       expect(
-          classifier.weightsByClasses.transpose(),
+          [
+            classifier.weightsByClasses.values.first,
+            classifier.weightsByClasses.values.last,
+          ],
           equals([
             [0.0, 2.0, 2.5, 1.5],
             [0.0, -2.0, -2.5, -1.5]
@@ -527,7 +528,10 @@ void main() {
       // derivative: [-1.0, -3.5, -4.5, -4.0]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [-1.0, -3.5, -4.5, -4.0] = [-1.0, -3.5, -4.5, -4.0]
       expect(
-          classifier.weightsByClasses.transpose(),
+          [
+            classifier.weightsByClasses.values.first,
+            classifier.weightsByClasses.values.last,
+          ],
           equals([
             [1.0, 3.5, 4.5, 4.0],
             [-1.0, -3.5, -4.5, -4.0]

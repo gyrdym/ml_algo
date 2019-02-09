@@ -77,23 +77,25 @@ class LogisticRegressor implements LinearClassifier {
   @override
   MLVector get weights => null;
 
-  MLMatrix get weightsByClasses => _weightsByClasses;
-  MLMatrix _weightsByClasses;
-
-  MLVector get classLabels => _classLabels;
-  MLVector _classLabels;
+  @override
+  Map<double, MLVector> get weightsByClasses => _weightsByClasses;
+  Map<double, MLVector> _weightsByClasses;
 
   @override
-  void fit(MLMatrix features, MLVector origLabels, {MLVector initialWeights, bool isDataNormalized = false}) {
-    _classLabels = origLabels.unique();
+  List<double> get classLabels => _classLabels;
+  List<double> _classLabels;
+
+  @override
+  void fit(MLMatrix features, MLVector labels, {MLVector initialWeights, bool isDataNormalized = false}) {
+    _classLabels = labels.unique().toList();
     final labelsAsList = _classLabels.toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    final weights = List<MLVector>.generate(labelsAsList.length, (int i) {
-      final labels = labelsProcessor.makeLabelsOneVsAll(origLabels, labelsAsList[i]);
-      return optimizer.findExtrema(processedFeatures, labels,
-          initialWeights: initialWeights, arePointsNormalized: isDataNormalized, isMinimizingObjective: false);
-    });
-    _weightsByClasses = MLMatrix.columns(weights, dtype: dtype);
+
+    _weightsByClasses = Map<double, MLVector>.fromIterable(labelsAsList,
+        key: (dynamic label) => label as double,
+        value: (dynamic label) => _fitBinaryClassifier(processedFeatures, labels, label as double, initialWeights,
+            isDataNormalized),
+    );
   }
 
   @override
@@ -122,11 +124,20 @@ class LogisticRegressor implements LinearClassifier {
   }
 
   MLMatrix _predictProbabilities(MLMatrix processedFeatures) {
-    final distributions = List<MLVector>(_weightsByClasses.columnsNum);
-    for (int i = 0; i < _weightsByClasses.columnsNum; i++) {
-      final scores = (processedFeatures * _weightsByClasses.getColumn(i)).toVector();
-      distributions[i] = probabilityCalculator.getProbabilities(scores);
-    }
+    final numOfObservations = _weightsByClasses.length;
+    final distributions = List<MLVector>(numOfObservations);
+    int i = 0;
+    _weightsByClasses.forEach((double label, MLVector weights) {
+      final scores = (processedFeatures * weights).toVector();
+      distributions[i++] = probabilityCalculator.getProbabilities(scores);
+    });
     return MLMatrix.columns(distributions, dtype: dtype);
+  }
+
+  MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels, double targetLabel, MLVector initialWeights,
+      bool arePointsNormalized) {
+    final binaryLabels = labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
+    return optimizer.findExtrema(features, binaryLabels, initialWeights: initialWeights,
+        arePointsNormalized: arePointsNormalized, isMinimizingObjective: false);
   }
 }

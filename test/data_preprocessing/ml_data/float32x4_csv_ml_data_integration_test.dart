@@ -15,8 +15,8 @@ void main() {
         expectedColsNum: 8,
         expectedRowsNum: 768,
         testContentFn: (features, labels, header) {
-          expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
-          expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0]));
+          expect(features.getRow(0), vectorAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
+          expect(features.getRow(34), vectorAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0]));
           expect([labels[0], labels[34], labels[63]], equals([1, 0, 0]));
         }
       );
@@ -29,8 +29,8 @@ void main() {
           expectedColsNum: 8,
           expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
-            expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([6.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
+            expect(features.getRow(34), vectorAlmostEqualTo([10.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
             expect([labels[0], labels[34], labels[63]], equals([148.0, 122.0, 141.0]));
           }
       );
@@ -43,8 +43,8 @@ void main() {
           expectedColsNum: 8,
           expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
-            expect(features.getRow(34), floatIterableAlmostEqualTo([122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
+            expect(features.getRow(34), vectorAlmostEqualTo([122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
             expect([labels[0], labels[34], labels[63]], equals([6.0, 10.0, 2.0]));
           }
       );
@@ -91,8 +91,8 @@ void main() {
           expectedRowsNum: 768,
           columns: [const Tuple2(0, 1), const Tuple2(2, 2), const Tuple2(3, 4), const Tuple2(6, 8)],
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 0.627, 50.0]));
-            expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 0.512, 45.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 0.627, 50.0]));
+            expect(features.getRow(34), vectorAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 0.512, 45.0]));
             expect([labels[0], labels[34], labels[63]], equals([1, 0, 0]));
           }
       );
@@ -119,8 +119,8 @@ void main() {
           expectedColsNum: 8,
           expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
-            expect(features.getRow(767), floatIterableAlmostEqualTo([1.0, 93.0, 70.0, 31.0, 0.0, 30.4, 0.315, 23.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
+            expect(features.getRow(767), vectorAlmostEqualTo([1.0, 93.0, 70.0, 31.0, 0.0, 30.4, 0.315, 23.0]));
             expect(() => features.getRow(768), throwsRangeError);
             expect([labels[0], labels[34], labels[767]], equals([1, 0, 0]));
             expect(() => labels[768], throwsRangeError);

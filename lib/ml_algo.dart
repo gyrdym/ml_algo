@@ -5,6 +5,7 @@ export 'package:ml_algo/learning_rate_type.dart';
 export 'package:ml_algo/linear_classifier.dart';
 export 'package:ml_algo/linear_regressor.dart';
 export 'package:ml_algo/ml_data.dart';
+export 'package:ml_algo/src/classifier/classifier.dart';
 export 'package:ml_algo/src/classifier/linear_classifier.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
 export 'package:ml_algo/src/metric/metric_type.dart';

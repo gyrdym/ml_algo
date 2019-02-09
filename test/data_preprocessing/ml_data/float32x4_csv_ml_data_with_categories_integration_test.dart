@@ -78,7 +78,7 @@ void main() {
               'elo98', 'elo15', 'confederation', 'gdp06', 'popu06', 'gdp_source', 'popu_source',
             ]));
 
-            expect(features.getRow(0), floatIterableAlmostEqualTo(<double>[
+            expect(features.getRow(0), vectorAlmostEqualTo(<double>[
               1116.0, // elo15
               0.0, 0.0, 1.0, 0.0, 0.0, 0.0, // confederation
               1076.461425, // gdp06
@@ -87,7 +87,7 @@ void main() {
               0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, // popu_source
             ]));
 
-            expect(features.getRow(5), floatIterableAlmostEqualTo(<double>[
+            expect(features.getRow(5), vectorAlmostEqualTo(<double>[
               641.0, // elo15
               0.0, 0.0, 0.0, 1.0, 0.0, 0.0, // confederation
               8800.0, // gdp06

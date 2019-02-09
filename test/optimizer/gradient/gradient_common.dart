@@ -70,7 +70,7 @@ void mockGetGradient(CostFunction mock, {Iterable<Iterable<double>> x, Iterable<
   Iterable<double> gradient}) {
   when(mock.getGradient(
     x == null ? any : argThat(matrixAlmostEqualTo(x)),
-    w == null ? any : argThat(floatIterableAlmostEqualTo(w)),
-    y == null ? any : argThat(floatIterableAlmostEqualTo(y)),
+    w == null ? any : argThat(vectorAlmostEqualTo(w)),
+    y == null ? any : argThat(vectorAlmostEqualTo(y)),
   )).thenReturn(MLVector.from(gradient ?? []));
 }

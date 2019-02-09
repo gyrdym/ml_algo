@@ -1,12 +1,12 @@
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/predictor.dart';
+import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-abstract class LinearClassifier implements Predictor {
+abstract class LinearClassifier implements Classifier {
   factory LinearClassifier.logisticRegressor({
     int iterationLimit,
     double learningRate,
