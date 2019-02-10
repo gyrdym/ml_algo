@@ -10,5 +10,5 @@ if [ "$COVERALLS_TOKEN" ]; then
     --token $COVERALLS_TOKEN \
     --retry 2 \
     --exclude-test-files \
-    test/*
+    test/
 fi
