@@ -5,7 +5,8 @@ class OneHotEncoderBenchmark extends BenchmarkBase {
   final OneHotEncoder _encoder;
   final Iterable<Object> _data;
 
-  OneHotEncoderBenchmark(this._encoder, this._data) : super('One Hot Encoder benchmark');
+  OneHotEncoderBenchmark(this._encoder, this._data)
+      : super('One Hot Encoder benchmark');
 
   @override
   void run() {
@@ -16,7 +17,8 @@ class OneHotEncoderBenchmark extends BenchmarkBase {
 void oneHotEncoderBenchmark() {
   final numOfLabels = 10000;
   final encoder = OneHotEncoder()
-    ..setCategoryValues(List<String>.generate(numOfLabels, (int idx) => 'label_$idx'));
+    ..setCategoryValues(
+        List<String>.generate(numOfLabels, (int idx) => 'label_$idx'));
   OneHotEncoderBenchmark(encoder, ['label_100', 'label_200', 'label_300'])
     ..report();
 }

@@ -1,3 +1,4 @@
 enum CostFunctionType {
-  squared, logLikelihood,
+  squared,
+  logLikelihood,
 }

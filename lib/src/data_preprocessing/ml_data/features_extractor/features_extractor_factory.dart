@@ -4,6 +4,12 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/featur
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
 abstract class MLDataFeaturesExtractorFactory {
-  MLDataFeaturesExtractor create(List<List<Object>> records, List<bool> rowMask, List<bool> columnsMask,
-      Map<int, CategoricalDataEncoder> encoders, int labelIdx, MLDataValueConverter valueConverter, Logger logger);
+  MLDataFeaturesExtractor create(
+      List<List<Object>> records,
+      List<bool> rowMask,
+      List<bool> columnsMask,
+      Map<int, CategoricalDataEncoder> encoders,
+      int labelIdx,
+      MLDataValueConverter valueConverter,
+      Logger logger);
 }

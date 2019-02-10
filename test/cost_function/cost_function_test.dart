@@ -39,10 +39,12 @@ void main() {
 
   group('LogLikelihoodCost', () {
     final mockedLinkFn = LinkFunctionMock();
-    final linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctions: {
+    final linkFunctionFactoryMock =
+        createLinkFunctionFactoryMock(linkFunctions: {
       LinkFunctionType.logit: mockedLinkFn,
     });
-    final logLikelihoodCost = LogLikelihoodCost(LinkFunctionType.logit, linkFunctionFactory: linkFunctionFactoryMock);
+    final logLikelihoodCost = LogLikelihoodCost(LinkFunctionType.logit,
+        linkFunctionFactory: linkFunctionFactoryMock);
 
     when(mockedLinkFn.float32x4Link(any)).thenReturn(Float32x4.splat(1.0));
 

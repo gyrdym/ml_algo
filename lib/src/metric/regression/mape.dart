@@ -6,5 +6,7 @@ class MAPEMetric implements RegressionMetric {
 
   @override
   double getError(MLVector predictedLabels, MLVector origLabels) =>
-      100 / predictedLabels.length * ((origLabels - predictedLabels) / origLabels).abs().sum();
+      100 /
+      predictedLabels.length *
+      ((origLabels - predictedLabels) / origLabels).abs().sum();
 }

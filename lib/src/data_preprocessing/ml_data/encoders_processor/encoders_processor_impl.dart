@@ -14,11 +14,14 @@ class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
   static const String noHeaderProvidedWarningMsg =
       'Column names with categorical values are provided, but there are no header with column names!';
 
-  MLDataEncodersProcessorImpl(this.records, this.header, this.encoderFactory, this.fallbackEncoderType, this.logger);
+  MLDataEncodersProcessorImpl(this.records, this.header, this.encoderFactory,
+      this.fallbackEncoderType, this.logger);
 
   @override
-  Map<int, CategoricalDataEncoder> createEncoders(Map<int, CategoricalDataEncoderType> indexesToEncoderTypes,
-      Map<String, CategoricalDataEncoderType> namesToEncoderTypes, Map<String, List<Object>> categories) {
+  Map<int, CategoricalDataEncoder> createEncoders(
+      Map<int, CategoricalDataEncoderType> indexesToEncoderTypes,
+      Map<String, CategoricalDataEncoderType> namesToEncoderTypes,
+      Map<String, List<Object>> categories) {
     Map<int, CategoricalDataEncoder> encoders = {};
     if (indexesToEncoderTypes.isNotEmpty) {
       encoders = _createEncodersFromIndexToEncoder(indexesToEncoderTypes);
@@ -35,16 +38,20 @@ class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
   }
 
   Map<int, CategoricalDataEncoder> _createEncodersFromNameToEncoder(
-      Map<String, CategoricalDataEncoderType> nameToEncoder) => _createEncoders((int colIdx) {
+          Map<String, CategoricalDataEncoderType> nameToEncoder) =>
+      _createEncoders((int colIdx) {
         final name = header[colIdx];
         return nameToEncoder.containsKey(name) ? nameToEncoder[name] : null;
-    });
+      });
 
   Map<int, CategoricalDataEncoder> _createEncodersFromIndexToEncoder(
-      Map<int, CategoricalDataEncoderType> indexToEncoderType) =>
-      _createEncoders((int colIdx) => indexToEncoderType.containsKey(colIdx) ? indexToEncoderType[colIdx] : null);
+          Map<int, CategoricalDataEncoderType> indexToEncoderType) =>
+      _createEncoders((int colIdx) => indexToEncoderType.containsKey(colIdx)
+          ? indexToEncoderType[colIdx]
+          : null);
 
-  Map<int, CategoricalDataEncoder> _createEncodersFromCategories(Map<String, List<Object>> categories) {
+  Map<int, CategoricalDataEncoder> _createEncodersFromCategories(
+      Map<String, List<Object>> categories) {
     final indexToEncoder = <int, CategoricalDataEncoder>{};
     for (int i = 0; i < header.length; i++) {
       final name = header[i];
@@ -56,17 +63,20 @@ class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
     return indexToEncoder;
   }
 
-  Map<int, CategoricalDataEncoder> _createEncoders(CategoricalDataEncoderType getEncoderType(int colIdx)) {
+  Map<int, CategoricalDataEncoder> _createEncoders(
+      CategoricalDataEncoderType getEncoderType(int colIdx)) {
     final indexToEncoder = <int, CategoricalDataEncoder>{};
     final encodersValues = <int, List<Object>>{};
     for (int rowIdx = 0; rowIdx < records.length; rowIdx++) {
       for (int colIdx = 0; colIdx < records[rowIdx].length; colIdx++) {
-          final encoderType = getEncoderType(colIdx);
-          if (encoderType != null) {
-            indexToEncoder.putIfAbsent(colIdx, () => encoderFactory.fromType(encoderType));
-            encodersValues.putIfAbsent(colIdx, () => List<Object>(records.length));
-            encodersValues[colIdx][rowIdx] = records[rowIdx][colIdx];
-          }
+        final encoderType = getEncoderType(colIdx);
+        if (encoderType != null) {
+          indexToEncoder.putIfAbsent(
+              colIdx, () => encoderFactory.fromType(encoderType));
+          encodersValues.putIfAbsent(
+              colIdx, () => List<Object>(records.length));
+          encodersValues[colIdx][rowIdx] = records[rowIdx][colIdx];
+        }
       }
     }
     encodersValues.forEach((int colIdx, List<Object> values) {

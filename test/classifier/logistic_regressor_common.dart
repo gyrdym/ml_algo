@@ -28,7 +28,8 @@ OptimizerFactory optimizerFactoryMock;
 
 void setUpLabelsProcessorFactory() {
   labelsProcessorMock = LabelsProcessorMock();
-  labelsProcessorFactoryMock = createLabelsProcessorFactoryMock(processors: {Float32x4: labelsProcessorMock});
+  labelsProcessorFactoryMock = createLabelsProcessorFactoryMock(
+      processors: {Float32x4: labelsProcessorMock});
 }
 
 void setUpInterceptPreprocessorFactory() {
@@ -39,7 +40,8 @@ void setUpInterceptPreprocessorFactory() {
 
 void setUpProbabilityCalculatorFactory() {
   probabilityCalculatorMock = LabelsProbabilityCalculatorMock();
-  probabilityCalculatorFactoryMock = createLabelsProbabilityCalculatorFactoryMock(
+  probabilityCalculatorFactoryMock =
+      createLabelsProbabilityCalculatorFactoryMock(
     linkType: LinkFunctionType.logit,
     dtype: Float32x4,
     calculator: probabilityCalculatorMock,
@@ -48,7 +50,8 @@ void setUpProbabilityCalculatorFactory() {
 
 void setUpOptimizerFactory() {
   optimizerMock = OptimizerMock();
-  optimizerFactoryMock = createOptimizerFactoryMock(optimizers: {OptimizerType.gradientDescent: optimizerMock});
+  optimizerFactoryMock = createOptimizerFactoryMock(
+      optimizers: {OptimizerType.gradientDescent: optimizerMock});
 }
 
 LogisticRegressor createRegressor({
@@ -58,7 +61,7 @@ LogisticRegressor createRegressor({
   double lambda = 0.1,
   int randomSeed = 123,
 }) =>
-  LogisticRegressor(
+    LogisticRegressor(
       dtype: Float32x4,
       learningRateType: LearningRateType.constant,
       initialWeightsType: InitialWeightsType.zeroes,
@@ -74,4 +77,4 @@ LogisticRegressor createRegressor({
       optimizerFactory: optimizerFactoryMock,
       gradientType: GradientType.stochastic,
       randomSeed: randomSeed,
-  );
+    );

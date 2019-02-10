@@ -8,7 +8,8 @@ class MLDataLabelsExtractorFactoryImpl implements MLDataLabelsExtractorFactory {
   const MLDataLabelsExtractorFactoryImpl();
 
   @override
-  MLDataLabelsExtractor create(List<List<Object>> records, List<bool> readMask, int labelIdx,
-      MLDataValueConverter valueConverter, Logger logger) =>
-      MLDataLabelsExtractorImpl(records, readMask, labelIdx, valueConverter, logger);
+  MLDataLabelsExtractor create(List<List<Object>> records, List<bool> readMask,
+          int labelIdx, MLDataValueConverter valueConverter, Logger logger) =>
+      MLDataLabelsExtractorImpl(
+          records, readMask, labelIdx, valueConverter, logger);
 }

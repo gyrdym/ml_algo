@@ -10,17 +10,21 @@ abstract class CategoricalDataEncoder {
       [EncodeUnknownValueStrategy encodeUnknownValueStrategy]) {
     switch (type) {
       case CategoricalDataEncoderType.ordinal:
-        return CategoricalDataEncoder.ordinal(encodeUnknownValueStrategy: encodeUnknownValueStrategy);
+        return CategoricalDataEncoder.ordinal(
+            encodeUnknownValueStrategy: encodeUnknownValueStrategy);
       case CategoricalDataEncoderType.oneHot:
-        return CategoricalDataEncoder.oneHot(encodeUnknownValueStrategy: encodeUnknownValueStrategy);
+        return CategoricalDataEncoder.oneHot(
+            encodeUnknownValueStrategy: encodeUnknownValueStrategy);
       default:
         throw Error();
     }
   }
 
-  factory CategoricalDataEncoder.oneHot({EncodeUnknownValueStrategy encodeUnknownValueStrategy}) = OneHotEncoder;
+  factory CategoricalDataEncoder.oneHot(
+      {EncodeUnknownValueStrategy encodeUnknownValueStrategy}) = OneHotEncoder;
 
-  factory CategoricalDataEncoder.ordinal({EncodeUnknownValueStrategy encodeUnknownValueStrategy}) = OrdinalEncoder;
+  factory CategoricalDataEncoder.ordinal(
+      {EncodeUnknownValueStrategy encodeUnknownValueStrategy}) = OrdinalEncoder;
 
   /// Specifies what to do with NaN(in numeric context)/null/empty or other unknown values for the particular category
   EncodeUnknownValueStrategy get encodeUnknownValueStrategy;

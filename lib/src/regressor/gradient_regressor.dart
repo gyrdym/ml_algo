@@ -36,30 +36,35 @@ class GradientRegressor implements LinearRegressor {
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
     // hidden arguments
-    InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
+    InterceptPreprocessorFactory interceptPreprocessorFactory =
+        const InterceptPreprocessorFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
-  }) :
-      _interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: fitIntercept ? interceptScale : 0.0),
-      _optimizer = GradientOptimizer(
-        costFnType: CostFunctionType.squared,
-        learningRateType: learningRateType,
-        initialWeightsType: initialWeightsType,
-        initialLearningRate: initialLearningRate,
-        minWeightsUpdate: minWeightsUpdate,
-        iterationLimit: iterationsLimit,
-        lambda: lambda,
-        batchSize: batchSizeCalculator.calculate(gradientType, batchSize),
-        randomSeed: randomSeed,
-      );
+  })  : _interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+            scale: fitIntercept ? interceptScale : 0.0),
+        _optimizer = GradientOptimizer(
+          costFnType: CostFunctionType.squared,
+          learningRateType: learningRateType,
+          initialWeightsType: initialWeightsType,
+          initialLearningRate: initialLearningRate,
+          minWeightsUpdate: minWeightsUpdate,
+          iterationLimit: iterationsLimit,
+          lambda: lambda,
+          batchSize: batchSizeCalculator.calculate(gradientType, batchSize),
+          randomSeed: randomSeed,
+        );
 
   @override
   MLVector get weights => _weights;
   MLVector _weights;
 
   @override
-  void fit(MLMatrix features, MLVector labels, {MLVector initialWeights, bool isDataNormalized = false}) {
-    _weights = _optimizer.findExtrema(_interceptPreprocessor.addIntercept(features), labels,
-        initialWeights: initialWeights, isMinimizingObjective: true, arePointsNormalized: isDataNormalized);
+  void fit(MLMatrix features, MLVector labels,
+      {MLVector initialWeights, bool isDataNormalized = false}) {
+    _weights = _optimizer.findExtrema(
+        _interceptPreprocessor.addIntercept(features), labels,
+        initialWeights: initialWeights,
+        isMinimizingObjective: true,
+        arePointsNormalized: isDataNormalized);
   }
 
   @override

@@ -25,26 +25,31 @@ class LassoRegressor implements LinearRegressor {
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
     // hidden arguments
-    InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
-  }) :
-      _interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: fitIntercept ? interceptScale : 0.0),
-      _optimizer = CoordinateOptimizer(
+    InterceptPreprocessorFactory interceptPreprocessorFactory =
+        const InterceptPreprocessorFactoryImpl(),
+  })  : _interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+            scale: fitIntercept ? interceptScale : 0.0),
+        _optimizer = CoordinateOptimizer(
           initialWeightsType: initialWeightsType,
           costFunctionType: CostFunctionType.squared,
           iterationsLimit: iterationsLimit,
           minCoefficientsDiff: minWeightsUpdate,
           lambda: lambda,
           dtype: dtype,
-      );
+        );
 
   @override
   MLVector get weights => _weights;
   MLVector _weights;
 
   @override
-  void fit(MLMatrix features, MLVector labels, {MLVector initialWeights, bool isDataNormalized = false}) {
-    _weights = _optimizer.findExtrema(_interceptPreprocessor.addIntercept(features), labels,
-        initialWeights: initialWeights, isMinimizingObjective: true, arePointsNormalized: isDataNormalized);
+  void fit(MLMatrix features, MLVector labels,
+      {MLVector initialWeights, bool isDataNormalized = false}) {
+    _weights = _optimizer.findExtrema(
+        _interceptPreprocessor.addIntercept(features), labels,
+        initialWeights: initialWeights,
+        isMinimizingObjective: true,
+        arePointsNormalized: isDataNormalized);
   }
 
   @override

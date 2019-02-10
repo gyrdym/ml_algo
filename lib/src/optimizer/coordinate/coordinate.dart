@@ -27,38 +27,44 @@ class CoordinateOptimizer implements Optimizer {
 
   CoordinateOptimizer({
     Type dtype = DefaultParameterValues.dtype,
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
+        const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     double minCoefficientsDiff = DefaultParameterValues.minWeightsUpdate,
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double lambda,
     InitialWeightsType initialWeightsType,
     CostFunctionType costFunctionType,
-  })
-      : _dtype = dtype,
+  })  : _dtype = dtype,
         _iterationLimit = iterationsLimit,
         _coefficientDiffThreshold = minCoefficientsDiff,
         _lambda = lambda ?? 0.0,
-        _initialCoefficientsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
+        _initialCoefficientsGenerator =
+            initialWeightsGeneratorFactory.fromType(initialWeightsType),
         _costFn = costFunctionFactory.fromType(costFunctionType);
 
   @override
   MLVector findExtrema(MLMatrix points, MLVector labels,
-      {MLVector initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
+      {MLVector initialWeights,
+      bool isMinimizingObjective = true,
+      bool arePointsNormalized = false}) {
     _normalizer = arePointsNormalized
         ? MLVector.filled(points.columnsNum, 1.0, dtype: _dtype)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
-    MLVector coefficients = initialWeights ?? _initialCoefficientsGenerator.generate(points.columnsNum);
+    MLVector coefficients = initialWeights ??
+        _initialCoefficientsGenerator.generate(points.columnsNum);
     final changes = List<double>.filled(points.columnsNum, double.infinity);
     int iteration = 0;
 
     while (!_isConverged(changes, iteration)) {
-      final updatedCoefficients = List<double>.filled(coefficients.length, 0.0, growable: false);
+      final updatedCoefficients =
+          List<double>.filled(coefficients.length, 0.0, growable: false);
 
       for (int j = 0; j < coefficients.length; j++) {
         final oldWeight = updatedCoefficients[j];
-        final newWeight = _coordinateDescentStep(j, points, labels, coefficients);
+        final newWeight =
+            _coordinateDescentStep(j, points, labels, coefficients);
         changes[j] = (oldWeight - newWeight).abs();
         updatedCoefficients[j] = newWeight;
         coefficients = MLVector.from(updatedCoefficients, dtype: _dtype);
@@ -72,19 +78,21 @@ class CoordinateOptimizer implements Optimizer {
 
   bool _isConverged(List<double> changes, int iterationCount) =>
       _coefficientDiffThreshold != null &&
-          changes.reduce((double maxValue, double value) => math.max<double>(maxValue ?? 0.0, value)) <=
+          changes.reduce((double maxValue, double value) =>
+                  math.max<double>(maxValue ?? 0.0, value)) <=
               _coefficientDiffThreshold ||
       iterationCount >= _iterationLimit;
 
-  double _coordinateDescentStep(
-      int coefficientNum, MLMatrix points, MLVector labels, MLVector coefficients) {
+  double _coordinateDescentStep(int coefficientNum, MLMatrix points,
+      MLVector labels, MLVector coefficients) {
     final currentCoefficient = coefficients[coefficientNum];
     double updatedCoefficient = currentCoefficient;
 
     for (int rowNum = 0; rowNum < points.rowsNum; rowNum++) {
       final point = points.getRow(rowNum);
       final output = labels[rowNum];
-      updatedCoefficient += _costFn.getSparseSolutionPartial(coefficientNum, point, coefficients, output);
+      updatedCoefficient += _costFn.getSparseSolutionPartial(
+          coefficientNum, point, coefficients, output);
     }
 
     return _regularize(updatedCoefficient, _lambda, coefficientNum);

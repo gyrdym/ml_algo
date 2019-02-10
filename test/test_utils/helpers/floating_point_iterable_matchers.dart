@@ -1,10 +1,17 @@
 import 'package:test/test.dart';
 
-Matcher vectorAlmostEqualTo(Iterable<double> expected, [double precision = 1e-5]) =>
-    pairwiseCompare<double, double>(expected, (expectedVal, actualVal) => (expectedVal - actualVal).abs() <= precision, '');
+Matcher vectorAlmostEqualTo(Iterable<double> expected,
+        [double precision = 1e-5]) =>
+    pairwiseCompare<double, double>(
+        expected,
+        (expectedVal, actualVal) =>
+            (expectedVal - actualVal).abs() <= precision,
+        '');
 
-Matcher matrixAlmostEqualTo(Iterable<Iterable<double>> expected, [double precision = 1e-5]) =>
-    pairwiseCompare<Iterable<double>, Iterable<double>>(expected, (Iterable<double> expected, Iterable<double> actual) {
+Matcher matrixAlmostEqualTo(Iterable<Iterable<double>> expected,
+        [double precision = 1e-5]) =>
+    pairwiseCompare<Iterable<double>, Iterable<double>>(expected,
+        (Iterable<double> expected, Iterable<double> actual) {
       if (expected.length != actual.length) {
         return false;
       }

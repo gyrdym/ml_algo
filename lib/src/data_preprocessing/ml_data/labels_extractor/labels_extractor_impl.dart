@@ -3,11 +3,15 @@ import 'package:ml_algo/src/common/error_logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
-class MLDataLabelsExtractorImpl extends Object with ErrorLoggerMixin implements MLDataLabelsExtractor {
-  static const String wrongReadMaskLengthMsg = 'Rows read mask for label column should not be greater than the number '
+class MLDataLabelsExtractorImpl extends Object
+    with ErrorLoggerMixin
+    implements MLDataLabelsExtractor {
+  static const String wrongReadMaskLengthMsg =
+      'Rows read mask for label column should not be greater than the number '
       'of labels in the column!';
 
-  static const String wrongLabelIndexMsg = 'Labels column index should be less than actual columns number of the '
+  static const String wrongLabelIndexMsg =
+      'Labels column index should be less than actual columns number of the '
       'dataset!';
 
   final List<List<Object>> records;
@@ -19,7 +23,8 @@ class MLDataLabelsExtractorImpl extends Object with ErrorLoggerMixin implements 
   @override
   final Logger logger;
 
-  MLDataLabelsExtractorImpl(this.records, this.readMask, this.labelIdx, this.valueConverter, this.logger)
+  MLDataLabelsExtractorImpl(this.records, this.readMask, this.labelIdx,
+      this.valueConverter, this.logger)
       : rowsNum = readMask.where((bool flag) => flag).length {
     if (readMask.length > records.length) {
       throwException(wrongReadMaskLengthMsg);

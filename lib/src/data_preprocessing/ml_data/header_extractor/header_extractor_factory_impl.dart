@@ -6,5 +6,6 @@ class MLDataHeaderExtractorFactoryImpl implements MLDataHeaderExtractorFactory {
   const MLDataHeaderExtractorFactoryImpl();
 
   @override
-  MLDataHeaderExtractor create(List<bool> readMask) => MLDataHeaderExtractorImpl(readMask);
+  MLDataHeaderExtractor create(List<bool> readMask) =>
+      MLDataHeaderExtractorImpl(readMask);
 }
