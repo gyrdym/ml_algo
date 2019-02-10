@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.0.3
+- Documentation for logistic regression corrected
+
 ## 6.0.2
 - Tests corrected: removed import `test_api.dart`
 
