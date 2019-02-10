@@ -3,8 +3,6 @@ import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
-import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 /// A factory for all the linear classifiers
 abstract class LinearClassifier implements Classifier {
@@ -73,8 +71,5 @@ abstract class LinearClassifier implements Classifier {
   }) = LogisticRegressor;
 
   factory LinearClassifier.SVM() => throw UnimplementedError();
-  factory LinearClassifier.NaiveBayes() => throw UnimplementedError();
-
-  MLMatrix predictProbabilities(MLMatrix features);
-  MLVector predictClasses(MLMatrix features);
+  factory LinearClassifier.naiveBayes() => throw UnimplementedError();
 }

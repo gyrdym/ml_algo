@@ -1,7 +1,5 @@
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';

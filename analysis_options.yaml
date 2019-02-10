@@ -1,3 +1,5 @@
+include: package:pedantic/analysis_options.yaml
+
 analyzer:
   strong-mode:
     implicit-casts: false
@@ -23,7 +25,6 @@ linter:
   - avoid_classes_with_only_static_members
   - avoid_renaming_method_parameters
   - avoid_return_types_on_setters
-  - cascade_invocations
   - constant_identifier_names
   - curly_braces_in_flow_control_structures
   - empty_catches
