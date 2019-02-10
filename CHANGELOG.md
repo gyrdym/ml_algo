@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.4
+- Documentation for linear regression corrected
+- Documentation for `MLData` corrected
+
 ## 6.0.3
 - Documentation for logistic regression corrected
 
