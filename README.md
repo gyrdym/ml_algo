@@ -27,11 +27,11 @@ Following algorithms are implemented:
 
 To provide main purposes of machine learning, the library exposes the following classes:
 
-- [MLData](https://github.com/gyrdym/ml_algo/blob/master/lib/ml_data.dart). Factory, that creates instances of 
+- [MLData](https://github.com/gyrdym/ml_algo/blob/master/lib/src/data_preprocessing/ml_data/ml_data.dart). Factory, that creates instances of 
 different adapters for data. For example, one can create a csv reader, that makes work with csv data easier: you just 
 need to point, where your dataset resides and then get features and labels in convenient data science friendly format.
 
-- [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/cross_validator.dart). Factory, that creates 
+- [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
 instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
 algorithms, assessing prediction quality on different parts of a dataset. [Wiki article](https://en.wikipedia.org/wiki/Cross-validation_(statistics)) about cross validation process. 
 
@@ -40,11 +40,11 @@ that performs simplest linear classification. If you want to use this classifier
 your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
 supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
 
-- [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear.dart). An algorithm, 
+- [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). An algorithm, 
 that performs geometry-based linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
 function.
 
-- [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear.dart) An algorithm, 
+- [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
 that performs feature selection along with regression process. It uses [coordinate descent optimization]() and [subgradient vector]() 
 instead of [gradient descent optimization]() and [gradient vector]() like in `LinearRegressor.gradient` to provide 
 regression. If you want to decide, which features are less important - go ahead and use this regressor. 

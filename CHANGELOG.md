@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.0.1
+- Readme corrected
+
 ## 6.0.0
 - Library fully refactored:
     - add possibility to set certain data type for numeric computations
