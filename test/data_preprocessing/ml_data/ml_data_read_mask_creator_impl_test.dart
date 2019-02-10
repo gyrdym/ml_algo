@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator_impl.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test_api/test_api.dart';
+import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../test_utils/mocks.dart';
