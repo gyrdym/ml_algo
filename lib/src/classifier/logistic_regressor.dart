@@ -50,28 +50,35 @@ class LogisticRegressor implements LinearClassifier {
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
-    LabelsProcessorFactory labelsProcessorFactory = const LabelsProcessorFactoryImpl(),
-    InterceptPreprocessorFactory interceptPreprocessorFactory = const InterceptPreprocessorFactoryImpl(),
-    LabelsProbabilityCalculatorFactory probabilityCalculatorFactory = const LabelsProbabilityCalculatorFactoryImpl(),
+    LabelsProcessorFactory labelsProcessorFactory =
+        const LabelsProcessorFactoryImpl(),
+    InterceptPreprocessorFactory interceptPreprocessorFactory =
+        const InterceptPreprocessorFactoryImpl(),
+    LabelsProbabilityCalculatorFactory probabilityCalculatorFactory =
+        const LabelsProbabilityCalculatorFactoryImpl(),
     OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
-  }) :
-    labelsProcessor = labelsProcessorFactory.create(dtype),
-    interceptPreprocessor = interceptPreprocessorFactory.create(dtype, scale: fitIntercept ? interceptScale : 0.0),
-    probabilityCalculator = probabilityCalculatorFactory.create(linkFunctionType, dtype),
-    optimizer = optimizerFactory.fromType(optimizer,
-        dtype: dtype,
-        costFunctionType: CostFunctionType.logLikelihood,
-        linkFunctionType: linkFunctionType,
-        learningRateType: learningRateType,
-        initialWeightsType: initialWeightsType,
-        initialLearningRate: initialLearningRate,
-        minCoefficientsUpdate: minWeightsUpdate,
-        iterationLimit: iterationsLimit,
-        lambda: lambda,
-        batchSize: gradientType != null ? batchSizeCalculator.calculate(gradientType, batchSize) : null,
-        randomSeed: randomSeed,
-    );
+  })  : labelsProcessor = labelsProcessorFactory.create(dtype),
+        interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+            scale: fitIntercept ? interceptScale : 0.0),
+        probabilityCalculator =
+            probabilityCalculatorFactory.create(linkFunctionType, dtype),
+        optimizer = optimizerFactory.fromType(
+          optimizer,
+          dtype: dtype,
+          costFunctionType: CostFunctionType.logLikelihood,
+          linkFunctionType: linkFunctionType,
+          learningRateType: learningRateType,
+          initialWeightsType: initialWeightsType,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minWeightsUpdate,
+          iterationLimit: iterationsLimit,
+          lambda: lambda,
+          batchSize: gradientType != null
+              ? batchSizeCalculator.calculate(gradientType, batchSize)
+              : null,
+          randomSeed: randomSeed,
+        );
 
   @override
   MLVector get weights => null;
@@ -85,14 +92,16 @@ class LogisticRegressor implements LinearClassifier {
   List<double> _classLabels;
 
   @override
-  void fit(MLMatrix features, MLVector labels, {MLVector initialWeights, bool isDataNormalized = false}) {
+  void fit(MLMatrix features, MLVector labels,
+      {MLVector initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
     final labelsAsList = _classLabels.toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    _weightsByClasses = Map<double, MLVector>.fromIterable(labelsAsList,
-        key: (dynamic label) => label as double,
-        value: (dynamic label) => _fitBinaryClassifier(processedFeatures, labels, label as double, initialWeights,
-            isDataNormalized),
+    _weightsByClasses = Map<double, MLVector>.fromIterable(
+      labelsAsList,
+      key: (dynamic label) => label as double,
+      value: (dynamic label) => _fitBinaryClassifier(processedFeatures, labels,
+          label as double, initialWeights, isDataNormalized),
     );
   }
 
@@ -132,10 +141,13 @@ class LogisticRegressor implements LinearClassifier {
     return MLMatrix.columns(distributions, dtype: dtype);
   }
 
-  MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels, double targetLabel, MLVector initialWeights,
-      bool arePointsNormalized) {
-    final binaryLabels = labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
-    return optimizer.findExtrema(features, binaryLabels, initialWeights: initialWeights,
-        arePointsNormalized: arePointsNormalized, isMinimizingObjective: false);
+  MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,
+      double targetLabel, MLVector initialWeights, bool arePointsNormalized) {
+    final binaryLabels =
+        labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
+    return optimizer.findExtrema(features, binaryLabels,
+        initialWeights: initialWeights,
+        arePointsNormalized: arePointsNormalized,
+        isMinimizingObjective: false);
   }
 }

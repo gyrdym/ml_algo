@@ -6,5 +6,6 @@
 /// [[1, 0], [1, 0], [0, 1], [0, 1], [0, 1], [1, 0]]
 /// [CategoricalDataEncoderType.ordinal] Ordinal encoder. Encodes every categorical value to a ordinal number
 enum CategoricalDataEncoderType {
-  ordinal, oneHot,
+  ordinal,
+  oneHot,
 }

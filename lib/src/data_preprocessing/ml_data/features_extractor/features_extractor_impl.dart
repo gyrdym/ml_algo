@@ -4,7 +4,9 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart'
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
-class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implements MLDataFeaturesExtractor {
+class MLDataFeaturesExtractorImpl extends Object
+    with ErrorLoggerMixin
+    implements MLDataFeaturesExtractor {
   static const String rowsMaskWrongLengthMsg =
       'Rows mask length should not be greater than actual rows number in the dataset!';
 
@@ -23,11 +25,10 @@ class MLDataFeaturesExtractorImpl extends Object with ErrorLoggerMixin implement
   @override
   final Logger logger;
 
-  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask, this.encoders, this.labelIdx,
-      this.valueConverter, this.logger) :
-      rowsNum = rowsMask.where((bool flag) => flag).length,
-      columnsNum = columnsMask.where((bool flag) => flag).length {
-
+  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
+      this.encoders, this.labelIdx, this.valueConverter, this.logger)
+      : rowsNum = rowsMask.where((bool flag) => flag).length,
+        columnsNum = columnsMask.where((bool flag) => flag).length {
     if (columnsMask.length > records.first.length) {
       throwException(columnsMaskWrongLengthMsg);
     }

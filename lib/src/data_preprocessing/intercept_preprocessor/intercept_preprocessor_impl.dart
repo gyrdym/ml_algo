@@ -5,7 +5,8 @@ class InterceptPreprocessorImpl implements InterceptPreprocessor {
   final Type dtype;
   final double _interceptScale;
 
-  const InterceptPreprocessorImpl(this.dtype, {double interceptScale = 1.0}) : _interceptScale = interceptScale;
+  const InterceptPreprocessorImpl(this.dtype, {double interceptScale = 1.0})
+      : _interceptScale = interceptScale;
 
   @override
   MLMatrix addIntercept(MLMatrix points) {

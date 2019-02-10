@@ -31,7 +31,8 @@ void main() {
       randomizer = RandomizerImpl();
     });
 
-    test('should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1',
+    test(
+        'should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by 1',
         () {
       final lowerBound = 0;
       final upperBound = 1;
@@ -45,17 +46,20 @@ void main() {
         'exactly the `intervalLength` value, zero `lowerBound` case', () {
       final lowerBound = 0;
       final upperBound = 1;
-      final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 1);
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound,
+          intervalLength: 1);
 
       expect(interval, equals([0, 1]));
     });
 
     test(
         'should return interval [lowerBound, upperBound] if `lowerBound` and `upperBound` differ from each other by '
-        'exactly the `intervalLength` value, zero `lowerBound` case, double check', () {
+        'exactly the `intervalLength` value, zero `lowerBound` case, double check',
+        () {
       final lowerBound = 0;
       final upperBound = 2;
-      final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 2);
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound,
+          intervalLength: 2);
 
       expect(interval, equals([0, 2]));
     });
@@ -75,16 +79,21 @@ void main() {
         'exactly the `intervalLength` value, non-zero `lowerBound` case', () {
       final lowerBound = 3;
       final upperBound = 5;
-      final interval = randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 2);
+      final interval = randomizer.getIntegerInterval(lowerBound, upperBound,
+          intervalLength: 2);
 
       expect(interval, equals([3, 5]));
     });
 
-    test('should throw an error if `intervalLength` exceeds the total interval', () {
+    test('should throw an error if `intervalLength` exceeds the total interval',
+        () {
       final lowerBound = 2;
       final upperBound = 4;
 
-      expect(() => randomizer.getIntegerInterval(lowerBound, upperBound, intervalLength: 3), throwsRangeError);
+      expect(
+          () => randomizer.getIntegerInterval(lowerBound, upperBound,
+              intervalLength: 3),
+          throwsRangeError);
     });
 
     test('should return a proper integer value from the given interval', () {
@@ -97,13 +106,15 @@ void main() {
       }
     });
 
-    test('should return a proper integer interval constrained by given bounds', () {
+    test('should return a proper integer interval constrained by given bounds',
+        () {
       final intervalLength = 3;
       final start = 6;
       final end = 17;
 
       for (int i = 0; i < maxEpoch; i++) {
-        final interval = randomizer.getIntegerInterval(start, end, intervalLength: intervalLength);
+        final interval = randomizer.getIntegerInterval(start, end,
+            intervalLength: intervalLength);
 
         expect(start <= interval.first && interval.first < end, isTrue);
         expect(start < interval.last && interval.last < end, isTrue);
@@ -111,7 +122,9 @@ void main() {
       }
     });
 
-    test('should return range error if start and end values are equal (integer interval generation)', () {
+    test(
+        'should return range error if start and end values are equal (integer interval generation)',
+        () {
       final start = 0;
       final end = 0;
 
@@ -128,11 +141,14 @@ void main() {
       }
     });
 
-    test('should return range error if start and end values are equal (integer value generation)', () {
+    test(
+        'should return range error if start and end values are equal (integer value generation)',
+        () {
       final start = 1;
       final end = 1;
 
-      expect(() => randomizer.getIntegerFromInterval(start, end), throwsRangeError);
+      expect(() => randomizer.getIntegerFromInterval(start, end),
+          throwsRangeError);
     });
 
     test('should return a proper double value from the given interval', () {
@@ -145,11 +161,14 @@ void main() {
       }
     });
 
-    test('should return range error if start and end values are equal (double value generation)', () {
+    test(
+        'should return range error if start and end values are equal (double value generation)',
+        () {
       final start = 1.0;
       final end = 1.0;
 
-      expect(() => randomizer.getDoubleFromInterval(start, end), throwsRangeError);
+      expect(
+          () => randomizer.getDoubleFromInterval(start, end), throwsRangeError);
     });
   });
 }

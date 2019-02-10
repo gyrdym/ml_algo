@@ -9,7 +9,6 @@ import 'package:tuple/tuple.dart';
 
 /// A parser for raw data
 abstract class MLData {
-
   /**
    * Creates a csv-data instance from file.
    *
@@ -50,7 +49,8 @@ abstract class MLData {
    * encountered. E.g., if the strategy is [EncodeUnknownValueStrategy.returnZeroes], an unknown value just will be
    * converted to the sequence of `0`
    */
-  factory MLData.fromCsvFile(String fileName, {
+  factory MLData.fromCsvFile(
+    String fileName, {
     String eol,
     int labelIdx,
     bool headerExists,

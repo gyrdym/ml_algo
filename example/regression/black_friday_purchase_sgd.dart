@@ -10,7 +10,8 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:tuple/tuple.dart';
 
 Future main() async {
-  final data = MLData.fromCsvFile('datasets/black_friday.csv',
+  final data = MLData.fromCsvFile(
+    'datasets/black_friday.csv',
     labelIdx: 11,
     rows: [const Tuple2(0, 3000)],
     columns: [const Tuple2(2, 11)],
@@ -20,9 +21,64 @@ Future main() async {
       'City_Category': ['A', 'B', 'C'],
       'Stay_In_Current_City_Years': [0, 1, 2, 3, '4+'],
       'Martial_Status': [0, 1],
-      'Product_Category_1': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-      'Product_Category_2': [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
-      'Product_Category_3': [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+      'Product_Category_1': [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      'Product_Category_2': [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      'Product_Category_3': [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
     },
     encodeUnknownStrategy: EncodeUnknownValueStrategy.returnZeroes,
   );
@@ -38,7 +94,8 @@ Future main() async {
       initialLearningRate: 0.001,
       learningRateType: LearningRateType.constant);
 
-  final error = validator.evaluate(regressor, features, labels, MetricType.mape);
+  final error =
+      validator.evaluate(regressor, features, labels, MetricType.mape);
 
   print('MAPE error on k-fold validation: $error');
 }

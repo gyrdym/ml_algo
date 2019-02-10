@@ -141,7 +141,8 @@ void main() {
             [2, 3, 4]
           ].toSet()));
 
-      expect(() => leavePOutSplitter = LeavePOutSplitter(0), throwsUnsupportedError);
+      expect(() => leavePOutSplitter = LeavePOutSplitter(0),
+          throwsUnsupportedError);
     });
   });
 }

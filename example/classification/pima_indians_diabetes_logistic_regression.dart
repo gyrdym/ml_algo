@@ -8,7 +8,8 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/ml_data.dart';
 
 Future main() async {
-  final data = MLData.fromCsvFile('datasets/pima_indians_diabetes_database.csv', labelIdx: 8, dtype: Float32x4);
+  final data = MLData.fromCsvFile('datasets/pima_indians_diabetes_database.csv',
+      labelIdx: 8, dtype: Float32x4);
 
   final features = await data.features;
   final labels = await data.labels;
@@ -24,7 +25,8 @@ Future main() async {
       learningRateType: LearningRateType.constant,
       randomSeed: 134);
 
-  final error = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
+  final error = validator.evaluate(
+      logisticRegressor, features, labels, MetricType.accuracy);
 
   print('Error is ${(error * 100).toStringAsFixed(2)}%');
 }

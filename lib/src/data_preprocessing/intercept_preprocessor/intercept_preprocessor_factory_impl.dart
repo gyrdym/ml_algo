@@ -6,5 +6,6 @@ class InterceptPreprocessorFactoryImpl implements InterceptPreprocessorFactory {
   const InterceptPreprocessorFactoryImpl();
 
   @override
-  InterceptPreprocessor create(Type dtype, {double scale}) => InterceptPreprocessorImpl(dtype, interceptScale: scale);
+  InterceptPreprocessor create(Type dtype, {double scale}) =>
+      InterceptPreprocessorImpl(dtype, interceptScale: scale);
 }

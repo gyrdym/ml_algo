@@ -10,7 +10,8 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 
 abstract class OptimizerFactory {
-  Optimizer fromType(OptimizerType type, {
+  Optimizer fromType(
+    OptimizerType type, {
     Type dtype,
     RandomizerFactory randomizerFactory,
     CostFunctionFactory costFunctionFactory,

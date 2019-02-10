@@ -27,16 +27,19 @@ void main() {
 
     test('should create read mask, case 4', () {
       expect(() => creator.create([]), throwsException);
-      verify(loggerMock.severe(MLDataReadMaskCreatorImpl.emptyRangesMsg, any)).called(1);
+      verify(loggerMock.severe(MLDataReadMaskCreatorImpl.emptyRangesMsg, any))
+          .called(1);
     });
 
     test('should create read mask, case 5', () {
-      final mask = creator.create([const Tuple2<int, int>(0, 0), const Tuple2<int, int>(0, 0)]);
+      final mask = creator
+          .create([const Tuple2<int, int>(0, 0), const Tuple2<int, int>(0, 0)]);
       expect(mask, equals([true]));
     });
 
     test('should create read mask, case 5', () {
-      final mask = creator.create([const Tuple2<int, int>(0, 0), const Tuple2<int, int>(3, 4)]);
+      final mask = creator
+          .create([const Tuple2<int, int>(0, 0), const Tuple2<int, int>(3, 4)]);
       expect(mask, equals([true, false, false, true, true]));
     });
   });

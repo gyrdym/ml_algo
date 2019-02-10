@@ -15,7 +15,9 @@ void main() {
 
     test('should encode numeric categorical test_data', () {
       when(valuesExtractor.extractCategoryValues(any)).thenReturn(<int>[1, 2]);
-      final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.returnZeroes, extractor: valuesExtractor,
+      final encoder = createEncoder(
+          strategy: EncodeUnknownValueStrategy.returnZeroes,
+          extractor: valuesExtractor,
           values: []);
       expect(encoder.encode(1), equals([1, 0]));
       expect(encoder.encode(2), equals([0, 1]));
@@ -24,7 +26,9 @@ void main() {
     test('should encode string categorical test_data', () {
       when(valuesExtractor.extractCategoryValues(any))
           .thenReturn(<String>['group A', 'group B', 'group C', 'group D']);
-      final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.returnZeroes, extractor: valuesExtractor,
+      final encoder = createEncoder(
+          strategy: EncodeUnknownValueStrategy.returnZeroes,
+          extractor: valuesExtractor,
           values: []);
       expect(encoder.encode('group A'), equals([1, 0, 0, 0]));
       expect(encoder.encode('group B'), equals([0, 1, 0, 0]));
@@ -35,22 +39,34 @@ void main() {
     test('should encode boolean categorical test_data', () {
       when(valuesExtractor.extractCategoryValues(any))
           .thenReturn(<bool>[true, false]);
-      final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.returnZeroes, extractor: valuesExtractor,
+      final encoder = createEncoder(
+          strategy: EncodeUnknownValueStrategy.returnZeroes,
+          extractor: valuesExtractor,
           values: []);
       expect(encoder.encode(true), equals([1, 0]));
       expect(encoder.encode(false), equals([0, 1]));
     });
 
-    test('should throw an error if unknown value is passed and unknown value encoding strategy is `throwError`', () {
-      when(valuesExtractor.extractCategoryValues(any)).thenReturn(<int>[1, 2, 3, 4]);
-      final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.throwError, extractor: valuesExtractor,
+    test(
+        'should throw an error if unknown value is passed and unknown value encoding strategy is `throwError`',
+        () {
+      when(valuesExtractor.extractCategoryValues(any))
+          .thenReturn(<int>[1, 2, 3, 4]);
+      final encoder = createEncoder(
+          strategy: EncodeUnknownValueStrategy.throwError,
+          extractor: valuesExtractor,
           values: []);
       expect(() => encoder.encode(234), throwsUnsupportedError);
     });
 
-    test('should return all zeroes if unknown value is passed and unknown value encoding strategy is `returnZeroes`', () {
-      when(valuesExtractor.extractCategoryValues(any)).thenReturn(<int>[10, 20]);
-      final encoder = createEncoder(strategy: EncodeUnknownValueStrategy.returnZeroes, extractor: valuesExtractor,
+    test(
+        'should return all zeroes if unknown value is passed and unknown value encoding strategy is `returnZeroes`',
+        () {
+      when(valuesExtractor.extractCategoryValues(any))
+          .thenReturn(<int>[10, 20]);
+      final encoder = createEncoder(
+          strategy: EncodeUnknownValueStrategy.returnZeroes,
+          extractor: valuesExtractor,
           values: []);
       expect(encoder.encode(21), equals([0, 0]));
     });
