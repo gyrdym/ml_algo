@@ -5,3 +5,4 @@ dart_task:
   - test: --platform vm
   - dartanalyzer: true
   - dartfmt: true
+script: ./tool/coverage.sh
