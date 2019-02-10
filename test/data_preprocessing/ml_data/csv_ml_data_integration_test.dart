@@ -7,7 +7,7 @@ import '../../test_utils/mocks.dart';
 import '../test_helpers/test_csv_data.dart';
 
 void main() {
-  group('Float32x4CsvMLData (categories-less)', () {
+  group('CsvMLData (categories-less)', () {
     test('should properly parse csv file', () async {
       await testCsvData(
           fileName:
