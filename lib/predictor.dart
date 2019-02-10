@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
 /// An interface for all the predicting entities: regressor, classifiers, etc.
 abstract class Predictor {
