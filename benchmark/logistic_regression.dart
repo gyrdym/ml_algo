@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_algo/linear_classifier.dart';
+import 'package:ml_algo/ml_data.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
-MLMatrix<Float32x4> features;
-MLVector<Float32x4> labels;
-LogisticRegressor regressor;
+MLMatrix features;
+MLVector labels;
+LinearClassifier regressor;
 
 class LogisticRegressorBenchmark extends BenchmarkBase {
   const LogisticRegressorBenchmark() : super('Logistic regressor');
@@ -23,14 +25,14 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    regressor = LogisticRegressor();
+    regressor = LinearClassifier.logisticRegressor(dtype: Float32x4);
   }
 
   void tearDown() {}
 }
 
 Future logisticRegressionBenchmark() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv', labelIdx: 8);
+  final data = MLData.fromCsvFile('datasets/pima_indians_diabetes_database.csv', labelIdx: 8, dtype: Float32x4);
   features = await data.features;
   labels = await data.labels;
 

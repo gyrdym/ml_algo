@@ -1,5 +1,5 @@
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/vector.dart';
 
-abstract class Metric<E> {
-  double getError(MLVector<E> predictedLabels, MLVector<E> origLabels);
+abstract class Metric {
+  double getError(MLVector predictedLabels, MLVector origLabels);
 }
