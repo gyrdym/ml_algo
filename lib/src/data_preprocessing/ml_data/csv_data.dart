@@ -63,14 +63,16 @@ class CsvData implements MLData {
   MLDataFeaturesExtractor _featuresExtractor;
   MLDataLabelsExtractor _labelsExtractor;
 
-  CsvData.fromFile(String fileName, {
+  CsvData.fromFile(
+    String fileName, {
     // public parameters
     Type dtype,
     String eol = '\n',
     int labelIdx,
     bool headerExists = true,
     CategoricalDataEncoderType encoderType = CategoricalDataEncoderType.oneHot,
-    EncodeUnknownValueStrategy encodeUnknownStrategy = EncodeUnknownValueStrategy.throwError,
+    EncodeUnknownValueStrategy encodeUnknownStrategy =
+        EncodeUnknownValueStrategy.throwError,
     Map<String, List<Object>> categories,
     Map<int, List<Object>> categoriesByIndexes,
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
@@ -79,17 +81,22 @@ class CsvData implements MLData {
     List<Tuple2<int, int>> columns,
 
     // private parameters, they are hidden by the factory
-    CategoricalDataEncoderFactory encoderFactory = const CategoricalDataEncoderFactory(),
+    CategoricalDataEncoderFactory encoderFactory =
+        const CategoricalDataEncoderFactory(),
     MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
     MLDataValueConverter valueConverter = const MLDataValueConverterImpl(),
-    MLDataHeaderExtractorFactory headerExtractorFactory = const MLDataHeaderExtractorFactoryImpl(),
-    MLDataFeaturesExtractorFactory featuresExtractorFactory = const MLDataFeaturesExtractorFactoryImpl(),
-    MLDataLabelsExtractorFactory labelsExtractorFactory = const MLDataLabelsExtractorFactoryImpl(),
-    MLDataReadMaskCreatorFactory readMaskCreatorFactory = const MLDataReadMaskCreatorFactoryImpl(),
-    MLDataEncodersProcessorFactory encodersProcessorFactory = const MLDataEncodersProcessorFactoryImpl(),
+    MLDataHeaderExtractorFactory headerExtractorFactory =
+        const MLDataHeaderExtractorFactoryImpl(),
+    MLDataFeaturesExtractorFactory featuresExtractorFactory =
+        const MLDataFeaturesExtractorFactoryImpl(),
+    MLDataLabelsExtractorFactory labelsExtractorFactory =
+        const MLDataLabelsExtractorFactoryImpl(),
+    MLDataReadMaskCreatorFactory readMaskCreatorFactory =
+        const MLDataReadMaskCreatorFactoryImpl(),
+    MLDataEncodersProcessorFactory encodersProcessorFactory =
+        const MLDataEncodersProcessorFactoryImpl(),
     Logger logger,
-  }) :
-        _dtype = dtype ?? DefaultParameterValues.dtype,
+  })  : _dtype = dtype ?? DefaultParameterValues.dtype,
         _csvCodec = CsvCodec(eol: eol),
         _file = File(fileName),
         _labelIdx = labelIdx,
@@ -109,7 +116,6 @@ class CsvData implements MLData {
         _readMaskCreatorFactory = readMaskCreatorFactory,
         _encodersProcessorFactory = encodersProcessorFactory,
         _logger = logger ?? Logger(_loggerPrefix) {
-
     final errorMsg = _paramsValidator.validate(
       labelIdx: labelIdx,
       rows: rows,
@@ -134,7 +140,8 @@ class CsvData implements MLData {
   @override
   Future<MLMatrix> get features async {
     _data ??= (await _prepareData(_rows, _columns));
-    _features ??= MLMatrix.from(_featuresExtractor.getFeatures(), dtype: _dtype);
+    _features ??=
+        MLMatrix.from(_featuresExtractor.getFeatures(), dtype: _dtype);
     return _features;
   }
 
@@ -145,14 +152,21 @@ class CsvData implements MLData {
     return _labels;
   }
 
-  Future<List<List<dynamic>>> _prepareData([Iterable<Tuple2<int, int>> rows, Iterable<Tuple2<int, int>> columns]) async {
+  Future<List<List<dynamic>>> _prepareData(
+      [Iterable<Tuple2<int, int>> rows,
+      Iterable<Tuple2<int, int>> columns]) async {
     final fileStream = _file.openRead();
-    final data = await (fileStream.transform(utf8.decoder).transform(_csvCodec.decoder).toList());
+    final data = await (fileStream
+        .transform(utf8.decoder)
+        .transform(_csvCodec.decoder)
+        .toList());
     final rowsNum = data.length;
     final columnsNum = data.first.length;
     final readMaskCreator = _readMaskCreatorFactory.create(_logger);
-    final rowsMask = readMaskCreator.create(rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))]);
-    final columnsMask = readMaskCreator.create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)]);
+    final rowsMask = readMaskCreator.create(
+        rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))]);
+    final columnsMask = readMaskCreator
+        .create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)]);
     final records = data.sublist(_headerExists ? 1 : 0);
 
     if (_labelIdx >= records.first.length || _labelIdx < 0) {
@@ -163,14 +177,16 @@ class CsvData implements MLData {
     final originalHeader = _headerExists
         ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
         : <String>[];
-    final encodersProcessor = _encodersProcessorFactory.create(records, originalHeader, _encoderFactory,
-        _fallbackEncoderType, _logger);
-    final encoders = encodersProcessor.createEncoders(_indexToEncoderType, _nameToEncoderType, _categories);
+    final encodersProcessor = _encodersProcessorFactory.create(records,
+        originalHeader, _encoderFactory, _fallbackEncoderType, _logger);
+    final encoders = encodersProcessor.createEncoders(
+        _indexToEncoderType, _nameToEncoderType, _categories);
 
     _headerExtractor = _headerExtractorFactory.create(columnsMask);
-    _featuresExtractor = _featuresExtractorFactory.create(records, rowsMask, columnsMask, encoders, _labelIdx,
-        _valueConverter, _logger);
-    _labelsExtractor = _labelsExtractorFactory.create(records, rowsMask, _labelIdx, _valueConverter, _logger);
+    _featuresExtractor = _featuresExtractorFactory.create(records, rowsMask,
+        columnsMask, encoders, _labelIdx, _valueConverter, _logger);
+    _labelsExtractor = _labelsExtractorFactory.create(
+        records, rowsMask, _labelIdx, _valueConverter, _logger);
 
     return data;
   }

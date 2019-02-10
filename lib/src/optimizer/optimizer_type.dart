@@ -7,5 +7,6 @@
 /// coordinate (term `feature` in this case is the same as `coordinate`). Allows to apply L1 regularization, since
 /// there is no need in finding gradient vector
 enum OptimizerType {
-  gradientDescent, coordinateDescent,
+  gradientDescent,
+  coordinateDescent,
 }

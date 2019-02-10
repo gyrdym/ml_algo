@@ -14,7 +14,8 @@ abstract class ClassificationMetricFactory {
         break;
 
       default:
-        throw UnsupportedError('Unsupported classification metric type: ${type}');
+        throw UnsupportedError(
+            'Unsupported classification metric type: ${type}');
     }
 
     return metric;

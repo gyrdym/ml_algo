@@ -7,5 +7,6 @@ class MLDataReadMaskCreatorFactoryImpl implements MLDataReadMaskCreatorFactory {
   const MLDataReadMaskCreatorFactoryImpl();
 
   @override
-  MLDataReadMaskCreator create(Logger logger) => MLDataReadMaskCreatorImpl(logger);
+  MLDataReadMaskCreator create(Logger logger) =>
+      MLDataReadMaskCreatorImpl(logger);
 }

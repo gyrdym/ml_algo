@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.5
+- Coveralls integration added
+- dartfm check task added
+
 ## 6.0.4
 - Documentation for linear regression corrected
 - Documentation for `MLData` corrected

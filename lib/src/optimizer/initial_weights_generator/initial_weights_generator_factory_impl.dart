@@ -3,7 +3,8 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/zero_weights_generator.dart';
 
-class InitialWeightsGeneratorFactoryImpl implements InitialWeightsGeneratorFactory {
+class InitialWeightsGeneratorFactoryImpl
+    implements InitialWeightsGeneratorFactory {
   const InitialWeightsGeneratorFactoryImpl();
 
   @override

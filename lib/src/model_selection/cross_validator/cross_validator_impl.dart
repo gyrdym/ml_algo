@@ -15,15 +15,19 @@ class CrossValidatorImpl implements CrossValidator {
   factory CrossValidatorImpl.kFold({Type dtype, int numberOfFolds = 5}) =>
       CrossValidatorImpl._(dtype, KFoldSplitter(numberOfFolds));
 
-  factory CrossValidatorImpl.lpo({Type dtype, int p}) => CrossValidatorImpl._(dtype, LeavePOutSplitter(p));
+  factory CrossValidatorImpl.lpo({Type dtype, int p}) =>
+      CrossValidatorImpl._(dtype, LeavePOutSplitter(p));
 
-  CrossValidatorImpl._(Type dtype, this._splitter) : dtype = dtype ?? DefaultParameterValues.dtype;
+  CrossValidatorImpl._(Type dtype, this._splitter)
+      : dtype = dtype ?? DefaultParameterValues.dtype;
 
   @override
-  double evaluate(Predictor predictor, MLMatrix points, MLVector labels, MetricType metric,
+  double evaluate(
+      Predictor predictor, MLMatrix points, MLVector labels, MetricType metric,
       {bool isDataNormalized = false}) {
     if (points.rowsNum != labels.length) {
-      throw Exception('Number of feature objects must be equal to the number of labels!');
+      throw Exception(
+          'Number of feature objects must be equal to the number of labels!');
     }
 
     final allIndicesGroups = _splitter.split(points.rowsNum);
@@ -31,7 +35,8 @@ class CrossValidatorImpl implements CrossValidator {
     int scoreCounter = 0;
 
     for (final testIndices in allIndicesGroups) {
-      final trainFeatures = List<List<double>>(points.rowsNum - testIndices.length);
+      final trainFeatures =
+          List<List<double>>(points.rowsNum - testIndices.length);
       final testFeatures = List<List<double>>(testIndices.length);
       final trainIndices = List<int>(points.rowsNum - testIndices.length);
 
@@ -48,11 +53,14 @@ class CrossValidatorImpl implements CrossValidator {
         }
       }
 
-      predictor.fit(MLMatrix.from(trainFeatures, dtype: dtype), labels.query(trainIndices),
+      predictor.fit(MLMatrix.from(trainFeatures, dtype: dtype),
+          labels.query(trainIndices),
           isDataNormalized: isDataNormalized);
 
-      scores[scoreCounter++] =
-          predictor.test(MLMatrix.from(testFeatures, dtype: dtype), labels.query(testIndices), metric);
+      scores[scoreCounter++] = predictor.test(
+          MLMatrix.from(testFeatures, dtype: dtype),
+          labels.query(testIndices),
+          metric);
     }
 
     return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;

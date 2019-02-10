@@ -30,8 +30,10 @@ void main() {
 
     setUp(() {
       final initialWeightsGeneratorMock = InitialWeightsGeneratorMock();
-      final initialWeightsGeneratorFactoryMock = InitialWeightsGeneratorFactoryMock();
-      when(initialWeightsGeneratorFactoryMock.fromType(InitialWeightsType.zeroes))
+      final initialWeightsGeneratorFactoryMock =
+          InitialWeightsGeneratorFactoryMock();
+      when(initialWeightsGeneratorFactoryMock
+              .fromType(InitialWeightsType.zeroes))
           .thenReturn(initialWeightsGeneratorMock);
 
       final costFunctionFactoryMock = CostFunctionFactoryMock();
@@ -43,8 +45,7 @@ void main() {
           costFunctionType: CostFunctionType.squared,
           minCoefficientsDiff: 1e-5,
           iterationsLimit: iterationsNumber,
-          lambda: lambda
-      );
+          lambda: lambda);
 
       data = MLMatrix.from([point1, point2, point3, point4]);
       labels = MLVector.from([20.0, 30.0, 20.0, 40.0]);
@@ -138,8 +139,10 @@ void main() {
 
     setUp(() {
       final initialWeightsGeneratorMock = InitialWeightsGeneratorMock();
-      final initialWeightsGeneratorFactoryMock = InitialWeightsGeneratorFactoryMock();
-      when(initialWeightsGeneratorFactoryMock.fromType(InitialWeightsType.zeroes))
+      final initialWeightsGeneratorFactoryMock =
+          InitialWeightsGeneratorFactoryMock();
+      when(initialWeightsGeneratorFactoryMock
+              .fromType(InitialWeightsType.zeroes))
           .thenReturn(initialWeightsGeneratorMock);
 
       final costFunctionFactoryMock = CostFunctionFactoryMock();
@@ -149,8 +152,7 @@ void main() {
           costFunctionFactory: costFunctionFactoryMock,
           minCoefficientsDiff: 1e-5,
           iterationsLimit: iterationsNumber,
-          lambda: lambda
-      );
+          lambda: lambda);
 
       data = MLMatrix.from([point1, point2, point3]);
       labels = MLVector.from([2.0, 3.0, 2.0]);
@@ -227,7 +229,8 @@ void main() {
     ///
     test('should find optimal weights for the given test_data', () {
       // actually, points in this example are not normalized
-      final weights = optimizer.findExtrema(data, labels, arePointsNormalized: true);
+      final weights =
+          optimizer.findExtrema(data, labels, arePointsNormalized: true);
       final w1 = weights[0];
       final w2 = weights[1];
       final w3 = weights[2];

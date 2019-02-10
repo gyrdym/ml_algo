@@ -17,15 +17,19 @@ void main() {
   group('MLDataLabelsExtractorImpl', () {
     test('should extract labels according to given read mask', () {
       final readMask = <bool>[true, true, true, true, true];
-      final extractor = MLDataLabelsExtractorImpl(records, readMask, 4, valueConverterMock, loggerMock);
+      final extractor = MLDataLabelsExtractorImpl(
+          records, readMask, 4, valueConverterMock, loggerMock);
       final actual = extractor.getLabels();
 
       expect(actual, equals([500, 192, 209, 100, 800]));
     });
 
-    test('should extract labels according to given read mask from pointed column number', () {
+    test(
+        'should extract labels according to given read mask from pointed column number',
+        () {
       final readMask = <bool>[true, true, true, true, true];
-      final extractor = MLDataLabelsExtractorImpl(records, readMask, 0, valueConverterMock, loggerMock);
+      final extractor = MLDataLabelsExtractorImpl(
+          records, readMask, 0, valueConverterMock, loggerMock);
       final actual = extractor.getLabels();
 
       expect(actual, equals([10, 700, 102, 308, 10001]));

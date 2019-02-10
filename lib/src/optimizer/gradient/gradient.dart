@@ -39,8 +39,10 @@ class GradientOptimizer implements Optimizer {
     Type dtype = DefaultParameterValues.dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
-    LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    LearningRateGeneratorFactory learningRateGeneratorFactory =
+        const LearningRateGeneratorFactoryImpl(),
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
+        const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -51,32 +53,39 @@ class GradientOptimizer implements Optimizer {
     double lambda,
     int batchSize,
     int randomSeed,
-  }) :
-    _minCoefficientsUpdate = minWeightsUpdate,
-    _iterationLimit = iterationLimit,
-    _lambda = lambda ?? 0.0,
-    _batchSize = batchSize,
-    _initialWeightsGenerator = initialWeightsGeneratorFactory.fromType(initialWeightsType),
-    _learningRateGenerator = learningRateGeneratorFactory.fromType(learningRateType),
-    _costFunction = costFunctionFactory.fromType(costFnType, dtype: dtype, linkFunctionType: linkFunctionType),
-    _randomizer = randomizerFactory.create(randomSeed) {
+  })  : _minCoefficientsUpdate = minWeightsUpdate,
+        _iterationLimit = iterationLimit,
+        _lambda = lambda ?? 0.0,
+        _batchSize = batchSize,
+        _initialWeightsGenerator =
+            initialWeightsGeneratorFactory.fromType(initialWeightsType),
+        _learningRateGenerator =
+            learningRateGeneratorFactory.fromType(learningRateType),
+        _costFunction = costFunctionFactory.fromType(costFnType,
+            dtype: dtype, linkFunctionType: linkFunctionType),
+        _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 
   @override
   MLVector findExtrema(MLMatrix points, MLVector labels,
-      {MLVector initialWeights, bool isMinimizingObjective = true, bool arePointsNormalized = false}) {
+      {MLVector initialWeights,
+      bool isMinimizingObjective = true,
+      bool arePointsNormalized = false}) {
     _points = points;
 
-    final batchSize = _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
-    var coefficients = initialWeights ?? _initialWeightsGenerator.generate(_points.columnsNum);
+    final batchSize =
+        _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
+    var coefficients =
+        initialWeights ?? _initialWeightsGenerator.generate(_points.columnsNum);
     var coefficientsUpdate = double.maxFinite;
     var iterationCounter = 0;
 
     while (!_isConverged(coefficientsUpdate, iterationCounter)) {
       final eta = _learningRateGenerator.getNextValue();
-      final updatedCoefficients =
-          _generateCoefficients(coefficients, labels, eta, batchSize, isMinimization: isMinimizingObjective);
+      final updatedCoefficients = _generateCoefficients(
+          coefficients, labels, eta, batchSize,
+          isMinimization: isMinimizingObjective);
       coefficientsUpdate = updatedCoefficients.distanceTo(coefficients);
       coefficients = updatedCoefficients;
       iterationCounter++;
@@ -88,7 +97,9 @@ class GradientOptimizer implements Optimizer {
   }
 
   bool _isConverged(double coefficientsUpdate, int iterationCounter) =>
-      (_minCoefficientsUpdate != null ? coefficientsUpdate <= _minCoefficientsUpdate : false) ||
+      (_minCoefficientsUpdate != null
+          ? coefficientsUpdate <= _minCoefficientsUpdate
+          : false) ||
       (iterationCounter >= _iterationLimit);
 
   MLVector _generateCoefficients(
@@ -100,18 +111,21 @@ class GradientOptimizer implements Optimizer {
     final pointsBatch = _points.submatrix(rows: Range(start, end));
     final labelsBatch = labels.subvector(start, end);
 
-    return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta, isMinimization: isMinimization);
+    return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta,
+        isMinimization: isMinimization);
   }
 
-  Iterable<int> _getBatchRange(int batchSize) =>
-      _randomizer.getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
+  Iterable<int> _getBatchRange(int batchSize) => _randomizer
+      .getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
 
   MLVector _makeGradientStep(
       MLVector coefficients, MLMatrix points, MLVector labels, double eta,
       {bool isMinimization = true}) {
     final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
-    return isMinimization ? regularizedCoefficients - gradient * eta : regularizedCoefficients + gradient * eta;
+    return isMinimization
+        ? regularizedCoefficients - gradient * eta
+        : regularizedCoefficients + gradient * eta;
   }
 
   MLVector _regularize(double eta, double lambda, MLVector coefficients) {

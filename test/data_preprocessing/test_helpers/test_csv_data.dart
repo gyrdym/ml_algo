@@ -11,21 +11,23 @@ import 'package:tuple/tuple.dart';
 
 import '../../test_utils/mocks.dart';
 
-Future testCsvData({
-  String fileName,
-  int labelIdx,
-  int expectedColsNum,
-  int expectedRowsNum,
-  List<Tuple2<int, int>> rows,
-  List<Tuple2<int, int>> columns,
-  CategoricalDataEncoderFactory categoricalDataFactoryMock,
-  MLDataParamsValidator validatorMock,
-  void testContentFn(MLMatrix features, MLVector labels, List<String> headers)}) async {
-
+Future testCsvData(
+    {String fileName,
+    int labelIdx,
+    int expectedColsNum,
+    int expectedRowsNum,
+    List<Tuple2<int, int>> rows,
+    List<Tuple2<int, int>> columns,
+    CategoricalDataEncoderFactory categoricalDataFactoryMock,
+    MLDataParamsValidator validatorMock,
+    void testContentFn(
+        MLMatrix features, MLVector labels, List<String> headers)}) async {
   categoricalDataFactoryMock ??= createCategoricalDataEncoderFactoryMock();
-  validatorMock ??= createMLDataParamsValidatorMock(validationShouldBeFailed: false);
+  validatorMock ??=
+      createMLDataParamsValidatorMock(validationShouldBeFailed: false);
 
-  final data = CsvData.fromFile(fileName,
+  final data = CsvData.fromFile(
+    fileName,
     labelIdx: labelIdx,
     columns: columns,
     rows: rows,

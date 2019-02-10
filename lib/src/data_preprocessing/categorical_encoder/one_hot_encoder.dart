@@ -13,7 +13,8 @@ class OneHotEncoder implements CategoricalDataEncoder {
 
   OneHotEncoder({
     this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
-    CategoryValuesExtractor valuesExtractor = const CategoryValuesExtractorImpl<Object>(),
+    CategoryValuesExtractor valuesExtractor =
+        const CategoryValuesExtractorImpl<Object>(),
   }) : _valuesExtractor = valuesExtractor;
 
   @override
@@ -26,7 +27,8 @@ class OneHotEncoder implements CategoricalDataEncoder {
       }
     }
     final targetIdx = _values.indexOf(value);
-    return List<double>.generate(_values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
+    return List<double>.generate(
+        _values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
   }
 
   @override

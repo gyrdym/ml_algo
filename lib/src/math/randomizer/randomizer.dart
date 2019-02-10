@@ -1,6 +1,7 @@
 abstract class Randomizer {
   ///returns random interval constrained by [lowerBound] (include) and [upperBound] (exclude)
-  Iterable<int> getIntegerInterval(int lowerBound, int upperBound, {int intervalLength});
+  Iterable<int> getIntegerInterval(int lowerBound, int upperBound,
+      {int intervalLength});
 
   ///returns random interval constrained by [lowerBound] (include) and [upperBound] (exclude)
   Iterable<double> getDoubleInterval(double lowerBound, double upperBound);

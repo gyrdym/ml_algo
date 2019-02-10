@@ -20,10 +20,12 @@ class LabelsProcessorImpl implements LabelsProcessor {
     }
   }
 
-  MLVector _makeFloat32x4LabelsOneVsAll(MLVector origLabels, double targetLabel) {
+  MLVector _makeFloat32x4LabelsOneVsAll(
+      MLVector origLabels, double targetLabel) {
     final targetAsFloat32x4 = Float32x4.splat(targetLabel);
-    return origLabels
-        .fastMap<Float32x4>((Float32x4 element, int start, int end) => element.equal(targetAsFloat32x4)
-        .select(_float32x4Ones, _float32x4Zeroes));
+    return origLabels.fastMap<Float32x4>(
+        (Float32x4 element, int start, int end) => element
+            .equal(targetAsFloat32x4)
+            .select(_float32x4Ones, _float32x4Zeroes));
   }
 }
