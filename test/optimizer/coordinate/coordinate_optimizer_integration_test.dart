@@ -1,10 +1,13 @@
-import 'dart:typed_data';
-
+import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/optimizer/coordinate.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/linalg.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+import '../../test_utils/mocks.dart';
 
 /// L1 regularization, as known as Lasso, is aimed to penalize unimportant features, setting their weights to the zero,
 /// therefore, we can treat the objective of the Lasso Optimizer like feature selection. Since lasso optimizer regularizes
@@ -22,15 +25,29 @@ void main() {
     final point4 = [20.0, 30.0, 10.0];
 
     CoordinateOptimizer optimizer;
-    MLMatrix<Float32x4> data;
-    MLVector<Float32x4> labels;
+    MLMatrix data;
+    MLVector labels;
 
     setUp(() {
-      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
-          minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
+      final initialWeightsGeneratorMock = InitialWeightsGeneratorMock();
+      final initialWeightsGeneratorFactoryMock = InitialWeightsGeneratorFactoryMock();
+      when(initialWeightsGeneratorFactoryMock.fromType(InitialWeightsType.zeroes))
+          .thenReturn(initialWeightsGeneratorMock);
 
-      data = Float32x4Matrix.from([point1, point2, point3, point4]);
-      labels = Float32x4Vector.from([20.0, 30.0, 20.0, 40.0]);
+      final costFunctionFactoryMock = CostFunctionFactoryMock();
+
+      optimizer = CoordinateOptimizer(
+          initialWeightsGeneratorFactory: initialWeightsGeneratorFactoryMock,
+          costFunctionFactory: costFunctionFactoryMock,
+          initialWeightsType: InitialWeightsType.zeroes,
+          costFunctionType: CostFunctionType.squared,
+          minCoefficientsDiff: 1e-5,
+          iterationsLimit: iterationsNumber,
+          lambda: lambda
+      );
+
+      data = MLMatrix.from([point1, point2, point3, point4]);
+      labels = MLVector.from([20.0, 30.0, 20.0, 40.0]);
     });
 
     /// Given matrix X:
@@ -116,15 +133,27 @@ void main() {
     final point3 = [70.0, 80.0, 90.0];
 
     CoordinateOptimizer optimizer;
-    MLMatrix<Float32x4> data;
-    MLVector<Float32x4> labels;
+    MLMatrix data;
+    MLVector labels;
 
     setUp(() {
-      optimizer = CoordinateOptimizer(InitialWeightsGeneratorFactory.zeroWeights(), const SquaredCost(),
-          minCoefficientsDiff: 1e-5, iterationLimit: iterationsNumber, lambda: lambda);
+      final initialWeightsGeneratorMock = InitialWeightsGeneratorMock();
+      final initialWeightsGeneratorFactoryMock = InitialWeightsGeneratorFactoryMock();
+      when(initialWeightsGeneratorFactoryMock.fromType(InitialWeightsType.zeroes))
+          .thenReturn(initialWeightsGeneratorMock);
 
-      data = Float32x4Matrix.from([point1, point2, point3]);
-      labels = Float32x4Vector.from([2.0, 3.0, 2.0]);
+      final costFunctionFactoryMock = CostFunctionFactoryMock();
+
+      optimizer = CoordinateOptimizer(
+          initialWeightsGeneratorFactory: initialWeightsGeneratorFactoryMock,
+          costFunctionFactory: costFunctionFactoryMock,
+          minCoefficientsDiff: 1e-5,
+          iterationsLimit: iterationsNumber,
+          lambda: lambda
+      );
+
+      data = MLMatrix.from([point1, point2, point3]);
+      labels = MLVector.from([2.0, 3.0, 2.0]);
     });
 
     /// Given matrix x:

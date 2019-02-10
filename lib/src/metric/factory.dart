@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/metric/classification/metric_factory.dart';
 import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_algo/src/metric/regression/metric_factory.dart';
-import 'package:ml_algo/metric_type.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 
 class MetricFactory {
   static Metric createByType(MetricType type) {

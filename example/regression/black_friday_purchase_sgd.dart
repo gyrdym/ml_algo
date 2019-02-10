@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:ml_algo/encode_unknown_value_strategy.dart';
-import 'package:ml_algo/float32x4_cross_validator.dart';
-import 'package:ml_algo/float32x4_csv_ml_data.dart';
-import 'package:ml_algo/gradient_regressor.dart';
+import 'package:ml_algo/cross_validator.dart';
+import 'package:ml_algo/ml_data.dart';
+import 'package:ml_algo/linear_regressor.dart';
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/metric_type.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:tuple/tuple.dart';
 
 Future main() async {
-  final data = Float32x4CsvMLData.fromFile('datasets/black_friday.csv',
+  final data = MLData.fromCsvFile('datasets/black_friday.csv',
     labelIdx: 11,
     rows: [const Tuple2(0, 3000)],
     columns: [const Tuple2(2, 11)],
@@ -30,12 +30,12 @@ Future main() async {
   final features = await data.features;
   final labels = await data.labels;
 
-  final validator = Float32x4CrossValidator.kFold(numberOfFolds: 5);
+  final validator = CrossValidator.kFold(numberOfFolds: 5);
 
-  final regressor = GradientRegressor(
-      type: GradientType.stochastic,
-      iterationLimit: 100000,
-      learningRate: 0.001,
+  final regressor = LinearRegressor.gradient(
+      gradientType: GradientType.stochastic,
+      iterationsLimit: 100000,
+      initialLearningRate: 0.001,
       learningRateType: LearningRateType.constant);
 
   final error = validator.evaluate(regressor, features, labels, MetricType.mape);

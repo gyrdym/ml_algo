@@ -1,20 +1,17 @@
 import 'dart:math' as math;
-import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class SquaredCost implements CostFunction<Float32x4> {
-  const SquaredCost();
-
+class SquaredCost implements CostFunction {
   @override
   double getCost(double predictedLabel, double originalLabel) => math.pow(predictedLabel - originalLabel, 2).toDouble();
 
   @override
-  MLVector<Float32x4> getGradient(MLMatrix<Float32x4> x, MLVector<Float32x4> w, MLVector<Float32x4> y) =>
+  MLVector getGradient(MLMatrix x, MLVector w, MLVector y) =>
       (x.transpose() * -2 * (y - x * w)).toVector();
 
   @override
-  double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
+  double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y) =>
       x[wIdx] * (y - x.dot(w) + x[wIdx] * w[wIdx]);
 }

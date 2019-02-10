@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/data_preprocessing/ml_data/float32x4_csv_ml_data.dart';
+import 'package:ml_algo/src/data_preprocessing/ml_data/csv_data.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -15,8 +15,8 @@ void main() {
         expectedColsNum: 8,
         expectedRowsNum: 768,
         testContentFn: (features, labels, header) {
-          expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
-          expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0]));
+          expect(features.getRow(0), vectorAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
+          expect(features.getRow(34), vectorAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0]));
           expect([labels[0], labels[34], labels[63]], equals([1, 0, 0]));
         }
       );
@@ -29,8 +29,8 @@ void main() {
           expectedColsNum: 8,
           expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
-            expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([6.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
+            expect(features.getRow(34), vectorAlmostEqualTo([10.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
             expect([labels[0], labels[34], labels[63]], equals([148.0, 122.0, 141.0]));
           }
       );
@@ -43,8 +43,8 @@ void main() {
           expectedColsNum: 8,
           expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
-            expect(features.getRow(34), floatIterableAlmostEqualTo([122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0, 1.0]));
+            expect(features.getRow(34), vectorAlmostEqualTo([122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
             expect([labels[0], labels[34], labels[63]], equals([6.0, 10.0, 2.0]));
           }
       );
@@ -74,7 +74,7 @@ void main() {
 
     test('should throw an error if label index is not in provided ranges', () async {
       expect(() =>
-          Float32x4CsvMLDataInternal.fromFile(
+          CsvData.fromFile(
             'test/data_preprocessing/test_data/elo_blatter.csv',
             labelIdx: 1,
             columns: [const Tuple2(2, 3), const Tuple2(5, 7)],
@@ -91,15 +91,15 @@ void main() {
           expectedRowsNum: 768,
           columns: [const Tuple2(0, 1), const Tuple2(2, 2), const Tuple2(3, 4), const Tuple2(6, 8)],
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 0.627, 50.0]));
-            expect(features.getRow(34), floatIterableAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 0.512, 45.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 0.627, 50.0]));
+            expect(features.getRow(34), vectorAlmostEqualTo([10.0, 122.0, 78.0, 31.0, 0.0, 0.512, 45.0]));
             expect([labels[0], labels[34], labels[63]], equals([1, 0, 0]));
           }
       );
     });
 
     test('should throw an error if there are intersecting column ranges while parsing csv file', () {
-      final actual = () => Float32x4CsvMLDataInternal.fromFile(
+      final actual = () => CsvData.fromFile(
           'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           columns: [
@@ -119,8 +119,8 @@ void main() {
           expectedColsNum: 8,
           expectedRowsNum: 768,
           testContentFn: (features, labels, header) {
-            expect(features.getRow(0), floatIterableAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
-            expect(features.getRow(767), floatIterableAlmostEqualTo([1.0, 93.0, 70.0, 31.0, 0.0, 30.4, 0.315, 23.0]));
+            expect(features.getRow(0), vectorAlmostEqualTo([6.0, 148.0, 72.0, 35.0, 0.0, 33.6, 0.627, 50.0]));
+            expect(features.getRow(767), vectorAlmostEqualTo([1.0, 93.0, 70.0, 31.0, 0.0, 30.4, 0.315, 23.0]));
             expect(() => features.getRow(768), throwsRangeError);
             expect([labels[0], labels[34], labels[767]], equals([1, 0, 0]));
             expect(() => labels[768], throwsRangeError);
@@ -165,7 +165,7 @@ void main() {
 
     test('should throw an error if params validation fails', () {
       final validatorMock = createMLDataParamsValidatorMock(validationShouldBeFailed: true);
-      final actual = () => Float32x4CsvMLDataInternal.fromFile(
+      final actual = () => CsvData.fromFile(
         'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
         paramsValidator: validatorMock,
       );

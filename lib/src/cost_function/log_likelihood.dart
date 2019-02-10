@@ -1,13 +1,21 @@
 import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/score_to_prob_link_function/link_function.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class LogLikelihoodCost implements CostFunction<Float32x4> {
-  final VectorizedScoreToProbLinkFunction<Float32x4> linkFunction;
+class LogLikelihoodCost implements CostFunction {
+  final LinkFunction linkFunction;
+  final Type dtype;
 
-  const LogLikelihoodCost(this.linkFunction);
+  LogLikelihoodCost(LinkFunctionType linkFunctionType, {
+    this.dtype = DefaultParameterValues.dtype,
+    LinkFunctionFactory linkFunctionFactory = const LinkFunctionFactoryImpl(),
+  }) : linkFunction = linkFunctionFactory.fromType(linkFunctionType);
 
   @override
   double getCost(double score, double yOrig) {
@@ -15,10 +23,16 @@ class LogLikelihoodCost implements CostFunction<Float32x4> {
   }
 
   @override
-  MLVector<Float32x4> getGradient(MLMatrix<Float32x4> x, MLVector<Float32x4> w, MLVector<Float32x4> y) =>
-      (x.transpose() * (y - (x * w).vectorizedMap(linkFunction))).toVector();
+  MLVector getGradient(MLMatrix x, MLVector w, MLVector y) {
+    switch (dtype) {
+      case Float32x4:
+        return (x.transpose() * (y - (x * w).fastMap<Float32x4>(linkFunction.float32x4Link))).toVector();
+      default:
+        throw throw UnsupportedError('Unsupported data type - $dtype');
+    }
+  }
 
   @override
-  double getSparseSolutionPartial(int wIdx, MLVector<Float32x4> x, MLVector<Float32x4> w, double y) =>
+  double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y) =>
       throw UnimplementedError();
 }

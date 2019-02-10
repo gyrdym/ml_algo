@@ -1,9 +1,7 @@
 import 'package:ml_linalg/linalg.dart';
 
-abstract class CostFunction<E> {
+abstract class CostFunction {
   double getCost(double predictedLabel, double originalLabel);
-
-  MLVector<E> getGradient(MLMatrix<E> x, MLVector<E> w, MLVector<E> y);
-
-  double getSparseSolutionPartial(int wIdx, MLVector<E> x, MLVector<E> w, double y);
+  MLVector getGradient(MLMatrix x, MLVector w, MLVector y);
+  double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y);
 }

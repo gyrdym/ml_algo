@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.0.0
+- Library fully refactored:
+    - add possibility to set certain data type for numeric computations
+    - all algorithms code now is more generic
+    - a lot of unit tests added
+    - bug fixes 
+
 ## 5.2.0
 - Ordinal encoder added
 - `Float32x4CsvMlData` significantly extended
