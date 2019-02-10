@@ -17,12 +17,12 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
     Map<int, CategoricalDataEncoderType> indexToEncoder,
   }) {
     final validators = [
-          () => _validateHeaderExistsParam(headerExists),
-          () => _validatePredefinedCategories(predefinedCategories, headerExists),
-          () => _validateNamesToEncoders(namesToEncoders, headerExists),
-          () => _validateLabelIdx(labelIdx),
-          () => _validateRanges(rows),
-          () => _validateRanges(columns, labelIdx),
+      () => _validateHeaderExistsParam(headerExists),
+      () => _validatePredefinedCategories(predefinedCategories, headerExists),
+      () => _validateNamesToEncoders(namesToEncoders, headerExists),
+      () => _validateLabelIdx(labelIdx),
+      () => _validateRanges(rows),
+      () => _validateRanges(columns, labelIdx),
     ];
     for (int i = 0; i < validators.length; i++) {
       final errorMsg = validators[i]();
@@ -40,7 +40,8 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
     return MLDataValidationErrorMessages.noErrorMsg;
   }
 
-  String _validatePredefinedCategories(Map<String, Iterable<Object>> categories, bool headerExists) {
+  String _validatePredefinedCategories(
+      Map<String, Iterable<Object>> categories, bool headerExists) {
     if (categories?.isEmpty == true) {
       return MLDataValidationErrorMessages.emptyCategoriesMsg();
     }
@@ -50,12 +51,15 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
     return MLDataValidationErrorMessages.noErrorMsg;
   }
 
-  String _validateNamesToEncoders(Map<String, CategoricalDataEncoderType> namesToEncoders, bool headerExists) {
+  String _validateNamesToEncoders(
+      Map<String, CategoricalDataEncoderType> namesToEncoders,
+      bool headerExists) {
     if (namesToEncoders?.isEmpty == true) {
       return MLDataValidationErrorMessages.emptyEncodersMsg();
     }
     if (!headerExists && namesToEncoders?.isNotEmpty == true) {
-      return MLDataValidationErrorMessages.noHeaderProvidedForColumnEncodersMsg(namesToEncoders);
+      return MLDataValidationErrorMessages.noHeaderProvidedForColumnEncodersMsg(
+          namesToEncoders);
     }
     return MLDataValidationErrorMessages.noErrorMsg;
   }
@@ -76,19 +80,24 @@ class MLDataParamsValidatorImpl implements MLDataParamsValidator {
 
     for (final range in ranges) {
       if (range.item1 > range.item2) {
-        return MLDataValidationErrorMessages.leftBoundGreaterThanRightMsg(range);
+        return MLDataValidationErrorMessages.leftBoundGreaterThanRightMsg(
+            range);
       }
       if (prevRange != null && prevRange.item2 >= range.item1) {
-        return MLDataValidationErrorMessages.intersectingRangesMsg(prevRange, range);
+        return MLDataValidationErrorMessages.intersectingRangesMsg(
+            prevRange, range);
       }
-      if (labelIdx != null && labelIdx >= range.item1 && labelIdx <= range.item2) {
+      if (labelIdx != null &&
+          labelIdx >= range.item1 &&
+          labelIdx <= range.item2) {
         isLabelInRanges = true;
       }
       prevRange = range;
     }
 
     if (labelIdx != null && !isLabelInRanges) {
-      return MLDataValidationErrorMessages.labelIsNotInRangesMsg(labelIdx, ranges);
+      return MLDataValidationErrorMessages.labelIsNotInRangesMsg(
+          labelIdx, ranges);
     }
     return MLDataValidationErrorMessages.noErrorMsg;
   }

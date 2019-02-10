@@ -13,7 +13,8 @@ class OrdinalEncoder implements CategoricalDataEncoder {
 
   OrdinalEncoder({
     this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
-    CategoryValuesExtractor valuesExtractor = const CategoryValuesExtractorImpl<Object>(),
+    CategoryValuesExtractor valuesExtractor =
+        const CategoryValuesExtractorImpl<Object>(),
   }) : _valuesExtractor = valuesExtractor;
 
   @override
@@ -26,7 +27,9 @@ class OrdinalEncoder implements CategoricalDataEncoder {
       }
     }
     final ordinalNum = _values.indexOf(value).toDouble();
-    return [ordinalNum + 1]; // plus one - to avoid zero value. Zero is reserved for unknown values
+    return [
+      ordinalNum + 1
+    ]; // plus one - to avoid zero value. Zero is reserved for unknown values
   }
 
   @override

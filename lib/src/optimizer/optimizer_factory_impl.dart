@@ -22,12 +22,15 @@ class OptimizerFactoryImpl implements OptimizerFactory {
   const OptimizerFactoryImpl();
 
   @override
-  Optimizer fromType(OptimizerType type, {
+  Optimizer fromType(
+    OptimizerType type, {
     Type dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
-    LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    LearningRateGeneratorFactory learningRateGeneratorFactory =
+        const LearningRateGeneratorFactoryImpl(),
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
+        const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionType costFunctionType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -79,31 +82,35 @@ class OptimizerFactoryImpl implements OptimizerFactory {
   @override
   Optimizer coordinate({
     Type dtype = Float32x4,
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
+        const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     double minCoefficientsDiff,
     int iterationLimit,
     double lambda,
     InitialWeightsType initialWeightsType,
     CostFunctionType costFunctionType,
-  }) => CoordinateOptimizer(
-    dtype: dtype,
-    initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
-    costFunctionFactory: costFunctionFactory,
-    minCoefficientsDiff: minCoefficientsDiff,
-    iterationsLimit: iterationLimit,
-    lambda: lambda,
-    initialWeightsType: initialWeightsType,
-    costFunctionType: costFunctionType,
-  );
+  }) =>
+      CoordinateOptimizer(
+        dtype: dtype,
+        initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
+        costFunctionFactory: costFunctionFactory,
+        minCoefficientsDiff: minCoefficientsDiff,
+        iterationsLimit: iterationLimit,
+        lambda: lambda,
+        initialWeightsType: initialWeightsType,
+        costFunctionType: costFunctionType,
+      );
 
   @override
   Optimizer gradient({
     Type dtype = Float32x4,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
-    LearningRateGeneratorFactory learningRateGeneratorFactory = const LearningRateGeneratorFactoryImpl(),
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory = const InitialWeightsGeneratorFactoryImpl(),
+    LearningRateGeneratorFactory learningRateGeneratorFactory =
+        const LearningRateGeneratorFactoryImpl(),
+    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
+        const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -114,20 +121,21 @@ class OptimizerFactoryImpl implements OptimizerFactory {
     double lambda,
     int batchSize,
     int randomSeed,
-  }) => GradientOptimizer(
-    randomizerFactory: randomizerFactory,
-    costFunctionFactory: costFunctionFactory,
-    learningRateGeneratorFactory: learningRateGeneratorFactory,
-    initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
-    costFnType: costFnType,
-    learningRateType: learningRateType,
-    initialWeightsType: initialWeightsType,
-    linkFunctionType: linkFunctionType,
-    initialLearningRate: initialLearningRate,
-    minWeightsUpdate: minCoefficientsUpdate,
-    iterationLimit: iterationLimit,
-    lambda: lambda,
-    batchSize: batchSize,
-    randomSeed: randomSeed,
-  );
+  }) =>
+      GradientOptimizer(
+        randomizerFactory: randomizerFactory,
+        costFunctionFactory: costFunctionFactory,
+        learningRateGeneratorFactory: learningRateGeneratorFactory,
+        initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
+        costFnType: costFnType,
+        learningRateType: learningRateType,
+        initialWeightsType: initialWeightsType,
+        linkFunctionType: linkFunctionType,
+        initialLearningRate: initialLearningRate,
+        minWeightsUpdate: minCoefficientsUpdate,
+        iterationLimit: iterationLimit,
+        lambda: lambda,
+        batchSize: batchSize,
+        randomSeed: randomSeed,
+      );
 }

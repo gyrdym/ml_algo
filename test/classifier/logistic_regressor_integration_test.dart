@@ -13,8 +13,12 @@ void main() {
 
   group('Logistic regressor', () {
     setUp(() {
-      classifier = LogisticRegressor(iterationsLimit: 2, learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0, fitIntercept: false, gradientType: GradientType.batch);
+      classifier = LogisticRegressor(
+          iterationsLimit: 2,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          fitIntercept: false,
+          gradientType: GradientType.batch);
     });
 
     test('should extract class labels from the test_data', () {
@@ -326,7 +330,9 @@ void main() {
 
       expect(
           probabilities,
-          equals([[0.01798621006309986, 0.0, 0.5]]));
+          equals([
+            [0.01798621006309986, 0.0, 0.5]
+          ]));
       expect(classes, equals([2]));
     });
 
@@ -345,7 +351,8 @@ void main() {
         [2.0, 4.0, 1.0],
       ]);
       final origLabels = MLVector.from([1.0]);
-      final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
+      final error =
+          classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(error, equals(1.0));
     });
 
@@ -364,7 +371,8 @@ void main() {
         [2.0, 4.0, 1.0],
       ]);
       final origLabels = MLVector.from([2.0]);
-      final error = classifier.test(newFeatures, origLabels, MetricType.accuracy);
+      final error =
+          classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(error, equals(0.0));
     });
 
@@ -446,7 +454,9 @@ void main() {
           ]));
     });
 
-    test('should consider intercept scale if intercept term is going to be fitted', () {
+    test(
+        'should consider intercept scale if intercept term is going to be fitted',
+        () {
       final classifier = LogisticRegressor(
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,

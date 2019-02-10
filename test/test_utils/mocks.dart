@@ -30,33 +30,68 @@ import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:mockito/mockito.dart';
 
 class EncoderMock extends Mock implements CategoricalDataEncoder {}
+
 class OneHotEncoderMock extends Mock implements CategoricalDataEncoder {}
+
 class OrdinalEncoderMock extends Mock implements CategoricalDataEncoder {}
-class CategoricalDataEncoderFactoryMock extends Mock implements CategoricalDataEncoderFactory {}
-class CategoryValuesExtractorMock extends Mock implements CategoryValuesExtractor<dynamic> {}
+
+class CategoricalDataEncoderFactoryMock extends Mock
+    implements CategoricalDataEncoderFactory {}
+
+class CategoryValuesExtractorMock extends Mock
+    implements CategoryValuesExtractor<dynamic> {}
+
 class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
+
 class LoggerMock extends Mock implements Logger {}
+
 class MLDataValueConverterMock extends Mock implements MLDataValueConverter {}
+
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
+
 class RandomizerMock extends Mock implements Randomizer {}
+
 class CostFunctionFactoryMock extends Mock implements CostFunctionFactory {}
+
 class CostFunctionMock extends Mock implements CostFunction {}
-class LearningRateGeneratorFactoryMock extends Mock implements LearningRateGeneratorFactory {}
+
+class LearningRateGeneratorFactoryMock extends Mock
+    implements LearningRateGeneratorFactory {}
+
 class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
-class InitialWeightsGeneratorFactoryMock extends Mock implements InitialWeightsGeneratorFactory {}
-class InitialWeightsGeneratorMock extends Mock implements InitialWeightsGenerator {}
+
+class InitialWeightsGeneratorFactoryMock extends Mock
+    implements InitialWeightsGeneratorFactory {}
+
+class InitialWeightsGeneratorMock extends Mock
+    implements InitialWeightsGenerator {}
+
 class LinkFunctionMock extends Mock implements LinkFunction {}
+
 class LinkFunctionFactoryMock extends Mock implements LinkFunctionFactory {}
-class LabelsProcessorFactoryMock extends Mock implements LabelsProcessorFactory {}
+
+class LabelsProcessorFactoryMock extends Mock
+    implements LabelsProcessorFactory {}
+
 class LabelsProcessorMock extends Mock implements LabelsProcessor {}
-class InterceptPreprocessorFactoryMock extends Mock implements InterceptPreprocessorFactory {}
+
+class InterceptPreprocessorFactoryMock extends Mock
+    implements InterceptPreprocessorFactory {}
+
 class InterceptPreprocessorMock extends Mock implements InterceptPreprocessor {}
-class LabelsProbabilityCalculatorFactoryMock extends Mock implements LabelsProbabilityCalculatorFactory {}
-class LabelsProbabilityCalculatorMock extends Mock implements LabelsProbabilityCalculator {}
+
+class LabelsProbabilityCalculatorFactoryMock extends Mock
+    implements LabelsProbabilityCalculatorFactory {}
+
+class LabelsProbabilityCalculatorMock extends Mock
+    implements LabelsProbabilityCalculator {}
+
 class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
+
 class OptimizerMock extends Mock implements Optimizer {}
 
-class MLDataValueConverterMockWithImpl extends Mock implements MLDataValueConverter {
+class MLDataValueConverterMockWithImpl extends Mock
+    implements MLDataValueConverter {
   @override
   double convert(Object value, [double fallbackValue]) => value as double;
 }
@@ -95,7 +130,8 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
   Map<InitialWeightsType, InitialWeightsGenerator> generators,
 }) {
   final factory = InitialWeightsGeneratorFactoryMock();
-  generators.forEach((InitialWeightsType type, InitialWeightsGenerator generator) {
+  generators
+      .forEach((InitialWeightsType type, InitialWeightsGenerator generator) {
     when(factory.fromType(type)).thenReturn(generator);
   });
   return factory;
@@ -129,7 +165,8 @@ LabelsProcessorFactoryMock createLabelsProcessorFactoryMock({
   return factory;
 }
 
-LabelsProbabilityCalculatorFactoryMock createLabelsProbabilityCalculatorFactoryMock({
+LabelsProbabilityCalculatorFactoryMock
+    createLabelsProbabilityCalculatorFactoryMock({
   LinkFunctionType linkType,
   Type dtype,
   LabelsProbabilityCalculator calculator,
@@ -145,12 +182,14 @@ OptimizerFactoryMock createOptimizerFactoryMock({
   final factory = OptimizerFactoryMock();
 
   optimizers.forEach((OptimizerType type, Optimizer optimizer) {
-    when(factory.fromType(type,
+    when(factory.fromType(
+      type,
       dtype: anyNamed('dtype'),
       randomizerFactory: anyNamed('randomizerFactory'),
       costFunctionFactory: anyNamed('costFunctionFactory'),
       learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
-      initialWeightsGeneratorFactory: anyNamed('initialWeightsGeneratorFactory'),
+      initialWeightsGeneratorFactory:
+          anyNamed('initialWeightsGeneratorFactory'),
       costFunctionType: anyNamed('costFunctionType'),
       learningRateType: anyNamed('learningRateType'),
       initialWeightsType: anyNamed('initialWeightsType'),
@@ -180,7 +219,8 @@ CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   return factory;
 }
 
-MLDataParamsValidator createMLDataParamsValidatorMock({bool validationShouldBeFailed}) {
+MLDataParamsValidator createMLDataParamsValidatorMock(
+    {bool validationShouldBeFailed}) {
   final validator = MLDataParamsValidatorMock();
   if (validationShouldBeFailed != null) {
     when(validator.validate(

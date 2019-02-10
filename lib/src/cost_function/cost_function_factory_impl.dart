@@ -13,12 +13,14 @@ class CostFunctionFactoryImpl implements CostFunctionFactory {
   CostFunction squared() => SquaredCost();
 
   @override
-  CostFunction logLikelihood(LinkFunctionType linkFunctionType, {Type dtype = DefaultParameterValues.dtype}) =>
+  CostFunction logLikelihood(LinkFunctionType linkFunctionType,
+          {Type dtype = DefaultParameterValues.dtype}) =>
       LogLikelihoodCost(linkFunctionType, dtype: dtype);
 
   @override
-  CostFunction fromType(CostFunctionType type, {Type dtype = DefaultParameterValues.dtype,
-    LinkFunctionType linkFunctionType}) {
+  CostFunction fromType(CostFunctionType type,
+      {Type dtype = DefaultParameterValues.dtype,
+      LinkFunctionType linkFunctionType}) {
     switch (type) {
       case CostFunctionType.logLikelihood:
         return logLikelihood(linkFunctionType, dtype: dtype);

@@ -5,8 +5,11 @@ import 'package:ml_algo/src/common/error_logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator.dart';
 import 'package:tuple/tuple.dart';
 
-class MLDataReadMaskCreatorImpl extends Object with ErrorLoggerMixin implements MLDataReadMaskCreator {
-  static const String emptyRangesMsg = 'Columns/rows read ranges list cannot be empty!';
+class MLDataReadMaskCreatorImpl extends Object
+    with ErrorLoggerMixin
+    implements MLDataReadMaskCreator {
+  static const String emptyRangesMsg =
+      'Columns/rows read ranges list cannot be empty!';
 
   @override
   final Logger logger;

@@ -32,13 +32,18 @@ InitialWeightsGenerator createInitialWeightsGenerator() {
 }
 
 GradientOptimizer createOptimizer(
-    {double eta, double minCoeffUpdate, int iterationsLimit, double lambda, int batchSize}) {
+    {double eta,
+    double minCoeffUpdate,
+    int iterationsLimit,
+    double lambda,
+    int batchSize}) {
   randomizerMock = RandomizerMock();
   learningRateGeneratorMock = createLearningRateGenerator();
   initialWeightsGeneratorMock = createInitialWeightsGenerator();
   costFunctionMock = CostFunctionMock();
   costFunctionFactoryMock = CostFunctionFactoryMock();
-  when(costFunctionFactoryMock.fromType(CostFunctionType.squared, dtype: Float32x4, linkFunctionType: null))
+  when(costFunctionFactoryMock.fromType(CostFunctionType.squared,
+          dtype: Float32x4, linkFunctionType: null))
       .thenReturn(costFunctionMock);
 
   final randomizerFactoryMock = RandomizerFactoryMock();
@@ -46,8 +51,10 @@ GradientOptimizer createOptimizer(
   final initialWeightsGeneratorFactory = InitialWeightsGeneratorFactoryMock();
 
   when(randomizerFactoryMock.create(any)).thenReturn(randomizerMock);
-  when(learningRateGeneratorFactoryMock.fromType(any)).thenReturn(learningRateGeneratorMock);
-  when(initialWeightsGeneratorFactory.fromType(any)).thenReturn(initialWeightsGeneratorMock);
+  when(learningRateGeneratorFactoryMock.fromType(any))
+      .thenReturn(learningRateGeneratorMock);
+  when(initialWeightsGeneratorFactory.fromType(any))
+      .thenReturn(initialWeightsGeneratorMock);
 
   final opt = GradientOptimizer(
       randomizerFactory: randomizerFactoryMock,
@@ -61,13 +68,17 @@ GradientOptimizer createOptimizer(
       lambda: lambda,
       batchSize: batchSize);
 
-  verify(costFunctionFactoryMock.fromType(CostFunctionType.squared, dtype: Float32x4, linkFunctionType: null));
+  verify(costFunctionFactoryMock.fromType(CostFunctionType.squared,
+      dtype: Float32x4, linkFunctionType: null));
 
   return opt;
 }
 
-void mockGetGradient(CostFunction mock, {Iterable<Iterable<double>> x, Iterable<double> w, Iterable<double> y,
-  Iterable<double> gradient}) {
+void mockGetGradient(CostFunction mock,
+    {Iterable<Iterable<double>> x,
+    Iterable<double> w,
+    Iterable<double> y,
+    Iterable<double> gradient}) {
   when(mock.getGradient(
     x == null ? any : argThat(matrixAlmostEqualTo(x)),
     w == null ? any : argThat(vectorAlmostEqualTo(w)),
