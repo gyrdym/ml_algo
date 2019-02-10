@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.6
+- Pedantic package integration added
+- Some linter issues fixed
+
 ## 6.0.5
 - Coveralls integration added
 - dartfm check task added
