@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.0
+- `LinkFunction` renamed to `ScoreToProbMapper`
+- `ScoreToProbMapper` accepts vector and returns vector instead of a scalar
+
 ## 6.0.6
 - Pedantic package integration added
 - Some linter issues fixed
