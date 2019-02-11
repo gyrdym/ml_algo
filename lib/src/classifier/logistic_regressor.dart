@@ -1,8 +1,5 @@
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator.dart';
-import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator_factory.dart';
-import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator_factory_impl.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
@@ -12,7 +9,6 @@ import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
 import 'package:ml_algo/src/default_parameter_values.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
@@ -22,6 +18,10 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -30,7 +30,7 @@ class LogisticRegressor implements LinearClassifier {
   final Optimizer optimizer;
   final InterceptPreprocessor interceptPreprocessor;
   final LabelsProcessor labelsProcessor;
-  final LabelsProbabilityCalculator probabilityCalculator;
+  final ScoreToProbMapper scoreToProbMapper;
 
   LogisticRegressor({
     // public arguments
@@ -46,7 +46,7 @@ class LogisticRegressor implements LinearClassifier {
     GradientType gradientType = GradientType.stochastic,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    LinkFunctionType linkFunctionType = LinkFunctionType.logit,
+    ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.logit,
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
@@ -54,20 +54,20 @@ class LogisticRegressor implements LinearClassifier {
         const LabelsProcessorFactoryImpl(),
     InterceptPreprocessorFactory interceptPreprocessorFactory =
         const InterceptPreprocessorFactoryImpl(),
-    LabelsProbabilityCalculatorFactory probabilityCalculatorFactory =
-        const LabelsProbabilityCalculatorFactoryImpl(),
+    ScoreToProbMapperFactory scoreToProbMapperFactory =
+        const ScoreToProbMapperFactoryImpl(),
     OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
   })  : labelsProcessor = labelsProcessorFactory.create(dtype),
         interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
             scale: fitIntercept ? interceptScale : 0.0),
-        probabilityCalculator =
-            probabilityCalculatorFactory.create(linkFunctionType, dtype),
+        scoreToProbMapper =
+            scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
           costFunctionType: CostFunctionType.logLikelihood,
-          linkFunctionType: linkFunctionType,
+          scoreToProbMapperType: scoreToProbMapperType,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
@@ -136,7 +136,7 @@ class LogisticRegressor implements LinearClassifier {
     int i = 0;
     _weightsByClasses.forEach((double label, MLVector weights) {
       final scores = (processedFeatures * weights).toVector();
-      distributions[i++] = probabilityCalculator.getProbabilities(scores);
+      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores);
     });
     return MLMatrix.columns(distributions, dtype: dtype);
   }

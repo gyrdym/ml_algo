@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -20,7 +20,7 @@ void main() {
     test('should initialize properly', () {
       setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
-      setUpProbabilityCalculatorFactory();
+      setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
       createRegressor();
@@ -28,8 +28,8 @@ void main() {
       verify(labelsProcessorFactoryMock.create(Float32x4)).called(1);
       verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0))
           .called(1);
-      verify(probabilityCalculatorFactoryMock.create(
-              LinkFunctionType.logit, Float32x4))
+      verify(scoreToProbFactoryMock.fromType(
+              ScoreToProbMapperType.logit, Float32x4))
           .called(1);
       verify(optimizerFactoryMock.fromType(
         OptimizerType.gradientDescent,
@@ -37,7 +37,7 @@ void main() {
         costFunctionType: CostFunctionType.logLikelihood,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
-        linkFunctionType: LinkFunctionType.logit,
+        scoreToProbMapperType: ScoreToProbMapperType.logit,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,
@@ -50,7 +50,7 @@ void main() {
     test('should make appropriate method calls when `fit` is called', () {
       setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
-      setUpProbabilityCalculatorFactory();
+      setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
       final features = MLMatrix.from([

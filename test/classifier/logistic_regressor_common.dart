@@ -2,18 +2,18 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/gradient_type.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator.dart';
-import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 
 import '../test_utils/mocks.dart';
 
@@ -21,10 +21,10 @@ LabelsProcessor labelsProcessorMock;
 LabelsProcessorFactory labelsProcessorFactoryMock;
 InterceptPreprocessor interceptPreprocessorMock;
 InterceptPreprocessorFactory interceptPreprocessorFactoryMock;
-LabelsProbabilityCalculator probabilityCalculatorMock;
-LabelsProbabilityCalculatorFactory probabilityCalculatorFactoryMock;
 Optimizer optimizerMock;
 OptimizerFactory optimizerFactoryMock;
+ScoreToProbMapperFactory scoreToProbFactoryMock;
+ScoreToProbMapper scoreToProbMapperMock;
 
 void setUpLabelsProcessorFactory() {
   labelsProcessorMock = LabelsProcessorMock();
@@ -38,20 +38,18 @@ void setUpInterceptPreprocessorFactory() {
       preprocessor: interceptPreprocessorMock);
 }
 
-void setUpProbabilityCalculatorFactory() {
-  probabilityCalculatorMock = LabelsProbabilityCalculatorMock();
-  probabilityCalculatorFactoryMock =
-      createLabelsProbabilityCalculatorFactoryMock(
-    linkType: LinkFunctionType.logit,
-    dtype: Float32x4,
-    calculator: probabilityCalculatorMock,
-  );
-}
-
 void setUpOptimizerFactory() {
   optimizerMock = OptimizerMock();
   optimizerFactoryMock = createOptimizerFactoryMock(
       optimizers: {OptimizerType.gradientDescent: optimizerMock});
+}
+
+void setUpScoreToProbMapperFactory() {
+  scoreToProbMapperMock = ScoreToProbMapperMock();
+  scoreToProbFactoryMock =
+      createScoreToProbMapperFactoryMock(Float32x4, mappers: {
+    ScoreToProbMapperType.logit: scoreToProbMapperMock,
+  });
 }
 
 LogisticRegressor createRegressor({
@@ -71,8 +69,8 @@ LogisticRegressor createRegressor({
       lambda: lambda,
       labelsProcessorFactory: labelsProcessorFactoryMock,
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
-      linkFunctionType: LinkFunctionType.logit,
-      probabilityCalculatorFactory: probabilityCalculatorFactoryMock,
+      scoreToProbMapperType: ScoreToProbMapperType.logit,
+      scoreToProbMapperFactory: scoreToProbFactoryMock,
       optimizer: OptimizerType.gradientDescent,
       optimizerFactory: optimizerFactoryMock,
       gradientType: GradientType.stochastic,

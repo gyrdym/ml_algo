@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
@@ -17,6 +16,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 
 class OptimizerFactoryImpl implements OptimizerFactory {
   const OptimizerFactoryImpl();
@@ -34,7 +34,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
     CostFunctionType costFunctionType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
-    LinkFunctionType linkFunctionType,
+    ScoreToProbMapperType scoreToProbMapperType,
     double initialLearningRate,
     double minCoefficientsUpdate,
     int iterationLimit,
@@ -65,7 +65,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
           costFnType: costFunctionType,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
-          linkFunctionType: linkFunctionType,
+          scoreToProbMapperType: scoreToProbMapperType,
           initialLearningRate: initialLearningRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           iterationLimit: iterationLimit,
@@ -114,7 +114,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
-    LinkFunctionType linkFunctionType,
+    ScoreToProbMapperType scoreToProbMapperType,
     double initialLearningRate,
     double minCoefficientsUpdate,
     int iterationLimit,
@@ -130,7 +130,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
         costFnType: costFnType,
         learningRateType: learningRateType,
         initialWeightsType: initialWeightsType,
-        linkFunctionType: linkFunctionType,
+        scoreToProbMapperType: scoreToProbMapperType,
         initialLearningRate: initialLearningRate,
         minWeightsUpdate: minCoefficientsUpdate,
         iterationLimit: iterationLimit,
