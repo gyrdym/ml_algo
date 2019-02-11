@@ -1,7 +1,5 @@
 import 'package:logging/logging.dart';
 import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator.dart';
-import 'package:ml_algo/src/classifier/labels_probability_calculator/labels_probability_calculator_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
@@ -80,12 +78,6 @@ class InterceptPreprocessorFactoryMock extends Mock
 
 class InterceptPreprocessorMock extends Mock implements InterceptPreprocessor {}
 
-class LabelsProbabilityCalculatorFactoryMock extends Mock
-    implements LabelsProbabilityCalculatorFactory {}
-
-class LabelsProbabilityCalculatorMock extends Mock
-    implements LabelsProbabilityCalculator {}
-
 class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
 
 class OptimizerMock extends Mock implements Optimizer {}
@@ -137,12 +129,13 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
   return factory;
 }
 
-LinkFunctionFactoryMock createLinkFunctionFactoryMock({
+LinkFunctionFactoryMock createLinkFunctionFactoryMock(
+  Type dtype, {
   Map<LinkFunctionType, LinkFunction> linkFunctions,
 }) {
   final factory = LinkFunctionFactoryMock();
   linkFunctions.forEach((LinkFunctionType type, LinkFunction fn) {
-    when(factory.fromType(type)).thenReturn(fn);
+    when(factory.fromType(type, dtype)).thenReturn(fn);
   });
   return factory;
 }
@@ -162,17 +155,6 @@ LabelsProcessorFactoryMock createLabelsProcessorFactoryMock({
   processors.forEach((Type type, LabelsProcessor processor) {
     when(factory.create(type)).thenReturn(processor);
   });
-  return factory;
-}
-
-LabelsProbabilityCalculatorFactoryMock
-    createLabelsProbabilityCalculatorFactoryMock({
-  LinkFunctionType linkType,
-  Type dtype,
-  LabelsProbabilityCalculator calculator,
-}) {
-  final factory = LabelsProbabilityCalculatorFactoryMock();
-  when(factory.create(linkType, dtype)).thenReturn(calculator);
   return factory;
 }
 

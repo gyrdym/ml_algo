@@ -7,10 +7,10 @@ class LinkFunctionFactoryImpl implements LinkFunctionFactory {
   const LinkFunctionFactoryImpl();
 
   @override
-  LinkFunction fromType(LinkFunctionType type) {
+  LinkFunction fromType(LinkFunctionType type, Type dtype) {
     switch (type) {
       case LinkFunctionType.logit:
-        return LogitLinkFunction();
+        return LogitLinkFunction(dtype);
       default:
         throw UnsupportedError('Unsupported link function type - $type');
     }

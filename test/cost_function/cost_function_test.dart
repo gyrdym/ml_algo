@@ -40,13 +40,14 @@ void main() {
   group('LogLikelihoodCost', () {
     final mockedLinkFn = LinkFunctionMock();
     final linkFunctionFactoryMock =
-        createLinkFunctionFactoryMock(linkFunctions: {
+        createLinkFunctionFactoryMock(Float32x4, linkFunctions: {
       LinkFunctionType.logit: mockedLinkFn,
     });
     final logLikelihoodCost = LogLikelihoodCost(LinkFunctionType.logit,
         linkFunctionFactory: linkFunctionFactoryMock);
 
-    when(mockedLinkFn.float32x4Link(any)).thenReturn(Float32x4.splat(1.0));
+    when(mockedLinkFn.linkScoresToProbs(any))
+        .thenReturn(MLVector.from([1.0, 1.0, 1.0]));
 
     test('should return a proper gradient vector', () {
       // The formula in matrix notation:

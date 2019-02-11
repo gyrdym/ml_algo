@@ -16,7 +16,7 @@ class LogLikelihoodCost implements CostFunction {
     LinkFunctionType linkFunctionType, {
     this.dtype = DefaultParameterValues.dtype,
     LinkFunctionFactory linkFunctionFactory = const LinkFunctionFactoryImpl(),
-  }) : linkFunction = linkFunctionFactory.fromType(linkFunctionType);
+  }) : linkFunction = linkFunctionFactory.fromType(linkFunctionType, dtype);
 
   @override
   double getCost(double score, double yOrig) {
@@ -25,10 +25,10 @@ class LogLikelihoodCost implements CostFunction {
 
   @override
   MLVector getGradient(MLMatrix x, MLVector w, MLVector y) {
+    final scores = (x * w).toVector();
     switch (dtype) {
       case Float32x4:
-        return (x.transpose() *
-                (y - (x * w).fastMap<Float32x4>(linkFunction.float32x4Link)))
+        return (x.transpose() * (y - linkFunction.linkScoresToProbs(scores)))
             .toVector();
       default:
         throw throw UnsupportedError('Unsupported data type - $dtype');
