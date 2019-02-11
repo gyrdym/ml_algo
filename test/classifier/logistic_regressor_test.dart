@@ -20,7 +20,7 @@ void main() {
     test('should initialize properly', () {
       setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
-      setUpProbabilityCalculatorFactory();
+      setUpLinkFunctionFactory();
       setUpOptimizerFactory();
 
       createRegressor();
@@ -28,7 +28,7 @@ void main() {
       verify(labelsProcessorFactoryMock.create(Float32x4)).called(1);
       verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0))
           .called(1);
-      verify(probabilityCalculatorFactoryMock.create(
+      verify(linkFunctionFactoryMock.fromType(
               LinkFunctionType.logit, Float32x4))
           .called(1);
       verify(optimizerFactoryMock.fromType(
@@ -50,7 +50,7 @@ void main() {
     test('should make appropriate method calls when `fit` is called', () {
       setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
-      setUpProbabilityCalculatorFactory();
+      setUpLinkFunctionFactory();
       setUpOptimizerFactory();
 
       final features = MLMatrix.from([

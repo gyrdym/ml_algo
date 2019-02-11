@@ -25,14 +25,14 @@ import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class LogisticRegressor implements LinearClassifier {
+class SoftMaxRegressor implements LinearClassifier {
   final Type dtype;
   final Optimizer optimizer;
   final InterceptPreprocessor interceptPreprocessor;
   final LabelsProcessor labelsProcessor;
   final LinkFunction linkFunction;
 
-  LogisticRegressor({
+  SoftMaxRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
