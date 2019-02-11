@@ -7,13 +7,13 @@ import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 
 import '../test_utils/mocks.dart';
 
@@ -23,8 +23,8 @@ InterceptPreprocessor interceptPreprocessorMock;
 InterceptPreprocessorFactory interceptPreprocessorFactoryMock;
 Optimizer optimizerMock;
 OptimizerFactory optimizerFactoryMock;
-LinkFunctionFactory linkFunctionFactoryMock;
-LinkFunction linkFunctionMock;
+ScoreToProbMapperFactory scoreToProbFactoryMock;
+ScoreToProbMapper scoreToProbMapperMock;
 
 void setUpLabelsProcessorFactory() {
   labelsProcessorMock = LabelsProcessorMock();
@@ -44,11 +44,11 @@ void setUpOptimizerFactory() {
       optimizers: {OptimizerType.gradientDescent: optimizerMock});
 }
 
-void setUpLinkFunctionFactory() {
-  linkFunctionMock = LinkFunctionMock();
-  linkFunctionFactoryMock =
-      createLinkFunctionFactoryMock(Float32x4, linkFunctions: {
-    LinkFunctionType.logit: linkFunctionMock,
+void setUpScoreToProbMapperFactory() {
+  scoreToProbMapperMock = ScoreToProbMapperMock();
+  scoreToProbFactoryMock =
+      createScoreToProbMapperFactoryMock(Float32x4, mappers: {
+    ScoreToProbMapperType.logit: scoreToProbMapperMock,
   });
 }
 
@@ -69,8 +69,8 @@ LogisticRegressor createRegressor({
       lambda: lambda,
       labelsProcessorFactory: labelsProcessorFactoryMock,
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
-      linkFunctionType: LinkFunctionType.logit,
-      linkFunctionFactory: linkFunctionFactoryMock,
+      scoreToProbMapperType: ScoreToProbMapperType.logit,
+      scoreToProbMapperFactory: scoreToProbFactoryMock,
       optimizer: OptimizerType.gradientDescent,
       optimizerFactory: optimizerFactoryMock,
       gradientType: GradientType.stochastic,

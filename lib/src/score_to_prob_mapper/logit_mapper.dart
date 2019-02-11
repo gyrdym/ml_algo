@@ -1,17 +1,17 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class LogitLinkFunction implements LinkFunction {
+class LogitMapper implements ScoreToProbMapper {
   final Type dtype;
 
   final float32x4Zeroes = Float32x4.zero();
   final float32x4Ones = Float32x4.splat(1.0);
 
-  LogitLinkFunction(this.dtype);
+  LogitMapper(this.dtype);
 
   @override
   MLVector linkScoresToProbs(MLVector scores, [MLMatrix scoresByClasses]) {

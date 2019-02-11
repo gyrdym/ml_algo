@@ -1,16 +1,16 @@
 import 'dart:typed_data';
 
-import 'package:ml_algo/src/link_function/logit_link_function.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/logit_mapper.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 void main() {
-  group('Float32x4 logit link function', () {
-    test('should properly translate score to probability', () {
+  group('LogitMapper', () {
+    test('should properly translate scores to probabilities for Float32x4', () {
       final scores = MLVector.from([1.0, 2.0, 3.0, 4.0]);
-      final logitLink = LogitLinkFunction(Float32x4);
+      final logitLink = LogitMapper(Float32x4);
       final probabilities = logitLink.linkScoresToProbs(scores);
 
       expect(probabilities,
