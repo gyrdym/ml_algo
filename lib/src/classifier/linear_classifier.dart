@@ -70,6 +70,7 @@ abstract class LinearClassifier implements Classifier {
     Type dtype,
   }) = LogisticRegressor;
 
+  factory LinearClassifier.softMaxRegressor() => throw UnimplementedError();
   factory LinearClassifier.SVM() => throw UnimplementedError();
   factory LinearClassifier.naiveBayes() => throw UnimplementedError();
 }

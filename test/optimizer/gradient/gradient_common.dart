@@ -43,7 +43,7 @@ GradientOptimizer createOptimizer(
   costFunctionMock = CostFunctionMock();
   costFunctionFactoryMock = CostFunctionFactoryMock();
   when(costFunctionFactoryMock.fromType(CostFunctionType.squared,
-          dtype: Float32x4, linkFunctionType: null))
+          dtype: Float32x4, scoreToProbMapperType: null))
       .thenReturn(costFunctionMock);
 
   final randomizerFactoryMock = RandomizerFactoryMock();
@@ -69,7 +69,7 @@ GradientOptimizer createOptimizer(
       batchSize: batchSize);
 
   verify(costFunctionFactoryMock.fromType(CostFunctionType.squared,
-      dtype: Float32x4, linkFunctionType: null));
+      dtype: Float32x4, scoreToProbMapperType: null));
 
   return opt;
 }

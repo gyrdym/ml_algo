@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -38,15 +38,16 @@ void main() {
   });
 
   group('LogLikelihoodCost', () {
-    final mockedLinkFn = LinkFunctionMock();
-    final linkFunctionFactoryMock =
-        createLinkFunctionFactoryMock(linkFunctions: {
-      LinkFunctionType.logit: mockedLinkFn,
+    final mockedLinkFn = ScoreToProbMapperMock();
+    final scoreToProbMapperFactoryMock =
+        createScoreToProbMapperFactoryMock(Float32x4, mappers: {
+      ScoreToProbMapperType.logit: mockedLinkFn,
     });
-    final logLikelihoodCost = LogLikelihoodCost(LinkFunctionType.logit,
-        linkFunctionFactory: linkFunctionFactoryMock);
+    final logLikelihoodCost = LogLikelihoodCost(ScoreToProbMapperType.logit,
+        scoreToProbMapperFactory: scoreToProbMapperFactoryMock);
 
-    when(mockedLinkFn.float32x4Link(any)).thenReturn(Float32x4.splat(1.0));
+    when(mockedLinkFn.linkScoresToProbs(any))
+        .thenReturn(MLVector.from([1.0, 1.0, 1.0]));
 
     test('should return a proper gradient vector', () {
       // The formula in matrix notation:
