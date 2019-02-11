@@ -2,21 +2,23 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/default_parameter_values.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class LogLikelihoodCost implements CostFunction {
-  final LinkFunction linkFunction;
+  final ScoreToProbMapper scoreToProbMapper;
   final Type dtype;
 
   LogLikelihoodCost(
-    LinkFunctionType linkFunctionType, {
+    ScoreToProbMapperType scoreToProbMapperType, {
     this.dtype = DefaultParameterValues.dtype,
-    LinkFunctionFactory linkFunctionFactory = const LinkFunctionFactoryImpl(),
-  }) : linkFunction = linkFunctionFactory.fromType(linkFunctionType, dtype);
+    ScoreToProbMapperFactory scoreToProbMapperFactory =
+        const ScoreToProbMapperFactoryImpl(),
+  }) : scoreToProbMapper =
+            scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype);
 
   @override
   double getCost(double score, double yOrig) {
@@ -28,7 +30,8 @@ class LogLikelihoodCost implements CostFunction {
     final scores = (x * w).toVector();
     switch (dtype) {
       case Float32x4:
-        return (x.transpose() * (y - linkFunction.linkScoresToProbs(scores)))
+        return (x.transpose() *
+                (y - scoreToProbMapper.linkScoresToProbs(scores)))
             .toVector();
       default:
         throw throw UnsupportedError('Unsupported data type - $dtype');

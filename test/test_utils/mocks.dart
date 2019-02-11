@@ -12,9 +12,6 @@ import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
@@ -25,6 +22,9 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:mockito/mockito.dart';
 
 class EncoderMock extends Mock implements CategoricalDataEncoder {}
@@ -64,9 +64,10 @@ class InitialWeightsGeneratorFactoryMock extends Mock
 class InitialWeightsGeneratorMock extends Mock
     implements InitialWeightsGenerator {}
 
-class LinkFunctionMock extends Mock implements LinkFunction {}
+class ScoreToProbMapperMock extends Mock implements ScoreToProbMapper {}
 
-class LinkFunctionFactoryMock extends Mock implements LinkFunctionFactory {}
+class ScoreToProbMapperFactoryMock extends Mock
+    implements ScoreToProbMapperFactory {}
 
 class LabelsProcessorFactoryMock extends Mock
     implements LabelsProcessorFactory {}
@@ -129,12 +130,12 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
   return factory;
 }
 
-LinkFunctionFactoryMock createLinkFunctionFactoryMock(
+ScoreToProbMapperFactoryMock createScoreToProbMapperFactoryMock(
   Type dtype, {
-  Map<LinkFunctionType, LinkFunction> linkFunctions,
+  Map<ScoreToProbMapperType, ScoreToProbMapper> mappers,
 }) {
-  final factory = LinkFunctionFactoryMock();
-  linkFunctions.forEach((LinkFunctionType type, LinkFunction fn) {
+  final factory = ScoreToProbMapperFactoryMock();
+  mappers.forEach((ScoreToProbMapperType type, ScoreToProbMapper fn) {
     when(factory.fromType(type, dtype)).thenReturn(fn);
   });
   return factory;
@@ -175,7 +176,7 @@ OptimizerFactoryMock createOptimizerFactoryMock({
       costFunctionType: anyNamed('costFunctionType'),
       learningRateType: anyNamed('learningRateType'),
       initialWeightsType: anyNamed('initialWeightsType'),
-      linkFunctionType: anyNamed('linkFunctionType'),
+      scoreToProbMapperType: anyNamed('scoreToProbMapperType'),
       initialLearningRate: anyNamed('initialLearningRate'),
       minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
       iterationLimit: anyNamed('iterationLimit'),

@@ -3,7 +3,6 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/default_parameter_values.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
@@ -16,6 +15,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/range.dart';
 import 'package:ml_linalg/vector.dart';
@@ -46,7 +46,7 @@ class GradientOptimizer implements Optimizer {
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
-    LinkFunctionType linkFunctionType,
+    ScoreToProbMapperType scoreToProbMapperType,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
     double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
     int iterationLimit = DefaultParameterValues.iterationsLimit,
@@ -62,7 +62,7 @@ class GradientOptimizer implements Optimizer {
         _learningRateGenerator =
             learningRateGeneratorFactory.fromType(learningRateType),
         _costFunction = costFunctionFactory.fromType(costFnType,
-            dtype: dtype, linkFunctionType: linkFunctionType),
+            dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
         _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }

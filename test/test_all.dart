@@ -8,6 +8,8 @@ import 'data_preprocessing/categorical_encoder/one_hot_encoder_test.dart'
     as one_hot_encoder_test;
 import 'data_preprocessing/categorical_encoder/ordinal_encoder_test.dart'
     as ordinal_encoder_test;
+import 'data_preprocessing/intercept_preprocessor_test.dart'
+    as intercept_preprocessor_test;
 import 'data_preprocessing/ml_data/csv_ml_data_integration_test.dart'
     as csv_ml_data_integration_test;
 import 'data_preprocessing/ml_data/csv_ml_data_with_categories_integration_test.dart'
@@ -22,8 +24,6 @@ import 'data_preprocessing/ml_data/ml_data_params_validator_impl_test.dart'
     as ml_data_params_validator_test;
 import 'data_preprocessing/ml_data/ml_data_read_mask_creator_impl_test.dart'
     as ml_data_read_mask_creator_test;
-import 'data_preprocessing/intercept_preprocessor_test.dart'
-    as intercept_preprocessor_test;
 import 'data_splitter/data_splitter_test.dart' as data_splitter_test;
 import 'math/randomizer_test.dart' as randomizer_test;
 import 'optimizer/coordinate/coordinate_optimizer_integration_test.dart'
@@ -32,8 +32,8 @@ import 'optimizer/gradient/gradient_optimizer_integration_test.dart'
     as gradient_optimizer_integration_test;
 import 'optimizer/gradient/gradient_optimizer_test.dart'
     as gradient_optimizer_test;
-import 'score_to_prob_link_function/link_function_test.dart'
-    as link_function_test;
+import 'score_to_prob_mapper/score_to_prob_mapper_test.dart'
+    as score_to_prob_mapper_test;
 
 void main() {
   logistic_regressor_integration_test.main();
@@ -55,5 +55,5 @@ void main() {
   coord_optimizer_integration_test.main();
   gradient_optimizer_integration_test.main();
   gradient_optimizer_test.main();
-  link_function_test.main();
+  score_to_prob_mapper_test.main();
 }
