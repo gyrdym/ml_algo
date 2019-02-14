@@ -104,6 +104,7 @@ class GradientOptimizer implements Optimizer {
         coefficientsSource[k] = newCoefficients;
         iterationCounter++;
       }
+      // TODO: get rid of matrix instantiating here, use a list
       _coefficients = MLMatrix.rows(coefficientsSource, dtype: _dtype);
     }
 

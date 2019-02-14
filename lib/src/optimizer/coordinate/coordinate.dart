@@ -81,6 +81,7 @@ class CoordinateOptimizer implements Optimizer {
         }
         coefficientsSource[k] = coefficients;
       }
+      // TODO: get rid of matrix instantiating here, use a list
       _coefficients = MLMatrix.rows(coefficientsSource, dtype: _dtype);
       iteration++;
     }
