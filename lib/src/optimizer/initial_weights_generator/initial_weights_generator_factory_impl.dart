@@ -8,13 +8,13 @@ class InitialWeightsGeneratorFactoryImpl
   const InitialWeightsGeneratorFactoryImpl();
 
   @override
-  InitialWeightsGenerator zeroes() => ZeroWeightsGenerator();
+  InitialWeightsGenerator zeroes(Type dtype) => ZeroWeightsGenerator(dtype);
 
   @override
-  InitialWeightsGenerator fromType(InitialWeightsType type) {
+  InitialWeightsGenerator fromType(InitialWeightsType type, Type dtype) {
     switch (type) {
       case InitialWeightsType.zeroes:
-        return zeroes();
+        return zeroes(dtype);
       default:
         throw UnimplementedError();
     }

@@ -83,9 +83,9 @@ void main() {
               ])),
               argThat(equals([1.0, 0.0])),
               arePointsNormalized: true,
-              initialWeights: initialWeights,
+              initialWeights: argThat(equals([[10.0, 20.0, 30.0, 40.0]]), named: 'initialWeights'),
               isMinimizingObjective: false))
-          .thenReturn(MLVector.from([333.0, 444.0]));
+          .thenReturn(MLMatrix.rows([MLVector.from([333.0, 444.0])]));
 
       when(optimizerMock.findExtrema(
               argThat(matrixAlmostEqualTo([
@@ -94,9 +94,9 @@ void main() {
               ])),
               argThat(equals([0.0, 1.0])),
               arePointsNormalized: true,
-              initialWeights: initialWeights,
+              initialWeights: argThat(equals([[10.0, 20.0, 30.0, 40.0]]), named: 'initialWeights'),
               isMinimizingObjective: false))
-          .thenReturn(MLVector.from([555.0, 666.0]));
+          .thenReturn(MLMatrix.rows([MLVector.from([555.0, 666.0])]));
 
       createRegressor()
         ..fit(features, origLabels,
@@ -114,7 +114,7 @@ void main() {
                 [500.0, 600.0, 700.0, 800.0],
               ])),
               argThat(equals([1.0, 0.0])),
-              initialWeights: initialWeights,
+              initialWeights: argThat(equals([[10.0, 20.0, 30.0, 40.0]]), named: 'initialWeights'),
               arePointsNormalized: true,
               isMinimizingObjective: false))
           .called(1);
@@ -125,7 +125,7 @@ void main() {
                 [500.0, 600.0, 700.0, 800.0],
               ])),
               argThat(equals([0.0, 1.0])),
-              initialWeights: initialWeights,
+              initialWeights: argThat(equals([[10.0, 20.0, 30.0, 40.0]]), named: 'initialWeights'),
               arePointsNormalized: true,
               isMinimizingObjective: false))
           .called(1);

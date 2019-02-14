@@ -132,7 +132,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
         initialWeightsType: initialWeightsType,
         scoreToProbMapperType: scoreToProbMapperType,
         initialLearningRate: initialLearningRate,
-        minWeightsUpdate: minCoefficientsUpdate,
+        minCoefficientsUpdate: minCoefficientsUpdate,
         iterationLimit: iterationLimit,
         lambda: lambda,
         batchSize: batchSize,
