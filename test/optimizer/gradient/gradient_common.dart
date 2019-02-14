@@ -53,7 +53,7 @@ GradientOptimizer createOptimizer(
   when(randomizerFactoryMock.create(any)).thenReturn(randomizerMock);
   when(learningRateGeneratorFactoryMock.fromType(any))
       .thenReturn(learningRateGeneratorMock);
-  when(initialWeightsGeneratorFactory.fromType(any))
+  when(initialWeightsGeneratorFactory.fromType(any, any))
       .thenReturn(initialWeightsGeneratorMock);
 
   final opt = GradientOptimizer(

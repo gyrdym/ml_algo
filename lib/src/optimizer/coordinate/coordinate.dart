@@ -41,7 +41,7 @@ class CoordinateOptimizer implements Optimizer {
         _coefficientDiffThreshold = minCoefficientsDiff,
         _lambda = lambda ?? 0.0,
         _initialCoefficientsGenerator =
-            initialWeightsGeneratorFactory.fromType(initialWeightsType),
+            initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
         _costFn = costFunctionFactory.fromType(costFunctionType);
 
   @override
@@ -81,7 +81,7 @@ class CoordinateOptimizer implements Optimizer {
         }
         coefficientsSource[k] = coefficients;
       }
-      _coefficients = MLMatrix.rows(coefficientsSource);
+      _coefficients = MLMatrix.rows(coefficientsSource, dtype: _dtype);
       iteration++;
     }
 
