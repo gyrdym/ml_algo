@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:ml_algo/cross_validator.dart';
-import 'package:ml_algo/linear_regressor.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/ml_data.dart';
+import 'package:ml_algo/ml_algo.dart';
 
 Future main() async {
   final data = MLData.fromCsvFile('datasets/advertising.csv',

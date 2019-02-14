@@ -1,5 +1,5 @@
 import 'package:logging/logging.dart';
-import 'package:ml_algo/learning_rate_type.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';

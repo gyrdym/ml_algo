@@ -72,22 +72,18 @@ class GradientOptimizer implements Optimizer {
 
   @override
   MLMatrix findExtrema(MLMatrix points, MLVector labels,
-      {
-        int numOfCoefficientVectors = 1,
-        MLMatrix initialWeights,
-        bool isMinimizingObjective = true,
-        bool arePointsNormalized = false
-      }
-  ) {
+      {int numOfCoefficientVectors = 1,
+      MLMatrix initialWeights,
+      bool isMinimizingObjective = true,
+      bool arePointsNormalized = false}) {
     _points = points;
 
     final batchSize =
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
-    _coefficients =
-        initialWeights ?? MLMatrix.rows(
-            List<MLVector>.generate(numOfCoefficientVectors, (int i) =>
-                _initialWeightsGenerator.generate(_points.columnsNum)));
+    _coefficients = initialWeights ??
+        MLMatrix.rows(List<MLVector>.generate(numOfCoefficientVectors,
+            (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     var coefficientsUpdate = double.maxFinite;
     var iterationCounter = 0;

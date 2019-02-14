@@ -1,4 +1,4 @@
-import 'package:ml_algo/encode_unknown_value_strategy.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';

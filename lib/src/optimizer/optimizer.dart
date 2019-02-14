@@ -13,10 +13,8 @@ abstract class Optimizer {
   /// [arePointsNormalized] `true` means that all the [points] columns are normalized (whether the sum of each column
   /// values gives 1.0 or not)
   MLMatrix findExtrema(MLMatrix points, MLVector labels,
-      {
-        int numOfCoefficientVectors,
-        MLMatrix initialWeights,
-        bool isMinimizingObjective,
-        bool arePointsNormalized
-      });
+      {int numOfCoefficientVectors,
+      MLMatrix initialWeights,
+      bool isMinimizingObjective,
+      bool arePointsNormalized});
 }

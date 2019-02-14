@@ -1,8 +1,8 @@
-import 'package:ml_algo/gradient_type.dart';
-import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/predictor.dart';
+import 'package:ml_algo/src/predictor.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
+import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 
 /// A factory for all the linear regressors.

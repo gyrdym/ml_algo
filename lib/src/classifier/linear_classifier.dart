@@ -1,8 +1,8 @@
-import 'package:ml_algo/gradient_type.dart';
-import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/regressor/gradient_type.dart';
 
 /// A factory for all the linear classifiers
 abstract class LinearClassifier implements Classifier {

@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:ml_algo/learning_rate_type.dart';
-import 'package:ml_algo/linear_regressor.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 

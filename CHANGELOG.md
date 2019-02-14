@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.0.0
+- All the exports packed into `ml_algo` entry
+
 ## 6.2.0
 - Coefficients in optimizers now are a matrix
 - InitialWeightsGenerator instantiating fixed: dtype is passed now 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:ml_algo/categorical_data_encoder_type.dart';
-import 'package:ml_algo/encode_unknown_value_strategy.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/csv_data.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
