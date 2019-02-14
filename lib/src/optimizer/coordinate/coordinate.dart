@@ -23,6 +23,7 @@ class CoordinateOptimizer implements Optimizer {
   final double _lambda;
   //hyper parameters declaration end
 
+  MLMatrix _coefficients;
   MLVector _normalizer;
 
   CoordinateOptimizer({
@@ -30,7 +31,7 @@ class CoordinateOptimizer implements Optimizer {
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
-    double minCoefficientsDiff = DefaultParameterValues.minWeightsUpdate,
+    double minCoefficientsDiff = DefaultParameterValues.minCoefficientsUpdate,
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double lambda,
     InitialWeightsType initialWeightsType,
@@ -44,36 +45,47 @@ class CoordinateOptimizer implements Optimizer {
         _costFn = costFunctionFactory.fromType(costFunctionType);
 
   @override
-  MLVector findExtrema(MLMatrix points, MLVector labels,
-      {MLVector initialWeights,
-      bool isMinimizingObjective = true,
-      bool arePointsNormalized = false}) {
+  MLMatrix findExtrema(MLMatrix points, MLVector labels,
+      {
+        int numOfCoefficientVectors = 1,
+        MLMatrix initialWeights,
+        bool isMinimizingObjective = true,
+        bool arePointsNormalized = false
+      }
+  ) {
     _normalizer = arePointsNormalized
         ? MLVector.filled(points.columnsNum, 1.0, dtype: _dtype)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
-    MLVector coefficients = initialWeights ??
-        _initialCoefficientsGenerator.generate(points.columnsNum);
+    _coefficients =
+        initialWeights ?? MLMatrix.rows(
+            List<MLVector>.generate(numOfCoefficientVectors, (int i) =>
+                _initialCoefficientsGenerator.generate(points.columnsNum)));
+
     final changes = List<double>.filled(points.columnsNum, double.infinity);
     int iteration = 0;
 
     while (!_isConverged(changes, iteration)) {
       final updatedCoefficients =
-          List<double>.filled(coefficients.length, 0.0, growable: false);
+          List<double>.filled(points.columnsNum, 0.0, growable: false);
+      final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
 
-      for (int j = 0; j < coefficients.length; j++) {
-        final oldWeight = updatedCoefficients[j];
-        final newWeight =
-            _coordinateDescentStep(j, points, labels, coefficients);
-        changes[j] = (oldWeight - newWeight).abs();
-        updatedCoefficients[j] = newWeight;
-        coefficients = MLVector.from(updatedCoefficients, dtype: _dtype);
+      for (int k = 0; k < numOfCoefficientVectors; k++) {
+        var coefficients = _coefficients.getRow(k);
+        for (int j = 0; j < coefficients.length; j++) {
+          final oldWeight = updatedCoefficients[j];
+          final newWeight = _coordinateDescentStep(j, points, labels, coefficients);
+          changes[j] = (oldWeight - newWeight).abs();
+          updatedCoefficients[j] = newWeight;
+          coefficients = MLVector.from(updatedCoefficients, dtype: _dtype);
+        }
+        coefficientsSource[k] = coefficients;
       }
-
+      _coefficients = MLMatrix.rows(coefficientsSource);
       iteration++;
     }
 
-    return coefficients;
+    return _coefficients;
   }
 
   bool _isConverged(List<double> changes, int iterationCount) =>

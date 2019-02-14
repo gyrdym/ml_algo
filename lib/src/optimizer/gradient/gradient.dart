@@ -34,6 +34,7 @@ class GradientOptimizer implements Optimizer {
   //hyper parameters declaration end
 
   MLMatrix _points;
+  MLMatrix _coefficients;
 
   GradientOptimizer({
     Type dtype = DefaultParameterValues.dtype,
@@ -48,12 +49,12 @@ class GradientOptimizer implements Optimizer {
     InitialWeightsType initialWeightsType,
     ScoreToProbMapperType scoreToProbMapperType,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
+    double minCoefficientsUpdate = DefaultParameterValues.minCoefficientsUpdate,
     int iterationLimit = DefaultParameterValues.iterationsLimit,
     double lambda,
     int batchSize,
     int randomSeed,
-  })  : _minCoefficientsUpdate = minWeightsUpdate,
+  })  : _minCoefficientsUpdate = minCoefficientsUpdate,
         _iterationLimit = iterationLimit,
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
@@ -68,32 +69,45 @@ class GradientOptimizer implements Optimizer {
   }
 
   @override
-  MLVector findExtrema(MLMatrix points, MLVector labels,
-      {MLVector initialWeights,
-      bool isMinimizingObjective = true,
-      bool arePointsNormalized = false}) {
+  MLMatrix findExtrema(MLMatrix points, MLVector labels,
+      {
+        int numOfCoefficientVectors = 1,
+        MLMatrix initialWeights,
+        bool isMinimizingObjective = true,
+        bool arePointsNormalized = false
+      }
+  ) {
     _points = points;
 
     final batchSize =
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
-    var coefficients =
-        initialWeights ?? _initialWeightsGenerator.generate(_points.columnsNum);
+
+    _coefficients =
+        initialWeights ?? MLMatrix.rows(
+            List<MLVector>.generate(numOfCoefficientVectors, (int i) =>
+                _initialWeightsGenerator.generate(_points.columnsNum)));
+
     var coefficientsUpdate = double.maxFinite;
     var iterationCounter = 0;
+    final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
 
     while (!_isConverged(coefficientsUpdate, iterationCounter)) {
-      final eta = _learningRateGenerator.getNextValue();
-      final updatedCoefficients = _generateCoefficients(
-          coefficients, labels, eta, batchSize,
-          isMinimization: isMinimizingObjective);
-      coefficientsUpdate = updatedCoefficients.distanceTo(coefficients);
-      coefficients = updatedCoefficients;
-      iterationCounter++;
+      for (int k = 0; k < numOfCoefficientVectors; k++) {
+        final eta = _learningRateGenerator.getNextValue();
+        final coefficients = _coefficients.getRow(k);
+        final newCoefficients = _generateCoefficients(
+            coefficients, labels, eta, batchSize,
+            isMinimization: isMinimizingObjective);
+        coefficientsUpdate = newCoefficients.distanceTo(coefficients);
+        coefficientsSource[k] = newCoefficients;
+        iterationCounter++;
+      }
+      _coefficients = MLMatrix.rows(coefficientsSource);
     }
 
     _learningRateGenerator.stop();
 
-    return coefficients;
+    return _coefficients;
   }
 
   bool _isConverged(double coefficientsUpdate, int iterationCounter) =>

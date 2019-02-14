@@ -36,7 +36,7 @@ class LogisticRegressor implements LinearClassifier {
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
+    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
     double lambda,
     int randomSeed,
     int batchSize = 1,
@@ -146,8 +146,8 @@ class LogisticRegressor implements LinearClassifier {
     final binaryLabels =
         labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
     return optimizer.findExtrema(features, binaryLabels,
-        initialWeights: initialWeights,
+        initialWeights: initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
         arePointsNormalized: arePointsNormalized,
-        isMinimizingObjective: false);
+        isMinimizingObjective: false).getRow(0);
   }
 }

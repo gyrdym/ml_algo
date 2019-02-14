@@ -227,7 +227,8 @@ void main() {
       //
       // c = [-32, -32, -32]
       //
-      expect(optimalCoefficients.toList(), equals([-32.0, -32.0, -32.0]));
+      expect(optimalCoefficients.getRow(0).toList(), equals([-32.0, -32.0, -32.0]));
+      expect(optimalCoefficients.rowsNum, 1);
     });
 
     test('should find optimal coefficient values and regularize it', () {
@@ -280,7 +281,8 @@ void main() {
       // c = [-23728.0, -23728.0, -23728.0]
       //
       expect(
-          optimalCoefficients.toList(), equals([-23728.0, -23728.0, -23728.0]));
+          optimalCoefficients.getRow(0).toList(), equals([-23728.0, -23728.0, -23728.0]));
+      expect(optimalCoefficients.rowsNum, 1);
     });
 
     test('should consider `iterationLimit` parameter', () {
@@ -363,7 +365,8 @@ void main() {
       // distance = sqrt((-14 - (-16))^2 + (-14 - (-16))^2 + (-14 - (-16))^2) = sqrt(12) ~~ 3.46
       final coefficients = optimizer.findExtrema(points, labels);
       verify(learningRateGeneratorMock.getNextValue()).called(3);
-      expect(coefficients.toList(), equals([-16.0, -16.0, -16.0]));
+      expect(coefficients.getRow(0).toList(), equals([-16.0, -16.0, -16.0]));
+      expect(coefficients.rowsNum, 1);
     });
 
     test('should consider `learningRate` parameter', () {

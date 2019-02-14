@@ -63,7 +63,7 @@ GradientOptimizer createOptimizer(
       learningRateGeneratorFactory: learningRateGeneratorFactoryMock,
       initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
       initialLearningRate: eta,
-      minWeightsUpdate: minCoeffUpdate,
+      minCoefficientsUpdate: minCoeffUpdate,
       iterationLimit: iterationsLimit,
       lambda: lambda,
       batchSize: batchSize);
