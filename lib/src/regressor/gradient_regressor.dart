@@ -24,7 +24,7 @@ class GradientRegressor implements LinearRegressor {
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
+    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
     double lambda,
     GradientType gradientType = GradientType.stochastic,
     bool fitIntercept = false,
@@ -46,7 +46,7 @@ class GradientRegressor implements LinearRegressor {
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
-          minWeightsUpdate: minWeightsUpdate,
+          minCoefficientsUpdate: minWeightsUpdate,
           iterationLimit: iterationsLimit,
           lambda: lambda,
           batchSize: batchSizeCalculator.calculate(gradientType, batchSize),
@@ -62,9 +62,9 @@ class GradientRegressor implements LinearRegressor {
       {MLVector initialWeights, bool isDataNormalized = false}) {
     _weights = _optimizer.findExtrema(
         _interceptPreprocessor.addIntercept(features), labels,
-        initialWeights: initialWeights,
+        initialWeights: initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
         isMinimizingObjective: true,
-        arePointsNormalized: isDataNormalized);
+        arePointsNormalized: isDataNormalized).getRow(0);
   }
 
   @override

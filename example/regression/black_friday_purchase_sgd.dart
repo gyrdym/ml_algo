@@ -13,7 +13,7 @@ Future main() async {
   final data = MLData.fromCsvFile(
     'datasets/black_friday.csv',
     labelIdx: 11,
-    rows: [const Tuple2(0, 3000)],
+    rows: [const Tuple2(0, 2999)],
     columns: [const Tuple2(2, 11)],
     categories: {
       'Gender': ['M', 'F'],
