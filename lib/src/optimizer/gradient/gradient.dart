@@ -25,6 +25,7 @@ class GradientOptimizer implements Optimizer {
   final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
   final InitialWeightsGenerator _initialWeightsGenerator;
+  final Type _dtype;
 
   //hyper parameters declaration
   final double _minCoefficientsUpdate;
@@ -59,11 +60,12 @@ class GradientOptimizer implements Optimizer {
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
         _initialWeightsGenerator =
-            initialWeightsGeneratorFactory.fromType(initialWeightsType),
+            initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
         _learningRateGenerator =
             learningRateGeneratorFactory.fromType(learningRateType),
         _costFunction = costFunctionFactory.fromType(costFnType,
             dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
+        _dtype = dtype,
         _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
@@ -102,7 +104,7 @@ class GradientOptimizer implements Optimizer {
         coefficientsSource[k] = newCoefficients;
         iterationCounter++;
       }
-      _coefficients = MLMatrix.rows(coefficientsSource);
+      _coefficients = MLMatrix.rows(coefficientsSource, dtype: _dtype);
     }
 
     _learningRateGenerator.stop();
