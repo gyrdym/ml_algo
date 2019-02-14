@@ -1,4 +1,4 @@
-import 'package:ml_algo/gradient_type.dart';
+import 'package:ml_algo/src/regressor/gradient_type.dart';
 
 abstract class BatchSizeCalculator {
   int calculate(GradientType gradientType, int predefinedBatchSize);

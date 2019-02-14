@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/predictor.dart';
+import 'package:ml_algo/src/predictor.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';

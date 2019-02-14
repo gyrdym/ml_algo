@@ -1,5 +1,3 @@
-import 'package:ml_algo/gradient_type.dart';
-import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
@@ -10,6 +8,7 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator_impl.dart';
 import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
@@ -60,11 +59,13 @@ class GradientRegressor implements LinearRegressor {
   @override
   void fit(MLMatrix features, MLVector labels,
       {MLVector initialWeights, bool isDataNormalized = false}) {
-    _weights = _optimizer.findExtrema(
-        _interceptPreprocessor.addIntercept(features), labels,
-        initialWeights: initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
-        isMinimizingObjective: true,
-        arePointsNormalized: isDataNormalized).getRow(0);
+    _weights = _optimizer
+        .findExtrema(_interceptPreprocessor.addIntercept(features), labels,
+            initialWeights:
+                initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
+            isMinimizingObjective: true,
+            arePointsNormalized: isDataNormalized)
+        .getRow(0);
   }
 
   @override

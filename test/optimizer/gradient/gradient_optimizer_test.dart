@@ -227,7 +227,8 @@ void main() {
       //
       // c = [-32, -32, -32]
       //
-      expect(optimalCoefficients.getRow(0).toList(), equals([-32.0, -32.0, -32.0]));
+      expect(optimalCoefficients.getRow(0).toList(),
+          equals([-32.0, -32.0, -32.0]));
       expect(optimalCoefficients.rowsNum, 1);
     });
 
@@ -280,8 +281,8 @@ void main() {
       //
       // c = [-23728.0, -23728.0, -23728.0]
       //
-      expect(
-          optimalCoefficients.getRow(0).toList(), equals([-23728.0, -23728.0, -23728.0]));
+      expect(optimalCoefficients.getRow(0).toList(),
+          equals([-23728.0, -23728.0, -23728.0]));
       expect(optimalCoefficients.rowsNum, 1);
     });
 

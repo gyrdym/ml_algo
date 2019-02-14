@@ -7,5 +7,6 @@ class ZeroWeightsGenerator implements InitialWeightsGenerator {
   ZeroWeightsGenerator(this.dtype);
 
   @override
-  MLVector generate(int length) => MLVector.from(List.filled(length, 0.0), dtype: dtype);
+  MLVector generate(int length) =>
+      MLVector.from(List.filled(length, 0.0), dtype: dtype);
 }

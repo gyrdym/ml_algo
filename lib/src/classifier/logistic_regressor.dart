@@ -1,5 +1,3 @@
-import 'package:ml_algo/gradient_type.dart';
-import 'package:ml_algo/learning_rate_type.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
@@ -13,11 +11,13 @@ import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator_impl.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
@@ -145,9 +145,12 @@ class LogisticRegressor implements LinearClassifier {
       double targetLabel, MLVector initialWeights, bool arePointsNormalized) {
     final binaryLabels =
         labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
-    return optimizer.findExtrema(features, binaryLabels,
-        initialWeights: initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
-        arePointsNormalized: arePointsNormalized,
-        isMinimizingObjective: false).getRow(0);
+    return optimizer
+        .findExtrema(features, binaryLabels,
+            initialWeights:
+                initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
+            arePointsNormalized: arePointsNormalized,
+            isMinimizingObjective: false)
+        .getRow(0);
   }
 }

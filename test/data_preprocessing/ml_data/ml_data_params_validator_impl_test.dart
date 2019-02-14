@@ -1,4 +1,4 @@
-import 'package:ml_algo/categorical_data_encoder_type.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/error_messages.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator_impl.dart';
 import 'package:test/test.dart';

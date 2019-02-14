@@ -46,20 +46,18 @@ class CoordinateOptimizer implements Optimizer {
 
   @override
   MLMatrix findExtrema(MLMatrix points, MLVector labels,
-      {
-        int numOfCoefficientVectors = 1,
-        MLMatrix initialWeights,
-        bool isMinimizingObjective = true,
-        bool arePointsNormalized = false
-      }
-  ) {
+      {int numOfCoefficientVectors = 1,
+      MLMatrix initialWeights,
+      bool isMinimizingObjective = true,
+      bool arePointsNormalized = false}) {
     _normalizer = arePointsNormalized
         ? MLVector.filled(points.columnsNum, 1.0, dtype: _dtype)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
-    _coefficients =
-        initialWeights ?? MLMatrix.rows(
-            List<MLVector>.generate(numOfCoefficientVectors, (int i) =>
+    _coefficients = initialWeights ??
+        MLMatrix.rows(List<MLVector>.generate(
+            numOfCoefficientVectors,
+            (int i) =>
                 _initialCoefficientsGenerator.generate(points.columnsNum)));
 
     final changes = List<double>.filled(points.columnsNum, double.infinity);
@@ -74,7 +72,8 @@ class CoordinateOptimizer implements Optimizer {
         var coefficients = _coefficients.getRow(k);
         for (int j = 0; j < coefficients.length; j++) {
           final oldWeight = updatedCoefficients[j];
-          final newWeight = _coordinateDescentStep(j, points, labels, coefficients);
+          final newWeight =
+              _coordinateDescentStep(j, points, labels, coefficients);
           changes[j] = (oldWeight - newWeight).abs();
           updatedCoefficients[j] = newWeight;
           coefficients = MLVector.from(updatedCoefficients, dtype: _dtype);

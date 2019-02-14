@@ -30,8 +30,8 @@ void main() {
       final initialWeightsGeneratorMock = InitialWeightsGeneratorMock();
       final initialWeightsGeneratorFactoryMock =
           InitialWeightsGeneratorFactoryMock();
-      when(initialWeightsGeneratorFactoryMock
-              .fromType(InitialWeightsType.zeroes, any))
+      when(initialWeightsGeneratorFactoryMock.fromType(
+              InitialWeightsType.zeroes, any))
           .thenReturn(initialWeightsGeneratorMock);
 
       final costFunctionFactoryMock = CostFunctionFactoryMock();
@@ -139,8 +139,8 @@ void main() {
       final initialWeightsGeneratorMock = InitialWeightsGeneratorMock();
       final initialWeightsGeneratorFactoryMock =
           InitialWeightsGeneratorFactoryMock();
-      when(initialWeightsGeneratorFactoryMock
-              .fromType(InitialWeightsType.zeroes, any))
+      when(initialWeightsGeneratorFactoryMock.fromType(
+              InitialWeightsType.zeroes, any))
           .thenReturn(initialWeightsGeneratorMock);
 
       final costFunctionFactoryMock = CostFunctionFactoryMock();
