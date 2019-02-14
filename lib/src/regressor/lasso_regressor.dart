@@ -17,7 +17,7 @@ class LassoRegressor implements LinearRegressor {
   LassoRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
-    double minWeightsUpdate = DefaultParameterValues.minWeightsUpdate,
+    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
     double lambda,
     bool fitIntercept = false,
     double interceptScale = 1.0,
@@ -47,9 +47,9 @@ class LassoRegressor implements LinearRegressor {
       {MLVector initialWeights, bool isDataNormalized = false}) {
     _weights = _optimizer.findExtrema(
         _interceptPreprocessor.addIntercept(features), labels,
-        initialWeights: initialWeights,
+        initialWeights: initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
         isMinimizingObjective: true,
-        arePointsNormalized: isDataNormalized);
+        arePointsNormalized: isDataNormalized).getRow(0);
   }
 
   @override

@@ -2,6 +2,6 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 
 abstract class InitialWeightsGeneratorFactory {
-  InitialWeightsGenerator zeroes();
-  InitialWeightsGenerator fromType(InitialWeightsType type);
+  InitialWeightsGenerator zeroes(Type dtype);
+  InitialWeightsGenerator fromType(InitialWeightsType type, Type dtype);
 }

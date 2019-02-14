@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.0
+- Coefficients in optimizers now are a matrix
+- InitialWeightsGenerator instantiating fixed: dtype is passed now 
+
 ## 6.1.0
 - `LinkFunction` renamed to `ScoreToProbMapper`
 - `ScoreToProbMapper` accepts vector and returns vector instead of a scalar

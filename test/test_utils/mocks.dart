@@ -125,7 +125,7 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
   final factory = InitialWeightsGeneratorFactoryMock();
   generators
       .forEach((InitialWeightsType type, InitialWeightsGenerator generator) {
-    when(factory.fromType(type)).thenReturn(generator);
+    when(factory.fromType(type, any)).thenReturn(generator);
   });
   return factory;
 }

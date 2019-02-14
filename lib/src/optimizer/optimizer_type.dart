@@ -1,5 +1,5 @@
-/// A type of optimizer. Optimizer is an algorithm that finds the best coefficients (or weights) for the passed features
-/// (points)
+/// A type of optimizer. Optimizer - is an algorithm that finds the best coefficients (or weights) for the passed
+/// features (points)
 /// [OptimizerType.gradientDescent] Gradient descent optimizer. On each iteration calculates a gradient vector of a cost
 /// function to find the further direction towards the optimal point (maximum or minimum) along the function
 /// [OptimizerType.coordinateDescent] Coordinate descent optimizer. Excludes a feature on each iteration and evaluates
