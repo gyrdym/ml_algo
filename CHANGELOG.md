@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.1.0
+- ConvergenceDetector added (this entity stops the optimizer when it is needed)
+
 ## 7.0.0
 - All the exports packed into `ml_algo` entry
 
