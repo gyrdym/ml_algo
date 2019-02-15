@@ -6,6 +6,9 @@ import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory_impl.dart';
@@ -25,14 +28,11 @@ class GradientOptimizer implements Optimizer {
   final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
   final InitialWeightsGenerator _initialWeightsGenerator;
+  final ConvergenceDetector _convergenceDetector;
   final Type _dtype;
 
-  //hyper parameters declaration
-  final double _minCoefficientsUpdate;
-  final int _iterationLimit;
   final double _lambda;
   final int _batchSize;
-  //hyper parameters declaration end
 
   MLMatrix _points;
   MLMatrix _coefficients;
@@ -45,6 +45,7 @@ class GradientOptimizer implements Optimizer {
         const LearningRateGeneratorFactoryImpl(),
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
+    ConvergenceDetectorFactory convergenceDetectorFactory = const ConvergenceDetectorFactoryImpl(),
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -55,9 +56,7 @@ class GradientOptimizer implements Optimizer {
     double lambda,
     int batchSize,
     int randomSeed,
-  })  : _minCoefficientsUpdate = minCoefficientsUpdate,
-        _iterationLimit = iterationLimit,
-        _lambda = lambda ?? 0.0,
+  })  : _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
         _initialWeightsGenerator =
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
@@ -65,6 +64,7 @@ class GradientOptimizer implements Optimizer {
             learningRateGeneratorFactory.fromType(learningRateType),
         _costFunction = costFunctionFactory.fromType(costFnType,
             dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
+        _convergenceDetector = convergenceDetectorFactory.create(minCoefficientsUpdate, iterationLimit),
         _dtype = dtype,
         _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
@@ -85,18 +85,18 @@ class GradientOptimizer implements Optimizer {
         MLMatrix.rows(List<MLVector>.generate(numOfCoefficientVectors,
             (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
-    var coefficientsUpdate = double.maxFinite;
-    var iterationCounter = 0;
+    int iterationCounter = 0;
+    final coefficientsUpdates = MLVector.from(List.filled(numOfCoefficientVectors, double.maxFinite), isMutable: true);
     final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
 
-    while (!_isConverged(coefficientsUpdate, iterationCounter)) {
+    while (!_convergenceDetector.isConverged(coefficientsUpdates, iterationCounter)) {
+      final learningRate = _learningRateGenerator.getNextValue();
       for (int k = 0; k < numOfCoefficientVectors; k++) {
-        final eta = _learningRateGenerator.getNextValue();
         final coefficients = _coefficients.getRow(k);
         final newCoefficients = _generateCoefficients(
-            coefficients, labels, eta, batchSize,
+            coefficients, labels, learningRate, batchSize,
             isMinimization: isMinimizingObjective);
-        coefficientsUpdate = newCoefficients.distanceTo(coefficients);
+        coefficientsUpdates[k] = newCoefficients.distanceTo(coefficients);
         coefficientsSource[k] = newCoefficients;
         iterationCounter++;
       }
@@ -108,12 +108,6 @@ class GradientOptimizer implements Optimizer {
 
     return _coefficients;
   }
-
-  bool _isConverged(double coefficientsUpdate, int iterationCounter) =>
-      (_minCoefficientsUpdate != null
-          ? coefficientsUpdate <= _minCoefficientsUpdate
-          : false) ||
-      (iterationCounter >= _iterationLimit);
 
   MLVector _generateCoefficients(
       MLVector currentCoefficients, MLVector labels, double eta, int batchSize,
