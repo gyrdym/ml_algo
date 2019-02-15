@@ -35,7 +35,15 @@ void verifyGetGradientCall(CostFunction mock,
 
 void main() {
   group('Gradient descent optimizer', () {
-    tearDown(resetMockitoState);
+    setUp(() {
+      when(convergenceDetectorMock.isConverged(any, argThat(inInclusiveRange(0, 2)))).thenReturn(false);
+      when(convergenceDetectorMock.isConverged(any, 3)).thenReturn(true);
+    });
+
+    tearDown(() {
+      verify(convergenceDetectorMock.isConverged(any, any)).called(4);
+      resetMockitoState();
+    });
 
     test(
         'should properly process `batchSize` parameter when the latter is equal to `1` (stochastic case)',
@@ -45,6 +53,7 @@ void main() {
 
       final optimizer = createOptimizer(
           minCoeffUpdate: 1e-100, iterationsLimit: 3, batchSize: 1);
+
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1))
           .thenReturn([2, 3]);
 
@@ -197,7 +206,7 @@ void main() {
       final labels = MLVector.from([7.0, 8.0]);
       final optimizer = createOptimizer(
           minCoeffUpdate: 1e-100,
-          iterationsLimit: 2,
+          iterationsLimit: 3,
           batchSize: 2,
           lambda: 0.0);
 
@@ -227,8 +236,16 @@ void main() {
       //
       // c = [-32, -32, -32]
       //
+      // iteration 3:
+      // gradient = [8, 8, 8]
+      //
+      // c_1 = c_1_prev - eta * partial_1 = -32 - 2 * 8 = -48
+      // c_2 = c_2_prev - eta * partial_2 = -32 - 2 * 8 = -48
+      // c_3 = c_3_prev - eta * partial_3 = -32 - 2 * 8 = -48
+      //
+      // c = [-48, -48, -48]
       expect(optimalCoefficients.getRow(0).toList(),
-          equals([-32.0, -32.0, -32.0]));
+          equals([-48.0, -48.0, -48.0]));
       expect(optimalCoefficients.rowsNum, 1);
     });
 
@@ -284,32 +301,6 @@ void main() {
       expect(optimalCoefficients.getRow(0).toList(),
           equals([-23728.0, -23728.0, -23728.0]));
       expect(optimalCoefficients.rowsNum, 1);
-    });
-
-    test('should consider `iterationLimit` parameter', () {
-      const maxIteration = 2000;
-
-      final points = MLMatrix.from([
-        [1.0, 2.0, 3.0],
-        [4.0, 5.0, 6.0],
-      ]);
-      final labels = MLVector.from([7.0, 8.0]);
-      final optimizer = createOptimizer(
-          minCoeffUpdate: 1e-100,
-          iterationsLimit: maxIteration,
-          batchSize: 2,
-          lambda: 0.0);
-      when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2))
-          .thenReturn([0, 2]);
-      when(costFunctionMock.getGradient(
-        argThat(equals(points)),
-        any,
-        argThat(equals(labels)),
-      )).thenReturn(MLVector.from([8.0, 8.0, 8.0]));
-
-      optimizer.findExtrema(points, labels);
-
-      verify(learningRateGeneratorMock.getNextValue()).called(maxIteration);
     });
 
     test('should consider `minCoefficientsUpdate` parameter', () {
@@ -374,11 +365,11 @@ void main() {
       final initialLearningRate = 10.0;
       createOptimizer(
           minCoeffUpdate: 1e-100,
-          iterationsLimit: 2,
+          iterationsLimit: 3,
           batchSize: 1,
           lambda: 0.0,
           eta: initialLearningRate);
       verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
-    });
+    }, skip: true);
   });
 }
