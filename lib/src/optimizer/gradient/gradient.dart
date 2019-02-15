@@ -86,7 +86,8 @@ class GradientOptimizer implements Optimizer {
             (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     int iterationCounter = 0;
-    final coefficientsUpdates = MLVector.from(List.filled(numOfCoefficientVectors, double.maxFinite), isMutable: true);
+    final coefficientsUpdates = MLVector.filled(numOfCoefficientVectors, double.maxFinite,
+        isMutable: true, dtype: _dtype);
     final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
 
     while (!_convergenceDetector.isConverged(coefficientsUpdates, iterationCounter)) {
