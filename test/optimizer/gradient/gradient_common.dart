@@ -47,7 +47,8 @@ GradientOptimizer createOptimizer(
 
   final randomizerFactoryMock = RandomizerFactoryMock();
   final learningRateGeneratorFactoryMock = LearningRateGeneratorFactoryMock();
-  final initialWeightsGeneratorFactoryMock = InitialWeightsGeneratorFactoryMock();
+  final initialWeightsGeneratorFactoryMock =
+      InitialWeightsGeneratorFactoryMock();
   final convergenceDetectorFactoryMock = ConvergenceDetectorFactoryMock();
 
   when(randomizerFactoryMock.create(any)).thenReturn(randomizerMock);
@@ -97,6 +98,8 @@ void testOptimizer(Function callback(Optimizer optimizer), {
   int batchSize = 1,
   double minCoeffUpdate = 1e-100,
   double lambda = 0.0,
+  double eta,
+  bool verifyConvergenceDetectorCall = true,
 }) {
   when(convergenceDetectorMock.isConverged(any,
       argThat(inInclusiveRange(0, iterations - 1)))).thenReturn(false);
@@ -106,7 +109,13 @@ void testOptimizer(Function callback(Optimizer optimizer), {
       minCoeffUpdate: minCoeffUpdate,
       iterationsLimit: iterations,
       lambda: lambda,
+      eta: eta,
       batchSize: batchSize);
 
   callback(optimizer);
+
+  if (verifyConvergenceDetectorCall) {
+    verify(convergenceDetectorMock.isConverged(any, any))
+        .called(iterations + 1);
+  }
 }
