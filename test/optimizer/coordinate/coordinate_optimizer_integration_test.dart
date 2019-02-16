@@ -71,9 +71,9 @@ void main() {
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(regularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal weights for the given data', () {
       // actually, points in this example are not normalized
-      final weights =
-          optimizer.findExtrema(data, labels, arePointsNormalized: true)
-              .getRow(0);
+      final weights = optimizer
+          .findExtrema(data, labels, arePointsNormalized: true)
+          .getRow(0);
       expect(weights, equals([-4381770, -4493700, -4073630]));
     });
   });

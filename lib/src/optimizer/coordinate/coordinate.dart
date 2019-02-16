@@ -39,8 +39,8 @@ class CoordinateOptimizer implements Optimizer {
         _lambda = lambda ?? 0.0,
         _initialCoefficientsGenerator =
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
-        _convergenceDetector = convergenceDetectorFactory
-            .create(minCoefficientsDiff, iterationsLimit),
+        _convergenceDetector = convergenceDetectorFactory.create(
+            minCoefficientsDiff, iterationsLimit),
         _costFn = costFunctionFactory.fromType(costFunctionType);
 
   @override
@@ -57,8 +57,7 @@ class CoordinateOptimizer implements Optimizer {
       _coefficients = initialWeights;
     } else {
       final initialCoefSource = List<MLVector>.generate(numOfCoefficientVectors,
-              (int i) => _initialCoefficientsGenerator
-                  .generate(points.columnsNum));
+          (int i) => _initialCoefficientsGenerator.generate(points.columnsNum));
       _coefficients = MLMatrix.rows(initialCoefSource, dtype: _dtype);
     }
 
@@ -68,12 +67,12 @@ class CoordinateOptimizer implements Optimizer {
 
     while (!_convergenceDetector.isConverged(updates, iteration)) {
       final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
-      final diffs = MLVector.zero(points.columnsNum, isMutable: true,
-          dtype: _dtype);
+      final diffs =
+          MLVector.zero(points.columnsNum, isMutable: true, dtype: _dtype);
 
       for (int k = 0; k < numOfCoefficientVectors; k++) {
-        final newCoeffs = MLVector.zero(points.columnsNum, isMutable: true,
-            dtype: _dtype);
+        final newCoeffs =
+            MLVector.zero(points.columnsNum, isMutable: true, dtype: _dtype);
         final currCoeffs = _coefficients.getRow(k);
 
         for (int j = 0; j < points.columnsNum; j++) {

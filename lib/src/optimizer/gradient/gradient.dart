@@ -45,7 +45,8 @@ class GradientOptimizer implements Optimizer {
         const LearningRateGeneratorFactoryImpl(),
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
-    ConvergenceDetectorFactory convergenceDetectorFactory = const ConvergenceDetectorFactoryImpl(),
+    ConvergenceDetectorFactory convergenceDetectorFactory =
+        const ConvergenceDetectorFactoryImpl(),
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -64,7 +65,8 @@ class GradientOptimizer implements Optimizer {
             learningRateGeneratorFactory.fromType(learningRateType),
         _costFunction = costFunctionFactory.fromType(costFnType,
             dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
-        _convergenceDetector = convergenceDetectorFactory.create(minCoefficientsUpdate, iterationLimit),
+        _convergenceDetector = convergenceDetectorFactory.create(
+            minCoefficientsUpdate, iterationLimit),
         _dtype = dtype,
         _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
@@ -86,11 +88,13 @@ class GradientOptimizer implements Optimizer {
             (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     int iterationCounter = 0;
-    final coefficientsUpdates = MLVector.filled(numOfCoefficientVectors, double.maxFinite,
+    final coefficientsUpdates = MLVector.filled(
+        numOfCoefficientVectors, double.maxFinite,
         isMutable: true, dtype: _dtype);
     final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
 
-    while (!_convergenceDetector.isConverged(coefficientsUpdates, iterationCounter)) {
+    while (!_convergenceDetector.isConverged(
+        coefficientsUpdates, iterationCounter)) {
       final learningRate = _learningRateGenerator.getNextValue();
       for (int k = 0; k < numOfCoefficientVectors; k++) {
         final coefficients = _coefficients.getRow(k);

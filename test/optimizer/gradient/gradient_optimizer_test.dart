@@ -37,11 +37,14 @@ void main() {
   group('Gradient descent optimizer', () {
     tearDown(resetMockitoState);
 
-    test('should properly process `batchSize` parameter when '
+    test(
+        'should properly process `batchSize` parameter when '
         'the latter is equal to `1` (stochastic case)', () {
       final points = getPoints();
       final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);
-      final x = [[10.0, 20.0, 30.0]];
+      final x = [
+        [10.0, 20.0, 30.0]
+      ];
       final y = [30.0];
       final w1 = [0.0, 0.0, 0.0];
       final w2 = [-20.0, -20.0, -20.0];
@@ -65,7 +68,8 @@ void main() {
       }, iterations: 3, batchSize: 1);
     });
 
-    test('should properly process `batchSize` parameter when the latter is '
+    test(
+        'should properly process `batchSize` parameter when the latter is '
         'equal to `2` (mini batch case)', () {
       final points = getPoints();
       final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);
@@ -80,22 +84,20 @@ void main() {
           .thenReturn([0, 2]);
 
       when(costFunctionMock.getGradient(
-          argThat(equals(batch)),
-          any,
-          argThat(equals(y))))
+              argThat(equals(batch)), any, argThat(equals(y))))
           .thenReturn(MLVector.from(grad));
 
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
 
         verify(costFunctionMock.getGradient(
-            argThat(equals(batch)),
-            any,
-            argThat(equals(y)))).called(3); // 3 iterations
+                argThat(equals(batch)), any, argThat(equals(y))))
+            .called(3); // 3 iterations
       }, iterations: 3, batchSize: 2);
     });
 
-    test('should properly process `batchSize` parameter when the latter is '
+    test(
+        'should properly process `batchSize` parameter when the latter is '
         'equal to `4` (batch case)', () {
       final points = getPoints();
       final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);
@@ -109,12 +111,13 @@ void main() {
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
         verify(costFunctionMock.getGradient(
-            argThat(equals(points)), any, argThat(equals(labels))))
+                argThat(equals(points)), any, argThat(equals(labels))))
             .called(3); // 3 iterations
       }, iterations: 3, batchSize: 4);
     });
 
-    test('should cut the batch size parameter to make it equal to the number '
+    test(
+        'should cut the batch size parameter to make it equal to the number '
         'of given points', () {
       final iterationLimit = 3;
       final points = getPoints();
@@ -130,7 +133,7 @@ void main() {
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
         verify(costFunctionMock.getGradient(
-            argThat(equals(points)), any, argThat(equals(labels))))
+                argThat(equals(points)), any, argThat(equals(labels))))
             .called(iterationLimit);
         verify(learningRateGeneratorMock.getNextValue()).called(iterationLimit);
       }, batchSize: 15, iterations: iterationLimit);
@@ -186,8 +189,12 @@ void main() {
       final iterations = 3;
       testOptimizer((optimizer) {
         verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
-      }, iterations: iterations, batchSize: 1, lambda: 0.0,
-          eta: initialLearningRate, verifyConvergenceDetectorCall: false);
+      },
+          iterations: iterations,
+          batchSize: 1,
+          lambda: 0.0,
+          eta: initialLearningRate,
+          verifyConvergenceDetectorCall: false);
     });
   });
 }

@@ -85,7 +85,8 @@ class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
 
 class OptimizerMock extends Mock implements Optimizer {}
 
-class ConvergenceDetectorFactoryMock extends Mock implements ConvergenceDetectorFactory {}
+class ConvergenceDetectorFactoryMock extends Mock
+    implements ConvergenceDetectorFactory {}
 
 class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
