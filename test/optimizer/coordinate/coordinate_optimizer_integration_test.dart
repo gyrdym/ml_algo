@@ -5,6 +5,7 @@ import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
 import '../../test_utils/mocks.dart';
 
 /// L1 regularization, as known as Lasso, is aimed to penalize unimportant features, setting their weights to the zero,
@@ -101,15 +102,9 @@ void main() {
     ///
     test('should find optimal weights for the given test_data', () {
       final weights = optimizer.findExtrema(data, labels).getRow(0);
-      final w1 = weights[0];
-      final w2 = weights[1];
-      final w3 = weights[2];
-      final delta = 5.0;
-
-      expect(w1, closeTo(-81796400, delta));
-      expect(w2, closeTo(-81295300, delta));
-      expect(w3, closeTo(-85285400, delta));
-    }, skip: true);
+      final expected = [-81796400.0, -81295300.0, -85285400.0];
+      expect(weights, vectorAlmostEqualTo(expected, 5.0));
+    });
   });
 
   group('Coordinate descent optimizer (regularized case)', () {
@@ -207,14 +202,9 @@ void main() {
     test('should find optimal weights for the given test_data', () {
       // actually, points in this example are not normalized
       final weights =
-          optimizer.findExtrema(data, labels, arePointsNormalized: true).getRow(0);
-      final w1 = weights[0];
-      final w2 = weights[1];
-      final w3 = weights[2];
-
-      expect(w1, equals(-4381770));
-      expect(w2, equals(-4493700));
-      expect(w3, equals(-4073630));
-    }, skip: true);
+          optimizer.findExtrema(data, labels, arePointsNormalized: true)
+              .getRow(0);
+      expect(weights, equals([-4381770, -4493700, -4073630]));
+    });
   });
 }

@@ -65,22 +65,24 @@ class CoordinateOptimizer implements Optimizer {
     int iteration = 0;
 
     while (!_convergenceDetector.isConverged(changesByCoefVectors, iteration)) {
-      final updatedCoefficients =
-          List<double>.filled(points.columnsNum, 0.0, growable: false);
       final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
-      final changes = MLVector.filled(points.columnsNum, double.infinity, isMutable: true, dtype: _dtype);
+      final changes = MLVector.zero(points.columnsNum, isMutable: true,
+          dtype: _dtype);
 
       for (int k = 0; k < numOfCoefficientVectors; k++) {
-        final coefficients = _coefficients.getRow(k, tryCache: false, mutable: true);
-        for (int j = 0; j < coefficients.length; j++) {
-          final oldWeight = updatedCoefficients[j];
-          final newWeight =
-              _coordinateDescentStep(j, points, labels, coefficients);
-          changes[j] = (oldWeight - newWeight).abs();
-          coefficients[j] = newWeight;
+        final newCoeffs = MLVector.zero(points.columnsNum, isMutable: true,
+            dtype: _dtype);
+        final currCoeffs = _coefficients.getRow(k);
+
+        for (int j = 0; j < points.columnsNum; j++) {
+          final currCoef = currCoeffs[j];
+          final newCoef = _coordinateDescentStep(j, points, labels, currCoeffs);
+          changes[j] = (currCoef - newCoef).abs();
+          newCoeffs[j] = newCoef;
         }
+
         changesByCoefVectors[k] = changes.max();
-        coefficientsSource[k] = coefficients;
+        coefficientsSource[k] = newCoeffs;
       }
       // TODO: get rid of matrix instantiating here, use a list
       _coefficients = MLMatrix.rows(coefficientsSource, dtype: _dtype);
@@ -92,17 +94,15 @@ class CoordinateOptimizer implements Optimizer {
 
   double _coordinateDescentStep(int coefficientNum, MLMatrix points,
       MLVector labels, MLVector coefficients) {
-    final currentCoefficient = coefficients[coefficientNum];
-    double updatedCoefficient = currentCoefficient;
-
+    double coefficient = 0.0;
     for (int rowNum = 0; rowNum < points.rowsNum; rowNum++) {
       final point = points.getRow(rowNum);
       final output = labels[rowNum];
-      updatedCoefficient += _costFn.getSparseSolutionPartial(
+      coefficient += _costFn.getSparseSolutionPartial(
           coefficientNum, point, coefficients, output);
     }
 
-    return _regularize(updatedCoefficient, _lambda, coefficientNum);
+    return _regularize(coefficient, _lambda, coefficientNum);
   }
 
   double _regularize(double coefficient, double lambda, int coefNum) {
