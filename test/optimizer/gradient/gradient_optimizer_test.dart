@@ -35,10 +35,7 @@ void verifyGetGradientCall(CostFunction mock,
 
 void main() {
   group('Gradient descent optimizer', () {
-    tearDown(() {
-      verify(convergenceDetectorMock.isConverged(any, any)).called(4);
-      resetMockitoState();
-    });
+    tearDown(resetMockitoState);
 
     test('should properly process `batchSize` parameter when '
         'the latter is equal to `1` (stochastic case)', () {
@@ -184,73 +181,13 @@ void main() {
       }, iterations: 3, batchSize: 2, lambda: 10.0);
     });
 
-//    test('should consider `minCoefficientsUpdate` parameter', () {
-//      final minCoefficientsUpdate = 4.0;
-//      final points = MLMatrix.from([
-//        [1.0, 2.0, 3.0],
-//      ]);
-//      final labels = MLVector.from([1.0]);
-//      final optimizer = createOptimizer(
-//          minCoeffUpdate: minCoefficientsUpdate,
-//          iterationsLimit: 1000000,
-//          batchSize: 1,
-//          lambda: 0.0);
-//
-//      when(randomizerMock.getIntegerInterval(0, 1, intervalLength: 1))
-//          .thenReturn([0, 1]);
-//      when(costFunctionMock.getGradient(
-//        argThat(equals(points)),
-//        argThat(equals([0.0, 0.0, 0.0])),
-//        argThat(equals(labels)),
-//      )).thenReturn(MLVector.from([5.0, 5.0, 5.0]));
-//
-//      when(costFunctionMock.getGradient(
-//        argThat(equals(points)),
-//        argThat(equals([-10.0, -10.0, -10.0])),
-//        argThat(equals(labels)),
-//      )).thenReturn(MLVector.from([2.0, 2.0, 2.0]));
-//
-//      when(costFunctionMock.getGradient(
-//        argThat(equals(points)),
-//        argThat(equals([-14.0, -14.0, -14.0])),
-//        argThat(equals(labels)),
-//      )).thenReturn(MLVector.from([1.0, 1.0, 1.0]));
-//
-//      // c_1 = c_1_prev - eta * partial = 0 - 2 * 5 = -10
-//      // c_2 = c_2_prev - eta * partial = 0 - 2 * 5 = -10
-//      // c_3 = c_3_prev - eta * partial = 0 - 2 * 5 = -10
-//      //
-//      // c = [-10, -10, -10]
-//      // distance = sqrt((0 - (-10))^2 + (0 - (-10))^2 + (0 - (-10))^2) = sqrt(300) ~~ 17.32
-//      //
-//      // c_1 = c_1_prev - eta * partial = -10 - 2 * 2 = -14
-//      // c_2 = c_2_prev - eta * partial = -10 - 2 * 2 = -14
-//      // c_3 = c_3_prev - eta * partial = -10 - 2 * 2 = -14
-//      //
-//      // c = [-14, -14, -14]
-//      // distance = sqrt((-10 - (-14))^2 + (-10 - (-14))^2 + (-10 - (-14))^2) = sqrt(48) ~~ 6.92
-//      //
-//      // c_1 = c_1_prev - eta * partial = -14 - 2 * 1 = -16
-//      // c_2 = c_2_prev - eta * partial = -14 - 2 * 1 = -16
-//      // c_3 = c_3_prev - eta * partial = -14 - 2 * 1 = -16
-//      //
-//      // c = [-16, -16, -16]
-//      // distance = sqrt((-14 - (-16))^2 + (-14 - (-16))^2 + (-14 - (-16))^2) = sqrt(12) ~~ 3.46
-//      final coefficients = optimizer.findExtrema(points, labels);
-//      verify(learningRateGeneratorMock.getNextValue()).called(3);
-//      expect(coefficients.getRow(0).toList(), equals([-16.0, -16.0, -16.0]));
-//      expect(coefficients.rowsNum, 1);
-//    });
-//
-//    test('should consider `learningRate` parameter', () {
-//      final initialLearningRate = 10.0;
-//      createOptimizer(
-//          minCoeffUpdate: 1e-100,
-//          iterationsLimit: 3,
-//          batchSize: 1,
-//          lambda: 0.0,
-//          eta: initialLearningRate);
-//      verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
-//    }, skip: true);
+    test('should consider `learningRate` parameter', () {
+      final initialLearningRate = 10.0;
+      final iterations = 3;
+      testOptimizer((optimizer) {
+        verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
+      }, iterations: iterations, batchSize: 1, lambda: 0.0,
+          eta: initialLearningRate, verifyConvergenceDetectorCall: false);
+    });
   });
 }
