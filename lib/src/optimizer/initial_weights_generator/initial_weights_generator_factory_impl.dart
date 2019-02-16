@@ -16,7 +16,7 @@ class InitialWeightsGeneratorFactoryImpl
       case InitialWeightsType.zeroes:
         return zeroes(dtype);
       default:
-        throw UnimplementedError();
+        throw UnsupportedError('Unsupported initial weights type - $type');
     }
   }
 }

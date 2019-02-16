@@ -1,10 +1,11 @@
-import 'dart:math' as math;
-
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
@@ -14,14 +15,10 @@ import 'package:ml_linalg/linalg.dart';
 
 class CoordinateOptimizer implements Optimizer {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
+  final ConvergenceDetector _convergenceDetector;
   final CostFunction _costFn;
   final Type _dtype;
-
-  //hyper parameters declaration
-  final double _coefficientDiffThreshold;
-  final int _iterationLimit;
   final double _lambda;
-  //hyper parameters declaration end
 
   MLMatrix _coefficients;
   MLVector _normalizer;
@@ -30,18 +27,20 @@ class CoordinateOptimizer implements Optimizer {
     Type dtype = DefaultParameterValues.dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
+    ConvergenceDetectorFactory convergenceDetectorFactory =
+        const ConvergenceDetectorFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     double minCoefficientsDiff = DefaultParameterValues.minCoefficientsUpdate,
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double lambda,
-    InitialWeightsType initialWeightsType,
-    CostFunctionType costFunctionType,
+    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+    CostFunctionType costFunctionType = CostFunctionType.squared,
   })  : _dtype = dtype,
-        _iterationLimit = iterationsLimit,
-        _coefficientDiffThreshold = minCoefficientsDiff,
         _lambda = lambda ?? 0.0,
         _initialCoefficientsGenerator =
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
+        _convergenceDetector = convergenceDetectorFactory.create(
+            minCoefficientsDiff, iterationsLimit),
         _costFn = costFunctionFactory.fromType(costFunctionType);
 
   @override
@@ -54,31 +53,37 @@ class CoordinateOptimizer implements Optimizer {
         ? MLVector.filled(points.columnsNum, 1.0, dtype: _dtype)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
-    _coefficients = initialWeights ??
-        MLMatrix.rows(List<MLVector>.generate(
-            numOfCoefficientVectors,
-            (int i) =>
-                _initialCoefficientsGenerator.generate(points.columnsNum)));
+    if (initialWeights != null) {
+      _coefficients = initialWeights;
+    } else {
+      final initialCoefSource = List<MLVector>.generate(numOfCoefficientVectors,
+          (int i) => _initialCoefficientsGenerator.generate(points.columnsNum));
+      _coefficients = MLMatrix.rows(initialCoefSource, dtype: _dtype);
+    }
 
-    final changes = List<double>.filled(points.columnsNum, double.infinity);
+    final updates = MLVector.filled(numOfCoefficientVectors, double.infinity,
+        isMutable: true, dtype: _dtype);
     int iteration = 0;
 
-    while (!_isConverged(changes, iteration)) {
-      final updatedCoefficients =
-          List<double>.filled(points.columnsNum, 0.0, growable: false);
+    while (!_convergenceDetector.isConverged(updates, iteration)) {
       final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
+      final diffs =
+          MLVector.zero(points.columnsNum, isMutable: true, dtype: _dtype);
 
       for (int k = 0; k < numOfCoefficientVectors; k++) {
-        var coefficients = _coefficients.getRow(k);
-        for (int j = 0; j < coefficients.length; j++) {
-          final oldWeight = updatedCoefficients[j];
-          final newWeight =
-              _coordinateDescentStep(j, points, labels, coefficients);
-          changes[j] = (oldWeight - newWeight).abs();
-          updatedCoefficients[j] = newWeight;
-          coefficients = MLVector.from(updatedCoefficients, dtype: _dtype);
+        final newCoeffs =
+            MLVector.zero(points.columnsNum, isMutable: true, dtype: _dtype);
+        final currCoeffs = _coefficients.getRow(k);
+
+        for (int j = 0; j < points.columnsNum; j++) {
+          final currCoef = currCoeffs[j];
+          final newCoef = _optimizeCoordinate(j, points, labels, currCoeffs);
+          diffs[j] = (currCoef - newCoef).abs();
+          newCoeffs[j] = newCoef;
         }
-        coefficientsSource[k] = coefficients;
+
+        updates[k] = diffs.max();
+        coefficientsSource[k] = newCoeffs;
       }
       // TODO: get rid of matrix instantiating here, use a list
       _coefficients = MLMatrix.rows(coefficientsSource, dtype: _dtype);
@@ -88,44 +93,29 @@ class CoordinateOptimizer implements Optimizer {
     return _coefficients;
   }
 
-  bool _isConverged(List<double> changes, int iterationCount) =>
-      _coefficientDiffThreshold != null &&
-          changes.reduce((double maxValue, double value) =>
-                  math.max<double>(maxValue ?? 0.0, value)) <=
-              _coefficientDiffThreshold ||
-      iterationCount >= _iterationLimit;
-
-  double _coordinateDescentStep(int coefficientNum, MLMatrix points,
+  double _optimizeCoordinate(int coefficientNum, MLMatrix points,
       MLVector labels, MLVector coefficients) {
-    final currentCoefficient = coefficients[coefficientNum];
-    double updatedCoefficient = currentCoefficient;
-
+    double coefficient = 0.0;
     for (int rowNum = 0; rowNum < points.rowsNum; rowNum++) {
       final point = points.getRow(rowNum);
       final output = labels[rowNum];
-      updatedCoefficient += _costFn.getSparseSolutionPartial(
+      coefficient += _costFn.getSparseSolutionPartial(
           coefficientNum, point, coefficients, output);
     }
-
-    return _regularize(updatedCoefficient, _lambda, coefficientNum);
+    return _regularize(coefficient, _lambda, coefficientNum);
   }
 
   double _regularize(double coefficient, double lambda, int coefNum) {
     if (lambda == 0.0) {
       return coefficient;
     }
-
     final threshold = lambda / 2;
-    double regularized;
-
+    double regularized = 0.0;
     if (coefficient > threshold) {
       regularized = (coefficient - threshold) / _normalizer[coefNum];
     } else if (coefficient < -threshold) {
       regularized = (coefficient + threshold) / _normalizer[coefNum];
-    } else {
-      regularized = 0.0;
     }
-
     return regularized;
   }
 }

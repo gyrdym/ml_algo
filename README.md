@@ -6,11 +6,11 @@
 # Machine learning algorithms with dart
 
 **Table of contents**
-- [What for is the library?](#what-for-is-the-library)
+- [What for is the library?](#what-is-the-ml_algo-for)
 - [The library's structure](#the-librarys-structure)
 - [Usage](#usage)
 
-## What for is the library?
+## What is the ml_algo for?
 
 The main purpose of the library - to give developers, interested both in Dart language and data science, native Dart 
 implementation of machine learning algorithms. This library targeted to dart vm, so, to get smoothest experience with 

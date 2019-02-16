@@ -14,6 +14,8 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
@@ -82,6 +84,11 @@ class InterceptPreprocessorMock extends Mock implements InterceptPreprocessor {}
 class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
 
 class OptimizerMock extends Mock implements Optimizer {}
+
+class ConvergenceDetectorFactoryMock extends Mock
+    implements ConvergenceDetectorFactory {}
+
+class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
 class MLDataValueConverterMockWithImpl extends Mock
     implements MLDataValueConverter {

@@ -8,44 +8,57 @@ import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 /// A factory for all the linear regressors.
 ///
 /// A typical linear regressor uses the equation of a line for multidimensional
-/// space to make a prediction. Each `x` in the equation has its own coefficient (weight) and the combination of these
-/// `x`-es and its coefficients gives the `y` term. The latter is a thing, that the regressor should predict, and
-/// as one knows all the `x` values (since it is the input for the algorithm), the regressor should find the best
-/// coefficients (weights) (they are unknown) to make a best prediction of `y` term.
+/// space to make a prediction. Each `x` in the equation has its own coefficient
+/// (weight) and the combination of these `x`-es and its coefficients gives the
+/// `y` term. The latter is a thing, that the regressor should predict, and
+/// as one knows all the `x` values (since it is the input for the algorithm),
+/// the regressor should find the best coefficients (weights) (they are unknown)
+/// to make a best prediction of `y` term.
 abstract class LinearRegressor implements Predictor {
   /**
-   * Creates a gradient linear regressor. Uses gradient descent optimizer to find the optimal weights
+   * Creates a gradient linear regressor. Uses gradient descent optimizer to
+   * find the optimal weights
    *
    * Parameters:
    *
-   * [iterationsLimit] A number of fitting iterations. Uses as a condition of convergence in the optimizer. Default
+   * [iterationsLimit] A number of fitting iterations. Uses as a condition of
+   * convergence in the optimizer. Default
    * value is `100`
    *
-   * [initialLearningRate] A value, defining velocity of the convergence of the gradient descent optimizer.
+   * [initialLearningRate] A value, defining velocity of the convergence of the
+   * gradient descent optimizer.
    *
-   * [minWeightsUpdate] A minimum distance between weights vectors in two subsequent iterations. Uses as a condition
-   * of convergence in the optimizer. In other words, if difference is small, there is no reason to continue fitting.
-   * Default value is `1e-12`
+   * [minWeightsUpdate] A minimum distance between weights vectors in two
+   * subsequent iterations. Uses as a condition of convergence in the optimizer.
+   * In other words, if difference is small, there is no reason to continue
+   * fitting. Default value is `1e-12`
    *
-   * [lambda] A coefficient for regularization. For this particular regressor there is only L2 regularization type.
+   * [lambda] A coefficient for regularization. For this particular regressor
+   * there is only L2 regularization type.
    *
-   * [randomSeed] A seed, that will be passed to a random value generator, used by stochastic optimizers. Will be
-   * ignored, if the optimizer is not stochastic. Remember, each time you run the regressor with the same parameters,
-   * you will receive a different result. To avoid it, define [randomSeed]
+   * [randomSeed] A seed, that will be passed to a random value generator, used
+   * by stochastic optimizers. Will be ignored, if the optimizer is not
+   * stochastic. Remember, each time you run the regressor with the same
+   * parameters, you will receive a different result. To avoid it, define
+   * [randomSeed]
    *
-   * [batchSize] A size of data (in rows), that will be used for fitting per one iteration.
+   * [batchSize] A size of data (in rows), that will be used for fitting per
+   * one iteration.
    *
-   * [fitIntercept] Whether or not to fit intercept term. Default value is false.
+   * [fitIntercept] Whether or not to fit intercept term. Default value is
+   * `false`.
    *
    * [interceptScale] A value, defining a size of the intercept term
    *
-   * [learningRateType] A value, defining a strategy for the learning rate behaviour throughout the whole fitting
-   * process
+   * [learningRateType] A value, defining a strategy for the learning rate
+   * behaviour throughout the whole fitting process
    *
-   * [gradientType] A type of gradient descent optimizer (stochastic, mini batch, batch)
+   * [gradientType] A type of gradient descent optimizer (stochastic, mini
+   * batch, batch)
    *
-   * [dtype] A data type for all the numeric values, used by the algorithm. Can affect performance or accuracy of the
-   * computations. Default value is [Float32x4]
+   * [dtype] A data type for all the numeric values, used by the algorithm.
+   * Can affect performance or accuracy of the computations. Default value is
+   * [Float32x4]
    */
   factory LinearRegressor.gradient({
     int iterationsLimit,
@@ -63,27 +76,33 @@ abstract class LinearRegressor implements Predictor {
   }) = GradientRegressor;
 
   /**
-   * Creates a linear regressor with a coordinate descent optimizer to use L1 regularization.
+   * Creates a linear regressor with a coordinate descent optimizer to use L1
+   * regularization.
    *
-   * L1 regularization allows to select more important features, make less important as zeroes.
+   * L1 regularization allows to select more important features, make less
+   * important as zeroes.
    *
    * Parameters:
    *
-   * [iterationsLimit] A number of fitting iterations. Uses as a condition of convergence in the optimizer. Default
-   * value is `100`
+   * [iterationsLimit] A number of fitting iterations. Uses as a condition of
+   * convergence in the optimizer. Default value is `100`
    *
-   * [minWeightsUpdate] A minimum distance between weights vectors in two subsequent iterations. Uses as a condition
-   * of convergence in the optimizer. In other words, if difference is small, there is no reason to continue fitting.
-   * Default value is `1e-12`
+   * [minWeightsUpdate] A minimum distance between weights vectors in two
+   * subsequent iterations. Uses as a condition of convergence in the optimizer.
+   * In other words, if difference is small, there is no reason to continue
+   * fitting. Default value is `1e-12`
    *
-   * [lambda] A coefficient for regularization. For this particular regressor there is only L1 regularization type.
+   * [lambda] A coefficient for regularization. For this particular regressor
+   * there is only L1 regularization type.
    *
-   * [fitIntercept] Whether or not to fit intercept term. Default value is false.
+   * [fitIntercept] Whether or not to fit intercept term. Default value is
+   * `false`.
    *
    * [interceptScale] A value, defining a size of the intercept term
    *
-   * [dtype] A data type for all the numeric values, used by the algorithm. Can affect performance or accuracy of the
-   * computations. Default value is [Float32x4]
+   * [dtype] A data type for all the numeric values, used by the algorithm.
+   * Can affect performance or accuracy of the computations. Default value is
+   * [Float32x4]
    */
   factory LinearRegressor.lasso({
     int iterationsLimit,
