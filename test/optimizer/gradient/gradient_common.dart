@@ -57,7 +57,7 @@ GradientOptimizer createOptimizer(
   when(initialWeightsGeneratorFactoryMock.fromType(any, any))
       .thenReturn(initialWeightsGeneratorMock);
   when(costFunctionFactoryMock.fromType(CostFunctionType.squared,
-      dtype: Float32x4, scoreToProbMapperType: null))
+          dtype: Float32x4, scoreToProbMapperType: null))
       .thenReturn(costFunctionMock);
   when(convergenceDetectorFactoryMock.create(any, any))
       .thenReturn(convergenceDetectorMock);
@@ -93,7 +93,8 @@ void mockGetGradient(CostFunction mock,
   )).thenReturn(MLVector.from(gradient ?? []));
 }
 
-void testOptimizer(Function callback(Optimizer optimizer), {
+void testOptimizer(
+  Function callback(Optimizer optimizer), {
   int iterations,
   int batchSize = 1,
   double minCoeffUpdate = 1e-100,
@@ -101,8 +102,9 @@ void testOptimizer(Function callback(Optimizer optimizer), {
   double eta,
   bool verifyConvergenceDetectorCall = true,
 }) {
-  when(convergenceDetectorMock.isConverged(any,
-      argThat(inInclusiveRange(0, iterations - 1)))).thenReturn(false);
+  when(convergenceDetectorMock.isConverged(
+          any, argThat(inInclusiveRange(0, iterations - 1))))
+      .thenReturn(false);
   when(convergenceDetectorMock.isConverged(any, iterations)).thenReturn(true);
 
   final optimizer = createOptimizer(
