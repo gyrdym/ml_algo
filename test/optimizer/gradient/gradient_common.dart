@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:matcher/matcher.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -12,6 +11,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
 import '../../test_utils/mocks.dart';
