@@ -115,7 +115,7 @@ class GradientOptimizer implements Optimizer {
   }
 
   MLVector _generateCoefficients(
-      MLVector currentCoefficients, MLVector labels, double eta, int batchSize,
+      MLVector coefficients, MLVector labels, double eta, int batchSize,
       {bool isMinimization = true}) {
     final range = _getBatchRange(batchSize);
     final start = range.first;
@@ -123,7 +123,7 @@ class GradientOptimizer implements Optimizer {
     final pointsBatch = _points.submatrix(rows: Range(start, end));
     final labelsBatch = labels.subvector(start, end);
 
-    return _makeGradientStep(currentCoefficients, pointsBatch, labelsBatch, eta,
+    return _makeGradientStep(coefficients, pointsBatch, labelsBatch, eta,
         isMinimization: isMinimization);
   }
 

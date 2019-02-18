@@ -1,5 +1,8 @@
 # Changelog
 
+## 7.2.0
+- `SoftmaxMapper` added (aka Softmax activation function)
+
 ## 7.1.0
 - `ConvergenceDetector` added (this entity stops the optimizer when it is needed)
 
