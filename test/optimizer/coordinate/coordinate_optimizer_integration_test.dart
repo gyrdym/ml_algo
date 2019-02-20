@@ -23,7 +23,7 @@ void main() {
 
     CoordinateOptimizer optimizer;
     MLMatrix data;
-    MLVector labels;
+    MLMatrix labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -34,7 +34,7 @@ void main() {
           lambda: lambda);
 
       data = MLMatrix.from([point1, point2, point3, point4]);
-      labels = MLVector.from([20.0, 30.0, 20.0, 40.0]);
+      labels = MLMatrix.from([[20.0, 30.0, 20.0, 40.0]]);
     });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(unregularized-case)-should-find-optimal-weights-for-the-given-data]
@@ -55,7 +55,7 @@ void main() {
 
     CoordinateOptimizer optimizer;
     MLMatrix data;
-    MLVector labels;
+    MLMatrix labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -65,7 +65,7 @@ void main() {
           lambda: lambda);
 
       data = MLMatrix.from([point1, point2, point3]);
-      labels = MLVector.from([2.0, 3.0, 2.0]);
+      labels = MLMatrix.from([[2.0, 3.0, 2.0]]);
     });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(regularized-case)-should-find-optimal-weights-for-the-given-data]

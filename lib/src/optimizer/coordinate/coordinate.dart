@@ -44,7 +44,7 @@ class CoordinateOptimizer implements Optimizer {
         _costFn = costFunctionFactory.fromType(costFunctionType);
 
   @override
-  MLMatrix findExtrema(MLMatrix points, MLVector labels,
+  MLMatrix findExtrema(MLMatrix points, MLMatrix labels,
       {int numOfCoefficientVectors = 1,
       MLMatrix initialWeights,
       bool isMinimizingObjective = true,
@@ -61,48 +61,29 @@ class CoordinateOptimizer implements Optimizer {
       _coefficients = MLMatrix.rows(initialCoefSource, dtype: _dtype);
     }
 
-    final updates = MLVector.filled(numOfCoefficientVectors, double.infinity,
-        isMutable: true, dtype: _dtype);
     int iteration = 0;
-
-    while (!_convergenceDetector.isConverged(updates, iteration)) {
-      final coefficientsSource = List<MLVector>(numOfCoefficientVectors);
-      final diffs =
-          MLVector.zero(points.columnsNum, isMutable: true, dtype: _dtype);
-
-      for (int k = 0; k < numOfCoefficientVectors; k++) {
-        final newCoeffs =
-            MLVector.zero(points.columnsNum, isMutable: true, dtype: _dtype);
-        final currCoeffs = _coefficients.getRow(k);
-
-        for (int j = 0; j < points.columnsNum; j++) {
-          final currCoef = currCoeffs[j];
-          final newCoef = _optimizeCoordinate(j, points, labels, currCoeffs);
-          diffs[j] = (currCoef - newCoef).abs();
-          newCoeffs[j] = newCoef;
-        }
-
-        updates[k] = diffs.max();
-        coefficientsSource[k] = newCoeffs;
+    final diffs = MLVector.filled(numOfCoefficientVectors, double.infinity,
+        isMutable: true, dtype: _dtype);
+    while (!_convergenceDetector.isConverged(diffs.max(), iteration)) {
+      for (int j = 0; j < points.columnsNum; j++) {
+        final jCoeffs = _coefficients.getColumn(j);
+        final newJCoeffs = _optimizeCoordinate(j, points, labels,
+            _coefficients);
+        // TODO improve diff calculation way
+        diffs[j] = jCoeffs.distanceTo(newJCoeffs);
+        _coefficients.setColumn(j, jCoeffs);
       }
-      // TODO: get rid of matrix instantiating here, use a list
-      _coefficients = MLMatrix.rows(coefficientsSource, dtype: _dtype);
       iteration++;
     }
 
     return _coefficients;
   }
 
-  double _optimizeCoordinate(int coefficientNum, MLMatrix points,
-      MLVector labels, MLVector coefficients) {
-    double coefficient = 0.0;
-    for (int rowNum = 0; rowNum < points.rowsNum; rowNum++) {
-      final point = points.getRow(rowNum);
-      final output = labels[rowNum];
-      coefficient += _costFn.getSparseSolutionPartial(
-          coefficientNum, point, coefficients, output);
-    }
-    return _regularize(coefficient, _lambda, coefficientNum);
+  MLVector _optimizeCoordinate(int coordIdx, MLMatrix x, MLMatrix y, MLMatrix w) {
+    final coefficients = _costFn.getSubDerivative(coordIdx, x, w, y);
+    return MLVector
+        // TODO Convert the logic into SIMD-way (SIMD way mapping)
+        .from(coefficients.map((coef) => _regularize(coef, _lambda, coordIdx)));
   }
 
   double _regularize(double coefficient, double lambda, int coefNum) {

@@ -26,19 +26,10 @@ class LogLikelihoodCost implements CostFunction {
   }
 
   @override
-  MLVector getGradient(MLMatrix x, MLVector w, MLVector y) {
-    final scores = (x * w).toVector();
-    switch (dtype) {
-      case Float32x4:
-        return (x.transpose() *
-                (y - scoreToProbMapper.linkScoresToProbs(scores)))
-            .toVector();
-      default:
-        throw throw UnsupportedError('Unsupported data type - $dtype');
-    }
-  }
+  MLMatrix getGradient(MLMatrix x, MLMatrix w, MLMatrix y) =>
+    x.transpose() * (y - scoreToProbMapper.linkScoresToProbs(x * w));
 
   @override
-  double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y) =>
+  MLVector getSubDerivative(int wIdx, MLMatrix x, MLMatrix w, MLMatrix y) =>
       throw UnimplementedError();
 }

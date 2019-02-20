@@ -1,10 +1,10 @@
 import 'package:logging/logging.dart';
-import 'package:ml_algo/src/common/error_logger_mixin.dart';
+import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
 class MLDataLabelsExtractorImpl extends Object
-    with ErrorLoggerMixin
+    with LoggerMixin
     implements MLDataLabelsExtractor {
   static const String wrongReadMaskLengthMsg =
       'Rows read mask for label column should not be greater than the number '
