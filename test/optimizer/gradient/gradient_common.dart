@@ -9,6 +9,7 @@ import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -90,7 +91,7 @@ void mockGetGradient(CostFunction mock,
     x == null ? any : argThat(matrixAlmostEqualTo(x)),
     w == null ? any : argThat(vectorAlmostEqualTo(w)),
     y == null ? any : argThat(vectorAlmostEqualTo(y)),
-  )).thenReturn(MLVector.from(gradient ?? []));
+  )).thenReturn(MLMatrix.from([gradient.toList() ?? []]));
 }
 
 void testOptimizer(

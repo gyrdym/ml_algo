@@ -1,11 +1,11 @@
 import 'package:logging/logging.dart';
-import 'package:ml_algo/src/common/error_logger_mixin.dart';
+import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
 class MLDataFeaturesExtractorImpl extends Object
-    with ErrorLoggerMixin
+    with LoggerMixin
     implements MLDataFeaturesExtractor {
   static const String rowsMaskWrongLengthMsg =
       'Rows mask length should not be greater than actual rows number in the dataset!';
