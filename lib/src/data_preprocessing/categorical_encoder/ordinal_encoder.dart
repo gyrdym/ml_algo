@@ -2,6 +2,7 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_valu
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
+import 'package:ml_linalg/matrix.dart';
 
 class OrdinalEncoder implements CategoricalDataEncoder {
   @override
@@ -18,7 +19,7 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   }) : _valuesExtractor = valuesExtractor;
 
   @override
-  Iterable<double> encode(Object value) {
+  Iterable<double> encodeSingle(Object value) {
     if (!_values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
         throw UnsupportedError('Ordinal encoding: unsupported value `$value`');
@@ -35,5 +36,10 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   @override
   void setCategoryValues(List<Object> values) {
     _values ??= _valuesExtractor.extractCategoryValues(values);
+  }
+
+  @override
+  MLMatrix encodeAll(Iterable<Object> values) {
+    throw UnimplementedError();
   }
 }

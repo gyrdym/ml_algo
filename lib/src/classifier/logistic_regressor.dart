@@ -135,8 +135,9 @@ class LogisticRegressor implements LinearClassifier {
     final distributions = List<MLVector>(numOfObservations);
     int i = 0;
     _weightsByClasses.forEach((double label, MLVector weights) {
-      final scores = (processedFeatures * weights).toVector();
-      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores);
+      final scores = processedFeatures * weights;
+      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores)
+          .toVector();
     });
     return MLMatrix.columns(distributions, dtype: dtype);
   }
@@ -146,7 +147,7 @@ class LogisticRegressor implements LinearClassifier {
     final binaryLabels =
         labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
     return optimizer
-        .findExtrema(features, binaryLabels,
+        .findExtrema(features, MLMatrix.columns([binaryLabels]),
             initialWeights:
                 initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
             arePointsNormalized: arePointsNormalized,

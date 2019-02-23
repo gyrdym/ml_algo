@@ -3,6 +3,8 @@ import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
@@ -31,6 +33,7 @@ class SoftmaxRegressor implements LinearClassifier {
   final InterceptPreprocessor interceptPreprocessor;
   final LabelsProcessor labelsProcessor;
   final ScoreToProbMapper scoreToProbMapper;
+  final CategoricalDataEncoder dataEncoder;
 
   SoftmaxRegressor({
     // public arguments
@@ -58,11 +61,15 @@ class SoftmaxRegressor implements LinearClassifier {
     const ScoreToProbMapperFactoryImpl(),
     OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
-  })  : labelsProcessor = labelsProcessorFactory.create(dtype),
+    CategoricalDataEncoderFactory categoricalDataEncoderFactory =
+    const CategoricalDataEncoderFactory(),
+  })
+      : labelsProcessor = labelsProcessorFactory.create(dtype),
         interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
             scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =
         scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
+        dataEncoder = categoricalDataEncoderFactory.oneHot(),
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
@@ -83,6 +90,8 @@ class SoftmaxRegressor implements LinearClassifier {
   @override
   MLVector get weights => null;
 
+  MLMatrix _weights;
+
   @override
   Map<double, MLVector> get weightsByClasses => _weightsByClasses;
   Map<double, MLVector> _weightsByClasses;
@@ -96,7 +105,8 @@ class SoftmaxRegressor implements LinearClassifier {
       {MLVector initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    _weightsByClasses = _learnWeights(processedFeatures, labels, initialWeights, isDataNormalized);
+    _weights = _learnWeights(
+        processedFeatures, labels, initialWeights, isDataNormalized);
   }
 
   @override
@@ -124,23 +134,16 @@ class SoftmaxRegressor implements LinearClassifier {
     return MLVector.from(classes, dtype: dtype);
   }
 
-  MLMatrix _predictProbabilities(MLMatrix processedFeatures) {
-    final numOfObservations = _weightsByClasses.length;
-    final distributions = List<MLVector>(numOfObservations);
-    int i = 0;
-    _weightsByClasses.forEach((double label, MLVector weights) {
-      final scores = (processedFeatures * weights).toVector();
-      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores);
-    });
-    return MLMatrix.columns(distributions, dtype: dtype);
-  }
+  MLMatrix _predictProbabilities(MLMatrix processedFeatures) =>
+      scoreToProbMapper.linkScoresToProbs(processedFeatures * _weights);
 
   MLMatrix _learnWeights(MLMatrix features, MLVector labels,
-      MLVector initialWeights, bool arePointsNormalized) =>
-    optimizer
-        .findExtrema(features, labels,
-        initialWeights:
-        initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
+      MLVector initialWeights, bool arePointsNormalized) {
+    final oneHotEncodedLabels = dataEncoder.encodeAll(labels);
+    return optimizer
+        .findExtrema(features, oneHotEncodedLabels,
+        initialWeights: initialWeights != null
+            ? MLMatrix.rows([initialWeights]) : null,
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
   }

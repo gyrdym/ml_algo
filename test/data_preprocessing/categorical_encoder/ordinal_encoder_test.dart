@@ -22,8 +22,8 @@ void main() {
           extractor: valuesExtractor,
           values: [],
           type: CategoricalDataEncoderType.ordinal);
-      expect(encoder.encode(20), equals([1]));
-      expect(encoder.encode(10), equals([2]));
+      expect(encoder.encodeSingle(20), equals([1]));
+      expect(encoder.encodeSingle(10), equals([2]));
     });
 
     test('should encode string categorical test_data', () {
@@ -34,10 +34,10 @@ void main() {
           extractor: valuesExtractor,
           values: [],
           type: CategoricalDataEncoderType.ordinal);
-      expect(encoder.encode('group A'), equals([1]));
-      expect(encoder.encode('group B'), equals([2]));
-      expect(encoder.encode('group C'), equals([3]));
-      expect(encoder.encode('group D'), equals([4]));
+      expect(encoder.encodeSingle('group A'), equals([1]));
+      expect(encoder.encodeSingle('group B'), equals([2]));
+      expect(encoder.encodeSingle('group C'), equals([3]));
+      expect(encoder.encodeSingle('group D'), equals([4]));
     });
 
     test('should encode boolean categorical test_data', () {
@@ -48,8 +48,8 @@ void main() {
           extractor: valuesExtractor,
           values: [],
           type: CategoricalDataEncoderType.ordinal);
-      expect(encoder.encode(true), equals([1]));
-      expect(encoder.encode(false), equals([2]));
+      expect(encoder.encodeSingle(true), equals([1]));
+      expect(encoder.encodeSingle(false), equals([2]));
     });
 
     test(
@@ -62,7 +62,7 @@ void main() {
           extractor: valuesExtractor,
           values: [],
           type: CategoricalDataEncoderType.ordinal);
-      expect(() => encoder.encode(234), throwsUnsupportedError);
+      expect(() => encoder.encodeSingle(234), throwsUnsupportedError);
     });
 
     test(
@@ -75,7 +75,7 @@ void main() {
           extractor: valuesExtractor,
           values: [],
           type: CategoricalDataEncoderType.ordinal);
-      expect(encoder.encode(21), equals([0]));
+      expect(encoder.encodeSingle(21), equals([0]));
     });
   });
 }
