@@ -19,8 +19,8 @@ void main() {
           strategy: EncodeUnknownValueStrategy.returnZeroes,
           extractor: valuesExtractor,
           values: []);
-      expect(encoder.encode(1), equals([1, 0]));
-      expect(encoder.encode(2), equals([0, 1]));
+      expect(encoder.encodeSingle(1), equals([1, 0]));
+      expect(encoder.encodeSingle(2), equals([0, 1]));
     });
 
     test('should encode string categorical test_data', () {
@@ -30,10 +30,10 @@ void main() {
           strategy: EncodeUnknownValueStrategy.returnZeroes,
           extractor: valuesExtractor,
           values: []);
-      expect(encoder.encode('group A'), equals([1, 0, 0, 0]));
-      expect(encoder.encode('group B'), equals([0, 1, 0, 0]));
-      expect(encoder.encode('group C'), equals([0, 0, 1, 0]));
-      expect(encoder.encode('group D'), equals([0, 0, 0, 1]));
+      expect(encoder.encodeSingle('group A'), equals([1, 0, 0, 0]));
+      expect(encoder.encodeSingle('group B'), equals([0, 1, 0, 0]));
+      expect(encoder.encodeSingle('group C'), equals([0, 0, 1, 0]));
+      expect(encoder.encodeSingle('group D'), equals([0, 0, 0, 1]));
     });
 
     test('should encode boolean categorical test_data', () {
@@ -43,8 +43,8 @@ void main() {
           strategy: EncodeUnknownValueStrategy.returnZeroes,
           extractor: valuesExtractor,
           values: []);
-      expect(encoder.encode(true), equals([1, 0]));
-      expect(encoder.encode(false), equals([0, 1]));
+      expect(encoder.encodeSingle(true), equals([1, 0]));
+      expect(encoder.encodeSingle(false), equals([0, 1]));
     });
 
     test(
@@ -56,7 +56,7 @@ void main() {
           strategy: EncodeUnknownValueStrategy.throwError,
           extractor: valuesExtractor,
           values: []);
-      expect(() => encoder.encode(234), throwsUnsupportedError);
+      expect(() => encoder.encodeSingle(234), throwsUnsupportedError);
     });
 
     test(
@@ -68,7 +68,7 @@ void main() {
           strategy: EncodeUnknownValueStrategy.returnZeroes,
           extractor: valuesExtractor,
           values: []);
-      expect(encoder.encode(21), equals([0, 0]));
+      expect(encoder.encodeSingle(21), equals([0, 0]));
     });
   });
 }

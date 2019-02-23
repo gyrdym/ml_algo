@@ -82,16 +82,17 @@ GradientOptimizer createOptimizer(
   return opt;
 }
 
-void mockGetGradient(CostFunction mock,
-    {Iterable<Iterable<double>> x,
-    Iterable<double> w,
-    Iterable<double> y,
-    Iterable<double> gradient}) {
+void mockGetGradient(CostFunction mock, {
+  Iterable<Iterable<double>> x,
+  Iterable<Iterable<double>> w,
+  Iterable<Iterable<double>> y,
+  MLMatrix gradient
+}) {
   when(mock.getGradient(
     x == null ? any : argThat(matrixAlmostEqualTo(x)),
-    w == null ? any : argThat(vectorAlmostEqualTo(w)),
-    y == null ? any : argThat(vectorAlmostEqualTo(y)),
-  )).thenReturn(MLMatrix.from([gradient.toList() ?? []]));
+    w == null ? any : argThat(matrixAlmostEqualTo(w)),
+    y == null ? any : argThat(matrixAlmostEqualTo(y)),
+  )).thenReturn(gradient ?? MLMatrix.from([[]]));
 }
 
 void testOptimizer(

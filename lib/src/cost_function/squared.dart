@@ -18,9 +18,9 @@ class SquaredCost implements CostFunction {
             (i) => Range(j, j, endInclusive: true)));
     final xWithoutJ = _excludeColumn(x, j);
     final wWithoutJ = _excludeColumn(w, j);
-    final predictionWithoutJ = xWithoutJ * wWithoutJ;
-    // not a matrix mul!!!
-    return (xj * (y - predictionWithoutJ)).reduceRows((sum, row) => sum + row);
+    final predictionWithoutJ = xWithoutJ * wWithoutJ.transpose();
+    return (xj.transpose() * (y - predictionWithoutJ))
+        .reduceRows((sum, row) => sum + row);
   }
 
   MLMatrix _excludeColumn(MLMatrix x, int column) {

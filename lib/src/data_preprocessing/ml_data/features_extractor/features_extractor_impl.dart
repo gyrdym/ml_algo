@@ -76,7 +76,7 @@ class MLDataFeaturesExtractorImpl extends Object
       final feature = features[i];
       Iterable<double> expanded;
       if (encoders.containsKey(i)) {
-        expanded = encoders[i].encode(feature);
+        expanded = encoders[i].encodeSingle(feature);
       } else {
         expanded = [valueConverter.convert(feature)];
       }
