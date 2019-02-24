@@ -335,7 +335,7 @@ void main() {
       expect(classes, equals([2]));
     });
 
-    test('should evaluate prediction quality, error = 1', () {
+    test('should evaluate prediction quality, accuracy = 0', () {
       final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -350,12 +350,12 @@ void main() {
         [2.0, 4.0, 1.0],
       ]);
       final origLabels = MLVector.from([1.0]);
-      final error =
+      final score =
           classifier.test(newFeatures, origLabels, MetricType.accuracy);
-      expect(error, equals(1.0));
+      expect(score, equals(0.0));
     });
 
-    test('should evaluate prediction quality, error = 0', () {
+    test('should evaluate prediction quality, accuracy = 1', () {
       final features = MLMatrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -370,9 +370,9 @@ void main() {
         [2.0, 4.0, 1.0],
       ]);
       final origLabels = MLVector.from([2.0]);
-      final error =
+      final score =
           classifier.test(newFeatures, origLabels, MetricType.accuracy);
-      expect(error, equals(0.0));
+      expect(score, equals(1.0));
     });
 
     test('should consider intercept term', () {

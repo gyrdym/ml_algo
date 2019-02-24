@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.0.0
+- `LinearClassifier.softmaxRegressor` implemented
+- `Metric` interface refactored (`getError` renamed to `getScore`)
+
 ## 7.2.0
 - `SoftmaxMapper` added (aka Softmax activation function)
 

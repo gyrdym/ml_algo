@@ -25,8 +25,8 @@ Future main() async {
       randomSeed: 46,
       learningRateType: LearningRateType.constant);
 
-  final error = validator.evaluate(
+  final accuracy = validator.evaluate(
       softmaxRegressor, features, labels, MetricType.accuracy);
 
-  print('Error is ${(error * 100).toStringAsFixed(2)}%');
+  print('Error is ${(accuracy * 100).toStringAsFixed(2)}%');
 }

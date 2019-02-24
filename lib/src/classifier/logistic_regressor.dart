@@ -107,9 +107,8 @@ class LogisticRegressor implements LinearClassifier {
 
   @override
   double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
-    final evaluator = MetricFactory.createByType(metricType);
-    final prediction = predictClasses(features);
-    return evaluator.getError(prediction, origLabels);
+    final metric = MetricFactory.createByType(metricType);
+    return metric.getScore(predictClasses(features), origLabels);
   }
 
   @override

@@ -19,7 +19,7 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   List<Object> _values;
 
   @override
-  Iterable<double> encodeSingle(Object value) {
+  List<double> encodeSingle(Object value) {
     if (!_values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
         throw UnsupportedError('Ordinal encoding: unsupported value `$value`');
@@ -40,6 +40,7 @@ class OrdinalEncoder implements CategoricalDataEncoder {
 
   @override
   MLMatrix encodeAll(Iterable<Object> values) {
-    throw UnimplementedError();
+    setCategoryValues(values.toList(growable: false));
+    return MLMatrix.from(values.map(encodeSingle).toList(growable: false));
   }
 }
