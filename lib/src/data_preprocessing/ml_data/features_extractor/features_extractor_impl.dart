@@ -1,12 +1,26 @@
 import 'package:logging/logging.dart';
-import 'package:ml_algo/src/common/error_logger_mixin.dart';
+import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
 class MLDataFeaturesExtractorImpl extends Object
-    with ErrorLoggerMixin
+    with LoggerMixin
     implements MLDataFeaturesExtractor {
+
+  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
+      this.encoders, this.labelIdx, this.valueConverter, this.logger)
+      : rowsNum = rowsMask.where((bool flag) => flag).length,
+        columnsNum = columnsMask.where((bool flag) => flag).length {
+    if (columnsMask.length > records.first.length) {
+      throwException(columnsMaskWrongLengthMsg);
+    }
+
+    if (rowsMask.length > records.length) {
+      throwException(rowsMaskWrongLengthMsg);
+    }
+  }
+
   static const String rowsMaskWrongLengthMsg =
       'Rows mask length should not be greater than actual rows number in the dataset!';
 
@@ -24,19 +38,6 @@ class MLDataFeaturesExtractorImpl extends Object
 
   @override
   final Logger logger;
-
-  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
-      this.encoders, this.labelIdx, this.valueConverter, this.logger)
-      : rowsNum = rowsMask.where((bool flag) => flag).length,
-        columnsNum = columnsMask.where((bool flag) => flag).length {
-    if (columnsMask.length > records.first.length) {
-      throwException(columnsMaskWrongLengthMsg);
-    }
-
-    if (rowsMask.length > records.length) {
-      throwException(rowsMaskWrongLengthMsg);
-    }
-  }
 
   @override
   List<List<double>> getFeatures() {
@@ -76,7 +77,7 @@ class MLDataFeaturesExtractorImpl extends Object
       final feature = features[i];
       Iterable<double> expanded;
       if (encoders.containsKey(i)) {
-        expanded = encoders[i].encode(feature);
+        expanded = encoders[i].encodeSingle(feature);
       } else {
         expanded = [valueConverter.convert(feature)];
       }

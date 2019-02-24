@@ -9,16 +9,15 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 import 'package:ml_linalg/linalg.dart';
 
 class LogLikelihoodCost implements CostFunction {
-  final ScoreToProbMapper scoreToProbMapper;
-  final Type dtype;
-
   LogLikelihoodCost(
-    ScoreToProbMapperType scoreToProbMapperType, {
-    this.dtype = DefaultParameterValues.dtype,
-    ScoreToProbMapperFactory scoreToProbMapperFactory =
+      ScoreToProbMapperType scoreToProbMapperType, {
+        Type dtype = DefaultParameterValues.dtype,
+        ScoreToProbMapperFactory scoreToProbMapperFactory =
         const ScoreToProbMapperFactoryImpl(),
-  }) : scoreToProbMapper =
-            scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype);
+      }) : scoreToProbMapper =
+  scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype);
+
+  final ScoreToProbMapper scoreToProbMapper;
 
   @override
   double getCost(double score, double yOrig) {
@@ -26,19 +25,10 @@ class LogLikelihoodCost implements CostFunction {
   }
 
   @override
-  MLVector getGradient(MLMatrix x, MLVector w, MLVector y) {
-    final scores = (x * w).toVector();
-    switch (dtype) {
-      case Float32x4:
-        return (x.transpose() *
-                (y - scoreToProbMapper.linkScoresToProbs(scores)))
-            .toVector();
-      default:
-        throw throw UnsupportedError('Unsupported data type - $dtype');
-    }
-  }
+  MLMatrix getGradient(MLMatrix x, MLMatrix w, MLMatrix y) =>
+    x.transpose() * (y - scoreToProbMapper.linkScoresToProbs(x * w));
 
   @override
-  double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y) =>
+  MLVector getSubDerivative(int wIdx, MLMatrix x, MLMatrix w, MLMatrix y) =>
       throw UnimplementedError();
 }

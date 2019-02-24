@@ -23,7 +23,7 @@ void main() {
 
     CoordinateOptimizer optimizer;
     MLMatrix data;
-    MLVector labels;
+    MLMatrix labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -34,14 +34,21 @@ void main() {
           lambda: lambda);
 
       data = MLMatrix.from([point1, point2, point3, point4]);
-      labels = MLVector.from([20.0, 30.0, 20.0, 40.0]);
+      labels = MLMatrix.from([
+        [20.0],
+        [30.0],
+        [20.0],
+        [40.0]
+      ]);
     });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(unregularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal weights for the given data', () {
-      final weights = optimizer.findExtrema(data, labels).getRow(0);
+      final weights = optimizer.findExtrema(data, labels);
       final expected = [-81796400.0, -81295300.0, -85285400.0];
-      expect(weights, vectorAlmostEqualTo(expected, 5.0));
+      expect(weights.rowsNum, 1);
+      expect(weights.columnsNum, 3);
+      expect(weights.getRow(0), vectorAlmostEqualTo(expected, 5.0));
     });
   });
 
@@ -55,7 +62,7 @@ void main() {
 
     CoordinateOptimizer optimizer;
     MLMatrix data;
-    MLVector labels;
+    MLMatrix labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -65,7 +72,11 @@ void main() {
           lambda: lambda);
 
       data = MLMatrix.from([point1, point2, point3]);
-      labels = MLVector.from([2.0, 3.0, 2.0]);
+      labels = MLMatrix.from([
+        [2.0],
+        [3.0],
+        [2.0],
+      ]);
     });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(regularized-case)-should-find-optimal-weights-for-the-given-data]

@@ -80,7 +80,7 @@ void main() {
 
     test('should encode categorical features', () {
       final encoderMock = mocks.OneHotEncoderMock();
-      when(encoderMock.encode(any)).thenReturn([1000.0, 2000.0]);
+      when(encoderMock.encodeSingle(any)).thenReturn([1000.0, 2000.0]);
 
       final rowMask = <bool>[true, true, true, true];
       final columnsMask = <bool>[true, true, true, true, true];

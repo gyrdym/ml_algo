@@ -1,22 +1,27 @@
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_linalg/vector.dart';
 
 class ConvergenceDetectorImpl implements ConvergenceDetector {
+  ConvergenceDetectorImpl(this.minDiff, this.iterationsLimit) {
+    if (minDiff == null && iterationsLimit == null) {
+      throw Exception('Neither minimum coefficients diff, nor iteration limit'
+          'are specified. Please, provide `minDiff` or `iterationsLimit` '
+          'parameters as a convergence criteria');
+    }
+  }
+
   @override
-  final double minUpdate;
+  final double minDiff;
 
   @override
   final int iterationsLimit;
 
-  ConvergenceDetectorImpl(this.minUpdate, this.iterationsLimit);
-
   @override
-  bool isConverged(MLVector coefficientUpdates, int iteration) {
+  bool isConverged(double coefficientsDiff, int iteration) {
     if (iterationsLimit != null && iteration >= iterationsLimit) {
       return true;
     }
 
-    if (coefficientUpdates.min() <= minUpdate) {
+    if (minDiff != null && coefficientsDiff <= minDiff) {
       return true;
     }
 

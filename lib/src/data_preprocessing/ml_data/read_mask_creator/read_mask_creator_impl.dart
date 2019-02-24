@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:logging/logging.dart';
-import 'package:ml_algo/src/common/error_logger_mixin.dart';
+import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/read_mask_creator/read_mask_creator.dart';
 import 'package:tuple/tuple.dart';
 
 class MLDataReadMaskCreatorImpl extends Object
-    with ErrorLoggerMixin
+    with LoggerMixin
     implements MLDataReadMaskCreator {
   static const String emptyRangesMsg =
       'Columns/rows read ranges list cannot be empty!';

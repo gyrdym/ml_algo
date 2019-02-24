@@ -9,6 +9,7 @@ import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -81,16 +82,17 @@ GradientOptimizer createOptimizer(
   return opt;
 }
 
-void mockGetGradient(CostFunction mock,
-    {Iterable<Iterable<double>> x,
-    Iterable<double> w,
-    Iterable<double> y,
-    Iterable<double> gradient}) {
+void mockGetGradient(CostFunction mock, {
+  Iterable<Iterable<double>> x,
+  Iterable<Iterable<double>> w,
+  Iterable<Iterable<double>> y,
+  MLMatrix gradient
+}) {
   when(mock.getGradient(
     x == null ? any : argThat(matrixAlmostEqualTo(x)),
-    w == null ? any : argThat(vectorAlmostEqualTo(w)),
-    y == null ? any : argThat(vectorAlmostEqualTo(y)),
-  )).thenReturn(MLVector.from(gradient ?? []));
+    w == null ? any : argThat(matrixAlmostEqualTo(w)),
+    y == null ? any : argThat(matrixAlmostEqualTo(y)),
+  )).thenReturn(gradient ?? MLMatrix.from([[]]));
 }
 
 void testOptimizer(

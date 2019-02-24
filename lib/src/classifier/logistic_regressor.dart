@@ -26,12 +26,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class LogisticRegressor implements LinearClassifier {
-  final Type dtype;
-  final Optimizer optimizer;
-  final InterceptPreprocessor interceptPreprocessor;
-  final LabelsProcessor labelsProcessor;
-  final ScoreToProbMapper scoreToProbMapper;
-
   LogisticRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -80,6 +74,12 @@ class LogisticRegressor implements LinearClassifier {
           randomSeed: randomSeed,
         );
 
+  final Type dtype;
+  final Optimizer optimizer;
+  final InterceptPreprocessor interceptPreprocessor;
+  final LabelsProcessor labelsProcessor;
+  final ScoreToProbMapper scoreToProbMapper;
+
   @override
   MLVector get weights => null;
 
@@ -93,7 +93,7 @@ class LogisticRegressor implements LinearClassifier {
 
   @override
   void fit(MLMatrix features, MLVector labels,
-      {MLVector initialWeights, bool isDataNormalized = false}) {
+      {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
     final labelsAsList = _classLabels.toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
@@ -107,9 +107,8 @@ class LogisticRegressor implements LinearClassifier {
 
   @override
   double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
-    final evaluator = MetricFactory.createByType(metricType);
-    final prediction = predictClasses(features);
-    return evaluator.getError(prediction, origLabels);
+    final metric = MetricFactory.createByType(metricType);
+    return metric.getScore(predictClasses(features), origLabels);
   }
 
   @override
@@ -135,22 +134,22 @@ class LogisticRegressor implements LinearClassifier {
     final distributions = List<MLVector>(numOfObservations);
     int i = 0;
     _weightsByClasses.forEach((double label, MLVector weights) {
-      final scores = (processedFeatures * weights).toVector();
-      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores);
+      final scores = processedFeatures * weights;
+      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores)
+          .toVector();
     });
     return MLMatrix.columns(distributions, dtype: dtype);
   }
 
   MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,
-      double targetLabel, MLVector initialWeights, bool arePointsNormalized) {
-    final binaryLabels =
-        labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
+      double targetLabel, MLMatrix initialWeights, bool arePointsNormalized) {
+    final binaryLabels = labelsProcessor.makeLabelsOneVsAll(labels,
+        targetLabel);
     return optimizer
-        .findExtrema(features, binaryLabels,
-            initialWeights:
-                initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
+        .findExtrema(features, MLMatrix.columns([binaryLabels]),
+            initialWeights: initialWeights?.transpose(),
             arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)
-        .getRow(0);
+        .getColumn(0);
   }
 }

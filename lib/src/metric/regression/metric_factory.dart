@@ -1,15 +1,15 @@
+import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_algo/src/metric/regression/mape.dart';
-import 'package:ml_algo/src/metric/regression/metric.dart';
 import 'package:ml_algo/src/metric/regression/rmse.dart';
 import 'package:ml_algo/src/metric/regression/type.dart';
 
 class RegressionMetricFactory {
-  static RegressionMetric rmse() => const RMSEMetric();
+  static Metric rmse() => const RMSEMetric();
 
-  static RegressionMetric mape() => const MAPEMetric();
+  static Metric mape() => const MAPEMetric();
 
-  static RegressionMetric createByType(RegressionMetricType type) {
-    RegressionMetric metric;
+  static Metric createByType(RegressionMetricType type) {
+    Metric metric;
 
     switch (type) {
       case RegressionMetricType.mape:

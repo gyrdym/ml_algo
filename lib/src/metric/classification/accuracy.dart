@@ -1,12 +1,8 @@
-import 'package:ml_algo/src/metric/classification/metric.dart';
+import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class AccuracyMetric implements ClassificationMetric {
+class AccuracyMetric implements Metric {
   const AccuracyMetric();
-
-  @override
-  double getError(MLVector predictedLabels, MLVector origLabels) =>
-      1 - getScore(predictedLabels, origLabels);
 
   @override
   double getScore(MLVector predictedLabels, MLVector origLabels) {
