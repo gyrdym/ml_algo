@@ -209,9 +209,13 @@ void main() {
 
       testOptimizer((optimizer) {
         final optimalCoefficients = optimizer.findExtrema(points, labels);
-        expect(optimalCoefficients.getRow(0).toList(),
-            equals([-48.0, -48.0, -48.0]));
-        expect(optimalCoefficients.rowsNum, 1);
+        expect(optimalCoefficients, equals([
+          [-48.0],
+          [-48.0],
+          [-48.0]
+        ]));
+        expect(optimalCoefficients.columnsNum, 1);
+        expect(optimalCoefficients.rowsNum, 3);
       }, iterations: 3, batchSize: 2);
     });
 
@@ -239,9 +243,13 @@ void main() {
 
       testOptimizer((optimizer) {
         final optimalCoefficients = optimizer.findExtrema(points, labels);
-        expect(optimalCoefficients.getRow(0).toList(),
-            equals([-23728.0, -23728.0, -23728.0]));
-        expect(optimalCoefficients.rowsNum, 1);
+        expect(optimalCoefficients, equals([
+          [-23728.0],
+          [-23728.0],
+          [-23728.0]
+        ]));
+        expect(optimalCoefficients.columnsNum, 1);
+        expect(optimalCoefficients.rowsNum, 3);
       }, iterations: 3, batchSize: 2, lambda: 10.0);
     });
 

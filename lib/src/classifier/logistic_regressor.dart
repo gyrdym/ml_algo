@@ -144,13 +144,13 @@ class LogisticRegressor implements LinearClassifier {
 
   MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,
       double targetLabel, MLMatrix initialWeights, bool arePointsNormalized) {
-    final binaryLabels =
-        labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
+    final binaryLabels = labelsProcessor.makeLabelsOneVsAll(labels,
+        targetLabel);
     return optimizer
         .findExtrema(features, MLMatrix.columns([binaryLabels]),
             initialWeights: initialWeights?.transpose(),
             arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)
-        .getRow(0);
+        .getColumn(0);
   }
 }
