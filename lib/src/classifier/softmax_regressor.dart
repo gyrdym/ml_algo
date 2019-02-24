@@ -112,8 +112,7 @@ class SoftmaxRegressor implements LinearClassifier {
   @override
   double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
     final evaluator = MetricFactory.createByType(metricType);
-    final prediction = predictClasses(features);
-    return evaluator.getError(prediction, origLabels);
+    return evaluator.getScore(predictClasses(features), origLabels);
   }
 
   @override

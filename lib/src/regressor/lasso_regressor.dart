@@ -59,7 +59,7 @@ class LassoRegressor implements LinearRegressor {
   double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
-    return metric.getError(prediction, origLabels);
+    return metric.getScore(prediction, origLabels);
   }
 
   MLVector predict(MLMatrix features) => (features * _weights).toVector();

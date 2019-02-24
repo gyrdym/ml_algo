@@ -19,8 +19,8 @@ Future main() async {
       learningRateType: LearningRateType.constant,
       randomSeed: 134);
 
-  final error = validator.evaluate(
+  final accuracy = validator.evaluate(
       logisticRegressor, features, labels, MetricType.accuracy);
 
-  print('Error is ${(error * 100).toStringAsFixed(2)}%');
+  print('Accuracy is ${(accuracy * 100).toStringAsFixed(2)}%');
 }
