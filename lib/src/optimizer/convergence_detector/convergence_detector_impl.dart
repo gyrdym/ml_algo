@@ -3,7 +3,9 @@ import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.
 class ConvergenceDetectorImpl implements ConvergenceDetector {
   ConvergenceDetectorImpl(this.minDiff, this.iterationsLimit) {
     if (minDiff == null && iterationsLimit == null) {
-      throw Exception();
+      throw Exception('Neither minimum coefficients diff, nor iteration limit'
+          'are specified. Please, provide `minDiff` or `iterationsLimit` '
+          'parameters as a convergence criteria');
     }
   }
 
