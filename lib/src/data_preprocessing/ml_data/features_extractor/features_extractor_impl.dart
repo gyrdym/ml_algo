@@ -7,6 +7,20 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_con
 class MLDataFeaturesExtractorImpl extends Object
     with LoggerMixin
     implements MLDataFeaturesExtractor {
+
+  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
+      this.encoders, this.labelIdx, this.valueConverter, this.logger)
+      : rowsNum = rowsMask.where((bool flag) => flag).length,
+        columnsNum = columnsMask.where((bool flag) => flag).length {
+    if (columnsMask.length > records.first.length) {
+      throwException(columnsMaskWrongLengthMsg);
+    }
+
+    if (rowsMask.length > records.length) {
+      throwException(rowsMaskWrongLengthMsg);
+    }
+  }
+
   static const String rowsMaskWrongLengthMsg =
       'Rows mask length should not be greater than actual rows number in the dataset!';
 
@@ -24,19 +38,6 @@ class MLDataFeaturesExtractorImpl extends Object
 
   @override
   final Logger logger;
-
-  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
-      this.encoders, this.labelIdx, this.valueConverter, this.logger)
-      : rowsNum = rowsMask.where((bool flag) => flag).length,
-        columnsNum = columnsMask.where((bool flag) => flag).length {
-    if (columnsMask.length > records.first.length) {
-      throwException(columnsMaskWrongLengthMsg);
-    }
-
-    if (rowsMask.length > records.length) {
-      throwException(rowsMaskWrongLengthMsg);
-    }
-  }
 
   @override
   List<List<double>> getFeatures() {

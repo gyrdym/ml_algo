@@ -186,7 +186,7 @@ class CsvData implements MLData {
     _featuresExtractor = _featuresExtractorFactory.create(records, rowsMask,
         columnsMask, encoders, _labelIdx, _valueConverter, _logger);
     _labelsExtractor = _labelsExtractorFactory.create(
-        records, rowsMask, _labelIdx, _valueConverter, _logger);
+        records, rowsMask, _labelIdx, _valueConverter, encoders, _logger);
 
     return data;
   }

@@ -9,16 +9,15 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 import 'package:ml_linalg/linalg.dart';
 
 class LogLikelihoodCost implements CostFunction {
-  final ScoreToProbMapper scoreToProbMapper;
-  final Type dtype;
-
   LogLikelihoodCost(
-    ScoreToProbMapperType scoreToProbMapperType, {
-    this.dtype = DefaultParameterValues.dtype,
-    ScoreToProbMapperFactory scoreToProbMapperFactory =
+      ScoreToProbMapperType scoreToProbMapperType, {
+        Type dtype = DefaultParameterValues.dtype,
+        ScoreToProbMapperFactory scoreToProbMapperFactory =
         const ScoreToProbMapperFactoryImpl(),
-  }) : scoreToProbMapper =
-            scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype);
+      }) : scoreToProbMapper =
+  scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype);
+
+  final ScoreToProbMapper scoreToProbMapper;
 
   @override
   double getCost(double score, double yOrig) {

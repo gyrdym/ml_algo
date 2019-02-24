@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor_impl.dart';
 import 'package:test/test.dart';
 
@@ -17,8 +18,9 @@ void main() {
   group('MLDataLabelsExtractorImpl', () {
     test('should extract labels according to given read mask', () {
       final readMask = <bool>[true, true, true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{};
       final extractor = MLDataLabelsExtractorImpl(
-          records, readMask, 4, valueConverterMock, loggerMock);
+          records, readMask, 4, valueConverterMock, encoders, loggerMock);
       final actual = extractor.getLabels();
 
       expect(actual, equals([500, 192, 209, 100, 800]));
@@ -28,8 +30,9 @@ void main() {
         'should extract labels according to given read mask from pointed column number',
         () {
       final readMask = <bool>[true, true, true, true, true];
+      final encoders = <int, CategoricalDataEncoder>{};
       final extractor = MLDataLabelsExtractorImpl(
-          records, readMask, 0, valueConverterMock, loggerMock);
+          records, readMask, 0, valueConverterMock, encoders, loggerMock);
       final actual = extractor.getLabels();
 
       expect(actual, equals([10, 700, 102, 308, 10001]));

@@ -26,12 +26,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class LogisticRegressor implements LinearClassifier {
-  final Type dtype;
-  final Optimizer optimizer;
-  final InterceptPreprocessor interceptPreprocessor;
-  final LabelsProcessor labelsProcessor;
-  final ScoreToProbMapper scoreToProbMapper;
-
   LogisticRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -79,6 +73,12 @@ class LogisticRegressor implements LinearClassifier {
               : null,
           randomSeed: randomSeed,
         );
+
+  final Type dtype;
+  final Optimizer optimizer;
+  final InterceptPreprocessor interceptPreprocessor;
+  final LabelsProcessor labelsProcessor;
+  final ScoreToProbMapper scoreToProbMapper;
 
   @override
   MLVector get weights => null;

@@ -5,18 +5,18 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart'
 import 'package:ml_linalg/matrix.dart';
 
 class OrdinalEncoder implements CategoricalDataEncoder {
+  OrdinalEncoder({
+    this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
+    CategoryValuesExtractor valuesExtractor =
+        const CategoryValuesExtractorImpl<Object>(),
+  }) : _valuesExtractor = valuesExtractor;
+
   @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
   final CategoryValuesExtractor _valuesExtractor;
 
   List<Object> _values;
-
-  OrdinalEncoder({
-    this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
-    CategoryValuesExtractor valuesExtractor =
-        const CategoryValuesExtractorImpl<Object>(),
-  }) : _valuesExtractor = valuesExtractor;
 
   @override
   Iterable<double> encodeSingle(Object value) {

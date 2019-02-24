@@ -125,23 +125,28 @@ class SoftmaxRegressor implements LinearClassifier {
   @override
   MLVector predictClasses(MLMatrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    final distributions = _predictProbabilities(processedFeatures);
+    final distribution = _predictProbabilities(processedFeatures);
     final classes = List<double>(processedFeatures.rowsNum);
-    for (int i = 0; i < distributions.rowsNum; i++) {
-      final probabilities = distributions.getRow(i);
+    for (int i = 0; i < distribution.rowsNum; i++) {
+      final probabilities = distribution.getRow(i);
       classes[i] = probabilities.toList().indexOf(probabilities.max()) * 1.0;
     }
     return MLVector.from(classes, dtype: dtype);
   }
 
-  MLMatrix _predictProbabilities(MLMatrix processedFeatures) =>
-      scoreToProbMapper.linkScoresToProbs(processedFeatures * _weights);
+  MLMatrix _predictProbabilities(MLMatrix features) {
+    if (features.columnsNum != _weights.rowsNum) {
+      throw Exception('Wrong features number provided: expected '
+          '${_weights.rowsNum}, but ${features.columnsNum} given. Please,'
+          'recheck columns number of the passed feature matrix');
+    }
+    return scoreToProbMapper.linkScoresToProbs(features * _weights);
+  }
 
   MLMatrix _learnWeights(MLMatrix features, MLVector labels,
       MLMatrix initialWeights, bool arePointsNormalized) {
     final oneHotEncodedLabels = dataEncoder.encodeAll(labels);
-    return optimizer
-        .findExtrema(features, oneHotEncodedLabels,
+    return optimizer.findExtrema(features, oneHotEncodedLabels,
         initialWeights: initialWeights?.transpose(),
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
