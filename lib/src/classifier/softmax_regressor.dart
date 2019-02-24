@@ -28,13 +28,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class SoftmaxRegressor implements LinearClassifier {
-  final Type dtype;
-  final Optimizer optimizer;
-  final InterceptPreprocessor interceptPreprocessor;
-  final LabelsProcessor labelsProcessor;
-  final ScoreToProbMapper scoreToProbMapper;
-  final CategoricalDataEncoder dataEncoder;
-
   SoftmaxRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -86,6 +79,13 @@ class SoftmaxRegressor implements LinearClassifier {
               : null,
           randomSeed: randomSeed,
         );
+
+  final Type dtype;
+  final Optimizer optimizer;
+  final InterceptPreprocessor interceptPreprocessor;
+  final LabelsProcessor labelsProcessor;
+  final ScoreToProbMapper scoreToProbMapper;
+  final CategoricalDataEncoder dataEncoder;
 
   @override
   MLVector get weights => null;

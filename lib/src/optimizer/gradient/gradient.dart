@@ -101,7 +101,7 @@ class GradientOptimizer implements Optimizer {
 
     _learningRateGenerator.stop();
 
-    return _coefficients.transpose();
+    return _coefficients;
   }
 
   MLMatrix _generateCoefficients(

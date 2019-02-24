@@ -7,7 +7,7 @@ abstract class Predictor {
   /// Learned coefficients (or weights) for given features
   MLVector get weights;
 
-  /// Fits the given data ([features]) to true labels ([origLabels]). It's
+  /// Fits the passed [features] to true labels - [origLabels]. It's
   /// possible to provide [initialWeights] and specify, whether the [features]
   /// normalized or not
   void fit(MLMatrix features, MLVector origLabels,
