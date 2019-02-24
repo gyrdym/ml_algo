@@ -102,7 +102,7 @@ class SoftmaxRegressor implements LinearClassifier {
 
   @override
   void fit(MLMatrix features, MLVector labels,
-      {MLVector initialWeights, bool isDataNormalized = false}) {
+      {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
     _weights = _learnWeights(
@@ -138,12 +138,11 @@ class SoftmaxRegressor implements LinearClassifier {
       scoreToProbMapper.linkScoresToProbs(processedFeatures * _weights);
 
   MLMatrix _learnWeights(MLMatrix features, MLVector labels,
-      MLVector initialWeights, bool arePointsNormalized) {
+      MLMatrix initialWeights, bool arePointsNormalized) {
     final oneHotEncodedLabels = dataEncoder.encodeAll(labels);
     return optimizer
         .findExtrema(features, oneHotEncodedLabels,
-        initialWeights: initialWeights != null
-            ? MLMatrix.rows([initialWeights]) : null,
+        initialWeights: initialWeights?.transpose(),
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
   }

@@ -82,7 +82,7 @@ class GradientOptimizer implements Optimizer {
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
     _coefficients = initialWeights ??
-        MLMatrix.rows(List<MLVector>.generate(numOfCoefficientVectors,
+        MLMatrix.columns(List<MLVector>.generate(numOfCoefficientVectors,
             (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     var iterationCounter = 0;
@@ -101,7 +101,7 @@ class GradientOptimizer implements Optimizer {
 
     _learningRateGenerator.stop();
 
-    return _coefficients;
+    return _coefficients.transpose();
   }
 
   MLMatrix _generateCoefficients(

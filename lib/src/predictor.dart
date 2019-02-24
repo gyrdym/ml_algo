@@ -11,7 +11,7 @@ abstract class Predictor {
   /// possible to provide [initialWeights] and specify, whether the [features]
   /// normalized or not
   void fit(MLMatrix features, MLVector origLabels,
-      {MLVector initialWeights, bool isDataNormalized});
+      {MLMatrix initialWeights, bool isDataNormalized});
 
   /// Assesses model according to provided [metric]
   double test(MLMatrix features, MLVector origLabels, MetricType metric);

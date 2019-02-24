@@ -50,10 +50,26 @@ void main() {
         [10.0, 20.0, 30.0]
       ];
       final y = [[30.0]];
-      final w1 = [[0.0, 0.0, 0.0]];
-      final w2 = [[-20.0, -20.0, -20.0]];
-      final w3 = [[-40.0, -40.0, -40.0]];
-      final grad = MLMatrix.from([[10.0, 10.0, 10.0]]);
+      final w1 = [
+        [0.0],
+        [0.0],
+        [0.0],
+      ];
+      final w2 = [
+        [-20.0],
+        [-20.0],
+        [-20.0],
+      ];
+      final w3 = [
+        [-40.0],
+        [-40.0],
+        [-40.0],
+      ];
+      final grad = MLMatrix.from([
+        [10.0],
+        [10.0],
+        [10.0]
+      ]);
       final interval = [2, 3];
 
       mockGetGradient(costFunctionMock, x: x, w: w1, y: y, gradient: grad);
@@ -89,7 +105,11 @@ void main() {
         [10.0],
         [20.0],
       ];
-      final grad = [[10.0, 10.0, 10.0]];
+      final grad = [
+        [10.0],
+        [10.0],
+        [10.0]
+      ];
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2))
           .thenReturn([0, 2]);
@@ -121,7 +141,11 @@ void main() {
           .thenReturn([0, 4]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(MLMatrix.from([[10.0, 10.0, 10.0]]));
+          .thenReturn(MLMatrix.from([
+            [10.0],
+            [10.0],
+            [10.0]
+      ]));
 
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
@@ -142,7 +166,11 @@ void main() {
         [40.0],
       ]);
       final interval = [0, 4];
-      final grad = [[10.0, 10.0, 10.0]];
+      final grad = [
+        [10.0],
+        [10.0],
+        [10.0],
+      ];
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4))
           .thenReturn(interval);
@@ -166,14 +194,18 @@ void main() {
       ]);
       final labels = MLMatrix.from([
         [7.0],
-        [8.0]
+        [8.0],
       ]);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2))
           .thenReturn([0, 2]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(MLMatrix.from([[8.0, 8.0, 8.0]]));
+          .thenReturn(MLMatrix.from([
+            [8.0],
+            [8.0],
+            [8.0]
+      ]));
 
       testOptimizer((optimizer) {
         final optimalCoefficients = optimizer.findExtrema(points, labels);
@@ -193,7 +225,11 @@ void main() {
         [7.0],
         [8.0]
       ]);
-      final gradient = MLMatrix.from([[8.0, 8.0, 8.0]]);
+      final gradient = MLMatrix.from([
+        [8.0],
+        [8.0],
+        [8.0],
+      ]);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2))
           .thenReturn([0, 2]);

@@ -67,7 +67,7 @@ void main() {
         [500.0, 600.0, 700.0, 800.0],
       ]));
 
-      final initialWeights = MLVector.from([10.0, 20.0, 30.0, 40.0]);
+      final initialWeights = MLMatrix.from([[10.0, 20.0, 30.0, 40.0]]);
 
       when(labelsProcessorMock.makeLabelsOneVsAll(
               argThat(equals([1.0, 2.0])), 1.0))
@@ -81,11 +81,17 @@ void main() {
                 [100.0, 200.0, 300.0, 400.0],
                 [500.0, 600.0, 700.0, 800.0],
               ])),
-              argThat(equals([1.0, 0.0])),
+              argThat(equals([
+                [1.0],
+                [0.0],
+              ])),
               arePointsNormalized: true,
               initialWeights: argThat(
                   equals([
-                    [10.0, 20.0, 30.0, 40.0]
+                      [10.0],
+                      [20.0],
+                      [30.0],
+                      [40.0],
                   ]),
                   named: 'initialWeights'),
               isMinimizingObjective: false))
@@ -98,17 +104,21 @@ void main() {
                 [100.0, 200.0, 300.0, 400.0],
                 [500.0, 600.0, 700.0, 800.0],
               ])),
-              argThat(equals([0.0, 1.0])),
+              argThat(equals([
+                [0.0],
+                [1.0],
+              ])),
               arePointsNormalized: true,
               initialWeights: argThat(
                   equals([
-                    [10.0, 20.0, 30.0, 40.0]
+                    [10.0],
+                    [20.0],
+                    [30.0],
+                    [40.0],
                   ]),
                   named: 'initialWeights'),
               isMinimizingObjective: false))
-          .thenReturn(MLMatrix.rows([
-        MLVector.from([555.0, 666.0])
-      ]));
+          .thenReturn(MLMatrix.rows([MLVector.from([555.0, 666.0])]));
 
       createRegressor()
         ..fit(features, origLabels,
@@ -125,10 +135,16 @@ void main() {
                 [100.0, 200.0, 300.0, 400.0],
                 [500.0, 600.0, 700.0, 800.0],
               ])),
-              argThat(equals([1.0, 0.0])),
+              argThat(equals([
+                [1.0],
+                [0.0],
+              ])),
               initialWeights: argThat(
                   equals([
-                    [10.0, 20.0, 30.0, 40.0]
+                    [10.0],
+                    [20.0],
+                    [30.0],
+                    [40.0],
                   ]),
                   named: 'initialWeights'),
               arePointsNormalized: true,
@@ -140,10 +156,16 @@ void main() {
                 [100.0, 200.0, 300.0, 400.0],
                 [500.0, 600.0, 700.0, 800.0],
               ])),
-              argThat(equals([0.0, 1.0])),
+              argThat(equals([
+                [0.0],
+                [1.0],
+              ])),
               initialWeights: argThat(
                   equals([
-                    [10.0, 20.0, 30.0, 40.0]
+                    [10.0],
+                    [20.0],
+                    [30.0],
+                    [40.0],
                   ]),
                   named: 'initialWeights'),
               arePointsNormalized: true,

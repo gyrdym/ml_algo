@@ -93,7 +93,7 @@ class LogisticRegressor implements LinearClassifier {
 
   @override
   void fit(MLMatrix features, MLVector labels,
-      {MLVector initialWeights, bool isDataNormalized = false}) {
+      {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
     final labelsAsList = _classLabels.toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
@@ -143,13 +143,12 @@ class LogisticRegressor implements LinearClassifier {
   }
 
   MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,
-      double targetLabel, MLVector initialWeights, bool arePointsNormalized) {
+      double targetLabel, MLMatrix initialWeights, bool arePointsNormalized) {
     final binaryLabels =
         labelsProcessor.makeLabelsOneVsAll(labels, targetLabel);
     return optimizer
         .findExtrema(features, MLMatrix.columns([binaryLabels]),
-            initialWeights:
-                initialWeights != null ? MLMatrix.rows([initialWeights]) : null,
+            initialWeights: initialWeights?.transpose(),
             arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)
         .getRow(0);

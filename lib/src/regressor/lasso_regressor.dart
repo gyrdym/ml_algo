@@ -44,14 +44,12 @@ class LassoRegressor implements LinearRegressor {
 
   @override
   void fit(MLMatrix features, MLVector labels,
-      {MLVector initialWeights, bool isDataNormalized = false}) {
+      {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _weights = _optimizer
         .findExtrema(
           _interceptPreprocessor.addIntercept(features),
           MLMatrix.columns([labels]),
-          initialWeights: initialWeights != null
-              ? MLMatrix.rows([initialWeights])
-              : null,
+          initialWeights: initialWeights.transpose(),
           isMinimizingObjective: true,
           arePointsNormalized: isDataNormalized
         ).getRow(0);
