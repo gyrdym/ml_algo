@@ -3,6 +3,8 @@ import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
@@ -25,8 +27,8 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class LogisticRegressor implements LinearClassifier {
-  LogisticRegressor({
+class SoftmaxRegressor implements LinearClassifier {
+  SoftmaxRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
@@ -40,23 +42,27 @@ class LogisticRegressor implements LinearClassifier {
     GradientType gradientType = GradientType.stochastic,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.logit,
+    ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.softmax,
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
     LabelsProcessorFactory labelsProcessorFactory =
-        const LabelsProcessorFactoryImpl(),
+    const LabelsProcessorFactoryImpl(),
     InterceptPreprocessorFactory interceptPreprocessorFactory =
-        const InterceptPreprocessorFactoryImpl(),
+    const InterceptPreprocessorFactoryImpl(),
     ScoreToProbMapperFactory scoreToProbMapperFactory =
-        const ScoreToProbMapperFactoryImpl(),
+    const ScoreToProbMapperFactoryImpl(),
     OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
-  })  : labelsProcessor = labelsProcessorFactory.create(dtype),
+    CategoricalDataEncoderFactory categoricalDataEncoderFactory =
+    const CategoricalDataEncoderFactory(),
+  })
+      : labelsProcessor = labelsProcessorFactory.create(dtype),
         interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
             scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =
-            scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
+        scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
+        dataEncoder = categoricalDataEncoderFactory.oneHot(),
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
@@ -79,9 +85,12 @@ class LogisticRegressor implements LinearClassifier {
   final InterceptPreprocessor interceptPreprocessor;
   final LabelsProcessor labelsProcessor;
   final ScoreToProbMapper scoreToProbMapper;
+  final CategoricalDataEncoder dataEncoder;
 
   @override
   MLVector get weights => null;
+
+  MLMatrix _weights;
 
   @override
   Map<double, MLVector> get weightsByClasses => _weightsByClasses;
@@ -95,20 +104,15 @@ class LogisticRegressor implements LinearClassifier {
   void fit(MLMatrix features, MLVector labels,
       {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
-    final labelsAsList = _classLabels.toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    _weightsByClasses = Map<double, MLVector>.fromIterable(
-      labelsAsList,
-      key: (dynamic label) => label as double,
-      value: (dynamic label) => _fitBinaryClassifier(processedFeatures, labels,
-          label as double, initialWeights, isDataNormalized),
-    );
+    _weights = _learnWeights(
+        processedFeatures, labels, initialWeights, isDataNormalized);
   }
 
   @override
   double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
-    final metric = MetricFactory.createByType(metricType);
-    return metric.getScore(predictClasses(features), origLabels);
+    final evaluator = MetricFactory.createByType(metricType);
+    return evaluator.getScore(predictClasses(features), origLabels);
   }
 
   @override
@@ -120,36 +124,30 @@ class LogisticRegressor implements LinearClassifier {
   @override
   MLVector predictClasses(MLMatrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    final distributions = _predictProbabilities(processedFeatures);
+    final distribution = _predictProbabilities(processedFeatures);
     final classes = List<double>(processedFeatures.rowsNum);
-    for (int i = 0; i < distributions.rowsNum; i++) {
-      final probabilities = distributions.getRow(i);
+    for (int i = 0; i < distribution.rowsNum; i++) {
+      final probabilities = distribution.getRow(i);
       classes[i] = probabilities.toList().indexOf(probabilities.max()) * 1.0;
     }
     return MLVector.from(classes, dtype: dtype);
   }
 
-  MLMatrix _predictProbabilities(MLMatrix processedFeatures) {
-    final numOfObservations = _weightsByClasses.length;
-    final distributions = List<MLVector>(numOfObservations);
-    int i = 0;
-    _weightsByClasses.forEach((double label, MLVector weights) {
-      final scores = processedFeatures * weights;
-      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores)
-          .toVector();
-    });
-    return MLMatrix.columns(distributions, dtype: dtype);
+  MLMatrix _predictProbabilities(MLMatrix features) {
+    if (features.columnsNum != _weights.rowsNum) {
+      throw Exception('Wrong features number provided: expected '
+          '${_weights.rowsNum}, but ${features.columnsNum} given. Please,'
+          'recheck columns number of the passed feature matrix');
+    }
+    return scoreToProbMapper.linkScoresToProbs(features * _weights);
   }
 
-  MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,
-      double targetLabel, MLMatrix initialWeights, bool arePointsNormalized) {
-    final binaryLabels = labelsProcessor.makeLabelsOneVsAll(labels,
-        targetLabel);
-    return optimizer
-        .findExtrema(features, MLMatrix.columns([binaryLabels]),
-            initialWeights: initialWeights?.transpose(),
-            arePointsNormalized: arePointsNormalized,
-            isMinimizingObjective: false)
-        .getColumn(0);
+  MLMatrix _learnWeights(MLMatrix features, MLVector labels,
+      MLMatrix initialWeights, bool arePointsNormalized) {
+    final oneHotEncodedLabels = dataEncoder.encodeAll(labels);
+    return optimizer.findExtrema(features, oneHotEncodedLabels,
+        initialWeights: initialWeights?.transpose(),
+        arePointsNormalized: arePointsNormalized,
+        isMinimizingObjective: false);
   }
 }

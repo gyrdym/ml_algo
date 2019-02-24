@@ -9,10 +9,28 @@ class SquaredCost implements CostFunction {
       math.pow(predictedLabel - originalLabel, 2).toDouble();
 
   @override
-  MLVector getGradient(MLMatrix x, MLVector w, MLVector y) =>
-      (x.transpose() * -2 * (y - x * w)).toVector();
+  MLMatrix getGradient(MLMatrix x, MLMatrix w, MLMatrix y) =>
+      x.transpose() * -2 * (y - x * w);
 
   @override
-  double getSparseSolutionPartial(int wIdx, MLVector x, MLVector w, double y) =>
-      x[wIdx] * (y - x.dot(w) + x[wIdx] * w[wIdx]);
+  MLVector getSubDerivative(int j, MLMatrix x, MLMatrix w, MLMatrix y) {
+    final xj = x.pick(columnRanges: List<Range>.generate(y.columnsNum,
+            (i) => Range(j, j, endInclusive: true)));
+    final xWithoutJ = _excludeColumn(x, j);
+    final wWithoutJ = _excludeColumn(w, j);
+    final predictionWithoutJ = xWithoutJ * wWithoutJ.transpose();
+    return (xj.transpose() * (y - predictionWithoutJ))
+        .reduceRows((sum, row) => sum + row);
+  }
+
+  MLMatrix _excludeColumn(MLMatrix x, int column) {
+    if (column == 0) {
+      return x.submatrix(columns: Range(1, x.columnsNum));
+    } else if (column == x.columnsNum - 1) {
+      return x.submatrix(columns: Range(0, column));
+    } else {
+      return x.pick(columnRanges: [Range(0, column), Range(column + 1,
+          x.columnsNum)]);
+    }
+  }
 }

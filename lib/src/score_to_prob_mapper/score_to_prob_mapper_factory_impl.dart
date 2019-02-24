@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/score_to_prob_mapper/logit_mapper.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/logit/logit_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/softmax_mapper.dart';
+import 'package:ml_algo/src/score_to_prob_mapper/softmax/softmax_mapper.dart';
 
 class ScoreToProbMapperFactoryImpl implements ScoreToProbMapperFactory {
   const ScoreToProbMapperFactoryImpl();

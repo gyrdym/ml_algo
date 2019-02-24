@@ -10,7 +10,7 @@ class OneHotEncoderBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    _data.forEach(_encoder.encode);
+    _data.forEach(_encoder.encodeSingle);
   }
 }
 

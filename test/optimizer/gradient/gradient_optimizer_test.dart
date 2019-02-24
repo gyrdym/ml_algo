@@ -23,8 +23,8 @@ void verifyNeverGetGradientCall(
 
 void verifyGetGradientCall(CostFunction mock,
     {Iterable<Iterable<double>> x,
-    Iterable<double> w,
-    Iterable<double> y,
+    Iterable<Iterable<double>> w,
+    Iterable<Iterable<double>> y,
     int calls}) {
   verify(mock.getGradient(
     argThat(equals(x)),
@@ -37,19 +37,39 @@ void main() {
   group('Gradient descent optimizer', () {
     tearDown(resetMockitoState);
 
-    test(
-        'should properly process `batchSize` parameter when '
-        'the latter is equal to `1` (stochastic case)', () {
+    test('should properly process `batchSize` parameter when the latter is '
+        'equal to `1` (stochastic case)', () {
       final points = getPoints();
-      final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = MLMatrix.from([
+        [10.0],
+        [20.0],
+        [30.0],
+        [40.0],
+      ]);
       final x = [
         [10.0, 20.0, 30.0]
       ];
-      final y = [30.0];
-      final w1 = [0.0, 0.0, 0.0];
-      final w2 = [-20.0, -20.0, -20.0];
-      final w3 = [-40.0, -40.0, -40.0];
-      final grad = [10.0, 10.0, 10.0];
+      final y = [[30.0]];
+      final w1 = [
+        [0.0],
+        [0.0],
+        [0.0],
+      ];
+      final w2 = [
+        [-20.0],
+        [-20.0],
+        [-20.0],
+      ];
+      final w3 = [
+        [-40.0],
+        [-40.0],
+        [-40.0],
+      ];
+      final grad = MLMatrix.from([
+        [10.0],
+        [10.0],
+        [10.0]
+      ]);
       final interval = [2, 3];
 
       mockGetGradient(costFunctionMock, x: x, w: w1, y: y, gradient: grad);
@@ -68,24 +88,35 @@ void main() {
       }, iterations: 3, batchSize: 1);
     });
 
-    test(
-        'should properly process `batchSize` parameter when the latter is '
+    test('should properly process `batchSize` parameter when the latter is '
         'equal to `2` (mini batch case)', () {
       final points = getPoints();
-      final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = MLMatrix.from([
+        [10.0],
+        [20.0],
+        [30.0],
+        [40.0],
+      ]);
       final batch = [
         [5.0, 10.0, 15.0],
         [1.0, 2.0, 3.0]
       ];
-      final y = [10.0, 20.0];
-      final grad = [10.0, 10.0, 10.0];
+      final y = [
+        [10.0],
+        [20.0],
+      ];
+      final grad = [
+        [10.0],
+        [10.0],
+        [10.0]
+      ];
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2))
           .thenReturn([0, 2]);
 
       when(costFunctionMock.getGradient(
               argThat(equals(batch)), any, argThat(equals(y))))
-          .thenReturn(MLVector.from(grad));
+          .thenReturn(MLMatrix.from(grad));
 
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
@@ -96,17 +127,25 @@ void main() {
       }, iterations: 3, batchSize: 2);
     });
 
-    test(
-        'should properly process `batchSize` parameter when the latter is '
+    test('should properly process `batchSize` parameter when the latter is '
         'equal to `4` (batch case)', () {
       final points = getPoints();
-      final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = MLMatrix.from([
+        [10.0],
+        [20.0],
+        [30.0],
+        [40.0],
+      ]);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4))
           .thenReturn([0, 4]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(MLVector.from([10.0, 10.0, 10.0]));
+          .thenReturn(MLMatrix.from([
+            [10.0],
+            [10.0],
+            [10.0]
+      ]));
 
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
@@ -116,19 +155,27 @@ void main() {
       }, iterations: 3, batchSize: 4);
     });
 
-    test(
-        'should cut the batch size parameter to make it equal to the number '
+    test('should cut the batch size parameter to make it equal to the number '
         'of given points', () {
       final iterationLimit = 3;
       final points = getPoints();
-      final labels = MLVector.from([10.0, 20.0, 30.0, 40.0]);
+      final labels = MLMatrix.from([
+        [10.0],
+        [20.0],
+        [30.0],
+        [40.0],
+      ]);
       final interval = [0, 4];
-      final grad = [10.0, 10.0, 10.0];
+      final grad = [
+        [10.0],
+        [10.0],
+        [10.0],
+      ];
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4))
           .thenReturn(interval);
       when(costFunctionMock.getGradient(any, any, any))
-          .thenReturn(MLVector.from(grad));
+          .thenReturn(MLMatrix.from(grad));
 
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
@@ -145,19 +192,30 @@ void main() {
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = MLVector.from([7.0, 8.0]);
+      final labels = MLMatrix.from([
+        [7.0],
+        [8.0],
+      ]);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2))
           .thenReturn([0, 2]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(MLVector.from([8.0, 8.0, 8.0]));
+          .thenReturn(MLMatrix.from([
+            [8.0],
+            [8.0],
+            [8.0]
+      ]));
 
       testOptimizer((optimizer) {
         final optimalCoefficients = optimizer.findExtrema(points, labels);
-        expect(optimalCoefficients.getRow(0).toList(),
-            equals([-48.0, -48.0, -48.0]));
-        expect(optimalCoefficients.rowsNum, 1);
+        expect(optimalCoefficients, equals([
+          [-48.0],
+          [-48.0],
+          [-48.0]
+        ]));
+        expect(optimalCoefficients.columnsNum, 1);
+        expect(optimalCoefficients.rowsNum, 3);
       }, iterations: 3, batchSize: 2);
     });
 
@@ -167,8 +225,15 @@ void main() {
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = MLVector.from([7.0, 8.0]);
-      final gradient = MLVector.from([8.0, 8.0, 8.0]);
+      final labels = MLMatrix.from([
+        [7.0],
+        [8.0]
+      ]);
+      final gradient = MLMatrix.from([
+        [8.0],
+        [8.0],
+        [8.0],
+      ]);
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2))
           .thenReturn([0, 2]);
@@ -178,9 +243,13 @@ void main() {
 
       testOptimizer((optimizer) {
         final optimalCoefficients = optimizer.findExtrema(points, labels);
-        expect(optimalCoefficients.getRow(0).toList(),
-            equals([-23728.0, -23728.0, -23728.0]));
-        expect(optimalCoefficients.rowsNum, 1);
+        expect(optimalCoefficients, equals([
+          [-23728.0],
+          [-23728.0],
+          [-23728.0]
+        ]));
+        expect(optimalCoefficients.columnsNum, 1);
+        expect(optimalCoefficients.rowsNum, 3);
       }, iterations: 3, batchSize: 2, lambda: 10.0);
     });
 

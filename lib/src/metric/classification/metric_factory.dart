@@ -1,12 +1,12 @@
 import 'package:ml_algo/src/metric/classification/accuracy.dart';
-import 'package:ml_algo/src/metric/classification/metric.dart';
 import 'package:ml_algo/src/metric/classification/type.dart';
+import 'package:ml_algo/src/metric/metric.dart';
 
 abstract class ClassificationMetricFactory {
-  static ClassificationMetric accuracy() => const AccuracyMetric();
+  static Metric accuracy() => const AccuracyMetric();
 
-  static ClassificationMetric createByType(ClassificationMetricType type) {
-    ClassificationMetric metric;
+  static Metric createByType(ClassificationMetricType type) {
+    Metric metric;
 
     switch (type) {
       case ClassificationMetricType.accuracy:

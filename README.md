@@ -23,6 +23,7 @@ Following algorithms are implemented:
 
 - Linear classifier:
     - Logistic regression (with "one-vs-all" multiclass classification)
+    - Softmax regression
     
 ## The library's structure
 
@@ -40,6 +41,10 @@ algorithms, assessing prediction quality on different parts of a dataset. [Wiki 
 that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
 your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
 supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
+
+- [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
+A class, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
+this classifier for your data, please, make sure, that your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability).
 
 - [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). An algorithm, 
 that performs geometry-based linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
@@ -80,7 +85,7 @@ more information about these types, please, visit [ml_linal repo](https://github
 Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) 
 of our model
 ````dart
-final validator = CrossValidator.KFold();
+final validator = CrossValidator.KFold(numberOfFolds: 5);
 ````
 
 All are set, so, we can perform our classification. For better hyperparameters fitting, let's create a loop in order to 
@@ -88,7 +93,7 @@ try each value of a chosen hyperparameter in a defined range:
 ````dart
 final step = 0.001;
 final limit = 0.6;
-double minError = double.infinity;
+double maxAccuracy = -double.infinity;
 double bestLearningRate = 0.0;
 for (double rate = step; rate < limit; rate += step) {
   // ...
@@ -104,16 +109,16 @@ final logisticRegressor = LinearClassifier.logisticRegressor(
 
 Evaluate our model via accuracy metric:
 ````dart
-final error = validator.evaluate(logisticRegressor, featuresMatrix, labels, MetricType.accuracy);
-if (error < minError) {
-  minError = error;
+final accuracy = validator.evaluate(logisticRegressor, featuresMatrix, labels, MetricType.accuracy);
+if (accuracy > maxAccuracy) {
+  maxAccuracy = accuracy;
   bestLearningRate = rate;
 }
 ````
 
 Let's print score:
 ````dart
-print('best error on classification: ${(minError * 100).toFixed(2)}');
+print('best accuracy on classification: ${(maxAccuracy * 100).toFixed(2)}');
 print('best learning rate: ${bestLearningRate.toFixed(3)}');
 ````
 
@@ -121,7 +126,7 @@ Best model parameters search takes much time so far, so be patient. After the se
 this:
 
 ````
-best error on classification: 35.5%
+best acuracy on classification: 67.0%
 best learning rate: 0.155
 ````
 
@@ -136,12 +141,12 @@ Future<double> logisticRegression() async {
   final features = await data.features;
   final labels = await data.labels;
 
-  final validator = CrossValidator.kFold(numberOfFolds: 7);
+  final validator = CrossValidator.kFold(numberOfFolds: 5);
 
   final step = 0.001;
   final limit = 0.6;
 
-  double minError = double.infinity;
+  double maxAccuracy = -double.infinity;
   double bestLearningRate = 0.0;
 
   for (double rate = step; rate < limit; rate += step) {
@@ -149,14 +154,14 @@ Future<double> logisticRegression() async {
       iterationsLimit: 100,
       initialLearningRate: rate,
       learningRateType: LearningRateType.constant);
-    final error = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
-    if (error < minError) {
-      minError = error;
+    final accuracy = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
+    if (accuracy > maxAccuracy) {
+      maxAccuracy = accuracy;
       bestLearningRate = rate;
     }
   }
 
-  print('best error on classification: ${(minError * 100).toFixed(2)}');
+  print('best accuracy on classification: ${(maxAccuracy * 100).toFixed(2)}');
   print('best learning rate: ${bestLearningRate.toFixed(3)}');
 }
 ````
