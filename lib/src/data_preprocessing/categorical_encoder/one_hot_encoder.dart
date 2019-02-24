@@ -3,21 +3,20 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_valu
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 class OneHotEncoder implements CategoricalDataEncoder {
+  OneHotEncoder({
+    this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
+    CategoryValuesExtractor valuesExtractor =
+    const CategoryValuesExtractorImpl<Object>(),
+  }) : _valuesExtractor = valuesExtractor;
+
   @override
   final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
 
   final CategoryValuesExtractor _valuesExtractor;
 
   List<Object> _values;
-
-  OneHotEncoder({
-    this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
-    CategoryValuesExtractor valuesExtractor =
-        const CategoryValuesExtractorImpl<Object>(),
-  }) : _valuesExtractor = valuesExtractor;
 
   @override
   List<double> encodeSingle(Object value) {
@@ -41,8 +40,6 @@ class OneHotEncoder implements CategoricalDataEncoder {
   @override
   MLMatrix encodeAll(Iterable<Object> values) {
     setCategoryValues(values.toList(growable: false));
-    return MLMatrix.rows(_values.map<MLVector>(
-            (Object value) => MLVector.from(encodeSingle(value)))
-        .toList(growable: false));
+    return MLMatrix.from(values.map(encodeSingle).toList(growable: false));
   }
 }

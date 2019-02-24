@@ -1,13 +1,17 @@
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
 
 class ConvergenceDetectorImpl implements ConvergenceDetector {
+  ConvergenceDetectorImpl(this.minDiff, this.iterationsLimit) {
+    if (minDiff == null && iterationsLimit == null) {
+      throw Exception();
+    }
+  }
+
   @override
   final double minDiff;
 
   @override
   final int iterationsLimit;
-
-  ConvergenceDetectorImpl(this.minDiff, this.iterationsLimit);
 
   @override
   bool isConverged(double coefficientsDiff, int iteration) {
@@ -15,7 +19,7 @@ class ConvergenceDetectorImpl implements ConvergenceDetector {
       return true;
     }
 
-    if (coefficientsDiff <= minDiff) {
+    if (minDiff != null && coefficientsDiff <= minDiff) {
       return true;
     }
 

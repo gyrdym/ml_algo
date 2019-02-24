@@ -24,18 +24,6 @@ import 'package:ml_linalg/range.dart';
 import 'package:ml_linalg/vector.dart';
 
 class GradientOptimizer implements Optimizer {
-  final Randomizer _randomizer;
-  final CostFunction _costFunction;
-  final LearningRateGenerator _learningRateGenerator;
-  final InitialWeightsGenerator _initialWeightsGenerator;
-  final ConvergenceDetector _convergenceDetector;
-
-  final double _lambda;
-  final int _batchSize;
-
-  MLMatrix _points;
-  MLMatrix _coefficients;
-
   GradientOptimizer({
     Type dtype = DefaultParameterValues.dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
@@ -70,6 +58,18 @@ class GradientOptimizer implements Optimizer {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 
+  final Randomizer _randomizer;
+  final CostFunction _costFunction;
+  final LearningRateGenerator _learningRateGenerator;
+  final InitialWeightsGenerator _initialWeightsGenerator;
+  final ConvergenceDetector _convergenceDetector;
+
+  final double _lambda;
+  final int _batchSize;
+
+  MLMatrix _points;
+  MLMatrix _coefficients;
+
   @override
   MLMatrix findExtrema(MLMatrix points, MLMatrix labels,
       {int numOfCoefficientVectors = 1,
@@ -82,20 +82,19 @@ class GradientOptimizer implements Optimizer {
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
     _coefficients = initialWeights ??
-        MLMatrix.columns(List<MLVector>.generate(numOfCoefficientVectors,
+        MLMatrix.columns(List<MLVector>.generate(labels.columnsNum,
             (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
-    var iterationCounter = 0;
+    var iteration = 0;
     var coefficientsDiff = double.maxFinite;
 
-    while (!_convergenceDetector.isConverged(coefficientsDiff,
-        iterationCounter)) {
+    while (!_convergenceDetector.isConverged(coefficientsDiff, iteration)) {
       final learningRate = _learningRateGenerator.getNextValue();
       final newCoefficients = _generateCoefficients(
           _coefficients, labels, learningRate, batchSize,
           isMinimization: isMinimizingObjective);
       coefficientsDiff = (newCoefficients - _coefficients).norm();
-      iterationCounter++;
+      iteration++;
       _coefficients = newCoefficients;
     }
 
