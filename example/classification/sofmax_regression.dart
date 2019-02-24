@@ -28,5 +28,5 @@ Future main() async {
   final accuracy = validator.evaluate(
       softmaxRegressor, features, labels, MetricType.accuracy);
 
-  print('Error is ${(accuracy * 100).toStringAsFixed(2)}%');
+  print('Accuracy is ${(accuracy * 100).toStringAsFixed(2)}%');
 }
