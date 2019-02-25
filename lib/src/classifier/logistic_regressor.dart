@@ -84,8 +84,8 @@ class LogisticRegressor implements LinearClassifier {
   MLVector get weights => null;
 
   @override
-  Map<double, MLVector> get weightsByClasses => _weightsByClasses;
-  Map<double, MLVector> _weightsByClasses;
+  MLMatrix get weightsByClasses => _weightsByClasses;
+  MLMatrix _weightsByClasses;
 
   @override
   List<double> get classLabels => _classLabels;
@@ -95,14 +95,9 @@ class LogisticRegressor implements LinearClassifier {
   void fit(MLMatrix features, MLVector labels,
       {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
-    final labelsAsList = _classLabels.toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    _weightsByClasses = Map<double, MLVector>.fromIterable(
-      labelsAsList,
-      key: (dynamic label) => label as double,
-      value: (dynamic label) => _fitBinaryClassifier(processedFeatures, labels,
-          label as double, initialWeights, isDataNormalized),
-    );
+    _weightsByClasses = _learnWeights(
+        processedFeatures, labels, initialWeights, isDataNormalized);
   }
 
   @override
@@ -129,16 +124,21 @@ class LogisticRegressor implements LinearClassifier {
     return MLVector.from(classes, dtype: dtype);
   }
 
-  MLMatrix _predictProbabilities(MLMatrix processedFeatures) {
-    final numOfObservations = _weightsByClasses.length;
-    final distributions = List<MLVector>(numOfObservations);
-    int i = 0;
-    _weightsByClasses.forEach((double label, MLVector weights) {
-      final scores = processedFeatures * weights;
-      distributions[i++] = scoreToProbMapper.linkScoresToProbs(scores)
-          .toVector();
-    });
-    return MLMatrix.columns(distributions, dtype: dtype);
+  MLMatrix _predictProbabilities(MLMatrix features) {
+    if (features.columnsNum != _weightsByClasses.rowsNum) {
+      throw Exception('Wrong features number provided: expected '
+          '${_weightsByClasses.rowsNum}, but ${features.columnsNum} given. '
+          'Please, recheck columns number of the passed feature matrix');
+    }
+    return scoreToProbMapper.linkScoresToProbs(features * _weightsByClasses);
+  }
+
+  MLMatrix _learnWeights(MLMatrix features, MLVector labels,
+      MLMatrix initialWeights, bool arePointsNormalized) {
+    final _weightsSource = List<MLVector>.generate(_classLabels.length,
+            (int i) => _fitBinaryClassifier(features, labels,
+            _classLabels[i], initialWeights, arePointsNormalized));
+    return MLMatrix.columns(_weightsSource);
   }
 
   MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,

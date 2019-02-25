@@ -1,5 +1,8 @@
 # Changelog
 
+## 8.0.1
+- More detailed unit tests for softmax regression added
+
 ## 8.0.0
 - `LinearClassifier.softmaxRegressor` implemented
 - `Metric` interface refactored (`getError` renamed to `getScore`)
