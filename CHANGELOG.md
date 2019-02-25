@@ -1,6 +1,7 @@
 # Changelog
 
-## 8.0.1
+## 9.0.0
+- `Classifier`: type of `weightsByClasses` changed from map to `MLMatrix` 
 - More detailed unit tests for softmax regression added
 
 ## 8.0.0
