@@ -301,13 +301,12 @@ void main() {
       // [-5.5, -6.5, -18.0] + eta * [9.0, 8.0, 5.0] = [-5.5, -6.5, -18.0] + 1.0 * [9.0, 8.0, 5.0] = [3.5, 1.5, -13.0]
 
       final weights = classifier.weightsByClasses;
-      final class1Weights = weights.values.elementAt(0);
-      final class2Weights = weights.values.elementAt(1);
-      final class3Weights = weights.values.elementAt(2);
 
-      expect(class1Weights, vectorAlmostEqualTo([3.5, -0.5, -9.0]));
-      expect(class2Weights, vectorAlmostEqualTo([-17.68, -15.5, -0.04], 1e-2));
-      expect(class3Weights, vectorAlmostEqualTo([3.5, 1.5, -13.0]));
+      expect(weights, matrixAlmostEqualTo([
+        [3.5, -17.68, 3.5],
+        [-0.5, -15.5, 1.5],
+        [-9.0, -0.04, -13.0],
+      ], 1e-2));
     });
 
     test('should make prediction', () {
@@ -442,20 +441,16 @@ void main() {
       //
       // derivative: [0.0, -2.0, -2.5, -1.5]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [0.0, -2.0, -2.5, -1.5] = [0.0, -2.0, -2.5, -1.5]
-      expect(
-          [
-            classifier.weightsByClasses.values.first,
-            classifier.weightsByClasses.values.last,
-          ],
-          equals([
-            [0.0, 2.0, 2.5, 1.5],
-            [0.0, -2.0, -2.5, -1.5]
-          ]));
+      expect(classifier.weightsByClasses, equals([
+        [0.0, 0.0],
+        [2.0, -2.0],
+        [2.5, -2.5],
+        [1.5, -1.5],
+      ]));
     });
 
-    test(
-        'should consider intercept scale if intercept term is going to be fitted',
-        () {
+    test('should consider intercept scale if intercept term is going to be '
+        'fitted', () {
       final classifier = LogisticRegressor(
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
@@ -536,15 +531,12 @@ void main() {
       //
       // derivative: [-1.0, -3.5, -4.5, -4.0]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [-1.0, -3.5, -4.5, -4.0] = [-1.0, -3.5, -4.5, -4.0]
-      expect(
-          [
-            classifier.weightsByClasses.values.first,
-            classifier.weightsByClasses.values.last,
-          ],
-          equals([
-            [1.0, 3.5, 4.5, 4.0],
-            [-1.0, -3.5, -4.5, -4.0]
-          ]));
+      expect(classifier.weightsByClasses, equals([
+        [1.0, -1.0],
+        [3.5, -3.5],
+        [4.5, -4.5],
+        [4.0, -4.0],
+      ]));
     });
   });
 }

@@ -90,11 +90,9 @@ class SoftmaxRegressor implements LinearClassifier {
   @override
   MLVector get weights => null;
 
-  MLMatrix _weights;
-
   @override
-  Map<double, MLVector> get weightsByClasses => _weightsByClasses;
-  Map<double, MLVector> _weightsByClasses;
+  MLMatrix get weightsByClasses => _weightsByClasses;
+  MLMatrix _weightsByClasses;
 
   @override
   List<double> get classLabels => _classLabels;
@@ -105,14 +103,14 @@ class SoftmaxRegressor implements LinearClassifier {
       {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.unique().toList();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    _weights = _learnWeights(
+    _weightsByClasses = _learnWeights(
         processedFeatures, labels, initialWeights, isDataNormalized);
   }
 
   @override
   double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
-    final evaluator = MetricFactory.createByType(metricType);
-    return evaluator.getScore(predictClasses(features), origLabels);
+    final metric = MetricFactory.createByType(metricType);
+    return metric.getScore(predictClasses(features), origLabels);
   }
 
   @override
@@ -134,12 +132,12 @@ class SoftmaxRegressor implements LinearClassifier {
   }
 
   MLMatrix _predictProbabilities(MLMatrix features) {
-    if (features.columnsNum != _weights.rowsNum) {
+    if (features.columnsNum != _weightsByClasses.rowsNum) {
       throw Exception('Wrong features number provided: expected '
-          '${_weights.rowsNum}, but ${features.columnsNum} given. Please,'
-          'recheck columns number of the passed feature matrix');
+          '${_weightsByClasses.rowsNum}, but ${features.columnsNum} given. '
+          'Please, recheck columns number of the passed feature matrix');
     }
-    return scoreToProbMapper.linkScoresToProbs(features * _weights);
+    return scoreToProbMapper.linkScoresToProbs(features * _weightsByClasses);
   }
 
   MLMatrix _learnWeights(MLMatrix features, MLVector labels,
