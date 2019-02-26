@@ -1,20 +1,20 @@
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
-import 'package:ml_algo/src/classifier/weights_finder/weights_finder.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/predictor/weights_finder.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
-  Type dtype;
-  Optimizer optimizer;
-  InterceptPreprocessor interceptPreprocessor;
-  LabelsProcessor labelsProcessor;
-  ScoreToProbMapper scoreToProbMapper;
+  Type get dtype;
+  Optimizer get optimizer;
+  InterceptPreprocessor get interceptPreprocessor;
+  LabelsProcessor get labelsProcessor;
+  ScoreToProbMapper get scoreToProbMapper;
 
   @override
   MLVector get weights => null;

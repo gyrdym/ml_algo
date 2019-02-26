@@ -1,7 +1,7 @@
+import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
-import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
@@ -24,7 +24,7 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class LogisticRegressor with LinearClassifierMixin implements LinearClassifier {
+class LogisticRegressor with LinearClassifierMixin implements Classifier {
   LogisticRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,

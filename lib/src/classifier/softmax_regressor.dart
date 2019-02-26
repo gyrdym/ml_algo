@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
@@ -6,6 +7,7 @@ import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
@@ -26,7 +28,7 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class SoftmaxRegressor with LinearClassifierMixin implements LinearClassifier {
+class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   SoftmaxRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -42,6 +44,8 @@ class SoftmaxRegressor with LinearClassifierMixin implements LinearClassifier {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.softmax,
+    CategoricalDataEncoderType categoricalEncoderType =
+        CategoricalDataEncoderType.oneHot,
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
@@ -61,7 +65,8 @@ class SoftmaxRegressor with LinearClassifierMixin implements LinearClassifier {
             scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =
         scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
-        dataEncoder = categoricalDataEncoderFactory.oneHot(),
+        dataEncoder = categoricalDataEncoderFactory
+            .fromType(categoricalEncoderType),
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
@@ -99,8 +104,13 @@ class SoftmaxRegressor with LinearClassifierMixin implements LinearClassifier {
   @override
   MLMatrix learnWeights(MLMatrix features, MLVector labels,
       MLMatrix initialWeights, bool arePointsNormalized) {
-    final oneHotEncodedLabels = dataEncoder.encodeAll(labels);
-    return optimizer.findExtrema(features, oneHotEncodedLabels,
+    final encodedLabels = dataEncoder.encodeAll(labels);
+    if (encodedLabels.columnsNum != classLabels.length) {
+      throw Exception('Unproper encoder. Please, provide encoder, that unfolds '
+          'a single label as a list of length equals a number of classes, e.g.'
+          '`CategoricalDataEncoderType.oneHot`. $dataEncoder given instead');
+    }
+    return optimizer.findExtrema(features, encodedLabels,
         initialWeights: initialWeights?.transpose(),
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);

@@ -1,5 +1,4 @@
 import 'package:logging/logging.dart';
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
@@ -8,6 +7,7 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
@@ -18,6 +18,7 @@ import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
@@ -89,6 +90,9 @@ class ConvergenceDetectorFactoryMock extends Mock
     implements ConvergenceDetectorFactory {}
 
 class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
+
+class CategoricalDataEncoderMock extends Mock implements
+    CategoricalDataEncoder {}
 
 class MLDataValueConverterMockWithImpl extends Mock
     implements MLDataValueConverter {
@@ -206,6 +210,10 @@ CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   final factory = CategoricalDataEncoderFactoryMock();
   when(factory.oneHot(any)).thenReturn(oneHotEncoderMock);
   when(factory.ordinal(any)).thenReturn(ordinalEncoderMock);
+  when(factory.fromType(CategoricalDataEncoderType.oneHot))
+      .thenReturn(oneHotEncoderMock);
+  when(factory.fromType(CategoricalDataEncoderType.ordinal))
+      .thenReturn(ordinalEncoderMock);
   return factory;
 }
 

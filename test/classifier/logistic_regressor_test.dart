@@ -11,7 +11,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
-import 'logistic_regressor_common.dart';
+import 'classifier_common.dart';
 
 void main() {
   group('LogisticRegressor', () {
@@ -23,7 +23,7 @@ void main() {
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      createRegressor();
+      createLogisticRegressor();
 
       verify(labelsProcessorFactoryMock.create(Float32x4)).called(1);
       verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0))
@@ -120,7 +120,7 @@ void main() {
               isMinimizingObjective: false))
           .thenReturn(MLMatrix.rows([MLVector.from([555.0, 666.0])]));
 
-      createRegressor()
+      createLogisticRegressor()
         ..fit(features, origLabels,
             initialWeights: initialWeights, isDataNormalized: true);
 

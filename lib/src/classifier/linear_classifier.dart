@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
@@ -87,7 +88,7 @@ abstract class LinearClassifier implements Classifier {
   /// Softmax regression is an algorithm that solves a multiclass classification
   /// problem. The algorithm uses maximization of the passed
   /// data likelihood (as well as
-  /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)).
+  /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression).
   /// In other words, the regressor iteratively tries to select coefficients,
   /// that makes combination of passed features and these coefficients most
   /// likely. But, instead of [Logit link function](https://en.wikipedia.org/wiki/Logit)
@@ -141,6 +142,9 @@ abstract class LinearClassifier implements Classifier {
   /// [gradientType] A type of gradient descent optimizer (stochastic, mini
   /// batch, batch). Will be ignored for all non-gradient optimizers
   ///
+  /// [categoricalEncoderType] Encoder, using for labels encoding. Default
+  /// value - [CategoricalDataEncoderType.oneHot]
+  ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [Float32x4]
@@ -156,6 +160,7 @@ abstract class LinearClassifier implements Classifier {
     LearningRateType learningRateType,
     OptimizerType optimizer,
     GradientType gradientType,
+    CategoricalDataEncoderType categoricalEncoderType,
     Type dtype,
   }) = SoftmaxRegressor;
 

@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/predictor.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
