@@ -4,6 +4,9 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
@@ -24,6 +27,8 @@ Optimizer optimizerMock;
 OptimizerFactory optimizerFactoryMock;
 ScoreToProbMapperFactory scoreToProbFactoryMock;
 ScoreToProbMapper scoreToProbMapperMock;
+CategoricalDataEncoderFactory categoricalDataEncoderFactoryMock;
+CategoricalDataEncoder categoricalDataEncoderMock;
 
 void setUpLabelsProcessorFactory() {
   labelsProcessorMock = LabelsProcessorMock();
@@ -51,7 +56,13 @@ void setUpScoreToProbMapperFactory() {
   });
 }
 
-LogisticRegressor createRegressor({
+void setUpCategoricalDataEncoderFactory() {
+  categoricalDataEncoderMock = CategoricalDataEncoderMock();
+  categoricalDataEncoderFactoryMock = createCategoricalDataEncoderFactoryMock(
+      oneHotEncoderMock: categoricalDataEncoderMock);
+}
+
+LogisticRegressor createLogisticRegressor({
   int iterationLimit = 100,
   double learningRate = 0.01,
   double minWeightsUpdate = 0.001,
@@ -70,6 +81,35 @@ LogisticRegressor createRegressor({
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
       scoreToProbMapperType: ScoreToProbMapperType.logit,
       scoreToProbMapperFactory: scoreToProbFactoryMock,
+      optimizer: OptimizerType.gradientDescent,
+      optimizerFactory: optimizerFactoryMock,
+      gradientType: GradientType.stochastic,
+      randomSeed: randomSeed,
+    );
+
+SoftmaxRegressor createSoftmaxRegressor({
+  int iterationLimit = 100,
+  double learningRate = 0.01,
+  double minWeightsUpdate = 0.001,
+  double lambda = 0.1,
+  int randomSeed = 123,
+  CategoricalDataEncoderType encoder,
+  Type dtype = Float32x4,
+}) =>
+    SoftmaxRegressor(
+      dtype: dtype,
+      learningRateType: LearningRateType.constant,
+      initialWeightsType: InitialWeightsType.zeroes,
+      iterationsLimit: iterationLimit,
+      initialLearningRate: learningRate,
+      minWeightsUpdate: minWeightsUpdate,
+      lambda: lambda,
+      categoricalEncoderType: encoder,
+      labelsProcessorFactory: labelsProcessorFactoryMock,
+      interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
+      scoreToProbMapperType: ScoreToProbMapperType.logit,
+      scoreToProbMapperFactory: scoreToProbFactoryMock,
+      categoricalDataEncoderFactory: categoricalDataEncoderFactoryMock,
       optimizer: OptimizerType.gradientDescent,
       optimizerFactory: optimizerFactoryMock,
       gradientType: GradientType.stochastic,

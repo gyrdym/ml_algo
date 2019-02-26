@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/predictor.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -9,7 +9,7 @@ abstract class Classifier implements Predictor {
   /// the specific class
   MLMatrix get weightsByClasses;
 
-  /// A collection of encoded class labels. Can be transformed back to original
+  /// A collection of class labels. Can be transformed back to original
   /// labels by a [MLData] instance, that was used previously to encode the
   /// labels
   Iterable<double> get classLabels;
