@@ -10,9 +10,9 @@ abstract class Predictor {
   /// Fits the passed [features] to true labels - [origLabels]. It's
   /// possible to provide [initialWeights] and specify, whether the [features]
   /// normalized or not
-  void fit(MLMatrix features, MLVector origLabels,
+  void fit(MLMatrix features, MLMatrix origLabels,
       {MLMatrix initialWeights, bool isDataNormalized});
 
   /// Assesses model according to provided [metric]
-  double test(MLMatrix features, MLVector origLabels, MetricType metric);
+  double test(MLMatrix features, MLMatrix origLabels, MetricType metric);
 }

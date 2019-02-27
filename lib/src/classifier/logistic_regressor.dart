@@ -1,7 +1,4 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
@@ -43,16 +40,13 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
-    LabelsProcessorFactory labelsProcessorFactory =
-        const LabelsProcessorFactoryImpl(),
     InterceptPreprocessorFactory interceptPreprocessorFactory =
         const InterceptPreprocessorFactoryImpl(),
     ScoreToProbMapperFactory scoreToProbMapperFactory =
         const ScoreToProbMapperFactoryImpl(),
     OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
-  })  : labelsProcessor = labelsProcessorFactory.create(dtype),
-        interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+  })  : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
             scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =
             scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
@@ -83,29 +77,23 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
   final InterceptPreprocessor interceptPreprocessor;
 
   @override
-  final LabelsProcessor labelsProcessor;
-
-  @override
   final ScoreToProbMapper scoreToProbMapper;
 
+  /// [labels] - either matrix-column of 0 and 1 or one-vs-all encoded
+  /// multiclass label list (m*n matrix, where m - rows number, n - number of
+  /// classes)
   @override
-  MLMatrix learnWeights(MLMatrix features, MLVector labels,
-      MLMatrix initialWeights, bool arePointsNormalized) {
-    final _weightsSource = List<MLVector>.generate(classLabels.length,
-            (int i) => _fitBinaryClassifier(features, labels,
-            classLabels[i], initialWeights, arePointsNormalized));
-    return MLMatrix.columns(_weightsSource);
-  }
+  MLMatrix learnWeights(MLMatrix features, MLMatrix labels,
+      MLMatrix initialWeights, bool arePointsNormalized) =>
+    labels.mapColumns((column) => _fitBinaryClassifier(features, column,
+        initialWeights, arePointsNormalized));
 
   MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,
-      double targetLabel, MLMatrix initialWeights, bool arePointsNormalized) {
-    final binaryLabels = labelsProcessor.makeLabelsOneVsAll(labels,
-        targetLabel);
-    return optimizer
-        .findExtrema(features, MLMatrix.columns([binaryLabels]),
+      MLMatrix initialWeights, bool arePointsNormalized) =>
+      optimizer
+        .findExtrema(features, MLMatrix.columns([labels]),
             initialWeights: initialWeights?.transpose(),
             arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)
         .getColumn(0);
-  }
 }

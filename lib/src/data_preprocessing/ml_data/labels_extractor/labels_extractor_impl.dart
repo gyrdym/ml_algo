@@ -4,8 +4,7 @@ import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 
-class MLDataLabelsExtractorImpl extends Object
-    with LoggerMixin
+class MLDataLabelsExtractorImpl with LoggerMixin
     implements MLDataLabelsExtractor {
 
   MLDataLabelsExtractorImpl(this.records, this.readMask, this.labelIdx,
@@ -38,16 +37,17 @@ class MLDataLabelsExtractorImpl extends Object
   final Logger logger;
 
   @override
-  List<double> getLabels() {
-    final result = List<double>(rowsNum);
+  List<List<double>> getLabels() {
+    final result = List<List<double>>(rowsNum);
     int _i = 0;
-    for (int i = 0; i < readMask.length; i++) {
-      if (readMask[i] == true) {
-        final dynamic rawValue = records[i][labelIdx];
-        final convertedValue = encoders != null &&
-            encoders.containsKey(labelIdx)
-            ? encoders[labelIdx].encodeSingle(rawValue).first
-            : valueConverter.convert(rawValue);
+    final categoricalDataExist = encoders != null &&
+        encoders.containsKey(labelIdx);
+    for (int row = 0; row < readMask.length; row++) {
+      if (readMask[row] == true) {
+        final dynamic rawValue = records[row][labelIdx];
+        final convertedValue = categoricalDataExist
+            ? encoders[labelIdx].encodeSingle(rawValue).toList(growable: false)
+            : [valueConverter.convert(rawValue)];
         result[_i++] = convertedValue;
       }
     }

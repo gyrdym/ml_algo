@@ -2,7 +2,6 @@ import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
-import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
@@ -26,7 +25,6 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.da
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   SoftmaxRegressor({
@@ -102,17 +100,12 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   final CategoricalDataEncoder dataEncoder;
 
   @override
-  MLMatrix learnWeights(MLMatrix features, MLVector labels,
-      MLMatrix initialWeights, bool arePointsNormalized) {
-    final encodedLabels = dataEncoder.encodeAll(labels);
-    if (encodedLabels.columnsNum != classLabels.length) {
-      throw Exception('Unproper encoder. Please, provide encoder, that unfolds '
-          'a single label as a list of length equals a number of classes, e.g.'
-          '`CategoricalDataEncoderType.oneHot`. $dataEncoder given instead');
-    }
-    return optimizer.findExtrema(features, encodedLabels,
+  MLMatrix learnWeights(MLMatrix features, MLMatrix labels,
+      MLMatrix initialWeights, bool arePointsNormalized) =>
+    optimizer.findExtrema(features,
+        labels.columnsNum == 1
+            ? dataEncoder.encodeAll(labels.getColumn(0)) : labels,
         initialWeights: initialWeights?.transpose(),
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
-  }
 }

@@ -91,5 +91,5 @@ abstract class MLData {
 
   /// Processed and ready to use (by machine learning algorithms) dataset
   /// labels (Target values, e.g. class labels or regression values)
-  Future<MLVector> get labels;
+  Future<MLMatrix> get labels;
 }

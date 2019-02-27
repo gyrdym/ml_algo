@@ -57,7 +57,10 @@ void main() {
         [10.1, 10.2, 12.0, 13.4],
         [3.1, 5.2, 6.0, 77.4],
       ]);
-      final origLabels = MLVector.from([1.0, 2.0]);
+      final origLabels = MLMatrix.from([
+        [1.0],
+        [2.0],
+      ]);
 
       when(interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
         [10.1, 10.2, 12.0, 13.4],
