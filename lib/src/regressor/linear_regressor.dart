@@ -1,9 +1,9 @@
-import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/lasso_regressor.dart';
+import 'package:ml_algo/src/regressor/regressor.dart';
 
 /// A factory for all the linear regressors.
 ///
@@ -14,7 +14,7 @@ import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 /// as one knows all the `x` values (since it is the input for the algorithm),
 /// the regressor should find the best coefficients (weights) (they are unknown)
 /// to make a best prediction of `y` term.
-abstract class LinearRegressor implements Predictor {
+abstract class LinearRegressor implements Regressor {
   /**
    * Creates a gradient linear regressor. Uses gradient descent optimizer to
    * find the optimal weights

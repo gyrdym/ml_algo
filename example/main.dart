@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 /// A simple usage example using synthetic data. To see more complex examples, please, visit other directories in this
 /// folder
@@ -15,7 +14,11 @@ Future main() async {
   ]);
 
   // Let's create dependent variables vector. It will be used as `true` values to adjust regression coefficients
-  final labels = MLVector.from([4.3, 3.5, 2.1]);
+  final labels = MLMatrix.from([
+    [4.3],
+    [3.5],
+    [2.1]
+  ]);
 
   // Let's create a regressor itself. With its help we can train some linear model to predict a label value for a new
   // features

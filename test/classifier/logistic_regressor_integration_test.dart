@@ -2,7 +2,6 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
@@ -30,7 +29,15 @@ void main() {
         [4.0, 0.0, 1.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
+      final labels = MLMatrix.from([
+        [3.0],
+        [1.0],
+        [3.0],
+        [2.0],
+        [2.0],
+        [0.0],
+        [0.0],
+      ]);
       classifier.fit(features, labels);
 
       expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
@@ -44,7 +51,13 @@ void main() {
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLMatrix.from([
+        [0.0],
+        [1.0],
+        [1.0],
+        [2.0],
+        [0.0]
+      ]);
       classifier.fit(features, labels);
 
       // given test_data
@@ -317,7 +330,13 @@ void main() {
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLMatrix.from([
+        [0.0],
+        [1.0],
+        [1.0],
+        [2.0],
+        [0.0],
+      ]);
       classifier.fit(features, labels);
 
       final newFeatures = MLMatrix.from([
@@ -342,13 +361,21 @@ void main() {
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLMatrix.from([
+        [0.0],
+        [1.0],
+        [1.0],
+        [2.0],
+        [0.0],
+      ]);
       classifier.fit(features, labels);
 
       final newFeatures = MLMatrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = MLVector.from([1.0]);
+      final origLabels = MLMatrix.from([
+        [1.0]
+      ]);
       final score =
           classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(score, equals(0.0));
@@ -362,13 +389,21 @@ void main() {
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = MLMatrix.from([
+        [0.0],
+        [1.0],
+        [1.0],
+        [2.0],
+        [0.0],
+      ]);
       classifier.fit(features, labels);
 
       final newFeatures = MLMatrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = MLVector.from([2.0]);
+      final origLabels = MLMatrix.from([
+        [2.0]
+      ]);
       final score =
           classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(score, equals(1.0));
@@ -385,7 +420,10 @@ void main() {
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0]);
+      final labels = MLMatrix.from([
+        [0.0],
+        [1.0],
+      ]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our test_data should look as follows:
@@ -463,7 +501,11 @@ void main() {
         [1.0, 2.0, 3.0],
         [3.0, 4.0, 5.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 0.0]);
+      final labels = MLMatrix.from([
+        [0.0],
+        [1.0],
+        [0.0],
+      ]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our test_data should look as follows:

@@ -11,14 +11,11 @@ import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
-import 'package:ml_algo/src/regressor/linear_regressor.dart';
+import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class GradientRegressor implements LinearRegressor {
-  final GradientOptimizer _optimizer;
-  final InterceptPreprocessor _interceptPreprocessor;
-
+class GradientRegressor implements Regressor {
   GradientRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -52,17 +49,20 @@ class GradientRegressor implements LinearRegressor {
           randomSeed: randomSeed,
         );
 
+  final GradientOptimizer _optimizer;
+  final InterceptPreprocessor _interceptPreprocessor;
+
   @override
   MLVector get weights => _weights;
   MLVector _weights;
 
   @override
-  void fit(MLMatrix features, MLVector labels,
+  void fit(MLMatrix features, MLMatrix labels,
       {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _weights = _optimizer
         .findExtrema(
           _interceptPreprocessor.addIntercept(features),
-          MLMatrix.columns([labels]),
+          labels,
           initialWeights: initialWeights?.transpose(),
           isMinimizingObjective: true,
           arePointsNormalized: isDataNormalized
@@ -70,11 +70,12 @@ class GradientRegressor implements LinearRegressor {
   }
 
   @override
-  double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
+  double test(MLMatrix features, MLMatrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);
   }
 
-  MLVector predict(MLMatrix features) => (features * _weights).toVector();
+  @override
+  MLMatrix predict(MLMatrix features) => features * _weights;
 }

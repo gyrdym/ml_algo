@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/data_preprocessing/ml_data/csv_data.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
@@ -19,7 +18,7 @@ Future testCsvWithCategories(
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
     void testContentFn(
-        MLMatrix features, MLVector labels, List<String> headers)}) async {
+        MLMatrix features, MLMatrix labels, List<String> headers)}) async {
   final data = CsvData.fromFile(fileName,
       labelIdx: labelIdx,
       columns: columns,
@@ -32,7 +31,7 @@ Future testCsvWithCategories(
   final labels = await data.labels;
 
   expect(features.rowsNum, equals(rowNum));
-  expect(labels.length, equals(rowNum));
+  expect(labels.rowsNum, equals(rowNum));
 
   testContentFn(features, labels, header);
 }

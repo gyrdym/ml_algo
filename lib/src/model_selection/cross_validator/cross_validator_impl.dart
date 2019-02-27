@@ -1,17 +1,14 @@
-import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class CrossValidatorImpl implements CrossValidator {
-  final Type dtype;
-  final Splitter _splitter;
-
   factory CrossValidatorImpl.kFold({Type dtype, int numberOfFolds = 5}) =>
       CrossValidatorImpl._(dtype, KFoldSplitter(numberOfFolds));
 
@@ -21,11 +18,14 @@ class CrossValidatorImpl implements CrossValidator {
   CrossValidatorImpl._(Type dtype, this._splitter)
       : dtype = dtype ?? DefaultParameterValues.dtype;
 
+  final Type dtype;
+  final Splitter _splitter;
+
   @override
   double evaluate(
-      Predictor predictor, MLMatrix points, MLVector labels, MetricType metric,
+      Predictor predictor, MLMatrix points, MLMatrix labels, MetricType metric,
       {bool isDataNormalized = false}) {
-    if (points.rowsNum != labels.length) {
+    if (points.rowsNum != labels.rowsNum) {
       throw Exception(
           'Number of feature objects must be equal to the number of labels!');
     }
@@ -36,31 +36,38 @@ class CrossValidatorImpl implements CrossValidator {
 
     for (final testIndices in allIndicesGroups) {
       final trainFeatures =
-          List<List<double>>(points.rowsNum - testIndices.length);
-      final testFeatures = List<List<double>>(testIndices.length);
-      final trainIndices = List<int>(points.rowsNum - testIndices.length);
+          List<MLVector>(points.rowsNum - testIndices.length);
+      final trainLabels =
+          List<MLVector>(points.rowsNum - testIndices.length);
+
+      final testFeatures = List<MLVector>(testIndices.length);
+      final testLabels = List<MLVector>(testIndices.length);
 
       int trainPointsCounter = 0;
       int testPointsCounter = 0;
 
       for (int index = 0; index < points.rowsNum; index++) {
         if (testIndices.contains(index)) {
-          testFeatures[testPointsCounter++] = points[index].toList();
+          testFeatures[testPointsCounter] = points.getRow(index);
+          testLabels[testPointsCounter] = labels.getRow(index);
+          testPointsCounter++;
         } else {
-          trainIndices[trainPointsCounter] = index;
-          trainFeatures[trainPointsCounter] = points[index].toList();
+          trainFeatures[trainPointsCounter] = points.getRow(index);
+          trainLabels[trainPointsCounter] = labels.getRow(index);
           trainPointsCounter++;
         }
       }
 
-      predictor.fit(MLMatrix.from(trainFeatures, dtype: dtype),
-          labels.query(trainIndices),
+      predictor.fit(
+          MLMatrix.rows(trainFeatures, dtype: dtype),
+          MLMatrix.rows(trainLabels, dtype: dtype),
           isDataNormalized: isDataNormalized);
 
       scores[scoreCounter++] = predictor.test(
-          MLMatrix.from(testFeatures, dtype: dtype),
-          labels.query(testIndices),
-          metric);
+          MLMatrix.rows(testFeatures, dtype: dtype),
+          MLMatrix.rows(trainLabels, dtype: dtype),
+          metric
+      );
     }
 
     return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;

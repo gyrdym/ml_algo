@@ -4,10 +4,9 @@ import 'dart:typed_data';
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 MLMatrix features;
-MLVector labels;
+MLMatrix labels;
 LinearClassifier regressor;
 
 class LogisticRegressorBenchmark extends BenchmarkBase {

@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/metric/factory.dart';
@@ -13,7 +12,6 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   Type get dtype;
   Optimizer get optimizer;
   InterceptPreprocessor get interceptPreprocessor;
-  LabelsProcessor get labelsProcessor;
   ScoreToProbMapper get scoreToProbMapper;
 
   @override
@@ -24,20 +22,20 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   MLMatrix _weightsByClasses;
 
   @override
-  List<double> get classLabels => _classLabels;
-  List<double> _classLabels;
+  MLMatrix get classLabels => _classLabels;
+  MLMatrix _classLabels;
 
   @override
-  void fit(MLMatrix features, MLVector labels,
+  void fit(MLMatrix features, MLMatrix labels,
       {MLMatrix initialWeights, bool isDataNormalized = false}) {
-    _classLabels = labels.unique().toList();
+    _classLabels = labels.uniqueRows();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
     _weightsByClasses = learnWeights(
         processedFeatures, labels, initialWeights, isDataNormalized);
   }
 
   @override
-  double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
+  double test(MLMatrix features, MLMatrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     return metric.getScore(predictClasses(features), origLabels);
   }
@@ -49,15 +47,12 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   }
 
   @override
-  MLVector predictClasses(MLMatrix features) {
+  MLMatrix predictClasses(MLMatrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    final distributions = _predictProbabilities(processedFeatures);
-    final classes = List<double>(processedFeatures.rowsNum);
-    for (int i = 0; i < distributions.rowsNum; i++) {
-      final probabilities = distributions.getRow(i);
-      classes[i] = probabilities.toList().indexOf(probabilities.max()) * 1.0;
-    }
-    return MLVector.from(classes, dtype: dtype);
+    return _predictProbabilities(processedFeatures).mapRows((probabilities) {
+      final labelIdx = probabilities.toList().indexOf(probabilities.max());
+      return _classLabels.getRow(labelIdx);
+    });
   }
 
   MLMatrix _predictProbabilities(MLMatrix features) {

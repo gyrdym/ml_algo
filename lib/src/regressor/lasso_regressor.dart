@@ -1,19 +1,17 @@
-import 'package:ml_algo/src/default_parameter_values.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/factory.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/regressor/linear_regressor.dart';
+import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class LassoRegressor implements LinearRegressor {
-  final CoordinateOptimizer _optimizer;
-  final InterceptPreprocessor _interceptPreprocessor;
-
+class LassoRegressor implements Regressor {
   LassoRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -38,17 +36,20 @@ class LassoRegressor implements LinearRegressor {
           dtype: dtype,
         );
 
+  final CoordinateOptimizer _optimizer;
+  final InterceptPreprocessor _interceptPreprocessor;
+
   @override
   MLVector get weights => _weights;
   MLVector _weights;
 
   @override
-  void fit(MLMatrix features, MLVector labels,
+  void fit(MLMatrix features, MLMatrix labels,
       {MLMatrix initialWeights, bool isDataNormalized = false}) {
     _weights = _optimizer
         .findExtrema(
           _interceptPreprocessor.addIntercept(features),
-          MLMatrix.columns([labels]),
+          labels,
           initialWeights: initialWeights.transpose(),
           isMinimizingObjective: true,
           arePointsNormalized: isDataNormalized
@@ -56,11 +57,12 @@ class LassoRegressor implements LinearRegressor {
   }
 
   @override
-  double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
+  double test(MLMatrix features, MLMatrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);
   }
 
-  MLVector predict(MLMatrix features) => (features * _weights).toVector();
+  @override
+  MLMatrix predict(MLMatrix features) => features * _weights;
 }

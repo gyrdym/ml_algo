@@ -27,10 +27,76 @@ import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_con
 import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter_impl.dart';
 import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
 
 class CsvData implements MLData {
+  CsvData.fromFile(String fileName, {
+      // public parameters
+      Type dtype,
+      String eol = '\n',
+      int labelIdx,
+      bool headerExists = true,
+      CategoricalDataEncoderType encoderType =
+          CategoricalDataEncoderType.oneHot,
+      EncodeUnknownValueStrategy encodeUnknownStrategy =
+          EncodeUnknownValueStrategy.throwError,
+      Map<String, List<Object>> categories,
+      Map<int, List<Object>> categoriesByIndexes,
+      Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
+      Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
+      List<Tuple2<int, int>> rows,
+      List<Tuple2<int, int>> columns,
+
+      // private parameters, they are hidden by the factory
+      CategoricalDataEncoderFactory encoderFactory =
+      const CategoricalDataEncoderFactory(),
+      MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
+      MLDataValueConverter valueConverter = const MLDataValueConverterImpl(),
+      MLDataHeaderExtractorFactory headerExtractorFactory =
+      const MLDataHeaderExtractorFactoryImpl(),
+      MLDataFeaturesExtractorFactory featuresExtractorFactory =
+      const MLDataFeaturesExtractorFactoryImpl(),
+      MLDataLabelsExtractorFactory labelsExtractorFactory =
+      const MLDataLabelsExtractorFactoryImpl(),
+      MLDataReadMaskCreatorFactory readMaskCreatorFactory =
+      const MLDataReadMaskCreatorFactoryImpl(),
+      MLDataEncodersProcessorFactory encodersProcessorFactory =
+      const MLDataEncodersProcessorFactoryImpl(),
+      Logger logger,
+    })  : _dtype = dtype ?? DefaultParameterValues.dtype,
+      _csvCodec = CsvCodec(eol: eol),
+      _file = File(fileName),
+      _labelIdx = labelIdx,
+      _headerExists = headerExists,
+      _rows = rows,
+      _columns = columns,
+      _categories = categories ?? {},
+      _nameToEncoderType = categoryNameToEncoder ?? {},
+      _indexToEncoderType = categoryIndexToEncoder ?? {},
+      _encoderFactory = encoderFactory,
+      _fallbackEncoderType = encoderType,
+      _paramsValidator = paramsValidator,
+      _valueConverter = valueConverter,
+      _headerExtractorFactory = headerExtractorFactory,
+      _featuresExtractorFactory = featuresExtractorFactory,
+      _labelsExtractorFactory = labelsExtractorFactory,
+      _readMaskCreatorFactory = readMaskCreatorFactory,
+      _encodersProcessorFactory = encodersProcessorFactory,
+      _logger = logger ?? Logger(_loggerPrefix) {
+    final errorMsg = _paramsValidator.validate(
+      labelIdx: labelIdx,
+      rows: rows,
+      columns: columns,
+      headerExists: headerExists,
+      predefinedCategories: categories,
+      namesToEncoders: categoryNameToEncoder,
+      indexToEncoder: categoryIndexToEncoder,
+    );
+    if (errorMsg.isNotEmpty) {
+      throw Exception(_wrapErrorMessage(errorMsg));
+    }
+  }
+
   final Type _dtype;
   final CsvCodec _csvCodec;
   final File _file;
@@ -57,78 +123,11 @@ class CsvData implements MLData {
 
   List<List<dynamic>> _data; // the whole dataset including header
   MLMatrix _features;
-  MLVector _labels;
+  MLMatrix _labels;
   List<String> _header;
   MLDataHeaderExtractor _headerExtractor;
   MLDataFeaturesExtractor _featuresExtractor;
   MLDataLabelsExtractor _labelsExtractor;
-
-  CsvData.fromFile(
-    String fileName, {
-    // public parameters
-    Type dtype,
-    String eol = '\n',
-    int labelIdx,
-    bool headerExists = true,
-    CategoricalDataEncoderType encoderType = CategoricalDataEncoderType.oneHot,
-    EncodeUnknownValueStrategy encodeUnknownStrategy =
-        EncodeUnknownValueStrategy.throwError,
-    Map<String, List<Object>> categories,
-    Map<int, List<Object>> categoriesByIndexes,
-    Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
-    Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
-    List<Tuple2<int, int>> rows,
-    List<Tuple2<int, int>> columns,
-
-    // private parameters, they are hidden by the factory
-    CategoricalDataEncoderFactory encoderFactory =
-        const CategoricalDataEncoderFactory(),
-    MLDataParamsValidator paramsValidator = const MLDataParamsValidatorImpl(),
-    MLDataValueConverter valueConverter = const MLDataValueConverterImpl(),
-    MLDataHeaderExtractorFactory headerExtractorFactory =
-        const MLDataHeaderExtractorFactoryImpl(),
-    MLDataFeaturesExtractorFactory featuresExtractorFactory =
-        const MLDataFeaturesExtractorFactoryImpl(),
-    MLDataLabelsExtractorFactory labelsExtractorFactory =
-        const MLDataLabelsExtractorFactoryImpl(),
-    MLDataReadMaskCreatorFactory readMaskCreatorFactory =
-        const MLDataReadMaskCreatorFactoryImpl(),
-    MLDataEncodersProcessorFactory encodersProcessorFactory =
-        const MLDataEncodersProcessorFactoryImpl(),
-    Logger logger,
-  })  : _dtype = dtype ?? DefaultParameterValues.dtype,
-        _csvCodec = CsvCodec(eol: eol),
-        _file = File(fileName),
-        _labelIdx = labelIdx,
-        _headerExists = headerExists,
-        _rows = rows,
-        _columns = columns,
-        _categories = categories ?? {},
-        _nameToEncoderType = categoryNameToEncoder ?? {},
-        _indexToEncoderType = categoryIndexToEncoder ?? {},
-        _encoderFactory = encoderFactory,
-        _fallbackEncoderType = encoderType,
-        _paramsValidator = paramsValidator,
-        _valueConverter = valueConverter,
-        _headerExtractorFactory = headerExtractorFactory,
-        _featuresExtractorFactory = featuresExtractorFactory,
-        _labelsExtractorFactory = labelsExtractorFactory,
-        _readMaskCreatorFactory = readMaskCreatorFactory,
-        _encodersProcessorFactory = encodersProcessorFactory,
-        _logger = logger ?? Logger(_loggerPrefix) {
-    final errorMsg = _paramsValidator.validate(
-      labelIdx: labelIdx,
-      rows: rows,
-      columns: columns,
-      headerExists: headerExists,
-      predefinedCategories: categories,
-      namesToEncoders: categoryNameToEncoder,
-      indexToEncoder: categoryIndexToEncoder,
-    );
-    if (errorMsg.isNotEmpty) {
-      throw Exception(_wrapErrorMessage(errorMsg));
-    }
-  }
 
   @override
   Future<List<String>> get header async {
@@ -146,9 +145,10 @@ class CsvData implements MLData {
   }
 
   @override
-  Future<MLVector> get labels async {
+  Future<MLMatrix> get labels async {
     _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= MLVector.from(_labelsExtractor.getLabels(), dtype: _dtype);
+    _labels ??= MLMatrix.from(_labelsExtractor.getLabels(), dtype: _dtype)
+        .transpose();
     return _labels;
   }
 
