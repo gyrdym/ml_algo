@@ -8,10 +8,9 @@ import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class LassoRegressor implements Regressor {
+class LassoRegressor implements LinearRegressor {
   LassoRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -40,12 +39,12 @@ class LassoRegressor implements Regressor {
   final InterceptPreprocessor _interceptPreprocessor;
 
   @override
-  MLVector get weights => _weights;
-  MLVector _weights;
+  Vector get weights => _weights;
+  Vector _weights;
 
   @override
-  void fit(MLMatrix features, MLMatrix labels,
-      {MLMatrix initialWeights, bool isDataNormalized = false}) {
+  void fit(Matrix features, Matrix labels,
+      {Matrix initialWeights, bool isDataNormalized = false}) {
     _weights = _optimizer
         .findExtrema(
           _interceptPreprocessor.addIntercept(features),
@@ -57,12 +56,12 @@ class LassoRegressor implements Regressor {
   }
 
   @override
-  double test(MLMatrix features, MLMatrix origLabels, MetricType metricType) {
+  double test(Matrix features, Matrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);
   }
 
   @override
-  MLMatrix predict(MLMatrix features) => features * _weights;
+  Matrix predict(Matrix features) => features * _weights;
 }

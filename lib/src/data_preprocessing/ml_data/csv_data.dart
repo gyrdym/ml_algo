@@ -122,8 +122,8 @@ class CsvData implements MLData {
   static const String _loggerPrefix = 'MLData';
 
   List<List<dynamic>> _data; // the whole dataset including header
-  MLMatrix _features;
-  MLMatrix _labels;
+  Matrix _features;
+  Matrix _labels;
   List<String> _header;
   MLDataHeaderExtractor _headerExtractor;
   MLDataFeaturesExtractor _featuresExtractor;
@@ -137,17 +137,17 @@ class CsvData implements MLData {
   }
 
   @override
-  Future<MLMatrix> get features async {
+  Future<Matrix> get features async {
     _data ??= (await _prepareData(_rows, _columns));
     _features ??=
-        MLMatrix.from(_featuresExtractor.getFeatures(), dtype: _dtype);
+        Matrix.from(_featuresExtractor.getFeatures(), dtype: _dtype);
     return _features;
   }
 
   @override
-  Future<MLMatrix> get labels async {
+  Future<Matrix> get labels async {
     _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= MLMatrix.from(_labelsExtractor.getLabels(), dtype: _dtype)
+    _labels ??= Matrix.from(_labelsExtractor.getLabels(), dtype: _dtype)
         .transpose();
     return _labels;
   }

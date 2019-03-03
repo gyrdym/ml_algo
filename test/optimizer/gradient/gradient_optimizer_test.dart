@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 import 'gradient_common.dart';
 
-MLMatrix getPoints() => MLMatrix.from([
+Matrix getPoints() => Matrix.from([
       [5.0, 10.0, 15.0],
       [1.0, 2.0, 3.0],
       [10.0, 20.0, 30.0],
@@ -40,7 +40,7 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is '
         'equal to `1` (stochastic case)', () {
       final points = getPoints();
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [10.0],
         [20.0],
         [30.0],
@@ -65,7 +65,7 @@ void main() {
         [-40.0],
         [-40.0],
       ];
-      final grad = MLMatrix.from([
+      final grad = Matrix.from([
         [10.0],
         [10.0],
         [10.0]
@@ -91,7 +91,7 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is '
         'equal to `2` (mini batch case)', () {
       final points = getPoints();
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [10.0],
         [20.0],
         [30.0],
@@ -116,7 +116,7 @@ void main() {
 
       when(costFunctionMock.getGradient(
               argThat(equals(batch)), any, argThat(equals(y))))
-          .thenReturn(MLMatrix.from(grad));
+          .thenReturn(Matrix.from(grad));
 
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
@@ -130,7 +130,7 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is '
         'equal to `4` (batch case)', () {
       final points = getPoints();
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [10.0],
         [20.0],
         [30.0],
@@ -141,7 +141,7 @@ void main() {
           .thenReturn([0, 4]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(MLMatrix.from([
+          .thenReturn(Matrix.from([
             [10.0],
             [10.0],
             [10.0]
@@ -159,7 +159,7 @@ void main() {
         'of given points', () {
       final iterationLimit = 3;
       final points = getPoints();
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [10.0],
         [20.0],
         [30.0],
@@ -175,7 +175,7 @@ void main() {
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4))
           .thenReturn(interval);
       when(costFunctionMock.getGradient(any, any, any))
-          .thenReturn(MLMatrix.from(grad));
+          .thenReturn(Matrix.from(grad));
 
       testOptimizer((optimizer) {
         optimizer.findExtrema(points, labels);
@@ -188,11 +188,11 @@ void main() {
 
     /// (Explanation of the test case)[https://github.com/gyrdym/ml_algo/wiki/Gradient-descent-optimizer-should-find-optimal-coefficient-values]
     test('should find optimal coefficient values', () {
-      final points = MLMatrix.from([
+      final points = Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [7.0],
         [8.0],
       ]);
@@ -201,7 +201,7 @@ void main() {
           .thenReturn([0, 2]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(MLMatrix.from([
+          .thenReturn(Matrix.from([
             [8.0],
             [8.0],
             [8.0]
@@ -221,15 +221,15 @@ void main() {
 
     /// (Explanation of the test case)[https://github.com/gyrdym/ml_algo/wiki/Gradient-descent-optimizer-should-find-optimal-coefficient-values-and-regularize-it]
     test('should find optimal coefficient values and regularize it', () {
-      final points = MLMatrix.from([
+      final points = Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [7.0],
         [8.0]
       ]);
-      final gradient = MLMatrix.from([
+      final gradient = Matrix.from([
         [8.0],
         [8.0],
         [8.0],

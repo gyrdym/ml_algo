@@ -19,7 +19,7 @@ Future testCsvData(
     CategoricalDataEncoderFactory categoricalDataFactoryMock,
     MLDataParamsValidator validatorMock,
     void testContentFn(
-        MLMatrix features, MLMatrix labels, List<String> headers)}) async {
+        Matrix features, Matrix labels, List<String> headers)}) async {
   categoricalDataFactoryMock ??= createCategoricalDataEncoderFactoryMock();
   validatorMock ??=
       createMLDataParamsValidatorMock(validationShouldBeFailed: false);

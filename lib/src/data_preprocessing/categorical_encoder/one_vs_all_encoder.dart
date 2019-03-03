@@ -30,12 +30,12 @@ class OneVsAllEncoder implements CategoricalDataEncoder {
   }
 
   @override
-  MLMatrix encodeAll(Iterable<Object> values) {
+  Matrix encodeAll(Iterable<Object> values) {
     setCategoryValues(values.toList(growable: false));
     final sourceEncoded = _values
         .map<List<double>>((value) => _makeValueOneVsAll(values, value))
         .toList(growable: false);
-    return MLMatrix.from(sourceEncoded).transpose();
+    return Matrix.from(sourceEncoded).transpose();
   }
 
   List<double> _makeValueOneVsAll(Iterable<Object> values,

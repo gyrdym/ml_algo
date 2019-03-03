@@ -67,13 +67,13 @@ class GradientOptimizer implements Optimizer {
   final double _lambda;
   final int _batchSize;
 
-  MLMatrix _points;
-  MLMatrix _coefficients;
+  Matrix _points;
+  Matrix _coefficients;
 
   @override
-  MLMatrix findExtrema(MLMatrix points, MLMatrix labels,
+  Matrix findExtrema(Matrix points, Matrix labels,
       {int numOfCoefficientVectors = 1,
-      MLMatrix initialWeights,
+      Matrix initialWeights,
       bool isMinimizingObjective = true,
       bool arePointsNormalized = false}) {
     _points = points;
@@ -82,7 +82,7 @@ class GradientOptimizer implements Optimizer {
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
     _coefficients = initialWeights ??
-        MLMatrix.columns(List<MLVector>.generate(labels.columnsNum,
+        Matrix.columns(List<Vector>.generate(labels.columnsNum,
             (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     var iteration = 0;
@@ -103,8 +103,8 @@ class GradientOptimizer implements Optimizer {
     return _coefficients;
   }
 
-  MLMatrix _generateCoefficients(
-      MLMatrix coefficients, MLMatrix labels, double eta, int batchSize,
+  Matrix _generateCoefficients(
+      Matrix coefficients, Matrix labels, double eta, int batchSize,
       {bool isMinimization = true}) {
     final range = _getBatchRange(batchSize);
     final start = range.first;
@@ -119,8 +119,8 @@ class GradientOptimizer implements Optimizer {
   Iterable<int> _getBatchRange(int batchSize) => _randomizer
       .getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
 
-  MLMatrix _makeGradientStep(
-      MLMatrix coefficients, MLMatrix points, MLMatrix labels, double eta,
+  Matrix _makeGradientStep(
+      Matrix coefficients, Matrix points, Matrix labels, double eta,
       {bool isMinimization = true}) {
     final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
@@ -129,7 +129,7 @@ class GradientOptimizer implements Optimizer {
         : regularizedCoefficients + gradient * eta;
   }
 
-  MLMatrix _regularize(double eta, double lambda, MLMatrix coefficients) {
+  Matrix _regularize(double eta, double lambda, Matrix coefficients) {
     if (lambda == 0) {
       return coefficients;
     } else {

@@ -18,7 +18,7 @@ Future testCsvWithCategories(
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
     void testContentFn(
-        MLMatrix features, MLMatrix labels, List<String> headers)}) async {
+        Matrix features, Matrix labels, List<String> headers)}) async {
   final data = CsvData.fromFile(fileName,
       labelIdx: labelIdx,
       columns: columns,

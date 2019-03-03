@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
@@ -25,10 +23,10 @@ class LogLikelihoodCost implements CostFunction {
   }
 
   @override
-  MLMatrix getGradient(MLMatrix x, MLMatrix w, MLMatrix y) =>
+  Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
     x.transpose() * (y - scoreToProbMapper.linkScoresToProbs(x * w));
 
   @override
-  MLVector getSubDerivative(int wIdx, MLMatrix x, MLMatrix w, MLMatrix y) =>
+  Vector getSubDerivative(int wIdx, Matrix x, Matrix w, Matrix y) =>
       throw UnimplementedError();
 }

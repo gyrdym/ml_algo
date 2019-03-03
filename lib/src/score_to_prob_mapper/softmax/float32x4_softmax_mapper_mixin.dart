@@ -5,17 +5,17 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 abstract class Float32x4SoftmaxMapperMixin {
-  MLMatrix float32x4ScoresToProbs(MLMatrix scores) {
+  Matrix float32x4ScoresToProbs(Matrix scores) {
     final maxValue = scores.max();
     final stableScores = scores - maxValue;
     final allProba = _toFloat32x4Probs(stableScores);
     final summedProba = allProba
         .reduceColumns(
-            (MLVector resultColumn, MLVector scores) => resultColumn + scores);
+            (Vector resultColumn, Vector scores) => resultColumn + scores);
     return allProba / summedProba;
   }
 
-  MLMatrix _toFloat32x4Probs(MLMatrix scores) =>
+  Matrix _toFloat32x4Probs(Matrix scores) =>
       scores.fastMap<Float32x4>(_float32x4Logit);
 
   Float32x4 _float32x4Logit(Float32x4 scores) => Float32x4(

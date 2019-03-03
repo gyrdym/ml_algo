@@ -15,19 +15,19 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   ScoreToProbMapper get scoreToProbMapper;
 
   @override
-  MLVector get weights => null;
+  Vector get weights => null;
 
   @override
-  MLMatrix get weightsByClasses => _weightsByClasses;
-  MLMatrix _weightsByClasses;
+  Matrix get weightsByClasses => _weightsByClasses;
+  Matrix _weightsByClasses;
 
   @override
-  MLMatrix get classLabels => _classLabels;
-  MLMatrix _classLabels;
+  Matrix get classLabels => _classLabels;
+  Matrix _classLabels;
 
   @override
-  void fit(MLMatrix features, MLMatrix labels,
-      {MLMatrix initialWeights, bool isDataNormalized = false}) {
+  void fit(Matrix features, Matrix labels,
+      {Matrix initialWeights, bool isDataNormalized = false}) {
     _classLabels = labels.uniqueRows();
     final processedFeatures = interceptPreprocessor.addIntercept(features);
     _weightsByClasses = learnWeights(
@@ -35,19 +35,19 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   }
 
   @override
-  double test(MLMatrix features, MLMatrix origLabels, MetricType metricType) {
+  double test(Matrix features, Matrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     return metric.getScore(predictClasses(features), origLabels);
   }
 
   @override
-  MLMatrix predictProbabilities(MLMatrix features) {
+  Matrix predictProbabilities(Matrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
     return _predictProbabilities(processedFeatures);
   }
 
   @override
-  MLMatrix predictClasses(MLMatrix features) {
+  Matrix predictClasses(Matrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
     return _predictProbabilities(processedFeatures).mapRows((probabilities) {
       final labelIdx = probabilities.toList().indexOf(probabilities.max());
@@ -55,7 +55,7 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
     });
   }
 
-  MLMatrix _predictProbabilities(MLMatrix features) {
+  Matrix _predictProbabilities(Matrix features) {
     if (features.columnsNum != _weightsByClasses.rowsNum) {
       throw Exception('Wrong features number provided: expected '
           '${_weightsByClasses.rowsNum}, but ${features.columnsNum} given. '

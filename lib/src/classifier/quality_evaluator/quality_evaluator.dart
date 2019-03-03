@@ -5,6 +5,6 @@ import 'package:ml_linalg/vector.dart';
 
 abstract class QualityEvaluator {
   Metric get metric;
-  double evaluate(MLMatrix features, MLVector origLabels,
+  double evaluate(Matrix features, Vector origLabels,
       MetricType metricType);
 }

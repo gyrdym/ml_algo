@@ -7,12 +7,12 @@ import 'package:ml_linalg/matrix.dart';
 class LogitMapper extends Object with Float32x4LogitMapperMixin
     implements ScoreToProbMapper {
 
-  final Type dtype;
-
   LogitMapper(this.dtype);
 
+  final Type dtype;
+
   @override
-  MLMatrix linkScoresToProbs(MLMatrix scores) {
+  Matrix linkScoresToProbs(Matrix scores) {
     switch (dtype) {
       case Float32x4:
         return float32x4ScoresToProbs(scores);

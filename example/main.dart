@@ -7,14 +7,14 @@ import 'package:ml_linalg/matrix.dart';
 /// folder
 Future main() async {
   // Let's create a feature matrix (a set of independent variables)
-  final features = MLMatrix.from([
+  final features = Matrix.from([
     [2.0, 3.0, 4.0, 5.0],
     [12.0, 32.0, 1.0, 3.0],
     [27.0, 3.0, 0.0, 59.0],
   ]);
 
   // Let's create dependent variables vector. It will be used as `true` values to adjust regression coefficients
-  final labels = MLMatrix.from([
+  final labels = Matrix.from([
     [4.3],
     [3.5],
     [2.1]

@@ -19,17 +19,17 @@ void main() {
       // where X^t - transposed X matrix
       // y - labels matrix (vector-column)
       // w - coefficients matrix (vector-column)
-      final x = MLMatrix.from([
+      final x = Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
         [7.0, 8.0, 9.0],
       ]);
-      final w = MLMatrix.from([
+      final w = Matrix.from([
         [-1.0],
         [2.0],
         [-3.0],
       ]);
-      final y = MLMatrix.from([
+      final y = Matrix.from([
         [10.0],
         [20.0],
         [30.0]
@@ -54,7 +54,7 @@ void main() {
     final logLikelihoodCost = LogLikelihoodCost(ScoreToProbMapperType.logit,
         scoreToProbMapperFactory: scoreToProbMapperFactoryMock);
 
-    when(mockedLinkFn.linkScoresToProbs(any)).thenReturn(MLMatrix.from([
+    when(mockedLinkFn.linkScoresToProbs(any)).thenReturn(Matrix.from([
       [1.0],
       [1.0],
       [1.0],
@@ -68,7 +68,7 @@ void main() {
       // W - coefficients matrix (vector-column)
       // indicator - function, that returns 1 if y == 1, otherwise returns 0
       // P(y=+1|X,W) - score to link function
-      final x = MLMatrix.from([
+      final x = Matrix.from([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
         [7.0, 8.0, 9.0],
@@ -76,12 +76,12 @@ void main() {
       // 1 4 7
       // 2 5 8
       // 3 6 9
-      final w = MLMatrix.from([
+      final w = Matrix.from([
         [-1.0],
         [2.0],
         [-3.0],
       ]);
-      final y = MLMatrix.from([
+      final y = Matrix.from([
         [1.0],
         [1.0],
         [0.0],

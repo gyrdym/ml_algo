@@ -11,7 +11,7 @@ import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 void main() {
   group('LogitMapper', () {
     test('should translate scores to probabilities for Float32x4', () {
-      final scores = MLMatrix.from([[1.0, 2.0, 3.0, 4.0]]);
+      final scores = Matrix.from([[1.0, 2.0, 3.0, 4.0]]);
       final logitLink = LogitMapper(Float32x4);
       final probabilities = logitLink.linkScoresToProbs(scores);
 
@@ -24,10 +24,10 @@ void main() {
     test('should translate scores to probabilities for Float32x4', () {
       final logitLink = SoftmaxMapper(Float32x4);
 
-      final scores = MLMatrix.columns([
-        MLVector.from([10.0, 55.0, 33.0, 29.0, 66.0]),
-        MLVector.from([20.0, 32.0, 44.0, 89.0, 41.0]),
-        MLVector.from([30.0, 21.0, 77.0, 40.0, 99.0]),
+      final scores = Matrix.columns([
+        Vector.from([10.0, 55.0, 33.0, 29.0, 66.0]),
+        Vector.from([20.0, 32.0, 44.0, 89.0, 41.0]),
+        Vector.from([30.0, 21.0, 77.0, 40.0, 99.0]),
       ]);
 
       final probabilities = logitLink.linkScoresToProbs(scores);

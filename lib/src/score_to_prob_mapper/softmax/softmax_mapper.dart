@@ -7,12 +7,13 @@ import 'package:ml_linalg/matrix.dart';
 class SoftmaxMapper extends Object with Float32x4SoftmaxMapperMixin
     implements ScoreToProbMapper {
 
-  final Type dtype;
-
   SoftmaxMapper(this.dtype);
 
+  final Type dtype;
+
   @override
-  MLMatrix linkScoresToProbs(MLMatrix scores) {
+  @override
+  Matrix linkScoresToProbs(Matrix scores) {
     switch (dtype) {
       case Float32x4:
         return float32x4ScoresToProbs(scores);

@@ -20,6 +20,6 @@ abstract class CrossValidator {
 
   /// Returns a score of quality of passed predictor depending on given [metric]
   double evaluate(
-      Predictor predictor, MLMatrix points, MLMatrix labels, MetricType metric,
+      Predictor predictor, Matrix points, Matrix labels, MetricType metric,
       {bool isDataNormalized = false});
 }

@@ -23,7 +23,7 @@ class CrossValidatorImpl implements CrossValidator {
 
   @override
   double evaluate(
-      Predictor predictor, MLMatrix points, MLMatrix labels, MetricType metric,
+      Predictor predictor, Matrix points, Matrix labels, MetricType metric,
       {bool isDataNormalized = false}) {
     if (points.rowsNum != labels.rowsNum) {
       throw Exception(
@@ -36,12 +36,12 @@ class CrossValidatorImpl implements CrossValidator {
 
     for (final testIndices in allIndicesGroups) {
       final trainFeatures =
-          List<MLVector>(points.rowsNum - testIndices.length);
+          List<Vector>(points.rowsNum - testIndices.length);
       final trainLabels =
-          List<MLVector>(points.rowsNum - testIndices.length);
+          List<Vector>(points.rowsNum - testIndices.length);
 
-      final testFeatures = List<MLVector>(testIndices.length);
-      final testLabels = List<MLVector>(testIndices.length);
+      final testFeatures = List<Vector>(testIndices.length);
+      final testLabels = List<Vector>(testIndices.length);
 
       int trainPointsCounter = 0;
       int testPointsCounter = 0;
@@ -59,13 +59,13 @@ class CrossValidatorImpl implements CrossValidator {
       }
 
       predictor.fit(
-          MLMatrix.rows(trainFeatures, dtype: dtype),
-          MLMatrix.rows(trainLabels, dtype: dtype),
+          Matrix.rows(trainFeatures, dtype: dtype),
+          Matrix.rows(trainLabels, dtype: dtype),
           isDataNormalized: isDataNormalized);
 
       scores[scoreCounter++] = predictor.test(
-          MLMatrix.rows(testFeatures, dtype: dtype),
-          MLMatrix.rows(trainLabels, dtype: dtype),
+          Matrix.rows(testFeatures, dtype: dtype),
+          Matrix.rows(trainLabels, dtype: dtype),
           metric
       );
     }
