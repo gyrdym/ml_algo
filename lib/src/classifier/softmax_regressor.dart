@@ -1,7 +1,4 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
@@ -47,8 +44,6 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
-    LabelsProcessorFactory labelsProcessorFactory =
-    const LabelsProcessorFactoryImpl(),
     InterceptPreprocessorFactory interceptPreprocessorFactory =
     const InterceptPreprocessorFactoryImpl(),
     ScoreToProbMapperFactory scoreToProbMapperFactory =
@@ -58,8 +53,7 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
     CategoricalDataEncoderFactory categoricalDataEncoderFactory =
     const CategoricalDataEncoderFactory(),
   })
-      : labelsProcessor = labelsProcessorFactory.create(dtype),
-        interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+      : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
             scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =
         scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
@@ -90,9 +84,6 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
 
   @override
   final InterceptPreprocessor interceptPreprocessor;
-
-  @override
-  final LabelsProcessor labelsProcessor;
 
   @override
   final ScoreToProbMapper scoreToProbMapper;
