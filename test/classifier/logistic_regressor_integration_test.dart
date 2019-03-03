@@ -20,7 +20,7 @@ void main() {
     });
 
     test('should extract class labels from the test_data', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
@@ -29,7 +29,7 @@ void main() {
         [4.0, 0.0, 1.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [3.0],
         [1.0],
         [3.0],
@@ -44,14 +44,14 @@ void main() {
     });
 
     test('should properly fit given test_data', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [0.0],
         [1.0],
         [1.0],
@@ -323,14 +323,14 @@ void main() {
     });
 
     test('should make prediction', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [0.0],
         [1.0],
         [1.0],
@@ -339,7 +339,7 @@ void main() {
       ]);
       classifier.fit(features, labels);
 
-      final newFeatures = MLMatrix.from([
+      final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
@@ -354,14 +354,14 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 0', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [0.0],
         [1.0],
         [1.0],
@@ -370,10 +370,10 @@ void main() {
       ]);
       classifier.fit(features, labels);
 
-      final newFeatures = MLMatrix.from([
+      final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = MLMatrix.from([
+      final origLabels = Matrix.from([
         [1.0]
       ]);
       final score =
@@ -382,14 +382,14 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 1', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [0.0],
         [1.0],
         [1.0],
@@ -398,10 +398,10 @@ void main() {
       ]);
       classifier.fit(features, labels);
 
-      final newFeatures = MLMatrix.from([
+      final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = MLMatrix.from([
+      final origLabels = Matrix.from([
         [2.0]
       ]);
       final score =
@@ -416,11 +416,11 @@ void main() {
           initialLearningRate: 1.0,
           gradientType: GradientType.batch,
           fitIntercept: true);
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [0.0],
         [1.0],
       ]);
@@ -496,12 +496,12 @@ void main() {
           gradientType: GradientType.batch,
           fitIntercept: true,
           interceptScale: 2.0);
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [3.0, 4.0, 5.0],
       ]);
-      final labels = MLMatrix.from([
+      final labels = Matrix.from([
         [0.0],
         [1.0],
         [0.0],

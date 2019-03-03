@@ -87,9 +87,9 @@ abstract class MLData {
   /// Keep in mind, that the number of columns of the feature matrix
   /// may differ from the number of elements in [header] because of categorical
   /// data, that might present in the source dataset
-  Future<MLMatrix> get features;
+  Future<Matrix> get features;
 
   /// Processed and ready to use (by machine learning algorithms) dataset
   /// labels (Target values, e.g. class labels or regression values)
-  Future<MLMatrix> get labels;
+  Future<Matrix> get labels;
 }

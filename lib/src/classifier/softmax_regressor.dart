@@ -100,8 +100,8 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   final CategoricalDataEncoder dataEncoder;
 
   @override
-  MLMatrix learnWeights(MLMatrix features, MLMatrix labels,
-      MLMatrix initialWeights, bool arePointsNormalized) =>
+  Matrix learnWeights(Matrix features, Matrix labels,
+      Matrix initialWeights, bool arePointsNormalized) =>
     optimizer.findExtrema(features,
         labels.columnsNum == 1
             ? dataEncoder.encodeAll(labels.getColumn(0)) : labels,

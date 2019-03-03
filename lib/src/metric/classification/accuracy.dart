@@ -5,7 +5,7 @@ class AccuracyMetric implements Metric {
   const AccuracyMetric();
 
   @override
-  double getScore(MLMatrix predictedLabels, MLMatrix origLabels) {
+  double getScore(Matrix predictedLabels, Matrix origLabels) {
     if (predictedLabels.rowsNum != origLabels.rowsNum &&
         predictedLabels.columnsNum != origLabels.columnsNum) {
       throw Exception('Predicated labels and original labels should have '

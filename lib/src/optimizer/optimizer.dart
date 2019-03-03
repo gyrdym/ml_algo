@@ -1,5 +1,4 @@
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 abstract class Optimizer {
   /// Accepts points (a matrix of all the X-coordinates values), a vector of y-labels and returns a matrix
@@ -17,9 +16,9 @@ abstract class Optimizer {
   ///
   /// [arePointsNormalized] `true` means that all the [points] columns are normalized (whether the sum of each column
   /// values gives 1.0 or not)
-  MLMatrix findExtrema(MLMatrix points, MLMatrix labels,
+  Matrix findExtrema(Matrix points, Matrix labels,
       {int numOfCoefficientVectors,
-      MLMatrix initialWeights,
+      Matrix initialWeights,
       bool isMinimizingObjective,
       bool arePointsNormalized});
 }

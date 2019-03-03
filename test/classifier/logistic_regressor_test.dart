@@ -53,11 +53,11 @@ void main() {
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [10.1, 10.2, 12.0, 13.4],
         [3.1, 5.2, 6.0, 77.4],
       ]);
-      final origLabels = MLMatrix.from([
+      final origLabels = Matrix.from([
         [1.0],
         [2.0],
       ]);
@@ -65,19 +65,19 @@ void main() {
       when(interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
         [10.1, 10.2, 12.0, 13.4],
         [3.1, 5.2, 6.0, 77.4],
-      ])))).thenReturn(MLMatrix.from([
+      ])))).thenReturn(Matrix.from([
         [100.0, 200.0, 300.0, 400.0],
         [500.0, 600.0, 700.0, 800.0],
       ]));
 
-      final initialWeights = MLMatrix.from([[10.0, 20.0, 30.0, 40.0]]);
+      final initialWeights = Matrix.from([[10.0, 20.0, 30.0, 40.0]]);
 
       when(labelsProcessorMock.makeLabelsOneVsAll(
               argThat(equals([1.0, 2.0])), 1.0))
-          .thenReturn(MLVector.from([1.0, 0.0]));
+          .thenReturn(Vector.from([1.0, 0.0]));
       when(labelsProcessorMock.makeLabelsOneVsAll(
               argThat(equals([1.0, 2.0])), 2.0))
-          .thenReturn(MLVector.from([0.0, 1.0]));
+          .thenReturn(Vector.from([0.0, 1.0]));
 
       when(optimizerMock.findExtrema(
               argThat(matrixAlmostEqualTo([
@@ -98,8 +98,8 @@ void main() {
                   ]),
                   named: 'initialWeights'),
               isMinimizingObjective: false))
-          .thenReturn(MLMatrix.rows([
-        MLVector.from([333.0, 444.0])
+          .thenReturn(Matrix.rows([
+        Vector.from([333.0, 444.0])
       ]));
 
       when(optimizerMock.findExtrema(
@@ -121,7 +121,7 @@ void main() {
                   ]),
                   named: 'initialWeights'),
               isMinimizingObjective: false))
-          .thenReturn(MLMatrix.rows([MLVector.from([555.0, 666.0])]));
+          .thenReturn(Matrix.rows([Vector.from([555.0, 666.0])]));
 
       createLogisticRegressor()
         ..fit(features, origLabels,

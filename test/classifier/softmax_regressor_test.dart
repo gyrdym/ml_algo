@@ -11,12 +11,12 @@ import 'package:test/test.dart';
 import 'classifier_common.dart';
 
 void main() {
-  final features = MLMatrix.from([
+  final features = Matrix.from([
     [1.0, 2.0, 3.0],
     [4.0, 5.0, 6.0],
   ]);
 
-  final labels = MLMatrix.from([
+  final labels = Matrix.from([
     [10.0],
     [20.0],
   ]);

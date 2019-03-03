@@ -83,15 +83,15 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
   /// multiclass label list (m*n matrix, where m - rows number, n - number of
   /// classes)
   @override
-  MLMatrix learnWeights(MLMatrix features, MLMatrix labels,
-      MLMatrix initialWeights, bool arePointsNormalized) =>
+  Matrix learnWeights(Matrix features, Matrix labels,
+      Matrix initialWeights, bool arePointsNormalized) =>
     labels.mapColumns((column) => _fitBinaryClassifier(features, column,
         initialWeights, arePointsNormalized));
 
-  MLVector _fitBinaryClassifier(MLMatrix features, MLVector labels,
-      MLMatrix initialWeights, bool arePointsNormalized) =>
+  Vector _fitBinaryClassifier(Matrix features, Vector labels,
+      Matrix initialWeights, bool arePointsNormalized) =>
       optimizer
-        .findExtrema(features, MLMatrix.columns([labels]),
+        .findExtrema(features, Matrix.columns([labels]),
             initialWeights: initialWeights?.transpose(),
             arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)

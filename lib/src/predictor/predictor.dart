@@ -5,14 +5,14 @@ import 'package:ml_linalg/vector.dart';
 /// An interface for all the predicting entities: regressor, classifiers, etc.
 abstract class Predictor {
   /// Learned coefficients (or weights) for given features
-  MLVector get weights;
+  Vector get weights;
 
   /// Fits the passed [features] to true labels - [origLabels]. It's
   /// possible to provide [initialWeights] and specify, whether the [features]
   /// normalized or not
-  void fit(MLMatrix features, MLMatrix origLabels,
-      {MLMatrix initialWeights, bool isDataNormalized});
+  void fit(Matrix features, Matrix origLabels,
+      {Matrix initialWeights, bool isDataNormalized});
 
   /// Assesses model according to provided [metric]
-  double test(MLMatrix features, MLMatrix origLabels, MetricType metric);
+  double test(Matrix features, Matrix origLabels, MetricType metric);
 }

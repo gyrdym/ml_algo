@@ -7,7 +7,7 @@ class RMSEMetric implements Metric {
   const RMSEMetric();
 
   @override
-  double getScore(MLMatrix predictedLabels, MLMatrix origLabels) {
+  double getScore(Matrix predictedLabels, Matrix origLabels) {
     if (predictedLabels.columnsNum != 1 || origLabels.columnsNum != 1) {
       throw Exception('Both predicted labels and original labels have to be '
           'a matrix-column');
