@@ -40,7 +40,12 @@ void main() {
       ]);
       classifier.fit(features, labels);
 
-      expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
+      expect(classifier.classLabels, equals([
+        [3.0],
+        [1.0],
+        [2.0],
+        [0.0],
+      ]));
     });
 
     test('should properly fit given test_data', () {
@@ -313,9 +318,7 @@ void main() {
       // update:
       // [-5.5, -6.5, -18.0] + eta * [9.0, 8.0, 5.0] = [-5.5, -6.5, -18.0] + 1.0 * [9.0, 8.0, 5.0] = [3.5, 1.5, -13.0]
 
-      final weights = classifier.weightsByClasses;
-
-      expect(weights, matrixAlmostEqualTo([
+      expect(classifier.weightsByClasses, matrixAlmostEqualTo([
         [3.5, -17.68, 3.5],
         [-0.5, -15.5, 1.5],
         [-9.0, -0.04, -13.0],

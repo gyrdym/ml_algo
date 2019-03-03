@@ -45,7 +45,7 @@ void main() {
       )).called(1);
     });
 
-    test('should make appropriate method calls when `fit` is called', () {
+    test('should make calls of appropriate method when `fit` is called', () {
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
@@ -55,8 +55,8 @@ void main() {
         [3.1, 5.2, 6.0, 77.4],
       ]);
       final origLabels = Matrix.from([
-        [1.0],
-        [2.0],
+        [1.0, 0.0],
+        [0.0, 1.0],
       ]);
 
       when(interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
@@ -109,7 +109,8 @@ void main() {
                     [30.0],
                     [40.0],
                   ]),
-                  named: 'initialWeights'),
+                  named: 'initialWeights'
+              ),
               isMinimizingObjective: false))
           .thenReturn(Matrix.rows([Vector.from([555.0, 666.0])]));
 

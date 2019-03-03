@@ -147,8 +147,7 @@ class CsvData implements MLData {
   @override
   Future<Matrix> get labels async {
     _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= Matrix.from(_labelsExtractor.getLabels(), dtype: _dtype)
-        .transpose();
+    _labels ??= Matrix.from(_labelsExtractor.getLabels(), dtype: _dtype);
     return _labels;
   }
 
