@@ -1,8 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
@@ -19,8 +17,6 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 
 import '../test_utils/mocks.dart';
 
-LabelsProcessor labelsProcessorMock;
-LabelsProcessorFactory labelsProcessorFactoryMock;
 InterceptPreprocessor interceptPreprocessorMock;
 InterceptPreprocessorFactory interceptPreprocessorFactoryMock;
 Optimizer optimizerMock;
@@ -29,12 +25,6 @@ ScoreToProbMapperFactory scoreToProbFactoryMock;
 ScoreToProbMapper scoreToProbMapperMock;
 CategoricalDataEncoderFactory categoricalDataEncoderFactoryMock;
 CategoricalDataEncoder categoricalDataEncoderMock;
-
-void setUpLabelsProcessorFactory() {
-  labelsProcessorMock = LabelsProcessorMock();
-  labelsProcessorFactoryMock = createLabelsProcessorFactoryMock(
-      processors: {Float32x4: labelsProcessorMock});
-}
 
 void setUpInterceptPreprocessorFactory() {
   interceptPreprocessorMock = InterceptPreprocessorMock();
@@ -104,7 +94,6 @@ SoftmaxRegressor createSoftmaxRegressor({
       minWeightsUpdate: minWeightsUpdate,
       lambda: lambda,
       categoricalEncoderType: encoder,
-      labelsProcessorFactory: labelsProcessorFactoryMock,
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
       scoreToProbMapperType: ScoreToProbMapperType.logit,
       scoreToProbMapperFactory: scoreToProbFactoryMock,

@@ -18,14 +18,12 @@ void main() {
     tearDown(resetMockitoState);
 
     test('should initialize properly', () {
-      setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
       createLogisticRegressor();
 
-      verify(labelsProcessorFactoryMock.create(Float32x4)).called(1);
       verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0))
           .called(1);
       verify(scoreToProbFactoryMock.fromType(
@@ -48,7 +46,6 @@ void main() {
     });
 
     test('should make appropriate method calls when `fit` is called', () {
-      setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
@@ -71,13 +68,6 @@ void main() {
       ]));
 
       final initialWeights = Matrix.from([[10.0, 20.0, 30.0, 40.0]]);
-
-      when(labelsProcessorMock.makeLabelsOneVsAll(
-              argThat(equals([1.0, 2.0])), 1.0))
-          .thenReturn(Vector.from([1.0, 0.0]));
-      when(labelsProcessorMock.makeLabelsOneVsAll(
-              argThat(equals([1.0, 2.0])), 2.0))
-          .thenReturn(Vector.from([0.0, 1.0]));
 
       when(optimizerMock.findExtrema(
               argThat(matrixAlmostEqualTo([

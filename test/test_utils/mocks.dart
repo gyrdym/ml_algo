@@ -1,6 +1,4 @@
 import 'package:logging/logging.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -71,11 +69,6 @@ class ScoreToProbMapperMock extends Mock implements ScoreToProbMapper {}
 
 class ScoreToProbMapperFactoryMock extends Mock
     implements ScoreToProbMapperFactory {}
-
-class LabelsProcessorFactoryMock extends Mock
-    implements LabelsProcessorFactory {}
-
-class LabelsProcessorMock extends Mock implements LabelsProcessor {}
 
 class InterceptPreprocessorFactoryMock extends Mock
     implements InterceptPreprocessorFactory {}
@@ -157,16 +150,6 @@ InterceptPreprocessorFactoryMock createInterceptPreprocessorFactoryMock({
 }) {
   final factory = InterceptPreprocessorFactoryMock();
   when(factory.create(any, scale: anyNamed('scale'))).thenReturn(preprocessor);
-  return factory;
-}
-
-LabelsProcessorFactoryMock createLabelsProcessorFactoryMock({
-  Map<Type, LabelsProcessor> processors,
-}) {
-  final factory = LabelsProcessorFactoryMock();
-  processors.forEach((Type type, LabelsProcessor processor) {
-    when(factory.create(type)).thenReturn(processor);
-  });
   return factory;
 }
 

@@ -26,7 +26,6 @@ void main() {
       final dtype = Float64x2;
       final encoder = CategoricalDataEncoderType.oneHot;
 
-      setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
@@ -34,7 +33,6 @@ void main() {
 
       createSoftmaxRegressor(dtype: dtype, encoder: encoder);
 
-      verify(labelsProcessorFactoryMock.create(dtype)).called(1);
       verify(interceptPreprocessorFactoryMock.create(dtype, scale: 0.0))
           .called(1);
       verify(scoreToProbFactoryMock.fromType(
@@ -61,7 +59,6 @@ void main() {
       final dtype = Float64x2;
       final encoder = CategoricalDataEncoderType.oneHot;
 
-      setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
