@@ -24,7 +24,11 @@ void main() {
                 features.getRow(34),
                 vectorAlmostEqualTo(
                     [10.0, 122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0]));
-            expect([labels[0], labels[34], labels[63]], equals([1, 0, 0]));
+            expect([labels[0], labels[34], labels[63]], equals([
+              [1],
+              [0],
+              [0],
+            ]));
           });
     });
 
@@ -46,7 +50,11 @@ void main() {
                 vectorAlmostEqualTo(
                     [10.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
             expect([labels[0], labels[34], labels[63]],
-                equals([148.0, 122.0, 141.0]));
+                equals([
+                  [148.0],
+                  [122.0],
+                  [141.0],
+                ]));
           });
     });
 
@@ -69,7 +77,11 @@ void main() {
                 vectorAlmostEqualTo(
                     [122.0, 78.0, 31.0, 0.0, 27.6, 0.512, 45.0, 0.0]));
             expect(
-                [labels[0], labels[34], labels[63]], equals([6.0, 10.0, 2.0]));
+                [labels[0], labels[34], labels[63]], equals([
+                  [6.0],
+                  [10.0],
+                  [2.0]
+            ]));
           });
     });
 
@@ -132,13 +144,16 @@ void main() {
                 features.getRow(34),
                 vectorAlmostEqualTo(
                     [10.0, 122.0, 78.0, 31.0, 0.0, 0.512, 45.0]));
-            expect([labels[0], labels[34], labels[63]], equals([1, 0, 0]));
+            expect([labels[0], labels[34], labels[63]], equals([
+              [1],
+              [0],
+              [0],
+            ]));
           });
     });
 
-    test(
-        'should throw an error if there are intersecting column ranges while parsing csv file',
-        () {
+    test('should throw an error if there are intersecting column ranges while '
+        'parsing csv file', () {
       final actual = () => CsvData.fromFile(
             'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
             labelIdx: 8,
@@ -170,7 +185,11 @@ void main() {
                 vectorAlmostEqualTo(
                     [1.0, 93.0, 70.0, 31.0, 0.0, 30.4, 0.315, 23.0]));
             expect(() => features.getRow(768), throwsRangeError);
-            expect([labels[0], labels[34], labels[767]], equals([1, 0, 0]));
+            expect([labels[0], labels[34], labels[767]], equals([
+              [1],
+              [0],
+              [0],
+            ]));
             expect(() => labels[768], throwsRangeError);
           });
     });
@@ -206,7 +225,10 @@ void main() {
             expect(() => features.getRow(11), throwsRangeError);
             expect(() => features.getRow(768), throwsRangeError);
 
-            expect(labels, equals([1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1]));
+            expect(labels.rowsNum, 11);
+            expect(labels.columnsNum, 1);
+            expect(labels.getColumn(0),
+                equals([1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1]));
             expect(() => labels[11], throwsRangeError);
             expect(() => labels[768], throwsRangeError);
           });

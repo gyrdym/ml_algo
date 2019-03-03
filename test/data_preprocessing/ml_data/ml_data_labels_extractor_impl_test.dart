@@ -23,19 +23,30 @@ void main() {
           records, readMask, 4, valueConverterMock, encoders, loggerMock);
       final actual = extractor.getLabels();
 
-      expect(actual, equals([500, 192, 209, 100, 800]));
+      expect(actual, equals([
+        [500],
+        [192],
+        [209],
+        [100],
+        [800]
+      ]));
     });
 
-    test(
-        'should extract labels according to given read mask from pointed column number',
-        () {
+    test('should extract labels according to given read mask from pointed '
+        'column number', () {
       final readMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final extractor = MLDataLabelsExtractorImpl(
           records, readMask, 0, valueConverterMock, encoders, loggerMock);
       final actual = extractor.getLabels();
 
-      expect(actual, equals([10, 700, 102, 308, 10001]));
+      expect(actual, equals([
+        [10],
+        [700],
+        [102],
+        [308],
+        [10001]
+      ]));
     });
   });
 }
