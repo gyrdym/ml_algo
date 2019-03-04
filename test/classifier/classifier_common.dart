@@ -82,7 +82,6 @@ SoftmaxRegressor createSoftmaxRegressor({
   double minWeightsUpdate = 0.001,
   double lambda = 0.1,
   int randomSeed = 123,
-  CategoricalDataEncoderType encoder,
   Type dtype = Float32x4,
 }) =>
     SoftmaxRegressor(
@@ -93,7 +92,6 @@ SoftmaxRegressor createSoftmaxRegressor({
       initialLearningRate: learningRate,
       minWeightsUpdate: minWeightsUpdate,
       lambda: lambda,
-      categoricalEncoderType: encoder,
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
       scoreToProbMapperType: ScoreToProbMapperType.logit,
       scoreToProbMapperFactory: scoreToProbFactoryMock,

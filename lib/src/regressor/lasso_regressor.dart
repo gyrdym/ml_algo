@@ -49,7 +49,7 @@ class LassoRegressor implements LinearRegressor {
         .findExtrema(
           _interceptPreprocessor.addIntercept(features),
           labels,
-          initialWeights: initialWeights.transpose(),
+          initialWeights: initialWeights,
           isMinimizingObjective: true,
           arePointsNormalized: isDataNormalized
         ).getRow(0);

@@ -142,9 +142,6 @@ abstract class LinearClassifier implements Classifier {
   /// [gradientType] A type of gradient descent optimizer (stochastic, mini
   /// batch, batch). Will be ignored for all non-gradient optimizers
   ///
-  /// [categoricalEncoderType] Encoder, using for labels encoding. Default
-  /// value - [CategoricalDataEncoderType.oneHot]
-  ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [Float32x4]
@@ -160,7 +157,6 @@ abstract class LinearClassifier implements Classifier {
     LearningRateType learningRateType,
     OptimizerType optimizer,
     GradientType gradientType,
-    CategoricalDataEncoderType categoricalEncoderType,
     Type dtype,
   }) = SoftmaxRegressor;
 

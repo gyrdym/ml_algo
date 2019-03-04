@@ -65,7 +65,7 @@ class CrossValidatorImpl implements CrossValidator {
 
       scores[scoreCounter++] = predictor.test(
           Matrix.rows(testFeatures, dtype: dtype),
-          Matrix.rows(trainLabels, dtype: dtype),
+          Matrix.rows(testLabels, dtype: dtype),
           metric
       );
     }
