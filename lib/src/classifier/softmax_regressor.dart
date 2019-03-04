@@ -1,9 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
@@ -39,8 +37,7 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.softmax,
-    CategoricalDataEncoderType categoricalEncoderType =
-        CategoricalDataEncoderType.oneHot,
+
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
@@ -57,8 +54,6 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
             scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =
         scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
-        dataEncoder = categoricalDataEncoderFactory
-            .fromType(categoricalEncoderType),
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
@@ -88,15 +83,13 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   @override
   final ScoreToProbMapper scoreToProbMapper;
 
-  final CategoricalDataEncoder dataEncoder;
-
   @override
   Matrix learnWeights(Matrix features, Matrix labels,
       Matrix initialWeights, bool arePointsNormalized) =>
-    optimizer.findExtrema(features,
-        labels.columnsNum == 1
-            ? dataEncoder.encodeAll(labels.getColumn(0)) : labels,
-        initialWeights: initialWeights?.transpose(),
+    optimizer.findExtrema(
+        features,
+        labels,
+        initialWeights: initialWeights,
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
 }

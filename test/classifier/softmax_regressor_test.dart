@@ -24,21 +24,18 @@ void main() {
   group('SoftmaxRegressor', () {
     test('should initialize properly', () {
       final dtype = Float64x2;
-      final encoder = CategoricalDataEncoderType.oneHot;
 
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
-      setUpCategoricalDataEncoderFactory();
 
-      createSoftmaxRegressor(dtype: dtype, encoder: encoder);
+      createSoftmaxRegressor(dtype: dtype);
 
       verify(interceptPreprocessorFactoryMock.create(dtype, scale: 0.0))
           .called(1);
       verify(scoreToProbFactoryMock.fromType(
           ScoreToProbMapperType.logit, dtype))
           .called(1);
-      verify(categoricalDataEncoderFactoryMock.fromType(encoder)).called(1);
       verify(optimizerFactoryMock.fromType(
         OptimizerType.gradientDescent,
         dtype: dtype,
@@ -57,14 +54,12 @@ void main() {
 
     test('should', () {
       final dtype = Float64x2;
-      final encoder = CategoricalDataEncoderType.oneHot;
 
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
-      setUpCategoricalDataEncoderFactory();
 
-      final classifier = createSoftmaxRegressor(dtype: dtype, encoder: encoder);
+      final classifier = createSoftmaxRegressor(dtype: dtype);
 
       classifier.fit(features, labels);
     });

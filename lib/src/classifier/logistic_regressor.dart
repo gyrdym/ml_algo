@@ -92,7 +92,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
       Matrix initialWeights, bool arePointsNormalized) =>
       optimizer
         .findExtrema(features, Matrix.columns([labels]),
-            initialWeights: initialWeights?.transpose(),
+            initialWeights: initialWeights,
             arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)
         .getColumn(0);

@@ -66,7 +66,7 @@ class GradientRegressor implements LinearRegressor {
           initialWeights: initialWeights?.transpose(),
           isMinimizingObjective: true,
           arePointsNormalized: isDataNormalized
-        ).getRow(0);
+        ).getColumn(0);
   }
 
   @override
