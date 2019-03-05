@@ -29,9 +29,10 @@ Following algorithms are implemented:
 
 To provide main purposes of machine learning, the library exposes the following classes:
 
-- [MLData](https://github.com/gyrdym/ml_algo/blob/master/lib/src/data_preprocessing/ml_data/ml_data.dart). Factory, that creates instances of 
-different adapters for data. For example, one can create a csv reader, that makes work with csv data easier: you just 
-need to point, where your dataset resides and then get features and labels in convenient data science friendly format.
+- [DataFrame](https://github.com/gyrdym/ml_algo/blob/master/lib/src/data_preprocessing/data_frame/data_frame.dart). 
+Factory, that creates instances of different adapters for data. For example, one can create a csv reader, that makes 
+work with csv data easier: you just need to point, where your dataset resides and then get features and labels in 
+convenient data science friendly format.
 
 - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
 instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
@@ -73,13 +74,13 @@ import 'package:ml_algo/ml_algo.dart';
 Read `csv`-file `pima_indians_diabetes_database.csv` with test data. You can use csv from the library's 
 [datasets directory](https://github.com/gyrdym/ml_algo/tree/master/datasets):
 ````dart
-final data = MLData.fromCsvFile('datasets/pima_indians_diabetes_database.csv');
+final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv');
 final features = await data.features;
 final labels = await data.labels;
 ````
 
 Data in this file is represented by 768 records and 8 features. Processed features are contained in a data structure of 
-`MLMatrix` type and processed labels are contained in a data structure of `MLVector` type. To get 
+`Matrix` type and processed labels are contained in a data structure of `Vector` type. To get 
 more information about these types, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
 
 Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) 
@@ -118,7 +119,7 @@ if (accuracy > maxAccuracy) {
 
 Let's print score:
 ````dart
-print('best accuracy on classification: ${(maxAccuracy * 100).toFixed(2)}');
+print('best accuracy on classification: ${maxAccuracy.toFixed(2)}');
 print('best learning rate: ${bestLearningRate.toFixed(3)}');
 ````
 
@@ -126,7 +127,7 @@ Best model parameters search takes much time so far, so be patient. After the se
 this:
 
 ````
-best acuracy on classification: 67.0%
+best acuracy on classification: 0.68
 best learning rate: 0.155
 ````
 
@@ -137,7 +138,7 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 
 Future<double> logisticRegression() async {
-  final data = CsvMLData.fromFile('datasets/pima_indians_diabetes_database.csv');
+  final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv');
   final features = await data.features;
   final labels = await data.labels;
 
@@ -161,7 +162,7 @@ Future<double> logisticRegression() async {
     }
   }
 
-  print('best accuracy on classification: ${(maxAccuracy * 100).toFixed(2)}');
+  print('best accuracy on classification: ${maxAccuracy.toFixed(2)}');
   print('best learning rate: ${bestLearningRate.toFixed(3)}');
 }
 ````
