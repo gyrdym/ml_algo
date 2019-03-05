@@ -7,7 +7,7 @@ import '../../test_utils/mocks.dart';
 
 void main() {
   final loggerMock = LoggerMock();
-  final creator = MLDataReadMaskCreatorImpl(loggerMock);
+  final creator = DataFrameReadMaskCreatorImpl(loggerMock);
 
   group('MLDataReadMaskCreatorImpl', () {
     test('should create read mask, case 1', () {
@@ -27,7 +27,7 @@ void main() {
 
     test('should create read mask, case 4', () {
       expect(() => creator.create([]), throwsException);
-      verify(loggerMock.severe(MLDataReadMaskCreatorImpl.emptyRangesMsg, any))
+      verify(loggerMock.severe(DataFrameReadMaskCreatorImpl.emptyRangesMsg, any))
           .called(1);
     });
 

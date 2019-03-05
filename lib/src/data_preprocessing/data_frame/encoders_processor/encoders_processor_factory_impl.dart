@@ -5,17 +5,17 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/enc
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_impl.dart';
 
-class MLDataEncodersProcessorFactoryImpl
-    implements MLDataEncodersProcessorFactory {
-  const MLDataEncodersProcessorFactoryImpl();
+class DataFrameEncodersProcessorFactoryImpl
+    implements DataFrameEncodersProcessorFactory {
+  const DataFrameEncodersProcessorFactoryImpl();
 
   @override
-  MLDataEncodersProcessor create(
+  DataFrameEncodersProcessor create(
           List<List<Object>> records,
           List<String> header,
           CategoricalDataEncoderFactory encoderFactory,
           CategoricalDataEncoderType fallbackEncoderType,
           Logger logger) =>
-      MLDataEncodersProcessorImpl(
+      DataFrameEncodersProcessorImpl(
           records, header, encoderFactory, fallbackEncoderType, logger);
 }

@@ -3,10 +3,12 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read
 import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read_mask_creator_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read_mask_creator_impl.dart';
 
-class MLDataReadMaskCreatorFactoryImpl implements MLDataReadMaskCreatorFactory {
-  const MLDataReadMaskCreatorFactoryImpl();
+class DataFrameReadMaskCreatorFactoryImpl implements
+    DataFrameReadMaskCreatorFactory {
+
+  const DataFrameReadMaskCreatorFactoryImpl();
 
   @override
-  MLDataReadMaskCreator create(Logger logger) =>
-      MLDataReadMaskCreatorImpl(logger);
+  DataFrameReadMaskCreator create(Logger logger) =>
+      DataFrameReadMaskCreatorImpl(logger);
 }

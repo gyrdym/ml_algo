@@ -1,5 +1,5 @@
 import 'package:tuple/tuple.dart';
 
-abstract class MLDataReadMaskCreator {
+abstract class DataFrameReadMaskCreator {
   List<bool> create(Iterable<Tuple2<int, int>> ranges);
 }

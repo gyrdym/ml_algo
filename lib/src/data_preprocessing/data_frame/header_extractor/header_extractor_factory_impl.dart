@@ -2,10 +2,12 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/heade
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor_impl.dart';
 
-class MLDataHeaderExtractorFactoryImpl implements MLDataHeaderExtractorFactory {
-  const MLDataHeaderExtractorFactoryImpl();
+class DataFrameHeaderExtractorFactoryImpl implements
+    DataFrameHeaderExtractorFactory {
+
+  const DataFrameHeaderExtractorFactoryImpl();
 
   @override
-  MLDataHeaderExtractor create(List<bool> readMask) =>
-      MLDataHeaderExtractorImpl(readMask);
+  DataFrameHeaderExtractor create(List<bool> readMask) =>
+      DataFrameHeaderExtractorImpl(readMask);
 }

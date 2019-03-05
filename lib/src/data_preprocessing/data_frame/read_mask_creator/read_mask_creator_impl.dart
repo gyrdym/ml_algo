@@ -5,16 +5,16 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read
 import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 import 'package:tuple/tuple.dart';
 
-class MLDataReadMaskCreatorImpl extends Object
-    with LoggerMixin
-    implements MLDataReadMaskCreator {
+class DataFrameReadMaskCreatorImpl with LoggerMixin
+    implements DataFrameReadMaskCreator {
+
+  DataFrameReadMaskCreatorImpl(this.logger);
+
   static const String emptyRangesMsg =
       'Columns/rows read ranges list cannot be empty!';
 
   @override
   final Logger logger;
-
-  MLDataReadMaskCreatorImpl(this.logger);
 
   @override
   List<bool> create(Iterable<Tuple2<int, int>> ranges) {

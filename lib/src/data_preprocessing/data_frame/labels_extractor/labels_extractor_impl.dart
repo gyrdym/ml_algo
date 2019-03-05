@@ -4,10 +4,10 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/label
 import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 
-class MLDataLabelsExtractorImpl with LoggerMixin
-    implements MLDataLabelsExtractor {
+class DataFrameLabelsExtractorImpl with LoggerMixin
+    implements DataFrameLabelsExtractor {
 
-  MLDataLabelsExtractorImpl(this.records, this.readMask, this.labelIdx,
+  DataFrameLabelsExtractorImpl(this.records, this.readMask, this.labelIdx,
       this.valueConverter, this.encoders, this.logger)
       : rowsNum = readMask.where((bool flag) => flag).length {
     if (readMask.length > records.length) {
@@ -31,7 +31,7 @@ class MLDataLabelsExtractorImpl with LoggerMixin
   final int labelIdx;
   final int rowsNum;
   final Map<int, CategoricalDataEncoder> encoders;
-  final MLDataValueConverter valueConverter;
+  final DataFrameValueConverter valueConverter;
 
   @override
   final Logger logger;

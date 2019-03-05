@@ -4,7 +4,10 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_facto
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor.dart';
 
-class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
+class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
+  DataFrameEncodersProcessorImpl(this.records, this.header, this.encoderFactory,
+      this.fallbackEncoderType, this.logger);
+
   final List<List<Object>> records;
   final List<String> header;
   final CategoricalDataEncoderFactory encoderFactory;
@@ -12,10 +15,8 @@ class MLDataEncodersProcessorImpl implements MLDataEncodersProcessor {
   final Logger logger;
 
   static const String noHeaderProvidedWarningMsg =
-      'Column names with categorical values are provided, but there are no header with column names!';
-
-  MLDataEncodersProcessorImpl(this.records, this.header, this.encoderFactory,
-      this.fallbackEncoderType, this.logger);
+      'Column names with categorical values are provided, but there are no '
+      'header with column names!';
 
   @override
   Map<int, CategoricalDataEncoder> createEncoders(

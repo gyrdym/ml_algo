@@ -3,8 +3,8 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_facto
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor.dart';
 
-abstract class MLDataEncodersProcessorFactory {
-  MLDataEncodersProcessor create(
+abstract class DataFrameEncodersProcessorFactory {
+  DataFrameEncodersProcessor create(
       List<List<Object>> data,
       List<String> header,
       CategoricalDataEncoderFactory encoderFactory,

@@ -4,10 +4,10 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/features_extractor/fea
 import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 
-class MLDataFeaturesExtractorImpl with LoggerMixin
-    implements MLDataFeaturesExtractor {
+class DataFrameFeaturesExtractorImpl with LoggerMixin
+    implements DataFrameFeaturesExtractor {
 
-  MLDataFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
+  DataFrameFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
       this.encoders, this.labelIdx, this.valueConverter, this.logger)
       : rowsNum = rowsMask.where((bool flag) => flag).length,
         columnsNum = columnsMask.where((bool flag) => flag).length {
@@ -32,7 +32,7 @@ class MLDataFeaturesExtractorImpl with LoggerMixin
   final int rowsNum;
   final int columnsNum;
   final int labelIdx;
-  final MLDataValueConverter valueConverter;
+  final DataFrameValueConverter valueConverter;
   final List<List<Object>> records;
 
   @override

@@ -1,18 +1,20 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:tuple/tuple.dart';
 
-abstract class MLDataValidationErrorMessages {
+abstract class DataFrameParametersValidationErrorMessages {
   static const noErrorMsg = '';
 
   static String noHeaderExistsParameterProvidedMsg() =>
       '`headerExists` parameter is not provided';
 
   static String noHeaderProvidedMsg(Map<String, Iterable<Object>> categories) =>
-      'no header provided to define, which columns belongs to given categories $categories';
+      'no header provided to define, which columns belongs to given categories '
+          '$categories';
 
   static String noHeaderProvidedForColumnEncodersMsg(
           Map<dynamic, CategoricalDataEncoderType> encoders) =>
-      'no header provided to define, which columns belongs to given ecnoders $encoders';
+      'no header provided to define, which columns belongs to given ecnoders '
+          '$encoders';
 
   static String noLabelIndexMsg() => 'label index must not be null';
 
