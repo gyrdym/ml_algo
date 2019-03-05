@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/csv_data.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/csv_data_frame.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
@@ -17,14 +17,14 @@ Future testCsvData(
     List<Tuple2<int, int>> rows,
     List<Tuple2<int, int>> columns,
     CategoricalDataEncoderFactory categoricalDataFactoryMock,
-    MLDataParamsValidator validatorMock,
+    DataFrameParamsValidator validatorMock,
     void testContentFn(
         Matrix features, Matrix labels, List<String> headers)}) async {
   categoricalDataFactoryMock ??= createCategoricalDataEncoderFactoryMock();
   validatorMock ??=
-      createMLDataParamsValidatorMock(validationShouldBeFailed: false);
+      createDataFrameParamsValidatorMock(validationShouldBeFailed: false);
 
-  final data = CsvData.fromFile(
+  final data = CsvDataFrame.fromFile(
     fileName,
     labelIdx: labelIdx,
     columns: columns,

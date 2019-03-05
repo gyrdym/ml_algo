@@ -4,7 +4,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:tuple/tuple.dart';
 
 Future main() async {
-  final data = MLData.fromCsvFile(
+  final data = DataFrame.fromCsv(
     'datasets/black_friday.csv',
     labelIdx: 11,
     rows: [const Tuple2(0, 2999)],
