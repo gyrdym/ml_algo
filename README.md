@@ -89,7 +89,7 @@ Data in this file is represented by 768 records and 8 features. 9th column is a 
  also, we should specify how to encode the labels (one-hot encoding in our case)  
  
  Processed features are contained in a data structure of `Matrix` type and processed labels are contained in a data 
- structure also of `Matrix` type. To get more information about these types, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
+ structure also of `Matrix` type. To get more information about `Matrix` type, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
 
 Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) 
 of our model
@@ -146,7 +146,11 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 
 Future<double> logisticRegression() async {
-  final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv');
+  final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
+     labelIdx: 8,
+     categoryNameToEncoder: {
+       'class variable (0 or 1)': CategoricalDataEncoderType.oneHot,
+  });
   final features = await data.features;
   final labels = await data.labels;
 
