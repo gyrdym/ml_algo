@@ -11,19 +11,19 @@ import 'data_preprocessing/categorical_encoder/ordinal_encoder_test.dart'
     as ordinal_encoder_test;
 import 'data_preprocessing/intercept_preprocessor_test.dart'
     as intercept_preprocessor_test;
-import 'data_preprocessing/ml_data/csv_ml_data_integration_test.dart'
+import 'data_preprocessing/data_frame/csv_data_frame_integration_test.dart'
     as csv_ml_data_integration_test;
-import 'data_preprocessing/ml_data/csv_ml_data_with_categories_integration_test.dart'
+import 'data_preprocessing/data_frame/csv_data_frame_with_categories_integration_test.dart'
     as csv_ml_data_with_cat_test;
-import 'data_preprocessing/ml_data/ml_data_encoders_processor_impl_test.dart'
+import 'data_preprocessing/data_frame/encoders_processor_impl_test.dart'
     as ml_data_enc_preprocessor_test;
-import 'data_preprocessing/ml_data/ml_data_features_extractor_impl_test.dart'
+import 'data_preprocessing/data_frame/features_extractor_impl_test.dart'
     as ml_data_feature_extractor_test;
-import 'data_preprocessing/ml_data/ml_data_labels_extractor_impl_test.dart'
+import 'data_preprocessing/data_frame/labels_extractor_impl_test.dart'
     as ml_data_labels_extractor_test;
-import 'data_preprocessing/ml_data/ml_data_params_validator_impl_test.dart'
+import 'data_preprocessing/data_frame/params_validator_impl_test.dart'
     as ml_data_params_validator_test;
-import 'data_preprocessing/ml_data/ml_data_read_mask_creator_impl_test.dart'
+import 'data_preprocessing/data_frame/read_mask_creator_impl_test.dart'
     as ml_data_read_mask_creator_test;
 import 'data_splitter/data_splitter_test.dart' as data_splitter_test;
 import 'math/randomizer_test.dart' as randomizer_test;

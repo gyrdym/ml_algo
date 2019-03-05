@@ -6,10 +6,10 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_valu
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
@@ -40,7 +40,7 @@ class CategoricalDataEncoderFactoryMock extends Mock
 class CategoryValuesExtractorMock extends Mock
     implements CategoryValuesExtractor<dynamic> {}
 
-class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
+class DataFrameParamsValidatorMock extends Mock implements DataFrameParamsValidator {}
 
 class LoggerMock extends Mock implements Logger {}
 
@@ -200,9 +200,9 @@ CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   return factory;
 }
 
-MLDataParamsValidator createMLDataParamsValidatorMock(
+DataFrameParamsValidator createDataFrameParamsValidatorMock(
     {bool validationShouldBeFailed}) {
-  final validator = MLDataParamsValidatorMock();
+  final validator = DataFrameParamsValidatorMock();
   if (validationShouldBeFailed != null) {
     when(validator.validate(
       labelIdx: anyNamed('labelIdx'),

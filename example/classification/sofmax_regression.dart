@@ -4,7 +4,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:tuple/tuple.dart';
 
 Future main() async {
-  final data = MLData.fromCsvFile('datasets/iris.csv',
+  final data = DataFrame.fromCsv('datasets/iris.csv',
     labelIdx: 5,
     columns: [const Tuple2<int, int>(1, 5)],
     categoryNameToEncoder: {
