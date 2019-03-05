@@ -9,11 +9,11 @@ class SquaredCost implements CostFunction {
       math.pow(predictedLabel - originalLabel, 2).toDouble();
 
   @override
-  MLMatrix getGradient(MLMatrix x, MLMatrix w, MLMatrix y) =>
+  Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
       x.transpose() * -2 * (y - x * w);
 
   @override
-  MLVector getSubDerivative(int j, MLMatrix x, MLMatrix w, MLMatrix y) {
+  Vector getSubDerivative(int j, Matrix x, Matrix w, Matrix y) {
     final xj = x.pick(columnRanges: List<Range>.generate(y.columnsNum,
             (i) => Range(j, j, endInclusive: true)));
     final xWithoutJ = _excludeColumn(x, j);
@@ -23,7 +23,7 @@ class SquaredCost implements CostFunction {
         .reduceRows((sum, row) => sum + row);
   }
 
-  MLMatrix _excludeColumn(MLMatrix x, int column) {
+  Matrix _excludeColumn(Matrix x, int column) {
     if (column == 0) {
       return x.submatrix(columns: Range(1, x.columnsNum));
     } else if (column == x.columnsNum - 1) {

@@ -11,21 +11,19 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
-import 'logistic_regressor_common.dart';
+import 'classifier_common.dart';
 
 void main() {
   group('LogisticRegressor', () {
     tearDown(resetMockitoState);
 
     test('should initialize properly', () {
-      setUpLabelsProcessorFactory();
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      createRegressor();
+      createLogisticRegressor();
 
-      verify(labelsProcessorFactoryMock.create(Float32x4)).called(1);
       verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0))
           .called(1);
       verify(scoreToProbFactoryMock.fromType(
@@ -47,34 +45,34 @@ void main() {
       )).called(1);
     });
 
-    test('should make appropriate method calls when `fit` is called', () {
-      setUpLabelsProcessorFactory();
+    test('should make calls of appropriate method when `fit` is called', () {
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [10.1, 10.2, 12.0, 13.4],
         [3.1, 5.2, 6.0, 77.4],
       ]);
-      final origLabels = MLVector.from([1.0, 2.0]);
+      final origLabels = Matrix.from([
+        [1.0, 0.0],
+        [0.0, 1.0],
+      ]);
 
       when(interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
         [10.1, 10.2, 12.0, 13.4],
         [3.1, 5.2, 6.0, 77.4],
-      ])))).thenReturn(MLMatrix.from([
+      ])))).thenReturn(Matrix.from([
         [100.0, 200.0, 300.0, 400.0],
         [500.0, 600.0, 700.0, 800.0],
       ]));
 
-      final initialWeights = MLMatrix.from([[10.0, 20.0, 30.0, 40.0]]);
-
-      when(labelsProcessorMock.makeLabelsOneVsAll(
-              argThat(equals([1.0, 2.0])), 1.0))
-          .thenReturn(MLVector.from([1.0, 0.0]));
-      when(labelsProcessorMock.makeLabelsOneVsAll(
-              argThat(equals([1.0, 2.0])), 2.0))
-          .thenReturn(MLVector.from([0.0, 1.0]));
+      final initialWeights = Matrix.from([
+        [10.0],
+        [20.0],
+        [30.0],
+        [40.0],
+      ]);
 
       when(optimizerMock.findExtrema(
               argThat(matrixAlmostEqualTo([
@@ -95,8 +93,8 @@ void main() {
                   ]),
                   named: 'initialWeights'),
               isMinimizingObjective: false))
-          .thenReturn(MLMatrix.rows([
-        MLVector.from([333.0, 444.0])
+          .thenReturn(Matrix.rows([
+        Vector.from([333.0, 444.0])
       ]));
 
       when(optimizerMock.findExtrema(
@@ -116,11 +114,12 @@ void main() {
                     [30.0],
                     [40.0],
                   ]),
-                  named: 'initialWeights'),
+                  named: 'initialWeights'
+              ),
               isMinimizingObjective: false))
-          .thenReturn(MLMatrix.rows([MLVector.from([555.0, 666.0])]));
+          .thenReturn(Matrix.rows([Vector.from([555.0, 666.0])]));
 
-      createRegressor()
+      createLogisticRegressor()
         ..fit(features, origLabels,
             initialWeights: initialWeights, isDataNormalized: true);
 

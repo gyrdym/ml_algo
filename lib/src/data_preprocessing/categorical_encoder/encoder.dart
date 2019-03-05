@@ -35,7 +35,7 @@ abstract class CategoricalDataEncoder {
   Iterable<double> encodeSingle(Object value);
 
   /// Encodes passed categorical values to a numerical representation
-  MLMatrix encodeAll(Iterable<Object> values);
+  Matrix encodeAll(Iterable<Object> values);
 
   /// Finds all unique values in the given list
   void setCategoryValues(List<Object> values);

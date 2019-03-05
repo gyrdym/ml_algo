@@ -10,7 +10,7 @@ void main() {
       final preprocessor =
           const InterceptPreprocessorImpl(Float32x4, interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(
-        MLMatrix.from([
+        Matrix.from([
           [4.0, 5.0, 10.0],
           [14.0, 49.0, 33.0],
           [41.0, 52.0, 101.0],
@@ -27,7 +27,7 @@ void main() {
     });
 
     test('should not mutate given test_data if processing takes place', () {
-      final data = MLMatrix.from([
+      final data = Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
@@ -42,7 +42,7 @@ void main() {
     test(
         'should return the same test_data if scale is 0.0 (processing does nnot take place)',
         () {
-      final data = MLMatrix.from([
+      final data = Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('should consider scale parameter (if scale is not equal to 0.0)', () {
-      final data = MLMatrix.from([
+      final data = Matrix.from([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],

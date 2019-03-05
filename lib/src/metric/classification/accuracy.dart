@@ -5,13 +5,20 @@ class AccuracyMetric implements Metric {
   const AccuracyMetric();
 
   @override
-  double getScore(MLVector predictedLabels, MLVector origLabels) {
+  double getScore(Matrix predictedLabels, Matrix origLabels) {
+    if (predictedLabels.rowsNum != origLabels.rowsNum &&
+        predictedLabels.columnsNum != origLabels.columnsNum) {
+      throw Exception('Predicated labels and original labels should have '
+          'the same dimensions');
+    }
+
     double score = 0.0;
-    for (int i = 0; i < origLabels.length; i++) {
-      if (origLabels[i] == predictedLabels[i]) {
+    for (int i = 0; i < origLabels.rowsNum; i++) {
+      if (origLabels.getRow(i) == predictedLabels.getRow(i)) {
         score++;
       }
     }
-    return score / origLabels.length;
+
+    return score / origLabels.rowsNum;
   }
 }

@@ -1,5 +1,5 @@
-import 'package:ml_linalg/vector.dart';
+import 'package:ml_linalg/matrix.dart';
 
 abstract class Metric {
-  double getScore(MLVector predictedLabels, MLVector origLabels);
+  double getScore(Matrix predictedLabels, Matrix origLabels);
 }

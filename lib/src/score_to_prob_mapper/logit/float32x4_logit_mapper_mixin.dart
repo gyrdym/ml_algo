@@ -7,7 +7,7 @@ class Float32x4LogitMapperMixin {
   final float32x4Zeroes = Float32x4.zero();
   final float32x4Ones = Float32x4.splat(1.0);
 
-  MLMatrix float32x4ScoresToProbs(MLMatrix scores) =>
+  Matrix float32x4ScoresToProbs(Matrix scores) =>
       scores.fastMap<Float32x4>(_scoreToProbFloat32x4);
 
   Float32x4 _scoreToProbFloat32x4(Float32x4 scores) =>

@@ -2,13 +2,16 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 void main() {
   LogisticRegressor classifier;
+
+  final firstClass = [1.0, 0.0, 0.0];
+  final secondClass = [0.0, 1.0, 0.0];
+  final thirdClass = [0.0, 0.0, 1.0];
 
   group('Logistic regressor', () {
     setUp(() {
@@ -21,7 +24,7 @@ void main() {
     });
 
     test('should extract class labels from the test_data', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
@@ -30,21 +33,40 @@ void main() {
         [4.0, 0.0, 1.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([3.0, 1.0, 3.0, 2.0, 2.0, 0.0, 0.0]);
+      final labels = Matrix.from([
+        [3.0],
+        [1.0],
+        [3.0],
+        [2.0],
+        [2.0],
+        [0.0],
+        [0.0],
+      ]);
       classifier.fit(features, labels);
 
-      expect(classifier.classLabels, equals([3.0, 1.0, 2.0, 0.0]));
+      expect(classifier.classLabels, equals([
+        [3.0],
+        [1.0],
+        [2.0],
+        [0.0],
+      ]));
     });
 
     test('should properly fit given test_data', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Matrix.from([
+        firstClass,
+        secondClass,
+        secondClass,
+        thirdClass,
+        firstClass,
+      ]);
       classifier.fit(features, labels);
 
       // given test_data
@@ -300,78 +322,94 @@ void main() {
       // update:
       // [-5.5, -6.5, -18.0] + eta * [9.0, 8.0, 5.0] = [-5.5, -6.5, -18.0] + 1.0 * [9.0, 8.0, 5.0] = [3.5, 1.5, -13.0]
 
-      final weights = classifier.weightsByClasses;
-      final class1Weights = weights.values.elementAt(0);
-      final class2Weights = weights.values.elementAt(1);
-      final class3Weights = weights.values.elementAt(2);
-
-      expect(class1Weights, vectorAlmostEqualTo([3.5, -0.5, -9.0]));
-      expect(class2Weights, vectorAlmostEqualTo([-17.68, -15.5, -0.04], 1e-2));
-      expect(class3Weights, vectorAlmostEqualTo([3.5, 1.5, -13.0]));
+      expect(classifier.weightsByClasses, matrixAlmostEqualTo([
+        [3.5, -17.68, 3.5],
+        [-0.5, -15.5, 1.5],
+        [-9.0, -0.04, -13.0],
+      ], 1e-2));
     });
 
     test('should make prediction', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+
+      final labels = Matrix.from([
+        firstClass,
+        secondClass,
+        secondClass,
+        thirdClass,
+        firstClass,
+      ]);
       classifier.fit(features, labels);
 
-      final newFeatures = MLMatrix.from([
+      final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
       final classes = classifier.predictClasses(newFeatures);
 
-      expect(
-          probabilities,
-          equals([
-            [0.01798621006309986, 0.0, 0.5]
-          ]));
-      expect(classes, equals([2]));
+      expect(probabilities, equals([[0.01798621006309986, 0.0, 0.5]]));
+      expect(classes, equals([thirdClass]));
     });
 
     test('should evaluate prediction quality, accuracy = 0', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Matrix.from([
+        [0.0],
+        [1.0],
+        [1.0],
+        [2.0],
+        [0.0],
+      ]);
       classifier.fit(features, labels);
 
-      final newFeatures = MLMatrix.from([
+      final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = MLVector.from([1.0]);
+      final origLabels = Matrix.from([
+        [1.0]
+      ]);
       final score =
           classifier.test(newFeatures, origLabels, MetricType.accuracy);
       expect(score, equals(0.0));
     });
 
     test('should evaluate prediction quality, accuracy = 1', () {
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 1.0, 2.0, 0.0]);
+      final labels = Matrix.from([
+        firstClass,
+        secondClass,
+        secondClass,
+        thirdClass,
+        firstClass,
+      ]);
       classifier.fit(features, labels);
 
-      final newFeatures = MLMatrix.from([
+      final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = MLVector.from([2.0]);
+      final newLabels = Matrix.from([
+        thirdClass,
+      ]);
       final score =
-          classifier.test(newFeatures, origLabels, MetricType.accuracy);
+          classifier.test(newFeatures, newLabels, MetricType.accuracy);
       expect(score, equals(1.0));
     });
 
@@ -382,11 +420,14 @@ void main() {
           initialLearningRate: 1.0,
           gradientType: GradientType.batch,
           fitIntercept: true);
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0]);
+      final labels = Matrix.from([
+        [1.0, 0.0],
+        [0.0, 1.0],
+      ]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our test_data should look as follows:
@@ -442,20 +483,16 @@ void main() {
       //
       // derivative: [0.0, -2.0, -2.5, -1.5]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [0.0, -2.0, -2.5, -1.5] = [0.0, -2.0, -2.5, -1.5]
-      expect(
-          [
-            classifier.weightsByClasses.values.first,
-            classifier.weightsByClasses.values.last,
-          ],
-          equals([
-            [0.0, 2.0, 2.5, 1.5],
-            [0.0, -2.0, -2.5, -1.5]
-          ]));
+      expect(classifier.weightsByClasses, equals([
+        [0.0, 0.0],
+        [2.0, -2.0],
+        [2.5, -2.5],
+        [1.5, -1.5],
+      ]));
     });
 
-    test(
-        'should consider intercept scale if intercept term is going to be fitted',
-        () {
+    test('should consider intercept scale if intercept term is going to be '
+        'fitted', () {
       final classifier = LogisticRegressor(
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
@@ -463,12 +500,16 @@ void main() {
           gradientType: GradientType.batch,
           fitIntercept: true,
           interceptScale: 2.0);
-      final features = MLMatrix.from([
+      final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [3.0, 4.0, 5.0],
       ]);
-      final labels = MLVector.from([0.0, 1.0, 0.0]);
+      final labels = Matrix.from([
+        [1.0, 0.0],
+        [0.0, 1.0],
+        [1.0, 0.0],
+      ]);
       classifier.fit(features, labels);
 
       // as the intercept is required to be fitted, our test_data should look as follows:
@@ -536,15 +577,12 @@ void main() {
       //
       // derivative: [-1.0, -3.5, -4.5, -4.0]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [-1.0, -3.5, -4.5, -4.0] = [-1.0, -3.5, -4.5, -4.0]
-      expect(
-          [
-            classifier.weightsByClasses.values.first,
-            classifier.weightsByClasses.values.last,
-          ],
-          equals([
-            [1.0, 3.5, 4.5, 4.0],
-            [-1.0, -3.5, -4.5, -4.0]
-          ]));
+      expect(classifier.weightsByClasses, equals([
+        [1.0, -1.0],
+        [3.5, -3.5],
+        [4.5, -4.5],
+        [4.0, -4.0],
+      ]));
     });
   });
 }

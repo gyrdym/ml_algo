@@ -16,9 +16,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class GradientRegressor implements LinearRegressor {
-  final GradientOptimizer _optimizer;
-  final InterceptPreprocessor _interceptPreprocessor;
-
   GradientRegressor({
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
@@ -52,29 +49,33 @@ class GradientRegressor implements LinearRegressor {
           randomSeed: randomSeed,
         );
 
-  @override
-  MLVector get weights => _weights;
-  MLVector _weights;
+  final GradientOptimizer _optimizer;
+  final InterceptPreprocessor _interceptPreprocessor;
 
   @override
-  void fit(MLMatrix features, MLVector labels,
-      {MLMatrix initialWeights, bool isDataNormalized = false}) {
+  Vector get weights => _weights;
+  Vector _weights;
+
+  @override
+  void fit(Matrix features, Matrix labels,
+      {Matrix initialWeights, bool isDataNormalized = false}) {
     _weights = _optimizer
         .findExtrema(
           _interceptPreprocessor.addIntercept(features),
-          MLMatrix.columns([labels]),
+          labels,
           initialWeights: initialWeights?.transpose(),
           isMinimizingObjective: true,
           arePointsNormalized: isDataNormalized
-        ).getRow(0);
+        ).getColumn(0);
   }
 
   @override
-  double test(MLMatrix features, MLVector origLabels, MetricType metricType) {
+  double test(Matrix features, Matrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);
   }
 
-  MLVector predict(MLMatrix features) => (features * _weights).toVector();
+  @override
+  Matrix predict(Matrix features) => features * _weights;
 }

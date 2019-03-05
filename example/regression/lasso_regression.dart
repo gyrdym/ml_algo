@@ -5,7 +5,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:tuple/tuple.dart';
 
 Future main() async {
-  final data = MLData.fromCsvFile('datasets/advertising.csv',
+  final data = DataFrame.fromCsv('datasets/advertising.csv',
       columns: [const Tuple2<int, int>(1, 4)], labelIdx: 4, dtype: Float32x4);
   final features = await data.features;
   final labels = await data.labels;

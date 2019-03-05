@@ -1,6 +1,6 @@
 language: dart
 dart:
-  - "2.1.0"
+  - "2.2.0"
 dart_task:
   - test: --platform vm
   - dartanalyzer: true
