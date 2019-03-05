@@ -8,19 +8,10 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 import 'classifier_common.dart';
 
 void main() {
-  final features = Matrix.from([
-    [1.0, 2.0, 3.0],
-    [4.0, 5.0, 6.0],
-  ]);
-
-  final labels = Matrix.from([
-    [10.0],
-    [20.0],
-  ]);
-
   group('SoftmaxRegressor', () {
     test('should initialize properly', () {
       final dtype = Float64x2;
@@ -33,8 +24,8 @@ void main() {
 
       verify(interceptPreprocessorFactoryMock.create(dtype, scale: 0.0))
           .called(1);
-      verify(scoreToProbFactoryMock.fromType(
-          ScoreToProbMapperType.logit, dtype))
+      verify(scoreToProbFactoryMock
+          .fromType(ScoreToProbMapperType.softmax, dtype))
           .called(1);
       verify(optimizerFactoryMock.fromType(
         OptimizerType.gradientDescent,
@@ -42,7 +33,7 @@ void main() {
         costFunctionType: CostFunctionType.logLikelihood,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
-        scoreToProbMapperType: ScoreToProbMapperType.logit,
+        scoreToProbMapperType: ScoreToProbMapperType.softmax,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,
@@ -52,16 +43,120 @@ void main() {
       )).called(1);
     });
 
-    test('should', () {
-      final dtype = Float64x2;
+    test('should call optimizer\'s `findExtrema` method with proper '
+        'parameters', () {
 
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      final classifier = createSoftmaxRegressor(dtype: dtype);
+      final features = Matrix.from([
+        [10.1, 10.2, 12.0, 13.4],
+        [13.1, 15.2, 61.0, 27.2],
+        [30.1, 25.2, 62.0, 34.1],
+        [32.1, 35.2, 36.0, 41.5],
+        [35.1, 95.2, 56.0, 52.6],
+        [90.1, 20.2, 10.0, 12.1],
+      ]);
+      final origLabels = Matrix.from([
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0],
+        [0.0, 1.0, 0.0],
+        [1.0, 0.0, 0.0],
+        [1.0, 0.0, 0.0],
+        [1.0, 0.0, 0.0],
+      ]);
 
-      classifier.fit(features, labels);
+      when(interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
+        [10.1, 10.2, 12.0, 13.4],
+        [13.1, 15.2, 61.0, 27.2],
+        [30.1, 25.2, 62.0, 34.1],
+        [32.1, 35.2, 36.0, 41.5],
+        [35.1, 95.2, 56.0, 52.6],
+        [90.1, 20.2, 10.0, 12.1],
+      ])))).thenReturn(Matrix.from([
+        [1.0, 10.1, 10.2, 12.0, 13.4],
+        [1.0, 13.1, 15.2, 61.0, 27.2],
+        [1.0, 30.1, 25.2, 62.0, 34.1],
+        [1.0, 32.1, 35.2, 36.0, 41.5],
+        [1.0, 35.1, 95.2, 56.0, 52.6],
+        [1.0, 90.1, 20.2, 10.0, 12.1],
+      ]));
+
+      final initialWeights = Matrix.from([
+        [1.0],
+        [10.0],
+        [20.0],
+        [30.0],
+        [40.0],
+      ]);
+
+      when(optimizerMock.findExtrema(
+          argThat(matrixAlmostEqualTo([
+            [1.0, 10.1, 10.2, 12.0, 13.4],
+            [1.0, 13.1, 15.2, 61.0, 27.2],
+            [1.0, 30.1, 25.2, 62.0, 34.1],
+            [1.0, 32.1, 35.2, 36.0, 41.5],
+            [1.0, 35.1, 95.2, 56.0, 52.6],
+            [1.0, 90.1, 20.2, 10.0, 12.1],
+          ], 1e-2)),
+          argThat(equals(origLabels)),
+          arePointsNormalized: true,
+          initialWeights: argThat(equals(initialWeights),
+              named: 'initialWeights'),
+          isMinimizingObjective: false))
+          .thenReturn(Matrix.from([
+            [100.0, 10.0, 1.0],
+            [200.0, 20.0, 2.0],
+            [300.0, 30.0, 3.0],
+            [400.0, 40.0, 4.0],
+            [500.0, 50.0, 5.0],
+          ])
+      );
+
+      createSoftmaxRegressor()
+        ..fit(features, origLabels,
+            initialWeights: initialWeights, isDataNormalized: true);
+
+      verify(
+          interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
+            [10.1, 10.2, 12.0, 13.4],
+            [13.1, 15.2, 61.0, 27.2],
+            [30.1, 25.2, 62.0, 34.1],
+            [32.1, 35.2, 36.0, 41.5],
+            [35.1, 95.2, 56.0, 52.6],
+            [90.1, 20.2, 10.0, 12.1],
+          ], 1e-2)))).called(1);
+
+      verify(optimizerMock.findExtrema(
+        argThat(matrixAlmostEqualTo([
+          [1.0, 10.1, 10.2, 12.0, 13.4],
+          [1.0, 13.1, 15.2, 61.0, 27.2],
+          [1.0, 30.1, 25.2, 62.0, 34.1],
+          [1.0, 32.1, 35.2, 36.0, 41.5],
+          [1.0, 35.1, 95.2, 56.0, 52.6],
+          [1.0, 90.1, 20.2, 10.0, 12.1],
+        ], 1e-2)),
+        argThat(equals([
+          [1.0, 0.0, 0.0],
+          [0.0, 1.0, 0.0],
+          [0.0, 1.0, 0.0],
+          [1.0, 0.0, 0.0],
+          [1.0, 0.0, 0.0],
+          [1.0, 0.0, 0.0],
+        ])),
+        initialWeights: argThat(
+            equals([
+              [1.0],
+              [10.0],
+              [20.0],
+              [30.0],
+              [40.0],
+            ]),
+            named: 'initialWeights'),
+        arePointsNormalized: true,
+        isMinimizingObjective: false)
+      ).called(1);
     });
   });
 }

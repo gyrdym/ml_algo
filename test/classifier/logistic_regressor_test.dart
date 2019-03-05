@@ -67,7 +67,12 @@ void main() {
         [500.0, 600.0, 700.0, 800.0],
       ]));
 
-      final initialWeights = Matrix.from([[10.0, 20.0, 30.0, 40.0]]);
+      final initialWeights = Matrix.from([
+        [10.0],
+        [20.0],
+        [30.0],
+        [40.0],
+      ]);
 
       when(optimizerMock.findExtrema(
               argThat(matrixAlmostEqualTo([

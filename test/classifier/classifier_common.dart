@@ -93,7 +93,6 @@ SoftmaxRegressor createSoftmaxRegressor({
       minWeightsUpdate: minWeightsUpdate,
       lambda: lambda,
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
-      scoreToProbMapperType: ScoreToProbMapperType.logit,
       scoreToProbMapperFactory: scoreToProbFactoryMock,
       categoricalDataEncoderFactory: categoricalDataEncoderFactoryMock,
       optimizer: OptimizerType.gradientDescent,

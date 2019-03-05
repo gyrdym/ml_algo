@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/matrix.dart';
 
-/// A simple usage example using synthetic data. To see more complex examples, please, visit other directories in this
-/// folder
+/// A simple usage example using synthetic data. To see more complex examples,
+/// please, visit other directories in this folder
 Future main() async {
   // Let's create a feature matrix (a set of independent variables)
   final features = Matrix.from([
@@ -13,21 +13,23 @@ Future main() async {
     [27.0, 3.0, 0.0, 59.0],
   ]);
 
-  // Let's create dependent variables vector. It will be used as `true` values to adjust regression coefficients
+  // Let's create dependent variables vector. It will be used as `true` values
+  // to adjust regression coefficients
   final labels = Matrix.from([
     [4.3],
     [3.5],
     [2.1]
   ]);
 
-  // Let's create a regressor itself. With its help we can train some linear model to predict a label value for a new
-  // features
+  // Let's create a regressor itself. With its help we can train some linear
+  // model to predict label values for new features
   final regressor = LinearRegressor.gradient(
       iterationsLimit: 100,
       initialLearningRate: 0.0005,
       learningRateType: LearningRateType.constant);
 
-  // Let's train our model (training or fitting is a coefficients adjusting process)
+  // Let's train our model (training or fitting is a coefficients
+  // adjusting process)
   regressor.fit(features, labels);
 
   // Let's see adjusted coefficients

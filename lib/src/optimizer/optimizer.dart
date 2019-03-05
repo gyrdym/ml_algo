@@ -8,8 +8,6 @@ abstract class Optimizer {
   ///
   /// [labels] input y coordinate values
   ///
-  /// [numOfCoefficientVectors] optional parameter
-  ///
   /// [initialWeights] initial weights (coefficients) to start optimization (e.g. random values)
   ///
   /// [isMinimizingObjective] should the optimizer find a maxima or minima
@@ -17,8 +15,10 @@ abstract class Optimizer {
   /// [arePointsNormalized] `true` means that all the [points] columns are normalized (whether the sum of each column
   /// values gives 1.0 or not)
   Matrix findExtrema(Matrix points, Matrix labels,
-      {int numOfCoefficientVectors,
+    {
       Matrix initialWeights,
       bool isMinimizingObjective,
-      bool arePointsNormalized});
+      bool arePointsNormalized
+    }
+  );
 }
