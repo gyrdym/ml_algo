@@ -45,16 +45,18 @@ class CoordinateOptimizer implements Optimizer {
 
   @override
   Matrix findExtrema(Matrix points, Matrix labels,
-      {int numOfCoefficientVectors = 1,
-      Matrix initialWeights,
-      bool isMinimizingObjective = true,
-      bool arePointsNormalized = false}) {
+      {
+        Matrix initialWeights,
+        bool isMinimizingObjective = true,
+        bool arePointsNormalized = false
+      }
+  ) {
     _normalizer = arePointsNormalized
         ? Vector.filled(points.columnsNum, 1.0, dtype: _dtype)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
     _coefficients = initialWeights ??
-        Matrix.rows(List<Vector>.generate(numOfCoefficientVectors,
+        Matrix.rows(List<Vector>.generate(labels.columnsNum,
                 (int i) => _initialCoefficientsGenerator
                     .generate(points.columnsNum)));
 
@@ -94,12 +96,12 @@ class CoordinateOptimizer implements Optimizer {
       return coefficient;
     }
     final threshold = lambda / 2;
-    double regularized = 0.0;
     if (coefficient > threshold) {
-      regularized = (coefficient - threshold) / _normalizer[coefNum];
-    } else if (coefficient < -threshold) {
-      regularized = (coefficient + threshold) / _normalizer[coefNum];
+      return (coefficient - threshold) / _normalizer[coefNum];
     }
-    return regularized;
+    if (coefficient < -threshold) {
+      return (coefficient + threshold) / _normalizer[coefNum];
+    }
+    return 0.0;
   }
 }

@@ -36,7 +36,6 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
     GradientType gradientType = GradientType.stochastic,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.softmax,
 
     this.dtype = DefaultParameterValues.dtype,
 
@@ -57,14 +56,14 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
       const CategoricalDataEncoderFactory(),
   })
       : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
-            scale: fitIntercept ? interceptScale : 0.0),
+          scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =
-        scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
+          scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
           costFunctionType: CostFunctionType.logLikelihood,
-          scoreToProbMapperType: scoreToProbMapperType,
+          scoreToProbMapperType: _scoreToProbMapperType,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
@@ -76,6 +75,8 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
               : null,
           randomSeed: randomSeed,
         );
+
+  static const _scoreToProbMapperType = ScoreToProbMapperType.softmax;
 
   @override
   final Type dtype;

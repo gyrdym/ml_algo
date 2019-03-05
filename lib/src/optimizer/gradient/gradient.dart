@@ -26,14 +26,22 @@ import 'package:ml_linalg/vector.dart';
 class GradientOptimizer implements Optimizer {
   GradientOptimizer({
     Type dtype = DefaultParameterValues.dtype,
-    RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
-    CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
+
+    RandomizerFactory randomizerFactory =
+      const RandomizerFactoryImpl(),
+
+    CostFunctionFactory costFunctionFactory =
+      const CostFunctionFactoryImpl(),
+
     LearningRateGeneratorFactory learningRateGeneratorFactory =
-        const LearningRateGeneratorFactoryImpl(),
+      const LearningRateGeneratorFactoryImpl(),
+
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
-        const InitialWeightsGeneratorFactoryImpl(),
+      const InitialWeightsGeneratorFactoryImpl(),
+
     ConvergenceDetectorFactory convergenceDetectorFactory =
-        const ConvergenceDetectorFactoryImpl(),
+      const ConvergenceDetectorFactoryImpl(),
+
     CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -72,10 +80,12 @@ class GradientOptimizer implements Optimizer {
 
   @override
   Matrix findExtrema(Matrix points, Matrix labels,
-      {int numOfCoefficientVectors = 1,
-      Matrix initialWeights,
-      bool isMinimizingObjective = true,
-      bool arePointsNormalized = false}) {
+      {
+        Matrix initialWeights,
+        bool isMinimizingObjective = true,
+        bool arePointsNormalized = false
+      }
+  ) {
     _points = points;
 
     final batchSize =

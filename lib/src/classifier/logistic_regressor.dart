@@ -41,11 +41,16 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
 
     // private arguments
     InterceptPreprocessorFactory interceptPreprocessorFactory =
-        const InterceptPreprocessorFactoryImpl(),
+      const InterceptPreprocessorFactoryImpl(),
+
     ScoreToProbMapperFactory scoreToProbMapperFactory =
-        const ScoreToProbMapperFactoryImpl(),
-    OptimizerFactory optimizerFactory = const OptimizerFactoryImpl(),
-    BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
+      const ScoreToProbMapperFactoryImpl(),
+
+    OptimizerFactory optimizerFactory =
+      const OptimizerFactoryImpl(),
+
+    BatchSizeCalculator batchSizeCalculator =
+      const BatchSizeCalculatorImpl(),
   })  : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
             scale: fitIntercept ? interceptScale : 0.0),
         scoreToProbMapper =

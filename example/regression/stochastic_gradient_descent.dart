@@ -36,5 +36,5 @@ Future main() async {
   final error =
       validator.evaluate(regressor, features, labels, MetricType.mape);
 
-  print('MAPE error on k-fold validation: $error');
+  print('MAPE error on k-fold validation: ${error.toStringAsFixed(2)}%');
 }
