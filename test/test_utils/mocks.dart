@@ -1,23 +1,22 @@
 import 'package:logging/logging.dart';
-import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor.dart';
-import 'package:ml_algo/src/classifier/labels_processor/labels_processor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/validator/ml_data_params_validator.dart';
-import 'package:ml_algo/src/data_preprocessing/ml_data/value_converter/value_converter.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
@@ -41,11 +40,11 @@ class CategoricalDataEncoderFactoryMock extends Mock
 class CategoryValuesExtractorMock extends Mock
     implements CategoryValuesExtractor<dynamic> {}
 
-class MLDataParamsValidatorMock extends Mock implements MLDataParamsValidator {}
+class DataFrameParamsValidatorMock extends Mock implements DataFrameParamsValidator {}
 
 class LoggerMock extends Mock implements Logger {}
 
-class MLDataValueConverterMock extends Mock implements MLDataValueConverter {}
+class MLDataValueConverterMock extends Mock implements DataFrameValueConverter {}
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
@@ -71,11 +70,6 @@ class ScoreToProbMapperMock extends Mock implements ScoreToProbMapper {}
 class ScoreToProbMapperFactoryMock extends Mock
     implements ScoreToProbMapperFactory {}
 
-class LabelsProcessorFactoryMock extends Mock
-    implements LabelsProcessorFactory {}
-
-class LabelsProcessorMock extends Mock implements LabelsProcessor {}
-
 class InterceptPreprocessorFactoryMock extends Mock
     implements InterceptPreprocessorFactory {}
 
@@ -90,8 +84,11 @@ class ConvergenceDetectorFactoryMock extends Mock
 
 class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
+class CategoricalDataEncoderMock extends Mock implements
+    CategoricalDataEncoder {}
+
 class MLDataValueConverterMockWithImpl extends Mock
-    implements MLDataValueConverter {
+    implements DataFrameValueConverter {
   @override
   double convert(Object value, [double fallbackValue]) => value as double;
 }
@@ -156,16 +153,6 @@ InterceptPreprocessorFactoryMock createInterceptPreprocessorFactoryMock({
   return factory;
 }
 
-LabelsProcessorFactoryMock createLabelsProcessorFactoryMock({
-  Map<Type, LabelsProcessor> processors,
-}) {
-  final factory = LabelsProcessorFactoryMock();
-  processors.forEach((Type type, LabelsProcessor processor) {
-    when(factory.create(type)).thenReturn(processor);
-  });
-  return factory;
-}
-
 OptimizerFactoryMock createOptimizerFactoryMock({
   Map<OptimizerType, Optimizer> optimizers,
 }) {
@@ -206,12 +193,16 @@ CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   final factory = CategoricalDataEncoderFactoryMock();
   when(factory.oneHot(any)).thenReturn(oneHotEncoderMock);
   when(factory.ordinal(any)).thenReturn(ordinalEncoderMock);
+  when(factory.fromType(CategoricalDataEncoderType.oneHot))
+      .thenReturn(oneHotEncoderMock);
+  when(factory.fromType(CategoricalDataEncoderType.ordinal))
+      .thenReturn(ordinalEncoderMock);
   return factory;
 }
 
-MLDataParamsValidator createMLDataParamsValidatorMock(
+DataFrameParamsValidator createDataFrameParamsValidatorMock(
     {bool validationShouldBeFailed}) {
-  final validator = MLDataParamsValidatorMock();
+  final validator = DataFrameParamsValidatorMock();
   if (validationShouldBeFailed != null) {
     when(validator.validate(
       labelIdx: anyNamed('labelIdx'),

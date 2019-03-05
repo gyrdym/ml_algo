@@ -39,8 +39,8 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   }
 
   @override
-  MLMatrix encodeAll(Iterable<Object> values) {
+  Matrix encodeAll(Iterable<Object> values) {
     setCategoryValues(values.toList(growable: false));
-    return MLMatrix.from(values.map(encodeSingle).toList(growable: false));
+    return Matrix.from(values.map(encodeSingle).toList(growable: false));
   }
 }

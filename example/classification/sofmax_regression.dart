@@ -4,12 +4,11 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:tuple/tuple.dart';
 
 Future main() async {
-  final data = MLData.fromCsvFile('datasets/iris.csv',
+  final data = DataFrame.fromCsv('datasets/iris.csv',
     labelIdx: 5,
     columns: [const Tuple2<int, int>(1, 5)],
-    encoderType: CategoricalDataEncoderType.ordinal,
-    categories: {
-      'Species': ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica'],
+    categoryNameToEncoder: {
+      'Species': CategoricalDataEncoderType.oneHot,
     },
   );
 
@@ -19,14 +18,14 @@ Future main() async {
   final validator = CrossValidator.kFold(numberOfFolds: 5);
 
   final softmaxRegressor = LinearClassifier.softmaxRegressor(
-      initialLearningRate: 0.00053,
-      iterationsLimit: 500,
-      minWeightsUpdate: null,
+      initialLearningRate: 0.03,
+      iterationsLimit: null,
+      minWeightsUpdate: 1e-6,
       randomSeed: 46,
       learningRateType: LearningRateType.constant);
 
   final accuracy = validator.evaluate(
       softmaxRegressor, features, labels, MetricType.accuracy);
 
-  print('Accuracy is ${(accuracy * 100).toStringAsFixed(2)}%');
+  print('Accuracy is ${accuracy.toStringAsFixed(2)}');
 }

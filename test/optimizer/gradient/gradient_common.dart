@@ -32,7 +32,7 @@ LearningRateGenerator createLearningRateGenerator() {
 
 InitialWeightsGenerator createInitialWeightsGenerator() {
   final mock = InitialWeightsGeneratorMock();
-  when(mock.generate(3)).thenReturn(MLVector.from([0.0, 0.0, 0.0]));
+  when(mock.generate(3)).thenReturn(Vector.from([0.0, 0.0, 0.0]));
   return mock;
 }
 
@@ -86,13 +86,13 @@ void mockGetGradient(CostFunction mock, {
   Iterable<Iterable<double>> x,
   Iterable<Iterable<double>> w,
   Iterable<Iterable<double>> y,
-  MLMatrix gradient
+  Matrix gradient
 }) {
   when(mock.getGradient(
     x == null ? any : argThat(matrixAlmostEqualTo(x)),
     w == null ? any : argThat(matrixAlmostEqualTo(w)),
     y == null ? any : argThat(matrixAlmostEqualTo(y)),
-  )).thenReturn(gradient ?? MLMatrix.from([[]]));
+  )).thenReturn(gradient ?? Matrix.from([[]]));
 }
 
 void testOptimizer(

@@ -1,15 +1,15 @@
 name: ml_algo
 description: Machine learning algorithms written in native dart (without bindings to any popular ML libraries, just pure Dart implementation)
-version: 8.0.0
+version: 9.0.0
 author: Ilia Gyrdymov <ilgyrd@gmail.com>
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:
-  sdk: '>=2.1.0 <3.0.0'
+  sdk: '>=2.2.0 <3.0.0'
 
 dependencies:
   csv: ^4.0.0
-  ml_linalg: ^5.5.1
+  ml_linalg: ^6.0.2
   tuple: ^1.0.2
   logging: ^0.11.3+2
 

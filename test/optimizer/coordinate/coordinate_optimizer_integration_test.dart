@@ -22,8 +22,8 @@ void main() {
     final point4 = [20.0, 30.0, 10.0];
 
     CoordinateOptimizer optimizer;
-    MLMatrix data;
-    MLMatrix labels;
+    Matrix data;
+    Matrix labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -33,8 +33,8 @@ void main() {
           iterationsLimit: iterationsNumber,
           lambda: lambda);
 
-      data = MLMatrix.from([point1, point2, point3, point4]);
-      labels = MLMatrix.from([
+      data = Matrix.from([point1, point2, point3, point4]);
+      labels = Matrix.from([
         [20.0],
         [30.0],
         [20.0],
@@ -61,8 +61,8 @@ void main() {
     final point3 = [70.0, 80.0, 90.0];
 
     CoordinateOptimizer optimizer;
-    MLMatrix data;
-    MLMatrix labels;
+    Matrix data;
+    Matrix labels;
 
     setUp(() {
       optimizer = CoordinateOptimizer(
@@ -71,8 +71,8 @@ void main() {
           initialWeightsType: InitialWeightsType.zeroes,
           lambda: lambda);
 
-      data = MLMatrix.from([point1, point2, point3]);
-      labels = MLMatrix.from([
+      data = Matrix.from([point1, point2, point3]);
+      labels = Matrix.from([
         [2.0],
         [3.0],
         [2.0],

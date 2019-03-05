@@ -1,5 +1,11 @@
 # Changelog
 
+## 9.0.0
+- `ml_linalg` v6.0.2 supported
+- `Classifier`: type of `weightsByClasses` changed from `Map` to `Matrix` 
+- `SoftmaxRegressor`: more detailed unit tests for softmax regression added
+- Data prepprocessing: `DataFrame` introduced (former `MLData`)
+
 ## 8.0.0
 - `LinearClassifier.softmaxRegressor` implemented
 - `Metric` interface refactored (`getError` renamed to `getScore`)

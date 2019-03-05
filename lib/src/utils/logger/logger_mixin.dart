@@ -1,6 +1,6 @@
 import 'package:logging/logging.dart';
 
-abstract class LoggerMixin {
+mixin LoggerMixin {
   Logger get logger;
 
   void throwException(String msg) {

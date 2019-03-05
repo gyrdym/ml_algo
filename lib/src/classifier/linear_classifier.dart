@@ -87,7 +87,7 @@ abstract class LinearClassifier implements Classifier {
   /// Softmax regression is an algorithm that solves a multiclass classification
   /// problem. The algorithm uses maximization of the passed
   /// data likelihood (as well as
-  /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)).
+  /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression).
   /// In other words, the regressor iteratively tries to select coefficients,
   /// that makes combination of passed features and these coefficients most
   /// likely. But, instead of [Logit link function](https://en.wikipedia.org/wiki/Logit)
