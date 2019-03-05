@@ -1,3 +1,3 @@
-abstract class MLDataLabelsExtractor {
+abstract class DataFrameLabelsExtractor {
   List<List<double>> getLabels();
 }

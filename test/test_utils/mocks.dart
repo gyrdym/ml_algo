@@ -44,7 +44,7 @@ class DataFrameParamsValidatorMock extends Mock implements DataFrameParamsValida
 
 class LoggerMock extends Mock implements Logger {}
 
-class MLDataValueConverterMock extends Mock implements MLDataValueConverter {}
+class MLDataValueConverterMock extends Mock implements DataFrameValueConverter {}
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
@@ -88,7 +88,7 @@ class CategoricalDataEncoderMock extends Mock implements
     CategoricalDataEncoder {}
 
 class MLDataValueConverterMockWithImpl extends Mock
-    implements MLDataValueConverter {
+    implements DataFrameValueConverter {
   @override
   double convert(Object value, [double fallbackValue]) => value as double;
 }

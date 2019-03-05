@@ -1,3 +1,3 @@
-abstract class MLDataFeaturesExtractor {
+abstract class DataFrameFeaturesExtractor {
   List<List<double>> getFeatures();
 }

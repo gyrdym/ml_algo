@@ -23,7 +23,7 @@ void main() {
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
           encoders, labelIdx, valueConverter, loggerMock);
       final features = extractor.getFeatures();
 
@@ -44,7 +44,7 @@ void main() {
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
           encoders, labelIdx, valueConverter, loggerMock);
       final features = extractor.getFeatures();
 
@@ -64,7 +64,7 @@ void main() {
       final labelIdx = 1;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
           encoders, labelIdx, valueConverter, loggerMock);
       final features = extractor.getFeatures();
 
@@ -90,7 +90,7 @@ void main() {
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
           encoders, labelIdx, valueConverter, loggerMock);
       final features = extractor.getFeatures();
 
@@ -112,7 +112,7 @@ void main() {
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
-      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
           encoders, labelIdx, valueConverter, loggerMock);
       final actual = extractor.getFeatures();
 
@@ -136,11 +136,11 @@ void main() {
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
       expect(
-          () => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+          () => DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
               encoders, labelIdx, valueConverter, loggerMock),
           throwsException);
       verify(loggerMock.severe(
-              MLDataFeaturesExtractorImpl.columnsMaskWrongLengthMsg, any))
+              DataFrameFeaturesExtractorImpl.columnsMaskWrongLengthMsg, any))
           .called(1);
     });
 
@@ -152,7 +152,7 @@ void main() {
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
-      final extractor = MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
           encoders, labelIdx, valueConverter, loggerMock);
       final actual = extractor.getFeatures();
 
@@ -175,11 +175,11 @@ void main() {
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
       expect(
-          () => MLDataFeaturesExtractorImpl(data, rowMask, columnsMask,
+          () => DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
               encoders, labelIdx, valueConverter, loggerMock),
           throwsException);
       verify(loggerMock.severe(
-              MLDataFeaturesExtractorImpl.rowsMaskWrongLengthMsg, any))
+              DataFrameFeaturesExtractorImpl.rowsMaskWrongLengthMsg, any))
           .called(1);
     });
   });

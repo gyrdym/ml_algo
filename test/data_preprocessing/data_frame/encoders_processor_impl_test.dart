@@ -29,7 +29,7 @@ void main() {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
       final fallbackEncoderMock = OneHotEncoderMock();
-      final encoderProcessor = MLDataEncodersProcessorImpl(
+      final encoderProcessor = DataFrameEncodersProcessorImpl(
           records, header, encoderFactory, fallbackEncoderType, loggerMock);
 
       when(encoderFactory.fromType(any)).thenReturn(fallbackEncoderMock);
@@ -51,7 +51,7 @@ void main() {
         'map has more priority) and the header is not empty', () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = MLDataEncodersProcessorImpl(
+      final encoderProcessor = DataFrameEncodersProcessorImpl(
           records, header, encoderFactory, fallbackEncoderType, loggerMock);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
@@ -86,7 +86,7 @@ void main() {
         () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = MLDataEncodersProcessorImpl(
+      final encoderProcessor = DataFrameEncodersProcessorImpl(
           records, header, encoderFactory, fallbackEncoderType, loggerMock);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
@@ -128,7 +128,7 @@ void main() {
         () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = MLDataEncodersProcessorImpl(
+      final encoderProcessor = DataFrameEncodersProcessorImpl(
           records, [], encoderFactory, fallbackEncoderType, loggerMock);
       final oneHotEncoderMock = OneHotEncoderMock();
 
@@ -147,7 +147,7 @@ void main() {
           argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
 
       verify(loggerMock
-              .warning(MLDataEncodersProcessorImpl.noHeaderProvidedWarningMsg))
+              .warning(DataFrameEncodersProcessorImpl.noHeaderProvidedWarningMsg))
           .called(1);
     });
 
@@ -156,7 +156,7 @@ void main() {
         () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = MLDataEncodersProcessorImpl(
+      final encoderProcessor = DataFrameEncodersProcessorImpl(
           records, [], encoderFactory, fallbackEncoderType, loggerMock);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
@@ -183,7 +183,7 @@ void main() {
           .setCategoryValues(argThat(equals([35, 27, 21, 25]))));
 
       verify(loggerMock
-              .warning(MLDataEncodersProcessorImpl.noHeaderProvidedWarningMsg))
+              .warning(DataFrameEncodersProcessorImpl.noHeaderProvidedWarningMsg))
           .called(1);
     });
 
@@ -192,7 +192,7 @@ void main() {
         () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = MLDataEncodersProcessorImpl(
+      final encoderProcessor = DataFrameEncodersProcessorImpl(
           records, [], encoderFactory, fallbackEncoderType, loggerMock);
       final encoders = encoderProcessor.createEncoders({}, {}, {});
 

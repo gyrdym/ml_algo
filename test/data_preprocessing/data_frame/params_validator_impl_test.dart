@@ -14,7 +14,7 @@ void main() {
         columns: [const Tuple2<int, int>(0, 1)],
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test('should return no error message if empty row ranges list is provided',
@@ -26,7 +26,7 @@ void main() {
         columns: [const Tuple2<int, int>(0, 1)],
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test(
@@ -43,7 +43,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages.intersectingRangesMsg(
+          equals(DataFrameParametersValidationErrorMessages.intersectingRangesMsg(
               rowRange1, rowRange2)));
     });
 
@@ -61,7 +61,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages.intersectingRangesMsg(
+          equals(DataFrameParametersValidationErrorMessages.intersectingRangesMsg(
               rowRange1, rowRange2)));
     });
 
@@ -79,7 +79,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages.leftBoundGreaterThanRightMsg(
+          equals(DataFrameParametersValidationErrorMessages.leftBoundGreaterThanRightMsg(
               rowRange2)));
     });
 
@@ -95,7 +95,7 @@ void main() {
         columns: [const Tuple2<int, int>(0, 1)],
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
   });
 
@@ -108,7 +108,7 @@ void main() {
         columns: null,
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test('should return no error message if empty row ranges list is provided',
@@ -120,7 +120,7 @@ void main() {
         columns: [],
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test(
@@ -137,7 +137,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages.intersectingRangesMsg(
+          equals(DataFrameParametersValidationErrorMessages.intersectingRangesMsg(
               colRange1, colRange2)));
     });
 
@@ -155,7 +155,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages.intersectingRangesMsg(
+          equals(DataFrameParametersValidationErrorMessages.intersectingRangesMsg(
               colRange1, colRange2)));
     });
 
@@ -173,7 +173,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages.leftBoundGreaterThanRightMsg(
+          equals(DataFrameParametersValidationErrorMessages.leftBoundGreaterThanRightMsg(
               colRange2)));
     });
 
@@ -189,7 +189,7 @@ void main() {
         columns: [colRange1, colRange2, colRange3],
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
   });
 
@@ -200,7 +200,7 @@ void main() {
         labelIdx: 10,
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test('should return proper error message if no label index is provided',
@@ -210,7 +210,7 @@ void main() {
         labelIdx: null,
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noLabelIndexMsg()));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noLabelIndexMsg()));
     });
 
     test(
@@ -229,7 +229,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages.labelIsNotInRangesMsg(
+          equals(DataFrameParametersValidationErrorMessages.labelIsNotInRangesMsg(
               labelIdx, ranges)));
     });
   });
@@ -242,7 +242,7 @@ void main() {
         labelIdx: 10,
         headerExists: true,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test(
@@ -255,7 +255,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages
+          equals(DataFrameParametersValidationErrorMessages
               .noHeaderExistsParameterProvidedMsg()));
     });
   });
@@ -269,7 +269,7 @@ void main() {
         labelIdx: 10,
         predefinedCategories: null,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test(
@@ -281,7 +281,7 @@ void main() {
         predefinedCategories: {},
       );
       expect(
-          actual, equals(MLDataValidationErrorMessages.emptyCategoriesMsg()));
+          actual, equals(DataFrameParametersValidationErrorMessages.emptyCategoriesMsg()));
     });
 
     test(
@@ -299,7 +299,7 @@ void main() {
       expect(
           actual,
           equals(
-              MLDataValidationErrorMessages.noHeaderProvidedMsg(categories)));
+              DataFrameParametersValidationErrorMessages.noHeaderProvidedMsg(categories)));
     });
   });
 
@@ -312,7 +312,7 @@ void main() {
         labelIdx: 10,
         namesToEncoders: null,
       );
-      expect(actual, equals(MLDataValidationErrorMessages.noErrorMsg));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
     });
 
     test('should return proper error message if `namesToEncoders` is empty',
@@ -322,7 +322,7 @@ void main() {
         labelIdx: 10,
         namesToEncoders: {},
       );
-      expect(actual, equals(MLDataValidationErrorMessages.emptyEncodersMsg()));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.emptyEncodersMsg()));
     });
 
     test(
@@ -337,7 +337,7 @@ void main() {
       );
       expect(
           actual,
-          equals(MLDataValidationErrorMessages
+          equals(DataFrameParametersValidationErrorMessages
               .noHeaderProvidedForColumnEncodersMsg(encoders)));
     });
   });

@@ -35,57 +35,59 @@ class DataFrameParamsValidatorImpl implements DataFrameParamsValidator {
 
   String _validateHeaderExistsParam(bool headerExists) {
     if (headerExists == null) {
-      return MLDataValidationErrorMessages.noHeaderExistsParameterProvidedMsg();
+      return DataFrameParametersValidationErrorMessages
+          .noHeaderExistsParameterProvidedMsg();
     }
-    return MLDataValidationErrorMessages.noErrorMsg;
+    return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }
 
   String _validatePredefinedCategories(
       Map<String, Iterable<Object>> categories, bool headerExists) {
     if (categories?.isEmpty == true) {
-      return MLDataValidationErrorMessages.emptyCategoriesMsg();
+      return DataFrameParametersValidationErrorMessages.emptyCategoriesMsg();
     }
     if (categories != null && !headerExists) {
-      return MLDataValidationErrorMessages.noHeaderProvidedMsg(categories);
+      return DataFrameParametersValidationErrorMessages
+          .noHeaderProvidedMsg(categories);
     }
-    return MLDataValidationErrorMessages.noErrorMsg;
+    return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }
 
   String _validateNamesToEncoders(
       Map<String, CategoricalDataEncoderType> namesToEncoders,
       bool headerExists) {
     if (namesToEncoders?.isEmpty == true) {
-      return MLDataValidationErrorMessages.emptyEncodersMsg();
+      return DataFrameParametersValidationErrorMessages.emptyEncodersMsg();
     }
     if (!headerExists && namesToEncoders?.isNotEmpty == true) {
-      return MLDataValidationErrorMessages.noHeaderProvidedForColumnEncodersMsg(
-          namesToEncoders);
+      return DataFrameParametersValidationErrorMessages
+          .noHeaderProvidedForColumnEncodersMsg(namesToEncoders);
     }
-    return MLDataValidationErrorMessages.noErrorMsg;
+    return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }
 
   String _validateLabelIdx(int labelIdx) {
     if (labelIdx == null) {
-      return MLDataValidationErrorMessages.noLabelIndexMsg();
+      return DataFrameParametersValidationErrorMessages.noLabelIndexMsg();
     }
-    return MLDataValidationErrorMessages.noErrorMsg;
+    return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }
 
   String _validateRanges(Iterable<Tuple2<int, int>> ranges, [int labelIdx]) {
     if (ranges == null || ranges.isEmpty == true) {
-      return MLDataValidationErrorMessages.noErrorMsg;
+      return DataFrameParametersValidationErrorMessages.noErrorMsg;
     }
     Tuple2<int, int> prevRange;
     bool isLabelInRanges = false;
 
     for (final range in ranges) {
       if (range.item1 > range.item2) {
-        return MLDataValidationErrorMessages.leftBoundGreaterThanRightMsg(
-            range);
+        return DataFrameParametersValidationErrorMessages
+            .leftBoundGreaterThanRightMsg(range);
       }
       if (prevRange != null && prevRange.item2 >= range.item1) {
-        return MLDataValidationErrorMessages.intersectingRangesMsg(
-            prevRange, range);
+        return DataFrameParametersValidationErrorMessages
+            .intersectingRangesMsg(prevRange, range);
       }
       if (labelIdx != null &&
           labelIdx >= range.item1 &&
@@ -96,9 +98,9 @@ class DataFrameParamsValidatorImpl implements DataFrameParamsValidator {
     }
 
     if (labelIdx != null && !isLabelInRanges) {
-      return MLDataValidationErrorMessages.labelIsNotInRangesMsg(
-          labelIdx, ranges);
+      return DataFrameParametersValidationErrorMessages
+          .labelIsNotInRangesMsg(labelIdx, ranges);
     }
-    return MLDataValidationErrorMessages.noErrorMsg;
+    return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }
 }

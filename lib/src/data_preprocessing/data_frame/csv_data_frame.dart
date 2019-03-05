@@ -55,23 +55,23 @@ class CsvDataFrame implements DataFrame {
       DataFrameParamsValidator paramsValidator =
         const DataFrameParamsValidatorImpl(),
 
-      MLDataValueConverter valueConverter =
-        const MLDataValueConverterImpl(),
+      DataFrameValueConverter valueConverter =
+        const DataFrameValueConverterImpl(),
 
-      MLDataHeaderExtractorFactory headerExtractorFactory =
-        const MLDataHeaderExtractorFactoryImpl(),
+      DataFrameHeaderExtractorFactory headerExtractorFactory =
+        const DataFrameHeaderExtractorFactoryImpl(),
 
-      MLDataFeaturesExtractorFactory featuresExtractorFactory =
-        const MLDataFeaturesExtractorFactoryImpl(),
+      DataFrameFeaturesExtractorFactory featuresExtractorFactory =
+        const DataFrameFeaturesExtractorFactoryImpl(),
 
-      MLDataLabelsExtractorFactory labelsExtractorFactory =
-        const MLDataLabelsExtractorFactoryImpl(),
+      DataFrameLabelsExtractorFactory labelsExtractorFactory =
+        const DataFrameLabelsExtractorFactoryImpl(),
 
-      MLDataReadMaskCreatorFactory readMaskCreatorFactory =
-        const MLDataReadMaskCreatorFactoryImpl(),
+      DataFrameReadMaskCreatorFactory readMaskCreatorFactory =
+        const DataFrameReadMaskCreatorFactoryImpl(),
 
-      MLDataEncodersProcessorFactory encodersProcessorFactory =
-        const MLDataEncodersProcessorFactoryImpl(),
+      DataFrameEncodersProcessorFactory encodersProcessorFactory =
+        const DataFrameEncodersProcessorFactoryImpl(),
 
       Logger logger,
     })  : _dtype = dtype ?? DefaultParameterValues.dtype,
@@ -117,12 +117,12 @@ class CsvDataFrame implements DataFrame {
   final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
   final DataFrameParamsValidator _paramsValidator;
-  final MLDataValueConverter _valueConverter;
-  final MLDataReadMaskCreatorFactory _readMaskCreatorFactory;
-  final MLDataHeaderExtractorFactory _headerExtractorFactory;
-  final MLDataFeaturesExtractorFactory _featuresExtractorFactory;
-  final MLDataLabelsExtractorFactory _labelsExtractorFactory;
-  final MLDataEncodersProcessorFactory _encodersProcessorFactory;
+  final DataFrameValueConverter _valueConverter;
+  final DataFrameReadMaskCreatorFactory _readMaskCreatorFactory;
+  final DataFrameHeaderExtractorFactory _headerExtractorFactory;
+  final DataFrameFeaturesExtractorFactory _featuresExtractorFactory;
+  final DataFrameLabelsExtractorFactory _labelsExtractorFactory;
+  final DataFrameEncodersProcessorFactory _encodersProcessorFactory;
   final Logger _logger;
 
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
@@ -136,9 +136,9 @@ class CsvDataFrame implements DataFrame {
   Matrix _features;
   Matrix _labels;
   List<String> _header;
-  MLDataHeaderExtractor _headerExtractor;
-  MLDataFeaturesExtractor _featuresExtractor;
-  MLDataLabelsExtractor _labelsExtractor;
+  DataFrameHeaderExtractor _headerExtractor;
+  DataFrameFeaturesExtractor _featuresExtractor;
+  DataFrameLabelsExtractor _labelsExtractor;
   Map<int, CategoricalDataEncoder> _encoders;
 
   @override

@@ -19,7 +19,7 @@ void main() {
     test('should extract labels according to given read mask', () {
       final readMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
-      final extractor = MLDataLabelsExtractorImpl(
+      final extractor = DataFrameLabelsExtractorImpl(
           records, readMask, 4, valueConverterMock, encoders, loggerMock);
       final actual = extractor.getLabels();
 
@@ -36,7 +36,7 @@ void main() {
         'column number', () {
       final readMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
-      final extractor = MLDataLabelsExtractorImpl(
+      final extractor = DataFrameLabelsExtractorImpl(
           records, readMask, 0, valueConverterMock, encoders, loggerMock);
       final actual = extractor.getLabels();
 

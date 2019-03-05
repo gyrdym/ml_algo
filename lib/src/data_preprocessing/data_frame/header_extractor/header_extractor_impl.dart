@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor.dart';
 
-class MLDataHeaderExtractorImpl implements MLDataHeaderExtractor {
-  MLDataHeaderExtractorImpl(this.readMask)
+class DataFrameHeaderExtractorImpl implements DataFrameHeaderExtractor {
+  DataFrameHeaderExtractorImpl(this.readMask)
       : columnsNum = readMask.where((bool flag) => flag).length;
 
   final List<bool> readMask;

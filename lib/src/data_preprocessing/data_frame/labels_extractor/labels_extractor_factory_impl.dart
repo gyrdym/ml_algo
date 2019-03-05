@@ -5,13 +5,15 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/label
 import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/labels_extractor_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 
-class MLDataLabelsExtractorFactoryImpl implements MLDataLabelsExtractorFactory {
-  const MLDataLabelsExtractorFactoryImpl();
+class DataFrameLabelsExtractorFactoryImpl implements
+    DataFrameLabelsExtractorFactory {
+
+  const DataFrameLabelsExtractorFactoryImpl();
 
   @override
-  MLDataLabelsExtractor create(List<List<Object>> records, List<bool> readMask,
-          int labelIdx, MLDataValueConverter valueConverter,
+  DataFrameLabelsExtractor create(List<List<Object>> records, List<bool> readMask,
+          int labelIdx, DataFrameValueConverter valueConverter,
       Map<int, CategoricalDataEncoder> encoders, Logger logger) =>
-      MLDataLabelsExtractorImpl(records, readMask, labelIdx, valueConverter,
+      DataFrameLabelsExtractorImpl(records, readMask, labelIdx, valueConverter,
           encoders, logger);
 }
