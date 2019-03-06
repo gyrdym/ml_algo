@@ -4,6 +4,7 @@ import 'package:tuple/tuple.dart';
 abstract class DataFrameParamsValidator {
   String validate({
     int labelIdx,
+    String labelName,
     Iterable<Tuple2<int, int>> rows,
     Iterable<Tuple2<int, int>> columns,
     bool headerExists,

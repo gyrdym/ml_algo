@@ -36,6 +36,7 @@ class CsvDataFrame implements DataFrame {
       Type dtype,
       String eol = '\n',
       int labelIdx,
+      String labelName,
       bool headerExists = true,
       CategoricalDataEncoderType encoderType =
           CategoricalDataEncoderType.oneHot,
@@ -78,6 +79,7 @@ class CsvDataFrame implements DataFrame {
       _csvCodec = CsvCodec(eol: eol),
       _file = File(fileName),
       _labelIdx = labelIdx,
+      _labelName = labelName,
       _headerExists = headerExists,
       _rows = rows,
       _columns = columns,
@@ -96,6 +98,7 @@ class CsvDataFrame implements DataFrame {
       _logger = logger ?? Logger(_loggerPrefix) {
     final errorMsg = _paramsValidator.validate(
       labelIdx: labelIdx,
+      labelName: labelName,
       rows: rows,
       columns: columns,
       headerExists: headerExists,
@@ -112,6 +115,7 @@ class CsvDataFrame implements DataFrame {
   final CsvCodec _csvCodec;
   final File _file;
   final int _labelIdx;
+  final String _labelName;
   final bool _headerExists;
   final List<Tuple2<int, int>> _rows;
   final List<Tuple2<int, int>> _columns;
@@ -130,7 +134,7 @@ class CsvDataFrame implements DataFrame {
   final Map<String, List<Object>> _categories;
   final CategoricalDataEncoderType _fallbackEncoderType;
 
-  static const String _loggerPrefix = 'MLData';
+  static const String _loggerPrefix = 'CsvDataFrame';
 
   List<List<dynamic>> _data; // the whole dataset including header
   Matrix _features;
@@ -180,14 +184,27 @@ class CsvDataFrame implements DataFrame {
         .create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)]);
     final records = data.sublist(_headerExists ? 1 : 0);
 
-    if (_labelIdx >= records.first.length || _labelIdx < 0) {
-      throw RangeError.range(_labelIdx, 0, records.first.length - 1, null,
+    final originalHeader = _headerExists
+        ? data[0].map((dynamic el) => el.toString()).toList(growable: false)
+        : <String>[];
+
+    int labelIdx;
+
+    if (_labelIdx != null) {
+      labelIdx = _labelIdx;
+    } else if (originalHeader.isNotEmpty) {
+      labelIdx = originalHeader.indexOf(_labelName);
+      if (labelIdx == -1) {
+        throw Exception(_wrapErrorMessage('There is no column named '
+            '`$_labelName`'));
+      }
+    }
+
+    if (labelIdx >= records.first.length || labelIdx < 0) {
+      throw RangeError.range(labelIdx, 0, records.first.length - 1, null,
           _wrapErrorMessage('Invalid label column number'));
     }
 
-    final originalHeader = _headerExists
-        ? data[0].map((dynamic el) => el.toString()).toList(growable: true)
-        : <String>[];
     final encodersProcessor = _encodersProcessorFactory.create(records,
         originalHeader, _encoderFactory, _fallbackEncoderType, _logger);
     _encoders = encodersProcessor.createEncoders(
@@ -195,14 +212,12 @@ class CsvDataFrame implements DataFrame {
 
     _headerExtractor = _headerExtractorFactory.create(columnsMask);
     _featuresExtractor = _featuresExtractorFactory.create(records, rowsMask,
-        columnsMask, _encoders, _labelIdx, _valueConverter, _logger);
+        columnsMask, _encoders, labelIdx, _valueConverter, _logger);
     _labelsExtractor = _labelsExtractorFactory.create(
-        records, rowsMask, _labelIdx, _valueConverter, _encoders, _logger);
+        records, rowsMask, labelIdx, _valueConverter, _encoders, _logger);
 
     return data;
   }
-
-  String _wrapErrorMessage(String text) => '$_loggerPrefix: $text';
 
   @override
   Iterable<String> decode(Matrix column, {String colName, int colIdx}) {
@@ -230,4 +245,6 @@ class CsvDataFrame implements DataFrame {
     }
     throw UnimplementedError('`Decode` is unimplemented yet');
   }
+
+  String _wrapErrorMessage(String text) => '$_loggerPrefix: $text';
 }

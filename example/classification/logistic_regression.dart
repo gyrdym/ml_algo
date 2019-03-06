@@ -4,7 +4,7 @@ import 'package:ml_algo/ml_algo.dart';
 
 Future main() async {
   final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv',
-    labelIdx: 8,
+    labelName: 'class variable (0 or 1)',
     categoryNameToEncoder: {
       'class variable (0 or 1)': CategoricalDataEncoderType.oneHot,
     },

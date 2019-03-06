@@ -10,8 +10,7 @@ void main() {
   group('CsvDataFrame (categories-less)', () {
     test('should properly parse csv file', () async {
       await testCsvData(
-          fileName:
-              'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 8,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -35,8 +34,7 @@ void main() {
     test('should parse csv file with specified label column position',
         () async {
       await testCsvData(
-          fileName:
-              'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 1,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -58,12 +56,10 @@ void main() {
           });
     });
 
-    test(
-        'should parse csv file with specified label column position, position is 0',
-        () async {
+    test('should parse csv file with specified label column position, '
+        'position is 0', () async {
       await testCsvData(
-          fileName:
-              'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
+          fileName: 'test/data_preprocessing/test_data/pima_indians_diabetes_database.csv',
           labelIdx: 0,
           expectedColsNum: 8,
           expectedRowsNum: 768,
@@ -120,6 +116,44 @@ void main() {
             ),
         throwsException,
       );
+    });
+
+    test('should throw an error if neither label index nor label name is not '
+        'provided', () async {
+      expect(() => CsvDataFrame.fromFile(
+          'test/data_preprocessing/test_data/elo_blatter.csv',
+          labelIdx: null,
+          labelName: null,
+          columns: [const Tuple2(2, 3), const Tuple2(5, 7)],
+        ),
+        throwsException,
+      );
+    });
+
+    test('should throw an error if label name does not present in the data '
+        'frame header', () async {
+      final data = CsvDataFrame.fromFile(
+        'test/data_preprocessing/test_data/elo_blatter.csv',
+        labelIdx: null,
+        labelName: 'some_unknown_column',
+        columns: [const Tuple2(2, 3), const Tuple2(5, 7)],
+      );
+      expect(() async => await data.header, throwsException);
+    });
+
+    test('should not throw an error if label name does not present in the data '
+        'frame header, but valid label index is provided', () async {
+      final data = CsvDataFrame.fromFile(
+        'test/data_preprocessing/test_data/elo_blatter.csv',
+        labelIdx: 1,
+        labelName: 'some_unknown_column',
+        columns: [const Tuple2(0, 3), const Tuple2(5, 7)],
+        rows: [const Tuple2(0, 0)],
+      );
+      final actual = await data.labels;
+      expect(actual, equals([
+        [993.0],
+      ]));
     });
 
     test('should cut out selected columns', () async {

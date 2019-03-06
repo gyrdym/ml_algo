@@ -5,7 +5,7 @@ import 'package:tuple/tuple.dart';
 
 Future main() async {
   final data = DataFrame.fromCsv('datasets/iris.csv',
-    labelIdx: 5,
+    labelName: 'Species',
     columns: [const Tuple2<int, int>(1, 5)],
     categoryNameToEncoder: {
       'Species': CategoricalDataEncoderType.oneHot,
