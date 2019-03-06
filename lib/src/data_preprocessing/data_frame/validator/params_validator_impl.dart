@@ -9,6 +9,7 @@ class DataFrameParamsValidatorImpl implements DataFrameParamsValidator {
   @override
   String validate({
     int labelIdx,
+    String labelName,
     Iterable<Tuple2<int, int>> rows,
     Iterable<Tuple2<int, int>> columns,
     bool headerExists = true,
@@ -20,7 +21,7 @@ class DataFrameParamsValidatorImpl implements DataFrameParamsValidator {
       () => _validateHeaderExistsParam(headerExists),
       () => _validatePredefinedCategories(predefinedCategories, headerExists),
       () => _validateNamesToEncoders(namesToEncoders, headerExists),
-      () => _validateLabelIdx(labelIdx),
+      () => _validateLabelPosition(labelIdx, labelName, headerExists),
       () => _validateRanges(rows),
       () => _validateRanges(columns, labelIdx),
     ];
@@ -66,9 +67,14 @@ class DataFrameParamsValidatorImpl implements DataFrameParamsValidator {
     return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }
 
-  String _validateLabelIdx(int labelIdx) {
-    if (labelIdx == null) {
-      return DataFrameParametersValidationErrorMessages.noLabelIndexMsg();
+  String _validateLabelPosition(int labelIdx, String labelName,
+      bool headerExists) {
+    if (labelIdx == null && labelName == null) {
+      return DataFrameParametersValidationErrorMessages.noLabelPositionMsg();
+    }
+    if (labelName != null && headerExists == false) {
+      return DataFrameParametersValidationErrorMessages
+          .labelNameWithoutHeader();
     }
     return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }

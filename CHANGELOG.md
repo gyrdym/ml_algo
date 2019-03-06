@@ -1,5 +1,8 @@
 # Changelog
 
+## 9.1.0
+- `DataFrame`: `labelName` parameter added
+
 ## 9.0.0
 - `ml_linalg` v6.0.2 supported
 - `Classifier`: type of `weightsByClasses` changed from `Map` to `Matrix` 

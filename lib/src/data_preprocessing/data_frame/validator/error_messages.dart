@@ -16,7 +16,12 @@ abstract class DataFrameParametersValidationErrorMessages {
       'no header provided to define, which columns belongs to given ecnoders '
           '$encoders';
 
-  static String noLabelIndexMsg() => 'label index must not be null';
+  static String noLabelPositionMsg() => 'neither label index nor label name '
+      'parameters are provided. It\'s necessary to specify, where label column '
+      'resides';
+
+  static String labelNameWithoutHeader() => 'label name is provided, but '
+      'the dataset doesn\'t have a header';
 
   static String leftBoundGreaterThanRightMsg(Tuple2<int, int> range) =>
       'left boundary of the range $range is greater than the right one';

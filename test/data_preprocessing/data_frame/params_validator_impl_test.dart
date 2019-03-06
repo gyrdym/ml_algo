@@ -210,7 +210,7 @@ void main() {
         labelIdx: null,
         headerExists: true,
       );
-      expect(actual, equals(DataFrameParametersValidationErrorMessages.noLabelIndexMsg()));
+      expect(actual, equals(DataFrameParametersValidationErrorMessages.noLabelPositionMsg()));
     });
 
     test(
