@@ -16,6 +16,8 @@ abstract class DataFrame {
    * [labelIdx] Position of the label column (by default - the last column).
    * Required parameter.
    *
+   * [labelName] Name of a column, where label values are contained
+   *
    * [eol] End of line symbol of the csv-file
    *
    * [headerExists] Indicates, whether the csv-file header (a sequence of
@@ -62,6 +64,7 @@ abstract class DataFrame {
     String fileName, {
     String eol,
     int labelIdx,
+    String labelName,
     bool headerExists,
     CategoricalDataEncoderType encoderType,
     EncodeUnknownValueStrategy encodeUnknownStrategy,
