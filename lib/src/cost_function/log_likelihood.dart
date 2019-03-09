@@ -11,7 +11,7 @@ class LogLikelihoodCost implements CostFunction {
       ScoreToProbMapperType scoreToProbMapperType, {
         Type dtype = DefaultParameterValues.dtype,
         ScoreToProbMapperFactory scoreToProbMapperFactory =
-        const ScoreToProbMapperFactoryImpl(),
+          const ScoreToProbMapperFactoryImpl(),
       }) : scoreToProbMapper =
   scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype);
 
@@ -24,7 +24,7 @@ class LogLikelihoodCost implements CostFunction {
 
   @override
   Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
-    x.transpose() * (y - scoreToProbMapper.linkScoresToProbs(x * w));
+    x.transpose() * (y - scoreToProbMapper.getProbabilities(x * w));
 
   @override
   Vector getSubDerivative(int wIdx, Matrix x, Matrix w, Matrix y) =>

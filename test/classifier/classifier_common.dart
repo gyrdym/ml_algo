@@ -68,7 +68,6 @@ LogisticRegressor createLogisticRegressor({
       minWeightsUpdate: minWeightsUpdate,
       lambda: lambda,
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
-      scoreToProbMapperType: ScoreToProbMapperType.logit,
       scoreToProbMapperFactory: scoreToProbFactoryMock,
       optimizer: OptimizerType.gradientDescent,
       optimizerFactory: optimizerFactoryMock,

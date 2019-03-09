@@ -13,7 +13,7 @@ class SoftmaxMapper extends Object with Float32x4SoftmaxMapperMixin
 
   @override
   @override
-  Matrix linkScoresToProbs(Matrix scores) {
+  Matrix getProbabilities(Matrix scores) {
     switch (dtype) {
       case Float32x4:
         return float32x4ScoresToProbs(scores);

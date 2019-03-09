@@ -49,6 +49,16 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   @override
   Matrix predictClasses(Matrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
+
+    // if we have only one binary encoded label column of values either 0 or 1
+    if (weightsByClasses.columnsNum == 1) {
+      final classesSource = _predictProbabilities(processedFeatures)
+          .getColumn(0)
+          .map((value) => value > 0.5 ? 1.0 : 0.0);
+      return Matrix.columns([Vector.from(classesSource)]);
+    }
+
+    // if we have several label columns (multi class classification case)
     return _predictProbabilities(processedFeatures).mapRows((probabilities) {
       final labelIdx = probabilities.toList().indexOf(probabilities.max());
       return _classLabels.getRow(labelIdx);
@@ -61,6 +71,6 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
           '${_weightsByClasses.rowsNum}, but ${features.columnsNum} given. '
           'Please, recheck columns number of the passed feature matrix');
     }
-    return scoreToProbMapper.linkScoresToProbs(features * _weightsByClasses);
+    return scoreToProbMapper.getProbabilities(features * _weightsByClasses);
   }
 }

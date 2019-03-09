@@ -7,6 +7,5 @@ class ZeroWeightsGenerator implements InitialWeightsGenerator {
   final Type dtype;
 
   @override
-  Vector generate(int length) =>
-      Vector.from(List.filled(length, 0.0), dtype: dtype);
+  Vector generate(int length) => Vector.zero(length, dtype: dtype);
 }

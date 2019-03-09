@@ -36,7 +36,6 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
     GradientType gradientType = GradientType.stochastic,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.logit,
     this.dtype = DefaultParameterValues.dtype,
 
     // private arguments
@@ -51,15 +50,18 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
 
     BatchSizeCalculator batchSizeCalculator =
       const BatchSizeCalculatorImpl(),
-  })  : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
-            scale: fitIntercept ? interceptScale : 0.0),
+  })  :
+        interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+          scale: fitIntercept ? interceptScale : 0.0),
+
         scoreToProbMapper =
-            scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
+          scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
+
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
           costFunctionType: CostFunctionType.logLikelihood,
-          scoreToProbMapperType: scoreToProbMapperType,
+          scoreToProbMapperType: _scoreToProbMapperType,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
@@ -71,6 +73,9 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
               : null,
           randomSeed: randomSeed,
         );
+
+  static const ScoreToProbMapperType _scoreToProbMapperType =
+      ScoreToProbMapperType.logit;
 
   @override
   final Type dtype;
