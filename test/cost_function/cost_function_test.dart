@@ -54,7 +54,7 @@ void main() {
     final logLikelihoodCost = LogLikelihoodCost(ScoreToProbMapperType.logit,
         scoreToProbMapperFactory: scoreToProbMapperFactoryMock);
 
-    when(mockedLinkFn.linkScoresToProbs(any)).thenReturn(Matrix.from([
+    when(mockedLinkFn.getProbabilities(any)).thenReturn(Matrix.from([
       [1.0],
       [1.0],
       [1.0],
