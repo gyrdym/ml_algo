@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.2.0
+- `LinearClassifier.logisticRegressor`: numerical stability improved
+- `DataFrame.fromCsv`: parameter `fieldDelimiter` added 
+
 ## 9.1.0
 - `DataFrame`: `labelName` parameter added
 
@@ -7,7 +11,7 @@
 - `ml_linalg` v6.0.2 supported
 - `Classifier`: type of `weightsByClasses` changed from `Map` to `Matrix` 
 - `SoftmaxRegressor`: more detailed unit tests for softmax regression added
-- Data prepprocessing: `DataFrame` introduced (former `MLData`)
+- Data preprocessing: `DataFrame` introduced (former `MLData`)
 
 ## 8.0.0
 - `LinearClassifier.softmaxRegressor` implemented

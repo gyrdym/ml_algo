@@ -57,8 +57,10 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   })
       : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
           scale: fitIntercept ? interceptScale : 0.0),
+
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
+
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,

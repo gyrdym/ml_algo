@@ -15,7 +15,7 @@ class InverseLogitMapper with Float32x4InverseLogitMapper
   Matrix getProbabilities(Matrix scores) {
     switch (dtype) {
       case Float32x4:
-        return float32x4ScoresToProbs(scores);
+        return getFloat32x4Probabilities(scores);
       default:
         throw UnsupportedError('Unsupported data type - $dtype');
     }

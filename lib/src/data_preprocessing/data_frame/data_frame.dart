@@ -66,6 +66,7 @@ abstract class DataFrame {
     int labelIdx,
     String labelName,
     bool headerExists,
+    String fieldDelimiter,
     CategoricalDataEncoderType encoderType,
     EncodeUnknownValueStrategy encodeUnknownStrategy,
     Map<String, List<Object>> categories,
