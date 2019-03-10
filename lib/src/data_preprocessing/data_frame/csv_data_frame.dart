@@ -34,6 +34,7 @@ class CsvDataFrame implements DataFrame {
   CsvDataFrame.fromFile(String fileName, {
       // public parameters
       Type dtype,
+      String fieldDelimiter = ',',
       String eol = '\n',
       int labelIdx,
       String labelName,
@@ -76,7 +77,7 @@ class CsvDataFrame implements DataFrame {
 
       Logger logger,
     })  : _dtype = dtype ?? DefaultParameterValues.dtype,
-      _csvCodec = CsvCodec(eol: eol),
+      _csvCodec = CsvCodec(eol: eol, fieldDelimiter: fieldDelimiter),
       _file = File(fileName),
       _labelIdx = labelIdx,
       _labelName = labelName,
@@ -179,9 +180,9 @@ class CsvDataFrame implements DataFrame {
     final columnsNum = data.first.length;
     final readMaskCreator = _readMaskCreatorFactory.create(_logger);
     final rowsMask = readMaskCreator.create(
-        rows ?? [Tuple2<int, int>(0, rowsNum - (_headerExists ? 2 : 1))]);
+        rows ?? [Tuple2(0, rowsNum - (_headerExists ? 2 : 1))]);
     final columnsMask = readMaskCreator
-        .create(columns ?? [Tuple2<int, int>(0, columnsNum - 1)]);
+        .create(columns ?? [Tuple2(0, columnsNum - 1)]);
     final records = data.sublist(_headerExists ? 1 : 0);
 
     final originalHeader = _headerExists

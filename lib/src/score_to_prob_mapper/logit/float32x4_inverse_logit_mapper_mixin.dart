@@ -8,7 +8,7 @@ mixin Float32x4InverseLogitMapper {
   static Float32x4 _upperBound = Float32x4.splat(10);
   static Float32x4 _lowerBound = Float32x4.splat(-10);
 
-  Matrix float32x4ScoresToProbs(Matrix scores) {
+  Matrix getFloat32x4Probabilities(Matrix scores) {
     // binary classification case
     if (scores.columnsNum == 1) {
       final scoresVector = scores.getColumn(0);
@@ -31,7 +31,7 @@ mixin Float32x4InverseLogitMapper {
 
   Float32x4 _exp(Float32x4 value) =>
     Float32x4(
-      //@TODO: find a more efficient way to raise exponent to the float power in SIMD way
+      // TODO find a more efficient way to raise exponent to the float power in SIMD way
       math.exp(value.x),
       math.exp(value.y),
       math.exp(value.z),

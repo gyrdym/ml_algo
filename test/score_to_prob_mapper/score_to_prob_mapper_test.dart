@@ -54,8 +54,8 @@ void main() {
           ]));
     });
 
-    test('should not yield extremelly precise numbers as probability '
-        'values', () {
+    test('should not yield extremelly precise numbers that are close to one '
+        'as probability values', () {
       final scores = Matrix.from([
         [10.0],
         [11.0],
@@ -77,6 +77,32 @@ void main() {
             [1.0],
             [1.0],
             [1.0]
+          ]));
+    });
+
+    test('should not yield extremelly precise numbers that are close to zero '
+        'as probability values', () {
+      final scores = Matrix.from([
+        [-10.0],
+        [-11.0],
+        [-12.0],
+        [-13.0],
+      ]);
+      final inverseLogitLink = InverseLogitMapper(Float32x4);
+      final probabilities = inverseLogitLink.getProbabilities(scores);
+      final probaAsVector = probabilities.getColumn(0);
+
+      expect(probaAsVector[0], isNotNaN);
+      expect(probaAsVector[1], isNotNaN);
+      expect(probaAsVector[2], isNotNaN);
+      expect(probaAsVector[3], isNotNaN);
+
+      expect(probabilities,
+          equals([
+            [0.0],
+            [0.0],
+            [0.0],
+            [0.0]
           ]));
     });
   });
