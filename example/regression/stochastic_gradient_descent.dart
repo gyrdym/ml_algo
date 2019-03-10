@@ -25,7 +25,7 @@ Future bostonHousingRegression() async {
       learningRateType: LearningRateType.constant);
 
   final error =
-  validator.evaluate(regressor, features, labels, MetricType.mape);
+    validator.evaluate(regressor, features, labels, MetricType.mape);
 
   print('Linear regression on Boston housing dataset, label - `medv`, MAPE '
       'error on k-fold validation ($folds folds): '

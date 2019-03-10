@@ -37,6 +37,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     this.dtype = DefaultParameterValues.dtype,
+    this.probabilityThreshold = 0.5,
 
     // private arguments
     InterceptPreprocessorFactory interceptPreprocessorFactory =
@@ -80,6 +81,8 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
   @override
   final Type dtype;
 
+  final double probabilityThreshold;
+
   @override
   final Optimizer optimizer;
 
@@ -97,6 +100,16 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
       Matrix initialWeights, bool arePointsNormalized) =>
     labels.mapColumns((column) => _fitBinaryClassifier(features, column,
         initialWeights, arePointsNormalized));
+
+  @override
+  Matrix predictClasses(Matrix features) {
+    // if we have several label columns (multi class classification case)
+    if (weightsByClasses.columnsNum > 1) {
+      return predictMultiClass(features);
+    }
+    // if we have only one binary encoded label column of values either 0 or 1
+    return predictSingleClass(features, probabilityThreshold);
+  }
 
   Vector _fitBinaryClassifier(Matrix features, Vector labels,
       Matrix initialWeights, bool arePointsNormalized) =>
