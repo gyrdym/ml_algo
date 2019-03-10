@@ -33,6 +33,12 @@ abstract class LinearClassifier implements Classifier {
    * [optimizer]. In other words, if difference is small, there is no reason to
    * continue fitting. Default value is 1e-12
    *
+   * [probabilityThreshold] A probability, on the basis of which it is decided,
+   * whether an observation relates to positive class label (label = 1) or
+   * negative class label (label = 0). The greater the probability, the more
+   * strict the classifier is. The parameter is meaningful only in case of
+   * binary classification. Default value is `0.5`.
+   *
    * [lambda] A coefficient for regularization. Type of regularization depends
    * on the [optimizer]. If the [optimizer] is a gradient optimizer, L1
    * regularization is not applicable, but if the [optimizer] is a coordinate
@@ -71,6 +77,7 @@ abstract class LinearClassifier implements Classifier {
     int iterationsLimit,
     double initialLearningRate,
     double minWeightsUpdate,
+    double probabilityThreshold,
     double lambda,
     int randomSeed,
     int batchSize,

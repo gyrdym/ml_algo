@@ -8,6 +8,8 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknow
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_codec_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_codec_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/data_frame.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory_impl.dart';
@@ -75,9 +77,14 @@ class CsvDataFrame implements DataFrame {
       DataFrameEncodersProcessorFactory encodersProcessorFactory =
         const DataFrameEncodersProcessorFactoryImpl(),
 
+      CsvCodecFactory csvCodecFactory =
+        const CsvCodecFactoryImpl(),
+
       Logger logger,
-    })  : _dtype = dtype ?? DefaultParameterValues.dtype,
-      _csvCodec = CsvCodec(eol: eol, fieldDelimiter: fieldDelimiter),
+    })  :
+      _dtype = dtype ?? DefaultParameterValues.dtype,
+      _csvCodec =
+        csvCodecFactory.create(eol: eol, fieldDelimiter: fieldDelimiter),
       _file = File(fileName),
       _labelIdx = labelIdx,
       _labelName = labelName,

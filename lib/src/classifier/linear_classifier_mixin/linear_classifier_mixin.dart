@@ -50,6 +50,7 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
     final classesSource = checkDataAndPredictProbabilities(processedFeatures)
         .getColumn(0)
+        // TODO: use SIMD
         .map((value) => value >= threshold ? 1.0 : 0.0);
     return Matrix.columns([Vector.from(classesSource)]);
   }
