@@ -75,10 +75,7 @@ Read `csv`-file `pima_indians_diabetes_database.csv` with test data. You can use
 [datasets directory](https://github.com/gyrdym/ml_algo/tree/master/datasets):
 ````dart
 final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
-  labelName: 'class variable (0 or 1)',
-  categoryNameToEncoder: {
-    'class variable (0 or 1)': CategoricalDataEncoderType.oneHot,
-  });
+  labelName: 'class variable (0 or 1)');
 final features = await data.features;
 final labels = await data.labels;
 ````
@@ -86,7 +83,7 @@ final labels = await data.labels;
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict values of class labels for each observation. Therefore, we 
 should point, where to get label values, with help of `labelName` parameter (labels column name, 'class variable 
-(0 or 1)' in our case), and, also, we should specify how to encode the labels (one-hot encoding in our case)  
+(0 or 1)' in our case).  
  
  Processed features are contained in a data structure of `Matrix` type and processed labels are contained in a data 
  structure also of `Matrix` type. To get more information about `Matrix` type, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
@@ -135,7 +132,7 @@ Best model parameters search takes much time so far, so be patient. After the se
 this:
 
 ````
-best acuracy on classification: 0.68
+best acuracy on classification: 0.77
 best learning rate: 0.155
 ````
 
@@ -145,12 +142,10 @@ import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
 
-Future<Null> logisticRegression() async {
+Future logisticRegression() async {
   final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
-     labelName: 'class variable (0 or 1)',
-     categoryNameToEncoder: {
-       'class variable (0 or 1)': CategoricalDataEncoderType.oneHot,
-  });
+     labelName: 'class variable (0 or 1)');
+  
   final features = await data.features;
   final labels = await data.labels;
 

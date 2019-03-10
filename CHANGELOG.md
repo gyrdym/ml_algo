@@ -2,7 +2,8 @@
 
 ## 9.2.0
 - `LinearClassifier.logisticRegressor`: numerical stability improved
-- `DataFrame.fromCsv`: parameter `fieldDelimiter` added 
+- `LinearClassifier.logisticRegressor`: `probabilityThreshold` parameter added
+- `DataFrame.fromCsv`: parameter `fieldDelimiter` added
 
 ## 9.1.0
 - `DataFrame`: `labelName` parameter added
