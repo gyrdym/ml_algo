@@ -101,4 +101,7 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
         initialWeights: initialWeights,
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
+
+  @override
+  Matrix predictClasses(Matrix features) => predictMultiClass(features);
 }

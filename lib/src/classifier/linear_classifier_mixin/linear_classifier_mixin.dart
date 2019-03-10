@@ -43,29 +43,27 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   @override
   Matrix predictProbabilities(Matrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    return _predictProbabilities(processedFeatures);
+    return checkDataAndPredictProbabilities(processedFeatures);
   }
 
-  @override
-  Matrix predictClasses(Matrix features) {
+  Matrix predictSingleClass(Matrix features, [double threshold = .5]) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
+    final classesSource = checkDataAndPredictProbabilities(processedFeatures)
+        .getColumn(0)
+        .map((value) => value >= threshold ? 1.0 : 0.0);
+    return Matrix.columns([Vector.from(classesSource)]);
+  }
 
-    // if we have only one binary encoded label column of values either 0 or 1
-    if (weightsByClasses.columnsNum == 1) {
-      final classesSource = _predictProbabilities(processedFeatures)
-          .getColumn(0)
-          .map((value) => value > 0.5 ? 1.0 : 0.0);
-      return Matrix.columns([Vector.from(classesSource)]);
-    }
-
-    // if we have several label columns (multi class classification case)
-    return _predictProbabilities(processedFeatures).mapRows((probabilities) {
+  Matrix predictMultiClass(Matrix features) {
+    final processedFeatures = interceptPreprocessor.addIntercept(features);
+    return checkDataAndPredictProbabilities(processedFeatures)
+        .mapRows((probabilities) {
       final labelIdx = probabilities.toList().indexOf(probabilities.max());
       return _classLabels.getRow(labelIdx);
     });
   }
 
-  Matrix _predictProbabilities(Matrix features) {
+  Matrix checkDataAndPredictProbabilities(Matrix features) {
     if (features.columnsNum != _weightsByClasses.rowsNum) {
       throw Exception('Wrong features number provided: expected '
           '${_weightsByClasses.rowsNum}, but ${features.columnsNum} given. '
