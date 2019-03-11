@@ -10,7 +10,7 @@ Future bostonHousingRegression() async {
   );
 
   final features = (await data.features)
-      .mapColumns((vector) => vector / vector.norm());
+      .mapColumns((column) => column.normalize());
   final labels = await data.labels;
 
   final folds = 5;

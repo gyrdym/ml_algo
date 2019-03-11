@@ -280,7 +280,7 @@ packages:
       name: ml_linalg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.2"
+    version: "6.1.0"
   mockito:
     dependency: "direct dev"
     description:
