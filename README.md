@@ -85,8 +85,8 @@ on each row. This column is our target - we should predict values of class label
 should point, where to get label values, with help of `labelName` parameter (labels column name, 'class variable 
 (0 or 1)' in our case).  
  
- Processed features are contained in a data structure of `Matrix` type and processed labels are contained in a data 
- structure also of `Matrix` type. To get more information about `Matrix` type, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
+Processed features and labels are contained in a data structure of `Matrix` type. To get more information about 
+`Matrix` type, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
 
 Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
 of our model
@@ -94,46 +94,33 @@ of our model
 final validator = CrossValidator.KFold(numberOfFolds: 5);
 ````
 
-All are set, so, we can perform our classification. For better hyperparameters fitting, let's create a loop in order to 
-try each value of a chosen hyperparameter in a defined range:
+All are set, so, we can perform our classification.
+
+Let's create a logistic regression classifier instance with full-batch gradient descent optimizer:
 ````dart
-final step = 0.001;
-final limit = 0.6;
-double maxAccuracy = -double.infinity;
-double bestLearningRate = 0.0;
-for (double rate = step; rate < limit; rate += step) {
-  // ...
-}
-````    
-Let's create a logistic regression classifier instance with stochastic gradient descent optimizer in the loop's body:
-````dart
-final logisticRegressor = LinearClassifier.logisticRegressor(
-        iterationsLimit: 100,
-        initialLearningRate: rate,
-        learningRateType: LearningRateType.constant);
+final model = LinearClassifier.logisticRegressor(
+    initialLearningRate: .8,
+    iterationsLimit: 500,
+    gradientType: GradientType.batch,
+    fitIntercept: true,
+    interceptScale: .1,
+    learningRateType: LearningRateType.constant);
 ````
 
 Evaluate our model via accuracy metric:
 ````dart
-final accuracy = validator.evaluate(logisticRegressor, featuresMatrix, labels, MetricType.accuracy);
-if (accuracy > maxAccuracy) {
-  maxAccuracy = accuracy;
-  bestLearningRate = rate;
-}
+final accuracy = validator.evaluate(model, featuresMatrix, labels, MetricType.accuracy);
 ````
 
 Let's print score:
 ````dart
-print('best accuracy on classification: ${maxAccuracy.toFixed(2)}');
-print('best learning rate: ${bestLearningRate.toFixed(3)}');
+print('accuracy on classification: ${maxAccuracy.toStringAsFixed(2)}');
 ````
 
-Best model parameters search takes much time so far, so be patient. After the search is over, we will see something like 
-this:
+We will see something like this:
 
 ````
-best acuracy on classification: 0.77
-best learning rate: 0.155
+acuracy on classification: 0.77
 ````
 
 All the code above all together:
@@ -150,27 +137,18 @@ Future logisticRegression() async {
   final labels = await data.labels;
 
   final validator = CrossValidator.kFold(numberOfFolds: 5);
+  
+  final model = LinearClassifier.logisticRegressor(
+    initialLearningRate: .8,
+    iterationsLimit: 500,
+    gradientType: GradientType.batch,
+    fitIntercept: true,
+    interceptScale: .1,
+    learningRateType: LearningRateType.constant);
+  
+  final accuracy = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
 
-  final step = 0.001;
-  final limit = 0.6;
-
-  double maxAccuracy = -double.infinity;
-  double bestLearningRate = 0.0;
-
-  for (double rate = step; rate < limit; rate += step) {
-    final logisticRegressor = LinearClassifier.logisticRegressor(
-      iterationsLimit: 100,
-      initialLearningRate: rate,
-      learningRateType: LearningRateType.constant);
-    final accuracy = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
-    if (accuracy > maxAccuracy) {
-      maxAccuracy = accuracy;
-      bestLearningRate = rate;
-    }
-  }
-
-  print('best accuracy on classification: ${maxAccuracy.toFixed(2)}');
-  print('best learning rate: ${bestLearningRate.toFixed(3)}');
+  print('accuracy on classification: ${accuracy.toStringFixed(2)}');
 }
 ````
 
