@@ -1,5 +1,8 @@
 # Changelog
 
+## 9.2.1
+- README corrected
+
 ## 9.2.0
 - `LinearClassifier.logisticRegressor`: numerical stability improved
 - `LinearClassifier.logisticRegressor`: `probabilityThreshold` parameter added

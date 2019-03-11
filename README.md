@@ -129,7 +129,7 @@ import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
 
-Future logisticRegression() async {
+Future main() async {
   final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
      labelName: 'class variable (0 or 1)');
   
@@ -146,7 +146,7 @@ Future logisticRegression() async {
     interceptScale: .1,
     learningRateType: LearningRateType.constant);
   
-  final accuracy = validator.evaluate(logisticRegressor, features, labels, MetricType.accuracy);
+  final accuracy = validator.evaluate(model, features, labels, MetricType.accuracy);
 
   print('accuracy on classification: ${accuracy.toStringFixed(2)}');
 }
