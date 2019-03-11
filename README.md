@@ -8,7 +8,9 @@
 **Table of contents**
 - [What for is the library?](#what-is-the-ml_algo-for)
 - [The library's structure](#the-librarys-structure)
-- [Usage](#usage)
+- [Examples](#examples)
+    - [Logistic regression](#logistic-regression)
+    - [Softmax regression](#softmax-regression)
 
 ## What is the ml_algo for?
 
@@ -56,9 +58,9 @@ that performs feature selection along with regression process. It uses [coordina
 instead of [gradient descent optimization]() and [gradient vector]() like in `LinearRegressor.gradient` to provide 
 regression. If you want to decide, which features are less important - go ahead and use this regressor. 
 
-## Usage
+## Examples
 
-### Real life example
+### Logistic regression
 
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart)
@@ -149,6 +151,104 @@ Future main() async {
   final accuracy = validator.evaluate(model, features, labels, MetricType.accuracy);
 
   print('accuracy on classification: ${accuracy.toStringFixed(2)}');
+}
+````
+
+### Softmax regression
+Let's classify another famous dataset - Iris dataset. Data in this csv is separated into 3 classes - therefore we need
+to use different approach to data classification - [Softmax regression](http://deeplearning.stanford.edu/tutorial/supervised/SoftmaxRegression/).
+
+As usual, start with data preparation:
+````Dart
+final data = DataFrame.fromCsv('datasets/iris.csv',
+    labelName: 'Species',
+    columns: [const Tuple2(1, 5)],
+    categoryNameToEncoder: {
+      'Species': CategoricalDataEncoderType.oneHot,
+    },
+);
+
+final features = await data.features;
+final labels = await data.labels;
+````
+
+The csv database has 6 columns, but we need to get rid of the first column, because it contains just ID of every 
+observation - it is absolutely useless data. So, as you may notice, we provided a columns range to exclude ID-column:
+
+````Dart
+columns: [const Tuple2(1, 5)]
+````
+
+Also, since the label column 'Species' has categorical data, we encoded it to numeric format:
+
+````Dart
+categoryNameToEncoder: {
+  'Species': CategoricalDataEncoderType.oneHot,
+},
+````
+
+To see how encoding works, visit the [api reference](https://pub.dartlang.org/documentation/ml_algo/latest/ml_algo/CategoricalDataEncoderType-class.html).
+
+Next step - create a cross validator instance:
+
+````Dart
+final validator = CrossValidator.kFold(numberOfFolds: 5);
+````
+
+And finally, create an instance of the classifier:
+
+````Dart
+final softmaxRegressor = LinearClassifier.softmaxRegressor(
+      initialLearningRate: 0.03,
+      iterationsLimit: null,
+      minWeightsUpdate: 1e-6,
+      randomSeed: 46,
+      learningRateType: LearningRateType.constant);
+````
+
+Evaluate quality of prediction:
+
+````Dart
+final accuracy = validator.evaluate(softmaxRegressor, features, labels, MetricType.accuracy);
+
+print('Iris dataset, softmax regression: accuracy is '
+  '${accuracy.toStringAsFixed(2)}'); // It yields 0.93
+````
+
+Gather all the code above all together:
+
+````Dart
+import 'dart:async';
+
+import 'package:ml_algo/ml_algo.dart';
+import 'package:tuple/tuple.dart';
+
+Future main() async {
+  final data = DataFrame.fromCsv('datasets/iris.csv',
+    labelName: 'Species',
+    columns: [const Tuple2(1, 5)],
+    categoryNameToEncoder: {
+      'Species': CategoricalDataEncoderType.oneHot,
+    },
+  );
+
+  final features = await data.features;
+  final labels = await data.labels;
+
+  final validator = CrossValidator.kFold(numberOfFolds: 5);
+
+  final softmaxRegressor = LinearClassifier.softmaxRegressor(
+      initialLearningRate: 0.03,
+      iterationsLimit: null,
+      minWeightsUpdate: 1e-6,
+      randomSeed: 46,
+      learningRateType: LearningRateType.constant);
+
+  final accuracy = validator.evaluate(
+      softmaxRegressor, features, labels, MetricType.accuracy);
+
+  print('Iris dataset, softmax regression: accuracy is '
+      '${accuracy.toStringAsFixed(2)}');
 }
 ````
 
