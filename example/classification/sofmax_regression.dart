@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:tuple/tuple.dart';
 
-Future main() async {
+Future softmaxRegression() async {
   final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
-    columns: [const Tuple2<int, int>(1, 5)],
+    columns: [const Tuple2(1, 5)],
     categoryNameToEncoder: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
@@ -27,5 +27,10 @@ Future main() async {
   final accuracy = validator.evaluate(
       softmaxRegressor, features, labels, MetricType.accuracy);
 
-  print('Accuracy is ${accuracy.toStringAsFixed(2)}');
+  print('Iris dataset, softmax regression: accuracy is '
+      '${accuracy.toStringAsFixed(2)}');
+}
+
+Future main() async {
+  await softmaxRegression();
 }

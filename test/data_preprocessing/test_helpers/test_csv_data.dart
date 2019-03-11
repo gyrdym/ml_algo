@@ -24,7 +24,7 @@ Future testCsvData(
   validatorMock ??=
       createDataFrameParamsValidatorMock(validationShouldBeFailed: false);
 
-  final data = CsvDataFrame.fromFile(
+  final dataFrame = CsvDataFrame.fromFile(
     fileName,
     labelIdx: labelIdx,
     columns: columns,
@@ -32,9 +32,9 @@ Future testCsvData(
     encoderFactory: categoricalDataFactoryMock,
     paramsValidator: validatorMock,
   );
-  final header = await data.header;
-  final features = await data.features;
-  final labels = await data.labels;
+  final header = await dataFrame.header;
+  final features = await dataFrame.features;
+  final labels = await dataFrame.labels;
 
   if (columns == null) {
     expect(header.length, equals(expectedColsNum + 1));

@@ -6,6 +6,7 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_valu
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_codec_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
@@ -40,11 +41,13 @@ class CategoricalDataEncoderFactoryMock extends Mock
 class CategoryValuesExtractorMock extends Mock
     implements CategoryValuesExtractor<dynamic> {}
 
-class DataFrameParamsValidatorMock extends Mock implements DataFrameParamsValidator {}
+class DataFrameParamsValidatorMock extends Mock implements
+    DataFrameParamsValidator {}
 
 class LoggerMock extends Mock implements Logger {}
 
-class MLDataValueConverterMock extends Mock implements DataFrameValueConverter {}
+class MLDataValueConverterMock extends Mock implements
+    DataFrameValueConverter {}
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
@@ -57,7 +60,8 @@ class CostFunctionMock extends Mock implements CostFunction {}
 class LearningRateGeneratorFactoryMock extends Mock
     implements LearningRateGeneratorFactory {}
 
-class LearningRateGeneratorMock extends Mock implements LearningRateGenerator {}
+class LearningRateGeneratorMock extends Mock implements
+    LearningRateGenerator {}
 
 class InitialWeightsGeneratorFactoryMock extends Mock
     implements InitialWeightsGeneratorFactory {}
@@ -86,6 +90,8 @@ class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
 class CategoricalDataEncoderMock extends Mock implements
     CategoricalDataEncoder {}
+
+class CsvCodecFactoryMock extends Mock implements CsvCodecFactory {}
 
 class MLDataValueConverterMockWithImpl extends Mock
     implements DataFrameValueConverter {
@@ -206,6 +212,7 @@ DataFrameParamsValidator createDataFrameParamsValidatorMock(
   if (validationShouldBeFailed != null) {
     when(validator.validate(
       labelIdx: anyNamed('labelIdx'),
+      labelName: anyNamed('labelName'),
       rows: anyNamed('rows'),
       columns: anyNamed('columns'),
       headerExists: anyNamed('headerExists'),

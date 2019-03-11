@@ -366,11 +366,11 @@ void main() {
         [4.0, 0.0, 1.0],
       ]);
       final labels = Matrix.from([
-        [0.0],
-        [1.0],
-        [1.0],
-        [2.0],
-        [0.0],
+        firstClass,
+        secondClass,
+        secondClass,
+        thirdClass,
+        firstClass,
       ]);
       classifier.fit(features, labels);
 

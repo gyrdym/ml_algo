@@ -36,8 +36,8 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
     GradientType gradientType = GradientType.stochastic,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    ScoreToProbMapperType scoreToProbMapperType = ScoreToProbMapperType.logit,
     this.dtype = DefaultParameterValues.dtype,
+    this.probabilityThreshold = 0.5,
 
     // private arguments
     InterceptPreprocessorFactory interceptPreprocessorFactory =
@@ -51,15 +51,18 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
 
     BatchSizeCalculator batchSizeCalculator =
       const BatchSizeCalculatorImpl(),
-  })  : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
-            scale: fitIntercept ? interceptScale : 0.0),
+  })  :
+        interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+          scale: fitIntercept ? interceptScale : 0.0),
+
         scoreToProbMapper =
-            scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype),
+          scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
+
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
           costFunctionType: CostFunctionType.logLikelihood,
-          scoreToProbMapperType: scoreToProbMapperType,
+          scoreToProbMapperType: _scoreToProbMapperType,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
@@ -72,8 +75,13 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
           randomSeed: randomSeed,
         );
 
+  static const ScoreToProbMapperType _scoreToProbMapperType =
+      ScoreToProbMapperType.logit;
+
   @override
   final Type dtype;
+
+  final double probabilityThreshold;
 
   @override
   final Optimizer optimizer;
@@ -92,6 +100,16 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
       Matrix initialWeights, bool arePointsNormalized) =>
     labels.mapColumns((column) => _fitBinaryClassifier(features, column,
         initialWeights, arePointsNormalized));
+
+  @override
+  Matrix predictClasses(Matrix features) {
+    // if we have several label columns (multi class classification case)
+    if (weightsByClasses.columnsNum > 1) {
+      return predictMultiClass(features);
+    }
+    // if we have only one binary encoded label column of values either 0 or 1
+    return predictSingleClass(features, probabilityThreshold);
+  }
 
   Vector _fitBinaryClassifier(Matrix features, Vector labels,
       Matrix initialWeights, bool arePointsNormalized) =>
