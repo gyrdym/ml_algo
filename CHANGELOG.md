@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.2.3
+- Examples for Linear regression and Logistic regression updated (vector's `normalize` method used)
+- `CategoricalDataEncoderType`: one-hot encoding documentation corrected
+
 ## 9.2.2
 - Softmax regression example added to README
 

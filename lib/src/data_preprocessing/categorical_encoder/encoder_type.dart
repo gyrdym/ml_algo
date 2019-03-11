@@ -18,12 +18,12 @@
 ///
 /// '31+' will be encoded as [0.0, 0.0, 1.0]
 ///
-/// Also, we have some data of this category - a list of `'AGE'` values:
+/// Let's say, we have some data of this category - a list of `'AGE'` values:
 /// ```
 /// ['0-17', '0-17', '18-30', '18-30', '18-30', '31+']
 /// ```
 ///
-/// After one-hot encoding the data will be look as:
+/// After one-hot encoding the data will look like:
 /// ```
 /// [[1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
 /// ```

@@ -9,7 +9,7 @@ Future binaryClassification() async {
   );
 
   final features = (await data.features)
-      .mapColumns((vector) => vector / vector.norm());
+      .mapColumns((column) => column.normalize());
   final labels = await data.labels;
   final validator = CrossValidator.kFold(numberOfFolds: 5);
   final logisticRegressor = LinearClassifier.logisticRegressor(
