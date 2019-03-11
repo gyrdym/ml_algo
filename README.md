@@ -82,7 +82,7 @@ final labels = await data.labels;
 
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict values of class labels for each observation. Therefore, we 
-should point, where to get label values, with help of `labelName` parameter (labels column name, 'class variable 
+should point, where to get label values. Let's use `labelName` parameter for that (labels column name, 'class variable 
 (0 or 1)' in our case).  
  
 Processed features and labels are contained in a data structure of `Matrix` type. To get more information about 
