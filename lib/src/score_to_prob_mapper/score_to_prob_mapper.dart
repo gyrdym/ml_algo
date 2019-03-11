@@ -5,5 +5,5 @@ abstract class ScoreToProbMapper {
   ///
   /// Score is a multiplication of a feature value and the corresponding weight
   /// (coefficient)
-  Matrix linkScoresToProbs(Matrix scoresByClasses);
+  Matrix getProbabilities(Matrix scoresByClasses);
 }

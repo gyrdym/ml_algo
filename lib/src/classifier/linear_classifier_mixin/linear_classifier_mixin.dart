@@ -43,24 +43,33 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   @override
   Matrix predictProbabilities(Matrix features) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    return _predictProbabilities(processedFeatures);
+    return checkDataAndPredictProbabilities(processedFeatures);
   }
 
-  @override
-  Matrix predictClasses(Matrix features) {
+  Matrix predictSingleClass(Matrix features, [double threshold = .5]) {
     final processedFeatures = interceptPreprocessor.addIntercept(features);
-    return _predictProbabilities(processedFeatures).mapRows((probabilities) {
+    final classesSource = checkDataAndPredictProbabilities(processedFeatures)
+        .getColumn(0)
+        // TODO: use SIMD
+        .map((value) => value >= threshold ? 1.0 : 0.0);
+    return Matrix.columns([Vector.from(classesSource)]);
+  }
+
+  Matrix predictMultiClass(Matrix features) {
+    final processedFeatures = interceptPreprocessor.addIntercept(features);
+    return checkDataAndPredictProbabilities(processedFeatures)
+        .mapRows((probabilities) {
       final labelIdx = probabilities.toList().indexOf(probabilities.max());
       return _classLabels.getRow(labelIdx);
     });
   }
 
-  Matrix _predictProbabilities(Matrix features) {
+  Matrix checkDataAndPredictProbabilities(Matrix features) {
     if (features.columnsNum != _weightsByClasses.rowsNum) {
       throw Exception('Wrong features number provided: expected '
           '${_weightsByClasses.rowsNum}, but ${features.columnsNum} given. '
           'Please, recheck columns number of the passed feature matrix');
     }
-    return scoreToProbMapper.linkScoresToProbs(features * _weightsByClasses);
+    return scoreToProbMapper.getProbabilities(features * _weightsByClasses);
   }
 }

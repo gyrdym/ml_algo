@@ -57,8 +57,10 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   })
       : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
           scale: fitIntercept ? interceptScale : 0.0),
+
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
+
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
@@ -99,4 +101,7 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
         initialWeights: initialWeights,
         arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
+
+  @override
+  Matrix predictClasses(Matrix features) => predictMultiClass(features);
 }

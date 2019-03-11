@@ -54,14 +54,19 @@ class GradientOptimizer implements Optimizer {
     int randomSeed,
   })  : _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
+
         _initialWeightsGenerator =
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
+
         _learningRateGenerator =
             learningRateGeneratorFactory.fromType(learningRateType),
+
         _costFunction = costFunctionFactory.fromType(costFnType,
             dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
+
         _convergenceDetector = convergenceDetectorFactory.create(
             minCoefficientsUpdate, iterationLimit),
+
         _randomizer = randomizerFactory.create(randomSeed) {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
