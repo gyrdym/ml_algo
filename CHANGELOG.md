@@ -1,5 +1,8 @@
 # Changelog
 
+## 9.2.2
+- Softmax regression example added to README
+
 ## 9.2.1
 - README corrected
 
