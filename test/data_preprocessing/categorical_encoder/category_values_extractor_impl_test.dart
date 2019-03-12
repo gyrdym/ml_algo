@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 void main() {
   group('CategoryValuesExtractorImpl', () {
     test('should find unique values and return them as List', () {
-      final extractor = const CategoryValuesExtractorImpl<String>();
+      final extractor = const CategoryValuesExtractorImpl();
       final values = <String>[
         '1',
         '2',

@@ -76,7 +76,7 @@ class DataFrameFeaturesExtractorImpl with LoggerMixin
       final feature = features[i];
       Iterable<double> expanded;
       if (encoders.containsKey(i)) {
-        expanded = encoders[i].encodeSingle(feature);
+        expanded = encoders[i].encodeSingle(feature.toString());
       } else {
         expanded = [valueConverter.convert(feature)];
       }

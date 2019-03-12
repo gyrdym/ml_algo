@@ -13,7 +13,7 @@ Future testCsvWithCategories(
     bool headerExist = true,
     int labelIdx,
     int rowNum,
-    Map<String, List<Object>> categories,
+    Map<String, List<String>> categories,
     List<Tuple2<int, int>> columns,
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,

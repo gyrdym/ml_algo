@@ -46,7 +46,8 @@ class DataFrameLabelsExtractorImpl with LoggerMixin
       if (readMask[row] == true) {
         final dynamic rawValue = records[row][labelIdx];
         final convertedValue = categoricalDataExist
-            ? encoders[labelIdx].encodeSingle(rawValue).toList(growable: false)
+            ? encoders[labelIdx].encodeSingle(rawValue.toString())
+                .toList(growable: false)
             : [valueConverter.convert(rawValue)];
         result[_i++] = convertedValue;
       }

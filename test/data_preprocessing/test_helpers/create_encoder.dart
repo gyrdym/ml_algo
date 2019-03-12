@@ -8,7 +8,7 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/ordinal_encod
 CategoricalDataEncoder createEncoder({
   EncodeUnknownValueStrategy strategy,
   CategoryValuesExtractor extractor,
-  List<Object> values,
+  List<String> values,
   CategoricalDataEncoderType type = CategoricalDataEncoderType.oneHot,
 }) {
   switch (type) {

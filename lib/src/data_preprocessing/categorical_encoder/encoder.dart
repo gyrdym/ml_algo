@@ -32,11 +32,11 @@ abstract class CategoricalDataEncoder {
   EncodeUnknownValueStrategy get encodeUnknownValueStrategy;
 
   /// Encodes passed categorical value to a numerical representation
-  Iterable<double> encodeSingle(Object value);
+  Iterable<double> encodeSingle(String value);
 
   /// Encodes passed categorical values to a numerical representation
-  Matrix encodeAll(Iterable<Object> values);
+  Matrix encodeAll(Iterable<String> values);
 
   /// Finds all unique values in the given list
-  void setCategoryValues(List<Object> values);
+  void setCategoryValues(List<String> values);
 }
