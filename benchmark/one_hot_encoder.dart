@@ -6,7 +6,7 @@ class OneHotEncoderBenchmark extends BenchmarkBase {
       : super('One Hot Encoder benchmark');
 
   final OneHotEncoder _encoder;
-  final Iterable<Object> _data;
+  final Iterable<String> _data;
 
   @override
   void run() {
