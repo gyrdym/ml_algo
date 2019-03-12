@@ -14,10 +14,10 @@ void main() {
     ['Spain', 'female', 21, 'single', 3000],
     ['Greece', 'female', 25, 'divorced', 2700],
   ];
-  final predefinedCategories = <String, List<Object>>{
+  final predefinedCategories = <String, List<String>>{
     'gender': ['male', 'female'],
     'martial_status': ['married', 'single', 'divorced'],
-    'age': [21, 27, 25, 35],
+    'age': ['21', '27', '25', '35'],
     'country': ['France', 'Russia', 'Spain', 'Greece'],
   };
   final loggerMock = LoggerMock();
@@ -41,7 +41,7 @@ void main() {
       verify(fallbackEncoderMock.setCategoryValues(
           argThat(equals(['married', 'single', 'divorced'])))).called(1);
       verify(fallbackEncoderMock
-          .setCategoryValues(argThat(equals([21, 27, 25, 35])))).called(1);
+          .setCategoryValues(argThat(equals(['21', '27', '25', '35'])))).called(1);
       verify(fallbackEncoderMock.setCategoryValues(
           argThat(equals(['France', 'Russia', 'Spain', 'Greece'])))).called(1);
     });
@@ -75,7 +75,7 @@ void main() {
       verify(oneHotEncoderMock.setCategoryValues(
           argThat(equals(['married', 'single', 'single', 'divorced']))));
       verify(ordinalEncoderMock
-          .setCategoryValues(argThat(equals([35, 27, 21, 25]))));
+          .setCategoryValues(argThat(equals(['35', '27', '21', '25']))));
       verify(ordinalEncoderMock.setCategoryValues(
           argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
     });
@@ -120,7 +120,7 @@ void main() {
       verify(oneHotEncoderMock.setCategoryValues(
           argThat(equals(['married', 'single', 'single', 'divorced']))));
       verify(oneHotEncoderMock
-          .setCategoryValues(argThat(equals([35, 27, 21, 25]))));
+          .setCategoryValues(argThat(equals(['35', '27', '21', '25']))));
     });
 
     test(
@@ -142,7 +142,7 @@ void main() {
       verifyNever(oneHotEncoderMock.setCategoryValues(
           argThat(equals(['married', 'single', 'divorced']))));
       verifyNever(oneHotEncoderMock
-          .setCategoryValues(argThat(equals([21, 27, 25, 35]))));
+          .setCategoryValues(argThat(equals(['21', '27', '25', '35']))));
       verifyNever(oneHotEncoderMock.setCategoryValues(
           argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
 
@@ -180,7 +180,7 @@ void main() {
       verifyNever(oneHotEncoderMock.setCategoryValues(
           argThat(equals(['married', 'single', 'single', 'divorced']))));
       verifyNever(oneHotEncoderMock
-          .setCategoryValues(argThat(equals([35, 27, 21, 25]))));
+          .setCategoryValues(argThat(equals(['35', '27', '21', '25']))));
 
       verify(loggerMock
               .warning(DataFrameEncodersProcessorImpl.noHeaderProvidedWarningMsg))

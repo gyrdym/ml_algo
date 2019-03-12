@@ -45,7 +45,7 @@ class CsvDataFrame implements DataFrame {
           CategoricalDataEncoderType.oneHot,
       EncodeUnknownValueStrategy encodeUnknownStrategy =
           EncodeUnknownValueStrategy.throwError,
-      Map<String, List<Object>> categories,
+      Map<String, List<String>> categories,
       Map<int, List<Object>> categoriesByIndexes,
       Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
       Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
@@ -139,7 +139,7 @@ class CsvDataFrame implements DataFrame {
 
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
   final Map<int, CategoricalDataEncoderType> _indexToEncoderType;
-  final Map<String, List<Object>> _categories;
+  final Map<String, List<String>> _categories;
   final CategoricalDataEncoderType _fallbackEncoderType;
 
   static const String _loggerPrefix = 'CsvDataFrame';

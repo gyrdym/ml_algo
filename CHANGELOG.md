@@ -1,5 +1,8 @@
 # Changelog
 
+## 9.2.4
+- Data preprocessing: All categorical values is now converted to String type  
+
 ## 9.2.3
 - Examples for Linear regression and Logistic regression updated (vector's `normalize` method used)
 - `CategoricalDataEncoderType`: one-hot encoding documentation corrected
