@@ -19,7 +19,7 @@ Future predefinedCategories() async {
   final features = await dataFrame.features;
   final genderEncoded = features.submatrix(columns: Range(0, 2));
   final ageEncoded = features.submatrix(columns: Range(2, 9));
-  final cityCategiryEncoded = features.submatrix(columns: Range(9, 12));
+  final cityCategoryEncoded = features.submatrix(columns: Range(9, 12));
   final stayInCityEncoded = features.submatrix(columns: Range(12, 16));
   final martialStatusEncoded = features.submatrix(columns: Range(16, 18));
 
@@ -41,7 +41,7 @@ Future predefinedCategories() async {
   print('==============================');
 
   print('City category');
-  print(cityCategiryEncoded);
+  print(cityCategoryEncoded);
 
   print('==============================');
 
