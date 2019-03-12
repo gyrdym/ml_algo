@@ -22,7 +22,7 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
   Map<int, CategoricalDataEncoder> createEncoders(
       Map<int, CategoricalDataEncoderType> indexesToEncoderTypes,
       Map<String, CategoricalDataEncoderType> namesToEncoderTypes,
-      Map<String, List<Object>> categories) {
+      Map<String, List<String>> categories) {
     Map<int, CategoricalDataEncoder> encoders = {};
     if (indexesToEncoderTypes.isNotEmpty) {
       encoders = _createEncodersFromIndexToEncoder(indexesToEncoderTypes);
@@ -52,7 +52,7 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
           : null);
 
   Map<int, CategoricalDataEncoder> _createEncodersFromCategories(
-      Map<String, List<Object>> categories) {
+      Map<String, List<String>> categories) {
     final indexToEncoder = <int, CategoricalDataEncoder>{};
     for (int i = 0; i < header.length; i++) {
       final name = header[i];
@@ -67,7 +67,7 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
   Map<int, CategoricalDataEncoder> _createEncoders(
       CategoricalDataEncoderType getEncoderType(int colIdx)) {
     final indexToEncoder = <int, CategoricalDataEncoder>{};
-    final encodersValues = <int, List<Object>>{};
+    final encodersValues = <int, List<String>>{};
     for (int rowIdx = 0; rowIdx < records.length; rowIdx++) {
       for (int colIdx = 0; colIdx < records[rowIdx].length; colIdx++) {
         final encoderType = getEncoderType(colIdx);
@@ -75,12 +75,12 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
           indexToEncoder.putIfAbsent(
               colIdx, () => encoderFactory.fromType(encoderType));
           encodersValues.putIfAbsent(
-              colIdx, () => List<Object>(records.length));
-          encodersValues[colIdx][rowIdx] = records[rowIdx][colIdx];
+              colIdx, () => List<String>(records.length));
+          encodersValues[colIdx][rowIdx] = records[rowIdx][colIdx].toString();
         }
       }
     }
-    encodersValues.forEach((int colIdx, List<Object> values) {
+    encodersValues.forEach((int colIdx, List<String> values) {
       indexToEncoder[colIdx].setCategoryValues(values);
     });
     return indexToEncoder;

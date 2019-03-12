@@ -5,5 +5,5 @@ abstract class DataFrameEncodersProcessor {
   Map<int, CategoricalDataEncoder> createEncoders(
       Map<int, CategoricalDataEncoderType> indexesToEncoderTypes,
       Map<String, CategoricalDataEncoderType> namesToEncoderTypes,
-      Map<String, List<Object>> categories);
+      Map<String, List<String>> categories);
 }

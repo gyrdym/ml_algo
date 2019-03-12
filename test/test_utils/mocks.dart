@@ -39,7 +39,7 @@ class CategoricalDataEncoderFactoryMock extends Mock
     implements CategoricalDataEncoderFactory {}
 
 class CategoryValuesExtractorMock extends Mock
-    implements CategoryValuesExtractor<dynamic> {}
+    implements CategoryValuesExtractor {}
 
 class DataFrameParamsValidatorMock extends Mock implements
     DataFrameParamsValidator {}

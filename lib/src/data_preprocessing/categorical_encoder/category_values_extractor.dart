@@ -1,3 +1,3 @@
-abstract class CategoryValuesExtractor<T> {
-  List<T> extractCategoryValues(List<T> values);
+abstract class CategoryValuesExtractor {
+  List<String> extractCategoryValues(List<String> values);
 }
