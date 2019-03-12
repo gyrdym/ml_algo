@@ -8,7 +8,7 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   OrdinalEncoder({
     this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
     CategoryValuesExtractor valuesExtractor =
-        const CategoryValuesExtractorImpl<Object>(),
+      const CategoryValuesExtractorImpl(),
   }) : _valuesExtractor = valuesExtractor;
 
   @override
@@ -19,7 +19,7 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   List<Object> _values;
 
   @override
-  List<double> encodeSingle(Object value) {
+  List<double> encodeSingle(String value) {
     if (!_values.contains(value)) {
       if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
         throw UnsupportedError('Ordinal encoding: unsupported value `$value`');
@@ -34,12 +34,12 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   }
 
   @override
-  void setCategoryValues(List<Object> values) {
+  void setCategoryValues(List<String> values) {
     _values ??= _valuesExtractor.extractCategoryValues(values);
   }
 
   @override
-  Matrix encodeAll(Iterable<Object> values) {
+  Matrix encodeAll(Iterable<String> values) {
     setCategoryValues(values.toList(growable: false));
     return Matrix.from(values.map(encodeSingle).toList(growable: false));
   }
