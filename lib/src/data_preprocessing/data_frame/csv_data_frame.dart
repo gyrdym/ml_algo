@@ -89,8 +89,6 @@ class CsvDataFrame implements DataFrame {
       _labelIdx = labelIdx,
       _labelName = labelName,
       _headerExists = headerExists,
-      _rows = rows,
-      _columns = columns,
       _categories = categories ?? {},
       _nameToEncoderType = categoryNameToEncoder ?? {},
       _indexToEncoderType = categoryIndexToEncoder ?? {},
@@ -117,6 +115,7 @@ class CsvDataFrame implements DataFrame {
     if (errorMsg.isNotEmpty) {
       throw Exception(_wrapErrorMessage(errorMsg));
     }
+    _initialization = _init(rows, columns);
   }
 
   final Type _dtype;
@@ -125,8 +124,6 @@ class CsvDataFrame implements DataFrame {
   final int _labelIdx;
   final String _labelName;
   final bool _headerExists;
-  final List<Tuple2<int, int>> _rows;
-  final List<Tuple2<int, int>> _columns;
   final CategoricalDataEncoderFactory _encoderFactory;
   final DataFrameParamsValidator _paramsValidator;
   final DataFrameValueConverter _valueConverter;
@@ -144,6 +141,7 @@ class CsvDataFrame implements DataFrame {
 
   static const String _loggerPrefix = 'CsvDataFrame';
 
+  Future _initialization;
   List<List<dynamic>> _data; // the whole dataset including header
   Matrix _features;
   Matrix _labels;
@@ -155,64 +153,37 @@ class CsvDataFrame implements DataFrame {
 
   @override
   Future<List<String>> get header async {
-    _data ??= (await _prepareData(_rows, _columns));
-    _header ??= _headerExists ? _headerExtractor.extract(_data) : null;
-    return _header;
+    await _initialization;
+    return _header ??= _headerExists ? _headerExtractor.extract(_data) : null;
   }
 
   @override
   Future<Matrix> get features async {
-    _data ??= (await _prepareData(_rows, _columns));
-    _features ??=
+    await _initialization;
+    return _features ??=
         Matrix.from(_featuresExtractor.getFeatures(), dtype: _dtype);
-    return _features;
   }
 
   @override
   Future<Matrix> get labels async {
-    _data ??= (await _prepareData(_rows, _columns));
-    _labels ??= Matrix.from(_labelsExtractor.getLabels(), dtype: _dtype);
-    return _labels;
+    await _initialization;
+    return _labels ??= Matrix.from(_labelsExtractor.getLabels(), dtype: _dtype);
   }
 
-  Future<List<List<dynamic>>> _prepareData(
+  Future<Null> _init(
       [Iterable<Tuple2<int, int>> rows,
       Iterable<Tuple2<int, int>> columns]) async {
-    final fileStream = _file.openRead();
-    final data = await (fileStream
-        .transform(utf8.decoder)
-        .transform(_csvCodec.decoder)
-        .toList());
-    final rowsNum = data.length;
-    final columnsNum = data.first.length;
+    _data = await _extractData();
+    final rowsNum = _data.length;
+    final columnsNum = _data.last.length;
     final readMaskCreator = _readMaskCreatorFactory.create(_logger);
     final rowsMask = readMaskCreator.create(
         rows ?? [Tuple2(0, rowsNum - (_headerExists ? 2 : 1))]);
     final columnsMask = readMaskCreator
         .create(columns ?? [Tuple2(0, columnsNum - 1)]);
-    final records = data.sublist(_headerExists ? 1 : 0);
-
-    final originalHeader = _headerExists
-        ? data[0].map((dynamic el) => el.toString()).toList(growable: false)
-        : <String>[];
-
-    int labelIdx;
-
-    if (_labelIdx != null) {
-      labelIdx = _labelIdx;
-    } else if (originalHeader.isNotEmpty) {
-      labelIdx = originalHeader.indexOf(_labelName);
-      if (labelIdx == -1) {
-        throw Exception(_wrapErrorMessage('There is no column named '
-            '`$_labelName`'));
-      }
-    }
-
-    if (labelIdx >= records.first.length || labelIdx < 0) {
-      throw RangeError.range(labelIdx, 0, records.first.length - 1, null,
-          _wrapErrorMessage('Invalid label column number'));
-    }
-
+    final originalHeader = _getOriginalHeader(_data);
+    final labelIdx = _getLabelIdx(originalHeader, columnsNum);
+    final records = _data.sublist(_headerExists ? 1 : 0);
     final encodersProcessor = _encodersProcessorFactory.create(records,
         originalHeader, _encoderFactory, _fallbackEncoderType, _logger);
     _encoders = encodersProcessor.createEncoders(
@@ -223,33 +194,69 @@ class CsvDataFrame implements DataFrame {
         columnsMask, _encoders, labelIdx, _valueConverter, _logger);
     _labelsExtractor = _labelsExtractorFactory.create(
         records, rowsMask, labelIdx, _valueConverter, _encoders, _logger);
+  }
 
-    return data;
+  List<String> _getOriginalHeader(List<List> data) => _headerExists
+      ? data[0].map((dynamic el) => el.toString()).toList(growable: false)
+      : <String>[];
+
+  Future<List<List<dynamic>>> _extractData() async {
+    final fileStream = _file.openRead();
+    return await (fileStream
+        .transform(utf8.decoder)
+        .transform(_csvCodec.decoder)
+        .toList());
+  }
+
+  int _getLabelIdx(List<String> originalHeader, int columnsNum) {
+    if (_labelIdx != null) {
+      if (_labelIdx >= columnsNum || _labelIdx < 0) {
+        throw RangeError.range(_labelIdx, 0, columnsNum - 1, null,
+            _wrapErrorMessage('Invalid label column number'));
+      }
+      return _labelIdx;
+    }
+
+    if (originalHeader.isNotEmpty) {
+      final labelIdx = originalHeader.indexOf(_labelName);
+      if (labelIdx == -1) {
+        throw Exception(_wrapErrorMessage('There is no column named '
+            '`$_labelName`'));
+      }
+      return labelIdx;
+    }
+
+    throw Exception(_wrapErrorMessage('Neither label index, nor label columns'
+        'are provided'));
   }
 
   @override
   Iterable<String> decode(Matrix column, {String colName, int colIdx}) {
     if (colName == null && colIdx == null) {
-      throw Exception('Neither column name, nor column index are provided');
+      throw Exception(_wrapErrorMessage('Neither column name, nor column index '
+          'are provided'));
     }
     if (colName != null) {
       if (!_headerExists) {
-        throw Exception('Column name `$colName` provided, but the data frame '
-            'does not have a header');
+        throw Exception(_wrapErrorMessage('Column name `$colName` provided, '
+            'but the data frame does not have a header'));
       }
       if (!_header.contains(colName)) {
-        throw Exception('Provided column name `$colName` is not in the header. '
-            'Maybe provided column was cutted out during data preparation?');
+        throw Exception(_wrapErrorMessage('Provided column name `$colName` is '
+            'not in the header. Maybe provided column was cutted out during '
+            'data preparation?'));
       }
     }
 
     if (colIdx != null && (colIdx < 0 || colIdx >= _header.length)) {
-      throw RangeError.index(colIdx, _header, 'Wrong column index is provided');
+      throw RangeError.index(colIdx, _header,
+          _wrapErrorMessage('Wrong column index is provided'));
     }
 
     final idx = colIdx != null ? colIdx : _header.indexOf(colName);
     if (!_encoders.containsKey(idx)) {
-      throw Exception('Provided column is not a categorical column');
+      throw Exception(
+          _wrapErrorMessage('Provided column is not a categorical column'));
     }
     throw UnimplementedError('`Decode` is unimplemented yet');
   }
