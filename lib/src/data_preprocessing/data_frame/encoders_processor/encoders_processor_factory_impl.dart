@@ -1,4 +1,3 @@
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor.dart';
@@ -14,8 +13,7 @@ class DataFrameEncodersProcessorFactoryImpl
           List<List<Object>> records,
           List<String> header,
           CategoricalDataEncoderFactory encoderFactory,
-          CategoricalDataEncoderType fallbackEncoderType,
-          Logger logger) =>
+          CategoricalDataEncoderType fallbackEncoderType) =>
       DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType, logger);
+          records, header, encoderFactory, fallbackEncoderType);
 }

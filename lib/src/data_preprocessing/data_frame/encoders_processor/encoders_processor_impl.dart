@@ -1,4 +1,3 @@
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
@@ -6,13 +5,12 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/enc
 
 class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
   DataFrameEncodersProcessorImpl(this.records, this.header, this.encoderFactory,
-      this.fallbackEncoderType, this.logger);
+      this.fallbackEncoderType);
 
   final List<List<Object>> records;
   final List<String> header;
   final CategoricalDataEncoderFactory encoderFactory;
   final CategoricalDataEncoderType fallbackEncoderType;
-  final Logger logger;
 
   static const String noHeaderProvidedWarningMsg =
       'Column names with categorical values are provided, but there are no '
@@ -33,7 +31,7 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
         encoders = _createEncodersFromCategories(categories);
       }
     } else if (namesToEncoderTypes.isNotEmpty || categories.isNotEmpty) {
-      logger.warning(noHeaderProvidedWarningMsg);
+//      logger.warning(noHeaderProvidedWarningMsg);
     }
     return encoders;
   }
@@ -58,7 +56,6 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
       final name = header[i];
       if (categories.containsKey(name)) {
         indexToEncoder[i] = encoderFactory.fromType(fallbackEncoderType);
-        indexToEncoder[i].setCategoryValues(categories[name]);
       }
     }
     return indexToEncoder;
@@ -80,9 +77,6 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
         }
       }
     }
-    encodersValues.forEach((int colIdx, List<String> values) {
-      indexToEncoder[colIdx].setCategoryValues(values);
-    });
     return indexToEncoder;
   }
 }

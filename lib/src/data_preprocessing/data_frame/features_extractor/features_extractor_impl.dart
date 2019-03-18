@@ -1,22 +1,19 @@
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
-import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 
-class DataFrameFeaturesExtractorImpl with LoggerMixin
-    implements DataFrameFeaturesExtractor {
+class DataFrameFeaturesExtractorImpl implements DataFrameFeaturesExtractor {
 
   DataFrameFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
-      this.encoders, this.labelIdx, this.valueConverter, this.logger)
+      this.encoders, this.labelIdx, this.valueConverter)
       : rowsNum = rowsMask.where((bool flag) => flag).length,
         columnsNum = columnsMask.where((bool flag) => flag).length {
     if (columnsMask.length > records.first.length) {
-      throwException(columnsMaskWrongLengthMsg);
+      throw Exception(columnsMaskWrongLengthMsg);
     }
 
     if (rowsMask.length > records.length) {
-      throwException(rowsMaskWrongLengthMsg);
+      throw Exception(rowsMaskWrongLengthMsg);
     }
   }
 
@@ -34,9 +31,6 @@ class DataFrameFeaturesExtractorImpl with LoggerMixin
   final int labelIdx;
   final DataFrameValueConverter valueConverter;
   final List<List<Object>> records;
-
-  @override
-  final Logger logger;
 
   @override
   List<List<double>> getFeatures() {

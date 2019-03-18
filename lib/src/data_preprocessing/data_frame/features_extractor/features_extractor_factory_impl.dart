@@ -1,4 +1,3 @@
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/features_extractor/features_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/features_extractor/features_extractor_factory.dart';
@@ -16,8 +15,7 @@ class DataFrameFeaturesExtractorFactoryImpl
           List<bool> columnsMask,
           Map<int, CategoricalDataEncoder> encoders,
           int labelIdx,
-          DataFrameValueConverter valueConverter,
-          Logger logger) =>
+          DataFrameValueConverter valueConverter) =>
       DataFrameFeaturesExtractorImpl(records, rowMask, columnsMask, encoders,
-          labelIdx, valueConverter, logger);
+          labelIdx, valueConverter);
 }

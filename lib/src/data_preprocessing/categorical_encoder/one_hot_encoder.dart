@@ -1,45 +1,53 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
 class OneHotEncoder implements CategoricalDataEncoder {
   OneHotEncoder({
-    this.encodeUnknownValueStrategy = EncodeUnknownValueStrategy.throwError,
     CategoryValuesExtractor valuesExtractor =
       const CategoryValuesExtractorImpl(),
   }) : _valuesExtractor = valuesExtractor;
 
-  @override
-  final EncodeUnknownValueStrategy encodeUnknownValueStrategy;
-
   final CategoryValuesExtractor _valuesExtractor;
 
-  List<String> _values;
+  Map<String, Vector> _sourceToEncoded;
+  Map<Vector, String> _encodedToSource;
 
   @override
-  List<double> encodeSingle(String value) {
-    if (!_values.contains(value)) {
-      if (encodeUnknownValueStrategy == EncodeUnknownValueStrategy.throwError) {
-        throw UnsupportedError('One hot encoding: unknown value `$value`');
-      } else {
-        return List<double>.filled(_values.length, 0.0);
-      }
-    }
-    final targetIdx = _values.indexOf(value);
-    return List<double>.generate(
-        _values.length, (int idx) => idx == targetIdx ? 1.0 : 0.0);
+  Matrix encode(Iterable<String> values) {
+    _sourceToEncoded ??= _createLabelToEncodedValueMap(values.toList(
+        growable: false));
+    return Matrix.rows(
+        values.map((value) => _sourceToEncoded[value]).toList(growable: false));
   }
 
   @override
-  void setCategoryValues(List<String> values) {
-    _values ??= _valuesExtractor.extractCategoryValues(values);
+  Iterable<String> decode(Matrix encoded) {
+    _encodedToSource ??= _invertSourceToEncoded();
+    return List<String>.generate(encoded.rowsNum,
+            (i) => _encodedToSource[encoded.getRow(i)]);
   }
 
-  @override
-  Matrix encodeAll(Iterable<String> values) {
-    setCategoryValues(values.toList(growable: false));
-    return Matrix.from(values.map(encodeSingle).toList(growable: false));
+  Map<String, Vector> _createLabelToEncodedValueMap(List<String> values) {
+    final categoryLabels = _valuesExtractor.extractCategoryValues(values);
+    return Map<String, Vector>.fromIterable(categoryLabels,
+      key: (dynamic value) => value as String,
+      value: (dynamic value) => _encodeLabel(value as String, categoryLabels),
+    );
   }
+
+  Vector _encodeLabel(String value, List<String> categoryLabels) {
+    final valueIdx = categoryLabels.indexOf(value);
+    final encodedCategorySource = List<double>.generate(
+        categoryLabels.length,
+            (int idx) => idx == valueIdx ? 1.0 : 0.0
+    );
+    return Vector.from(encodedCategorySource);
+  }
+
+  Map<Vector, String> _invertSourceToEncoded() =>
+      Map.fromEntries(_sourceToEncoded.entries.map(
+              (entry) => MapEntry(entry.value, entry.key)));
 }

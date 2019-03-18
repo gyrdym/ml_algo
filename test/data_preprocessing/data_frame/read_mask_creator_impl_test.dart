@@ -6,8 +6,7 @@ import 'package:tuple/tuple.dart';
 import '../../test_utils/mocks.dart';
 
 void main() {
-  final loggerMock = LoggerMock();
-  final creator = DataFrameReadMaskCreatorImpl(loggerMock);
+  final creator = DataFrameReadMaskCreatorImpl();
 
   group('MLDataReadMaskCreatorImpl', () {
     test('should create read mask, case 1', () {
@@ -27,8 +26,6 @@ void main() {
 
     test('should create read mask, case 4', () {
       expect(() => creator.create([]), throwsException);
-      verify(loggerMock.severe(DataFrameReadMaskCreatorImpl.emptyRangesMsg, any))
-          .called(1);
     });
 
     test('should create read mask, case 5', () {
