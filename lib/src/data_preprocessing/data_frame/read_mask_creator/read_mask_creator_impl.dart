@@ -1,25 +1,19 @@
 import 'dart:math' as math;
 
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read_mask_creator.dart';
-import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 import 'package:tuple/tuple.dart';
 
-class DataFrameReadMaskCreatorImpl with LoggerMixin
-    implements DataFrameReadMaskCreator {
+class DataFrameReadMaskCreatorImpl implements DataFrameReadMaskCreator {
 
-  DataFrameReadMaskCreatorImpl(this.logger);
+  DataFrameReadMaskCreatorImpl();
 
   static const String emptyRangesMsg =
       'Columns/rows read ranges list cannot be empty!';
 
   @override
-  final Logger logger;
-
-  @override
   List<bool> create(Iterable<Tuple2<int, int>> ranges) {
     if (ranges.isEmpty) {
-      throwException(emptyRangesMsg);
+      throw Exception(emptyRangesMsg);
     }
     final numberOfElements = ranges.last.item2 + 1;
     final mask = List<bool>.filled(numberOfElements, false);

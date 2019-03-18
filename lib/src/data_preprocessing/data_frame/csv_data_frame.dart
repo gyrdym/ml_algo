@@ -100,8 +100,7 @@ class CsvDataFrame implements DataFrame {
       _featuresExtractorFactory = featuresExtractorFactory,
       _labelsExtractorFactory = labelsExtractorFactory,
       _readMaskCreatorFactory = readMaskCreatorFactory,
-      _encodersProcessorFactory = encodersProcessorFactory,
-      _logger = logger ?? Logger(_loggerPrefix) {
+      _encodersProcessorFactory = encodersProcessorFactory {
     final errorMsg = _paramsValidator.validate(
       labelIdx: labelIdx,
       labelName: labelName,
@@ -132,7 +131,6 @@ class CsvDataFrame implements DataFrame {
   final DataFrameFeaturesExtractorFactory _featuresExtractorFactory;
   final DataFrameLabelsExtractorFactory _labelsExtractorFactory;
   final DataFrameEncodersProcessorFactory _encodersProcessorFactory;
-  final Logger _logger;
 
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
   final Map<int, CategoricalDataEncoderType> _indexToEncoderType;
@@ -176,7 +174,7 @@ class CsvDataFrame implements DataFrame {
     _data = await _extractData();
     final rowsNum = _data.length;
     final columnsNum = _data.last.length;
-    final readMaskCreator = _readMaskCreatorFactory.create(_logger);
+    final readMaskCreator = _readMaskCreatorFactory.create();
     final rowsMask = readMaskCreator.create(
         rows ?? [Tuple2(0, rowsNum - (_headerExists ? 2 : 1))]);
     final columnsMask = readMaskCreator
@@ -185,15 +183,15 @@ class CsvDataFrame implements DataFrame {
     final labelIdx = _getLabelIdx(originalHeader, columnsNum);
     final records = _data.sublist(_headerExists ? 1 : 0);
     final encodersProcessor = _encodersProcessorFactory.create(records,
-        originalHeader, _encoderFactory, _fallbackEncoderType, _logger);
+        originalHeader, _encoderFactory, _fallbackEncoderType);
     _encoders = encodersProcessor.createEncoders(
         _indexToEncoderType, _nameToEncoderType, _categories);
 
     _headerExtractor = _headerExtractorFactory.create(columnsMask);
     _featuresExtractor = _featuresExtractorFactory.create(records, rowsMask,
-        columnsMask, _encoders, labelIdx, _valueConverter, _logger);
+        columnsMask, _encoders, labelIdx, _valueConverter);
     _labelsExtractor = _labelsExtractorFactory.create(
-        records, rowsMask, labelIdx, _valueConverter, _encoders, _logger);
+        records, rowsMask, labelIdx, _valueConverter, _encoders);
   }
 
   List<String> _getOriginalHeader(List<List> data) => _headerExists
@@ -243,8 +241,8 @@ class CsvDataFrame implements DataFrame {
       }
       if (!_header.contains(colName)) {
         throw Exception(_wrapErrorMessage('Provided column name `$colName` is '
-            'not in the header. Maybe provided column was cutted out during '
-            'data preparation?'));
+            'not in the header. Maybe provided column has been cutted out '
+            'during data preparation?'));
       }
     }
 
@@ -258,7 +256,7 @@ class CsvDataFrame implements DataFrame {
       throw Exception(
           _wrapErrorMessage('Provided column is not a categorical column'));
     }
-    throw UnimplementedError('`Decode` is unimplemented yet');
+    return _encoders[idx].decode(column);
   }
 
   String _wrapErrorMessage(String text) => '$_loggerPrefix: $text';

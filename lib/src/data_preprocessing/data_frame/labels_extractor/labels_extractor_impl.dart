@@ -1,20 +1,16 @@
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
-import 'package:ml_algo/src/utils/logger/logger_mixin.dart';
 
-class DataFrameLabelsExtractorImpl with LoggerMixin
-    implements DataFrameLabelsExtractor {
-
+class DataFrameLabelsExtractorImpl implements DataFrameLabelsExtractor {
   DataFrameLabelsExtractorImpl(this.records, this.readMask, this.labelIdx,
-      this.valueConverter, this.encoders, this.logger)
+      this.valueConverter, this.encoders)
       : rowsNum = readMask.where((bool flag) => flag).length {
     if (readMask.length > records.length) {
-      throwException(wrongReadMaskLengthMsg);
+      throw Exception(wrongReadMaskLengthMsg);
     }
     if (labelIdx >= records.first.length) {
-      throwException(wrongLabelIndexMsg);
+      throw Exception(wrongLabelIndexMsg);
     }
   }
 
@@ -32,9 +28,6 @@ class DataFrameLabelsExtractorImpl with LoggerMixin
   final int rowsNum;
   final Map<int, CategoricalDataEncoder> encoders;
   final DataFrameValueConverter valueConverter;
-
-  @override
-  final Logger logger;
 
   @override
   List<List<double>> getLabels() {

@@ -39,8 +39,11 @@ class OrdinalEncoder implements CategoricalDataEncoder {
   }
 
   @override
-  Matrix encodeAll(Iterable<String> values) {
+  Matrix encode(Iterable<String> values) {
     setCategoryValues(values.toList(growable: false));
     return Matrix.from(values.map(encodeSingle).toList(growable: false));
   }
+
+  @override
+  Iterable<String> decode(Matrix values) => null;
 }

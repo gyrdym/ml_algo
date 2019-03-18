@@ -13,14 +13,13 @@ void main() {
     [308.0, 2983.0, 387.0, 249.0, 100.0],
     [10001.0, 208.0, 230.0, 200.0, 800.0],
   ];
-  final loggerMock = LoggerMock();
 
   group('MLDataLabelsExtractorImpl', () {
     test('should extract labels according to given read mask', () {
       final readMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final extractor = DataFrameLabelsExtractorImpl(
-          records, readMask, 4, valueConverterMock, encoders, loggerMock);
+          records, readMask, 4, valueConverterMock, encoders);
       final actual = extractor.getLabels();
 
       expect(actual, equals([
@@ -37,7 +36,7 @@ void main() {
       final readMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final extractor = DataFrameLabelsExtractorImpl(
-          records, readMask, 0, valueConverterMock, encoders, loggerMock);
+          records, readMask, 0, valueConverterMock, encoders);
       final actual = extractor.getLabels();
 
       expect(actual, equals([

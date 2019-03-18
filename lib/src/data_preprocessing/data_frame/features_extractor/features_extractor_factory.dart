@@ -10,6 +10,5 @@ abstract class DataFrameFeaturesExtractorFactory {
       List<bool> columnsMask,
       Map<int, CategoricalDataEncoder> encoders,
       int labelIdx,
-      DataFrameValueConverter valueConverter,
-      Logger logger);
+      DataFrameValueConverter valueConverter);
 }

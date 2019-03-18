@@ -1,4 +1,3 @@
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/labels_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/labels_extractor_factory.dart';
@@ -11,9 +10,9 @@ class DataFrameLabelsExtractorFactoryImpl implements
   const DataFrameLabelsExtractorFactoryImpl();
 
   @override
-  DataFrameLabelsExtractor create(List<List<Object>> records, List<bool> readMask,
-          int labelIdx, DataFrameValueConverter valueConverter,
-      Map<int, CategoricalDataEncoder> encoders, Logger logger) =>
+  DataFrameLabelsExtractor create(List<List<Object>> records,
+      List<bool> readMask, int labelIdx, DataFrameValueConverter valueConverter,
+      Map<int, CategoricalDataEncoder> encoders) =>
       DataFrameLabelsExtractorImpl(records, readMask, labelIdx, valueConverter,
-          encoders, logger);
+          encoders);
 }

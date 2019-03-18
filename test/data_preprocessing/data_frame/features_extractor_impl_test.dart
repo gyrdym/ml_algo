@@ -6,8 +6,6 @@ import 'package:test/test.dart';
 import '../../test_utils/mocks.dart' as mocks;
 
 void main() {
-  final loggerMock = mocks.LoggerMock();
-
   final data = [
     [10.0, 20.0, 30.0, 40.0, 50.0],
     [100.0, 200.0, 300.0, 400.0, 500.0],
@@ -23,8 +21,8 @@ void main() {
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-          encoders, labelIdx, valueConverter, loggerMock);
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
+          columnsMask, encoders, labelIdx, valueConverter);
       final features = extractor.getFeatures();
 
       expect(
@@ -44,8 +42,8 @@ void main() {
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-          encoders, labelIdx, valueConverter, loggerMock);
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
+          columnsMask, encoders, labelIdx, valueConverter);
       final features = extractor.getFeatures();
 
       expect(
@@ -64,8 +62,8 @@ void main() {
       final labelIdx = 1;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-          encoders, labelIdx, valueConverter, loggerMock);
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
+          columnsMask, encoders, labelIdx, valueConverter);
       final features = extractor.getFeatures();
 
       expect(
@@ -90,8 +88,8 @@ void main() {
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
 
-      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-          encoders, labelIdx, valueConverter, loggerMock);
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
+          columnsMask, encoders, labelIdx, valueConverter);
       final features = extractor.getFeatures();
 
       expect(
@@ -112,8 +110,8 @@ void main() {
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
-      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-          encoders, labelIdx, valueConverter, loggerMock);
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
+          columnsMask, encoders, labelIdx, valueConverter);
       final actual = extractor.getFeatures();
 
       expect(
@@ -137,23 +135,19 @@ void main() {
 
       expect(
           () => DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-              encoders, labelIdx, valueConverter, loggerMock),
+              encoders, labelIdx, valueConverter),
           throwsException);
-      verify(loggerMock.severe(
-              DataFrameFeaturesExtractorImpl.columnsMaskWrongLengthMsg, any))
-          .called(1);
     });
 
-    test(
-        'should not throw an error if length of rows mask is less than number of rows in dataset',
-        () {
+    test('should not throw an error if length of rows mask is less than number '
+        'of rows in dataset', () {
       final rowMask = <bool>[true, true, true];
       final columnsMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
       final labelIdx = 4;
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
-      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-          encoders, labelIdx, valueConverter, loggerMock);
+      final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
+          columnsMask, encoders, labelIdx, valueConverter);
       final actual = extractor.getFeatures();
 
       expect(
@@ -165,9 +159,8 @@ void main() {
           ]));
     });
 
-    test(
-        'should throw an error if length of rows mask is greater than number of rows in dataset',
-        () {
+    test('should throw an error if length of rows mask is greater than number '
+        'of rows in dataset', () {
       final rowMask = <bool>[true, true, true, true, true, true];
       final columnsMask = <bool>[true, true, true, true, true];
       final encoders = <int, CategoricalDataEncoder>{};
@@ -176,11 +169,8 @@ void main() {
 
       expect(
           () => DataFrameFeaturesExtractorImpl(data, rowMask, columnsMask,
-              encoders, labelIdx, valueConverter, loggerMock),
+              encoders, labelIdx, valueConverter),
           throwsException);
-      verify(loggerMock.severe(
-              DataFrameFeaturesExtractorImpl.rowsMaskWrongLengthMsg, any))
-          .called(1);
     });
   });
 }

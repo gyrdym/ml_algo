@@ -20,7 +20,6 @@ void main() {
     'age': ['21', '27', '25', '35'],
     'country': ['France', 'Russia', 'Spain', 'Greece'],
   };
-  final loggerMock = LoggerMock();
 
   group('MLDataEncodersProcessorImpl', () {
     test(
@@ -30,7 +29,7 @@ void main() {
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
       final fallbackEncoderMock = OneHotEncoderMock();
       final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType, loggerMock);
+          records, header, encoderFactory, fallbackEncoderType);
 
       when(encoderFactory.fromType(any)).thenReturn(fallbackEncoderMock);
 
@@ -52,7 +51,7 @@ void main() {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
       final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType, loggerMock);
+          records, header, encoderFactory, fallbackEncoderType);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
 
@@ -87,7 +86,7 @@ void main() {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
       final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType, loggerMock);
+          records, header, encoderFactory, fallbackEncoderType);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
 
@@ -129,7 +128,7 @@ void main() {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
       final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, [], encoderFactory, fallbackEncoderType, loggerMock);
+          records, [], encoderFactory, fallbackEncoderType);
       final oneHotEncoderMock = OneHotEncoderMock();
 
       when(encoderFactory.fromType(fallbackEncoderType))
@@ -145,10 +144,6 @@ void main() {
           .setCategoryValues(argThat(equals(['21', '27', '25', '35']))));
       verifyNever(oneHotEncoderMock.setCategoryValues(
           argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
-
-      verify(loggerMock
-              .warning(DataFrameEncodersProcessorImpl.noHeaderProvidedWarningMsg))
-          .called(1);
     });
 
     test(
@@ -157,7 +152,7 @@ void main() {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
       final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, [], encoderFactory, fallbackEncoderType, loggerMock);
+          records, [], encoderFactory, fallbackEncoderType);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
 
@@ -181,10 +176,6 @@ void main() {
           argThat(equals(['married', 'single', 'single', 'divorced']))));
       verifyNever(oneHotEncoderMock
           .setCategoryValues(argThat(equals(['35', '27', '21', '25']))));
-
-      verify(loggerMock
-              .warning(DataFrameEncodersProcessorImpl.noHeaderProvidedWarningMsg))
-          .called(1);
     });
 
     test(
@@ -193,7 +184,7 @@ void main() {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
       final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
       final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, [], encoderFactory, fallbackEncoderType, loggerMock);
+          records, [], encoderFactory, fallbackEncoderType);
       final encoders = encoderProcessor.createEncoders({}, {}, {});
 
       expect(encoders, equals(<int, CategoricalDataEncoder>{}));

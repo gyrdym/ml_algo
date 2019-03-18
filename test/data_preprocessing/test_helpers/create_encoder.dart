@@ -14,12 +14,12 @@ CategoricalDataEncoder createEncoder({
   switch (type) {
     case CategoricalDataEncoderType.oneHot:
       return OneHotEncoder(
-          encodeUnknownValueStrategy: strategy, valuesExtractor: extractor)
-        ..setCategoryValues(values);
+          encodeUnknownValueStrategy: strategy, valuesExtractor: extractor,
+          {categoryLabels: values});
     case CategoricalDataEncoderType.ordinal:
       return OrdinalEncoder(
-          encodeUnknownValueStrategy: strategy, valuesExtractor: extractor)
-        ..setCategoryValues(values);
+          encodeUnknownValueStrategy: strategy, valuesExtractor: extractor,
+          {categoryLabels: values});
     default:
       throw Error();
   }
