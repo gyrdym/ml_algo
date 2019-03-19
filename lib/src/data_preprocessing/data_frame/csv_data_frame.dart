@@ -158,8 +158,7 @@ class CsvDataFrame implements DataFrame {
   @override
   Future<Matrix> get features async {
     await _initialization;
-    return _features ??=
-        Matrix.from(_featuresExtractor.getFeatures(), dtype: _dtype);
+    return _features ??= _featuresExtractor.extract();
   }
 
   @override

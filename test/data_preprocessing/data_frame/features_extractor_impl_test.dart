@@ -23,7 +23,7 @@ void main() {
 
       final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
           columnsMask, encoders, labelIdx, valueConverter);
-      final features = extractor.getFeatures();
+      final features = extractor.extract();
 
       expect(
           features,
@@ -44,7 +44,7 @@ void main() {
 
       final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
           columnsMask, encoders, labelIdx, valueConverter);
-      final features = extractor.getFeatures();
+      final features = extractor.extract();
 
       expect(
           features,
@@ -64,7 +64,7 @@ void main() {
 
       final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
           columnsMask, encoders, labelIdx, valueConverter);
-      final features = extractor.getFeatures();
+      final features = extractor.extract();
 
       expect(
           features,
@@ -90,7 +90,7 @@ void main() {
 
       final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
           columnsMask, encoders, labelIdx, valueConverter);
-      final features = extractor.getFeatures();
+      final features = extractor.extract();
 
       expect(
           features,
@@ -112,7 +112,7 @@ void main() {
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
       final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
           columnsMask, encoders, labelIdx, valueConverter);
-      final actual = extractor.getFeatures();
+      final actual = extractor.extract();
 
       expect(
           actual,
@@ -148,7 +148,7 @@ void main() {
       final valueConverter = mocks.MLDataValueConverterMockWithImpl();
       final extractor = DataFrameFeaturesExtractorImpl(data, rowMask,
           columnsMask, encoders, labelIdx, valueConverter);
-      final actual = extractor.getFeatures();
+      final actual = extractor.extract();
 
       expect(
           actual,
