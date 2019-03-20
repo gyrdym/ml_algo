@@ -42,7 +42,7 @@ class DataFrameParamsValidatorMock extends Mock implements
 
 class LoggerMock extends Mock implements Logger {}
 
-class MLDataValueConverterMock extends Mock implements
+class ToNumberConverterMock extends Mock implements
     DataFrameValueConverter {}
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}

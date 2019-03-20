@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:csv/csv.dart';
 import 'package:logging/logging.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
@@ -13,15 +12,12 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_
 import 'package:ml_algo/src/data_preprocessing/data_frame/data_frame.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/features_extractor/features_extractor.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/features_extractor/features_extractor_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/features_extractor/features_extractor_factory_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor_factory_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/labels_extractor.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/labels_extractor_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/labels_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read_mask_creator_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read_mask_creator_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
@@ -43,8 +39,6 @@ class CsvDataFrame implements DataFrame {
       bool headerExists = true,
       CategoricalDataEncoderType encoderType =
           CategoricalDataEncoderType.oneHot,
-      EncodeUnknownValueStrategy encodeUnknownStrategy =
-          EncodeUnknownValueStrategy.throwError,
       Map<String, List<String>> categories,
       Map<int, List<Object>> categoriesByIndexes,
       Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
@@ -65,11 +59,8 @@ class CsvDataFrame implements DataFrame {
       DataFrameHeaderExtractorFactory headerExtractorFactory =
         const DataFrameHeaderExtractorFactoryImpl(),
 
-      FeaturesExtractorFactory featuresExtractorFactory =
-        const FeaturesExtractorFactoryImpl(),
-
-      DataFrameLabelsExtractorFactory labelsExtractorFactory =
-        const DataFrameLabelsExtractorFactoryImpl(),
+      VariablesExtractorFactory featuresExtractorFactory =
+        const VariablesExtractorFactoryImpl(),
 
       DataFrameReadMaskCreatorFactory readMaskCreatorFactory =
         const DataFrameReadMaskCreatorFactoryImpl(),
@@ -97,8 +88,7 @@ class CsvDataFrame implements DataFrame {
       _paramsValidator = paramsValidator,
       _valueConverter = valueConverter,
       _headerExtractorFactory = headerExtractorFactory,
-      _featuresExtractorFactory = featuresExtractorFactory,
-      _labelsExtractorFactory = labelsExtractorFactory,
+      _variablesExtractorFactory = featuresExtractorFactory,
       _readMaskCreatorFactory = readMaskCreatorFactory,
       _encodersProcessorFactory = encodersProcessorFactory {
     final errorMsg = _paramsValidator.validate(
@@ -128,8 +118,7 @@ class CsvDataFrame implements DataFrame {
   final DataFrameValueConverter _valueConverter;
   final DataFrameReadMaskCreatorFactory _readMaskCreatorFactory;
   final DataFrameHeaderExtractorFactory _headerExtractorFactory;
-  final FeaturesExtractorFactory _featuresExtractorFactory;
-  final DataFrameLabelsExtractorFactory _labelsExtractorFactory;
+  final VariablesExtractorFactory _variablesExtractorFactory;
   final DataFrameEncodersProcessorFactory _encodersProcessorFactory;
 
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
@@ -145,8 +134,7 @@ class CsvDataFrame implements DataFrame {
   Matrix _labels;
   List<String> _header;
   DataFrameHeaderExtractor _headerExtractor;
-  FeaturesExtractor _featuresExtractor;
-  DataFrameLabelsExtractor _labelsExtractor;
+  VariablesExtractor _variablesExtractor;
   Map<int, CategoricalDataEncoder> _encoders;
 
   @override
@@ -158,13 +146,13 @@ class CsvDataFrame implements DataFrame {
   @override
   Future<Matrix> get features async {
     await _initialization;
-    return _features ??= _featuresExtractor.extract();
+    return _features ??= _variablesExtractor.extractFeatures();
   }
 
   @override
   Future<Matrix> get labels async {
     await _initialization;
-    return _labels ??= Matrix.from(_labelsExtractor.getLabels(), dtype: _dtype);
+    return _labels ??= _variablesExtractor.extractLabels();
   }
 
   Future<Null> _init(
@@ -185,12 +173,9 @@ class CsvDataFrame implements DataFrame {
         originalHeader, _encoderFactory, _fallbackEncoderType);
     _encoders = encodersProcessor.createEncoders(
         _indexToEncoderType, _nameToEncoderType, _categories);
-
     _headerExtractor = _headerExtractorFactory.create(columnsMask);
-    _featuresExtractor = _featuresExtractorFactory.create(records, rowsMask,
+    _variablesExtractor = _variablesExtractorFactory.create(records, rowsMask,
         columnsMask, _encoders, labelIdx, _valueConverter);
-    _labelsExtractor = _labelsExtractorFactory.create(
-        records, rowsMask, labelIdx, _valueConverter, _encoders);
   }
 
   List<String> _getOriginalHeader(List<List> data) => _headerExists

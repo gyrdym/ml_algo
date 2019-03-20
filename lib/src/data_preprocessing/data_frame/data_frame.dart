@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/csv_data_frame.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -54,11 +53,6 @@ abstract class DataFrame {
    * [encoderType] Encoder for categorical data. Use it, if you want to encode
    * all your categorical data with only this encoder. It makes sense only if
    * [categoryToEncoder] is null
-   *
-   * [encodeUnknownStrategy] Indicates, what type of strategy will be used when
-   * unknown categorical value is encountered. E.g., if the strategy is
-   * [EncodeUnknownValueStrategy.returnZeroes], an unknown value just will be
-   * converted to the sequence of `0`
    */
   factory DataFrame.fromCsv(
     String fileName, {
@@ -68,7 +62,6 @@ abstract class DataFrame {
     bool headerExists,
     String fieldDelimiter,
     CategoricalDataEncoderType encoderType,
-    EncodeUnknownValueStrategy encodeUnknownStrategy,
     Map<String, List<String>> categories,
     Map<int, List<String>> categoriesByIndexes,
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
