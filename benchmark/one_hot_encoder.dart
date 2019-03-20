@@ -10,15 +10,14 @@ class OneHotEncoderBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    _data.forEach(_encoder.encodeSingle);
+    _encoder.encode(_data);
   }
 }
 
 void oneHotEncoderBenchmark() {
   final numOfLabels = 10000;
-  final encoder = OneHotEncoder()
-    ..setCategoryValues(
-        List<String>.generate(numOfLabels, (int idx) => 'label_$idx'));
-  OneHotEncoderBenchmark(encoder, ['label_100', 'label_200', 'label_300'])
+  final encoder = OneHotEncoder();
+  OneHotEncoderBenchmark(encoder,
+      List<String>.generate(numOfLabels, (int idx) => 'label_$idx'))
     ..report();
 }

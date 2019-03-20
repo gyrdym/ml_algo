@@ -8,6 +8,9 @@ mixin EncoderMixin implements CategoricalDataEncoder {
 
   @override
   Matrix encode(Iterable<String> values) {
+    if (values.isEmpty) {
+      throw Exception('Empty category label list has been passed');
+    }
     _sourceToEncoded ??= _createSourceToEncodedMap(values.toList(
         growable: false));
     return Matrix.rows(
