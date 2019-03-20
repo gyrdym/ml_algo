@@ -1,5 +1,5 @@
 import 'package:ml_linalg/matrix.dart';
 
-abstract class DataFrameFeaturesExtractor {
+abstract class FeaturesExtractor {
   Matrix extract();
 }

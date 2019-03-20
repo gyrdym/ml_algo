@@ -5,9 +5,9 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
 
-class DataFrameFeaturesExtractorImpl implements DataFrameFeaturesExtractor {
+class FeaturesExtractorImpl implements FeaturesExtractor {
 
-  DataFrameFeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
+  FeaturesExtractorImpl(this.records, this.rowsMask, this.columnsMask,
       this.encoders, this.labelIdx, this.toFloatConverter)
       : rowsNum = rowsMask.where((bool flag) => flag).length,
         columnsNum = columnsMask.where((bool flag) => flag).length {
@@ -51,14 +51,10 @@ class DataFrameFeaturesExtractorImpl implements DataFrameFeaturesExtractor {
     for (int i = 0; i < rowsMask.length; i++) {
       if (rowsMask[i] == true) {
         final rowData = _processRow(records[i]);
-        rowData.item1.forEach((idx, value) {
-          numericalColumns.putIfAbsent(idx, () => [value]);
-          numericalColumns[idx].add(value);
-        });
-        rowData.item2.forEach((idx, value) {
-          categoricalColumns.putIfAbsent(idx, () => [value]);
-          categoricalColumns[idx].add(value);
-        });
+        rowData.item1.forEach((idx, value) =>
+            numericalColumns.putIfAbsent(idx, () => []).add(value));
+        rowData.item2.forEach((idx, value) =>
+            categoricalColumns.putIfAbsent(idx, () => []).add(value));
       }
     }
     return Tuple2(numericalColumns, categoricalColumns);

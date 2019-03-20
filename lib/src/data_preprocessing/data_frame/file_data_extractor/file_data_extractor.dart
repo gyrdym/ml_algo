@@ -4,7 +4,7 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/labels_extractor/label
 
 abstract class FileDataExtractor {
   DataFrameHeaderExtractor get headerExtractor;
-  DataFrameFeaturesExtractor get featuresExtractor;
+  FeaturesExtractor get featuresExtractor;
   DataFrameLabelsExtractor get labelsExtractor;
 
 

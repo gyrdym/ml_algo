@@ -193,8 +193,8 @@ CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
   ordinalEncoderMock ??= OrdinalEncoderMock();
 
   final factory = CategoricalDataEncoderFactoryMock();
-  when(factory.oneHot(any)).thenReturn(oneHotEncoderMock);
-  when(factory.ordinal(any)).thenReturn(ordinalEncoderMock);
+  when(factory.oneHot()).thenReturn(oneHotEncoderMock);
+  when(factory.ordinal()).thenReturn(ordinalEncoderMock);
   when(factory.fromType(CategoricalDataEncoderType.oneHot))
       .thenReturn(oneHotEncoderMock);
   when(factory.fromType(CategoricalDataEncoderType.ordinal))

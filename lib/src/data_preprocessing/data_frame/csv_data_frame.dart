@@ -65,8 +65,8 @@ class CsvDataFrame implements DataFrame {
       DataFrameHeaderExtractorFactory headerExtractorFactory =
         const DataFrameHeaderExtractorFactoryImpl(),
 
-      DataFrameFeaturesExtractorFactory featuresExtractorFactory =
-        const DataFrameFeaturesExtractorFactoryImpl(),
+      FeaturesExtractorFactory featuresExtractorFactory =
+        const FeaturesExtractorFactoryImpl(),
 
       DataFrameLabelsExtractorFactory labelsExtractorFactory =
         const DataFrameLabelsExtractorFactoryImpl(),
@@ -128,7 +128,7 @@ class CsvDataFrame implements DataFrame {
   final DataFrameValueConverter _valueConverter;
   final DataFrameReadMaskCreatorFactory _readMaskCreatorFactory;
   final DataFrameHeaderExtractorFactory _headerExtractorFactory;
-  final DataFrameFeaturesExtractorFactory _featuresExtractorFactory;
+  final FeaturesExtractorFactory _featuresExtractorFactory;
   final DataFrameLabelsExtractorFactory _labelsExtractorFactory;
   final DataFrameEncodersProcessorFactory _encodersProcessorFactory;
 
@@ -145,7 +145,7 @@ class CsvDataFrame implements DataFrame {
   Matrix _labels;
   List<String> _header;
   DataFrameHeaderExtractor _headerExtractor;
-  DataFrameFeaturesExtractor _featuresExtractor;
+  FeaturesExtractor _featuresExtractor;
   DataFrameLabelsExtractor _labelsExtractor;
   Map<int, CategoricalDataEncoder> _encoders;
 
