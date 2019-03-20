@@ -38,11 +38,11 @@ class DataFrameLabelsExtractorImpl implements DataFrameLabelsExtractor {
     for (int row = 0; row < readMask.length; row++) {
       if (readMask[row] == true) {
         final dynamic rawValue = records[row][labelIdx];
-        final convertedValue = categoricalDataExist
-            ? encoders[labelIdx].encodeSingle(rawValue.toString())
-                .toList(growable: false)
-            : [valueConverter.convert(rawValue)];
-        result[_i++] = convertedValue;
+//        final convertedValue = categoricalDataExist
+//            ? encoders[labelIdx].encodeSingle(rawValue.toString())
+//                .toList(growable: false)
+//            : [valueConverter.convert(rawValue)];
+//        result[_i++] = convertedValue;
       }
     }
     return result;

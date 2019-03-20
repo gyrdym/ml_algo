@@ -2,7 +2,6 @@ import 'package:logging/logging.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
@@ -37,9 +36,6 @@ class OrdinalEncoderMock extends Mock implements CategoricalDataEncoder {}
 
 class CategoricalDataEncoderFactoryMock extends Mock
     implements CategoricalDataEncoderFactory {}
-
-class CategoryValuesExtractorMock extends Mock
-    implements CategoryValuesExtractor {}
 
 class DataFrameParamsValidatorMock extends Mock implements
     DataFrameParamsValidator {}
