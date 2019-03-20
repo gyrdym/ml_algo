@@ -2,7 +2,6 @@ library ml_algo;
 
 export 'package:ml_algo/src/classifier/classifier.dart';
 export 'package:ml_algo/src/classifier/linear_classifier.dart';
-export 'package:ml_algo/src/data_preprocessing/categorical_encoder/encode_unknown_strategy_type.dart';
 export 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 export 'package:ml_algo/src/data_preprocessing/data_frame/data_frame.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
