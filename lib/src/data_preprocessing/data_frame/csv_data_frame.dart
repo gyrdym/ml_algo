@@ -37,9 +37,6 @@ class CsvDataFrame implements DataFrame {
       int labelIdx,
       String labelName,
       bool headerExists = true,
-      CategoricalDataEncoderType encoderType =
-          CategoricalDataEncoderType.oneHot,
-      Map<String, List<String>> categories,
       Map<int, List<Object>> categoriesByIndexes,
       Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
       Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
@@ -65,8 +62,8 @@ class CsvDataFrame implements DataFrame {
       DataFrameReadMaskCreatorFactory readMaskCreatorFactory =
         const DataFrameReadMaskCreatorFactoryImpl(),
 
-      DataFrameEncodersProcessorFactory encodersProcessorFactory =
-        const DataFrameEncodersProcessorFactoryImpl(),
+      EncodersProcessorFactory encodersProcessorFactory =
+        const EncodersProcessorFactoryImpl(),
 
       CsvCodecFactory csvCodecFactory =
         const CsvCodecFactoryImpl(),
@@ -80,11 +77,9 @@ class CsvDataFrame implements DataFrame {
       _labelIdx = labelIdx,
       _labelName = labelName,
       _headerExists = headerExists,
-      _categories = categories ?? {},
       _nameToEncoderType = categoryNameToEncoder ?? {},
       _indexToEncoderType = categoryIndexToEncoder ?? {},
       _encoderFactory = encoderFactory,
-      _fallbackEncoderType = encoderType,
       _paramsValidator = paramsValidator,
       _valueConverter = valueConverter,
       _headerExtractorFactory = headerExtractorFactory,
@@ -97,7 +92,6 @@ class CsvDataFrame implements DataFrame {
       rows: rows,
       columns: columns,
       headerExists: headerExists,
-      predefinedCategories: categories,
       namesToEncoders: categoryNameToEncoder,
       indexToEncoder: categoryIndexToEncoder,
     );
@@ -119,12 +113,10 @@ class CsvDataFrame implements DataFrame {
   final DataFrameReadMaskCreatorFactory _readMaskCreatorFactory;
   final DataFrameHeaderExtractorFactory _headerExtractorFactory;
   final VariablesExtractorFactory _variablesExtractorFactory;
-  final DataFrameEncodersProcessorFactory _encodersProcessorFactory;
+  final EncodersProcessorFactory _encodersProcessorFactory;
 
   final Map<String, CategoricalDataEncoderType> _nameToEncoderType;
   final Map<int, CategoricalDataEncoderType> _indexToEncoderType;
-  final Map<String, List<String>> _categories;
-  final CategoricalDataEncoderType _fallbackEncoderType;
 
   static const String _loggerPrefix = 'CsvDataFrame';
 
@@ -170,9 +162,9 @@ class CsvDataFrame implements DataFrame {
     final labelIdx = _getLabelIdx(originalHeader, columnsNum);
     final records = _data.sublist(_headerExists ? 1 : 0);
     final encodersProcessor = _encodersProcessorFactory.create(records,
-        originalHeader, _encoderFactory, _fallbackEncoderType);
-    _encoders = encodersProcessor.createEncoders(
-        _indexToEncoderType, _nameToEncoderType, _categories);
+        originalHeader, _encoderFactory);
+    _encoders = encodersProcessor.createEncoders(_indexToEncoderType,
+        _nameToEncoderType);
     _headerExtractor = _headerExtractorFactory.create(columnsMask);
     _variablesExtractor = _variablesExtractorFactory.create(records, rowsMask,
         columnsMask, _encoders, labelIdx, _valueConverter);

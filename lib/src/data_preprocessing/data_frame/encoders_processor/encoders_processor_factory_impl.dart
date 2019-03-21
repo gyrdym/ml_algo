@@ -1,19 +1,16 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_impl.dart';
 
-class DataFrameEncodersProcessorFactoryImpl
-    implements DataFrameEncodersProcessorFactory {
-  const DataFrameEncodersProcessorFactoryImpl();
+class EncodersProcessorFactoryImpl
+    implements EncodersProcessorFactory {
+  const EncodersProcessorFactoryImpl();
 
   @override
-  DataFrameEncodersProcessor create(
-          List<List<Object>> records,
-          List<String> header,
-          CategoricalDataEncoderFactory encoderFactory,
-          CategoricalDataEncoderType fallbackEncoderType) =>
-      DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType);
+  EncodersProcessor create(
+      List<List<Object>> records,
+      List<String> header,
+      CategoricalDataEncoderFactory encoderFactory
+  ) => EncodersProcessorImpl(records, header, encoderFactory);
 }

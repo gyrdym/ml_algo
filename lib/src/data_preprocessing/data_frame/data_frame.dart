@@ -22,11 +22,6 @@ abstract class DataFrame {
    * [headerExists] Indicates, whether the csv-file header (a sequence of
    * column names) exists or not
    *
-   * [categories] Category names and all the categories' possible values. It
-   * only makes sense if [headerExists] is `true`. Use it, if you know in
-   * advance all the categorical values. If [categories] or
-   * [categoriesByIndexes] are provided, data will be processed much faster
-   *
    * [categoriesByIndexes] Categories' column indexes and all the categories'
    * possible values. Use it, if you know in advance all the categorical values.
    * If [categories] or [categoriesByIndexes] are provided, data will be
@@ -49,10 +44,6 @@ abstract class DataFrame {
    * [columns] Ranges of columns to be read from csv-file. Ranges represented
    * as closed interval, that means that, e.g. `const Tuple2<int, int>(1, 1)`
    * is a valid interval that contains only one value - `1`
-   *
-   * [encoderType] Encoder for categorical data. Use it, if you want to encode
-   * all your categorical data with only this encoder. It makes sense only if
-   * [categoryToEncoder] is null
    */
   factory DataFrame.fromCsv(
     String fileName, {
@@ -61,8 +52,6 @@ abstract class DataFrame {
     String labelName,
     bool headerExists,
     String fieldDelimiter,
-    CategoricalDataEncoderType encoderType,
-    Map<String, List<String>> categories,
     Map<int, List<String>> categoriesByIndexes,
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
