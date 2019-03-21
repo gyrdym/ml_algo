@@ -3,37 +3,25 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_facto
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor.dart';
 
-class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
-  DataFrameEncodersProcessorImpl(this.records, this.header, this.encoderFactory,
-      this.fallbackEncoderType);
+class EncodersProcessorImpl implements EncodersProcessor {
+  EncodersProcessorImpl(this.records, this.header,
+      this.encoderFactory);
 
   final List<List<Object>> records;
   final List<String> header;
   final CategoricalDataEncoderFactory encoderFactory;
-  final CategoricalDataEncoderType fallbackEncoderType;
-
-  static const String noHeaderProvidedWarningMsg =
-      'Column names with categorical values are provided, but there are no '
-      'header with column names!';
 
   @override
   Map<int, CategoricalDataEncoder> createEncoders(
       Map<int, CategoricalDataEncoderType> indexesToEncoderTypes,
       Map<String, CategoricalDataEncoderType> namesToEncoderTypes,
-      Map<String, List<String>> categories) {
-    Map<int, CategoricalDataEncoder> encoders = {};
+  ) {
     if (indexesToEncoderTypes.isNotEmpty) {
-      encoders = _createEncodersFromIndexToEncoder(indexesToEncoderTypes);
-    } else if (header.isNotEmpty) {
-      if (namesToEncoderTypes.isNotEmpty) {
-        encoders = _createEncodersFromNameToEncoder(namesToEncoderTypes);
-      } else if (categories.isNotEmpty) {
-        encoders = _createEncodersFromCategories(categories);
-      }
-    } else if (namesToEncoderTypes.isNotEmpty || categories.isNotEmpty) {
-//      logger.warning(noHeaderProvidedWarningMsg);
+      return _createEncodersFromIndexToEncoder(indexesToEncoderTypes);
+    } else if (header.isNotEmpty && namesToEncoderTypes.isNotEmpty) {
+      return _createEncodersFromNameToEncoder(namesToEncoderTypes);
     }
-    return encoders;
+    return {};
   }
 
   Map<int, CategoricalDataEncoder> _createEncodersFromNameToEncoder(
@@ -48,18 +36,6 @@ class DataFrameEncodersProcessorImpl implements DataFrameEncodersProcessor {
       _createEncoders((int colIdx) => indexToEncoderType.containsKey(colIdx)
           ? indexToEncoderType[colIdx]
           : null);
-
-  Map<int, CategoricalDataEncoder> _createEncodersFromCategories(
-      Map<String, List<String>> categories) {
-    final indexToEncoder = <int, CategoricalDataEncoder>{};
-    for (int i = 0; i < header.length; i++) {
-      final name = header[i];
-      if (categories.containsKey(name)) {
-        indexToEncoder[i] = encoderFactory.fromType(fallbackEncoderType);
-      }
-    }
-    return indexToEncoder;
-  }
 
   Map<int, CategoricalDataEncoder> _createEncoders(
       CategoricalDataEncoderType getEncoderType(int colIdx)) {

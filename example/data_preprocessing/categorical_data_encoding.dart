@@ -2,17 +2,17 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/range.dart';
 import 'package:tuple/tuple.dart';
 
-Future predefinedCategories() async {
+Future processDataSetWithCategoricalData() async {
   final dataFrame = DataFrame.fromCsv('datasets/black_friday.csv',
     labelName: 'Purchase\r',
     columns: [const Tuple2(2, 3), const Tuple2(5, 7), const Tuple2(11, 11)],
     rows: [const Tuple2(0, 20)],
-    categories: {
-      'Gender': ['M', 'F'],
-      'Age': ['0-17', '18-25', '26-35', '36-45', '46-50', '51-55', '55+'],
-      'City_Category': ['A', 'B', 'C'],
-      'Stay_In_Current_City_Years': ['0', '1', '2', '3', '4+'],
-      'Martial_Status': ['0', '1'],
+    categoryNameToEncoder: {
+      'Gender': CategoricalDataEncoderType.oneHot,
+      'Age': CategoricalDataEncoderType.oneHot,
+      'City_Category': CategoricalDataEncoderType.oneHot,
+      'Stay_In_Current_City_Years': CategoricalDataEncoderType.oneHot,
+      'Martial_Status': CategoricalDataEncoderType.oneHot,
     },
   );
 
@@ -55,5 +55,5 @@ Future predefinedCategories() async {
 }
 
 Future main() async {
-  await predefinedCategories();
+  await processDataSetWithCategoricalData();
 }

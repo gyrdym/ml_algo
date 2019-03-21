@@ -13,7 +13,6 @@ Future testCsvWithCategories(
     bool headerExist = true,
     int labelIdx,
     int rowNum,
-    Map<String, List<String>> categories,
     List<Tuple2<int, int>> columns,
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
@@ -25,7 +24,7 @@ Future testCsvWithCategories(
       headerExists: headerExist,
       categoryNameToEncoder: categoryNameToEncoder,
       categoryIndexToEncoder: categoryIndexToEncoder,
-      categories: categories);
+  );
   final header = await data.header;
   final features = await data.features;
   final labels = await data.labels;
@@ -37,10 +36,9 @@ Future testCsvWithCategories(
 }
 
 void main() {
-  group('CsvMLData', () {
-    test(
-        'should encode data with help of predefined categories (`categories` parameter)',
-        () async {
+  group('CsvDataFrame', () {
+    test('should encode data with help of predefined categories (`categories` '
+        'parameter)', () async {
       await testCsvWithCategories(
           fileName: 'test/data_preprocessing/test_data/elo_blatter.csv',
           labelIdx: 1,
@@ -48,38 +46,6 @@ void main() {
           columns: [
             const Tuple2(1, 7),
           ],
-          categories: {
-            'confederation': [
-              'CAF',
-              'UEFA',
-              'AFC',
-              'CONCACAF',
-              'CONMEBOL',
-              'OFC'
-            ],
-            'gdp_source': [
-              'World Bank',
-              'CIA (2005)',
-              'CIA (2004)',
-              'IMF',
-              'World Bank\'s estimate for UK, adjusted per http://en.wikipedia.org/w/index.php?title=Countries_of_the_United_Kingdom_by_GVA_per_capita&oldid=153382497',
-              'CIA (2008)',
-              'CIA (2007)',
-              'CIA',
-              'South Sudan not independent in 2006; used Sudan\'s figure instead',
-              'CIA (2004, French Polynesia)',
-            ],
-            'popu_source': [
-              '2007: http://en.wikipedia.org/wiki/Tahiti',
-              'CIA (2007)',
-              'http://en.wikipedia.org/wiki/Demographics_of_Northern_Ireland#Population',
-              'http://en.wikipedia.org/wiki/Demographics_of_Scotland',
-              'http://en.wikipedia.org/wiki/Demographics_of_Wales#Population',
-              'http://en.wikipedia.org/wiki/Demography_of_England#Population',
-              'IMF',
-              'World Bank',
-            ]
-          },
           testContentFn: (features, labels, header) {
             expect(
                 header,
@@ -159,8 +125,8 @@ void main() {
           });
     });
 
-    test('should encode categorical data (`categorIndexToEncoder` parameter)',
-        () async {
+    test('should encode categorical data (`categorIndexToEncoder` '
+        'parameter)', () async {
       await testCsvWithCategories(
           fileName: 'test/data_preprocessing/test_data/fake_data.csv',
           labelIdx: 3,

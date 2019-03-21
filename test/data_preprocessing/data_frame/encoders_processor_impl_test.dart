@@ -14,44 +14,22 @@ void main() {
     ['Spain', 'female', 21, 'single', 3000],
     ['Greece', 'female', 25, 'divorced', 2700],
   ];
-  final predefinedCategories = <String, List<String>>{
-    'gender': ['male', 'female'],
-    'martial_status': ['married', 'single', 'divorced'],
-    'age': ['21', '27', '25', '35'],
-    'country': ['France', 'Russia', 'Spain', 'Greece'],
-  };
 
-  group('MLDataEncodersProcessorImpl', () {
-    test(
-        'should create fallback encoders for all columns if there are no specific encoders provided, predefined'
-        ' categories are provided and the columns header is not empty', () {
+  group('EncodersProcessorImpl', () {
+    test('should return empty map if there are no specific encoders provided '
+        'and the columns header is not empty', () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final fallbackEncoderMock = OneHotEncoderMock();
-      final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType);
-
-      when(encoderFactory.fromType(any)).thenReturn(fallbackEncoderMock);
-
-      encoderProcessor.createEncoders({}, {}, predefinedCategories);
-      verify(encoderFactory.fromType(fallbackEncoderType)).called(4);
-      verify(fallbackEncoderMock
-          .setCategoryValues(argThat(equals(['male', 'female'])))).called(1);
-      verify(fallbackEncoderMock.setCategoryValues(
-          argThat(equals(['married', 'single', 'divorced'])))).called(1);
-      verify(fallbackEncoderMock
-          .setCategoryValues(argThat(equals(['21', '27', '25', '35'])))).called(1);
-      verify(fallbackEncoderMock.setCategoryValues(
-          argThat(equals(['France', 'Russia', 'Spain', 'Greece'])))).called(1);
+      final encoderProcessor = EncodersProcessorImpl(records, header,
+          encoderFactory);
+      final encoders = encoderProcessor.createEncoders({}, {});
+      expect(encoders, equals(<int, CategoricalDataEncoder>{}));
     });
 
-    test(
-        'should create encoders from `name-to-encoder` map if the map and predefined categories are provided (the '
-        'map has more priority) and the header is not empty', () {
+    test('should create encoders from `name-to-encoder` map and header is not '
+        'empty', () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType);
+      final encoderProcessor = EncodersProcessorImpl(
+          records, header, encoderFactory);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
 
@@ -67,26 +45,22 @@ void main() {
       when(encoderFactory.fromType(CategoricalDataEncoderType.oneHot))
           .thenReturn(oneHotEncoderMock);
 
-      encoderProcessor.createEncoders({}, nameToEncoder, predefinedCategories);
+      final encoders = encoderProcessor.createEncoders({}, nameToEncoder);
 
-      verify(oneHotEncoderMock.setCategoryValues(
-          argThat(equals(['male', 'male', 'female', 'female']))));
-      verify(oneHotEncoderMock.setCategoryValues(
-          argThat(equals(['married', 'single', 'single', 'divorced']))));
-      verify(ordinalEncoderMock
-          .setCategoryValues(argThat(equals(['35', '27', '21', '25']))));
-      verify(ordinalEncoderMock.setCategoryValues(
-          argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
+      expect(encoders, equals({
+        0: ordinalEncoderMock,
+        1: oneHotEncoderMock,
+        2: ordinalEncoderMock,
+        3: oneHotEncoderMock,
+      }));
     });
 
-    test(
-        'should create encoders from `index-to-encoder` map if the map, a `name-to-encoder` map and predefined '
-        'categories are provided (`index-to-encoder` map has high priority)',
-        () {
+    test('should create encoders from `index-to-encoder` map if both maps ('
+        'index to encoder and name to encoder) are provided (`index-to-encoder` '
+        'map has high priority)', () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, header, encoderFactory, fallbackEncoderType);
+      final encoderProcessor = EncodersProcessorImpl(
+          records, header, encoderFactory);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
 
@@ -109,85 +83,14 @@ void main() {
       when(encoderFactory.fromType(CategoricalDataEncoderType.oneHot))
           .thenReturn(oneHotEncoderMock);
 
-      encoderProcessor.createEncoders(
-          indexToEncoder, nameToEncoder, predefinedCategories);
-
-      verify(ordinalEncoderMock.setCategoryValues(
-          argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
-      verify(ordinalEncoderMock.setCategoryValues(
-          argThat(equals(['male', 'male', 'female', 'female']))));
-      verify(oneHotEncoderMock.setCategoryValues(
-          argThat(equals(['married', 'single', 'single', 'divorced']))));
-      verify(oneHotEncoderMock
-          .setCategoryValues(argThat(equals(['35', '27', '21', '25']))));
-    });
-
-    test(
-        'should throw a warning if predefined categories are provided, but columns header is not',
-        () {
-      final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, [], encoderFactory, fallbackEncoderType);
-      final oneHotEncoderMock = OneHotEncoderMock();
-
-      when(encoderFactory.fromType(fallbackEncoderType))
-          .thenReturn(oneHotEncoderMock);
-
-      encoderProcessor.createEncoders({}, {}, predefinedCategories);
-
-      verifyNever(oneHotEncoderMock
-          .setCategoryValues(argThat(equals(['male', 'female']))));
-      verifyNever(oneHotEncoderMock.setCategoryValues(
-          argThat(equals(['married', 'single', 'divorced']))));
-      verifyNever(oneHotEncoderMock
-          .setCategoryValues(argThat(equals(['21', '27', '25', '35']))));
-      verifyNever(oneHotEncoderMock.setCategoryValues(
-          argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
-    });
-
-    test(
-        'should throw a warning if column names to encoders map is provided, but columns header is not',
-        () {
-      final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, [], encoderFactory, fallbackEncoderType);
-      final oneHotEncoderMock = OneHotEncoderMock();
-      final ordinalEncoderMock = OrdinalEncoderMock();
-
-      final nameToEncoder = <String, CategoricalDataEncoderType>{
-        'country': CategoricalDataEncoderType.oneHot,
-        'gender': CategoricalDataEncoderType.oneHot,
-        'age': CategoricalDataEncoderType.ordinal,
-        'martial_status': CategoricalDataEncoderType.ordinal,
-      };
-
-      when(encoderFactory.fromType(fallbackEncoderType))
-          .thenReturn(oneHotEncoderMock);
-
-      encoderProcessor.createEncoders({}, nameToEncoder, predefinedCategories);
-
-      verifyNever(ordinalEncoderMock.setCategoryValues(
-          argThat(equals(['France', 'Russia', 'Spain', 'Greece']))));
-      verifyNever(ordinalEncoderMock.setCategoryValues(
-          argThat(equals(['male', 'male', 'female', 'female']))));
-      verifyNever(oneHotEncoderMock.setCategoryValues(
-          argThat(equals(['married', 'single', 'single', 'divorced']))));
-      verifyNever(oneHotEncoderMock
-          .setCategoryValues(argThat(equals(['35', '27', '21', '25']))));
-    });
-
-    test(
-        'should return an empty encoders map if no categoriies data is provided',
-        () {
-      final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final fallbackEncoderType = CategoricalDataEncoderType.oneHot;
-      final encoderProcessor = DataFrameEncodersProcessorImpl(
-          records, [], encoderFactory, fallbackEncoderType);
-      final encoders = encoderProcessor.createEncoders({}, {}, {});
-
-      expect(encoders, equals(<int, CategoricalDataEncoder>{}));
+      final encoders = encoderProcessor.createEncoders(indexToEncoder,
+          nameToEncoder);
+      expect(encoders, equals({
+        0: ordinalEncoderMock,
+        1: ordinalEncoderMock,
+        2: oneHotEncoderMock,
+        3: oneHotEncoderMock,
+      }));
     });
   });
 }

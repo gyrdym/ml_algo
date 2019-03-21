@@ -11,7 +11,7 @@ mixin EncoderMixin implements CategoricalDataEncoder {
     if (values.isEmpty) {
       throw Exception('Empty category label list has been passed');
     }
-    _sourceToEncoded ??= _createSourceToEncodedMap(values.toList(
+    _sourceToEncoded = _createSourceToEncodedMap(values.toList(
         growable: false));
     return Matrix.rows(
         values.map((value) => _sourceToEncoded[value]).toList(growable: false));
@@ -19,7 +19,7 @@ mixin EncoderMixin implements CategoricalDataEncoder {
 
   @override
   Iterable<String> decode(Matrix encoded) {
-    _encodedToSource ??= _invertSourceToEncoded();
+    _encodedToSource = _invertSourceToEncoded();
     return List<String>.generate(encoded.rowsNum,
             (i) => _encodedToSource[encoded.getRow(i)]);
   }
