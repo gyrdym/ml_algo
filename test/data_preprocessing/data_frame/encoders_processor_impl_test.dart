@@ -8,19 +8,12 @@ import '../../test_utils/mocks.dart';
 
 void main() {
   final header = ['country', 'gender', 'age', 'martial_status', 'salary'];
-  final records = [
-    ['France', 'male', 35, 'married', 5000],
-    ['Russia', 'male', 27, 'single', 2500],
-    ['Spain', 'female', 21, 'single', 3000],
-    ['Greece', 'female', 25, 'divorced', 2700],
-  ];
 
   group('EncodersProcessorImpl', () {
     test('should return empty map if there are no specific encoders provided '
         'and the columns header is not empty', () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final encoderProcessor = EncodersProcessorImpl(records, header,
-          encoderFactory);
+      final encoderProcessor = EncodersProcessorImpl(header, encoderFactory);
       final encoders = encoderProcessor.createEncoders({}, {});
       expect(encoders, equals(<int, CategoricalDataEncoder>{}));
     });
@@ -28,8 +21,7 @@ void main() {
     test('should create encoders from `name-to-encoder` map and header is not '
         'empty', () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final encoderProcessor = EncodersProcessorImpl(
-          records, header, encoderFactory);
+      final encoderProcessor = EncodersProcessorImpl(header, encoderFactory);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
 
@@ -59,8 +51,7 @@ void main() {
         'index to encoder and name to encoder) are provided (`index-to-encoder` '
         'map has high priority)', () {
       final encoderFactory = createCategoricalDataEncoderFactoryMock();
-      final encoderProcessor = EncodersProcessorImpl(
-          records, header, encoderFactory);
+      final encoderProcessor = EncodersProcessorImpl(header, encoderFactory);
       final oneHotEncoderMock = OneHotEncoderMock();
       final ordinalEncoderMock = OrdinalEncoderMock();
 
