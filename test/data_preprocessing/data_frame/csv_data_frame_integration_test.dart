@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/csv_data_frame.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
@@ -149,6 +150,12 @@ void main() {
         labelName: 'some_unknown_column',
         columns: [const Tuple2(0, 3), const Tuple2(5, 7)],
         rows: [const Tuple2(0, 0)],
+        categoryNameToEncoder: {
+          'country': CategoricalDataEncoderType.oneHot,
+          'confederation': CategoricalDataEncoderType.oneHot,
+          'gdp_source': CategoricalDataEncoderType.oneHot,
+          'popu_source': CategoricalDataEncoderType.oneHot,
+        },
       );
       final actual = await data.labels;
       expect(actual, equals([
