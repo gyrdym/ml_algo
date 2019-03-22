@@ -147,22 +147,25 @@ class CsvDataFrame implements DataFrame {
     return _labels ??= _variablesExtractor.extractLabels();
   }
 
-  Future<Null> _init(
-      [Iterable<Tuple2<int, int>> rows,
-      Iterable<Tuple2<int, int>> columns]) async {
+  Future<Null> _init([Iterable<Tuple2<int, int>> rows,
+    Iterable<Tuple2<int, int>> columns]) async {
     _data = await _extractData();
+
     final rowsNum = _data.length;
     final columnsNum = _data.last.length;
     final readMaskCreator = _readMaskCreatorFactory.create();
+
     final rowsMask = readMaskCreator.create(
         rows ?? [Tuple2(0, rowsNum - (_headerExists ? 2 : 1))]);
     final columnsMask = readMaskCreator
         .create(columns ?? [Tuple2(0, columnsNum - 1)]);
+
     final originalHeader = _getOriginalHeader(_data);
     final labelIdx = _getLabelIdx(originalHeader, columnsNum);
     final records = _data.sublist(_headerExists ? 1 : 0);
-    final encodersProcessor = _encodersProcessorFactory.create(records,
-        originalHeader, _encoderFactory);
+    final encodersProcessor = _encodersProcessorFactory.create(originalHeader,
+        _encoderFactory);
+
     _encoders = encodersProcessor.createEncoders(_indexToEncoderType,
         _nameToEncoderType);
     _headerExtractor = _headerExtractorFactory.create(columnsMask);
