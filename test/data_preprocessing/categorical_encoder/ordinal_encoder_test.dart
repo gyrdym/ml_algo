@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/ordinal_encoder.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -44,6 +45,35 @@ void main() {
           [2],
         ]),
       );
+    });
+
+    test('should provide symmetrical encoding/decoding', () {
+      final encoder = OrdinalEncoder();
+      final encoded = encoder.encode(['group B', 'group D', 'group B', 'group A',
+        'group C', 'group C', 'group A']);
+      expect(encoder.decode(encoded), equals(['group B', 'group D', 'group B',
+        'group A', 'group C', 'group C', 'group A']));
+    });
+
+    test('should decode categorical data', () {
+      final encoder = OrdinalEncoder();
+      encoder.encode(['group B', 'group D', 'group B', 'group A',
+        'group C', 'group C', 'group A']);
+      expect(encoder.decode(Matrix.from([
+        [2.0],
+        [3.0],
+        [3.0],
+      ])), equals(['group A', 'group C', 'group C']));
+    });
+
+    test('should throw an exception if one tries to decode nonexistent '
+        'category value', () {
+      final encoder = OrdinalEncoder();
+      encoder.encode(['group B', 'group D', 'group B', 'group A',
+      'group C', 'group C', 'group A']);
+      expect(() => encoder.decode(Matrix.from([
+        [25.0],
+      ])), throwsException);
     });
 
     test('should throw an error if an empty label list is passed', () {
