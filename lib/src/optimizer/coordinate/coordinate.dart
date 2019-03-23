@@ -2,7 +2,7 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory_impl.dart';

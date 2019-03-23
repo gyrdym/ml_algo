@@ -6,8 +6,8 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart'
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_codec_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/to_float_number_converter/to_float_number_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
@@ -43,7 +43,7 @@ class DataFrameParamsValidatorMock extends Mock implements
 class LoggerMock extends Mock implements Logger {}
 
 class ToNumberConverterMock extends Mock implements
-    DataFrameValueConverter {}
+    ToFloatNumberConverter {}
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
@@ -90,7 +90,7 @@ class CategoricalDataEncoderMock extends Mock implements
 class CsvCodecFactoryMock extends Mock implements CsvCodecFactory {}
 
 class MLDataValueConverterMockWithImpl extends Mock
-    implements DataFrameValueConverter {
+    implements ToFloatNumberConverter {
   @override
   double convert(Object value, [double fallbackValue]) => value as double;
 }

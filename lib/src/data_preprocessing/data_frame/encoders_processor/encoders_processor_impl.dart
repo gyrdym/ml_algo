@@ -2,7 +2,7 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart'
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor.dart';
-import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 
 class EncodersProcessorImpl implements EncodersProcessor {
   EncodersProcessorImpl(this.header, this.encoderFactory,

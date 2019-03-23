@@ -13,19 +13,19 @@ import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_
 import 'package:ml_algo/src/data_preprocessing/data_frame/data_frame.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor_factory_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/header_extractor/header_extractor_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read_mask_creator_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/read_mask_creator/read_mask_creator_factory_impl.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/to_float_number_converter/to_float_number_converter.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/to_float_number_converter/to_float_number_converter_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator_impl.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter_impl.dart';
-import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor_factory_impl.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:tuple/tuple.dart';
 
@@ -51,8 +51,8 @@ class CsvDataFrame implements DataFrame {
       DataFrameParamsValidator paramsValidator =
         const DataFrameParamsValidatorImpl(),
 
-      DataFrameValueConverter valueConverter =
-        const DataFrameValueConverterImpl(),
+      ToFloatNumberConverter valueConverter =
+        const ToFloatNumberConverterImpl(),
 
       DataFrameHeaderExtractorFactory headerExtractorFactory =
         const DataFrameHeaderExtractorFactoryImpl(),
@@ -110,7 +110,7 @@ class CsvDataFrame implements DataFrame {
   final bool _headerExists;
   final CategoricalDataEncoderFactory _encoderFactory;
   final DataFrameParamsValidator _paramsValidator;
-  final DataFrameValueConverter _valueConverter;
+  final ToFloatNumberConverter _valueConverter;
   final DataFrameReadMaskCreatorFactory _readMaskCreatorFactory;
   final DataFrameHeaderExtractorFactory _headerExtractorFactory;
   final VariablesExtractorFactory _variablesExtractorFactory;
