@@ -6,6 +6,7 @@ import 'package:csv/csv.dart';
 import 'package:logging/logging.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
+import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory_impl.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_codec_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_codec_factory_impl.dart';
@@ -45,7 +46,7 @@ class CsvDataFrame implements DataFrame {
 
       // private parameters, they are hidden by the factory
       CategoricalDataEncoderFactory encoderFactory =
-        const CategoricalDataEncoderFactory(),
+        const CategoricalDataEncoderFactoryImpl(),
 
       DataFrameParamsValidator paramsValidator =
         const DataFrameParamsValidatorImpl(),
@@ -164,13 +165,13 @@ class CsvDataFrame implements DataFrame {
     final labelIdx = _getLabelIdx(originalHeader, columnsNum);
     final records = _data.sublist(_headerExists ? 1 : 0);
     final encodersProcessor = _encodersProcessorFactory.create(originalHeader,
-        _encoderFactory);
+        _encoderFactory, _dtype);
 
     _encoders = encodersProcessor.createEncoders(_indexToEncoderType,
         _nameToEncoderType);
     _headerExtractor = _headerExtractorFactory.create(columnsMask);
     _variablesExtractor = _variablesExtractorFactory.create(records, rowsMask,
-        columnsMask, _encoders, labelIdx, _valueConverter);
+        columnsMask, _encoders, labelIdx, _valueConverter, _dtype);
   }
 
   List<String> _getOriginalHeader(List<List> data) => _headerExists
@@ -189,7 +190,7 @@ class CsvDataFrame implements DataFrame {
     if (_labelIdx != null) {
       if (_labelIdx >= columnsNum || _labelIdx < 0) {
         throw RangeError.range(_labelIdx, 0, columnsNum - 1, null,
-            _wrapErrorMessage('Invalid label column number'));
+            _wrapErrorMessage('Invalid label column index'));
       }
       return _labelIdx;
     }
@@ -203,7 +204,7 @@ class CsvDataFrame implements DataFrame {
       return labelIdx;
     }
 
-    throw Exception(_wrapErrorMessage('Neither label index, nor label columns'
+    throw Exception(_wrapErrorMessage('Neither label index, nor label column'
         'are provided'));
   }
 

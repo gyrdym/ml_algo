@@ -13,13 +13,11 @@ class DataFrameParamsValidatorImpl implements DataFrameParamsValidator {
     Iterable<Tuple2<int, int>> rows,
     Iterable<Tuple2<int, int>> columns,
     bool headerExists = true,
-    Map<String, Iterable<Object>> predefinedCategories,
     Map<String, CategoricalDataEncoderType> namesToEncoders,
     Map<int, CategoricalDataEncoderType> indexToEncoder,
   }) {
     final validators = [
       () => _validateHeaderExistsParam(headerExists),
-      () => _validatePredefinedCategories(predefinedCategories, headerExists),
       () => _validateNamesToEncoders(namesToEncoders, headerExists),
       () => _validateLabelPosition(labelIdx, labelName, headerExists),
       () => _validateRanges(rows),
@@ -38,18 +36,6 @@ class DataFrameParamsValidatorImpl implements DataFrameParamsValidator {
     if (headerExists == null) {
       return DataFrameParametersValidationErrorMessages
           .noHeaderExistsParameterProvidedMsg();
-    }
-    return DataFrameParametersValidationErrorMessages.noErrorMsg;
-  }
-
-  String _validatePredefinedCategories(
-      Map<String, Iterable<Object>> categories, bool headerExists) {
-    if (categories?.isEmpty == true) {
-      return DataFrameParametersValidationErrorMessages.emptyCategoriesMsg();
-    }
-    if (categories != null && !headerExists) {
-      return DataFrameParametersValidationErrorMessages
-          .noHeaderProvidedMsg(categories);
     }
     return DataFrameParametersValidationErrorMessages.noErrorMsg;
   }

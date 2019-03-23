@@ -313,45 +313,6 @@ void main() {
     });
   });
 
-  group('DataFrameParamsValidatorImpl (`predefinedCategories` param)', () {
-    test('should return no error message if `predefinedCategories` '
-            'param is not provided', () {
-      final dataFrameParamsValidator = const DataFrameParamsValidatorImpl();
-      final actual = dataFrameParamsValidator.validate(
-        labelIdx: 10,
-        predefinedCategories: null,
-      );
-      expect(actual,
-          equals(DataFrameParametersValidationErrorMessages.noErrorMsg));
-    });
-
-    test('should return proper error message if `predefinedCategories` param '
-        'is provided, but it is empty', () {
-      final dataFrameParamsValidator = const DataFrameParamsValidatorImpl();
-      final actual = dataFrameParamsValidator.validate(
-        labelIdx: 10,
-        predefinedCategories: {},
-      );
-      expect(actual, equals(DataFrameParametersValidationErrorMessages
-          .emptyCategoriesMsg()));
-    });
-
-    test('should return proper error message if no `headerExists` param is '
-        'provided, but predefined categories exist', () {
-      final dataFrameParamsValidator = const DataFrameParamsValidatorImpl();
-      final categories = {
-        'category': ['val_1', 'val_2']
-      };
-      final actual = dataFrameParamsValidator.validate(
-        labelIdx: 10,
-        headerExists: false,
-        predefinedCategories: categories,
-      );
-      expect(actual, equals(DataFrameParametersValidationErrorMessages
-          .noHeaderProvidedMsg(categories)));
-    });
-  });
-
   group('DataFrameParamsValidatorImpl (`namesToEncoders` param)', () {
     test('should return no-error message if `namesToEncoders` param is not '
         'provided', () {

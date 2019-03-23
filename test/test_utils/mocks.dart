@@ -212,7 +212,6 @@ DataFrameParamsValidator createDataFrameParamsValidatorMock(
       rows: anyNamed('rows'),
       columns: anyNamed('columns'),
       headerExists: anyNamed('headerExists'),
-      predefinedCategories: anyNamed('predefinedCategories'),
       namesToEncoders: anyNamed('namesToEncoders'),
       indexToEncoder: anyNamed('indexToEncoder'),
     )).thenReturn(validationShouldBeFailed ? 'error' : '');
