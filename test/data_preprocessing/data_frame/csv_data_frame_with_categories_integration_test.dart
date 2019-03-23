@@ -116,34 +116,6 @@ void main() {
           });
     });
 
-    test('should decode categorical data', () async {
-      await testCsvWithCategories(
-        fileName: 'test/data_preprocessing/test_data/fake_data.csv',
-        labelIdx: 3,
-        rowNum: 7,
-        columns: [
-          const Tuple2(0, 3),
-        ],
-        categoryIndexToEncoder: {
-          0: CategoricalDataEncoderType.oneHot,
-          1: CategoricalDataEncoderType.ordinal,
-          2: CategoricalDataEncoderType.oneHot,
-        },
-        testContentFn: (features, labels, header, dataFrame) {
-          final decoded = dataFrame.decode(Matrix.from([
-            [1.0, 0.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 0.0, 1.0],
-            [0.0, 1.0, 0.0],
-            [0.0, 1.0, 0.0],
-            [1.0, 0.0, 0.0],
-            [0.0, 0.0, 1.0],
-          ]), colName: 'feature_1');
-          expect(decoded, equals(['value_1_1', 'value_1_2', 'value_1_3',
-            'value_1_2', 'value_1_2', 'value_1_1', 'value_1_3']));
-        });
-    });
-
     test('should encode categorical data in headless dataset', () async {
       await testCsvWithCategories(
           fileName: 'test/data_preprocessing/test_data/fake_data_headless.csv',
@@ -180,6 +152,145 @@ void main() {
               [500],
               [700]
             ]));
+          });
+    });
+
+    test('should decode categorical data', () async {
+      await testCsvWithCategories(
+          fileName: 'test/data_preprocessing/test_data/fake_data.csv',
+          labelIdx: 3,
+          rowNum: 7,
+          columns: [
+            const Tuple2(0, 3),
+          ],
+          categoryIndexToEncoder: {
+            0: CategoricalDataEncoderType.oneHot,
+            1: CategoricalDataEncoderType.ordinal,
+            2: CategoricalDataEncoderType.oneHot,
+          },
+          testContentFn: (features, labels, header, dataFrame) {
+            final decoded = dataFrame.decode(Matrix.from([
+              [1.0, 0.0, 0.0],
+              [0.0, 1.0, 0.0],
+              [0.0, 0.0, 1.0],
+              [0.0, 1.0, 0.0],
+              [0.0, 1.0, 0.0],
+              [1.0, 0.0, 0.0],
+              [0.0, 0.0, 1.0],
+            ]), colName: 'feature_1');
+            expect(decoded, equals(['value_1_1', 'value_1_2', 'value_1_3',
+            'value_1_2', 'value_1_2', 'value_1_1', 'value_1_3']));
+          });
+    });
+
+    test('should throw an exception if one tries to decode a data without '
+        'providing column name or column index', () async {
+      await testCsvWithCategories(
+          fileName: 'test/data_preprocessing/test_data/fake_data.csv',
+          labelIdx: 3,
+          rowNum: 7,
+          columns: [
+            const Tuple2(0, 3),
+          ],
+          categoryIndexToEncoder: {
+            0: CategoricalDataEncoderType.oneHot,
+            1: CategoricalDataEncoderType.ordinal,
+            2: CategoricalDataEncoderType.oneHot,
+          },
+          testContentFn: (features, labels, header, dataFrame) {
+            expect(() => dataFrame.decode(Matrix.from([
+              [1.0, 0.0, 0.0],
+              [0.0, 1.0, 0.0],
+            ])), throwsException);
+          });
+    });
+
+    test('should throw an exception if one tries to decode a data from headless'
+        'dataset providing just a column name', () async {
+      await testCsvWithCategories(
+          fileName: 'test/data_preprocessing/test_data/fake_data_headless.csv',
+          headerExist: false,
+          labelIdx: 3,
+          rowNum: 7,
+          columns: [
+            const Tuple2(0, 3),
+          ],
+          categoryIndexToEncoder: {
+            0: CategoricalDataEncoderType.oneHot,
+            1: CategoricalDataEncoderType.ordinal,
+            2: CategoricalDataEncoderType.oneHot,
+          },
+          testContentFn: (features, labels, header, dataFrame) {
+            expect(() => dataFrame.decode(Matrix.from([
+              [1.0, 0.0, 0.0],
+              [0.0, 1.0, 0.0],
+            ]), colName: 'feature_1'), throwsException);
+          });
+    });
+
+    test('should throw an exception if one tries to decode a data providing '
+        'inexistent column name', () async {
+      await testCsvWithCategories(
+          fileName: 'test/data_preprocessing/test_data/fake_data.csv',
+          labelIdx: 3,
+          rowNum: 7,
+          columns: [
+            const Tuple2(0, 3),
+          ],
+          categoryIndexToEncoder: {
+            0: CategoricalDataEncoderType.oneHot,
+            1: CategoricalDataEncoderType.ordinal,
+            2: CategoricalDataEncoderType.oneHot,
+          },
+          testContentFn: (features, labels, header, dataFrame) {
+            expect(() => dataFrame.decode(Matrix.from([
+              [1.0, 0.0, 0.0],
+              [0.0, 1.0, 0.0],
+            ]), colName: 'country'), throwsException);
+          });
+    });
+
+    test('should throw a range error if one tries to decode a data providing '
+        'improper column index', () async {
+      await testCsvWithCategories(
+          fileName: 'test/data_preprocessing/test_data/fake_data.csv',
+          labelIdx: 3,
+          rowNum: 7,
+          columns: [
+            const Tuple2(0, 3),
+          ],
+          categoryIndexToEncoder: {
+            0: CategoricalDataEncoderType.oneHot,
+            1: CategoricalDataEncoderType.ordinal,
+            2: CategoricalDataEncoderType.oneHot,
+          },
+          testContentFn: (features, labels, header, dataFrame) {
+            expect(() => dataFrame.decode(Matrix.from([
+              [1.0, 0.0, 0.0],
+              [0.0, 1.0, 0.0],
+            ]), colIdx: 45), throwsRangeError);
+          });
+    });
+
+    test('should throw an exception if one tries to decode a data providing '
+        'index of non-categorical column', () async {
+      await testCsvWithCategories(
+          fileName: 'test/data_preprocessing/test_data/fake_data.csv',
+          labelIdx: 3,
+          rowNum: 7,
+          columns: [
+            const Tuple2(0, 3),
+          ],
+          categoryIndexToEncoder: {
+            0: CategoricalDataEncoderType.oneHot,
+            1: CategoricalDataEncoderType.ordinal,
+            2: CategoricalDataEncoderType.oneHot,
+          },
+          testContentFn: (features, labels, header, dataFrame) {
+            expect(() => dataFrame.decode(Matrix.from([
+              [1.0, 0.0, 0.0],
+              [0.0, 1.0, 0.0],
+            ]), colIdx: 3), throwsException);
           });
     });
   });

@@ -208,7 +208,7 @@ class CsvDataFrame implements DataFrame {
   }
 
   @override
-  Iterable<String> decode(Matrix column, {String colName, int colIdx}) {
+  Iterable<String> decode(Matrix encoded, {String colName, int colIdx}) {
     if (colName == null && colIdx == null) {
       throw Exception(_wrapErrorMessage('Neither column name, nor column index '
           'are provided'));
@@ -225,8 +225,8 @@ class CsvDataFrame implements DataFrame {
       }
     }
 
-    if (colIdx != null && (colIdx < 0 || colIdx >= _header.length)) {
-      throw RangeError.index(colIdx, _header,
+    if (colIdx != null && (colIdx < 0 || colIdx >= _data.first.length)) {
+      throw RangeError.index(colIdx, _data.first,
           _wrapErrorMessage('Wrong column index is provided'));
     }
 
@@ -235,7 +235,7 @@ class CsvDataFrame implements DataFrame {
       throw Exception(
           _wrapErrorMessage('Provided column is not a categorical column'));
     }
-    return _encoders[idx].decode(column);
+    return _encoders[idx].decode(encoded);
   }
 
   String _wrapErrorMessage(String text) => '$_loggerPrefix: $text';
