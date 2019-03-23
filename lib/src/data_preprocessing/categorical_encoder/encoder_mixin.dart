@@ -21,8 +21,15 @@ mixin EncoderMixin implements CategoricalDataEncoder {
   Iterable<String> decode(Matrix encoded) {
     _encodedToSource = _invertSourceToEncoded();
     return List<String>.generate(encoded.rowsNum,
-            (i) => _encodedToSource[encoded.getRow(i)]);
+            (i) => _decodeSingle(encoded.getRow(i)));
   }
+
+  String _decodeSingle(Vector encoded) =>
+      _encodedToSource.entries.firstWhere(
+          (entry) => entry.key == encoded,
+          orElse: () => throw Exception('There is no source value for provided '
+              'encoded value ($encoded)'),
+      ).value;
 
   Map<String, Vector> _createSourceToEncodedMap(List<String> values) {
     final categoryLabels = Set<String>.from(values).toList(growable: false);
