@@ -6,8 +6,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
-
 Future testCsvWithCategories(
     {String fileName,
     bool headerExist = true,
@@ -16,23 +14,23 @@ Future testCsvWithCategories(
     List<Tuple2<int, int>> columns,
     Map<String, CategoricalDataEncoderType> categoryNameToEncoder,
     Map<int, CategoricalDataEncoderType> categoryIndexToEncoder,
-    void testContentFn(
-        Matrix features, Matrix labels, List<String> headers)}) async {
-  final data = CsvDataFrame.fromFile(fileName,
+    void testContentFn(Matrix features, Matrix labels, List<String> headers,
+        DataFrame dataFrame)}) async {
+  final dataFrame = CsvDataFrame.fromFile(fileName,
       labelIdx: labelIdx,
       columns: columns,
       headerExists: headerExist,
       categoryNameToEncoder: categoryNameToEncoder,
       categoryIndexToEncoder: categoryIndexToEncoder,
   );
-  final header = await data.header;
-  final features = await data.features;
-  final labels = await data.labels;
+  final header = await dataFrame.header;
+  final features = await dataFrame.features;
+  final labels = await dataFrame.labels;
 
   expect(features.rowsNum, equals(rowNum));
   expect(labels.rowsNum, equals(rowNum));
 
-  testContentFn(features, labels, header);
+  testContentFn(features, labels, header, dataFrame);
 }
 
 void main() {
@@ -51,7 +49,7 @@ void main() {
             'feature_2': CategoricalDataEncoderType.ordinal,
             'feature_3': CategoricalDataEncoderType.oneHot,
           },
-          testContentFn: (features, labels, header) {
+          testContentFn: (features, labels, header, dataFrame) {
             expect(header,
                 equals(['feature_1', 'feature_2', 'feature_3', 'score']));
             expect(
@@ -92,7 +90,7 @@ void main() {
             1: CategoricalDataEncoderType.ordinal,
             2: CategoricalDataEncoderType.oneHot,
           },
-          testContentFn: (features, labels, header) {
+          testContentFn: (features, labels, header, dataFrame) {
             expect(header,
                 equals(['feature_1', 'feature_2', 'feature_3', 'score']));
             expect(
@@ -118,6 +116,34 @@ void main() {
           });
     });
 
+    test('should decode categorical data', () async {
+      await testCsvWithCategories(
+        fileName: 'test/data_preprocessing/test_data/fake_data.csv',
+        labelIdx: 3,
+        rowNum: 7,
+        columns: [
+          const Tuple2(0, 3),
+        ],
+        categoryIndexToEncoder: {
+          0: CategoricalDataEncoderType.oneHot,
+          1: CategoricalDataEncoderType.ordinal,
+          2: CategoricalDataEncoderType.oneHot,
+        },
+        testContentFn: (features, labels, header, dataFrame) {
+          final decoded = dataFrame.decode(Matrix.from([
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 0.0, 1.0],
+          ]), colName: 'feature_1');
+          expect(decoded, equals(['value_1_1', 'value_1_2', 'value_1_3',
+            'value_1_2', 'value_1_2', 'value_1_1', 'value_1_3']));
+        });
+    });
+
     test('should encode categorical data in headless dataset', () async {
       await testCsvWithCategories(
           fileName: 'test/data_preprocessing/test_data/fake_data_headless.csv',
@@ -132,7 +158,7 @@ void main() {
             1: CategoricalDataEncoderType.ordinal,
             2: CategoricalDataEncoderType.oneHot,
           },
-          testContentFn: (features, labels, header) {
+          testContentFn: (features, labels, header, dataFrame) {
             expect(header, isNull);
             expect(
                 features,
