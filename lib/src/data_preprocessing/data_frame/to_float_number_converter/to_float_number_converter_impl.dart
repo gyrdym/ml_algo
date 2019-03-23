@@ -1,7 +1,7 @@
-import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/to_float_number_converter/to_float_number_converter.dart';
 
-class DataFrameValueConverterImpl implements DataFrameValueConverter {
-  const DataFrameValueConverterImpl();
+class ToFloatNumberConverterImpl implements ToFloatNumberConverter {
+  const ToFloatNumberConverterImpl();
 
   @override
   double convert(Object value, [double fallbackValue = 0.0]) {

@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_mixin.dart';
-import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/vector.dart';
 
 class OrdinalEncoder with EncoderMixin implements CategoricalDataEncoder {

@@ -1,3 +1,3 @@
-abstract class DataFrameValueConverter {
+abstract class ToFloatNumberConverter {
   double convert(Object value, [double fallbackValue]);
 }

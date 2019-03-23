@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
+import 'package:ml_algo/src/data_preprocessing/data_frame/to_float_number_converter/to_float_number_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor.dart';
-import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
@@ -31,7 +31,7 @@ class VariablesExtractorImpl implements VariablesExtractor {
   final List<bool> _columnsMask;
   final Map<int, CategoricalDataEncoder> _encoders;
   final int _labelIdx;
-  final DataFrameValueConverter _toFloatConverter;
+  final ToFloatNumberConverter _toFloatConverter;
   final List<List<Object>> _observations;
 
   Tuple2<Matrix, Matrix> _data;
