@@ -9,6 +9,7 @@ class EncodersProcessorFactoryImpl implements EncodersProcessorFactory {
   @override
   EncodersProcessor create(
       List<String> header,
-      CategoricalDataEncoderFactory encoderFactory
-  ) => EncodersProcessorImpl(header, encoderFactory);
+      CategoricalDataEncoderFactory encoderFactory,
+      [Type dtype]
+  ) => EncodersProcessorImpl(header, encoderFactory, dtype);
 }

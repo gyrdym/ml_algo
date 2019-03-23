@@ -2,10 +2,13 @@ import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart'
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/encoders_processor/encoders_processor.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 
 class EncodersProcessorImpl implements EncodersProcessor {
-  EncodersProcessorImpl(this.header, this.encoderFactory);
+  EncodersProcessorImpl(this.header, this.encoderFactory,
+      [Type dtype = DefaultParameterValues.dtype]) : _dtype = dtype;
 
+  final Type _dtype;
   final List<String> header;
   final CategoricalDataEncoderFactory encoderFactory;
 
@@ -27,7 +30,8 @@ class EncodersProcessorImpl implements EncodersProcessor {
     final indexToEncoder = <int, CategoricalDataEncoder>{};
     for (int i = 0; i < header.length; i++) {
       if (nameToEncoder.containsKey(header[i])) {
-        indexToEncoder[i] = encoderFactory.fromType(nameToEncoder[header[i]]);
+        indexToEncoder[i] =
+            encoderFactory.fromType(nameToEncoder[header[i]], _dtype);
       }
     }
     return indexToEncoder;
@@ -37,5 +41,5 @@ class EncodersProcessorImpl implements EncodersProcessor {
           Map<int, CategoricalDataEncoderType> indexToEncoderType) =>
     indexToEncoderType.map((idx, encoderType) =>
         MapEntry<int, CategoricalDataEncoder>(idx,
-            encoderFactory.fromType(encoderType)));
+            encoderFactory.fromType(encoderType, _dtype)));
 }

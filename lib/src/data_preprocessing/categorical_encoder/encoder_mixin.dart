@@ -14,7 +14,8 @@ mixin EncoderMixin implements CategoricalDataEncoder {
     _sourceToEncoded = _createSourceToEncodedMap(values.toList(
         growable: false));
     return Matrix.rows(
-        values.map((value) => _sourceToEncoded[value]).toList(growable: false));
+        values.map((value) => _sourceToEncoded[value]).toList(growable: false),
+        dtype: dtype);
   }
 
   @override

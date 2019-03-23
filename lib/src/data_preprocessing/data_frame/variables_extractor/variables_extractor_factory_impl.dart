@@ -14,7 +14,8 @@ class VariablesExtractorFactoryImpl implements VariablesExtractorFactory {
           List<bool> columnsMask,
           Map<int, CategoricalDataEncoder> encoders,
           int labelIdx,
-          DataFrameValueConverter valueConverter) =>
+          DataFrameValueConverter valueConverter,
+          Type dtype) =>
       VariablesExtractorImpl(records, rowMask, columnsMask, encoders,
-          labelIdx, valueConverter);
+          labelIdx, valueConverter, dtype);
 }

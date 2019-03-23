@@ -8,7 +8,6 @@ abstract class DataFrameParamsValidator {
     Iterable<Tuple2<int, int>> rows,
     Iterable<Tuple2<int, int>> columns,
     bool headerExists,
-    Map<String, Iterable<Object>> predefinedCategories,
     Map<String, CategoricalDataEncoderType> namesToEncoders,
     Map<int, CategoricalDataEncoderType> indexToEncoder,
   });

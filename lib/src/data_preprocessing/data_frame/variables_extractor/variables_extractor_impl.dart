@@ -1,13 +1,15 @@
 import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/data_frame/variables_extractor/variables_extractor.dart';
+import 'package:ml_algo/src/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:tuple/tuple.dart';
 
 class VariablesExtractorImpl implements VariablesExtractor {
   VariablesExtractorImpl(this._observations, this._rowsMask, this._columnsMask,
-      this._encoders, this._labelIdx, this._toFloatConverter) {
+      this._encoders, this._labelIdx, this._toFloatConverter,
+      [Type dtype = DefaultParameterValues.dtype]) : _dtype = dtype {
     if (_columnsMask.length > _observations.first.length) {
       throw Exception(columnsMaskWrongLengthMsg);
     }
@@ -24,6 +26,7 @@ class VariablesExtractorImpl implements VariablesExtractor {
       'Columns mask length should not be greater than actual columns number in '
       'the dataset!';
 
+  final Type _dtype;
   final List<bool> _rowsMask;
   final List<bool> _columnsMask;
   final Map<int, CategoricalDataEncoder> _encoders;
@@ -95,7 +98,7 @@ class VariablesExtractorImpl implements VariablesExtractor {
     };
     for (int i = 0; i < _columnsMask.length; i++) {
       if (numericalColumns.containsKey(i)) {
-        updateColumns(i, Vector.from(numericalColumns[i]));
+        updateColumns(i, Vector.from(numericalColumns[i], dtype: _dtype));
       } else if (categoricalColumns.containsKey(i)) {
         final encoded = _encoders[i].encode(categoricalColumns[i]);
         for (int col = 0; col < encoded.columnsNum; col++) {
@@ -104,8 +107,10 @@ class VariablesExtractorImpl implements VariablesExtractor {
       }
     }
     return Tuple2(
-        featureColumns.isNotEmpty ? Matrix.columns(featureColumns) : null,
-        labelColumns.isNotEmpty ? Matrix.columns(labelColumns) : null
+        featureColumns.isNotEmpty
+            ? Matrix.columns(featureColumns, dtype: _dtype) : null,
+        labelColumns.isNotEmpty
+            ? Matrix.columns(labelColumns, dtype: _dtype) : null
     );
   }
 }

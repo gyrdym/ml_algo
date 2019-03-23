@@ -32,9 +32,9 @@ void main() {
         'country': CategoricalDataEncoderType.ordinal,
       };
 
-      when(encoderFactory.fromType(CategoricalDataEncoderType.ordinal))
+      when(encoderFactory.fromType(CategoricalDataEncoderType.ordinal, any))
           .thenReturn(ordinalEncoderMock);
-      when(encoderFactory.fromType(CategoricalDataEncoderType.oneHot))
+      when(encoderFactory.fromType(CategoricalDataEncoderType.oneHot, any))
           .thenReturn(oneHotEncoderMock);
 
       final encoders = encoderProcessor.createEncoders({}, nameToEncoder);
@@ -69,9 +69,9 @@ void main() {
         'martial_status': CategoricalDataEncoderType.ordinal,
       };
 
-      when(encoderFactory.fromType(CategoricalDataEncoderType.ordinal))
+      when(encoderFactory.fromType(CategoricalDataEncoderType.ordinal, any))
           .thenReturn(ordinalEncoderMock);
-      when(encoderFactory.fromType(CategoricalDataEncoderType.oneHot))
+      when(encoderFactory.fromType(CategoricalDataEncoderType.oneHot, any))
           .thenReturn(oneHotEncoderMock);
 
       final encoders = encoderProcessor.createEncoders(indexToEncoder,
