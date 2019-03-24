@@ -1,5 +1,8 @@
 # Changelog
 
+# 9.3.0
+- Data preprocessing: Categorical data decoding added 
+
 ## 9.2.4
 - Data preprocessing: All categorical values are now converted to String type  
 
@@ -72,7 +75,7 @@
 ## 6.0.0
 - Library fully refactored:
     - add possibility to set certain data type for numeric computations
-    - all algorithms code now is more generic
+    - all algorithms now are more generic
     - a lot of unit tests added
     - bug fixes 
 

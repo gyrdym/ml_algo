@@ -15,7 +15,7 @@ class OneHotEncoderBenchmark extends BenchmarkBase {
 }
 
 void oneHotEncoderBenchmark() {
-  final numOfLabels = 10000;
+  final numOfLabels = 1000;
   final encoder = OneHotEncoder();
   OneHotEncoderBenchmark(encoder,
       List<String>.generate(numOfLabels, (int idx) => 'label_$idx'))
