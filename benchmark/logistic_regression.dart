@@ -4,6 +4,10 @@ import 'dart:typed_data';
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
+
+const observationsNum = 200;
+const featuresNum = 20;
 
 Matrix features;
 Matrix labels;
@@ -23,17 +27,17 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    regressor = LinearClassifier.logisticRegressor(dtype: Float32x4);
+    regressor = LinearClassifier.logisticRegressor(dtype: Float32x4,
+        minWeightsUpdate: null, iterationsLimit: 200);
   }
 
   void tearDown() {}
 }
 
 Future logisticRegressionBenchmark() async {
-  final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv',
-      labelIdx: 8, dtype: Float32x4);
-  features = await data.features;
-  labels = await data.labels;
-
+  features = Matrix.rows(List.generate(observationsNum,
+          (i) => Vector.randomFilled(featuresNum)));
+  labels = Matrix.columns([Vector.from(List.generate(observationsNum,
+          (i) => 0.0))]);
   LogisticRegressorBenchmark.main();
 }

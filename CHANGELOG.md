@@ -1,7 +1,7 @@
 # Changelog
 
-# 9.3.0
-- Data preprocessing: Categorical data decoding added 
+# 10.0.0
+- Data preprocessing: all the entities moved to separate repo - [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing)  
 
 ## 9.2.4
 - Data preprocessing: All categorical values are now converted to String type  
