@@ -37,12 +37,12 @@ algorithms, assessing prediction quality on different parts of a dataset. [Wiki 
 
 - [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). A class,
 that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
-your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
+your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
 supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
 
 - [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
 A class, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
-this classifier for your data, please, make sure, that your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability).
+this classifier for your data, please, make sure, that your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
 - [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). An algorithm, 
 that performs geometry-based linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
@@ -64,7 +64,8 @@ Import all necessary packages. First, it's needed to ensure, if you have `ml_pre
 dependencies:
 
 ````
-ml_preprocessing: ^2.0.0
+dependencies:
+  ml_preprocessing: ^2.0.0
 ````
 
 We need this repo to parse raw data in order to use it farther in machine learning algorithms. For more details, please,
@@ -170,7 +171,7 @@ As usual, start with data preparation. Download the file and read it:
 final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
     columns: [const Tuple2(1, 5)],
-    categoryNameToEncoder: {
+    categories: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
 );
