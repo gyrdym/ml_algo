@@ -3,28 +3,8 @@ import 'classifier/logistic_regressor_integration_test.dart'
 import 'classifier/logistic_regressor_test.dart' as logistic_regressor_test;
 import 'classifier/softmax_regressor_test.dart' as softmax_regressor_test;
 import 'cost_function/cost_function_test.dart' as cost_function_test;
-import 'data_preprocessing/categorical_encoder/encoder_factory.dart'
-    as encoder_factory_test;
-import 'data_preprocessing/categorical_encoder/one_hot_encoder_test.dart'
-    as one_hot_encoder_test;
-import 'data_preprocessing/categorical_encoder/ordinal_encoder_test.dart'
-    as ordinal_encoder_test;
 import 'data_preprocessing/intercept_preprocessor_test.dart'
     as intercept_preprocessor_test;
-import 'data_preprocessing/data_frame/csv_data_frame_integration_test.dart'
-    as csv_data_frame_integration_test;
-import 'data_preprocessing/data_frame/csv_data_frame_with_categories_integration_test.dart'
-    as csv_data_frame_with_cat_test;
-import 'data_preprocessing/data_frame/encoders_processor_impl_test.dart'
-    as data_frame_enc_preprocessor_test;
-import 'data_preprocessing/data_frame/variables_extractor/variables_extractor_factory_impl_test.dart'
-    as variables_extractor_factory_test;
-import 'data_preprocessing/data_frame/variables_extractor/variables_extractor_impl_test.dart'
-    as variables_extractor_test;
-import 'data_preprocessing/data_frame/params_validator_impl_test.dart'
-    as data_frame_params_validator_test;
-import 'data_preprocessing/data_frame/read_mask_creator_impl_test.dart'
-    as data_frame_read_mask_creator_test;
 import 'data_splitter/data_splitter_test.dart' as data_splitter_test;
 import 'math/randomizer_test.dart' as randomizer_test;
 import 'optimizer/convergence_detector/convergence_detector_impl_test.dart'
@@ -43,16 +23,6 @@ void main() {
   logistic_regressor_test.main();
   softmax_regressor_test.main();
   cost_function_test.main();
-  encoder_factory_test.main();
-  one_hot_encoder_test.main();
-  ordinal_encoder_test.main();
-  csv_data_frame_integration_test.main();
-  csv_data_frame_with_cat_test.main();
-  data_frame_enc_preprocessor_test.main();
-  variables_extractor_factory_test.main();
-  variables_extractor_test.main();
-  data_frame_params_validator_test.main();
-  data_frame_read_mask_creator_test.main();
   intercept_preprocessor_test.main();
   data_splitter_test.main();
   randomizer_test.main();
