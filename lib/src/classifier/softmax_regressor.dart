@@ -1,11 +1,10 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
-import 'package:ml_algo/src/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator_impl.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
@@ -51,9 +50,6 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
 
     BatchSizeCalculator batchSizeCalculator =
       const BatchSizeCalculatorImpl(),
-
-    CategoricalDataEncoderFactory categoricalDataEncoderFactory =
-      const CategoricalDataEncoderFactory(),
   })
       : interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
           scale: fitIntercept ? interceptScale : 0.0),

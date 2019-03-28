@@ -31,23 +31,18 @@ the lib, please, do not use it in a browser.
 
 To provide main purposes of machine learning, the library exposes the following classes:
 
-- [DataFrame](https://github.com/gyrdym/ml_algo/blob/master/lib/src/data_preprocessing/data_frame/data_frame.dart). 
-Factory, that creates instances of different adapters for data. For example, one can create a csv reader, that makes 
-work with csv data easier: it's just needed to point, where a dataset resides and then get features and labels in 
-convenient data science friendly format.
-
 - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
 instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
 algorithms, assessing prediction quality on different parts of a dataset. [Wiki article](https://en.wikipedia.org/wiki/Cross-validation_(statistics)) about cross validation process. 
 
 - [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). A class,
 that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
-your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
+your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
 supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
 
 - [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
 A class, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
-this classifier for your data, please, make sure, that your data is [linearly separably](https://en.wikipedia.org/wiki/Linear_separability).
+this classifier for your data, please, make sure, that your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
 - [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). An algorithm, 
 that performs geometry-based linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
@@ -65,16 +60,27 @@ regression. If you want to decide, which features are less important - go ahead 
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart)
 
-Import all necessary packages: 
+Import all necessary packages. First, it's needed to ensure, if you have `ml_preprocessing` package in your 
+dependencies:
+
+````
+dependencies:
+  ml_preprocessing: ^2.0.0
+````
+
+We need this repo to parse raw data in order to use it farther in machine learning algorithms. For more details, please,
+visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page.
 
 ````dart  
 import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
 ````
 
-Read `csv`-file `pima_indians_diabetes_database.csv` with test data. You can use a csv file from the library's 
-[datasets directory](https://github.com/gyrdym/ml_algo/tree/master/datasets):
+Download dataset from [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database) and 
+read it (of course, you should provide a proper path to your downloaded file): 
+
 ````dart
 final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
   labelName: 'class variable (0 or 1)');
@@ -96,7 +102,7 @@ of our model
 final validator = CrossValidator.KFold(numberOfFolds: 5);
 ````
 
-All are set, so, we can perform our classification.
+All are set, so, we can do our classification.
 
 Let's create a logistic regression classifier instance with full-batch gradient descent optimizer:
 ````dart
@@ -130,6 +136,7 @@ All the code above all together:
 import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 Future main() async {
   final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
@@ -158,12 +165,13 @@ Future main() async {
 Let's classify another famous dataset - [Iris dataset](https://www.kaggle.com/uciml/iris). Data in this csv is separated into 3 classes - therefore we need
 to use different approach to data classification - [Softmax regression](http://deeplearning.stanford.edu/tutorial/supervised/SoftmaxRegression/).
 
-As usual, start with data preparation:
+As usual, start with data preparation. Download the file and read it:
+
 ````Dart
 final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
     columns: [const Tuple2(1, 5)],
-    categoryNameToEncoder: {
+    categories: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
 );
@@ -173,7 +181,7 @@ final labels = await data.labels;
 ````
 
 The csv database has 6 columns, but we need to get rid of the first column, because it contains just ID of every 
-observation - it is absolutely useless data. So, as you may notice, we provided a columns range to exclude ID-column:
+observation - it's absolutely useless data. So, as you may notice, we provided a columns range to exclude ID-column:
 
 ````Dart
 columns: [const Tuple2(1, 5)]
@@ -182,7 +190,7 @@ columns: [const Tuple2(1, 5)]
 Also, since the label column 'Species' has categorical data, we encoded it to numerical format:
 
 ````Dart
-categoryNameToEncoder: {
+categories: {
   'Species': CategoricalDataEncoderType.oneHot,
 },
 ````
@@ -221,13 +229,14 @@ Gather all the code above all together:
 import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:tuple/tuple.dart';
 
 Future main() async {
   final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
     columns: [const Tuple2(1, 5)],
-    categoryNameToEncoder: {
+    categories: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
   );

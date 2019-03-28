@@ -3,8 +3,6 @@ import 'dart:typed_data';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
@@ -23,8 +21,6 @@ Optimizer optimizerMock;
 OptimizerFactory optimizerFactoryMock;
 ScoreToProbMapperFactory scoreToProbFactoryMock;
 ScoreToProbMapper scoreToProbMapperMock;
-CategoricalDataEncoderFactory categoricalDataEncoderFactoryMock;
-CategoricalDataEncoder categoricalDataEncoderMock;
 
 void setUpInterceptPreprocessorFactory() {
   interceptPreprocessorMock = InterceptPreprocessorMock();
@@ -44,12 +40,6 @@ void setUpScoreToProbMapperFactory() {
       createScoreToProbMapperFactoryMock(Float32x4, mappers: {
     ScoreToProbMapperType.logit: scoreToProbMapperMock,
   });
-}
-
-void setUpCategoricalDataEncoderFactory() {
-  categoricalDataEncoderMock = CategoricalDataEncoderMock();
-  categoricalDataEncoderFactoryMock = createCategoricalDataEncoderFactoryMock(
-      oneHotEncoderMock: categoricalDataEncoderMock);
 }
 
 LogisticRegressor createLogisticRegressor({
@@ -93,7 +83,6 @@ SoftmaxRegressor createSoftmaxRegressor({
       lambda: lambda,
       interceptPreprocessorFactory: interceptPreprocessorFactoryMock,
       scoreToProbMapperFactory: scoreToProbFactoryMock,
-      categoricalDataEncoderFactory: categoricalDataEncoderFactoryMock,
       optimizer: OptimizerType.gradientDescent,
       optimizerFactory: optimizerFactoryMock,
       gradientType: GradientType.stochastic,
