@@ -1,14 +1,6 @@
-import 'package:logging/logging.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/category_values_extractor.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/categorical_encoder/encoder_type.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/csv_codec_factory/csv_codec_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/validator/params_validator.dart';
-import 'package:ml_algo/src/data_preprocessing/data_frame/value_converter/value_converter.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
@@ -28,26 +20,6 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:mockito/mockito.dart';
-
-class EncoderMock extends Mock implements CategoricalDataEncoder {}
-
-class OneHotEncoderMock extends Mock implements CategoricalDataEncoder {}
-
-class OrdinalEncoderMock extends Mock implements CategoricalDataEncoder {}
-
-class CategoricalDataEncoderFactoryMock extends Mock
-    implements CategoricalDataEncoderFactory {}
-
-class CategoryValuesExtractorMock extends Mock
-    implements CategoryValuesExtractor {}
-
-class DataFrameParamsValidatorMock extends Mock implements
-    DataFrameParamsValidator {}
-
-class LoggerMock extends Mock implements Logger {}
-
-class MLDataValueConverterMock extends Mock implements
-    DataFrameValueConverter {}
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
@@ -87,17 +59,6 @@ class ConvergenceDetectorFactoryMock extends Mock
     implements ConvergenceDetectorFactory {}
 
 class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
-
-class CategoricalDataEncoderMock extends Mock implements
-    CategoricalDataEncoder {}
-
-class CsvCodecFactoryMock extends Mock implements CsvCodecFactory {}
-
-class MLDataValueConverterMockWithImpl extends Mock
-    implements DataFrameValueConverter {
-  @override
-  double convert(Object value, [double fallbackValue]) => value as double;
-}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,
@@ -187,39 +148,4 @@ OptimizerFactoryMock createOptimizerFactoryMock({
   });
 
   return factory;
-}
-
-CategoricalDataEncoderFactory createCategoricalDataEncoderFactoryMock({
-  CategoricalDataEncoder oneHotEncoderMock,
-  CategoricalDataEncoder ordinalEncoderMock,
-}) {
-  oneHotEncoderMock ??= OneHotEncoderMock();
-  ordinalEncoderMock ??= OrdinalEncoderMock();
-
-  final factory = CategoricalDataEncoderFactoryMock();
-  when(factory.oneHot(any)).thenReturn(oneHotEncoderMock);
-  when(factory.ordinal(any)).thenReturn(ordinalEncoderMock);
-  when(factory.fromType(CategoricalDataEncoderType.oneHot))
-      .thenReturn(oneHotEncoderMock);
-  when(factory.fromType(CategoricalDataEncoderType.ordinal))
-      .thenReturn(ordinalEncoderMock);
-  return factory;
-}
-
-DataFrameParamsValidator createDataFrameParamsValidatorMock(
-    {bool validationShouldBeFailed}) {
-  final validator = DataFrameParamsValidatorMock();
-  if (validationShouldBeFailed != null) {
-    when(validator.validate(
-      labelIdx: anyNamed('labelIdx'),
-      labelName: anyNamed('labelName'),
-      rows: anyNamed('rows'),
-      columns: anyNamed('columns'),
-      headerExists: anyNamed('headerExists'),
-      predefinedCategories: anyNamed('predefinedCategories'),
-      namesToEncoders: anyNamed('namesToEncoders'),
-      indexToEncoder: anyNamed('indexToEncoder'),
-    )).thenReturn(validationShouldBeFailed ? 'error' : '');
-  }
-  return validator;
 }

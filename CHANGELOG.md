@@ -1,5 +1,8 @@
 # Changelog
 
+# 10.0.0
+- Data preprocessing: all the entities moved to separate repo - [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing)  
+
 ## 9.2.4
 - Data preprocessing: All categorical values are now converted to String type  
 
@@ -72,7 +75,7 @@
 ## 6.0.0
 - Library fully refactored:
     - add possibility to set certain data type for numeric computations
-    - all algorithms code now is more generic
+    - all algorithms now are more generic
     - a lot of unit tests added
     - bug fixes 
 
