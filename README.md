@@ -65,7 +65,7 @@ dependencies:
 
 ````
 dependencies:
-  ml_preprocessing: ^2.0.0
+  ml_preprocessing: ^3.0.0
 ````
 
 We need this repo to parse raw data in order to use it farther in machine learning algorithms. For more details, please,
@@ -170,7 +170,7 @@ As usual, start with data preparation. Download the file and read it:
 ````Dart
 final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
-    columns: [const Tuple2(1, 5)],
+    columns: [ZRange.closed(1, 5)],
     categories: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
@@ -184,7 +184,7 @@ The csv database has 6 columns, but we need to get rid of the first column, beca
 observation - it's absolutely useless data. So, as you may notice, we provided a columns range to exclude ID-column:
 
 ````Dart
-columns: [const Tuple2(1, 5)]
+columns: [ZRange.closed(1, 5)]
 ````
 
 Also, since the label column 'Species' has categorical data, we encoded it to numerical format:
@@ -230,12 +230,12 @@ import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
-import 'package:tuple/tuple.dart';
+import 'package:xrange/zrange.dart';
 
 Future main() async {
   final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
-    columns: [const Tuple2(1, 5)],
+    columns: [ZRange.closed(1, 5)],
     categories: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
