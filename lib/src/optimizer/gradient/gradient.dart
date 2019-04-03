@@ -2,7 +2,6 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
@@ -19,9 +18,10 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/range.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:xrange/zrange.dart';
 
 class GradientOptimizer implements Optimizer {
   GradientOptimizer({
@@ -97,8 +97,8 @@ class GradientOptimizer implements Optimizer {
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
     _coefficients = initialWeights ??
-        Matrix.columns(List<Vector>.generate(labels.columnsNum,
-            (int i) => _initialWeightsGenerator.generate(_points.columnsNum)));
+        Matrix.columns(List.generate(labels.columnsNum,
+            (i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     var iteration = 0;
     var coefficientsDiff = double.maxFinite;
@@ -124,8 +124,8 @@ class GradientOptimizer implements Optimizer {
     final range = _getBatchRange(batchSize);
     final start = range.first;
     final end = range.last;
-    final pointsBatch = _points.submatrix(rows: Range(start, end));
-    final labelsBatch = labels.submatrix(rows: Range(start, end));
+    final pointsBatch = _points.submatrix(rows: ZRange.closedOpen(start, end));
+    final labelsBatch = labels.submatrix(rows: ZRange.closedOpen(start, end));
 
     return _makeGradientStep(coefficients, pointsBatch, labelsBatch, eta,
         isMinimization: isMinimization);

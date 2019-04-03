@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
+import 'package:xrange/zrange.dart';
 
 class SquaredCost implements CostFunction {
   @override
@@ -14,8 +15,8 @@ class SquaredCost implements CostFunction {
 
   @override
   Vector getSubDerivative(int j, Matrix x, Matrix w, Matrix y) {
-    final xj = x.pick(columnRanges: List<Range>.generate(y.columnsNum,
-            (i) => Range(j, j, endInclusive: true)));
+    final xj = x.pick(columnRanges: List.generate(y.columnsNum,
+            (i) => ZRange.singleton(j)));
     final xWithoutJ = _excludeColumn(x, j);
     final wWithoutJ = _excludeColumn(w, j);
     final predictionWithoutJ = xWithoutJ * wWithoutJ.transpose();
@@ -25,12 +26,14 @@ class SquaredCost implements CostFunction {
 
   Matrix _excludeColumn(Matrix x, int column) {
     if (column == 0) {
-      return x.submatrix(columns: Range(1, x.columnsNum));
+      return x.submatrix(columns: ZRange.closedOpen(1, x.columnsNum));
     } else if (column == x.columnsNum - 1) {
-      return x.submatrix(columns: Range(0, column));
+      return x.submatrix(columns: ZRange.closedOpen(0, column));
     } else {
-      return x.pick(columnRanges: [Range(0, column), Range(column + 1,
-          x.columnsNum)]);
+      return x.pick(columnRanges: [
+        ZRange.closedOpen(0, column),
+        ZRange.closedOpen(column + 1, x.columnsNum)
+      ]);
     }
   }
 }
