@@ -273,7 +273,7 @@ packages:
       name: ml_linalg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.1"
+    version: "7.0.0"
   mockito:
     dependency: "direct dev"
     description:
@@ -505,6 +505,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.11"
+  xrange:
+    dependency: "direct main"
+    description:
+      name: xrange
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
   yaml:
     dependency: transitive
     description:
