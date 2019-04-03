@@ -65,7 +65,7 @@ dependencies:
 
 ````
 dependencies:
-  ml_preprocessing: ^2.0.0
+  ml_preprocessing: ^3.0.0
 ````
 
 We need this repo to parse raw data in order to use it farther in machine learning algorithms. For more details, please,
@@ -122,7 +122,7 @@ final accuracy = validator.evaluate(model, featuresMatrix, labels, MetricType.ac
 
 Let's print score:
 ````dart
-print('accuracy on classification: ${maxAccuracy.toStringAsFixed(2)}');
+print('accuracy on classification: ${accuracy.toStringAsFixed(2)}');
 ````
 
 We will see something like this:
@@ -165,12 +165,22 @@ Future main() async {
 Let's classify another famous dataset - [Iris dataset](https://www.kaggle.com/uciml/iris). Data in this csv is separated into 3 classes - therefore we need
 to use different approach to data classification - [Softmax regression](http://deeplearning.stanford.edu/tutorial/supervised/SoftmaxRegression/).
 
-As usual, start with data preparation. Download the file and read it:
+As usual, start with data preparation. Before we start, we should update our pubspec's dependencies with `xrange` 
+library: 
+
+````
+dependencies:
+    ...
+    xrange: ^0.0.5
+    ...
+````
+
+Download the file and read it:
 
 ````Dart
 final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
-    columns: [const Tuple2(1, 5)],
+    columns: [ZRange.closed(1, 5)],
     categories: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
@@ -184,7 +194,7 @@ The csv database has 6 columns, but we need to get rid of the first column, beca
 observation - it's absolutely useless data. So, as you may notice, we provided a columns range to exclude ID-column:
 
 ````Dart
-columns: [const Tuple2(1, 5)]
+columns: [ZRange.closed(1, 5)]
 ````
 
 Also, since the label column 'Species' has categorical data, we encoded it to numerical format:
@@ -230,12 +240,12 @@ import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
-import 'package:tuple/tuple.dart';
+import 'package:xrange/zrange.dart';
 
 Future main() async {
   final data = DataFrame.fromCsv('datasets/iris.csv',
     labelName: 'Species',
-    columns: [const Tuple2(1, 5)],
+    columns: [ZRange.closed(1, 5)],
     categories: {
       'Species': CategoricalDataEncoderType.oneHot,
     },
