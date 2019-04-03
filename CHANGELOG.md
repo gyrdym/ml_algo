@@ -1,6 +1,9 @@
 # Changelog
 
-# 10.0.0
+## 10.1.0
+- `ml_linalg` v7.0.0 support
+
+## 10.0.0
 - Data preprocessing: all the entities moved to separate repo - [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing)  
 
 ## 9.2.4
