@@ -122,7 +122,7 @@ final accuracy = validator.evaluate(model, featuresMatrix, labels, MetricType.ac
 
 Let's print score:
 ````dart
-print('accuracy on classification: ${maxAccuracy.toStringAsFixed(2)}');
+print('accuracy on classification: ${accuracy.toStringAsFixed(2)}');
 ````
 
 We will see something like this:
@@ -165,7 +165,17 @@ Future main() async {
 Let's classify another famous dataset - [Iris dataset](https://www.kaggle.com/uciml/iris). Data in this csv is separated into 3 classes - therefore we need
 to use different approach to data classification - [Softmax regression](http://deeplearning.stanford.edu/tutorial/supervised/SoftmaxRegression/).
 
-As usual, start with data preparation. Download the file and read it:
+As usual, start with data preparation. Before we start, we should update our pubspec's dependencies with `xrange` 
+library: 
+
+````
+dependencies:
+    ...
+    xrange: ^0.0.5
+    ...
+````
+
+Download the file and read it:
 
 ````Dart
 final data = DataFrame.fromCsv('datasets/iris.csv',
