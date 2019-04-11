@@ -114,7 +114,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
   Vector _fitBinaryClassifier(Matrix features, Vector labels,
       Matrix initialWeights, bool arePointsNormalized) =>
       optimizer
-        .findExtrema(features, Matrix.columns([labels]),
+        .findExtrema(features, Matrix.fromColumns([labels]),
             initialWeights: initialWeights,
             arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)

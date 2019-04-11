@@ -59,13 +59,13 @@ class CrossValidatorImpl implements CrossValidator {
       }
 
       predictor.fit(
-          Matrix.rows(trainFeatures, dtype: dtype),
-          Matrix.rows(trainLabels, dtype: dtype),
+          Matrix.fromRows(trainFeatures, dtype: dtype),
+          Matrix.fromRows(trainLabels, dtype: dtype),
           isDataNormalized: isDataNormalized);
 
       scores[scoreCounter++] = predictor.test(
-          Matrix.rows(testFeatures, dtype: dtype),
-          Matrix.rows(testLabels, dtype: dtype),
+          Matrix.fromRows(testFeatures, dtype: dtype),
+          Matrix.fromRows(testLabels, dtype: dtype),
           metric
       );
     }

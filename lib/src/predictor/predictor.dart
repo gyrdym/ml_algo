@@ -7,12 +7,12 @@ abstract class Predictor {
   /// Learned coefficients (or weights) for given features
   Vector get weights;
 
-  /// Fits the passed [features] to true labels - [origLabels]. It's
-  /// possible to provide [initialWeights] and specify, whether the [features]
+  /// Fits the passed [observations] to true labels - [outcomes]. It's
+  /// possible to provide [initialWeights] and specify, whether the [observations]
   /// normalized or not
-  void fit(Matrix features, Matrix origLabels,
+  void fit(Matrix observations, Matrix outcomes,
       {Matrix initialWeights, bool isDataNormalized});
 
   /// Assesses model according to provided [metric]
-  double test(Matrix features, Matrix origLabels, MetricType metric);
+  double test(Matrix observations, Matrix outcomes, MetricType metric);
 }

@@ -56,7 +56,7 @@ class CoordinateOptimizer implements Optimizer {
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 
     _coefficients = initialWeights ??
-        Matrix.rows(List<Vector>.generate(labels.columnsNum,
+        Matrix.fromRows(List<Vector>.generate(labels.columnsNum,
                 (int i) => _initialCoefficientsGenerator
                     .generate(points.columnsNum)));
 
@@ -75,7 +75,7 @@ class CoordinateOptimizer implements Optimizer {
         newCoefsSource[j] = newJCoeffs;
       }
       // TODO: get rid of redundant matrix creation
-      _coefficients = Matrix.columns(newCoefsSource);
+      _coefficients = Matrix.fromColumns(newCoefsSource);
       iteration++;
     }
 
