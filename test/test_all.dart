@@ -1,3 +1,4 @@
+import 'algorithms/knn_test.dart' as knn_test;
 import 'classifier/logistic_regressor_integration_test.dart'
     as logistic_regressor_integration_test;
 import 'classifier/logistic_regressor_test.dart' as logistic_regressor_test;
@@ -19,6 +20,7 @@ import 'score_to_prob_mapper/score_to_prob_mapper_test.dart'
     as score_to_prob_mapper_test;
 
 void main() {
+  knn_test.main();
   logistic_regressor_integration_test.main();
   logistic_regressor_test.main();
   softmax_regressor_test.main();
