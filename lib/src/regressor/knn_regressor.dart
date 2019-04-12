@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/algorithms/knn.dart';
+import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -17,6 +17,10 @@ class KNNRegressor implements Regressor {
   Matrix _observations;
   Matrix _outcomes;
 
+  Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(
+      _outcomes.columnsNum);
+  Vector _cachedZeroVector;
+
   @override
   void fit(Matrix observations, Matrix outcomes, {Matrix initialWeights,
     bool isDataNormalized}) {
@@ -25,15 +29,15 @@ class KNNRegressor implements Regressor {
   }
 
   @override
-  Matrix predict(Matrix observations) => Matrix.fromColumns([
-    Vector.from(_generateOutcomes(observations)),
-  ]);
+  Matrix predict(Matrix observations) => Matrix.fromRows(
+    _generateOutcomes(observations).toList(growable: false),
+  );
 
-  Iterable<double> _generateOutcomes(Matrix observations) sync* {
+  Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
     for (final kNeighbours in findKNeighbours(k, _observations, _outcomes,
         observations)) {
       yield kNeighbours
-          .fold<double>(0, (sum, pair) => sum + pair.item1) / k;
+          .fold<Vector>(_zeroVector, (sum, pair) => sum + pair.label) / k;
     }
   }
 

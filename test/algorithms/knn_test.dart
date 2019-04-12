@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/algorithms/knn.dart';
+import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test_api/test_api.dart';
 
@@ -40,8 +40,8 @@ void main() {
           observations).toList();
 
       expect([
-        actual[0].map((pair) => pair.item2),
-        actual[1].map((pair) => pair.item2),
+        actual[0].map((pair) => pair.label),
+        actual[1].map((pair) => pair.label),
       ],
       equals([
         [y7, y6, y2],
