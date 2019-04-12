@@ -11,23 +11,33 @@ Iterable<Iterable<Tuple2<double, Vector>>> findKNeighbours(int k,
     Matrix observations,
 ) sync* {
   final allNeighbours = zip([trainObservations.rows, trainOutcomes.rows]);
-  final firstKNeighbours = allNeighbours.take(k).toList(growable: false);
+  final firstKNeighbours = allNeighbours.take(k);
   final restNeighbours = allNeighbours.skip(k);
   for (final observation in observations.rows) {
-    final kNeighbours = firstKNeighbours
+    final sortedKNeighbors = firstKNeighbours
         .map((pair) => Tuple2(pair.first.distanceTo(observation), pair.last))
-        .toList(growable: false);
+        .toList(growable: false)
+        ..sort((pair1, pair2) => (pair1.item1 - pair2.item1) ~/
+                (pair1.item1 - pair2.item1).abs());
     restNeighbours.forEach((pair) {
       final newKNeighbour = Tuple2(observation.distanceTo(pair.first),
           pair.last);
-      for (int i = k - 1; i >= 0; i--) {
-        if (newKNeighbour.item1 < kNeighbours[i].item1) {
-          kNeighbours.setRange(i + 1, k, kNeighbours, i);
-          kNeighbours[i] = newKNeighbour;
-          break;
-        }
+      final newNeighbourIdx = _findNewNeighbourIdx(newKNeighbour.item1, k,
+          sortedKNeighbors);
+      if (newNeighbourIdx != -1) {
+        sortedKNeighbors.setRange(newNeighbourIdx + 1, k, sortedKNeighbors,
+            newNeighbourIdx);
+        sortedKNeighbors[newNeighbourIdx] = newKNeighbour;
       }
     });
-    yield kNeighbours;
+    yield sortedKNeighbors;
   }
+}
+
+int _findNewNeighbourIdx(double newNeighbourDist, int k,
+    List<Tuple2<double, Vector>> sortedKNeighbors) {
+  for (int i = 0; i < k; i++) {
+    if (newNeighbourDist < sortedKNeighbors[i].item1) return i;
+  }
+  return -1;
 }
