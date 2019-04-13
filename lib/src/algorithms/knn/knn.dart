@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/algorithms/knn/neigbour.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/norm.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart';
 
@@ -9,6 +10,9 @@ Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(int k,
     Matrix trainObservations,
     Matrix trainOutcomes,
     Matrix observations,
+    {
+      Norm distanceType = Norm.euclidean,
+    }
 ) sync* {
   final allNeighbours = zip([trainObservations.rows, trainOutcomes.rows]);
   final firstKNeighbours = allNeighbours.take(k);
@@ -17,8 +21,7 @@ Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(int k,
     final sortedKNeighbors = firstKNeighbours
         .map((pair) => Neighbour(pair.first.distanceTo(observation), pair.last))
         .toList(growable: false)
-        ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/
-                (pair1.distance - pair2.distance).abs());
+        ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
     restNeighbours.forEach((pair) {
       final newKNeighbour = Neighbour(observation.distanceTo(pair.first),
           pair.last);
