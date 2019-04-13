@@ -30,8 +30,7 @@ class KNNRegressor implements Regressor {
 
   @override
   Matrix predict(Matrix observations) => Matrix.fromRows(
-    _generateOutcomes(observations).toList(growable: false),
-  );
+    _generateOutcomes(observations).toList(growable: false));
 
   Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
     for (final kNeighbours in findKNeighbours(k, _observations, _outcomes,
