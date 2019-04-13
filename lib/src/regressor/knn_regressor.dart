@@ -9,10 +9,12 @@ class KNNRegressor implements Regressor {
   KNNRegressor({
     this.k,
     this.distanceType,
+    this.solverFn = findKNeighbours,
   });
 
   final Norm distanceType;
   final int k;
+  final FindKnnFn solverFn;
 
   Matrix _observations;
   Matrix _outcomes;
@@ -33,7 +35,7 @@ class KNNRegressor implements Regressor {
     _generateOutcomes(observations).toList(growable: false));
 
   Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
-    for (final kNeighbours in findKNeighbours(k, _observations, _outcomes,
+    for (final kNeighbours in solverFn(k, _observations, _outcomes,
         observations)) {
       yield kNeighbours
           .fold<Vector>(_zeroVector, (sum, pair) => sum + pair.label) / k;

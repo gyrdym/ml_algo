@@ -4,22 +4,27 @@ import 'package:ml_linalg/norm.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart';
 
+typedef FindKnnFn = Iterable<Iterable<Neighbour<Vector>>> Function(int k,
+    Matrix trainObservations, Matrix labels, Matrix observations,
+    {Norm distanceType});
+
 /// Finds [k] nearest neighbours for either observation in [observations]
-/// basing on [trainObservations] and [trainOutcomes]
+/// basing on [trainObservations] and [labels]
 Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(int k,
     Matrix trainObservations,
-    Matrix trainOutcomes,
+    Matrix labels,
     Matrix observations,
     {
       Norm distanceType = Norm.euclidean,
     }
 ) sync* {
-  final allNeighbours = zip([trainObservations.rows, trainOutcomes.rows]);
+  final allNeighbours = zip([trainObservations.rows, labels.rows]);
   final firstKNeighbours = allNeighbours.take(k);
   final restNeighbours = allNeighbours.skip(k);
   for (final observation in observations.rows) {
     final sortedKNeighbors = firstKNeighbours
-        .map((pair) => Neighbour(pair.first.distanceTo(observation), pair.last))
+        .map((pair) => Neighbour(pair.first
+        .distanceTo(observation, distanceType), pair.last))
         .toList(growable: false)
         ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
     restNeighbours.forEach((pair) {
