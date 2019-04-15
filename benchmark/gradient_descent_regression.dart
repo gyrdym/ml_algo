@@ -33,7 +33,7 @@ class GDRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future gradientDescentRegressionBenchmark() async {
+Future main() async {
   features = Matrix.fromRows(List.generate(observationsNum,
           (i) => Vector.randomFilled(featuresNum)));
   labels = Matrix.fromColumns([Vector.randomFilled(observationsNum)]);
