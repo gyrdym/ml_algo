@@ -21,7 +21,7 @@ the lib, please, do not use it in a browser.
 **Following algorithms are implemented:**
 - *Linear regression:*
     - Gradient descent algorithm (batch, mini-batch, stochastic) with ridge regularization
-    - Lasso regression (feature selection model)
+    - Lasso regression
 
 - *Linear classifier:*
     - Logistic regression (with "one-vs-all" multiclass classification)
@@ -36,19 +36,19 @@ To provide main purposes of machine learning, the library exposes the following 
 
 - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
 instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
-algorithms, assessing prediction quality on different parts of a dataset. [Wiki article](https://en.wikipedia.org/wiki/Cross-validation_(statistics)) about cross validation process. 
+algorithms, assessing prediction quality on different parts of a dataset. 
 
-- [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). A class,
+- [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). An algorithm,
 that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
 your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
 supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
 
 - [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
-A class, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
+An algorithm, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
 this classifier for your data, please, make sure, that your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
-- [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). An algorithm, 
-that performs geometry-based linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
+- [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). A 
+well-known algorithm, that performs linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
 function.
 
 - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
@@ -57,7 +57,7 @@ optimization. If you want to decide, which features are less important - go ahea
 
 - [NoNParametricRegressor.nearestNeighbor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/non_parametric_regressor.dart)
 An algorithm, that makes prediction for each new observation based on first `k` closest observations from training data.
-It has quite high computational complexity, but in the same time it may catch non-linear pattern of the data. 
+It has quite high computational complexity, but in the same time it may easily catch non-linear pattern of the data. 
 
 ## Examples
 
@@ -71,10 +71,10 @@ dependencies:
 
 ````
 dependencies:
-  ml_preprocessing: ^3.0.0
+  ml_preprocessing: ^3.2.0
 ````
 
-We need this repo to parse raw data in order to use it farther in machine learning algorithms. For more details, please,
+We need this repo to parse raw data in order to use it farther. For more details, please,
 visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page.
 
 ````dart  
@@ -95,7 +95,7 @@ final labels = await data.labels;
 ````
 
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
-on each row. This column is our target - we should predict values of class labels for each observation. Therefore, we 
+on each row. This column is our target - we should predict a class label for each observation. Therefore, we 
 should point, where to get label values. Let's use `labelName` parameter for that (labels column name, 'class variable 
 (0 or 1)' in our case).  
  
@@ -171,7 +171,7 @@ Future main() async {
 Let's classify another famous dataset - [Iris dataset](https://www.kaggle.com/uciml/iris). Data in this csv is separated into 3 classes - therefore we need
 to use different approach to data classification - [Softmax regression](http://deeplearning.stanford.edu/tutorial/supervised/SoftmaxRegression/).
 
-As usual, start with data preparation. Before we start, we should update our pubspec's dependencies with `xrange` 
+As usual, start with data preparation. Before we start, we should update our pubspec's dependencies with [xrange](https://github.com/gyrdym/xrange)` 
 library: 
 
 ````
@@ -210,8 +210,6 @@ categories: {
   'Species': CategoricalDataEncoderType.oneHot,
 },
 ````
-
-To see how encoding works, visit the [api reference](https://pub.dartlang.org/documentation/ml_algo/latest/ml_algo/CategoricalDataEncoderType-class.html).
 
 Next step - create a cross validator instance:
 
