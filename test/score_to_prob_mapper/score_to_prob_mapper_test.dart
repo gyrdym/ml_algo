@@ -111,7 +111,7 @@ void main() {
     test('should translate scores to probabilities for Float32x4', () {
       final logitLink = SoftmaxMapper(Float32x4);
 
-      final scores = Matrix.columns([
+      final scores = Matrix.fromColumns([
         Vector.from([10.0, 55.0, 33.0, 29.0, 66.0]),
         Vector.from([20.0, 32.0, 44.0, 89.0, 41.0]),
         Vector.from([30.0, 21.0, 77.0, 40.0, 99.0]),

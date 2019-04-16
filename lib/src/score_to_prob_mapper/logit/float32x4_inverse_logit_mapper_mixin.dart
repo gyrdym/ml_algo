@@ -13,7 +13,7 @@ mixin Float32x4InverseLogitMapper {
     if (scores.columnsNum == 1) {
       final scoresVector = scores.getColumn(0);
       return Matrix
-          .columns([scoresVector.fastMap<Float32x4>(scoreToProb)]);
+          .fromColumns([scoresVector.fastMap<Float32x4>(scoreToProb)]);
     }
 
     // multi class classification case
