@@ -1,5 +1,10 @@
 # Changelog
 
+## 10.2.0
+- `NoNParametricRegressor` class added
+- `KNNRegressor` class added
+- `ml_linalg` v9.0.0 supported
+
 ## 10.1.0
 - `ml_linalg` v7.0.0 support
 
