@@ -9,7 +9,7 @@ import 'package:ml_linalg/vector.dart';
 class KNNRegressor implements NoNParametricRegressor {
   KNNRegressor({
     this.k,
-    this.distanceType,
+    this.distanceType = Distance.euclidean,
     this.solverFn = findKNeighbours,
   });
 
