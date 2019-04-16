@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/algorithms/knn/knn.dart';
+import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/regressor/non_parametric_regressor.dart';
 import 'package:ml_linalg/distance.dart';
@@ -43,7 +44,11 @@ class KNNRegressor implements NoNParametricRegressor {
   }
 
   @override
-  double test(Matrix features, Matrix origLabels, MetricType metric) => null;
+  double test(Matrix features, Matrix origLabels, MetricType metricType) {
+    final metric = MetricFactory.createByType(metricType);
+    final prediction = predict(features);
+    return metric.getScore(prediction, origLabels);
+  }
 
   @override
   Vector get weights => null;

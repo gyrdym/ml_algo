@@ -27,6 +27,9 @@ the lib, please, do not use it in a browser.
     - Logistic regression (with "one-vs-all" multiclass classification)
     - Softmax regression
     
+- *Non-parametric regression:*
+    - KNN regression
+    
 ## The library's structure
 
 To provide main purposes of machine learning, the library exposes the following classes:
@@ -49,9 +52,12 @@ that performs geometry-based linear regression using [gradient vector](https://e
 function.
 
 - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
-that performs feature selection along with regression process. It uses [coordinate descent optimization]() and [subgradient vector]() 
-instead of [gradient descent optimization]() and [gradient vector]() like in `LinearRegressor.gradient` to provide 
-regression. If you want to decide, which features are less important - go ahead and use this regressor. 
+that performs feature selection along with regression process. The heart of the algorithm - coordinate descent 
+optimization. If you want to decide, which features are less important - go ahead and use this regressor. 
+
+- [NoNParametricRegressor.nearestNeighbor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/non_parametric_regressor.dart)
+An algorithm, that makes prediction for each new observation based on first `k` closest observations from training data.
+It has quite high computational complexity, but in the same time it may catch non-linear pattern of the data. 
 
 ## Examples
 
@@ -271,7 +277,7 @@ Future main() async {
 }
 ````
 
-For more examples please see [examples folder](https://github.com/gyrdym/dart_ml/tree/master/example)
+For more examples, please, visit [ml_algo_examples](https://github.com/gyrdym/ml_algo_examples) repository
 
 ### Contacts
 If you have questions, feel free to write me on 
