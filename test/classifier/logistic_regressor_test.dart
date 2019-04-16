@@ -93,7 +93,7 @@ void main() {
                   ]),
                   named: 'initialWeights'),
               isMinimizingObjective: false))
-          .thenReturn(Matrix.rows([
+          .thenReturn(Matrix.fromRows([
         Vector.from([333.0, 444.0])
       ]));
 
@@ -117,7 +117,7 @@ void main() {
                   named: 'initialWeights'
               ),
               isMinimizingObjective: false))
-          .thenReturn(Matrix.rows([Vector.from([555.0, 666.0])]));
+          .thenReturn(Matrix.fromRows([Vector.from([555.0, 666.0])]));
 
       createLogisticRegressor()
         ..fit(features, origLabels,

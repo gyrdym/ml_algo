@@ -34,10 +34,10 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future logisticRegressionBenchmark() async {
-  features = Matrix.rows(List.generate(observationsNum,
+Future main() async {
+  features = Matrix.fromRows(List.generate(observationsNum,
           (i) => Vector.randomFilled(featuresNum)));
-  labels = Matrix.columns([Vector.from(List.generate(observationsNum,
+  labels = Matrix.fromColumns([Vector.from(List.generate(observationsNum,
           (i) => 0.0))]);
   LogisticRegressorBenchmark.main();
 }

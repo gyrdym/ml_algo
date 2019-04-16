@@ -20,7 +20,6 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class GradientOptimizer implements Optimizer {
@@ -97,7 +96,7 @@ class GradientOptimizer implements Optimizer {
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
     _coefficients = initialWeights ??
-        Matrix.columns(List.generate(labels.columnsNum,
+        Matrix.fromColumns(List.generate(labels.columnsNum,
             (i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     var iteration = 0;

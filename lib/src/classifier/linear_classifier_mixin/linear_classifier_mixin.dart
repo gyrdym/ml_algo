@@ -52,7 +52,7 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
         .getColumn(0)
         // TODO: use SIMD
         .map((value) => value >= threshold ? 1.0 : 0.0);
-    return Matrix.columns([Vector.from(classesSource)]);
+    return Matrix.fromColumns([Vector.from(classesSource)]);
   }
 
   Matrix predictMultiClass(Matrix features) {
