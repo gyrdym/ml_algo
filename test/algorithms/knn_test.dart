@@ -2,7 +2,7 @@ import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_algo/src/algorithms/knn/neigbour.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
-import 'package:test_api/test_api.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('findKNeighbours', () {
