@@ -1,5 +1,8 @@
 # Changelog
 
+## 10.2.1
+- test coverage restored
+
 ## 10.2.0
 - `NoNParametricRegressor` class added
 - `KNNRegressor` class added
