@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/distance.dart';
@@ -9,6 +10,7 @@ abstract class NoNParametricRegressor implements Regressor {
   /// [k] a number of neighbors
   factory NoNParametricRegressor.nearestNeighbor({
     int k,
-    Distance distanceType,
+    Kernel kernel,
+    Distance distance,
   }) = KNNRegressor;
 }
