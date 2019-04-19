@@ -3,8 +3,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('KNNRegressor', () {
-    test('should consider', () {
+  group('KNNRegressor (integration)', () {
+    test('should predict values', () {
       final k = 2;
       final features = Matrix.from([
         [20, 20, 20, 20, 20],
@@ -23,8 +23,8 @@ void main() {
       final testFeatures = Matrix.from([
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
-      final regressor = NoNParametricRegressor.nearestNeighbor(k: k);
-      regressor.fit(features, outcomes);
+      final regressor = NoNParametricRegressor.nearestNeighbor(k: k)
+        ..fit(features, outcomes);
 
       final actual = regressor.predict(testFeatures);
       expect(actual, equals([[4.0]]));
