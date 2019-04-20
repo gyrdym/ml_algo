@@ -32,8 +32,6 @@ the lib, please, do not use it in a browser.
     
 ## The library's structure
 
-To provide main purposes of machine learning, the library exposes the following classes:
-
 - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
 instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
 algorithms, assessing prediction quality on different parts of a dataset. 
