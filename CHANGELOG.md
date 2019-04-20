@@ -1,5 +1,13 @@
 # Changelog
 
+## 10.3.0
+- kernels added:
+    - uniform
+    - epanechnikov
+    - cosine
+    - gaussian
+- `NoNParametricRegressor.nearestNeighbour`: added possibility to specify the kernel function
+
 ## 10.2.1
 - test coverage restored
 
