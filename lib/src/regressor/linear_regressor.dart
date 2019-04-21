@@ -5,6 +5,7 @@ import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
 /// A factory for all the linear regressors.
 ///
@@ -129,4 +130,7 @@ abstract class LinearRegressor implements Regressor {
     Type dtype,
     bool isTrainDataNormalized,
   }) = LassoRegressor;
+
+  /// Learned coefficients (or weights) for given features
+  Vector get weights;
 }

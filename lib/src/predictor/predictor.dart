@@ -1,15 +1,13 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 /// An interface for all the predicting entities: regressor, classifiers, etc.
 abstract class Predictor {
+  /// A matrix of training observations, that was used to fit the predictor
   Matrix get trainingFeatures;
 
+  /// A matrix of dependant variables, that was used to fit the predictor
   Matrix get trainingOutcomes;
-
-  /// Learned coefficients (or weights) for given features
-  Vector get weights;
 
   /// Fits the passed [observations] to true labels - [outcomes]. It's
   /// possible to provide [initialWeights] and specify, whether the [observations]
