@@ -9,9 +9,8 @@ abstract class Predictor {
   /// A matrix of dependant variables, that was used to fit the predictor
   Matrix get trainingOutcomes;
 
-  /// Fits the passed [observations] to true labels - [outcomes]. It's
-  /// possible to provide [initialWeights] and specify, whether the [observations]
-  /// normalized or not
+  /// Fits the [trainingFeatures] to true labels - [trainingOutcomes]. It's
+  /// possible to provide [initialWeights] for [trainingFeatures]
   void fit({Matrix initialWeights});
 
   /// Assesses model according to provided [metric]
