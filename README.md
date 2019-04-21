@@ -153,7 +153,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 Future main() async {
   final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
      labelName: 'class variable (0 or 1)');
-  final features = await data.features;
+  final features = (await data.features).mapColumns((column) => column.normalize());
   final labels = await data.labels;
   final validator = CrossValidator.kFold(numberOfFolds: 5);
   final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
@@ -289,7 +289,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:xrange/zrange.dart';
 ````
 
-and download and read the data:
+and download and read the data
 
 ````dart
 final data = DataFrame.fromCsv('lib/_datasets/housing.csv',
@@ -300,7 +300,7 @@ final data = DataFrame.fromCsv('lib/_datasets/housing.csv',
 ````
 
 As you can see, the dataset is headless, that means, that there is no a descriptive line in the beginning of the file,
-hence we can just use the index-based approach to point, where the outcomes column resides (13 in our case)
+hence we can just use the index-based approach to point, where the outcomes column resides (13 index in our case)
 
 Extract features and labels
 
