@@ -22,6 +22,13 @@ abstract class LinearClassifier implements Classifier {
    *
    * Parameters:
    *
+   * [trainingFeatures] A matrix with observations, that will be used by the
+   * classifier to learn coefficients of the hyperplane, which divides the
+   * features space, forming classes of the features
+   *
+   * [trainingOutcomes] A matrix with outcomes (class labels, or dependant
+   * variables) for each observation from [trainingFeatures]
+   *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
    * convergence in the [optimizer]. Default value is 100
    *
@@ -107,6 +114,13 @@ abstract class LinearClassifier implements Classifier {
   /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression))
   ///
   /// Parameters:
+  ///
+  /// [trainingFeatures] A matrix with observations, that will be used by the
+  /// classifier to learn coefficients of the hyperplane, which divides the
+  /// features space, forming classes of the features
+  ///
+  /// [trainingOutcomes] A matrix with outcomes (class labels, or dependant
+  /// variables) for each observation from [trainingFeatures]
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the [optimizer]. Default value is 100

@@ -22,6 +22,12 @@ abstract class LinearRegressor implements Regressor {
    *
    * Parameters:
    *
+   * [trainingFeatures] A matrix with observations, that will be used by the
+   * regressor to learn coefficients of the hyperplane
+   *
+   * [trainingOutcomes] A matrix with outcomes (dependant variables) for each
+   * observation from [trainingFeatures]
+   *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
    * convergence in the optimizer. Default
    * value is `100`
@@ -85,6 +91,12 @@ abstract class LinearRegressor implements Regressor {
    * important as zeroes.
    *
    * Parameters:
+   *
+   * [trainingFeatures] A matrix with observations, that will be used by the
+   * regressor to learn coefficients of the hyperplane
+   *
+   * [trainingOutcomes] A matrix with outcomes (dependant variables) for each
+   * observation from [trainingFeatures]
    *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
    * convergence in the optimizer. Default value is `100`

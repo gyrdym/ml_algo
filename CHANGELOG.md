@@ -1,5 +1,8 @@
 # Changelog
 
+## 11.0.0
+- Added immutable state to all the predictor subclasses
+
 ## 10.3.0
 - kernels added:
     - uniform

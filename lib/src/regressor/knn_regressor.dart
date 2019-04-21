@@ -11,7 +11,7 @@ import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KNNRegressor implements NoNParametricRegressor {
+class KNNRegressor implements ParameterlessRegressor {
   KNNRegressor(this.trainingFeatures, this.trainingOutcomes, {
     int k,
     Distance distance = Distance.euclidean,

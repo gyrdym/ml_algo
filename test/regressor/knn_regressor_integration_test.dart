@@ -23,7 +23,7 @@ void main() {
       final testFeatures = Matrix.from([
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
-      final regressor = NoNParametricRegressor.nearestNeighbor(features,
+      final regressor = ParameterlessRegressor.knn(features,
           outcomes, k: k)..fit();
 
       final actual = regressor.predict(testFeatures);
@@ -49,7 +49,7 @@ void main() {
       final testFeatures = Matrix.from([
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
-      final regressor = NoNParametricRegressor.nearestNeighbor(features,
+      final regressor = ParameterlessRegressor.knn(features,
           outcomes, k: k, kernel: Kernel.epanechnikov)
         ..fit();
 

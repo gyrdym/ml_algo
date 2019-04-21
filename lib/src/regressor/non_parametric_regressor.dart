@@ -5,7 +5,7 @@ import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/matrix.dart';
 
 /// A factory for all the non parametric family of Machine Learning algorithms
-abstract class NoNParametricRegressor implements Regressor {
+abstract class ParameterlessRegressor implements Regressor {
   /// Creates an instance of KNN regressor
   ///
   /// KNN here means "K nearest neighbor"
@@ -17,7 +17,7 @@ abstract class NoNParametricRegressor implements Regressor {
   ///
   /// [distance] a distance type, that will be used to measure a distance
   /// between two observation vectors
-  factory NoNParametricRegressor.nearestNeighbor(Matrix trainingFeatures,
+  factory ParameterlessRegressor.knn(Matrix trainingFeatures,
       Matrix trainingOutcomes, {
     int k,
     Kernel kernel,
