@@ -23,8 +23,8 @@ void main() {
       final testFeatures = Matrix.from([
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
-      final regressor = NoNParametricRegressor.nearestNeighbor(k: k)
-        ..fit(features, outcomes);
+      final regressor = NoNParametricRegressor.nearestNeighbor(features,
+          outcomes, k: k)..fit();
 
       final actual = regressor.predict(testFeatures);
       expect(actual, equals([[4.0]]));
@@ -49,9 +49,9 @@ void main() {
       final testFeatures = Matrix.from([
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
-      final regressor = NoNParametricRegressor.nearestNeighbor(k: k,
-          kernel: Kernel.epanechnikov)
-        ..fit(features, outcomes);
+      final regressor = NoNParametricRegressor.nearestNeighbor(features,
+          outcomes, k: k, kernel: Kernel.epanechnikov)
+        ..fit();
 
       final actual = regressor.predict(testFeatures);
       expect(actual, equals([[-208.875]]));

@@ -12,7 +12,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class KNNRegressor implements NoNParametricRegressor {
-  KNNRegressor({
+  KNNRegressor(this.trainingFeatures, this.trainingOutcomes, {
     int k,
     Distance distance = Distance.euclidean,
     FindKnnFn solverFn = findKNeighbours,
@@ -25,7 +25,22 @@ class KNNRegressor implements NoNParametricRegressor {
         _distanceType = distance,
         _solverFn = solverFn,
         _dtype = dtype,
-        _kernelFn = kernelFnFactory.createByType(kernel);
+        _kernelFn = kernelFnFactory.createByType(kernel) {
+    if (trainingFeatures.rowsNum != trainingOutcomes.rowsNum) {
+      throw Exception('Number of observations and number of outcomes have to be'
+          'equal');
+    }
+    if (_k > trainingFeatures.rowsNum) {
+      throw Exception('Parameter k should be less than or equal to the number '
+          'of training observations');
+    }
+  }
+
+  @override
+  final Matrix trainingFeatures;
+
+  @override
+  final Matrix trainingOutcomes;
 
   final Distance _distanceType;
   final int _k;
@@ -33,34 +48,19 @@ class KNNRegressor implements NoNParametricRegressor {
   final KernelFn _kernelFn;
   final Type _dtype;
 
-  Matrix _trainingObservations;
-  Matrix _trainingOutcomes;
-
   Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(
-      _trainingOutcomes.columnsNum, dtype: _dtype);
+      trainingOutcomes.columnsNum, dtype: _dtype);
   Vector _cachedZeroVector;
 
   @override
-  void fit(Matrix observations, Matrix outcomes, {Matrix initialWeights,
-    bool isDataNormalized}) {
-    if (observations.rowsNum != outcomes.rowsNum) {
-      throw Exception('Number of observations and number of outcomes have to be'
-          'equal');
-    }
-    if (_k > observations.rowsNum) {
-      throw Exception('Parameter k should be less than or equal to the number '
-          'of training observations');
-    }
-    _trainingObservations = observations;
-    _trainingOutcomes = outcomes;
-  }
+  void fit({Matrix initialWeights}) {}
 
   @override
   Matrix predict(Matrix observations) => Matrix.fromRows(
     _generateOutcomes(observations).toList(growable: false), dtype: _dtype);
 
   Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
-    for (final kNeighbours in _solverFn(_k, _trainingObservations, _trainingOutcomes,
+    for (final kNeighbours in _solverFn(_k, trainingFeatures, trainingOutcomes,
         observations, distance: _distanceType)) {
       yield kNeighbours
           .fold<Vector>(_zeroVector,

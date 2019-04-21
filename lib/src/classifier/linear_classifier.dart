@@ -4,6 +4,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
+import 'package:ml_linalg/matrix.dart';
 
 /// A factory for all the linear classifiers
 abstract class LinearClassifier implements Classifier {
@@ -73,7 +74,8 @@ abstract class LinearClassifier implements Classifier {
    * affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearClassifier.logisticRegressor({
+  factory LinearClassifier.logisticRegressor(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     double initialLearningRate,
     double minWeightsUpdate,
@@ -151,7 +153,8 @@ abstract class LinearClassifier implements Classifier {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [Float32x4]
-  factory LinearClassifier.softmaxRegressor({
+  factory LinearClassifier.softmaxRegressor(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     double initialLearningRate,
     double minWeightsUpdate,

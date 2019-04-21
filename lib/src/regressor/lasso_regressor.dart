@@ -11,7 +11,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_linalg/linalg.dart';
 
 class LassoRegressor implements LinearRegressor {
-  LassoRegressor({
+  LassoRegressor(this.trainingFeatures, this.trainingOutcomes, {
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
@@ -20,11 +20,12 @@ class LassoRegressor implements LinearRegressor {
     double interceptScale = 1.0,
     Type dtype = DefaultParameterValues.dtype,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+    bool isTrainDataNormalized = false,
 
     // hidden arguments
     InterceptPreprocessorFactory interceptPreprocessorFactory =
         const InterceptPreprocessorFactoryImpl(),
-  })  : _interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
+  }) : _interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
             scale: fitIntercept ? interceptScale : 0.0),
         _optimizer = CoordinateOptimizer(
           initialWeightsType: initialWeightsType,
@@ -33,7 +34,14 @@ class LassoRegressor implements LinearRegressor {
           minCoefficientsDiff: minWeightsUpdate,
           lambda: lambda,
           dtype: dtype,
+          isTrainDataNormalized: isTrainDataNormalized,
         );
+
+  @override
+  final Matrix trainingFeatures;
+
+  @override
+  final Matrix trainingOutcomes;
 
   final CoordinateOptimizer _optimizer;
   final InterceptPreprocessor _interceptPreprocessor;
@@ -43,16 +51,13 @@ class LassoRegressor implements LinearRegressor {
   Vector _weights;
 
   @override
-  void fit(Matrix features, Matrix labels,
-      {Matrix initialWeights, bool isDataNormalized = false}) {
-    _weights = _optimizer
-        .findExtrema(
-          _interceptPreprocessor.addIntercept(features),
-          labels,
-          initialWeights: initialWeights,
-          isMinimizingObjective: true,
-          arePointsNormalized: isDataNormalized
-        ).getRow(0);
+  void fit({Matrix initialWeights}) {
+    _weights = _optimizer.findExtrema(
+      _interceptPreprocessor.addIntercept(trainingFeatures),
+      trainingOutcomes,
+      initialWeights: initialWeights,
+      isMinimizingObjective: true,
+    ).getRow(0);
   }
 
   @override
