@@ -16,7 +16,7 @@ class KnnRegressorBenchmark extends BenchmarkBase {
   Matrix testFeatures;
   Matrix labels;
   Matrix testLabels;
-  NoNParametricRegressor regressor;
+  ParameterlessRegressor regressor;
 
 
   static void main() {
@@ -38,7 +38,7 @@ class KnnRegressorBenchmark extends BenchmarkBase {
             (i) => Vector.randomFilled(featuresNum)));
     testLabels = Matrix.fromColumns([Vector.randomFilled(observationsNum)]);
 
-    regressor = NoNParametricRegressor.nearestNeighbor(features, labels, k: 7);
+    regressor = ParameterlessRegressor.knn(features, labels, k: 7);
   }
 
   void tearDown() {}

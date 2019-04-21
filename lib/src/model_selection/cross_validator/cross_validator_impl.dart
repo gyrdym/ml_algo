@@ -30,6 +30,7 @@ class CrossValidatorImpl implements CrossValidator {
     }
 
     final allIndicesGroups = _splitter.split(observations.rowsNum);
+    // TODO get rid of length accessing
     final scores = List<double>(allIndicesGroups.length);
     int scoreCounter = 0;
 

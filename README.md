@@ -11,6 +11,7 @@
 - [Examples](#examples)
     - [Logistic regression](#logistic-regression)
     - [Softmax regression](#softmax-regression)
+    - [KNN regression](#k-nearest-neighbour-regression)
 
 ## What is the ml_algo for?
 
@@ -32,30 +33,36 @@ the lib, please, do not use it in a browser.
     
 ## The library's structure
 
-- [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
-instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
-algorithms, assessing prediction quality on different parts of a dataset. 
+- #### Model selection
+    - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
+    instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
+    algorithms, assessing prediction quality on different parts of a dataset. 
 
-- [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). An algorithm,
-that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
-your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
-supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
+- #### Classification algorithms
+    - ##### Linear classification
+        - [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). An algorithm,
+        that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
+        your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
+        supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
 
-- [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
-An algorithm, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
-this classifier for your data, please, make sure, that your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+        - [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
+        An algorithm, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
+        this classifier for your data, please, make sure, that your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
-- [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). A 
-well-known algorithm, that performs linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
-function.
+- #### Regression algorithms
+    - ##### Linear regression
+        - [LinearRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). A 
+        well-known algorithm, that performs linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
+        function.
 
-- [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
-that performs feature selection along with regression process. The heart of the algorithm - coordinate descent 
-optimization. If you want to decide, which features are less important - go ahead and use this regressor. 
-
-- [NoNParametricRegressor.nearestNeighbor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/non_parametric_regressor.dart)
-An algorithm, that makes prediction for each new observation based on first `k` closest observations from training data.
-It has quite high computational complexity, but in the same time it may easily catch non-linear pattern of the data. 
+        - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
+        that performs feature selection along with regression process. The heart of the algorithm - coordinate descent 
+        optimization. If you want to decide, which features are less important - go ahead and use this regressor. 
+    
+    - ##### Nonlinear regression
+        - [ParameterlessRegressor.knn](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/non_parametric_regressor.dart)
+        An algorithm, that makes prediction for each new observation based on first `k` closest observations from training data.
+        It has quite high computational complexity, but in the same time it may easily catch non-linear pattern of the data. 
 
 ## Examples
 
@@ -88,7 +95,10 @@ read it (of course, you should provide a proper path to your downloaded file):
 ````dart
 final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
   labelName: 'class variable (0 or 1)');
-final features = await data.features;
+final features = (await data.features)
+      .mapColumns((column) => column.normalize()); // it's needed to normalize the matrix column-wise to reach 
+                                                   // computational stability and provide uniform scale for all 
+                                                   // the values in the column
 final labels = await data.labels;
 ````
 
@@ -108,20 +118,18 @@ final validator = CrossValidator.KFold(numberOfFolds: 5);
 
 All are set, so, we can do our classification.
 
-Let's create a logistic regression classifier instance with full-batch gradient descent optimizer:
-````dart
-final model = LinearClassifier.logisticRegressor(
-    initialLearningRate: .8,
-    iterationsLimit: 500,
-    gradientType: GradientType.batch,
-    fitIntercept: true,
-    interceptScale: 0.1,
-    learningRateType: LearningRateType.constant);
-````
-
 Evaluate our model via accuracy metric:
 ````dart
-final accuracy = validator.evaluate(model, featuresMatrix, labels, MetricType.accuracy);
+final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
+    LinearClassifier.logisticRegressor(
+        trainFeatures, trainLabels,
+        initialLearningRate: .8,
+        iterationsLimit: 500,
+        gradientType: GradientType.batch,
+        fitIntercept: true,
+        interceptScale: .1,
+        learningRateType: LearningRateType.constant), 
+    features, labels, MetricType.accuracy);
 ````
 
 Let's print score:
@@ -145,21 +153,19 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 Future main() async {
   final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
      labelName: 'class variable (0 or 1)');
-  
   final features = await data.features;
   final labels = await data.labels;
-
   final validator = CrossValidator.kFold(numberOfFolds: 5);
-  
-  final model = LinearClassifier.logisticRegressor(
-    initialLearningRate: .8,
-    iterationsLimit: 500,
-    gradientType: GradientType.batch,
-    fitIntercept: true,
-    interceptScale: .1,
-    learningRateType: LearningRateType.constant);
-  
-  final accuracy = validator.evaluate(model, features, labels, MetricType.accuracy);
+  final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
+    LinearClassifier.logisticRegressor(
+        trainFeatures, trainLabels,
+        initialLearningRate: .8,
+        iterationsLimit: 500,
+        gradientType: GradientType.batch,
+        fitIntercept: true,
+        interceptScale: .1,
+        learningRateType: LearningRateType.constant), 
+    features, labels, MetricType.accuracy);
 
   print('accuracy on classification: ${accuracy.toStringFixed(2)}');
 }
@@ -215,21 +221,18 @@ Next step - create a cross validator instance:
 final validator = CrossValidator.kFold(numberOfFolds: 5);
 ````
 
-And finally, create an instance of the classifier:
-
-````Dart
-final softmaxRegressor = LinearClassifier.softmaxRegressor(
-      initialLearningRate: 0.03,
-      iterationsLimit: null,
-      minWeightsUpdate: 1e-6,
-      randomSeed: 46,
-      learningRateType: LearningRateType.constant);
-````
-
 Evaluate quality of prediction:
 
 ````Dart
-final accuracy = validator.evaluate(softmaxRegressor, features, labels, MetricType.accuracy);
+final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
+      LinearClassifier.softmaxRegressor(
+          trainFeatures, trainLabels,
+          initialLearningRate: 0.03,
+          iterationsLimit: null,
+          minWeightsUpdate: 1e-6,
+          randomSeed: 46,
+          learningRateType: LearningRateType.constant
+      ), features, labels, MetricType.accuracy);
 
 print('Iris dataset, softmax regression: accuracy is '
   '${accuracy.toStringAsFixed(2)}'); // It yields 0.93
@@ -255,25 +258,79 @@ Future main() async {
 
   final features = await data.features;
   final labels = await data.labels;
-
   final validator = CrossValidator.kFold(numberOfFolds: 5);
-
-  final softmaxRegressor = LinearClassifier.softmaxRegressor(
-      initialLearningRate: 0.03,
-      iterationsLimit: null,
-      minWeightsUpdate: 1e-6,
-      randomSeed: 46,
-      learningRateType: LearningRateType.constant);
-
-  final accuracy = validator.evaluate(
-      softmaxRegressor, features, labels, MetricType.accuracy);
+  final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
+      LinearClassifier.softmaxRegressor(
+          trainFeatures, trainLabels,
+          initialLearningRate: 0.03,
+          iterationsLimit: null,
+          minWeightsUpdate: 1e-6,
+          randomSeed: 46,
+          learningRateType: LearningRateType.constant
+      ), features, labels, MetricType.accuracy);
 
   print('Iris dataset, softmax regression: accuracy is '
       '${accuracy.toStringAsFixed(2)}');
 }
 ````
 
-For more examples, please, visit [ml_algo_examples](https://github.com/gyrdym/ml_algo_examples) repository
+### K nearest neighbour regression
+
+Let's do some prediction with a well-known non-parametric regression algorithm - k nearest neighbours. Let's take a 
+state of the art dataset - [boston housing](https://www.kaggle.com/c/boston-housing).
+
+As usual, import all necessary packages
+
+````dart
+import 'dart:async';
+
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
+import 'package:xrange/zrange.dart';
+````
+
+and download and read the data:
+
+````dart
+final data = DataFrame.fromCsv('lib/_datasets/housing.csv',
+    headerExists: false,
+    fieldDelimiter: ' ',
+    labelIdx: 13,
+);
+````
+
+As you can see, the dataset is headless, that means, that there is no a descriptive line in the beginning of the file,
+hence we can just use the index-based approach to point, where the outcomes column resides (13 in our case)
+
+Extract features and labels
+
+````dart
+// As in example above, it's needed to normalize the matrix column-wise to reach computational stability and provide 
+// uniform scale for all the values in the column
+final features = (await data.features).mapColumns((column) => column.normalize());
+final labels = await data.labels;
+````
+
+Create a cross-validator instance
+
+````dart
+final validator = CrossValidator.kFold(numberOfFolds: 5);
+````
+
+Let the `k` parameter be equal to `4`.
+
+Assess a knn regressor with the chosen `k` value using MAPE metric
+
+````dart
+final error = validator.evaluate((trainFeatures, trainLabels) => 
+  ParameterlessRegressor.knn(trainFeatures, trainLabels, k: 4), features, labels, MetricType.mape);
+````
+
+Let's print our error
+
+````dart
+print('MAPE error on k-fold validation: ${error.toStringAsFixed(2)}%'); // it yields approx. 6.18
+````
 
 ### Contacts
 If you have questions, feel free to write me on 
