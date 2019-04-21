@@ -21,7 +21,7 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 import 'package:ml_linalg/matrix.dart';
 
 class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
-  SoftmaxRegressor({
+  SoftmaxRegressor(this.trainingFeatures, this.trainingOutcomes, {
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
@@ -57,6 +57,8 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
 
+        classLabels = trainingOutcomes.uniqueRows(),
+
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
@@ -77,6 +79,15 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   static const _scoreToProbMapperType = ScoreToProbMapperType.softmax;
 
   @override
+  final Matrix trainingFeatures;
+
+  @override
+  final Matrix trainingOutcomes;
+
+  @override
+  final Matrix classLabels;
+
+  @override
   final Type dtype;
 
   @override
@@ -89,13 +100,11 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   final ScoreToProbMapper scoreToProbMapper;
 
   @override
-  Matrix learnWeights(Matrix features, Matrix labels,
-      Matrix initialWeights, bool arePointsNormalized) =>
+  Matrix learnWeights(Matrix features, Matrix labels, Matrix initialWeights) =>
     optimizer.findExtrema(
         features,
         labels,
         initialWeights: initialWeights,
-        arePointsNormalized: arePointsNormalized,
         isMinimizingObjective: false);
 
   @override

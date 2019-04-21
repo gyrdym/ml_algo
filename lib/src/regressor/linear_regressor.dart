@@ -4,6 +4,8 @@ import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
 /// A factory for all the linear regressors.
 ///
@@ -20,6 +22,12 @@ abstract class LinearRegressor implements Regressor {
    * find the optimal weights
    *
    * Parameters:
+   *
+   * [trainingFeatures] A matrix with observations, that will be used by the
+   * regressor to learn coefficients of the hyperplane
+   *
+   * [trainingOutcomes] A matrix with outcomes (dependant variables) for each
+   * observation from [trainingFeatures]
    *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
    * convergence in the optimizer. Default
@@ -60,7 +68,8 @@ abstract class LinearRegressor implements Regressor {
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearRegressor.gradient({
+  factory LinearRegressor.gradient(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -84,6 +93,12 @@ abstract class LinearRegressor implements Regressor {
    *
    * Parameters:
    *
+   * [trainingFeatures] A matrix with observations, that will be used by the
+   * regressor to learn coefficients of the hyperplane
+   *
+   * [trainingOutcomes] A matrix with outcomes (dependant variables) for each
+   * observation from [trainingFeatures]
+   *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
    * convergence in the optimizer. Default value is `100`
    *
@@ -104,7 +119,8 @@ abstract class LinearRegressor implements Regressor {
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearRegressor.lasso({
+  factory LinearRegressor.lasso(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     double minWeightsUpdate,
     double lambda,
@@ -112,5 +128,9 @@ abstract class LinearRegressor implements Regressor {
     double interceptScale,
     InitialWeightsType initialWeightsType,
     Type dtype,
+    bool isTrainDataNormalized,
   }) = LassoRegressor;
+
+  /// Learned coefficients (or weights) for given features
+  Vector get weights;
 }

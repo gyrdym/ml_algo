@@ -66,6 +66,7 @@ void main() {
 
     setUp(() {
       optimizer = CoordinateOptimizer(
+          isTrainDataNormalized: true,
           minCoefficientsDiff: 1e-5,
           iterationsLimit: iterationsNumber,
           initialWeightsType: InitialWeightsType.zeroes,
@@ -83,7 +84,7 @@ void main() {
     test('should find optimal weights for the given data', () {
       // actually, points in this example are not normalized
       final weights = optimizer
-          .findExtrema(data, labels, arePointsNormalized: true)
+          .findExtrema(data, labels)
           .getRow(0);
       expect(weights, equals([-4381770, -4493700, -4073630]));
     });

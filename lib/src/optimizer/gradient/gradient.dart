@@ -83,13 +83,10 @@ class GradientOptimizer implements Optimizer {
   Matrix _coefficients;
 
   @override
-  Matrix findExtrema(Matrix points, Matrix labels,
-      {
-        Matrix initialWeights,
-        bool isMinimizingObjective = true,
-        bool arePointsNormalized = false
-      }
-  ) {
+  Matrix findExtrema(Matrix points, Matrix labels, {
+    Matrix initialWeights,
+    bool isMinimizingObjective = true,
+  }) {
     _points = points;
 
     final batchSize =

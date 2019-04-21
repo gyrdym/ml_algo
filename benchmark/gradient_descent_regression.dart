@@ -22,12 +22,12 @@ class GDRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    regressor.fit(features, labels);
+    regressor.fit();
   }
 
   @override
   void setup() {
-    regressor = LinearRegressor.gradient(dtype: Float32x4);
+    regressor = LinearRegressor.gradient(features, labels, dtype: Float32x4);
   }
 
   void tearDown() {}

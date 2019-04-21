@@ -16,7 +16,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class GradientRegressor implements LinearRegressor {
-  GradientRegressor({
+  GradientRegressor(this.trainingFeatures, this.trainingOutcomes, {
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
@@ -49,6 +49,12 @@ class GradientRegressor implements LinearRegressor {
           randomSeed: randomSeed,
         );
 
+  @override
+  final Matrix trainingFeatures;
+
+  @override
+  final Matrix trainingOutcomes;
+
   final GradientOptimizer _optimizer;
   final InterceptPreprocessor _interceptPreprocessor;
 
@@ -57,15 +63,13 @@ class GradientRegressor implements LinearRegressor {
   Vector _weights;
 
   @override
-  void fit(Matrix features, Matrix labels,
-      {Matrix initialWeights, bool isDataNormalized = false}) {
+  void fit({Matrix initialWeights}) {
     _weights = _optimizer
         .findExtrema(
-          _interceptPreprocessor.addIntercept(features),
-          labels,
+          _interceptPreprocessor.addIntercept(trainingFeatures),
+          trainingOutcomes,
           initialWeights: initialWeights?.transpose(),
           isMinimizingObjective: true,
-          arePointsNormalized: isDataNormalized
         ).getColumn(0);
   }
 

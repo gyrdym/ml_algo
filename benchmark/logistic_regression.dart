@@ -22,13 +22,13 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    regressor.fit(features, labels);
+    regressor.fit();
   }
 
   @override
   void setup() {
-    regressor = LinearClassifier.logisticRegressor(dtype: Float32x4,
-        minWeightsUpdate: null, iterationsLimit: 200);
+    regressor = LinearClassifier.logisticRegressor(features, labels,
+        dtype: Float32x4, minWeightsUpdate: null, iterationsLimit: 200);
   }
 
   void tearDown() {}

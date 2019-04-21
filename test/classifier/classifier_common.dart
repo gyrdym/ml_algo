@@ -12,6 +12,7 @@ import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/matrix.dart';
 
 import '../test_utils/mocks.dart';
 
@@ -42,7 +43,7 @@ void setUpScoreToProbMapperFactory() {
   });
 }
 
-LogisticRegressor createLogisticRegressor({
+LogisticRegressor createLogisticRegressor(Matrix features, Matrix labels, {
   int iterationLimit = 100,
   double learningRate = 0.01,
   double minWeightsUpdate = 0.001,
@@ -50,6 +51,7 @@ LogisticRegressor createLogisticRegressor({
   int randomSeed = 123,
 }) =>
     LogisticRegressor(
+      features, labels,
       dtype: Float32x4,
       learningRateType: LearningRateType.constant,
       initialWeightsType: InitialWeightsType.zeroes,
@@ -65,7 +67,7 @@ LogisticRegressor createLogisticRegressor({
       randomSeed: randomSeed,
     );
 
-SoftmaxRegressor createSoftmaxRegressor({
+SoftmaxRegressor createSoftmaxRegressor(Matrix features, Matrix labels, {
   int iterationLimit = 100,
   double learningRate = 0.01,
   double minWeightsUpdate = 0.001,
@@ -74,6 +76,7 @@ SoftmaxRegressor createSoftmaxRegressor({
   Type dtype = Float32x4,
 }) =>
     SoftmaxRegressor(
+      features, labels,
       dtype: dtype,
       learningRateType: LearningRateType.constant,
       initialWeightsType: InitialWeightsType.zeroes,

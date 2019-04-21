@@ -22,7 +22,7 @@ void main() {
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      createLogisticRegressor();
+      createLogisticRegressor(Matrix.from([[1.0]]), Matrix.from([[0]]));
 
       verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0))
           .called(1);
@@ -83,7 +83,6 @@ void main() {
                 [1.0],
                 [0.0],
               ])),
-              arePointsNormalized: true,
               initialWeights: argThat(
                   equals([
                       [10.0],
@@ -106,7 +105,6 @@ void main() {
                 [0.0],
                 [1.0],
               ])),
-              arePointsNormalized: true,
               initialWeights: argThat(
                   equals([
                     [10.0],
@@ -119,9 +117,8 @@ void main() {
               isMinimizingObjective: false))
           .thenReturn(Matrix.fromRows([Vector.from([555.0, 666.0])]));
 
-      createLogisticRegressor()
-        ..fit(features, origLabels,
-            initialWeights: initialWeights, isDataNormalized: true);
+      createLogisticRegressor(features, origLabels)
+        ..fit(initialWeights: initialWeights);
 
       verify(
           interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
@@ -146,7 +143,6 @@ void main() {
                     [40.0],
                   ]),
                   named: 'initialWeights'),
-              arePointsNormalized: true,
               isMinimizingObjective: false))
           .called(1);
 
@@ -167,7 +163,6 @@ void main() {
                     [40.0],
                   ]),
                   named: 'initialWeights'),
-              arePointsNormalized: true,
               isMinimizingObjective: false))
           .called(1);
     });
