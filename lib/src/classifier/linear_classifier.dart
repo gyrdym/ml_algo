@@ -4,6 +4,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
+import 'package:ml_linalg/matrix.dart';
 
 /// A factory for all the linear classifiers
 abstract class LinearClassifier implements Classifier {
@@ -20,6 +21,13 @@ abstract class LinearClassifier implements Classifier {
    * coefficients most likely.
    *
    * Parameters:
+   *
+   * [trainingFeatures] A matrix with observations, that will be used by the
+   * classifier to learn coefficients of the hyperplane, which divides the
+   * features space, forming classes of the features
+   *
+   * [trainingOutcomes] A matrix with outcomes (class labels, or dependant
+   * variables) for each observation from [trainingFeatures]
    *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
    * convergence in the [optimizer]. Default value is 100
@@ -73,7 +81,8 @@ abstract class LinearClassifier implements Classifier {
    * affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearClassifier.logisticRegressor({
+  factory LinearClassifier.logisticRegressor(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     double initialLearningRate,
     double minWeightsUpdate,
@@ -105,6 +114,13 @@ abstract class LinearClassifier implements Classifier {
   /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression))
   ///
   /// Parameters:
+  ///
+  /// [trainingFeatures] A matrix with observations, that will be used by the
+  /// classifier to learn coefficients of the hyperplane, which divides the
+  /// features space, forming classes of the features
+  ///
+  /// [trainingOutcomes] A matrix with outcomes (class labels, or dependant
+  /// variables) for each observation from [trainingFeatures]
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the [optimizer]. Default value is 100
@@ -151,7 +167,8 @@ abstract class LinearClassifier implements Classifier {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [Float32x4]
-  factory LinearClassifier.softmaxRegressor({
+  factory LinearClassifier.softmaxRegressor(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     double initialLearningRate,
     double minWeightsUpdate,

@@ -19,7 +19,6 @@ abstract class CrossValidator {
   factory CrossValidator.lpo({Type dtype, int p}) = CrossValidatorImpl.lpo;
 
   /// Returns a score of quality of passed predictor depending on given [metric]
-  double evaluate(
-      Predictor predictor, Matrix points, Matrix labels, MetricType metric,
-      {bool isDataNormalized = false});
+  double evaluate(Predictor predictorFactory(Matrix features, Matrix outcomes),
+      Matrix observations, Matrix outcomes, MetricType metric);
 }

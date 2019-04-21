@@ -22,23 +22,23 @@ class CrossValidatorImpl implements CrossValidator {
   final Splitter _splitter;
 
   @override
-  double evaluate(
-      Predictor predictor, Matrix points, Matrix labels, MetricType metric,
-      {bool isDataNormalized = false}) {
-    if (points.rowsNum != labels.rowsNum) {
+  double evaluate(Predictor predictorFactory(Matrix features, Matrix outcomes),
+      Matrix observations, Matrix labels, MetricType metric) {
+    if (observations.rowsNum != labels.rowsNum) {
       throw Exception(
           'Number of feature objects must be equal to the number of labels!');
     }
 
-    final allIndicesGroups = _splitter.split(points.rowsNum);
+    final allIndicesGroups = _splitter.split(observations.rowsNum);
+    // TODO get rid of length accessing
     final scores = List<double>(allIndicesGroups.length);
     int scoreCounter = 0;
 
     for (final testIndices in allIndicesGroups) {
       final trainFeatures =
-          List<Vector>(points.rowsNum - testIndices.length);
+          List<Vector>(observations.rowsNum - testIndices.length);
       final trainLabels =
-          List<Vector>(points.rowsNum - testIndices.length);
+          List<Vector>(observations.rowsNum - testIndices.length);
 
       final testFeatures = List<Vector>(testIndices.length);
       final testLabels = List<Vector>(testIndices.length);
@@ -46,22 +46,22 @@ class CrossValidatorImpl implements CrossValidator {
       int trainPointsCounter = 0;
       int testPointsCounter = 0;
 
-      for (int index = 0; index < points.rowsNum; index++) {
+      for (int index = 0; index < observations.rowsNum; index++) {
         if (testIndices.contains(index)) {
-          testFeatures[testPointsCounter] = points.getRow(index);
+          testFeatures[testPointsCounter] = observations.getRow(index);
           testLabels[testPointsCounter] = labels.getRow(index);
           testPointsCounter++;
         } else {
-          trainFeatures[trainPointsCounter] = points.getRow(index);
+          trainFeatures[trainPointsCounter] = observations.getRow(index);
           trainLabels[trainPointsCounter] = labels.getRow(index);
           trainPointsCounter++;
         }
       }
 
-      predictor.fit(
-          Matrix.fromRows(trainFeatures, dtype: dtype),
-          Matrix.fromRows(trainLabels, dtype: dtype),
-          isDataNormalized: isDataNormalized);
+      final predictor = predictorFactory(
+        Matrix.fromRows(trainFeatures, dtype: dtype),
+        Matrix.fromRows(trainLabels, dtype: dtype),
+      )..fit();
 
       scores[scoreCounter++] = predictor.test(
           Matrix.fromRows(testFeatures, dtype: dtype),
@@ -70,6 +70,6 @@ class CrossValidatorImpl implements CrossValidator {
       );
     }
 
-    return scores.reduce((sum, value) => (sum ?? 0.0) + value) / scores.length;
+    return scores.fold<double>(0, (sum, value) => sum + value) / scores.length;
   }
 }

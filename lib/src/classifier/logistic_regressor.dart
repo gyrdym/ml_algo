@@ -22,7 +22,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class LogisticRegressor with LinearClassifierMixin implements Classifier {
-  LogisticRegressor({
+  LogisticRegressor(this.trainingFeatures, this.trainingOutcomes, {
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
@@ -58,6 +58,8 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
 
+        classLabels = trainingOutcomes.uniqueRows(),
+
         optimizer = optimizerFactory.fromType(
           optimizer,
           dtype: dtype,
@@ -79,6 +81,15 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
       ScoreToProbMapperType.logit;
 
   @override
+  final Matrix trainingFeatures;
+
+  @override
+  final Matrix trainingOutcomes;
+
+  @override
+  final Matrix classLabels;
+
+  @override
   final Type dtype;
 
   final double probabilityThreshold;
@@ -97,9 +108,9 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
   /// classes)
   @override
   Matrix learnWeights(Matrix features, Matrix labels,
-      Matrix initialWeights, bool arePointsNormalized) =>
+      Matrix initialWeights) =>
     labels.mapColumns((column) => _fitBinaryClassifier(features, column,
-        initialWeights, arePointsNormalized));
+        initialWeights));
 
   @override
   Matrix predictClasses(Matrix features) {
@@ -112,11 +123,9 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
   }
 
   Vector _fitBinaryClassifier(Matrix features, Vector labels,
-      Matrix initialWeights, bool arePointsNormalized) =>
-      optimizer
+      Matrix initialWeights) => optimizer
         .findExtrema(features, Matrix.fromColumns([labels]),
             initialWeights: initialWeights,
-            arePointsNormalized: arePointsNormalized,
             isMinimizingObjective: false)
         .getColumn(0);
 }
