@@ -7,22 +7,11 @@ import 'package:test/test.dart';
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 void main() {
-  LogisticRegressor classifier;
-
   final firstClass = [1.0, 0.0, 0.0];
   final secondClass = [0.0, 1.0, 0.0];
   final thirdClass = [0.0, 0.0, 1.0];
 
   group('Logistic regressor', () {
-    setUp(() {
-      classifier = LogisticRegressor(
-          iterationsLimit: 2,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          fitIntercept: false,
-          gradientType: GradientType.batch);
-    });
-
     test('should extract class labels from the test_data', () {
       final features = Matrix.from([
         [5.0, 7.0, 6.0],
@@ -42,7 +31,15 @@ void main() {
         [0.0],
         [0.0],
       ]);
-      classifier.fit(features, labels);
+
+      final classifier = LogisticRegressor(
+          features, labels,
+          iterationsLimit: 2,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          fitIntercept: false,
+          gradientType: GradientType.batch)
+        ..fit();
 
       expect(classifier.classLabels, equals([
         [3.0],
@@ -67,7 +64,15 @@ void main() {
         thirdClass,
         firstClass,
       ]);
-      classifier.fit(features, labels);
+
+      final classifier = LogisticRegressor(
+          features, labels,
+          iterationsLimit: 2,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          fitIntercept: false,
+          gradientType: GradientType.batch)
+        ..fit();
 
       // given test_data
       // -----------------------------------------
@@ -345,7 +350,15 @@ void main() {
         thirdClass,
         firstClass,
       ]);
-      classifier.fit(features, labels);
+
+      final classifier = LogisticRegressor(
+          features, labels,
+          iterationsLimit: 2,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          fitIntercept: false,
+          gradientType: GradientType.batch)
+        ..fit();
 
       final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
@@ -372,7 +385,15 @@ void main() {
         thirdClass,
         firstClass,
       ]);
-      classifier.fit(features, labels);
+
+      final classifier = LogisticRegressor(
+          features, labels,
+          iterationsLimit: 2,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          fitIntercept: false,
+          gradientType: GradientType.batch)
+        ..fit();
 
       final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
@@ -400,7 +421,15 @@ void main() {
         thirdClass,
         firstClass,
       ]);
-      classifier.fit(features, labels);
+
+      final classifier = LogisticRegressor(
+          features, labels,
+          iterationsLimit: 2,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          fitIntercept: false,
+          gradientType: GradientType.batch)
+        ..fit();
 
       final newFeatures = Matrix.from([
         [2.0, 4.0, 1.0],
@@ -414,12 +443,6 @@ void main() {
     });
 
     test('should consider intercept term', () {
-      final classifier = LogisticRegressor(
-          iterationsLimit: 1,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          gradientType: GradientType.batch,
-          fitIntercept: true);
       final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -428,8 +451,14 @@ void main() {
         [1.0, 0.0],
         [0.0, 1.0],
       ]);
-      classifier.fit(features, labels);
-
+      final classifier = LogisticRegressor(
+          features, labels,
+          iterationsLimit: 1,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          gradientType: GradientType.batch,
+          fitIntercept: true)
+        ..fit();
       // as the intercept is required to be fitted, our test_data should look as follows:
       //
       // [5.0, 7.0, 6.0] => [1.0, 5.0, 7.0, 6.0]
@@ -493,13 +522,6 @@ void main() {
 
     test('should consider intercept scale if intercept term is going to be '
         'fitted', () {
-      final classifier = LogisticRegressor(
-          iterationsLimit: 1,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          gradientType: GradientType.batch,
-          fitIntercept: true,
-          interceptScale: 2.0);
       final features = Matrix.from([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
@@ -510,7 +532,16 @@ void main() {
         [0.0, 1.0],
         [1.0, 0.0],
       ]);
-      classifier.fit(features, labels);
+
+      final classifier = LogisticRegressor(
+          features, labels,
+          iterationsLimit: 1,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          gradientType: GradientType.batch,
+          fitIntercept: true,
+          interceptScale: 2.0)
+        ..fit();
 
       // as the intercept is required to be fitted, our test_data should look as follows:
       //

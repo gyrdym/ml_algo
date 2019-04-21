@@ -17,8 +17,13 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(k: 1, distance: Distance.cosine, solverFn: solverFn)
-        ..fit(Matrix.from([[1.0]]), Matrix.from([[1.0]]))
+      KNNRegressor(
+          Matrix.from([[1.0]]),
+          Matrix.from([[1.0]]),
+          k: 1,
+          distance: Distance.cosine,
+          solverFn: solverFn)
+        ..fit()
         ..predict(Matrix.from([[1.0]]));
     });
 
@@ -32,14 +37,14 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(k: 2, distance: Distance.cosine, solverFn: solverFn)
-        ..fit(Matrix.from([
-            [1.0, 2.0, 3.0],
-            [4.0, 5.0, 6.0],
-        ]), Matrix.from([
-          [1.0],
-          [2.0]
-        ]))
+      KNNRegressor(Matrix.from([
+        [1.0, 2.0, 3.0],
+        [4.0, 5.0, 6.0],
+      ]), Matrix.from([
+        [1.0],
+        [2.0]
+      ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
+        ..fit()
         ..predict(Matrix.from([[10.0, 20.0, 30.0]]));
     });
 
@@ -53,14 +58,14 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(k: 2, distance: Distance.cosine, solverFn: solverFn)
-        ..fit(Matrix.from([
-          [1.0, 2.0, 3.0],
-          [4.0, 5.0, 6.0],
-        ]), Matrix.from([
-          [1.0],
-          [2.0]
-        ]))
+      KNNRegressor(Matrix.from([
+        [1.0, 2.0, 3.0],
+        [4.0, 5.0, 6.0],
+      ]), Matrix.from([
+        [1.0],
+        [2.0]
+      ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
+        ..fit()
         ..predict(Matrix.from([[10.0, 20.0, 30.0]]));
     });
 
@@ -71,14 +76,14 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(k: 2, distance: Distance.cosine, solverFn: solverFn)
-        ..fit(Matrix.from([
-          [1.0, 2.0, 3.0],
-          [4.0, 5.0, 6.0],
-        ]), Matrix.from([
-          [1.0],
-          [2.0]
-        ]))
+      KNNRegressor(Matrix.from([
+        [1.0, 2.0, 3.0],
+        [4.0, 5.0, 6.0],
+      ]), Matrix.from([
+        [1.0],
+        [2.0]
+      ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
+        ..fit()
         ..predict(Matrix.from([[10.0, 20.0, 30.0]]));
     });
 
@@ -89,8 +94,13 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(k: 1, distance: Distance.cosine, solverFn: solverFn)
-        ..fit(Matrix.from([[1.0]]), Matrix.from([[1.0]]))
+      KNNRegressor(
+          Matrix.from([[1.0]]),
+          Matrix.from([[1.0]]),
+          k: 1,
+          distance: Distance.cosine,
+          solverFn: solverFn)
+        ..fit()
         ..predict(Matrix.from([[1.0]]));
     });
 
@@ -98,13 +108,11 @@ void main() {
         'number of training outcomes mismatch', () {
       final solverFn = (int k, Matrix trainObservations, Matrix outcomes,
           Matrix observations, {Distance distance}) => fakeKNeighbours;
-      final regressor = KNNRegressor(k: 1, distance: Distance.cosine,
-          solverFn: solverFn);
       expect(
-        () => regressor.fit(Matrix.from([[1.0, 2,0]]), Matrix.from([
+        () => KNNRegressor(Matrix.from([[1.0, 2,0]]), Matrix.from([
           [1.0],
           [3.0],
-        ])),
+        ]), k: 1, distance: Distance.cosine, solverFn: solverFn),
         throwsException,
       );
     });
@@ -113,11 +121,9 @@ void main() {
         'training observations mismatch', () {
       final solverFn = (int k, Matrix trainObservations, Matrix outcomes,
           Matrix observations, {Distance distance}) => fakeKNeighbours;
-      final regressor = KNNRegressor(k: 3, distance: Distance.cosine,
-          solverFn: solverFn);
       expect(
-            () => regressor.fit(Matrix.from([[1.0, 2,0]]), Matrix.from([
-              [1.0],])),
+            () => KNNRegressor(Matrix.from([[1.0, 2,0]]), Matrix.from([
+              [1.0],]), k: 3, distance: Distance.cosine, solverFn: solverFn),
         throwsException,
       );
     });

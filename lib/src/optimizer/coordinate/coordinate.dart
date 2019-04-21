@@ -14,15 +14,6 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CoordinateOptimizer implements Optimizer {
-  final InitialWeightsGenerator _initialCoefficientsGenerator;
-  final ConvergenceDetector _convergenceDetector;
-  final CostFunction _costFn;
-  final Type _dtype;
-  final double _lambda;
-
-  Matrix _coefficients;
-  Vector _normalizer;
-
   CoordinateOptimizer({
     Type dtype = DefaultParameterValues.dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
@@ -35,23 +26,32 @@ class CoordinateOptimizer implements Optimizer {
     double lambda,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     CostFunctionType costFunctionType = CostFunctionType.squared,
+    bool isTrainDataNormalized = false,
   })  : _dtype = dtype,
         _lambda = lambda ?? 0.0,
         _initialCoefficientsGenerator =
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
         _convergenceDetector = convergenceDetectorFactory.create(
             minCoefficientsDiff, iterationsLimit),
-        _costFn = costFunctionFactory.fromType(costFunctionType);
+        _costFn = costFunctionFactory.fromType(costFunctionType),
+        _isTrainDataNormalized = isTrainDataNormalized;
+
+  final InitialWeightsGenerator _initialCoefficientsGenerator;
+  final ConvergenceDetector _convergenceDetector;
+  final CostFunction _costFn;
+  final Type _dtype;
+  final double _lambda;
+  final bool _isTrainDataNormalized;
+
+  Matrix _coefficients;
+  Vector _normalizer;
 
   @override
-  Matrix findExtrema(Matrix points, Matrix labels,
-      {
-        Matrix initialWeights,
-        bool isMinimizingObjective = true,
-        bool arePointsNormalized = false
-      }
-  ) {
-    _normalizer = arePointsNormalized
+  Matrix findExtrema(Matrix points, Matrix labels, {
+    Matrix initialWeights,
+    bool isMinimizingObjective = true,
+  }) {
+    _normalizer = _isTrainDataNormalized
         ? Vector.filled(points.columnsNum, 1.0, dtype: _dtype)
         : points.reduceRows((combine, vector) => (combine + vector * vector));
 

@@ -22,16 +22,10 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   Matrix _weightsByClasses;
 
   @override
-  Matrix get classLabels => _classLabels;
-  Matrix _classLabels;
-
-  @override
-  void fit(Matrix features, Matrix labels,
-      {Matrix initialWeights, bool isDataNormalized = false}) {
-    _classLabels = labels.uniqueRows();
-    final processedFeatures = interceptPreprocessor.addIntercept(features);
+  void fit({Matrix initialWeights}) {
     _weightsByClasses = learnWeights(
-        processedFeatures, labels, initialWeights, isDataNormalized);
+        interceptPreprocessor.addIntercept(trainingFeatures), trainingOutcomes,
+        initialWeights);
   }
 
   @override
@@ -60,7 +54,7 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
     return checkDataAndPredictProbabilities(processedFeatures)
         .mapRows((probabilities) {
       final labelIdx = probabilities.toList().indexOf(probabilities.max());
-      return _classLabels.getRow(labelIdx);
+      return classLabels.getRow(labelIdx);
     });
   }
 

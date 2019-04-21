@@ -20,7 +20,8 @@ void main() {
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      createSoftmaxRegressor(dtype: dtype);
+      createSoftmaxRegressor(Matrix.from([[1.0]]), Matrix.from([[1.0]]),
+          dtype: dtype);
 
       verify(interceptPreprocessorFactoryMock.create(dtype, scale: 0.0))
           .called(1);
@@ -101,7 +102,6 @@ void main() {
             [1.0, 90.1, 20.2, 10.0, 12.1],
           ], 1e-2)),
           argThat(equals(origLabels)),
-          arePointsNormalized: true,
           initialWeights: argThat(equals(initialWeights),
               named: 'initialWeights'),
           isMinimizingObjective: false))
@@ -114,9 +114,8 @@ void main() {
           ])
       );
 
-      createSoftmaxRegressor()
-        ..fit(features, origLabels,
-            initialWeights: initialWeights, isDataNormalized: true);
+      createSoftmaxRegressor(features, origLabels)
+        ..fit(initialWeights: initialWeights);
 
       verify(
           interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
@@ -154,7 +153,6 @@ void main() {
               [40.0],
             ]),
             named: 'initialWeights'),
-        arePointsNormalized: true,
         isMinimizingObjective: false)
       ).called(1);
     });

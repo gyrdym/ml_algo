@@ -4,6 +4,7 @@ import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
+import 'package:ml_linalg/matrix.dart';
 
 /// A factory for all the linear regressors.
 ///
@@ -60,7 +61,8 @@ abstract class LinearRegressor implements Regressor {
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearRegressor.gradient({
+  factory LinearRegressor.gradient(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
@@ -104,7 +106,8 @@ abstract class LinearRegressor implements Regressor {
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearRegressor.lasso({
+  factory LinearRegressor.lasso(Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
     int iterationsLimit,
     double minWeightsUpdate,
     double lambda,
@@ -112,5 +115,6 @@ abstract class LinearRegressor implements Regressor {
     double interceptScale,
     InitialWeightsType initialWeightsType,
     Type dtype,
+    bool isTrainDataNormalized,
   }) = LassoRegressor;
 }
