@@ -74,7 +74,4 @@ class KNNRegressor implements ParameterlessRegressor {
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);
   }
-
-  @override
-  Vector get weights => null;
 }

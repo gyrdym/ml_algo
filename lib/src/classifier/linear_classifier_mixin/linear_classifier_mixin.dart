@@ -15,9 +15,6 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
   ScoreToProbMapper get scoreToProbMapper;
 
   @override
-  Vector get weights => null;
-
-  @override
   Matrix get weightsByClasses => _weightsByClasses;
   Matrix _weightsByClasses;
 
