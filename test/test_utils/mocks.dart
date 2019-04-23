@@ -5,6 +5,7 @@ import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
@@ -16,6 +17,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
@@ -59,6 +61,10 @@ class ConvergenceDetectorFactoryMock extends Mock
     implements ConvergenceDetectorFactory {}
 
 class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
+
+class SplitterMock extends Mock implements Splitter {}
+
+class PredictorMock extends Mock implements Predictor {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,
