@@ -1,5 +1,10 @@
 # Changelog
 
+## 11.0.1
+- Cross validator refactored
+- Data splitters refactored
+- Unit tests for cross validator added
+
 ## 11.0.0
 - Added immutable state to all the predictor subclasses
 

@@ -58,5 +58,23 @@ void main() {
         [530, 130, 930],
       ])), argThat(equals([[700], [900]])), metric)).called(1);
     });
+
+    test('should throw an exception if observations number and outcomes number '
+        'mismatch', () {
+      final allObservations = Matrix.from([
+        [330, 930, 130],
+        [630, 830, 230],
+      ]);
+      final allOutcomes = Matrix.from([
+        [100],
+      ]);
+      final metric = MetricType.mape;
+      final splitter = SplitterMock();
+      final predictor = PredictorMock();
+      final validator = CrossValidatorImpl(Float32x4, splitter);
+
+      expect(() => validator.evaluate((observations, outcomes) => predictor,
+          allObservations, allOutcomes, metric), throwsException);
+    });
   });
 }

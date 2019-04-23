@@ -26,19 +26,20 @@ class CrossValidatorImpl implements CrossValidator {
     var folds = 0;
 
     for (final testIndices in allIndicesGroups) {
+      final testIndicesAsSet = Set<int>.from(testIndices);
       final trainFeatures =
-          List<Vector>(observations.rowsNum - testIndices.length);
+          List<Vector>(observations.rowsNum - testIndicesAsSet.length);
       final trainLabels =
-          List<Vector>(observations.rowsNum - testIndices.length);
+          List<Vector>(observations.rowsNum - testIndicesAsSet.length);
 
-      final testFeatures = List<Vector>(testIndices.length);
-      final testLabels = List<Vector>(testIndices.length);
+      final testFeatures = List<Vector>(testIndicesAsSet.length);
+      final testLabels = List<Vector>(testIndicesAsSet.length);
 
       int trainPointsCounter = 0;
       int testPointsCounter = 0;
 
       for (int index = 0; index < observations.rowsNum; index++) {
-        if (testIndices.contains(index)) {
+        if (testIndicesAsSet.contains(index)) {
           testFeatures[testPointsCounter] = observations.getRow(index);
           testLabels[testPointsCounter] = labels.getRow(index);
           testPointsCounter++;
