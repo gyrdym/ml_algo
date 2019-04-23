@@ -1,21 +1,13 @@
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class CrossValidatorImpl implements CrossValidator {
-  factory CrossValidatorImpl.kFold({Type dtype, int numberOfFolds = 5}) =>
-      CrossValidatorImpl._(dtype, KFoldSplitter(numberOfFolds));
-
-  factory CrossValidatorImpl.lpo({Type dtype, int p}) =>
-      CrossValidatorImpl._(dtype, LeavePOutSplitter(p));
-
-  CrossValidatorImpl._(Type dtype, this._splitter)
+  CrossValidatorImpl(Type dtype, this._splitter)
       : dtype = dtype ?? DefaultParameterValues.dtype;
 
   final Type dtype;
