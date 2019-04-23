@@ -1,4 +1,4 @@
-// 10 sec
+// 8.5 sec
 import 'dart:async';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
