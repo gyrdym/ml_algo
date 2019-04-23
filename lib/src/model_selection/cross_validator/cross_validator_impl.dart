@@ -1,21 +1,13 @@
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class CrossValidatorImpl implements CrossValidator {
-  factory CrossValidatorImpl.kFold({Type dtype, int numberOfFolds = 5}) =>
-      CrossValidatorImpl._(dtype, KFoldSplitter(numberOfFolds));
-
-  factory CrossValidatorImpl.lpo({Type dtype, int p}) =>
-      CrossValidatorImpl._(dtype, LeavePOutSplitter(p));
-
-  CrossValidatorImpl._(Type dtype, this._splitter)
+  CrossValidatorImpl(Type dtype, this._splitter)
       : dtype = dtype ?? DefaultParameterValues.dtype;
 
   final Type dtype;
@@ -30,24 +22,24 @@ class CrossValidatorImpl implements CrossValidator {
     }
 
     final allIndicesGroups = _splitter.split(observations.rowsNum);
-    // TODO get rid of length accessing
-    final scores = List<double>(allIndicesGroups.length);
-    int scoreCounter = 0;
+    var score = 0.0;
+    var folds = 0;
 
     for (final testIndices in allIndicesGroups) {
+      final testIndicesAsSet = Set<int>.from(testIndices);
       final trainFeatures =
-          List<Vector>(observations.rowsNum - testIndices.length);
+          List<Vector>(observations.rowsNum - testIndicesAsSet.length);
       final trainLabels =
-          List<Vector>(observations.rowsNum - testIndices.length);
+          List<Vector>(observations.rowsNum - testIndicesAsSet.length);
 
-      final testFeatures = List<Vector>(testIndices.length);
-      final testLabels = List<Vector>(testIndices.length);
+      final testFeatures = List<Vector>(testIndicesAsSet.length);
+      final testLabels = List<Vector>(testIndicesAsSet.length);
 
       int trainPointsCounter = 0;
       int testPointsCounter = 0;
 
       for (int index = 0; index < observations.rowsNum; index++) {
-        if (testIndices.contains(index)) {
+        if (testIndicesAsSet.contains(index)) {
           testFeatures[testPointsCounter] = observations.getRow(index);
           testLabels[testPointsCounter] = labels.getRow(index);
           testPointsCounter++;
@@ -63,13 +55,14 @@ class CrossValidatorImpl implements CrossValidator {
         Matrix.fromRows(trainLabels, dtype: dtype),
       )..fit();
 
-      scores[scoreCounter++] = predictor.test(
+      score += predictor.test(
           Matrix.fromRows(testFeatures, dtype: dtype),
           Matrix.fromRows(testLabels, dtype: dtype),
           metric
       );
+      folds++;
     }
 
-    return scores.fold<double>(0, (sum, value) => sum + value) / scores.length;
+    return score / folds;
   }
 }

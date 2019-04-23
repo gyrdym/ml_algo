@@ -1,47 +1,31 @@
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:xrange/zrange.dart';
 
 class KFoldSplitter implements Splitter {
-  final int _numberOfFolds;
-
   KFoldSplitter(this._numberOfFolds) {
     if (_numberOfFolds == 0 || _numberOfFolds == 1) {
       throw RangeError(
-          'Number of folds must be greater than 1 and less than number of samples');
+          'Number of folds must be greater than 1 and less than number of '
+              'samples');
     }
   }
+
+  final int _numberOfFolds;
 
   @override
-  Iterable<Iterable<int>> split(int numberOfSamples) sync* {
-    if (_numberOfFolds > numberOfSamples) {
-      throw RangeError.range(_numberOfFolds, 0, numberOfSamples, null,
+  Iterable<Iterable<int>> split(int numOfObservations) sync* {
+    if (_numberOfFolds > numOfObservations) {
+      throw RangeError.range(_numberOfFolds, 0, numOfObservations, null,
           'Number of folds must be less than number of samples!');
     }
-
-    final remainder = numberOfSamples % _numberOfFolds;
-    final size = (numberOfSamples / _numberOfFolds).truncate();
-    final sizes = List<int>.filled(_numberOfFolds, 1)
-        .map((int el) => el * size)
-        .toList(growable: false);
-
-    if (remainder > 0) {
-      final range =
-          sizes.take(remainder).map((int el) => ++el).toList(growable: false);
-      sizes.setRange(0, remainder, range);
-    }
-
-    int startIdx = 0;
-    int endIdx = 0;
-
-    for (int i = 0; i < sizes.length; i++) {
-      endIdx = startIdx + sizes[i];
-      yield _range(startIdx, endIdx);
+    final remainder = numOfObservations % _numberOfFolds;
+    final foldSize = numOfObservations ~/ _numberOfFolds;
+    for (int i = 0, startIdx = 0, endIdx = 0; i < _numberOfFolds; i++) {
+      // if we reached last fold of size [foldSize], all the next folds up
+      // to the last fold will have size that is equal to [foldSize] + 1
+      endIdx = startIdx + foldSize + (i >= _numberOfFolds - remainder ? 1 : 0);
+      yield ZRange.closedOpen(startIdx, endIdx).values();
       startIdx = endIdx;
-    }
-  }
-
-  Iterable<int> _range(int start, int end) sync* {
-    for (int i = start; i < end; i++) {
-      yield i;
     }
   }
 }
