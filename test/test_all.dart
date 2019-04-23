@@ -6,9 +6,12 @@ import 'classifier/logistic_regressor_integration_test.dart'
 import 'classifier/logistic_regressor_test.dart' as logistic_regressor_test;
 import 'classifier/softmax_regressor_test.dart' as softmax_regressor_test;
 import 'cost_function/cost_function_test.dart' as cost_function_test;
+import 'cross_validator/cross_validator_impl_test.dart'
+  as cross_validator_impl_test;
 import 'data_preprocessing/intercept_preprocessor_test.dart'
     as intercept_preprocessor_test;
-import 'data_splitter/data_splitter_test.dart' as data_splitter_test;
+import 'data_splitter/k_fold_splitter_test.dart' as k_fold_splitter_test;
+import 'data_splitter/lpo_splitter_test.dart' as lpo_splitter_test;
 import 'math/randomizer_test.dart' as randomizer_test;
 import 'optimizer/convergence_detector/convergence_detector_impl_test.dart'
     as convergence_detector_test;
@@ -33,8 +36,10 @@ void main() {
   logistic_regressor_test.main();
   softmax_regressor_test.main();
   cost_function_test.main();
+  cross_validator_impl_test.main();
   intercept_preprocessor_test.main();
-  data_splitter_test.main();
+  k_fold_splitter_test.main();
+  lpo_splitter_test.main();
   randomizer_test.main();
   convergence_detector_test.main();
   coord_optimizer_integration_test.main();
