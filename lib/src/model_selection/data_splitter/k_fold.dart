@@ -5,7 +5,8 @@ class KFoldSplitter implements Splitter {
   KFoldSplitter(this._numberOfFolds) {
     if (_numberOfFolds == 0 || _numberOfFolds == 1) {
       throw RangeError(
-          'Number of folds must be greater than 1 and less than number of samples');
+          'Number of folds must be greater than 1 and less than number of '
+              'samples');
     }
   }
 
@@ -20,6 +21,8 @@ class KFoldSplitter implements Splitter {
     final remainder = numOfObservations % _numberOfFolds;
     final foldSize = numOfObservations ~/ _numberOfFolds;
     for (int i = 0, startIdx = 0, endIdx = 0; i < _numberOfFolds; i++) {
+      // if we reached last fold of size [foldSize], all the next folds up
+      // to the last fold will have size that is equal to [foldSize] + 1
       endIdx = startIdx + foldSize + (i >= _numberOfFolds - remainder ? 1 : 0);
       yield ZRange.closedOpen(startIdx, endIdx).values();
       startIdx = endIdx;
