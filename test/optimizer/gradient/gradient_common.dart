@@ -36,12 +36,13 @@ InitialWeightsGenerator createInitialWeightsGenerator() {
   return mock;
 }
 
-GradientOptimizer createOptimizer(
-    {double eta,
-    double minCoeffUpdate,
-    int iterationsLimit,
-    double lambda,
-    int batchSize}) {
+GradientOptimizer createOptimizer(Matrix points, Matrix labels, {
+  double eta,
+  double minCoeffUpdate,
+  int iterationsLimit,
+  double lambda,
+  int batchSize
+}) {
   learningRateGeneratorMock = createLearningRateGenerator();
   initialWeightsGeneratorMock = createInitialWeightsGenerator();
   costFunctionFactoryMock = CostFunctionFactoryMock();
@@ -64,6 +65,7 @@ GradientOptimizer createOptimizer(
       .thenReturn(convergenceDetectorMock);
 
   final opt = GradientOptimizer(
+      points, labels,
       randomizerFactory: randomizerFactoryMock,
       costFunctionFactory: costFunctionFactoryMock,
       costFnType: CostFunctionType.squared,
@@ -96,6 +98,7 @@ void mockGetGradient(CostFunction mock, {
 }
 
 void testOptimizer(
+  Matrix points, Matrix labels,
   Function callback(Optimizer optimizer), {
   int iterations,
   int batchSize = 1,
@@ -110,6 +113,7 @@ void testOptimizer(
   when(convergenceDetectorMock.isConverged(any, iterations)).thenReturn(true);
 
   final optimizer = createOptimizer(
+      points, labels,
       minCoeffUpdate: minCoeffUpdate,
       iterationsLimit: iterations,
       lambda: lambda,

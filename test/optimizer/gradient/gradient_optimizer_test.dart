@@ -79,9 +79,8 @@ void main() {
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1))
           .thenReturn(interval);
 
-      testOptimizer((optimizer) {
-        optimizer.findExtrema(points, labels);
-
+      testOptimizer(points, labels, (optimizer) {
+        optimizer.findExtrema();
         verifyGetGradientCall(costFunctionMock, x: x, w: w1, y: y, calls: 1);
         verifyGetGradientCall(costFunctionMock, x: x, w: w2, y: y, calls: 1);
         verifyGetGradientCall(costFunctionMock, x: x, w: w3, y: y, calls: 1);
@@ -118,9 +117,8 @@ void main() {
               argThat(equals(batch)), any, argThat(equals(y))))
           .thenReturn(Matrix.from(grad));
 
-      testOptimizer((optimizer) {
-        optimizer.findExtrema(points, labels);
-
+      testOptimizer(points, labels, (optimizer) {
+        optimizer.findExtrema();
         verify(costFunctionMock.getGradient(
                 argThat(equals(batch)), any, argThat(equals(y))))
             .called(3); // 3 iterations
@@ -147,8 +145,8 @@ void main() {
             [10.0]
       ]));
 
-      testOptimizer((optimizer) {
-        optimizer.findExtrema(points, labels);
+      testOptimizer(points, labels, (optimizer) {
+        optimizer.findExtrema();
         verify(costFunctionMock.getGradient(
                 argThat(equals(points)), any, argThat(equals(labels))))
             .called(3); // 3 iterations
@@ -177,8 +175,8 @@ void main() {
       when(costFunctionMock.getGradient(any, any, any))
           .thenReturn(Matrix.from(grad));
 
-      testOptimizer((optimizer) {
-        optimizer.findExtrema(points, labels);
+      testOptimizer(points, labels, (optimizer) {
+        optimizer.findExtrema();
         verify(costFunctionMock.getGradient(
                 argThat(equals(points)), any, argThat(equals(labels))))
             .called(iterationLimit);
@@ -207,8 +205,8 @@ void main() {
             [8.0]
       ]));
 
-      testOptimizer((optimizer) {
-        final optimalCoefficients = optimizer.findExtrema(points, labels);
+      testOptimizer(points, labels, (optimizer) {
+        final optimalCoefficients = optimizer.findExtrema();
         expect(optimalCoefficients, equals([
           [-48.0],
           [-48.0],
@@ -241,8 +239,8 @@ void main() {
               argThat(equals(points)), any, argThat(equals(labels))))
           .thenReturn(gradient);
 
-      testOptimizer((optimizer) {
-        final optimalCoefficients = optimizer.findExtrema(points, labels);
+      testOptimizer(points, labels, (optimizer) {
+        final optimalCoefficients = optimizer.findExtrema();
         expect(optimalCoefficients, equals([
           [-23728.0],
           [-23728.0],
@@ -256,7 +254,7 @@ void main() {
     test('should consider `learningRate` parameter', () {
       final initialLearningRate = 10.0;
       final iterations = 3;
-      testOptimizer((optimizer) {
+      testOptimizer(Matrix.from([[]]), Matrix.from([[]]), (optimizer) {
         verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
       },
           iterations: iterations,

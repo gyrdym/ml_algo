@@ -29,9 +29,10 @@ void setUpInterceptPreprocessorFactory() {
       preprocessor: interceptPreprocessorMock);
 }
 
-void setUpOptimizerFactory() {
+void setUpOptimizerFactory(Matrix points, Matrix labels) {
   optimizerMock = OptimizerMock();
   optimizerFactoryMock = createOptimizerFactoryMock(
+      points, labels,
       optimizers: {OptimizerType.gradientDescent: optimizerMock});
 }
 
