@@ -21,6 +21,7 @@ import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
@@ -126,14 +127,14 @@ InterceptPreprocessorFactoryMock createInterceptPreprocessorFactoryMock({
   return factory;
 }
 
-OptimizerFactoryMock createOptimizerFactoryMock({
+OptimizerFactoryMock createOptimizerFactoryMock(Matrix points, Matrix labels, {
   Map<OptimizerType, Optimizer> optimizers,
 }) {
   final factory = OptimizerFactoryMock();
 
   optimizers.forEach((OptimizerType type, Optimizer optimizer) {
     when(factory.fromType(
-      type,
+      type, points, labels,
       dtype: anyNamed('dtype'),
       randomizerFactory: anyNamed('randomizerFactory'),
       costFunctionFactory: anyNamed('costFunctionFactory'),
