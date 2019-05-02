@@ -23,7 +23,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/zrange.dart';
 
 class GradientOptimizer implements Optimizer {
-  GradientOptimizer({
+  GradientOptimizer(Matrix points, Matrix labels, {
     Type dtype = DefaultParameterValues.dtype,
 
     RandomizerFactory randomizerFactory =
@@ -51,7 +51,10 @@ class GradientOptimizer implements Optimizer {
     double lambda,
     int batchSize,
     int randomSeed,
-  })  : _lambda = lambda ?? 0.0,
+  })  :
+        _points = points,
+        _labels = labels,
+        _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
 
         _initialWeightsGenerator =
@@ -70,6 +73,8 @@ class GradientOptimizer implements Optimizer {
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 
+  final Matrix _points;
+  final Matrix _labels;
   final Randomizer _randomizer;
   final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
@@ -79,21 +84,14 @@ class GradientOptimizer implements Optimizer {
   final double _lambda;
   final int _batchSize;
 
-  Matrix _points;
-  Matrix _coefficients;
-
   @override
-  Matrix findExtrema(Matrix points, Matrix labels, {
-    Matrix initialWeights,
-    bool isMinimizingObjective = true,
-  }) {
-    _points = points;
-
+  Matrix findExtrema({Matrix initialWeights,
+    bool isMinimizingObjective = true}) {
     final batchSize =
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
-    _coefficients = initialWeights ??
-        Matrix.fromColumns(List.generate(labels.columnsNum,
+    Matrix coefficients = initialWeights ??
+        Matrix.fromColumns(List.generate(_labels.columnsNum,
             (i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     var iteration = 0;
@@ -102,16 +100,16 @@ class GradientOptimizer implements Optimizer {
     while (!_convergenceDetector.isConverged(coefficientsDiff, iteration)) {
       final learningRate = _learningRateGenerator.getNextValue();
       final newCoefficients = _generateCoefficients(
-          _coefficients, labels, learningRate, batchSize,
+          coefficients, _labels, learningRate, batchSize,
           isMinimization: isMinimizingObjective);
-      coefficientsDiff = (newCoefficients - _coefficients).norm();
+      coefficientsDiff = (newCoefficients - coefficients).norm();
       iteration++;
-      _coefficients = newCoefficients;
+      coefficients = newCoefficients;
     }
 
     _learningRateGenerator.stop();
 
-    return _coefficients;
+    return coefficients;
   }
 
   Matrix _generateCoefficients(

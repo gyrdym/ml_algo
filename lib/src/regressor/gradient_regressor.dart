@@ -1,8 +1,6 @@
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
@@ -12,6 +10,7 @@ import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -35,9 +34,10 @@ class GradientRegressor implements LinearRegressor {
     InterceptPreprocessorFactory interceptPreprocessorFactory =
         const InterceptPreprocessorFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
-  })  : _interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
-            scale: fitIntercept ? interceptScale : 0.0),
-        _optimizer = GradientOptimizer(
+  })  : _optimizer = GradientOptimizer(
+          interceptPreprocessorFactory.create(dtype, scale: fitIntercept
+              ? interceptScale : 0.0)
+              .addIntercept(trainingFeatures), trainingOutcomes,
           costFnType: CostFunctionType.squared,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
@@ -56,7 +56,6 @@ class GradientRegressor implements LinearRegressor {
   final Matrix trainingOutcomes;
 
   final GradientOptimizer _optimizer;
-  final InterceptPreprocessor _interceptPreprocessor;
 
   @override
   Vector get weights => _weights;
@@ -64,13 +63,10 @@ class GradientRegressor implements LinearRegressor {
 
   @override
   void fit({Matrix initialWeights}) {
-    _weights = _optimizer
-        .findExtrema(
-          _interceptPreprocessor.addIntercept(trainingFeatures),
-          trainingOutcomes,
-          initialWeights: initialWeights?.transpose(),
-          isMinimizingObjective: true,
-        ).getColumn(0);
+    _weights = _optimizer.findExtrema(
+      initialWeights: initialWeights?.transpose(),
+      isMinimizingObjective: true,
+    ).getColumn(0);
   }
 
   @override

@@ -1,13 +1,12 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class LassoRegressor implements LinearRegressor {
@@ -25,9 +24,10 @@ class LassoRegressor implements LinearRegressor {
     // hidden arguments
     InterceptPreprocessorFactory interceptPreprocessorFactory =
         const InterceptPreprocessorFactoryImpl(),
-  }) : _interceptPreprocessor = interceptPreprocessorFactory.create(dtype,
-            scale: fitIntercept ? interceptScale : 0.0),
-        _optimizer = CoordinateOptimizer(
+  }) : _optimizer = CoordinateOptimizer(
+          interceptPreprocessorFactory.create(dtype,
+              scale: fitIntercept ? interceptScale : 0.0)
+              .addIntercept(trainingFeatures), trainingOutcomes,
           initialWeightsType: initialWeightsType,
           costFunctionType: CostFunctionType.squared,
           iterationsLimit: iterationsLimit,
@@ -44,7 +44,6 @@ class LassoRegressor implements LinearRegressor {
   final Matrix trainingOutcomes;
 
   final CoordinateOptimizer _optimizer;
-  final InterceptPreprocessor _interceptPreprocessor;
 
   @override
   Vector get weights => _weights;
@@ -53,8 +52,6 @@ class LassoRegressor implements LinearRegressor {
   @override
   void fit({Matrix initialWeights}) {
     _weights = _optimizer.findExtrema(
-      _interceptPreprocessor.addIntercept(trainingFeatures),
-      trainingOutcomes,
       initialWeights: initialWeights,
       isMinimizingObjective: true,
     ).getRow(0);

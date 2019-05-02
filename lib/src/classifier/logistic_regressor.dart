@@ -61,7 +61,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
         classLabels = trainingOutcomes.uniqueRows(),
 
         optimizer = optimizerFactory.fromType(
-          optimizer,
+          optimizer, trainingFeatures, trainingOutcomes,
           dtype: dtype,
           costFunctionType: CostFunctionType.logLikelihood,
           scoreToProbMapperType: _scoreToProbMapperType,
