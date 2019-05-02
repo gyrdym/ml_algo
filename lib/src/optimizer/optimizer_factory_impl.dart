@@ -17,13 +17,14 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/matrix.dart';
 
 class OptimizerFactoryImpl implements OptimizerFactory {
   const OptimizerFactoryImpl();
 
   @override
   Optimizer fromType(
-    OptimizerType type, {
+    OptimizerType type, Matrix points, Matrix labels, {
     Type dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
@@ -45,6 +46,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
     switch (type) {
       case OptimizerType.coordinateDescent:
         return coordinate(
+          points, labels,
           dtype: dtype,
           initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
           costFunctionFactory: costFunctionFactory,
@@ -57,6 +59,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
 
       case OptimizerType.gradientDescent:
         return gradient(
+          points, labels,
           dtype: dtype,
           randomizerFactory: randomizerFactory,
           costFunctionFactory: costFunctionFactory,
@@ -80,7 +83,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
   }
 
   @override
-  Optimizer coordinate({
+  Optimizer coordinate(Matrix points, Matrix labels, {
     Type dtype = Float32x4,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
@@ -92,6 +95,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
     CostFunctionType costFunctionType,
   }) =>
       CoordinateOptimizer(
+        points, labels,
         dtype: dtype,
         initialWeightsGeneratorFactory: initialWeightsGeneratorFactory,
         costFunctionFactory: costFunctionFactory,
@@ -103,7 +107,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
       );
 
   @override
-  Optimizer gradient({
+  Optimizer gradient(Matrix points, Matrix labels, {
     Type dtype = Float32x4,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
@@ -123,6 +127,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
     int randomSeed,
   }) =>
       GradientOptimizer(
+        points, labels,
         randomizerFactory: randomizerFactory,
         costFunctionFactory: costFunctionFactory,
         learningRateGeneratorFactory: learningRateGeneratorFactory,
