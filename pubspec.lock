@@ -273,7 +273,7 @@ packages:
       name: ml_linalg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.0.0"
+    version: "10.0.0"
   mockito:
     dependency: "direct dev"
     description:
@@ -513,4 +513,4 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.2.0 <3.0.0"
+  dart: ">=2.3.0 <3.0.0"

@@ -21,6 +21,7 @@ import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
@@ -114,7 +115,7 @@ ScoreToProbMapperFactoryMock createScoreToProbMapperFactoryMock(
 }) {
   final factory = ScoreToProbMapperFactoryMock();
   mappers.forEach((ScoreToProbMapperType type, ScoreToProbMapper fn) {
-    when(factory.fromType(type, dtype)).thenReturn(fn);
+    when(factory.fromType(type, DType.float32)).thenReturn(fn);
   });
   return factory;
 }

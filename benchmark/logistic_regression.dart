@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -28,7 +28,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
   @override
   void setup() {
     regressor = LinearClassifier.logisticRegressor(features, labels,
-        dtype: Float32x4, minWeightsUpdate: null, iterationsLimit: 200);
+        dtype: DType.float32, minWeightsUpdate: null, iterationsLimit: 200);
   }
 
   void tearDown() {}
@@ -37,7 +37,6 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 Future main() async {
   features = Matrix.fromRows(List.generate(observationsNum,
           (i) => Vector.randomFilled(featuresNum)));
-  labels = Matrix.fromColumns([Vector.from(List.generate(observationsNum,
-          (i) => 0.0))]);
+  labels = Matrix.fromColumns([Vector.zero(observationsNum)]);
   LogisticRegressorBenchmark.main();
 }

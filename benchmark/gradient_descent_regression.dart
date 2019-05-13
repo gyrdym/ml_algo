@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -27,7 +27,8 @@ class GDRegressorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    regressor = LinearRegressor.gradient(features, labels, dtype: Float32x4);
+    regressor = LinearRegressor.gradient(features, labels,
+        dtype: DType.float32);
   }
 
   void tearDown() {}

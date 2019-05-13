@@ -20,12 +20,12 @@ void main() {
       final y7 = [700.0];
       final y8 = [800.0];
 
-      final observations = Matrix.from([
+      final observations = Matrix.fromList([
         [10, 10, 10, 10, 10],
         [3, 3, 3, 3, 3],
       ]);
 
-      final trainObservations = Matrix.from([
+      final trainObservations = Matrix.fromList([
         [15, 15, 15, 15, 15],
         [14, 14, 14, 14, 14],
         [16, 16, 16, 16, 16],
@@ -36,7 +36,7 @@ void main() {
         [5, 5, 5, 5, 5],
       ]);
 
-      final trainOutcomes = Matrix.from([y1, y2, y3, y4, y5, y6, y7, y8]);
+      final trainOutcomes = Matrix.fromList([y1, y2, y3, y4, y5, y6, y7, y8]);
 
       final actual = findKNeighbours(k, trainObservations, trainOutcomes,
           observations).toList();
@@ -62,12 +62,12 @@ void main() {
       final y4 = [400.0];
       final y5 = [500.0];
 
-      final observations = Matrix.from([
+      final observations = Matrix.fromList([
         [10, 10, 10, 10, 10],
         [3, 3, 3, 3, 3],
       ]);
 
-      final trainObservations = Matrix.from([
+      final trainObservations = Matrix.fromList([
         [15, 15, 15, 15, 15],
         [14, 14, 14, 14, 14],
         [16, 16, 16, 16, 16],
@@ -75,7 +75,7 @@ void main() {
         [17, 17, 17, 17, 17],
       ]);
 
-      final trainOutcomes = Matrix.from([y1, y2, y3, y4, y5]);
+      final trainOutcomes = Matrix.fromList([y1, y2, y3, y4, y5]);
 
       final actual = findKNeighbours(k, trainObservations, trainOutcomes,
           observations);
@@ -97,12 +97,12 @@ void main() {
       final y4 = [400.0];
       final y5 = [500.0];
 
-      final observations = Matrix.from([
+      final observations = Matrix.fromList([
         [10, 10, 10, 10, 10],
         [3, 3, 3, 3, 3],
       ]);
 
-      final trainObservations = Matrix.from([
+      final trainObservations = Matrix.fromList([
         [15, 15, 15, 15, 15],
         [14, 14, 14, 14, 14],
         [2, 2, 2, 2, 2],
@@ -110,7 +110,7 @@ void main() {
         [1, 1, 1, 1, 1],
       ]);
 
-      final trainOutcomes = Matrix.from([y1, y2, y3, y4, y5]);
+      final trainOutcomes = Matrix.fromList([y1, y2, y3, y4, y5]);
 
       final actual = findKNeighbours(k, trainObservations, trainOutcomes,
           observations).toList();

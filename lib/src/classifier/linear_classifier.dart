@@ -4,6 +4,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 /// A factory for all the linear classifiers
@@ -95,7 +96,7 @@ abstract class LinearClassifier implements Classifier {
     LearningRateType learningRateType,
     OptimizerType optimizer,
     GradientType gradientType,
-    Type dtype,
+    DType dtype,
   }) = LogisticRegressor;
 
   /// Creates a softmax regressor classifier.
@@ -180,7 +181,7 @@ abstract class LinearClassifier implements Classifier {
     LearningRateType learningRateType,
     OptimizerType optimizer,
     GradientType gradientType,
-    Type dtype,
+    DType dtype,
   }) = SoftmaxRegressor;
 
   factory LinearClassifier.SVM() => throw UnimplementedError();

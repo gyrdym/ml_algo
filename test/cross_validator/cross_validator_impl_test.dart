@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -19,7 +20,7 @@ void main() {
   group('CrossValidatorImpl', () {
     test('should perform validation of a model on given test indices of'
         'observations', () {
-      final allObservations = Matrix.from([
+      final allObservations = Matrix.fromList([
         [330, 930, 130],
         [630, 830, 230],
         [730, 730, 330],
@@ -30,13 +31,13 @@ void main() {
         [430, 230, 830],
         [530, 130, 930],
       ]);
-      final allOutcomes = Matrix.from([
+      final allOutcomes = Matrix.fromList([
         [100],[200],[300],[400],[500],[600],[700],[800],[900],
       ]);
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
       final predictor = PredictorMock();
-      final validator = CrossValidatorImpl(Float32x4, splitter);
+      final validator = CrossValidatorImpl(DType.float32, splitter);
 
       var score = 20.0;
       when(predictor.test(any, any, any))
@@ -61,17 +62,17 @@ void main() {
 
     test('should throw an exception if observations number and outcomes number '
         'mismatch', () {
-      final allObservations = Matrix.from([
+      final allObservations = Matrix.fromList([
         [330, 930, 130],
         [630, 830, 230],
       ]);
-      final allOutcomes = Matrix.from([
+      final allOutcomes = Matrix.fromList([
         [100],
       ]);
       final metric = MetricType.mape;
       final splitter = SplitterMock();
       final predictor = PredictorMock();
-      final validator = CrossValidatorImpl(Float32x4, splitter);
+      final validator = CrossValidatorImpl(DType.float32, splitter);
 
       expect(() => validator.evaluate((observations, outcomes) => predictor,
           allObservations, allOutcomes, metric), throwsException);

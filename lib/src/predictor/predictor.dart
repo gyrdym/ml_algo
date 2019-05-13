@@ -9,6 +9,10 @@ abstract class Predictor {
   /// A matrix of dependant variables, that was used to fit the predictor
   Matrix get trainingOutcomes;
 
+  bool get fitIntercept;
+
+  double get interceptScale;
+
   /// Fits the [trainingFeatures] to true labels - [trainingOutcomes]. It's
   /// possible to provide [initialWeights] for [trainingFeatures]
   void fit({Matrix initialWeights});

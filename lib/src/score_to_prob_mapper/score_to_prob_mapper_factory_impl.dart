@@ -3,12 +3,13 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/softmax/softmax_mapper.dart';
+import 'package:ml_linalg/dtype.dart';
 
 class ScoreToProbMapperFactoryImpl implements ScoreToProbMapperFactory {
   const ScoreToProbMapperFactoryImpl();
 
   @override
-  ScoreToProbMapper fromType(ScoreToProbMapperType type, Type dtype) {
+  ScoreToProbMapper fromType(ScoreToProbMapperType type, DType dtype) {
     switch (type) {
       case ScoreToProbMapperType.logit:
         return InverseLogitMapper(dtype);

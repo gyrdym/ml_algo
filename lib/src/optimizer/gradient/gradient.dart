@@ -19,12 +19,13 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/zrange.dart';
 
 class GradientOptimizer implements Optimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
-    Type dtype = DefaultParameterValues.dtype,
+    DType dtype = DefaultParameterValues.dtype,
 
     RandomizerFactory randomizerFactory =
       const RandomizerFactoryImpl(),

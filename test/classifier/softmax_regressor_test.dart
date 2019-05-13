@@ -4,6 +4,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -14,13 +15,13 @@ import 'classifier_common.dart';
 void main() {
   group('SoftmaxRegressor', () {
     test('should initialize properly', () {
-      final dtype = Float64x2;
+      final dtype = DType.float32;
 
       setUpInterceptPreprocessorFactory();
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      createSoftmaxRegressor(Matrix.from([[1.0]]), Matrix.from([[1.0]]),
+      createSoftmaxRegressor(Matrix.fromList([[1.0]]), Matrix.fromList([[1.0]]),
           dtype: dtype);
 
       verify(interceptPreprocessorFactoryMock.create(dtype, scale: 0.0))
@@ -51,7 +52,7 @@ void main() {
       setUpScoreToProbMapperFactory();
       setUpOptimizerFactory();
 
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [10.1, 10.2, 12.0, 13.4],
         [13.1, 15.2, 61.0, 27.2],
         [30.1, 25.2, 62.0, 34.1],
@@ -59,7 +60,7 @@ void main() {
         [35.1, 95.2, 56.0, 52.6],
         [90.1, 20.2, 10.0, 12.1],
       ]);
-      final origLabels = Matrix.from([
+      final origLabels = Matrix.fromList([
         [1.0, 0.0, 0.0],
         [0.0, 1.0, 0.0],
         [0.0, 1.0, 0.0],
@@ -75,7 +76,7 @@ void main() {
         [32.1, 35.2, 36.0, 41.5],
         [35.1, 95.2, 56.0, 52.6],
         [90.1, 20.2, 10.0, 12.1],
-      ])))).thenReturn(Matrix.from([
+      ])))).thenReturn(Matrix.fromList([
         [1.0, 10.1, 10.2, 12.0, 13.4],
         [1.0, 13.1, 15.2, 61.0, 27.2],
         [1.0, 30.1, 25.2, 62.0, 34.1],
@@ -84,7 +85,7 @@ void main() {
         [1.0, 90.1, 20.2, 10.0, 12.1],
       ]));
 
-      final initialWeights = Matrix.from([
+      final initialWeights = Matrix.fromList([
         [1.0],
         [10.0],
         [20.0],
@@ -105,7 +106,7 @@ void main() {
           initialWeights: argThat(equals(initialWeights),
               named: 'initialWeights'),
           isMinimizingObjective: false))
-          .thenReturn(Matrix.from([
+          .thenReturn(Matrix.fromList([
             [100.0, 10.0, 1.0],
             [200.0, 20.0, 2.0],
             [300.0, 30.0, 3.0],
