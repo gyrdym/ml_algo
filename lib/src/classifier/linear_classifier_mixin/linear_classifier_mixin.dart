@@ -1,17 +1,13 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
+import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
-import 'package:ml_algo/src/predictor/weights_finder.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
-mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
-  Type get dtype;
+mixin LinearClassifierMixin implements LinearClassifier {
   Optimizer get optimizer;
-  InterceptPreprocessor get interceptPreprocessor;
   ScoreToProbMapper get scoreToProbMapper;
 
   @override
@@ -20,9 +16,8 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
 
   @override
   void fit({Matrix initialWeights}) {
-    _weightsByClasses = learnWeights(
-        interceptPreprocessor.addIntercept(trainingFeatures), trainingOutcomes,
-        initialWeights);
+    _weightsByClasses ??= optimizer.findExtrema(initialWeights: initialWeights,
+        isMinimizingObjective: false);
   }
 
   @override
@@ -33,26 +28,9 @@ mixin LinearClassifierMixin implements LinearClassifier, WeightsFinder {
 
   @override
   Matrix predictProbabilities(Matrix features) {
-    final processedFeatures = interceptPreprocessor.addIntercept(features);
+    final processedFeatures = addIntercept(trainingFeatures, fitIntercept,
+        interceptScale);
     return checkDataAndPredictProbabilities(processedFeatures);
-  }
-
-  Matrix predictSingleClass(Matrix features, [double threshold = .5]) {
-    final processedFeatures = interceptPreprocessor.addIntercept(features);
-    final classesSource = checkDataAndPredictProbabilities(processedFeatures)
-        .getColumn(0)
-        // TODO: use SIMD
-        .map((value) => value >= threshold ? 1.0 : 0.0);
-    return Matrix.fromColumns([Vector.from(classesSource)]);
-  }
-
-  Matrix predictMultiClass(Matrix features) {
-    final processedFeatures = interceptPreprocessor.addIntercept(features);
-    return checkDataAndPredictProbabilities(processedFeatures)
-        .mapRows((probabilities) {
-      final labelIdx = probabilities.toList().indexOf(probabilities.max());
-      return classLabels.getRow(labelIdx);
-    });
   }
 
   Matrix checkDataAndPredictProbabilities(Matrix features) {

@@ -1,6 +1,4 @@
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory_impl.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
@@ -11,6 +9,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -26,13 +25,11 @@ class GradientRegressor implements LinearRegressor {
     double interceptScale = 1.0,
     int randomSeed,
     int batchSize = 1,
-    Type dtype = DefaultParameterValues.dtype,
+    DType dtype = DefaultParameterValues.dtype,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
     // hidden arguments
-    InterceptPreprocessorFactory interceptPreprocessorFactory =
-        const InterceptPreprocessorFactoryImpl(),
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
   })  : _optimizer = GradientOptimizer(
           interceptPreprocessorFactory.create(dtype, scale: fitIntercept

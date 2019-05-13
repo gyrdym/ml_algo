@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 import 'gradient_common.dart';
 
-Matrix getPoints() => Matrix.from([
+Matrix getPoints() => Matrix.fromList([
       [5.0, 10.0, 15.0],
       [1.0, 2.0, 3.0],
       [10.0, 20.0, 30.0],
@@ -40,7 +40,7 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is '
         'equal to `1` (stochastic case)', () {
       final points = getPoints();
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [10.0],
         [20.0],
         [30.0],
@@ -65,7 +65,7 @@ void main() {
         [-40.0],
         [-40.0],
       ];
-      final grad = Matrix.from([
+      final grad = Matrix.fromList([
         [10.0],
         [10.0],
         [10.0]
@@ -90,7 +90,7 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is '
         'equal to `2` (mini batch case)', () {
       final points = getPoints();
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [10.0],
         [20.0],
         [30.0],
@@ -115,7 +115,7 @@ void main() {
 
       when(costFunctionMock.getGradient(
               argThat(equals(batch)), any, argThat(equals(y))))
-          .thenReturn(Matrix.from(grad));
+          .thenReturn(Matrix.fromList(grad));
 
       testOptimizer(points, labels, (optimizer) {
         optimizer.findExtrema();
@@ -128,7 +128,7 @@ void main() {
     test('should properly process `batchSize` parameter when the latter is '
         'equal to `4` (batch case)', () {
       final points = getPoints();
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [10.0],
         [20.0],
         [30.0],
@@ -139,7 +139,7 @@ void main() {
           .thenReturn([0, 4]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(Matrix.from([
+          .thenReturn(Matrix.fromList([
             [10.0],
             [10.0],
             [10.0]
@@ -157,7 +157,7 @@ void main() {
         'of given points', () {
       final iterationLimit = 3;
       final points = getPoints();
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [10.0],
         [20.0],
         [30.0],
@@ -173,7 +173,7 @@ void main() {
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4))
           .thenReturn(interval);
       when(costFunctionMock.getGradient(any, any, any))
-          .thenReturn(Matrix.from(grad));
+          .thenReturn(Matrix.fromList(grad));
 
       testOptimizer(points, labels, (optimizer) {
         optimizer.findExtrema();
@@ -186,11 +186,11 @@ void main() {
 
     /// (Explanation of the test case)[https://github.com/gyrdym/ml_algo/wiki/Gradient-descent-optimizer-should-find-optimal-coefficient-values]
     test('should find optimal coefficient values', () {
-      final points = Matrix.from([
+      final points = Matrix.fromList([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [7.0],
         [8.0],
       ]);
@@ -199,7 +199,7 @@ void main() {
           .thenReturn([0, 2]);
       when(costFunctionMock.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
-          .thenReturn(Matrix.from([
+          .thenReturn(Matrix.fromList([
             [8.0],
             [8.0],
             [8.0]
@@ -219,15 +219,15 @@ void main() {
 
     /// (Explanation of the test case)[https://github.com/gyrdym/ml_algo/wiki/Gradient-descent-optimizer-should-find-optimal-coefficient-values-and-regularize-it]
     test('should find optimal coefficient values and regularize it', () {
-      final points = Matrix.from([
+      final points = Matrix.fromList([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [7.0],
         [8.0]
       ]);
-      final gradient = Matrix.from([
+      final gradient = Matrix.fromList([
         [8.0],
         [8.0],
         [8.0],
@@ -254,7 +254,7 @@ void main() {
     test('should consider `learningRate` parameter', () {
       final initialLearningRate = 10.0;
       final iterations = 3;
-      testOptimizer(Matrix.from([[]]), Matrix.from([[]]), (optimizer) {
+      testOptimizer(Matrix.fromList([[]]), Matrix.fromList([[]]), (optimizer) {
         verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
       },
           iterations: iterations,

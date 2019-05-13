@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 void main() {
   final fakeKNeighbours = <Iterable<Neighbour<Vector>>>[[
-    Neighbour(1.0, Vector.from([1.0]))]];
+    Neighbour(1.0, Vector.fromList([1.0]))]];
 
   group('KNNRegressor', () {
     test('should consider k parameter', () {
@@ -18,13 +18,13 @@ void main() {
       };
 
       KNNRegressor(
-          Matrix.from([[1.0]]),
-          Matrix.from([[1.0]]),
+          Matrix.fromList([[1.0]]),
+          Matrix.fromList([[1.0]]),
           k: 1,
           distance: Distance.cosine,
           solverFn: solverFn)
         ..fit()
-        ..predict(Matrix.from([[1.0]]));
+        ..predict(Matrix.fromList([[1.0]]));
     });
 
     test('should pass train observations to the solver function', () {
@@ -37,15 +37,15 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(Matrix.from([
+      KNNRegressor(Matrix.fromList([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
-      ]), Matrix.from([
+      ]), Matrix.fromList([
         [1.0],
         [2.0]
       ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
         ..fit()
-        ..predict(Matrix.from([[10.0, 20.0, 30.0]]));
+        ..predict(Matrix.fromList([[10.0, 20.0, 30.0]]));
     });
 
     test('should pass train outcomes to the solver function', () {
@@ -58,15 +58,15 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(Matrix.from([
+      KNNRegressor(Matrix.fromList([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
-      ]), Matrix.from([
+      ]), Matrix.fromList([
         [1.0],
         [2.0]
       ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
         ..fit()
-        ..predict(Matrix.from([[10.0, 20.0, 30.0]]));
+        ..predict(Matrix.fromList([[10.0, 20.0, 30.0]]));
     });
 
     test('should pass observations to the solver function', () {
@@ -76,15 +76,15 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressor(Matrix.from([
+      KNNRegressor(Matrix.fromList([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
-      ]), Matrix.from([
+      ]), Matrix.fromList([
         [1.0],
         [2.0]
       ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
         ..fit()
-        ..predict(Matrix.from([[10.0, 20.0, 30.0]]));
+        ..predict(Matrix.fromList([[10.0, 20.0, 30.0]]));
     });
 
     test('should consider distance type', () {
@@ -95,13 +95,13 @@ void main() {
       };
 
       KNNRegressor(
-          Matrix.from([[1.0]]),
-          Matrix.from([[1.0]]),
+          Matrix.fromList([[1.0]]),
+          Matrix.fromList([[1.0]]),
           k: 1,
           distance: Distance.cosine,
           solverFn: solverFn)
         ..fit()
-        ..predict(Matrix.from([[1.0]]));
+        ..predict(Matrix.fromList([[1.0]]));
     });
 
     test('should throw an exception if number of training observations and '
@@ -109,7 +109,7 @@ void main() {
       final solverFn = (int k, Matrix trainObservations, Matrix outcomes,
           Matrix observations, {Distance distance}) => fakeKNeighbours;
       expect(
-        () => KNNRegressor(Matrix.from([[1.0, 2,0]]), Matrix.from([
+        () => KNNRegressor(Matrix.fromList([[1.0, 2,0]]), Matrix.fromList([
           [1.0],
           [3.0],
         ]), k: 1, distance: Distance.cosine, solverFn: solverFn),
@@ -122,7 +122,7 @@ void main() {
       final solverFn = (int k, Matrix trainObservations, Matrix outcomes,
           Matrix observations, {Distance distance}) => fakeKNeighbours;
       expect(
-            () => KNNRegressor(Matrix.from([[1.0, 2,0]]), Matrix.from([
+            () => KNNRegressor(Matrix.fromList([[1.0, 2,0]]), Matrix.fromList([
               [1.0],]), k: 3, distance: Distance.cosine, solverFn: solverFn),
         throwsException,
       );

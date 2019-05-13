@@ -13,7 +13,7 @@ void main() {
 
   group('Logistic regressor', () {
     test('should extract class labels from the test_data', () {
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
@@ -22,7 +22,7 @@ void main() {
         [4.0, 0.0, 1.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [3.0],
         [1.0],
         [3.0],
@@ -50,14 +50,14 @@ void main() {
     });
 
     test('should properly fit given test_data', () {
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         firstClass,
         secondClass,
         secondClass,
@@ -335,7 +335,7 @@ void main() {
     });
 
     test('should make prediction', () {
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
@@ -343,7 +343,7 @@ void main() {
         [4.0, 0.0, 1.0],
       ]);
 
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         firstClass,
         secondClass,
         secondClass,
@@ -360,7 +360,7 @@ void main() {
           gradientType: GradientType.batch)
         ..fit();
 
-      final newFeatures = Matrix.from([
+      final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
@@ -371,14 +371,14 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 0', () {
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         firstClass,
         secondClass,
         secondClass,
@@ -395,10 +395,10 @@ void main() {
           gradientType: GradientType.batch)
         ..fit();
 
-      final newFeatures = Matrix.from([
+      final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
       ]);
-      final origLabels = Matrix.from([
+      final origLabels = Matrix.fromList([
         [1.0]
       ]);
       final score =
@@ -407,14 +407,14 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 1', () {
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [10.0, 12.0, 31.0],
         [9.0, 8.0, 5.0],
         [4.0, 0.0, 1.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         firstClass,
         secondClass,
         secondClass,
@@ -431,10 +431,10 @@ void main() {
           gradientType: GradientType.batch)
         ..fit();
 
-      final newFeatures = Matrix.from([
+      final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
       ]);
-      final newLabels = Matrix.from([
+      final newLabels = Matrix.fromList([
         thirdClass,
       ]);
       final score =
@@ -443,11 +443,11 @@ void main() {
     });
 
     test('should consider intercept term', () {
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [1.0, 0.0],
         [0.0, 1.0],
       ]);
@@ -522,12 +522,12 @@ void main() {
 
     test('should consider intercept scale if intercept term is going to be '
         'fitted', () {
-      final features = Matrix.from([
+      final features = Matrix.fromList([
         [5.0, 7.0, 6.0],
         [1.0, 2.0, 3.0],
         [3.0, 4.0, 5.0],
       ]);
-      final labels = Matrix.from([
+      final labels = Matrix.fromList([
         [1.0, 0.0],
         [0.0, 1.0],
         [1.0, 0.0],

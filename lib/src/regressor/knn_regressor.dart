@@ -8,6 +8,7 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/regressor/non_parametric_regressor.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/distance.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -17,7 +18,7 @@ class KNNRegressor implements ParameterlessRegressor {
     Distance distance = Distance.euclidean,
     FindKnnFn solverFn = findKNeighbours,
     Kernel kernel = Kernel.uniform,
-    Type dtype = DefaultParameterValues.dtype,
+    DType dtype = DefaultParameterValues.dtype,
 
     KernelFunctionFactory kernelFnFactory = const KernelFunctionFactoryImpl(),
   }) :
@@ -42,11 +43,17 @@ class KNNRegressor implements ParameterlessRegressor {
   @override
   final Matrix trainingOutcomes;
 
+  @override
+  final fitIntercept = null;
+
+  @override
+  final interceptScale = null;
+
   final Distance _distanceType;
   final int _k;
   final FindKnnFn _solverFn;
   final KernelFn _kernelFn;
-  final Type _dtype;
+  final DType _dtype;
 
   Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(
       trainingOutcomes.columnsNum, dtype: _dtype);

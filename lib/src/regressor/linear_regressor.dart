@@ -4,6 +4,7 @@ import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -81,7 +82,7 @@ abstract class LinearRegressor implements Regressor {
     double interceptScale,
     int randomSeed,
     int batchSize,
-    Type dtype,
+    DType dtype,
   }) = GradientRegressor;
 
   /**
@@ -127,7 +128,7 @@ abstract class LinearRegressor implements Regressor {
     bool fitIntercept,
     double interceptScale,
     InitialWeightsType initialWeightsType,
-    Type dtype,
+    DType dtype,
     bool isTrainDataNormalized,
   }) = LassoRegressor;
 

@@ -8,12 +8,13 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 abstract class OptimizerFactory {
   Optimizer fromType(
     OptimizerType type, Matrix points, Matrix labels, {
-    Type dtype,
+    DType dtype,
     RandomizerFactory randomizerFactory,
     CostFunctionFactory costFunctionFactory,
     LearningRateGeneratorFactory learningRateGeneratorFactory,
@@ -31,7 +32,7 @@ abstract class OptimizerFactory {
   });
 
   Optimizer gradient(Matrix points, Matrix labels, {
-    Type dtype,
+    DType dtype,
     RandomizerFactory randomizerFactory,
     CostFunctionFactory costFunctionFactory,
     LearningRateGeneratorFactory learningRateGeneratorFactory,
@@ -49,7 +50,7 @@ abstract class OptimizerFactory {
   });
 
   Optimizer coordinate(Matrix points, Matrix labels, {
-    Type dtype,
+    DType dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory,
     CostFunctionFactory costFunctionFactory,
     double minCoefficientsDiff,

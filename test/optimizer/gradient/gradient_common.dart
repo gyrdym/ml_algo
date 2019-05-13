@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -9,6 +7,7 @@ import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -32,7 +31,7 @@ LearningRateGenerator createLearningRateGenerator() {
 
 InitialWeightsGenerator createInitialWeightsGenerator() {
   final mock = InitialWeightsGeneratorMock();
-  when(mock.generate(3)).thenReturn(Vector.from([0.0, 0.0, 0.0]));
+  when(mock.generate(3)).thenReturn(Vector.fromList([0.0, 0.0, 0.0]));
   return mock;
 }
 
@@ -59,7 +58,7 @@ GradientOptimizer createOptimizer(Matrix points, Matrix labels, {
   when(initialWeightsGeneratorFactoryMock.fromType(any, any))
       .thenReturn(initialWeightsGeneratorMock);
   when(costFunctionFactoryMock.fromType(CostFunctionType.squared,
-          dtype: Float32x4, scoreToProbMapperType: null))
+          dtype: DType.float32, scoreToProbMapperType: null))
       .thenReturn(costFunctionMock);
   when(convergenceDetectorFactoryMock.create(any, any))
       .thenReturn(convergenceDetectorMock);
@@ -79,7 +78,7 @@ GradientOptimizer createOptimizer(Matrix points, Matrix labels, {
       batchSize: batchSize);
 
   verify(costFunctionFactoryMock.fromType(CostFunctionType.squared,
-      dtype: Float32x4, scoreToProbMapperType: null));
+      dtype: DType.float32, scoreToProbMapperType: null));
 
   return opt;
 }
@@ -94,7 +93,7 @@ void mockGetGradient(CostFunction mock, {
     x == null ? any : argThat(matrixAlmostEqualTo(x)),
     w == null ? any : argThat(matrixAlmostEqualTo(w)),
     y == null ? any : argThat(matrixAlmostEqualTo(y)),
-  )).thenReturn(gradient ?? Matrix.from([[]]));
+  )).thenReturn(gradient ?? Matrix.fromList([[]]));
 }
 
 void testOptimizer(

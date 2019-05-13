@@ -26,8 +26,8 @@ void main() {
     Matrix labels;
 
     setUp(() {
-      data = Matrix.from([point1, point2, point3, point4]);
-      labels = Matrix.from([
+      data = Matrix.fromList([point1, point2, point3, point4]);
+      labels = Matrix.fromList([
         [20.0],
         [30.0],
         [20.0],
@@ -65,8 +65,8 @@ void main() {
     Matrix labels;
 
     setUp(() {
-      data = Matrix.from([point1, point2, point3]);
-      labels = Matrix.from([
+      data = Matrix.fromList([point1, point2, point3]);
+      labels = Matrix.fromList([
         [2.0],
         [3.0],
         [2.0],

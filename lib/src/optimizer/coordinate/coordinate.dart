@@ -11,11 +11,12 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CoordinateOptimizer implements Optimizer {
   CoordinateOptimizer(Matrix points, Matrix labels, {
-    Type dtype = DefaultParameterValues.dtype,
+    DType dtype = DefaultParameterValues.dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
     ConvergenceDetectorFactory convergenceDetectorFactory =
@@ -46,7 +47,7 @@ class CoordinateOptimizer implements Optimizer {
   final InitialWeightsGenerator _initialCoefficientsGenerator;
   final ConvergenceDetector _convergenceDetector;
   final CostFunction _costFn;
-  final Type _dtype;
+  final DType _dtype;
   final double _lambda;
   final Vector _normalizer;
 
@@ -88,7 +89,8 @@ class CoordinateOptimizer implements Optimizer {
     final coefficients = _costFn.getSubDerivative(j, x, w, y);
     return Vector
         // TODO Convert the logic into SIMD-way (SIMD way mapping)
-        .from(coefficients.map((coef) => _regularize(coef, _lambda, j)));
+        .fromList(coefficients.map((coef) => _regularize(coef, _lambda, j))
+        .toList(growable: false));
   }
 
   double _regularize(double coefficient, double lambda, int coefNum) {

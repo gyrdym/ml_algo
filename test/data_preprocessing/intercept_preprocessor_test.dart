@@ -1,6 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_impl.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
@@ -8,9 +7,9 @@ void main() {
   group('Intercept preprocessor', () {
     test('should add intercept to the given points', () {
       final preprocessor =
-          const InterceptPreprocessorImpl(Float32x4, interceptScale: 1.0);
+          const InterceptPreprocessorImpl(DType.float32, interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(
-        Matrix.from([
+        Matrix.fromList([
           [4.0, 5.0, 10.0],
           [14.0, 49.0, 33.0],
           [41.0, 52.0, 101.0],
@@ -27,13 +26,13 @@ void main() {
     });
 
     test('should not mutate given test_data if processing takes place', () {
-      final data = Matrix.from([
+      final data = Matrix.fromList([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
       ]);
       final preprocessor =
-          const InterceptPreprocessorImpl(Float32x4, interceptScale: 1.0);
+          const InterceptPreprocessorImpl(DType.float32, interceptScale: 1.0);
       final processedPoints = preprocessor.addIntercept(data);
 
       expect(processedPoints, isNot(same(data)));
@@ -42,13 +41,13 @@ void main() {
     test(
         'should return the same test_data if scale is 0.0 (processing does nnot take place)',
         () {
-      final data = Matrix.from([
+      final data = Matrix.fromList([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
       ]);
       final preprocessor =
-          const InterceptPreprocessorImpl(Float32x4, interceptScale: 0.0);
+          const InterceptPreprocessorImpl(DType.float32, interceptScale: 0.0);
       final processedPoints = preprocessor.addIntercept(data);
 
       expect(processedPoints, same(data));
@@ -60,13 +59,13 @@ void main() {
     });
 
     test('should consider scale parameter (if scale is not equal to 0.0)', () {
-      final data = Matrix.from([
+      final data = Matrix.fromList([
         [4.0, 5.0, 10.0],
         [14.0, 49.0, 33.0],
         [41.0, 52.0, 101.0],
       ]);
       final preprocessor =
-          const InterceptPreprocessorImpl(Float32x4, interceptScale: -5.0);
+          const InterceptPreprocessorImpl(DType.float32, interceptScale: -5.0);
       final processedPoints = preprocessor.addIntercept(data);
 
       expect(processedPoints, [

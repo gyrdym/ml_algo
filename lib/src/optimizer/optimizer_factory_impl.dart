@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -17,6 +15,8 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class OptimizerFactoryImpl implements OptimizerFactory {
@@ -25,7 +25,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
   @override
   Optimizer fromType(
     OptimizerType type, Matrix points, Matrix labels, {
-    Type dtype,
+    DType dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     LearningRateGeneratorFactory learningRateGeneratorFactory =
@@ -84,7 +84,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
 
   @override
   Optimizer coordinate(Matrix points, Matrix labels, {
-    Type dtype = Float32x4,
+    DType dtype = DefaultParameterValues.dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
@@ -108,7 +108,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
 
   @override
   Optimizer gradient(Matrix points, Matrix labels, {
-    Type dtype = Float32x4,
+    DType dtype = DefaultParameterValues.dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     LearningRateGeneratorFactory learningRateGeneratorFactory =
