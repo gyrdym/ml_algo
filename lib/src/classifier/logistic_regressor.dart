@@ -51,7 +51,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
         classLabels = trainingOutcomes.uniqueRows(),
         optimizer = optimizerFactory.fromType(
           optimizer,
-          addIntercept(trainingFeatures, fitIntercept, interceptScale),
+          addInterceptIf(trainingFeatures, fitIntercept, interceptScale),
           trainingOutcomes,
           dtype: dtype,
           costFunctionType: CostFunctionType.logLikelihood,
@@ -103,7 +103,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
 
   @override
   Matrix predictClasses(Matrix features) {
-    final processedFeatures = addIntercept(trainingFeatures, fitIntercept,
+    final processedFeatures = addInterceptIf(trainingFeatures, fitIntercept,
         interceptScale);
     final classesSource = checkDataAndPredictProbabilities(processedFeatures)
         .getColumn(0)

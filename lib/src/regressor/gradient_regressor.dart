@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
@@ -31,10 +32,11 @@ class GradientRegressor implements LinearRegressor {
 
     // hidden arguments
     BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
-  })  : _optimizer = GradientOptimizer(
-          interceptPreprocessorFactory.create(dtype, scale: fitIntercept
-              ? interceptScale : 0.0)
-              .addIntercept(trainingFeatures), trainingOutcomes,
+  })  : fitIntercept = fitIntercept,
+        interceptScale = interceptScale,
+        _optimizer = GradientOptimizer(
+          addInterceptIf(trainingFeatures, fitIntercept, interceptScale),
+          trainingOutcomes,
           costFnType: CostFunctionType.squared,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
@@ -51,6 +53,12 @@ class GradientRegressor implements LinearRegressor {
 
   @override
   final Matrix trainingOutcomes;
+
+  @override
+  final bool fitIntercept;
+
+  @override
+  final double interceptScale;
 
   final GradientOptimizer _optimizer;
 
@@ -74,5 +82,6 @@ class GradientRegressor implements LinearRegressor {
   }
 
   @override
-  Matrix predict(Matrix features) => features * _weights;
+  Matrix predict(Matrix features) =>
+      addInterceptIf(features, fitIntercept, interceptScale) * _weights;
 }

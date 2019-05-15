@@ -96,7 +96,7 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
 
   @override
   Matrix predictClasses(Matrix features) {
-    final processedFeatures = addIntercept(trainingFeatures, fitIntercept,
+    final processedFeatures = addInterceptIf(trainingFeatures, fitIntercept,
         interceptScale);
     return checkDataAndPredictProbabilities(processedFeatures)
         .mapRows((probabilities) {
