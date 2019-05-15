@@ -1,8 +1,6 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
@@ -49,11 +47,6 @@ class ScoreToProbMapperMock extends Mock implements ScoreToProbMapper {}
 
 class ScoreToProbMapperFactoryMock extends Mock
     implements ScoreToProbMapperFactory {}
-
-class InterceptPreprocessorFactoryMock extends Mock
-    implements InterceptPreprocessorFactory {}
-
-class InterceptPreprocessorMock extends Mock implements InterceptPreprocessor {}
 
 class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
 
@@ -110,21 +103,13 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
 }
 
 ScoreToProbMapperFactoryMock createScoreToProbMapperFactoryMock(
-  Type dtype, {
+  DType dtype, {
   Map<ScoreToProbMapperType, ScoreToProbMapper> mappers,
 }) {
   final factory = ScoreToProbMapperFactoryMock();
   mappers.forEach((ScoreToProbMapperType type, ScoreToProbMapper fn) {
-    when(factory.fromType(type, DType.float32)).thenReturn(fn);
+    when(factory.fromType(type, dtype)).thenReturn(fn);
   });
-  return factory;
-}
-
-InterceptPreprocessorFactoryMock createInterceptPreprocessorFactoryMock({
-  InterceptPreprocessor preprocessor,
-}) {
-  final factory = InterceptPreprocessorFactoryMock();
-  when(factory.create(any, scale: anyNamed('scale'))).thenReturn(preprocessor);
   return factory;
 }
 
