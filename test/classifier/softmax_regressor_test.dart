@@ -10,12 +10,12 @@ import 'package:test/test.dart';
 
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 import '../test_utils/mocks.dart';
-import 'classifier_common.dart';
 
 void main() {
   group('SoftmaxRegressor', () {
+    final dtype = DType.float32;
+
     test('should initialize properly', () {
-      final dtype = DType.float32;
       final scoreToProbFactoryMock = createScoreToProbMapperFactoryMock(dtype,
         mappers: {
           ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
@@ -68,9 +68,14 @@ void main() {
     });
 
     test('should call optimizer\'s `findExtrema` method with proper '
-        'parameters', () {
+        'parameters and consider intercept term', () {
+      final scoreToProbFactoryMock = createScoreToProbMapperFactoryMock(dtype,
+        mappers: {
+          ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
+        },
+      );
 
-      final features = Matrix.fromList([
+      final observations = Matrix.fromList([
         [10.1, 10.2, 12.0, 13.4],
         [13.1, 15.2, 61.0, 27.2],
         [30.1, 25.2, 62.0, 34.1],
@@ -79,7 +84,7 @@ void main() {
         [90.1, 20.2, 10.0, 12.1],
       ]);
 
-      final labels = Matrix.fromList([
+      final outcomes = Matrix.fromList([
         [1.0, 0.0, 0.0],
         [0.0, 1.0, 0.0],
         [0.0, 1.0, 0.0],
@@ -98,34 +103,30 @@ void main() {
 
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createOptimizerFactoryMock(
-        features, labels, optimizers: {
+        argThat(matrixAlmostEqualTo([
+          [2.0, 10.1, 10.2, 12.0, 13.4],
+          [2.0, 13.1, 15.2, 61.0, 27.2],
+          [2.0, 30.1, 25.2, 62.0, 34.1],
+          [2.0, 32.1, 35.2, 36.0, 41.5],
+          [2.0, 35.1, 95.2, 56.0, 52.6],
+          [2.0, 90.1, 20.2, 10.0, 12.1],
+        ], 1e-2)), outcomes, optimizers: {
           OptimizerType.gradientDescent: optimizerMock,
         },
       );
 
-      when(optimizerMock.findExtrema(
-          initialWeights: argThat(equals(initialWeights),
-              named: 'initialWeights'),
-          isMinimizingObjective: false))
-          .thenReturn(Matrix.fromList([
-            [100.0, 10.0, 1.0],
-            [200.0, 20.0, 2.0],
-            [300.0, 30.0, 3.0],
-            [400.0, 40.0, 4.0],
-            [500.0, 50.0, 5.0],
-          ])
-      );
-
       SoftmaxRegressor(
-        features,
-        labels,
-        dtype: DType.float32,
+        observations,
+        outcomes,
+        dtype: dtype,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         iterationsLimit: 100,
         initialLearningRate: 0.01,
         minWeightsUpdate: 0.001,
         lambda: 0.1,
+        fitIntercept: true,
+        interceptScale: 2.0,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizer: OptimizerType.gradientDescent,
         optimizerFactory: optimizerFactoryMock,
@@ -136,12 +137,12 @@ void main() {
       verify(optimizerFactoryMock.fromType(
         OptimizerType.gradientDescent,
         argThat(matrixAlmostEqualTo([
-          [1.0, 10.1, 10.2, 12.0, 13.4],
-          [1.0, 13.1, 15.2, 61.0, 27.2],
-          [1.0, 30.1, 25.2, 62.0, 34.1],
-          [1.0, 32.1, 35.2, 36.0, 41.5],
-          [1.0, 35.1, 95.2, 56.0, 52.6],
-          [1.0, 90.1, 20.2, 10.0, 12.1],
+          [2.0, 10.1, 10.2, 12.0, 13.4],
+          [2.0, 13.1, 15.2, 61.0, 27.2],
+          [2.0, 30.1, 25.2, 62.0, 34.1],
+          [2.0, 32.1, 35.2, 36.0, 41.5],
+          [2.0, 35.1, 95.2, 56.0, 52.6],
+          [2.0, 90.1, 20.2, 10.0, 12.1],
         ], 1e-2)),
         argThat(equals([
           [1.0, 0.0, 0.0],
@@ -151,6 +152,22 @@ void main() {
           [1.0, 0.0, 0.0],
           [1.0, 0.0, 0.0],
         ])),
+        dtype: dtype,
+        costFunctionType: CostFunctionType.logLikelihood,
+        learningRateType: LearningRateType.constant,
+        initialWeightsType: InitialWeightsType.zeroes,
+        scoreToProbMapperType: ScoreToProbMapperType.softmax,
+        initialLearningRate: 0.01,
+        minCoefficientsUpdate: 0.001,
+        iterationLimit: 100,
+        lambda: 0.1,
+        batchSize: 1,
+        randomSeed: 123,
+      )).called(1);
+
+      verify(optimizerMock.findExtrema(
+        initialWeights: initialWeights,
+        isMinimizingObjective: false,
       )).called(1);
     });
   });

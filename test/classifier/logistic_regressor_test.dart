@@ -94,22 +94,6 @@ void main() {
         [40.0],
       ]);
 
-      when(optimizerMock.findExtrema(
-          initialWeights: argThat(equals(initialWeights),
-              named: 'initialWeights'),
-          isMinimizingObjective: false)
-      ).thenReturn(Matrix.fromRows([
-        Vector.fromList([333.0, 444.0])
-      ]));
-
-      when(optimizerMock.findExtrema(
-              initialWeights: argThat(
-                  equals(initialWeights),
-                  named: 'initialWeights'
-              ),
-              isMinimizingObjective: false))
-          .thenReturn(Matrix.fromRows([Vector.fromList([555.0, 666.0])]));
-
       LogisticRegressor(
         observations,
         outcomes,
@@ -126,13 +110,6 @@ void main() {
         gradientType: GradientType.stochastic,
         randomSeed: 123,
       )..fit(initialWeights: initialWeights);
-
-      verify(optimizerMock.findExtrema(
-              initialWeights: argThat(
-                  equals(initialWeights),
-                  named: 'initialWeights'),
-              isMinimizingObjective: false))
-          .called(1);
 
       verify(optimizerMock.findExtrema(
               initialWeights: argThat(
