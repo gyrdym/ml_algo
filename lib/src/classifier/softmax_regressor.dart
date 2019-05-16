@@ -17,7 +17,6 @@ import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart'
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   SoftmaxRegressor(this.trainingFeatures, this.trainingOutcomes, {
@@ -51,10 +50,7 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
         classLabels = trainingOutcomes.uniqueRows(),
         optimizer = optimizerFactory.fromType(
           optimizer,
-            fitIntercept
-                ? trainingFeatures.insertColumns(0, [
-                  Vector.filled(trainingFeatures.rowsNum, interceptScale)])
-                : trainingFeatures,
+          addInterceptIf(trainingFeatures, fitIntercept, interceptScale),
           trainingOutcomes,
           dtype: dtype,
           costFunctionType: CostFunctionType.logLikelihood,

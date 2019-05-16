@@ -117,10 +117,11 @@ OptimizerFactoryMock createOptimizerFactoryMock(Matrix points, Matrix labels, {
   Map<OptimizerType, Optimizer> optimizers,
 }) {
   final factory = OptimizerFactoryMock();
-
   optimizers.forEach((OptimizerType type, Optimizer optimizer) {
     when(factory.fromType(
-      type, points, labels,
+      type,
+      points,
+      labels,
       dtype: anyNamed('dtype'),
       randomizerFactory: anyNamed('randomizerFactory'),
       costFunctionFactory: anyNamed('costFunctionFactory'),
@@ -139,6 +140,5 @@ OptimizerFactoryMock createOptimizerFactoryMock(Matrix points, Matrix labels, {
       randomSeed: anyNamed('randomSeed'),
     )).thenReturn(optimizer);
   });
-
   return factory;
 }
