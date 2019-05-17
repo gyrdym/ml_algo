@@ -24,7 +24,7 @@ class LassoRegressor implements LinearRegressor {
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         _optimizer = CoordinateOptimizer(
-          addInterceptIf(trainingFeatures, fitIntercept, interceptScale),
+          addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           initialWeightsType: initialWeightsType,
           costFunctionType: CostFunctionType.squared,
@@ -70,5 +70,5 @@ class LassoRegressor implements LinearRegressor {
 
   @override
   Matrix predict(Matrix features) =>
-      addInterceptIf(features, fitIntercept, interceptScale) * _weights;
+      addInterceptIf(fitIntercept, features, interceptScale) * _weights;
 }
