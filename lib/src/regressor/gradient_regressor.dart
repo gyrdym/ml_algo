@@ -35,7 +35,7 @@ class GradientRegressor implements LinearRegressor {
   })  : fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         _optimizer = GradientOptimizer(
-          addInterceptIf(trainingFeatures, fitIntercept, interceptScale),
+          addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           costFnType: CostFunctionType.squared,
           learningRateType: learningRateType,
@@ -83,5 +83,5 @@ class GradientRegressor implements LinearRegressor {
 
   @override
   Matrix predict(Matrix features) =>
-      addInterceptIf(features, fitIntercept, interceptScale) * _weights;
+      addInterceptIf(fitIntercept, features, interceptScale) * _weights;
 }

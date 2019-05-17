@@ -1,7 +1,7 @@
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-Matrix addInterceptIf(Matrix observations, bool fitIntercept,
+Matrix addInterceptIf(bool fitIntercept, Matrix observations,
     double interceptScale) =>
   fitIntercept
       ? observations.insertColumns(0, [

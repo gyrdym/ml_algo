@@ -28,7 +28,7 @@ mixin LinearClassifierMixin implements LinearClassifier {
 
   @override
   Matrix predictProbabilities(Matrix features) {
-    final processedFeatures = addInterceptIf(trainingFeatures, fitIntercept,
+    final processedFeatures = addInterceptIf(fitIntercept, features,
         interceptScale);
     return checkDataAndPredictProbabilities(processedFeatures);
   }
