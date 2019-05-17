@@ -2,7 +2,7 @@ import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Leave p out splitter', () {
+  group('LeavePOutSplitter', () {
     void testLpoSplitter(int p, int numOfObservations,
         Iterable<Iterable<int>> expected) {
       test('should return proper groups of indices if p is $p and number of '

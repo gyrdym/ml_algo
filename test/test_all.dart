@@ -10,6 +10,7 @@ import 'cross_validator/cross_validator_impl_test.dart'
   as cross_validator_impl_test;
 import 'data_splitter/k_fold_splitter_test.dart' as k_fold_splitter_test;
 import 'data_splitter/lpo_splitter_test.dart' as lpo_splitter_test;
+import 'helpers/add_intercept.dart' as add_intercept_test;
 import 'math/randomizer_test.dart' as randomizer_test;
 import 'optimizer/convergence_detector/convergence_detector_impl_test.dart'
     as convergence_detector_test;
@@ -37,6 +38,7 @@ void main() {
   cross_validator_impl_test.main();
   k_fold_splitter_test.main();
   lpo_splitter_test.main();
+  add_intercept_test.main();
   randomizer_test.main();
   convergence_detector_test.main();
   coord_optimizer_integration_test.main();
