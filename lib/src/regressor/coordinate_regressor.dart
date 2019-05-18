@@ -9,8 +9,8 @@ import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class LassoRegressor implements LinearRegressor {
-  LassoRegressor(this.trainingFeatures, this.trainingOutcomes, {
+class CoordinateRegressor implements LinearRegressor {
+  CoordinateRegressor(this.trainingFeatures, this.trainingOutcomes, {
     // public arguments
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,

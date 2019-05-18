@@ -3,7 +3,6 @@ import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
-import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -75,9 +74,6 @@ abstract class LinearClassifier implements Classifier {
    * [optimizer] A type of optimizer (gradient descent, coordinate descent and
    * so on)
    *
-   * [gradientType] A type of gradient descent optimizer (stochastic, mini
-   * batch, batch). Will be ignored for all non-gradient optimizers
-   *
    * [dtype] A data type for all the numeric values, used by the algorithm. Can
    * affect performance or accuracy of the computations. Default value is
    * [Float32x4]
@@ -95,7 +91,6 @@ abstract class LinearClassifier implements Classifier {
     double interceptScale,
     LearningRateType learningRateType,
     OptimizerType optimizer,
-    GradientType gradientType,
     DType dtype,
   }) = LogisticRegressor;
 
@@ -162,12 +157,9 @@ abstract class LinearClassifier implements Classifier {
   /// [optimizer] A type of optimizer (gradient descent, coordinate descent and
   /// so on)
   ///
-  /// [gradientType] A type of gradient descent optimizer (stochastic, mini
-  /// batch, batch). Will be ignored for all non-gradient optimizers
-  ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
-  /// [Float32x4]
+  /// [DType.float32]
   factory LinearClassifier.softmaxRegressor(Matrix trainingFeatures,
       Matrix trainingOutcomes, {
     int iterationsLimit,

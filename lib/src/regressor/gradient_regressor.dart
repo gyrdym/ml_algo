@@ -5,7 +5,6 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -19,7 +18,6 @@ class GradientRegressor implements LinearRegressor {
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
     double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
     double lambda,
-    GradientType gradientType = GradientType.stochastic,
     bool fitIntercept = false,
     double interceptScale = 1.0,
     int randomSeed,
