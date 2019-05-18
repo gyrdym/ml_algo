@@ -27,7 +27,7 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
     int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    OptimizerType optimizer = OptimizerType.gradientDescent,
+    OptimizerType optimizer = OptimizerType.gradient,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 

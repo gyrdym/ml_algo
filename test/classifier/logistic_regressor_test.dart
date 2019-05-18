@@ -24,7 +24,7 @@ void main() {
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createOptimizerFactoryMock(
         observations, outcomes, optimizers: {
-          OptimizerType.gradientDescent: optimizerMock
+          OptimizerType.gradient: optimizerMock
         },
       );
 
@@ -39,7 +39,7 @@ void main() {
         minWeightsUpdate: 0.001,
         lambda: 0.1,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradientDescent,
+        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
@@ -48,7 +48,7 @@ void main() {
               ScoreToProbMapperType.logit, DType.float32))
           .called(1);
       verify(optimizerFactoryMock.fromType(
-        OptimizerType.gradientDescent,
+        OptimizerType.gradient,
         argThat(equals([[1.0]])),
         argThat(equals([[0]])),
         dtype: DType.float32,
@@ -81,7 +81,7 @@ void main() {
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createOptimizerFactoryMock(
           observations, outcomes, optimizers: {
-            OptimizerType.gradientDescent: optimizerMock
+            OptimizerType.gradient: optimizerMock
           },
       );
 
@@ -103,7 +103,7 @@ void main() {
         minWeightsUpdate: 0.001,
         lambda: 0.1,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradientDescent,
+        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       )..fit(initialWeights: initialWeights);

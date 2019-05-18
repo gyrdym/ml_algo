@@ -44,7 +44,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
     int randomSeed,
   }) {
     switch (type) {
-      case OptimizerType.coordinateDescent:
+      case OptimizerType.coordinate:
         return coordinate(
           points, labels,
           dtype: dtype,
@@ -57,7 +57,7 @@ class OptimizerFactoryImpl implements OptimizerFactory {
           costFunctionType: costFunctionType,
         );
 
-      case OptimizerType.gradientDescent:
+      case OptimizerType.gradient:
         return gradient(
           points, labels,
           dtype: dtype,
