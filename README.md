@@ -21,11 +21,11 @@ the lib, please, do not use it in a browser.
 
 **Following algorithms are implemented:**
 - *Linear regression:*
-    - Gradient descent algorithm (batch, mini-batch, stochastic) with ridge regularization
-    - Lasso regression
+    - Gradient descent algorithm with ridge regularization
+    - Lasso regression with coordinate descent
 
 - *Linear classifier:*
-    - Logistic regression (with "one-vs-all" multiclass classification)
+    - Logistic regression
     - Softmax regression
     
 - *Non-parametric regression:*
@@ -125,7 +125,7 @@ final accuracy = validator.evaluate((trainFeatures, trainLabels) =>
         trainFeatures, trainLabels,
         initialLearningRate: .8,
         iterationsLimit: 500,
-        gradientType: GradientType.batch,
+        batchSize: 768,
         fitIntercept: true,
         interceptScale: .1,
         learningRateType: LearningRateType.constant), 
@@ -161,7 +161,7 @@ Future main() async {
         trainFeatures, trainLabels,
         initialLearningRate: .8,
         iterationsLimit: 500,
-        gradientType: GradientType.batch,
+        batchSize: 768,
         fitIntercept: true,
         interceptScale: .1,
         learningRateType: LearningRateType.constant), 
