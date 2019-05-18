@@ -9,8 +9,10 @@ abstract class Predictor {
   /// A matrix of dependant variables, that was used to fit the predictor
   Matrix get trainingOutcomes;
 
+  /// A flag that shows whether the intercept term is fitted or not
   bool get fitIntercept;
 
+  /// A multiplier of intercept term (meaningful only if [fitIntercept] is true)
   double get interceptScale;
 
   /// Fits the [trainingFeatures] to true labels - [trainingOutcomes]. It's

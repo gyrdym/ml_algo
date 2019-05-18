@@ -76,22 +76,23 @@ abstract class LinearClassifier implements Classifier {
    *
    * [dtype] A data type for all the numeric values, used by the algorithm. Can
    * affect performance or accuracy of the computations. Default value is
-   * [Float32x4]
+   * [DType.float32]
    */
-  factory LinearClassifier.logisticRegressor(Matrix trainingFeatures,
+  factory LinearClassifier.logisticRegressor(
+      Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-    int iterationsLimit,
-    double initialLearningRate,
-    double minWeightsUpdate,
-    double probabilityThreshold,
-    double lambda,
-    int randomSeed,
-    int batchSize,
-    bool fitIntercept,
-    double interceptScale,
-    LearningRateType learningRateType,
-    OptimizerType optimizer,
-    DType dtype,
+        int iterationsLimit,
+        double initialLearningRate,
+        double minWeightsUpdate,
+        double probabilityThreshold,
+        double lambda,
+        int randomSeed,
+        int batchSize,
+        bool fitIntercept,
+        double interceptScale,
+        LearningRateType learningRateType,
+        OptimizerType optimizer,
+        DType dtype,
   }) = LogisticRegressor;
 
   /// Creates a softmax regressor classifier.
@@ -160,19 +161,20 @@ abstract class LinearClassifier implements Classifier {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
-  factory LinearClassifier.softmaxRegressor(Matrix trainingFeatures,
+  factory LinearClassifier.softmaxRegressor(
+      Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-    int iterationsLimit,
-    double initialLearningRate,
-    double minWeightsUpdate,
-    double lambda,
-    int randomSeed,
-    int batchSize,
-    bool fitIntercept,
-    double interceptScale,
-    LearningRateType learningRateType,
-    OptimizerType optimizer,
-    DType dtype,
+        int iterationsLimit,
+        double initialLearningRate,
+        double minWeightsUpdate,
+        double lambda,
+        int randomSeed,
+        int batchSize,
+        bool fitIntercept,
+        double interceptScale,
+        LearningRateType learningRateType,
+        OptimizerType optimizer,
+        DType dtype,
   }) = SoftmaxRegressor;
 
   factory LinearClassifier.SVM() => throw UnimplementedError();
