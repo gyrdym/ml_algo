@@ -15,10 +15,6 @@ abstract class Predictor {
   /// A multiplier of intercept term (meaningful only if [fitIntercept] is true)
   double get interceptScale;
 
-  /// Fits the [trainingFeatures] to true labels - [trainingOutcomes]. It's
-  /// possible to provide [initialWeights] for [trainingFeatures]
-  void fit({Matrix initialWeights});
-
   /// Assesses model according to provided [metric]
   double test(Matrix observations, Matrix outcomes, MetricType metric);
 }

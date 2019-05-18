@@ -65,20 +65,22 @@ abstract class LinearRegressor implements Regressor {
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearRegressor.gradient(Matrix trainingFeatures,
+  factory LinearRegressor.gradient(
+      Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-    int iterationsLimit,
-    LearningRateType learningRateType,
-    InitialWeightsType initialWeightsType,
-    double initialLearningRate,
-    double minWeightsUpdate,
-    double lambda,
-    bool fitIntercept,
-    double interceptScale,
-    int randomSeed,
-    int batchSize,
-    DType dtype,
-  }) = GradientRegressor;
+        int iterationsLimit,
+        LearningRateType learningRateType,
+        InitialWeightsType initialWeightsType,
+        double initialLearningRate,
+        double minWeightsUpdate,
+        double lambda,
+        bool fitIntercept,
+        double interceptScale,
+        int randomSeed,
+        int batchSize,
+        Matrix initialWeights,
+        DType dtype,
+      }) = GradientRegressor;
 
   /**
    * Creates a linear regressor with a coordinate descent optimizer to use L1
@@ -115,17 +117,19 @@ abstract class LinearRegressor implements Regressor {
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearRegressor.coordinate(Matrix trainingFeatures,
+  factory LinearRegressor.coordinate(
+      Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-    int iterationsLimit,
-    double minWeightsUpdate,
-    double lambda,
-    bool fitIntercept,
-    double interceptScale,
-    InitialWeightsType initialWeightsType,
-    DType dtype,
-    bool isTrainDataNormalized,
-  }) = CoordinateRegressor;
+        int iterationsLimit,
+        double minWeightsUpdate,
+        double lambda,
+        bool fitIntercept,
+        double interceptScale,
+        InitialWeightsType initialWeightsType,
+        DType dtype,
+        Matrix initialWeights,
+        bool isTrainDataNormalized,
+      }) = CoordinateRegressor;
 
   /// Learned coefficients (or weights) for given features
   Vector get weights;

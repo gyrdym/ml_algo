@@ -9,25 +9,20 @@ import 'package:ml_linalg/vector.dart';
 const observationsNum = 200;
 const featuresNum = 20;
 
-Matrix features;
-Matrix labels;
-LinearClassifier regressor;
-
 class LogisticRegressorBenchmark extends BenchmarkBase {
-  const LogisticRegressorBenchmark() : super('Logistic regressor');
+  LogisticRegressorBenchmark() : super('Logistic regressor');
+
+  final Matrix features = Matrix.fromRows(List.generate(observationsNum,
+    (i) => Vector.randomFilled(featuresNum)));
+  final Matrix labels = Matrix.fromColumns([Vector.zero(observationsNum)]);
 
   static void main() {
-    const LogisticRegressorBenchmark().report();
+    LogisticRegressorBenchmark().report();
   }
 
   @override
   void run() {
-    regressor.fit();
-  }
-
-  @override
-  void setup() {
-    regressor = LinearClassifier.logisticRegressor(features, labels,
+    LinearClassifier.logisticRegressor(features, labels,
         dtype: DType.float32, minWeightsUpdate: null, iterationsLimit: 200);
   }
 
@@ -35,8 +30,5 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 }
 
 Future main() async {
-  features = Matrix.fromRows(List.generate(observationsNum,
-          (i) => Vector.randomFilled(featuresNum)));
-  labels = Matrix.fromColumns([Vector.zero(observationsNum)]);
   LogisticRegressorBenchmark.main();
 }

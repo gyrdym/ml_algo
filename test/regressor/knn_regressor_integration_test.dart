@@ -24,7 +24,7 @@ void main() {
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
       final regressor = ParameterlessRegressor.knn(features,
-          outcomes, k: k)..fit();
+          outcomes, k: k);
 
       final actual = regressor.predict(testFeatures);
       expect(actual, equals([[4.0]]));
@@ -50,8 +50,7 @@ void main() {
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
       final regressor = ParameterlessRegressor.knn(features,
-          outcomes, k: k, kernel: Kernel.epanechnikov)
-        ..fit();
+          outcomes, k: k, kernel: Kernel.epanechnikov);
 
       final actual = regressor.predict(testFeatures);
       expect(actual, equals([[-208.875]]));

@@ -92,6 +92,7 @@ abstract class LinearClassifier implements Classifier {
         double interceptScale,
         LearningRateType learningRateType,
         OptimizerType optimizer,
+        Matrix initialWeights,
         DType dtype,
   }) = LogisticRegressor;
 
@@ -174,6 +175,7 @@ abstract class LinearClassifier implements Classifier {
         double interceptScale,
         LearningRateType learningRateType,
         OptimizerType optimizer,
+        Matrix initialWeights,
         DType dtype,
   }) = SoftmaxRegressor;
 

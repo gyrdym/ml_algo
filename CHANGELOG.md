@@ -1,8 +1,11 @@
 # Changelog
 
 ## 12.0.0
+- GradientType enum removed (breaking change)
+- OptimizerType enum corrected (breaking change)
+- `Predictor`: `fit` method removed, fitting is happening while a model is being created (breaking change)
 - Optimizers now have immutable state
-- GradientType enum removed
+- `InterceptPreprocessor` replaced with a helper function `addInterceptIf`
 
 ## 11.0.1
 - Cross validator refactored

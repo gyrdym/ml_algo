@@ -10,20 +10,22 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CoordinateRegressor implements LinearRegressor {
-  CoordinateRegressor(this.trainingFeatures, this.trainingOutcomes, {
-    // public arguments
-    int iterationsLimit = DefaultParameterValues.iterationsLimit,
-    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
-    double lambda,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    DType dtype = DefaultParameterValues.dtype,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    bool isTrainDataNormalized = false,
-  }) :
+  CoordinateRegressor(
+      this.trainingFeatures,
+      this.trainingOutcomes, {
+        int iterationsLimit = DefaultParameterValues.iterationsLimit,
+        double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+        double lambda,
+        bool fitIntercept = false,
+        double interceptScale = 1.0,
+        DType dtype = DefaultParameterValues.dtype,
+        InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+        Matrix initialWeights,
+        bool isTrainDataNormalized = false,
+      }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
-        _optimizer = CoordinateOptimizer(
+        weights = CoordinateOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           initialWeightsType: initialWeightsType,
@@ -33,7 +35,10 @@ class CoordinateRegressor implements LinearRegressor {
           lambda: lambda,
           dtype: dtype,
           isTrainDataNormalized: isTrainDataNormalized,
-        );
+        ).findExtrema(
+          initialWeights: initialWeights,
+          isMinimizingObjective: true,
+        ).getRow(0);
 
   @override
   final Matrix trainingFeatures;
@@ -47,19 +52,8 @@ class CoordinateRegressor implements LinearRegressor {
   @override
   final double interceptScale;
 
-  final CoordinateOptimizer _optimizer;
-
   @override
-  Vector get weights => _weights;
-  Vector _weights;
-
-  @override
-  void fit({Matrix initialWeights}) {
-    _weights = _optimizer.findExtrema(
-      initialWeights: initialWeights,
-      isMinimizingObjective: true,
-    ).getRow(0);
-  }
+  final Vector weights;
 
   @override
   double test(Matrix features, Matrix origLabels, MetricType metricType) {
@@ -70,5 +64,5 @@ class CoordinateRegressor implements LinearRegressor {
 
   @override
   Matrix predict(Matrix features) =>
-      addInterceptIf(fitIntercept, features, interceptScale) * _weights;
+      addInterceptIf(fitIntercept, features, interceptScale) * weights;
 }

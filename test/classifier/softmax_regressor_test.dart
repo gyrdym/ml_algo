@@ -129,8 +129,9 @@ void main() {
         scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
+        initialWeights: initialWeights,
         randomSeed: 123,
-      )..fit(initialWeights: initialWeights);
+      );
 
       verify(optimizerFactoryMock.fromType(
         OptimizerType.gradient,

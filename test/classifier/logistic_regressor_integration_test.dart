@@ -38,7 +38,7 @@ void main() {
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
           fitIntercept: false
-      )..fit();
+      );
 
       expect(classifier.classLabels, equals([
         [3.0],
@@ -71,7 +71,7 @@ void main() {
           initialLearningRate: 1.0,
           batchSize: 5,
           fitIntercept: false
-      )..fit();
+      );
 
       expect(classifier.weightsByClasses, matrixAlmostEqualTo([
         [3.5,],
@@ -104,7 +104,7 @@ void main() {
           initialLearningRate: 1.0,
           batchSize: 5,
           fitIntercept: false
-      )..fit();
+      );
 
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
@@ -139,7 +139,7 @@ void main() {
           initialLearningRate: 1.0,
           batchSize: 5,
           fitIntercept: false
-      )..fit();
+      );
 
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
@@ -175,7 +175,7 @@ void main() {
           initialLearningRate: 1.0,
           batchSize: 5,
           fitIntercept: false
-      )..fit();
+      );
 
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
@@ -204,7 +204,7 @@ void main() {
           initialLearningRate: 1.0,
           batchSize: 2,
           fitIntercept: true
-      )..fit();
+      );
       // as the intercept is required to be fitted, our test_data should look as follows:
       //
       // [5.0, 7.0, 6.0] => [1.0, 5.0, 7.0, 6.0]
@@ -287,7 +287,7 @@ void main() {
           batchSize: 3,
           fitIntercept: true,
           interceptScale: 2.0
-      )..fit();
+      );
 
       // as the intercept is required to be fitted, our test_data should look as follows:
       //

@@ -60,9 +60,6 @@ class KNNRegressor implements ParameterlessRegressor {
   Vector _cachedZeroVector;
 
   @override
-  void fit({Matrix initialWeights}) {}
-
-  @override
   Matrix predict(Matrix observations) => Matrix.fromRows(
     _generateOutcomes(observations).toList(growable: false), dtype: _dtype);
 

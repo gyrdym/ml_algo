@@ -21,17 +21,12 @@ Future main() async {
     [2.1]
   ]);
 
-  // Let's create a regressor itself. With its help we can train some linear
-  // model to predict label values for new features
+  // Let's create a regressor itself and train it
   final regressor = LinearRegressor.gradient(
       features, labels,
       iterationsLimit: 100,
       initialLearningRate: 0.0005,
       learningRateType: LearningRateType.constant);
-
-  // Let's train our model (training or fitting is a coefficients
-  // adjusting process)
-  regressor.fit();
 
   // Let's see adjusted coefficients
   print('Regression coefficients: ${regressor.weights}');

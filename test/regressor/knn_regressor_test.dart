@@ -22,9 +22,8 @@ void main() {
           Matrix.fromList([[1.0]]),
           k: 1,
           distance: Distance.cosine,
-          solverFn: solverFn)
-        ..fit()
-        ..predict(Matrix.fromList([[1.0]]));
+          solverFn: solverFn
+      )..predict(Matrix.fromList([[1.0]]));
     });
 
     test('should pass train observations to the solver function', () {
@@ -44,7 +43,6 @@ void main() {
         [1.0],
         [2.0]
       ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
-        ..fit()
         ..predict(Matrix.fromList([[10.0, 20.0, 30.0]]));
     });
 
@@ -65,7 +63,6 @@ void main() {
         [1.0],
         [2.0]
       ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
-        ..fit()
         ..predict(Matrix.fromList([[10.0, 20.0, 30.0]]));
     });
 
@@ -83,7 +80,6 @@ void main() {
         [1.0],
         [2.0]
       ]), k: 2, distance: Distance.cosine, solverFn: solverFn)
-        ..fit()
         ..predict(Matrix.fromList([[10.0, 20.0, 30.0]]));
     });
 
@@ -100,7 +96,6 @@ void main() {
           k: 1,
           distance: Distance.cosine,
           solverFn: solverFn)
-        ..fit()
         ..predict(Matrix.fromList([[1.0]]));
     });
 

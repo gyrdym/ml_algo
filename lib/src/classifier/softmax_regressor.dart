@@ -4,7 +4,6 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
@@ -17,35 +16,38 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
-  SoftmaxRegressor(this.trainingFeatures, this.trainingOutcomes, {
-    // public arguments
-    int iterationsLimit = DefaultParameterValues.iterationsLimit,
-    double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
-    double lambda,
-    int randomSeed,
-    int batchSize = 1,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    OptimizerType optimizer = OptimizerType.gradient,
-    LearningRateType learningRateType = LearningRateType.constant,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+  SoftmaxRegressor(
+      this.trainingFeatures,
+      this.trainingOutcomes, {
+        // public arguments
+        int iterationsLimit = DefaultParameterValues.iterationsLimit,
+        double initialLearningRate = DefaultParameterValues.initialLearningRate,
+        double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+        double lambda,
+        int randomSeed,
+        int batchSize = 1,
+        bool fitIntercept = false,
+        double interceptScale = 1.0,
+        Matrix initialWeights,
+        OptimizerType optimizer = OptimizerType.gradient,
+        LearningRateType learningRateType = LearningRateType.constant,
+        InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
-    this.dtype = DefaultParameterValues.dtype,
+        this.dtype = DefaultParameterValues.dtype,
 
-    // private arguments
-    ScoreToProbMapperFactory scoreToProbMapperFactory =
-      const ScoreToProbMapperFactoryImpl(),
+        // private arguments
+        ScoreToProbMapperFactory scoreToProbMapperFactory =
+          const ScoreToProbMapperFactoryImpl(),
 
-    OptimizerFactory optimizerFactory =
-      const OptimizerFactoryImpl(),
-  })
-      : fitIntercept = fitIntercept,
+        OptimizerFactory optimizerFactory =
+          const OptimizerFactoryImpl(),
+      }) :
+        fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
         classLabels = trainingOutcomes.uniqueRows(),
-        optimizer = optimizerFactory.fromType(
+        weightsByClasses = optimizerFactory.fromType(
           optimizer,
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
@@ -60,6 +62,9 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
           lambda: lambda,
           batchSize: batchSize,
           randomSeed: randomSeed,
+        ).findExtrema(
+          initialWeights: initialWeights,
+          isMinimizingObjective: false,
         );
 
   static const _scoreToProbMapperType = ScoreToProbMapperType.softmax;
@@ -79,10 +84,10 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
   @override
   final Matrix classLabels;
 
-  final DType dtype;
-
   @override
-  final Optimizer optimizer;
+  final Matrix weightsByClasses;
+
+  final DType dtype;
 
   @override
   final ScoreToProbMapper scoreToProbMapper;

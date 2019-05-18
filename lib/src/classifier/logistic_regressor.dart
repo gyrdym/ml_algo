@@ -4,7 +4,6 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
@@ -18,35 +17,38 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class LogisticRegressor with LinearClassifierMixin implements Classifier {
-  LogisticRegressor(this.trainingFeatures, this.trainingOutcomes, {
-    // public arguments
-    int iterationsLimit = DefaultParameterValues.iterationsLimit,
-    double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
-    double lambda,
-    int randomSeed,
-    int batchSize = 1,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    OptimizerType optimizer = OptimizerType.gradient,
-    LearningRateType learningRateType = LearningRateType.constant,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    this.dtype = DefaultParameterValues.dtype,
-    this.probabilityThreshold = 0.5,
+  LogisticRegressor(
+      this.trainingFeatures,
+      this.trainingOutcomes, {
+        // public arguments
+        int iterationsLimit = DefaultParameterValues.iterationsLimit,
+        double initialLearningRate = DefaultParameterValues.initialLearningRate,
+        double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+        double lambda,
+        int randomSeed,
+        int batchSize = 1,
+        bool fitIntercept = false,
+        double interceptScale = 1.0,
+        OptimizerType optimizer = OptimizerType.gradient,
+        LearningRateType learningRateType = LearningRateType.constant,
+        InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+        Matrix initialWeights,
+        this.dtype = DefaultParameterValues.dtype,
+        this.probabilityThreshold = 0.5,
 
-    // private arguments
-    ScoreToProbMapperFactory scoreToProbMapperFactory =
-      const ScoreToProbMapperFactoryImpl(),
+        // private arguments
+        ScoreToProbMapperFactory scoreToProbMapperFactory =
+          const ScoreToProbMapperFactoryImpl(),
 
-    OptimizerFactory optimizerFactory =
-      const OptimizerFactoryImpl(),
-  })  :
+        OptimizerFactory optimizerFactory =
+          const OptimizerFactoryImpl(),
+      }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
         classLabels = trainingOutcomes.uniqueRows(),
-        optimizer = optimizerFactory.fromType(
+        weightsByClasses = optimizerFactory.fromType(
           optimizer,
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
@@ -61,6 +63,9 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
           lambda: lambda,
           batchSize: batchSize,
           randomSeed: randomSeed,
+        ).findExtrema(
+            initialWeights: initialWeights,
+            isMinimizingObjective: false,
         ) {
     if (trainingOutcomes.columnsNum > 1) {
       throw Exception('Probably, you are trying to classify data with '
@@ -86,14 +91,14 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
   final Matrix trainingOutcomes;
 
   @override
+  final Matrix weightsByClasses;
+
+  @override
   final Matrix classLabels;
 
   final DType dtype;
 
   final double probabilityThreshold;
-
-  @override
-  final Optimizer optimizer;
 
   @override
   final ScoreToProbMapper scoreToProbMapper;
@@ -104,7 +109,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
         interceptScale);
     final classesSource = checkDataAndPredictProbabilities(processedFeatures)
         .getColumn(0)
-    // TODO: use SIMD
+        // TODO: use SIMD
         .map((value) => value >= probabilityThreshold ? 1.0 : 0.0)
         .toList(growable: false);
     return Matrix.fromColumns([Vector.fromList(classesSource)]);
