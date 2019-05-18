@@ -137,6 +137,7 @@ void main() {
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
+          batchSize: 5,
           fitIntercept: false
       )..fit();
 
@@ -172,6 +173,7 @@ void main() {
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
+          batchSize: 5,
           fitIntercept: false
       )..fit();
 

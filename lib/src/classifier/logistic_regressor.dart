@@ -8,7 +8,6 @@ import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
-import 'package:ml_algo/src/regressor/gradient_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
@@ -30,7 +29,6 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
     bool fitIntercept = false,
     double interceptScale = 1.0,
     OptimizerType optimizer = OptimizerType.gradient,
-    GradientType gradientType = GradientType.stochastic,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     this.dtype = DefaultParameterValues.dtype,

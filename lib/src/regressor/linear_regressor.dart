@@ -1,8 +1,7 @@
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
-import 'package:ml_algo/src/regressor/gradient_type.dart';
-import 'package:ml_algo/src/regressor/lasso_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -62,9 +61,6 @@ abstract class LinearRegressor implements Regressor {
    * [learningRateType] A value, defining a strategy for the learning rate
    * behaviour throughout the whole fitting process
    *
-   * [gradientType] A type of gradient descent optimizer (stochastic, mini
-   * batch, batch)
-   *
    * [dtype] A data type for all the numeric values, used by the algorithm.
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
@@ -77,7 +73,6 @@ abstract class LinearRegressor implements Regressor {
     double initialLearningRate,
     double minWeightsUpdate,
     double lambda,
-    GradientType gradientType,
     bool fitIntercept,
     double interceptScale,
     int randomSeed,
@@ -130,7 +125,7 @@ abstract class LinearRegressor implements Regressor {
     InitialWeightsType initialWeightsType,
     DType dtype,
     bool isTrainDataNormalized,
-  }) = LassoRegressor;
+  }) = CoordinateRegressor;
 
   /// Learned coefficients (or weights) for given features
   Vector get weights;
