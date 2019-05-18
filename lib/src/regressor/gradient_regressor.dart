@@ -12,22 +12,25 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class GradientRegressor implements LinearRegressor {
-  GradientRegressor(this.trainingFeatures, this.trainingOutcomes, {
-    // public arguments
-    int iterationsLimit = DefaultParameterValues.iterationsLimit,
-    double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
-    double lambda,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    int randomSeed,
-    int batchSize = 1,
-    DType dtype = DefaultParameterValues.dtype,
-    LearningRateType learningRateType = LearningRateType.constant,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-  })  : fitIntercept = fitIntercept,
+  GradientRegressor(
+      this.trainingFeatures,
+      this.trainingOutcomes, {
+        int iterationsLimit = DefaultParameterValues.iterationsLimit,
+        double initialLearningRate = DefaultParameterValues.initialLearningRate,
+        double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+        double lambda,
+        bool fitIntercept = false,
+        double interceptScale = 1.0,
+        int randomSeed,
+        int batchSize = 1,
+        DType dtype = DefaultParameterValues.dtype,
+        Matrix initialWeights,
+        LearningRateType learningRateType = LearningRateType.constant,
+        InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+      }) :
+        fitIntercept = fitIntercept,
         interceptScale = interceptScale,
-        _optimizer = GradientOptimizer(
+        weights = GradientOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           costFnType: CostFunctionType.squared,
@@ -39,7 +42,10 @@ class GradientRegressor implements LinearRegressor {
           lambda: lambda,
           batchSize: batchSize,
           randomSeed: randomSeed,
-        );
+        ).findExtrema(
+          initialWeights: initialWeights?.transpose(),
+          isMinimizingObjective: true,
+        ).getColumn(0);
 
   @override
   final Matrix trainingFeatures;
@@ -53,19 +59,8 @@ class GradientRegressor implements LinearRegressor {
   @override
   final double interceptScale;
 
-  final GradientOptimizer _optimizer;
-
   @override
-  Vector get weights => _weights;
-  Vector _weights;
-
-  @override
-  void fit({Matrix initialWeights}) {
-    _weights = _optimizer.findExtrema(
-      initialWeights: initialWeights?.transpose(),
-      isMinimizingObjective: true,
-    ).getColumn(0);
-  }
+  final Vector weights;
 
   @override
   double test(Matrix features, Matrix origLabels, MetricType metricType) {
@@ -76,5 +71,5 @@ class GradientRegressor implements LinearRegressor {
 
   @override
   Matrix predict(Matrix features) =>
-      addInterceptIf(fitIntercept, features, interceptScale) * _weights;
+      addInterceptIf(fitIntercept, features, interceptScale) * weights;
 }

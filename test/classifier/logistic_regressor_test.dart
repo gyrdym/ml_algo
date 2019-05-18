@@ -105,8 +105,9 @@ void main() {
         scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
+        initialWeights: initialWeights,
         randomSeed: 123,
-      )..fit(initialWeights: initialWeights);
+      );
 
       verify(optimizerMock.findExtrema(
               initialWeights: argThat(
