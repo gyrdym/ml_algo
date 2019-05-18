@@ -1,5 +1,9 @@
 # Changelog
 
+## 12.0.0
+- Optimizers now have immutable state
+- GradientType enum removed
+
 ## 11.0.1
 - Cross validator refactored
 - Data splitters refactored
