@@ -42,7 +42,6 @@ void main() {
         scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizer: OptimizerType.gradientDescent,
         optimizerFactory: optimizerFactoryMock,
-        gradientType: GradientType.stochastic,
         randomSeed: 123,
       );
 
@@ -130,7 +129,6 @@ void main() {
         scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizer: OptimizerType.gradientDescent,
         optimizerFactory: optimizerFactoryMock,
-        gradientType: GradientType.stochastic,
         randomSeed: 123,
       )..fit(initialWeights: initialWeights);
 
