@@ -2,8 +2,6 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator.dart';
-import 'package:ml_algo/src/optimizer/gradient/batch_size_calculator/batch_size_calculator_impl.dart';
 import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
@@ -29,9 +27,6 @@ class GradientRegressor implements LinearRegressor {
     DType dtype = DefaultParameterValues.dtype,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-
-    // hidden arguments
-    BatchSizeCalculator batchSizeCalculator = const BatchSizeCalculatorImpl(),
   })  : fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         _optimizer = GradientOptimizer(
@@ -44,7 +39,7 @@ class GradientRegressor implements LinearRegressor {
           minCoefficientsUpdate: minWeightsUpdate,
           iterationLimit: iterationsLimit,
           lambda: lambda,
-          batchSize: batchSizeCalculator.calculate(gradientType, batchSize),
+          batchSize: batchSize,
           randomSeed: randomSeed,
         );
 

@@ -57,20 +57,19 @@ class GradientOptimizer implements Optimizer {
         _labels = labels,
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
-
         _initialWeightsGenerator =
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
-
         _learningRateGenerator =
             learningRateGeneratorFactory.fromType(learningRateType),
-
         _costFunction = costFunctionFactory.fromType(costFnType,
             dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
-
         _convergenceDetector = convergenceDetectorFactory.create(
             minCoefficientsUpdate, iterationLimit),
-
         _randomizer = randomizerFactory.create(randomSeed) {
+    if (batchSize < 1 || batchSize > points.rowsNum) {
+      throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '
+          'value');
+    }
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 

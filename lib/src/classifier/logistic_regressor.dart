@@ -2,7 +2,6 @@ import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/helpers/add_intercept.dart';
-import 'package:ml_algo/src/helpers/get_batch_size.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
@@ -62,7 +61,7 @@ class LogisticRegressor with LinearClassifierMixin implements Classifier {
           minCoefficientsUpdate: minWeightsUpdate,
           iterationLimit: iterationsLimit,
           lambda: lambda,
-          batchSize: getBatchSize(gradientType, batchSize),
+          batchSize: batchSize,
           randomSeed: randomSeed,
         ) {
     if (trainingOutcomes.columnsNum > 1) {
