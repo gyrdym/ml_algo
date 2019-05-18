@@ -180,7 +180,6 @@ abstract class LinearClassifier implements Classifier {
     double interceptScale,
     LearningRateType learningRateType,
     OptimizerType optimizer,
-    GradientType gradientType,
     DType dtype,
   }) = SoftmaxRegressor;
 

@@ -181,7 +181,7 @@ void main() {
                 argThat(equals(points)), any, argThat(equals(labels))))
             .called(iterationLimit);
         verify(learningRateGeneratorMock.getNextValue()).called(iterationLimit);
-      }, batchSize: 15, iterations: iterationLimit);
+      }, batchSize: 4, iterations: iterationLimit);
     });
 
     /// (Explanation of the test case)[https://github.com/gyrdym/ml_algo/wiki/Gradient-descent-optimizer-should-find-optimal-coefficient-values]

@@ -1,6 +1,6 @@
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
@@ -37,9 +37,8 @@ void main() {
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
-          fitIntercept: false,
-          gradientType: GradientType.batch)
-        ..fit();
+          fitIntercept: false
+      )..fit();
 
       expect(classifier.classLabels, equals([
         [3.0],
@@ -70,9 +69,9 @@ void main() {
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
-          fitIntercept: false,
-          gradientType: GradientType.batch)
-        ..fit();
+          batchSize: 5,
+          fitIntercept: false
+      )..fit();
 
       expect(classifier.weightsByClasses, matrixAlmostEqualTo([
         [3.5,],
@@ -103,9 +102,9 @@ void main() {
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
-          fitIntercept: false,
-          gradientType: GradientType.batch)
-        ..fit();
+          batchSize: 5,
+          fitIntercept: false
+      )..fit();
 
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
@@ -138,9 +137,8 @@ void main() {
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
-          fitIntercept: false,
-          gradientType: GradientType.batch)
-        ..fit();
+          fitIntercept: false
+      )..fit();
 
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
@@ -174,9 +172,8 @@ void main() {
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
-          fitIntercept: false,
-          gradientType: GradientType.batch)
-        ..fit();
+          fitIntercept: false
+      )..fit();
 
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
@@ -203,9 +200,9 @@ void main() {
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
-          gradientType: GradientType.batch,
-          fitIntercept: true)
-        ..fit();
+          batchSize: 2,
+          fitIntercept: true
+      )..fit();
       // as the intercept is required to be fitted, our test_data should look as follows:
       //
       // [5.0, 7.0, 6.0] => [1.0, 5.0, 7.0, 6.0]
@@ -285,10 +282,10 @@ void main() {
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
-          gradientType: GradientType.batch,
+          batchSize: 3,
           fitIntercept: true,
-          interceptScale: 2.0)
-        ..fit();
+          interceptScale: 2.0
+      )..fit();
 
       // as the intercept is required to be fitted, our test_data should look as follows:
       //

@@ -1,12 +1,11 @@
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -42,7 +41,6 @@ void main() {
         scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizer: OptimizerType.gradientDescent,
         optimizerFactory: optimizerFactoryMock,
-        gradientType: GradientType.stochastic,
         randomSeed: 123,
       );
 
@@ -107,7 +105,6 @@ void main() {
         scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizer: OptimizerType.gradientDescent,
         optimizerFactory: optimizerFactoryMock,
-        gradientType: GradientType.stochastic,
         randomSeed: 123,
       )..fit(initialWeights: initialWeights);
 
