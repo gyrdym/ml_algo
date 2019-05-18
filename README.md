@@ -21,8 +21,8 @@ the lib, please, do not use it in a browser.
 
 **Following algorithms are implemented:**
 - *Linear regression:*
-    - Gradient descent algorithm with ridge regularization
-    - Lasso regression with coordinate descent
+    - Gradient descent based linear regression
+    - Coordinate descent based linear regression
 
 - *Linear classifier:*
     - Logistic regression
@@ -55,9 +55,9 @@ the lib, please, do not use it in a browser.
         well-known algorithm, that performs linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
         function.
 
-        - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
-        that performs feature selection along with regression process. The heart of the algorithm - coordinate descent 
-        optimization. If you want to decide, which features are less important - go ahead and use this regressor. 
+        - [LinearRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
+        that uses coordinate descent in order to find optimal value of a cost function. Coordinate descent allows to 
+        perform feature selection along with regression process (This technique often calls `Lasso regression`). 
     
     - ##### Nonlinear regression
         - [ParameterlessRegressor.knn](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/non_parametric_regressor.dart)

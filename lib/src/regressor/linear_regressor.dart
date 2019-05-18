@@ -120,7 +120,7 @@ abstract class LinearRegressor implements Regressor {
    * Can affect performance or accuracy of the computations. Default value is
    * [Float32x4]
    */
-  factory LinearRegressor.lasso(Matrix trainingFeatures,
+  factory LinearRegressor.coordinate(Matrix trainingFeatures,
       Matrix trainingOutcomes, {
     int iterationsLimit,
     double minWeightsUpdate,

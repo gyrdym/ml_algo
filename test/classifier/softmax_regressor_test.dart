@@ -26,7 +26,7 @@ void main() {
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createOptimizerFactoryMock(
         observations, outcomes, optimizers: {
-          OptimizerType.gradientDescent: optimizerMock,
+          OptimizerType.gradient: optimizerMock,
         },
       );
 
@@ -40,7 +40,7 @@ void main() {
         minWeightsUpdate: 0.001,
         lambda: 0.1,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradientDescent,
+        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
@@ -49,7 +49,7 @@ void main() {
           .fromType(ScoreToProbMapperType.softmax, dtype))
           .called(1);
       verify(optimizerFactoryMock.fromType(
-        OptimizerType.gradientDescent,
+        OptimizerType.gradient,
         observations,
         outcomes,
         dtype: dtype,
@@ -110,7 +110,7 @@ void main() {
           [2.0, 35.1, 95.2, 56.0, 52.6],
           [2.0, 90.1, 20.2, 10.0, 12.1],
         ], 1e-2)), outcomes, optimizers: {
-          OptimizerType.gradientDescent: optimizerMock,
+          OptimizerType.gradient: optimizerMock,
         },
       );
 
@@ -127,13 +127,13 @@ void main() {
         fitIntercept: true,
         interceptScale: 2.0,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradientDescent,
+        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       )..fit(initialWeights: initialWeights);
 
       verify(optimizerFactoryMock.fromType(
-        OptimizerType.gradientDescent,
+        OptimizerType.gradient,
         argThat(matrixAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 13.1, 15.2, 61.0, 27.2],
