@@ -40,10 +40,14 @@ the lib, please, do not use it in a browser.
 
 - #### Classification algorithms
     - ##### Linear classification
-        - [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). An algorithm,
-        that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
-        your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
-        supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
+        - ###### Logistic regression
+            - [LogisticRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
+            An algorithm, that performs simplest linear classification based on gradient ascent optimization of 
+            log-likelihood cost function. To use this kind of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+            
+            - [LogisticRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
+            Not implemented yet. An algorithm, that performs simplest linear classification based on coordinate ascent 
+            optimization of log-likelihood cost function. To use this kind of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
         - [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
         An algorithm, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
@@ -121,7 +125,7 @@ All are set, so, we can do our classification.
 Evaluate our model via accuracy metric:
 ````dart
 final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
-    LinearClassifier.logisticRegressor(
+    LogisticRegressor.gradient(
         trainFeatures, trainLabels,
         initialLearningRate: .8,
         iterationsLimit: 500,
@@ -157,7 +161,7 @@ Future main() async {
   final labels = await data.labels;
   final validator = CrossValidator.kFold(numberOfFolds: 5);
   final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
-    LinearClassifier.logisticRegressor(
+    LogisticRegressor.gradient(
         trainFeatures, trainLabels,
         initialLearningRate: .8,
         iterationsLimit: 500,
