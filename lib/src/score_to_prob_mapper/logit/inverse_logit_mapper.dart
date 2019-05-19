@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/score_to_prob_mapper/logit/float32x4_inverse_logit_mapper_mixin.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_linalg/dtype.dart';

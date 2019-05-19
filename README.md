@@ -34,24 +34,35 @@ the lib, please, do not use it in a browser.
 ## The library's structure
 
 - #### Model selection
-    - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
-    instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
-    algorithms, assessing prediction quality on different parts of a dataset. 
+    - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
+    Factory, that creates instances of a cross validator. Cross validation allows researchers to fit different 
+    [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms, 
+    assessing prediction quality on different parts of a dataset. 
 
 - #### Classification algorithms
     - ##### Linear classification
         - ###### Logistic regression
+            An algorithm, that performs linear binary classification. 
             - [LogisticRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
-            An algorithm, that performs simplest linear classification based on gradient ascent optimization of 
-            log-likelihood cost function. To use this kind of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+            Logistic regression with gradient ascent optimization of log-likelihood cost function. To use this kind 
+            of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
             
             - [LogisticRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
-            Not implemented yet. An algorithm, that performs simplest linear classification based on coordinate ascent 
-            optimization of log-likelihood cost function. To use this kind of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
-
-        - [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
-        An algorithm, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
-        this classifier for your data, please, make sure, that your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+            Not implemented yet. Logistic regression with coordinate ascent optimization of log-likelihood cost 
+            function. Coordinate ascent allows to do feature selection (aka `L1 regularization`) To use this kind of 
+            classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+        
+        - ##### Softmax regression
+            An algorithm, that performs linear multiclass classification.
+            - [SoftmaxRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/softmax_regressor.dart). 
+            Softmax regression with gradient ascent optimization of log-likelihood cost function. To use this kind 
+            of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+            
+            - [LogistiSoftmaxRegressorcRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/logistic_regressor.dart). 
+            Not implemented yet. Softmax regression with coordinate ascent optimization of log-likelihood cost 
+            function. As in case of logistic regression, coordinate ascent allows to do feature selection (aka 
+            `L1 regularization`) To use this kind of classifier your data have to be 
+            [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
 - #### Regression algorithms
     - ##### Linear regression
