@@ -142,3 +142,32 @@ OptimizerFactoryMock createOptimizerFactoryMock(Matrix points, Matrix labels, {
   });
   return factory;
 }
+
+OptimizerFactoryMock createGradientOptimizerFactoryMock(
+    Matrix points,
+    Matrix labels,
+    Optimizer optimizer,
+) {
+  final factory = OptimizerFactoryMock();
+  when(factory.gradient(
+    points,
+    labels,
+    dtype: anyNamed('dtype'),
+    randomizerFactory: anyNamed('randomizerFactory'),
+    costFunctionFactory: anyNamed('costFunctionFactory'),
+    learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
+    initialWeightsGeneratorFactory:
+      anyNamed('initialWeightsGeneratorFactory'),
+    costFnType: anyNamed('costFnType'),
+    learningRateType: anyNamed('learningRateType'),
+    initialWeightsType: anyNamed('initialWeightsType'),
+    scoreToProbMapperType: anyNamed('scoreToProbMapperType'),
+    initialLearningRate: anyNamed('initialLearningRate'),
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+    iterationLimit: anyNamed('iterationLimit'),
+    lambda: anyNamed('lambda'),
+    batchSize: anyNamed('batchSize'),
+    randomSeed: anyNamed('randomSeed'),
+  )).thenReturn(optimizer);
+  return factory;
+}

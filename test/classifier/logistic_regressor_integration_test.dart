@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -32,7 +32,7 @@ void main() {
         [0.0],
       ]);
 
-      final classifier = LogisticRegressor(
+      final classifier = GradientLogisticRegressor(
           features, labels,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
@@ -64,7 +64,7 @@ void main() {
         firstClass,
       ]);
 
-      final classifier = LogisticRegressor(
+      final classifier = GradientLogisticRegressor(
           features, labels,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
@@ -97,7 +97,7 @@ void main() {
         firstClass,
       ]);
 
-      final classifier = LogisticRegressor(
+      final classifier = GradientLogisticRegressor(
           features, labels,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
@@ -132,7 +132,7 @@ void main() {
         firstClass,
       ]);
 
-      final classifier = LogisticRegressor(
+      final classifier = GradientLogisticRegressor(
           features, labels,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
@@ -168,7 +168,7 @@ void main() {
         firstClass,
       ]);
 
-      final classifier = LogisticRegressor(
+      final classifier = GradientLogisticRegressor(
           features, labels,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
@@ -197,7 +197,7 @@ void main() {
         [1.0],
         [0.0],
       ]);
-      final classifier = LogisticRegressor(
+      final classifier = GradientLogisticRegressor(
           features, labels,
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
@@ -279,7 +279,7 @@ void main() {
         [1.0],
       ]);
 
-      final classifier = LogisticRegressor(
+      final classifier = GradientLogisticRegressor(
           features, labels,
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,

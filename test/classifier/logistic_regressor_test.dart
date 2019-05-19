@@ -1,8 +1,7 @@
-import 'package:ml_algo/src/classifier/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -22,13 +21,10 @@ void main() {
       final observations = Matrix.fromList([[1.0]]);
       final outcomes = Matrix.fromList([[0]]);
       final optimizerMock = OptimizerMock();
-      final optimizerFactoryMock = createOptimizerFactoryMock(
-        observations, outcomes, optimizers: {
-          OptimizerType.gradient: optimizerMock
-        },
-      );
+      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
+          observations, outcomes, optimizerMock);
 
-      LogisticRegressor(
+      GradientLogisticRegressor(
         observations,
         outcomes,
         dtype: DType.float32,
@@ -39,7 +35,6 @@ void main() {
         minWeightsUpdate: 0.001,
         lambda: 0.1,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
@@ -47,12 +42,11 @@ void main() {
       verify(scoreToProbFactoryMock.fromType(
               ScoreToProbMapperType.logit, DType.float32))
           .called(1);
-      verify(optimizerFactoryMock.fromType(
-        OptimizerType.gradient,
+      verify(optimizerFactoryMock.gradient(
         argThat(equals([[1.0]])),
         argThat(equals([[0]])),
         dtype: DType.float32,
-        costFunctionType: CostFunctionType.logLikelihood,
+        costFnType: CostFunctionType.logLikelihood,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         scoreToProbMapperType: ScoreToProbMapperType.logit,
@@ -79,11 +73,8 @@ void main() {
             ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
           });
       final optimizerMock = OptimizerMock();
-      final optimizerFactoryMock = createOptimizerFactoryMock(
-          observations, outcomes, optimizers: {
-            OptimizerType.gradient: optimizerMock
-          },
-      );
+      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
+          observations, outcomes, optimizerMock);
 
       final initialWeights = Matrix.fromList([
         [10.0],
@@ -92,7 +83,7 @@ void main() {
         [40.0],
       ]);
 
-      LogisticRegressor(
+      GradientLogisticRegressor(
         observations,
         outcomes,
         dtype: DType.float32,
@@ -103,7 +94,6 @@ void main() {
         minWeightsUpdate: 0.001,
         lambda: 0.1,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         initialWeights: initialWeights,
         randomSeed: 123,
