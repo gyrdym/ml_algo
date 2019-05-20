@@ -1,5 +1,5 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
@@ -24,13 +24,10 @@ void main() {
       final observations = Matrix.fromList([[1.0]]);
       final outcomes = Matrix.fromList([[0]]);
       final optimizerMock = OptimizerMock();
-      final optimizerFactoryMock = createOptimizerFactoryMock(
-        observations, outcomes, optimizers: {
-          OptimizerType.gradient: optimizerMock,
-        },
-      );
+      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
+        observations, outcomes, optimizerMock);
 
-      SoftmaxRegressor(
+      GradientSoftmaxRegressor(
         observations, outcomes,
         dtype: dtype,
         learningRateType: LearningRateType.constant,
@@ -40,7 +37,6 @@ void main() {
         minWeightsUpdate: 0.001,
         lambda: 0.1,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
@@ -48,12 +44,11 @@ void main() {
       verify(scoreToProbFactoryMock
           .fromType(ScoreToProbMapperType.softmax, dtype))
           .called(1);
-      verify(optimizerFactoryMock.fromType(
-        OptimizerType.gradient,
+      verify(optimizerFactoryMock.gradient(
         observations,
         outcomes,
         dtype: dtype,
-        costFunctionType: CostFunctionType.logLikelihood,
+        costFnType: CostFunctionType.logLikelihood,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         scoreToProbMapperType: ScoreToProbMapperType.softmax,
@@ -101,7 +96,7 @@ void main() {
       ]);
 
       final optimizerMock = OptimizerMock();
-      final optimizerFactoryMock = createOptimizerFactoryMock(
+      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
         argThat(matrixAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 13.1, 15.2, 61.0, 27.2],
@@ -109,12 +104,10 @@ void main() {
           [2.0, 32.1, 35.2, 36.0, 41.5],
           [2.0, 35.1, 95.2, 56.0, 52.6],
           [2.0, 90.1, 20.2, 10.0, 12.1],
-        ], 1e-2)), outcomes, optimizers: {
-          OptimizerType.gradient: optimizerMock,
-        },
+        ], 1e-2)), outcomes, optimizerMock,
       );
 
-      SoftmaxRegressor(
+      GradientSoftmaxRegressor(
         observations,
         outcomes,
         dtype: dtype,
@@ -127,14 +120,12 @@ void main() {
         fitIntercept: true,
         interceptScale: 2.0,
         scoreToProbMapperFactory: scoreToProbFactoryMock,
-        optimizer: OptimizerType.gradient,
         optimizerFactory: optimizerFactoryMock,
         initialWeights: initialWeights,
         randomSeed: 123,
       );
 
-      verify(optimizerFactoryMock.fromType(
-        OptimizerType.gradient,
+      verify(optimizerFactoryMock.gradient(
         argThat(matrixAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 13.1, 15.2, 61.0, 27.2],
@@ -152,7 +143,7 @@ void main() {
           [1.0, 0.0, 0.0],
         ])),
         dtype: dtype,
-        costFunctionType: CostFunctionType.logLikelihood,
+        costFnType: CostFunctionType.logLikelihood,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         scoreToProbMapperType: ScoreToProbMapperType.softmax,

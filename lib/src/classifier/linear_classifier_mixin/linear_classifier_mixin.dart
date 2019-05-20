@@ -1,11 +1,11 @@
-import 'package:ml_algo/src/classifier/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_linalg/matrix.dart';
 
-mixin LinearClassifierMixin implements LinearClassifier {
+mixin LinearClassifierMixin implements Classifier {
   ScoreToProbMapper get scoreToProbMapper;
 
   @override
