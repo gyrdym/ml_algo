@@ -1,6 +1,6 @@
 export 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 export 'package:ml_algo/src/classifier/classifier.dart';
-export 'package:ml_algo/src/classifier/linear_classifier.dart';
+export 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
 export 'package:ml_algo/src/metric/metric_type.dart';
 export 'package:ml_algo/src/metric/regression/type.dart';

@@ -1,12 +1,11 @@
-import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
-import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
@@ -15,8 +14,9 @@ import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
-class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
-  SoftmaxRegressor(
+class GradientSoftmaxRegressor with LinearClassifierMixin
+    implements SoftmaxRegressor {
+  GradientSoftmaxRegressor(
       this.trainingFeatures,
       this.trainingOutcomes, {
         // public arguments
@@ -29,7 +29,6 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
         bool fitIntercept = false,
         double interceptScale = 1.0,
         Matrix initialWeights,
-        OptimizerType optimizer = OptimizerType.gradient,
         LearningRateType learningRateType = LearningRateType.constant,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
@@ -47,12 +46,11 @@ class SoftmaxRegressor with LinearClassifierMixin implements Classifier {
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
         classLabels = trainingOutcomes.uniqueRows(),
-        weightsByClasses = optimizerFactory.fromType(
-          optimizer,
+        weightsByClasses = optimizerFactory.gradient(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           dtype: dtype,
-          costFunctionType: CostFunctionType.logLikelihood,
+          costFnType: CostFunctionType.logLikelihood,
           scoreToProbMapperType: _scoreToProbMapperType,
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
