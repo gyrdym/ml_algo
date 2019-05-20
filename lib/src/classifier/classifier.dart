@@ -1,9 +1,8 @@
-import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_linalg/matrix.dart';
 
 /// An interface for any classifier (linear, non-linear, parametric,
 /// non-parametric, etc.)
-abstract class Classifier implements Predictor {
+abstract class Classifier {
   /// A matrix, where each column is a vector of weights, associated with
   /// the specific class
   Matrix get weightsByClasses;
@@ -16,8 +15,4 @@ abstract class Classifier implements Predictor {
   /// Returns predicted distribution of probabilities for each observation in
   /// the passed [features]
   Matrix predictProbabilities(Matrix features);
-
-  /// Return a collection of predicted class labels for each observation in the
-  /// passed [features]
-  Matrix predictClasses(Matrix features);
 }

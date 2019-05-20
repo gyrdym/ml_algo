@@ -29,5 +29,5 @@ Future main() async {
       learningRateType: LearningRateType.constant);
 
   // Let's see adjusted coefficients
-  print('Regression coefficients: ${regressor.weights}');
+  print('Regression coefficients: ${regressor.coefficients}');
 }

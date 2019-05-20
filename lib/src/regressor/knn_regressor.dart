@@ -5,7 +5,7 @@ import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/regressor/non_parametric_regressor.dart';
+import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -42,12 +42,6 @@ class KNNRegressor implements ParameterlessRegressor {
 
   @override
   final Matrix trainingOutcomes;
-
-  @override
-  final fitIntercept = null;
-
-  @override
-  final interceptScale = null;
 
   final Distance _distanceType;
   final int _k;

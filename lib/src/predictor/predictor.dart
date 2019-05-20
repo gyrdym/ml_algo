@@ -9,11 +9,8 @@ abstract class Predictor {
   /// A matrix of dependant variables, that was used to fit the predictor
   Matrix get trainingOutcomes;
 
-  /// A flag that shows whether the intercept term is fitted or not
-  bool get fitIntercept;
-
-  /// A multiplier of intercept term (meaningful only if [fitIntercept] is true)
-  double get interceptScale;
+  /// Returns prediction based on the model learned parameters
+  Matrix predict(Matrix features);
 
   /// Assesses model according to provided [metric]
   double test(Matrix observations, Matrix outcomes, MetricType metric);
