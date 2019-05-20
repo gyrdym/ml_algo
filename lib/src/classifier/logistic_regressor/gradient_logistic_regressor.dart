@@ -102,7 +102,7 @@ class GradientLogisticRegressor with LinearClassifierMixin
   final ScoreToProbMapper scoreToProbMapper;
 
   @override
-  Matrix predictClasses(Matrix features) {
+  Matrix predict(Matrix features) {
     final processedFeatures = addInterceptIf(fitIntercept, features,
         interceptScale);
     final classesSource = checkDataAndPredictProbabilities(processedFeatures)

@@ -1,8 +1,8 @@
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/predictor/linear_predictor.dart';
 import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
-import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -16,7 +16,7 @@ import 'package:ml_linalg/vector.dart';
 /// as one knows all the `x` values (since it is the input for the algorithm),
 /// the regressor should find the best coefficients (weights) (they are unknown)
 /// to make a best prediction of `y` term.
-abstract class LinearRegressor implements Regressor {
+abstract class LinearRegressor implements LinearPredictor {
   /**
    * Creates a gradient linear regressor. Uses gradient descent optimizer to
    * find the optimal weights
@@ -132,5 +132,5 @@ abstract class LinearRegressor implements Regressor {
       }) = CoordinateRegressor;
 
   /// Learned coefficients (or weights) for given features
-  Vector get weights;
+  Vector get coefficients;
 }

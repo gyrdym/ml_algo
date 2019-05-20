@@ -2,16 +2,17 @@ import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/helpers/add_intercept.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/predictor/linear_predictor.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_linalg/matrix.dart';
 
-mixin LinearClassifierMixin implements Classifier {
+mixin LinearClassifierMixin implements Classifier, LinearPredictor {
   ScoreToProbMapper get scoreToProbMapper;
 
   @override
   double test(Matrix features, Matrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
-    return metric.getScore(predictClasses(features), origLabels);
+    return metric.getScore(predict(features), origLabels);
   }
 
   @override

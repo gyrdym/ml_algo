@@ -25,7 +25,7 @@ class CoordinateRegressor implements LinearRegressor {
       }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
-        weights = CoordinateOptimizer(
+        coefficients = CoordinateOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           initialWeightsType: initialWeightsType,
@@ -53,7 +53,7 @@ class CoordinateRegressor implements LinearRegressor {
   final double interceptScale;
 
   @override
-  final Vector weights;
+  final Vector coefficients;
 
   @override
   double test(Matrix features, Matrix origLabels, MetricType metricType) {
@@ -64,5 +64,5 @@ class CoordinateRegressor implements LinearRegressor {
 
   @override
   Matrix predict(Matrix features) =>
-      addInterceptIf(fitIntercept, features, interceptScale) * weights;
+      addInterceptIf(fitIntercept, features, interceptScale) * coefficients;
 }
