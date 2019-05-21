@@ -3,6 +3,7 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
@@ -14,8 +15,6 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
-import 'package:ml_algo/src/optimizer/optimizer_type.dart';
-import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
@@ -109,36 +108,6 @@ ScoreToProbMapperFactoryMock createScoreToProbMapperFactoryMock(
   final factory = ScoreToProbMapperFactoryMock();
   mappers.forEach((ScoreToProbMapperType type, ScoreToProbMapper fn) {
     when(factory.fromType(type, dtype)).thenReturn(fn);
-  });
-  return factory;
-}
-
-OptimizerFactoryMock createOptimizerFactoryMock(Matrix points, Matrix labels, {
-  Map<OptimizerType, Optimizer> optimizers,
-}) {
-  final factory = OptimizerFactoryMock();
-  optimizers.forEach((OptimizerType type, Optimizer optimizer) {
-    when(factory.fromType(
-      type,
-      points,
-      labels,
-      dtype: anyNamed('dtype'),
-      randomizerFactory: anyNamed('randomizerFactory'),
-      costFunctionFactory: anyNamed('costFunctionFactory'),
-      learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
-      initialWeightsGeneratorFactory:
-          anyNamed('initialWeightsGeneratorFactory'),
-      costFunctionType: anyNamed('costFunctionType'),
-      learningRateType: anyNamed('learningRateType'),
-      initialWeightsType: anyNamed('initialWeightsType'),
-      scoreToProbMapperType: anyNamed('scoreToProbMapperType'),
-      initialLearningRate: anyNamed('initialLearningRate'),
-      minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-      iterationLimit: anyNamed('iterationLimit'),
-      lambda: anyNamed('lambda'),
-      batchSize: anyNamed('batchSize'),
-      randomSeed: anyNamed('randomSeed'),
-    )).thenReturn(optimizer);
   });
   return factory;
 }
