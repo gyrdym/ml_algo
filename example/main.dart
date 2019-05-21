@@ -18,7 +18,7 @@ Future main() async {
   final labels = Matrix.fromList([
     [4.3],
     [3.5],
-    [2.1]
+    [2.1],
   ]);
 
   // Let's create a regressor itself and train it

@@ -16,5 +16,7 @@ abstract class Classifier {
   /// the passed [features]
   Matrix predictProbabilities(Matrix features);
 
+  /// Return a collection of predicted class labels for each observation in the
+  /// passed [features]
   Matrix predictClasses(Matrix features);
 }
