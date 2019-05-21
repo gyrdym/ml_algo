@@ -48,8 +48,8 @@ the lib, please, do not use it in a browser.
             of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
             
             - [LogisticRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
-            Not implemented yet. Logistic regression with coordinate ascent optimization of log-likelihood cost 
-            function. Coordinate ascent allows to do feature selection (aka `L1 regularization`) To use this kind of 
+            Not implemented yet. Logistic regression with coordinate descent optimization of negated log-likelihood cost 
+            function. Coordinate descent allows to do feature selection (aka `L1 regularization`) To use this kind of 
             classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
         
         - ##### Softmax regression
@@ -58,9 +58,9 @@ the lib, please, do not use it in a browser.
             Softmax regression with gradient ascent optimization of log-likelihood cost function. To use this kind 
             of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
             
-            - [LogistiSoftmaxRegressorcRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/logistic_regressor.dart). 
-            Not implemented yet. Softmax regression with coordinate ascent optimization of log-likelihood cost 
-            function. As in case of logistic regression, coordinate ascent allows to do feature selection (aka 
+            - [SoftmaxRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/logistic_regressor.dart). 
+            Not implemented yet. Softmax regression with coordinate descent optimization of negated log-likelihood cost 
+            function. As in case of logistic regression, coordinate descent allows to do feature selection (aka 
             `L1 regularization`) To use this kind of classifier your data have to be 
             [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
