@@ -12,7 +12,7 @@ class SoftmaxMapper extends Object with Float32x4SoftmaxMapperMixin
 
   @override
   @override
-  Matrix getProbabilities(Matrix scores) {
+  Matrix map(Matrix scores) {
     switch (dtype) {
       case DType.float32:
         return float32x4ScoresToProbs(scores);

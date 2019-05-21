@@ -15,7 +15,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_type.dart';
-import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
@@ -59,7 +59,7 @@ class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
 class SplitterMock extends Mock implements Splitter {}
 
-class PredictorMock extends Mock implements Predictor {}
+class PredictorMock extends Mock implements Assessable {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,

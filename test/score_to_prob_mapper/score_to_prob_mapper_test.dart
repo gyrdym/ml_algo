@@ -19,7 +19,7 @@ void main() {
         [4.0],
       ]);
       final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.getProbabilities(scores);
+      final probabilities = inverseLogitLink.map(scores);
 
       expect(probabilities,
           matrixAlmostEqualTo([
@@ -38,7 +38,7 @@ void main() {
         [1000.0],
       ]);
       final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.getProbabilities(scores);
+      final probabilities = inverseLogitLink.map(scores);
       final probaAsVector = probabilities.getColumn(0);
 
       expect(probaAsVector[0], isNotNaN);
@@ -64,7 +64,7 @@ void main() {
         [13.0],
       ]);
       final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.getProbabilities(scores);
+      final probabilities = inverseLogitLink.map(scores);
       final probaAsVector = probabilities.getColumn(0);
 
       expect(probaAsVector[0], isNotNaN);
@@ -90,7 +90,7 @@ void main() {
         [-13.0],
       ]);
       final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.getProbabilities(scores);
+      final probabilities = inverseLogitLink.map(scores);
       final probaAsVector = probabilities.getColumn(0);
 
       expect(probaAsVector[0], isNotNaN);
@@ -118,7 +118,7 @@ void main() {
         Vector.fromList([30.0, 21.0, 77.0, 40.0, 99.0]),
       ]);
 
-      final probabilities = logitLink.getProbabilities(scores);
+      final probabilities = logitLink.map(scores);
       final expected = [
         [2.061060046209062e-9, 0.00004539786860886666, 0.9999546000703311],
         [0.9999999998973794, 1.0261879630648809e-10, 1.7139084313661305e-15],

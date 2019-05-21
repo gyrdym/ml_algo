@@ -25,7 +25,7 @@ class LogLikelihoodCost implements CostFunction {
 
   @override
   Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
-    x.transpose() * (y - scoreToProbMapper.getProbabilities(x * w));
+    x.transpose() * (y - scoreToProbMapper.map(x * w));
 
   @override
   Vector getSubDerivative(int wIdx, Matrix x, Matrix w, Matrix y) =>

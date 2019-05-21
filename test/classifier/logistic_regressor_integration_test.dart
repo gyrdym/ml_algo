@@ -73,7 +73,7 @@ void main() {
           fitIntercept: false
       );
 
-      expect(classifier.weightsByClasses, matrixAlmostEqualTo([
+      expect(classifier.coefficientsByClasses, matrixAlmostEqualTo([
         [3.5,],
         [-0.5,],
         [-9.0,],
@@ -110,7 +110,7 @@ void main() {
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
-      final classes = classifier.predict(newFeatures);
+      final classes = classifier.predictClasses(newFeatures);
 
       expect(probabilities, equals([[0.01798621006309986]]));
       expect(classes, equals([thirdClass]));
@@ -148,7 +148,7 @@ void main() {
         [1.0]
       ]);
       final score =
-          classifier.test(newFeatures, origLabels, MetricType.accuracy);
+          classifier.assess(newFeatures, origLabels, MetricType.accuracy);
       expect(score, equals(0.0));
     });
 
@@ -184,7 +184,7 @@ void main() {
         thirdClass,
       ]);
       final score =
-          classifier.test(newFeatures, newLabels, MetricType.accuracy);
+          classifier.assess(newFeatures, newLabels, MetricType.accuracy);
       expect(score, equals(1.0));
     });
 
@@ -258,7 +258,7 @@ void main() {
       //
       // derivative: [0.0, -2.0, -2.5, -1.5]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [0.0, -2.0, -2.5, -1.5] = [0.0, -2.0, -2.5, -1.5]
-      expect(classifier.weightsByClasses, equals([
+      expect(classifier.coefficientsByClasses, equals([
         [0.0],
         [2.0],
         [2.5],
@@ -354,7 +354,7 @@ void main() {
       //
       // derivative: [-1.0, -3.5, -4.5, -4.0]
       // update: [0.0, 0.0, 0.0, 0.0] + 1.0 * [-1.0, -3.5, -4.5, -4.0] = [-1.0, -3.5, -4.5, -4.0]
-      expect(classifier.weightsByClasses, equals([
+      expect(classifier.coefficientsByClasses, equals([
         [1.0],
         [3.5],
         [4.5],

@@ -2,7 +2,7 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
-import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -23,6 +23,6 @@ abstract class CrossValidator {
       CrossValidatorImpl(dtype, LeavePOutSplitter(p));
 
   /// Returns a score of quality of passed predictor depending on given [metric]
-  double evaluate(Predictor predictorFactory(Matrix features, Matrix outcomes),
+  double evaluate(Assessable predictorFactory(Matrix features, Matrix outcomes),
       Matrix observations, Matrix outcomes, MetricType metric);
 }

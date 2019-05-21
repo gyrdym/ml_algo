@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/helpers/add_intercept.dart';
+import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
