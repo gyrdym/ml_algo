@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/helpers/add_intercept.dart';
+import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
@@ -13,8 +13,8 @@ import 'package:ml_linalg/vector.dart';
 
 class GradientRegressor implements LinearRegressor {
   GradientRegressor(
-      this.trainingFeatures,
-      this.trainingOutcomes, {
+      Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
         int iterationsLimit = DefaultParameterValues.iterationsLimit,
         double initialLearningRate = DefaultParameterValues.initialLearningRate,
         double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
@@ -28,8 +28,8 @@ class GradientRegressor implements LinearRegressor {
         LearningRateType learningRateType = LearningRateType.constant,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
       }) :
-        fitIntercept = fitIntercept,
-        interceptScale = interceptScale,
+        _fitIntercept = fitIntercept,
+        _interceptScale = interceptScale,
         coefficients = GradientOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
@@ -47,23 +47,14 @@ class GradientRegressor implements LinearRegressor {
           isMinimizingObjective: true,
         ).getColumn(0);
 
-  @override
-  final Matrix trainingFeatures;
-
-  @override
-  final Matrix trainingOutcomes;
-
-  @override
-  final bool fitIntercept;
-
-  @override
-  final double interceptScale;
+  final bool _fitIntercept;
+  final double _interceptScale;
 
   @override
   final Vector coefficients;
 
   @override
-  double test(Matrix features, Matrix origLabels, MetricType metricType) {
+  double assess(Matrix features, Matrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);
@@ -71,5 +62,5 @@ class GradientRegressor implements LinearRegressor {
 
   @override
   Matrix predict(Matrix features) =>
-      addInterceptIf(fitIntercept, features, interceptScale) * coefficients;
+      addInterceptIf(_fitIntercept, features, _interceptScale) * coefficients;
 }

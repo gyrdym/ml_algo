@@ -1,7 +1,8 @@
-import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/helpers/add_intercept.dart';
+import 'package:ml_algo/src/helpers/add_intercept_if.dart';
+import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
@@ -17,8 +18,8 @@ import 'package:ml_linalg/matrix.dart';
 class GradientSoftmaxRegressor with LinearClassifierMixin
     implements SoftmaxRegressor {
   GradientSoftmaxRegressor(
-      this.trainingFeatures,
-      this.trainingOutcomes, {
+      Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
         // public arguments
         int iterationsLimit = DefaultParameterValues.iterationsLimit,
         double initialLearningRate = DefaultParameterValues.initialLearningRate,
@@ -46,7 +47,7 @@ class GradientSoftmaxRegressor with LinearClassifierMixin
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
         classLabels = trainingOutcomes.uniqueRows(),
-        weightsByClasses = optimizerFactory.gradient(
+        coefficientsByClasses = optimizerFactory.gradient(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           dtype: dtype,
@@ -74,16 +75,10 @@ class GradientSoftmaxRegressor with LinearClassifierMixin
   final double interceptScale;
 
   @override
-  final Matrix trainingFeatures;
-
-  @override
-  final Matrix trainingOutcomes;
-
-  @override
   final Matrix classLabels;
 
   @override
-  final Matrix weightsByClasses;
+  final Matrix coefficientsByClasses;
 
   final DType dtype;
 
@@ -91,13 +86,14 @@ class GradientSoftmaxRegressor with LinearClassifierMixin
   final ScoreToProbMapper scoreToProbMapper;
 
   @override
-  Matrix predict(Matrix features) {
-    final processedFeatures = addInterceptIf(fitIntercept, trainingFeatures,
+  Matrix predictClasses(Matrix features) {
+    final processedFeatures = addInterceptIf(fitIntercept, features,
         interceptScale);
-    return checkDataAndPredictProbabilities(processedFeatures)
+    return getProbabilities(processedFeatures, coefficientsByClasses,
+        scoreToProbMapper)
         .mapRows((probabilities) {
-      final labelIdx = probabilities.toList().indexOf(probabilities.max());
-      return classLabels.getRow(labelIdx);
-    });
+          final labelIdx = probabilities.toList().indexOf(probabilities.max());
+          return classLabels.getRow(labelIdx);
+        });
   }
 }

@@ -40,7 +40,7 @@ void main() {
       final validator = CrossValidatorImpl(DType.float32, splitter);
 
       var score = 20.0;
-      when(predictor.test(any, any, any))
+      when(predictor.assess(any, any, any))
           .thenAnswer((Invocation inv) => score = score + 10);
 
       final actual = validator.evaluate((observations, outcomes) => predictor,
@@ -48,13 +48,13 @@ void main() {
 
       expect(actual, 35);
 
-      verify(predictor.test(argThat(equals([
+      verify(predictor.assess(argThat(equals([
         [330, 930, 130],
         [730, 730, 330],
         [930, 530, 530],
       ])), argThat(equals([[100], [300], [500]])), metric)).called(1);
 
-      verify(predictor.test(argThat(equals([
+      verify(predictor.assess(argThat(equals([
         [230, 330, 730],
         [530, 130, 930],
       ])), argThat(equals([[700], [900]])), metric)).called(1);

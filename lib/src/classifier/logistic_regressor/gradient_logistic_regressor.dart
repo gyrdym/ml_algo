@@ -1,7 +1,8 @@
-import 'package:ml_algo/src/classifier/linear_classifier_mixin/linear_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/helpers/add_intercept.dart';
+import 'package:ml_algo/src/helpers/add_intercept_if.dart';
+import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
@@ -18,8 +19,8 @@ import 'package:ml_linalg/vector.dart';
 class GradientLogisticRegressor with LinearClassifierMixin
     implements LogisticRegressor {
   GradientLogisticRegressor(
-      this.trainingFeatures,
-      this.trainingOutcomes, {
+      Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
         // public arguments
         int iterationsLimit = DefaultParameterValues.iterationsLimit,
         double initialLearningRate = DefaultParameterValues.initialLearningRate,
@@ -47,7 +48,7 @@ class GradientLogisticRegressor with LinearClassifierMixin
         scoreToProbMapper =
           scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
         classLabels = trainingOutcomes.uniqueRows(),
-        weightsByClasses = optimizerFactory.gradient(
+        coefficientsByClasses = optimizerFactory.gradient(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           dtype: dtype,
@@ -64,35 +65,22 @@ class GradientLogisticRegressor with LinearClassifierMixin
         ).findExtrema(
             initialWeights: initialWeights,
             isMinimizingObjective: false,
-        ) {
-    if (trainingOutcomes.columnsNum > 1) {
-      throw Exception('Probably, you are trying to classify data with '
-          'multiclass dependant variable, since the columns number of passed '
-          'outcomes matrix is greater than 1 (${trainingOutcomes.columnsNum} '
-          'given)');
-    }
-  }
+        );
 
   static const ScoreToProbMapperType _scoreToProbMapperType =
       ScoreToProbMapperType.logit;
+
+  @override
+  final Matrix coefficientsByClasses;
+
+  @override
+  final Matrix classLabels;
 
   @override
   final bool fitIntercept;
 
   @override
   final double interceptScale;
-
-  @override
-  final Matrix trainingFeatures;
-
-  @override
-  final Matrix trainingOutcomes;
-
-  @override
-  final Matrix weightsByClasses;
-
-  @override
-  final Matrix classLabels;
 
   final DType dtype;
 
@@ -102,10 +90,11 @@ class GradientLogisticRegressor with LinearClassifierMixin
   final ScoreToProbMapper scoreToProbMapper;
 
   @override
-  Matrix predict(Matrix features) {
+  Matrix predictClasses(Matrix features) {
     final processedFeatures = addInterceptIf(fitIntercept, features,
         interceptScale);
-    final classesSource = checkDataAndPredictProbabilities(processedFeatures)
+    final classesSource = getProbabilities(processedFeatures,
+        coefficientsByClasses, scoreToProbMapper)
         .getColumn(0)
         // TODO: use SIMD
         .map((value) => value >= probabilityThreshold ? 1.0 : 0.0)

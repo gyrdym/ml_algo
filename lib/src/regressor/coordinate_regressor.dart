@@ -1,6 +1,6 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/helpers/add_intercept.dart';
+import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
@@ -11,8 +11,8 @@ import 'package:ml_linalg/linalg.dart';
 
 class CoordinateRegressor implements LinearRegressor {
   CoordinateRegressor(
-      this.trainingFeatures,
-      this.trainingOutcomes, {
+      Matrix trainingFeatures,
+      Matrix trainingOutcomes, {
         int iterationsLimit = DefaultParameterValues.iterationsLimit,
         double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
         double lambda,
@@ -23,8 +23,8 @@ class CoordinateRegressor implements LinearRegressor {
         Matrix initialWeights,
         bool isTrainDataNormalized = false,
       }) :
-        fitIntercept = fitIntercept,
-        interceptScale = interceptScale,
+        _fitIntercept = fitIntercept,
+        _interceptScale = interceptScale,
         coefficients = CoordinateOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
@@ -40,23 +40,15 @@ class CoordinateRegressor implements LinearRegressor {
           isMinimizingObjective: true,
         ).getRow(0);
 
-  @override
-  final Matrix trainingFeatures;
+  final bool _fitIntercept;
 
-  @override
-  final Matrix trainingOutcomes;
-
-  @override
-  final bool fitIntercept;
-
-  @override
-  final double interceptScale;
+  final double _interceptScale;
 
   @override
   final Vector coefficients;
 
   @override
-  double test(Matrix features, Matrix origLabels, MetricType metricType) {
+  double assess(Matrix features, Matrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);
@@ -64,5 +56,5 @@ class CoordinateRegressor implements LinearRegressor {
 
   @override
   Matrix predict(Matrix features) =>
-      addInterceptIf(fitIntercept, features, interceptScale) * coefficients;
+      addInterceptIf(_fitIntercept, features, _interceptScale) * coefficients;
 }

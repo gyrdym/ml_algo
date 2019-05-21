@@ -11,7 +11,7 @@ class InverseLogitMapper with Float32x4InverseLogitMapper
   final DType dtype;
 
   @override
-  Matrix getProbabilities(Matrix scores) {
+  Matrix map(Matrix scores) {
     switch (dtype) {
       case DType.float32:
         return getFloat32x4Probabilities(scores);

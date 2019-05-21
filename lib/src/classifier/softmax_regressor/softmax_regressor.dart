@@ -1,5 +1,6 @@
-import 'package:ml_algo/src/classifier/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -18,7 +19,7 @@ import 'package:ml_linalg/matrix.dart';
 ///
 /// Also, it is worth to mention, that the algorithm is a generalization of
 /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression))
-abstract class SoftmaxRegressor implements LinearClassifier {
+abstract class SoftmaxRegressor implements Classifier, Assessable {
   /// Creates a gradient descent based softmax regressor classifier.
   ///
   /// Parameters:

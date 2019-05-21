@@ -1,5 +1,6 @@
-import 'package:ml_algo/src/classifier/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -11,7 +12,7 @@ import 'package:ml_linalg/matrix.dart';
 /// In other words, the regressor iteratively tries to select coefficients,
 /// that makes combination of passed features and these coefficients most
 /// likely.
-abstract class LogisticRegressor implements LinearClassifier {
+abstract class LogisticRegressor implements Classifier, Assessable {
   /// Parameters:
   ///
   /// [trainingFeatures] A matrix with observations, that will be used by the
