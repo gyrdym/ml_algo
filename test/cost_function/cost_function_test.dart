@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -19,17 +20,17 @@ void main() {
       // where X^t - transposed X matrix
       // y - labels matrix (vector-column)
       // w - coefficients matrix (vector-column)
-      final x = Matrix.from([
+      final x = Matrix.fromList([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
         [7.0, 8.0, 9.0],
       ]);
-      final w = Matrix.from([
+      final w = Matrix.fromList([
         [-1.0],
         [2.0],
         [-3.0],
       ]);
-      final y = Matrix.from([
+      final y = Matrix.fromList([
         [10.0],
         [20.0],
         [30.0]
@@ -48,13 +49,13 @@ void main() {
   group('LogLikelihoodCost', () {
     final mockedLinkFn = ScoreToProbMapperMock();
     final scoreToProbMapperFactoryMock =
-        createScoreToProbMapperFactoryMock(Float32x4, mappers: {
+        createScoreToProbMapperFactoryMock(DType.float32, mappers: {
       ScoreToProbMapperType.logit: mockedLinkFn,
     });
     final logLikelihoodCost = LogLikelihoodCost(ScoreToProbMapperType.logit,
         scoreToProbMapperFactory: scoreToProbMapperFactoryMock);
 
-    when(mockedLinkFn.getProbabilities(any)).thenReturn(Matrix.from([
+    when(mockedLinkFn.map(any)).thenReturn(Matrix.fromList([
       [1.0],
       [1.0],
       [1.0],
@@ -68,7 +69,7 @@ void main() {
       // W - coefficients matrix (vector-column)
       // indicator - function, that returns 1 if y == 1, otherwise returns 0
       // P(y=+1|X,W) - score to link function
-      final x = Matrix.from([
+      final x = Matrix.fromList([
         [1.0, 2.0, 3.0],
         [4.0, 5.0, 6.0],
         [7.0, 8.0, 9.0],
@@ -76,12 +77,12 @@ void main() {
       // 1 4 7
       // 2 5 8
       // 3 6 9
-      final w = Matrix.from([
+      final w = Matrix.fromList([
         [-1.0],
         [2.0],
         [-3.0],
       ]);
-      final y = Matrix.from([
+      final y = Matrix.fromList([
         [1.0],
         [1.0],
         [0.0],

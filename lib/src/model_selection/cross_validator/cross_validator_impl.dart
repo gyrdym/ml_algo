@@ -1,20 +1,21 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
-import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class CrossValidatorImpl implements CrossValidator {
-  CrossValidatorImpl(Type dtype, this._splitter)
+  CrossValidatorImpl(DType dtype, this._splitter)
       : dtype = dtype ?? DefaultParameterValues.dtype;
 
-  final Type dtype;
+  final DType dtype;
   final Splitter _splitter;
 
   @override
-  double evaluate(Predictor predictorFactory(Matrix features, Matrix outcomes),
+  double evaluate(Assessable predictorFactory(Matrix features, Matrix outcomes),
       Matrix observations, Matrix labels, MetricType metric) {
     if (observations.rowsNum != labels.rowsNum) {
       throw Exception(
@@ -53,9 +54,9 @@ class CrossValidatorImpl implements CrossValidator {
       final predictor = predictorFactory(
         Matrix.fromRows(trainFeatures, dtype: dtype),
         Matrix.fromRows(trainLabels, dtype: dtype),
-      )..fit();
+      );
 
-      score += predictor.test(
+      score += predictor.assess(
           Matrix.fromRows(testFeatures, dtype: dtype),
           Matrix.fromRows(testLabels, dtype: dtype),
           metric

@@ -17,10 +17,10 @@ mixin Float32x4InverseLogitMapper {
     }
 
     // multi class classification case
-    return scores.fastMap<Float32x4>((score) => scoreToProb(score, null, null));
+    return scores.fastMap<Float32x4>(scoreToProb);
   }
 
-  Float32x4 scoreToProb(Float32x4 scores, int start, int end) {
+  Float32x4 scoreToProb(Float32x4 scores) {
     final exp = _exp(scores);
     final bigMask = scores.greaterThanOrEqual(_upperBound);
     final smallMask = scores.lessThanOrEqual(_lowerBound);

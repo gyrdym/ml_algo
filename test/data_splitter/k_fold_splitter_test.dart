@@ -2,7 +2,7 @@ import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('KFold splitter', () {
+  group('KFoldSplitter', () {
     void testKFoldSplitter(int numOfFold, int numOfObservations,
         Iterable<Iterable<int>> expected) {
       test('should return proper groups of indices if number of folds is '

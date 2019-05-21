@@ -1,38 +1,52 @@
-import 'dart:typed_data';
-
-import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../test_utils/helpers/floating_point_iterable_matchers.dart';
-import 'classifier_common.dart';
+import '../test_utils/mocks.dart';
 
 void main() {
   group('LogisticRegressor', () {
-    tearDown(resetMockitoState);
-
     test('should initialize properly', () {
-      setUpInterceptPreprocessorFactory();
-      setUpScoreToProbMapperFactory();
-      setUpOptimizerFactory();
+      final scoreToProbFactoryMock = createScoreToProbMapperFactoryMock(
+          DType.float32, mappers: {
+            ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
+          },
+      );
+      final observations = Matrix.fromList([[1.0]]);
+      final outcomes = Matrix.fromList([[0]]);
+      final optimizerMock = OptimizerMock();
+      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
+          observations, outcomes, optimizerMock);
 
-      createLogisticRegressor(Matrix.from([[1.0]]), Matrix.from([[0]]));
+      GradientLogisticRegressor(
+        observations,
+        outcomes,
+        dtype: DType.float32,
+        learningRateType: LearningRateType.constant,
+        initialWeightsType: InitialWeightsType.zeroes,
+        iterationsLimit: 100,
+        initialLearningRate: 0.01,
+        minWeightsUpdate: 0.001,
+        lambda: 0.1,
+        scoreToProbMapperFactory: scoreToProbFactoryMock,
+        optimizerFactory: optimizerFactoryMock,
+        randomSeed: 123,
+      );
 
-      verify(interceptPreprocessorFactoryMock.create(Float32x4, scale: 0.0))
-          .called(1);
       verify(scoreToProbFactoryMock.fromType(
-              ScoreToProbMapperType.logit, Float32x4))
+              ScoreToProbMapperType.logit, DType.float32))
           .called(1);
-      verify(optimizerFactoryMock.fromType(
-        OptimizerType.gradientDescent,
-        dtype: Float32x4,
-        costFunctionType: CostFunctionType.logLikelihood,
+      verify(optimizerFactoryMock.gradient(
+        argThat(equals([[1.0]])),
+        argThat(equals([[0]])),
+        dtype: DType.float32,
+        costFnType: CostFunctionType.logLikelihood,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         scoreToProbMapperType: ScoreToProbMapperType.logit,
@@ -46,122 +60,48 @@ void main() {
     });
 
     test('should make calls of appropriate method when `fit` is called', () {
-      setUpInterceptPreprocessorFactory();
-      setUpScoreToProbMapperFactory();
-      setUpOptimizerFactory();
-
-      final features = Matrix.from([
+      final observations = Matrix.fromList([
         [10.1, 10.2, 12.0, 13.4],
         [3.1, 5.2, 6.0, 77.4],
       ]);
-      final origLabels = Matrix.from([
-        [1.0, 0.0],
-        [0.0, 1.0],
+      final outcomes = Matrix.fromList([
+        [1.0],
+        [0.0],
       ]);
+      final scoreToProbFactoryMock =
+          createScoreToProbMapperFactoryMock(DType.float32, mappers: {
+            ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
+          });
+      final optimizerMock = OptimizerMock();
+      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
+          observations, outcomes, optimizerMock);
 
-      when(interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
-        [10.1, 10.2, 12.0, 13.4],
-        [3.1, 5.2, 6.0, 77.4],
-      ])))).thenReturn(Matrix.from([
-        [100.0, 200.0, 300.0, 400.0],
-        [500.0, 600.0, 700.0, 800.0],
-      ]));
-
-      final initialWeights = Matrix.from([
+      final initialWeights = Matrix.fromList([
         [10.0],
         [20.0],
         [30.0],
         [40.0],
       ]);
 
-      when(optimizerMock.findExtrema(
-              argThat(matrixAlmostEqualTo([
-                [100.0, 200.0, 300.0, 400.0],
-                [500.0, 600.0, 700.0, 800.0],
-              ])),
-              argThat(equals([
-                [1.0],
-                [0.0],
-              ])),
-              initialWeights: argThat(
-                  equals([
-                      [10.0],
-                      [20.0],
-                      [30.0],
-                      [40.0],
-                  ]),
-                  named: 'initialWeights'),
-              isMinimizingObjective: false))
-          .thenReturn(Matrix.fromRows([
-        Vector.from([333.0, 444.0])
-      ]));
-
-      when(optimizerMock.findExtrema(
-              argThat(matrixAlmostEqualTo([
-                [100.0, 200.0, 300.0, 400.0],
-                [500.0, 600.0, 700.0, 800.0],
-              ])),
-              argThat(equals([
-                [0.0],
-                [1.0],
-              ])),
-              initialWeights: argThat(
-                  equals([
-                    [10.0],
-                    [20.0],
-                    [30.0],
-                    [40.0],
-                  ]),
-                  named: 'initialWeights'
-              ),
-              isMinimizingObjective: false))
-          .thenReturn(Matrix.fromRows([Vector.from([555.0, 666.0])]));
-
-      createLogisticRegressor(features, origLabels)
-        ..fit(initialWeights: initialWeights);
-
-      verify(
-          interceptPreprocessorMock.addIntercept(argThat(matrixAlmostEqualTo([
-        [10.1, 10.2, 12.0, 13.4],
-        [3.1, 5.2, 6.0, 77.4],
-      ])))).called(1);
+      GradientLogisticRegressor(
+        observations,
+        outcomes,
+        dtype: DType.float32,
+        learningRateType: LearningRateType.constant,
+        initialWeightsType: InitialWeightsType.zeroes,
+        iterationsLimit: 100,
+        initialLearningRate: 0.01,
+        minWeightsUpdate: 0.001,
+        lambda: 0.1,
+        scoreToProbMapperFactory: scoreToProbFactoryMock,
+        optimizerFactory: optimizerFactoryMock,
+        initialWeights: initialWeights,
+        randomSeed: 123,
+      );
 
       verify(optimizerMock.findExtrema(
-              argThat(matrixAlmostEqualTo([
-                [100.0, 200.0, 300.0, 400.0],
-                [500.0, 600.0, 700.0, 800.0],
-              ])),
-              argThat(equals([
-                [1.0],
-                [0.0],
-              ])),
               initialWeights: argThat(
-                  equals([
-                    [10.0],
-                    [20.0],
-                    [30.0],
-                    [40.0],
-                  ]),
-                  named: 'initialWeights'),
-              isMinimizingObjective: false))
-          .called(1);
-
-      verify(optimizerMock.findExtrema(
-              argThat(matrixAlmostEqualTo([
-                [100.0, 200.0, 300.0, 400.0],
-                [500.0, 600.0, 700.0, 800.0],
-              ])),
-              argThat(equals([
-                [0.0],
-                [1.0],
-              ])),
-              initialWeights: argThat(
-                  equals([
-                    [10.0],
-                    [20.0],
-                    [30.0],
-                    [40.0],
-                  ]),
+                  equals(initialWeights),
                   named: 'initialWeights'),
               isMinimizingObjective: false))
           .called(1);

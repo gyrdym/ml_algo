@@ -1,53 +1,47 @@
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/regressor/linear_regressor.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
+import 'package:ml_linalg/linalg.dart';
 
-class GradientRegressor implements LinearRegressor {
-  GradientRegressor(
+class CoordinateRegressor implements LinearRegressor {
+  CoordinateRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
         int iterationsLimit = DefaultParameterValues.iterationsLimit,
-        double initialLearningRate = DefaultParameterValues.initialLearningRate,
         double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
         double lambda,
         bool fitIntercept = false,
         double interceptScale = 1.0,
-        int randomSeed,
-        int batchSize = 1,
         DType dtype = DefaultParameterValues.dtype,
-        Matrix initialWeights,
-        LearningRateType learningRateType = LearningRateType.constant,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+        Matrix initialWeights,
+        bool isTrainDataNormalized = false,
       }) :
         _fitIntercept = fitIntercept,
         _interceptScale = interceptScale,
-        coefficients = GradientOptimizer(
+        coefficients = CoordinateOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
-          costFnType: CostFunctionType.squared,
-          learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
-          initialLearningRate: initialLearningRate,
-          minCoefficientsUpdate: minWeightsUpdate,
-          iterationLimit: iterationsLimit,
+          costFunctionType: CostFunctionType.squared,
+          iterationsLimit: iterationsLimit,
+          minCoefficientsDiff: minWeightsUpdate,
           lambda: lambda,
-          batchSize: batchSize,
-          randomSeed: randomSeed,
+          dtype: dtype,
+          isTrainDataNormalized: isTrainDataNormalized,
         ).findExtrema(
-          initialWeights: initialWeights?.transpose(),
+          initialWeights: initialWeights,
           isMinimizingObjective: true,
-        ).getColumn(0);
+        ).getRow(0);
 
   final bool _fitIntercept;
+
   final double _interceptScale;
 
   @override

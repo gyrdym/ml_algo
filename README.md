@@ -21,11 +21,11 @@ the lib, please, do not use it in a browser.
 
 **Following algorithms are implemented:**
 - *Linear regression:*
-    - Gradient descent algorithm (batch, mini-batch, stochastic) with ridge regularization
-    - Lasso regression
+    - Gradient descent based linear regression
+    - Coordinate descent based linear regression
 
 - *Linear classifier:*
-    - Logistic regression (with "one-vs-all" multiclass classification)
+    - Logistic regression
     - Softmax regression
     
 - *Non-parametric regression:*
@@ -34,20 +34,35 @@ the lib, please, do not use it in a browser.
 ## The library's structure
 
 - #### Model selection
-    - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). Factory, that creates 
-    instances of a cross validator. In a few words, this entity allows researchers to fit different [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning
-    algorithms, assessing prediction quality on different parts of a dataset. 
+    - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
+    Factory, that creates instances of a cross validator. Cross validation allows researchers to fit different 
+    [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms, 
+    assessing prediction quality on different parts of a dataset. 
 
 - #### Classification algorithms
     - ##### Linear classification
-        - [LinearClassifier.logisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). An algorithm,
-        that performs simplest linear classification. If you want to use this classifier for your data, please, make sure, that 
-        your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability). Multiclass classification is also
-        supported (see [ovr classification](https://en.wikipedia.org/wiki/Multiclass_classification#One-vs.-rest))
-
-        - [LinearClassifier.softmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart). 
-        An algorithm, that performs simplest linear multiclass classification. As well as for logistic regression, if you want to use 
-        this classifier for your data, please, make sure, that your data is [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+        - ###### Logistic regression
+            An algorithm, that performs linear binary classification. 
+            - [LogisticRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
+            Logistic regression with gradient ascent optimization of log-likelihood cost function. To use this kind 
+            of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+            
+            - [LogisticRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
+            Not implemented yet. Logistic regression with coordinate descent optimization of negated log-likelihood cost 
+            function. Coordinate descent allows to do feature selection (aka `L1 regularization`) To use this kind of 
+            classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+        
+        - ##### Softmax regression
+            An algorithm, that performs linear multiclass classification.
+            - [SoftmaxRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/softmax_regressor.dart). 
+            Softmax regression with gradient ascent optimization of log-likelihood cost function. To use this kind 
+            of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+            
+            - [SoftmaxRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/logistic_regressor.dart). 
+            Not implemented yet. Softmax regression with coordinate descent optimization of negated log-likelihood cost 
+            function. As in case of logistic regression, coordinate descent allows to do feature selection (aka 
+            `L1 regularization`) To use this kind of classifier your data have to be 
+            [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
 - #### Regression algorithms
     - ##### Linear regression
@@ -55,9 +70,9 @@ the lib, please, do not use it in a browser.
         well-known algorithm, that performs linear regression using [gradient vector](https://en.wikipedia.org/wiki/Gradient) of a cost 
         function.
 
-        - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
-        that performs feature selection along with regression process. The heart of the algorithm - coordinate descent 
-        optimization. If you want to decide, which features are less important - go ahead and use this regressor. 
+        - [LinearRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart) An algorithm, 
+        that uses coordinate descent in order to find optimal value of a cost function. Coordinate descent allows to 
+        perform feature selection along with regression process (This technique often calls `Lasso regression`). 
     
     - ##### Nonlinear regression
         - [ParameterlessRegressor.knn](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/non_parametric_regressor.dart)
@@ -121,11 +136,11 @@ All are set, so, we can do our classification.
 Evaluate our model via accuracy metric:
 ````dart
 final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
-    LinearClassifier.logisticRegressor(
+    LogisticRegressor.gradient(
         trainFeatures, trainLabels,
         initialLearningRate: .8,
         iterationsLimit: 500,
-        gradientType: GradientType.batch,
+        batchSize: 768,
         fitIntercept: true,
         interceptScale: .1,
         learningRateType: LearningRateType.constant), 
@@ -157,11 +172,11 @@ Future main() async {
   final labels = await data.labels;
   final validator = CrossValidator.kFold(numberOfFolds: 5);
   final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
-    LinearClassifier.logisticRegressor(
+    LogisticRegressor.gradient(
         trainFeatures, trainLabels,
         initialLearningRate: .8,
         iterationsLimit: 500,
-        gradientType: GradientType.batch,
+        batchSize: 768,
         fitIntercept: true,
         interceptScale: .1,
         learningRateType: LearningRateType.constant), 

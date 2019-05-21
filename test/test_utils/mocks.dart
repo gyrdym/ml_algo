@@ -1,10 +1,9 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor.dart';
-import 'package:ml_algo/src/data_preprocessing/intercept_preprocessor/intercept_preprocessor_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
@@ -16,11 +15,11 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
-import 'package:ml_algo/src/optimizer/optimizer_type.dart';
-import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
@@ -48,11 +47,6 @@ class ScoreToProbMapperMock extends Mock implements ScoreToProbMapper {}
 class ScoreToProbMapperFactoryMock extends Mock
     implements ScoreToProbMapperFactory {}
 
-class InterceptPreprocessorFactoryMock extends Mock
-    implements InterceptPreprocessorFactory {}
-
-class InterceptPreprocessorMock extends Mock implements InterceptPreprocessor {}
-
 class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
 
 class OptimizerMock extends Mock implements Optimizer {}
@@ -64,7 +58,7 @@ class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
 class SplitterMock extends Mock implements Splitter {}
 
-class PredictorMock extends Mock implements Predictor {}
+class PredictorMock extends Mock implements Assessable {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,
@@ -108,7 +102,7 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
 }
 
 ScoreToProbMapperFactoryMock createScoreToProbMapperFactoryMock(
-  Type dtype, {
+  DType dtype, {
   Map<ScoreToProbMapperType, ScoreToProbMapper> mappers,
 }) {
   final factory = ScoreToProbMapperFactoryMock();
@@ -118,40 +112,31 @@ ScoreToProbMapperFactoryMock createScoreToProbMapperFactoryMock(
   return factory;
 }
 
-InterceptPreprocessorFactoryMock createInterceptPreprocessorFactoryMock({
-  InterceptPreprocessor preprocessor,
-}) {
-  final factory = InterceptPreprocessorFactoryMock();
-  when(factory.create(any, scale: anyNamed('scale'))).thenReturn(preprocessor);
-  return factory;
-}
-
-OptimizerFactoryMock createOptimizerFactoryMock({
-  Map<OptimizerType, Optimizer> optimizers,
-}) {
+OptimizerFactoryMock createGradientOptimizerFactoryMock(
+    Matrix points,
+    Matrix labels,
+    Optimizer optimizer,
+) {
   final factory = OptimizerFactoryMock();
-
-  optimizers.forEach((OptimizerType type, Optimizer optimizer) {
-    when(factory.fromType(
-      type,
-      dtype: anyNamed('dtype'),
-      randomizerFactory: anyNamed('randomizerFactory'),
-      costFunctionFactory: anyNamed('costFunctionFactory'),
-      learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
-      initialWeightsGeneratorFactory:
-          anyNamed('initialWeightsGeneratorFactory'),
-      costFunctionType: anyNamed('costFunctionType'),
-      learningRateType: anyNamed('learningRateType'),
-      initialWeightsType: anyNamed('initialWeightsType'),
-      scoreToProbMapperType: anyNamed('scoreToProbMapperType'),
-      initialLearningRate: anyNamed('initialLearningRate'),
-      minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-      iterationLimit: anyNamed('iterationLimit'),
-      lambda: anyNamed('lambda'),
-      batchSize: anyNamed('batchSize'),
-      randomSeed: anyNamed('randomSeed'),
-    )).thenReturn(optimizer);
-  });
-
+  when(factory.gradient(
+    points,
+    labels,
+    dtype: anyNamed('dtype'),
+    randomizerFactory: anyNamed('randomizerFactory'),
+    costFunctionFactory: anyNamed('costFunctionFactory'),
+    learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
+    initialWeightsGeneratorFactory:
+      anyNamed('initialWeightsGeneratorFactory'),
+    costFnType: anyNamed('costFnType'),
+    learningRateType: anyNamed('learningRateType'),
+    initialWeightsType: anyNamed('initialWeightsType'),
+    scoreToProbMapperType: anyNamed('scoreToProbMapperType'),
+    initialLearningRate: anyNamed('initialLearningRate'),
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+    iterationLimit: anyNamed('iterationLimit'),
+    lambda: anyNamed('lambda'),
+    batchSize: anyNamed('batchSize'),
+    randomSeed: anyNamed('randomSeed'),
+  )).thenReturn(optimizer);
   return factory;
 }
