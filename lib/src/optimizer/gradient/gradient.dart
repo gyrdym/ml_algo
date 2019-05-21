@@ -19,12 +19,13 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/zrange.dart';
 
 class GradientOptimizer implements Optimizer {
-  GradientOptimizer({
-    Type dtype = DefaultParameterValues.dtype,
+  GradientOptimizer(Matrix points, Matrix labels, {
+    DType dtype = DefaultParameterValues.dtype,
 
     RandomizerFactory randomizerFactory =
       const RandomizerFactoryImpl(),
@@ -51,25 +52,29 @@ class GradientOptimizer implements Optimizer {
     double lambda,
     int batchSize,
     int randomSeed,
-  })  : _lambda = lambda ?? 0.0,
+  })  :
+        _points = points,
+        _labels = labels,
+        _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
-
         _initialWeightsGenerator =
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
-
         _learningRateGenerator =
             learningRateGeneratorFactory.fromType(learningRateType),
-
         _costFunction = costFunctionFactory.fromType(costFnType,
             dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
-
         _convergenceDetector = convergenceDetectorFactory.create(
             minCoefficientsUpdate, iterationLimit),
-
         _randomizer = randomizerFactory.create(randomSeed) {
+    if (batchSize < 1 || batchSize > points.rowsNum) {
+      throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '
+          'value');
+    }
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 
+  final Matrix _points;
+  final Matrix _labels;
   final Randomizer _randomizer;
   final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
@@ -79,21 +84,14 @@ class GradientOptimizer implements Optimizer {
   final double _lambda;
   final int _batchSize;
 
-  Matrix _points;
-  Matrix _coefficients;
-
   @override
-  Matrix findExtrema(Matrix points, Matrix labels, {
-    Matrix initialWeights,
-    bool isMinimizingObjective = true,
-  }) {
-    _points = points;
-
+  Matrix findExtrema({Matrix initialWeights,
+    bool isMinimizingObjective = true}) {
     final batchSize =
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
-    _coefficients = initialWeights ??
-        Matrix.fromColumns(List.generate(labels.columnsNum,
+    Matrix coefficients = initialWeights ??
+        Matrix.fromColumns(List.generate(_labels.columnsNum,
             (i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 
     var iteration = 0;
@@ -102,16 +100,16 @@ class GradientOptimizer implements Optimizer {
     while (!_convergenceDetector.isConverged(coefficientsDiff, iteration)) {
       final learningRate = _learningRateGenerator.getNextValue();
       final newCoefficients = _generateCoefficients(
-          _coefficients, labels, learningRate, batchSize,
+          coefficients, _labels, learningRate, batchSize,
           isMinimization: isMinimizingObjective);
-      coefficientsDiff = (newCoefficients - _coefficients).norm();
+      coefficientsDiff = (newCoefficients - coefficients).norm();
       iteration++;
-      _coefficients = newCoefficients;
+      coefficients = newCoefficients;
     }
 
     _learningRateGenerator.stop();
 
-    return _coefficients;
+    return coefficients;
   }
 
   Matrix _generateCoefficients(

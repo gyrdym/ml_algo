@@ -5,19 +5,20 @@ import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/regressor/non_parametric_regressor.dart';
+import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/distance.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class KNNRegressor implements ParameterlessRegressor {
-  KNNRegressor(this.trainingFeatures, this.trainingOutcomes, {
+  KNNRegressor(this._trainingFeatures, this._trainingOutcomes, {
     int k,
     Distance distance = Distance.euclidean,
     FindKnnFn solverFn = findKNeighbours,
     Kernel kernel = Kernel.uniform,
-    Type dtype = DefaultParameterValues.dtype,
+    DType dtype = DefaultParameterValues.dtype,
 
     KernelFunctionFactory kernelFnFactory = const KernelFunctionFactoryImpl(),
   }) :
@@ -26,41 +27,34 @@ class KNNRegressor implements ParameterlessRegressor {
         _solverFn = solverFn,
         _dtype = dtype,
         _kernelFn = kernelFnFactory.createByType(kernel) {
-    if (trainingFeatures.rowsNum != trainingOutcomes.rowsNum) {
+    if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
       throw Exception('Number of observations and number of outcomes have to be'
           'equal');
     }
-    if (_k > trainingFeatures.rowsNum) {
+    if (_k > _trainingFeatures.rowsNum) {
       throw Exception('Parameter k should be less than or equal to the number '
           'of training observations');
     }
   }
 
-  @override
-  final Matrix trainingFeatures;
-
-  @override
-  final Matrix trainingOutcomes;
-
+  final Matrix _trainingFeatures;
+  final Matrix _trainingOutcomes;
   final Distance _distanceType;
   final int _k;
   final FindKnnFn _solverFn;
   final KernelFn _kernelFn;
-  final Type _dtype;
+  final DType _dtype;
 
   Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(
-      trainingOutcomes.columnsNum, dtype: _dtype);
+      _trainingOutcomes.columnsNum, dtype: _dtype);
   Vector _cachedZeroVector;
-
-  @override
-  void fit({Matrix initialWeights}) {}
 
   @override
   Matrix predict(Matrix observations) => Matrix.fromRows(
     _generateOutcomes(observations).toList(growable: false), dtype: _dtype);
 
   Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
-    for (final kNeighbours in _solverFn(_k, trainingFeatures, trainingOutcomes,
+    for (final kNeighbours in _solverFn(_k, _trainingFeatures, _trainingOutcomes,
         observations, distance: _distanceType)) {
       yield kNeighbours
           .fold<Vector>(_zeroVector,
@@ -69,7 +63,7 @@ class KNNRegressor implements ParameterlessRegressor {
   }
 
   @override
-  double test(Matrix features, Matrix origLabels, MetricType metricType) {
+  double assess(Matrix features, Matrix origLabels, MetricType metricType) {
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(features);
     return metric.getScore(prediction, origLabels);

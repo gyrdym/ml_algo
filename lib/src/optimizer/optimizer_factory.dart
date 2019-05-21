@@ -6,31 +6,13 @@ import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
-import 'package:ml_algo/src/optimizer/optimizer_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 
 abstract class OptimizerFactory {
-  Optimizer fromType(
-    OptimizerType type, {
-    Type dtype,
-    RandomizerFactory randomizerFactory,
-    CostFunctionFactory costFunctionFactory,
-    LearningRateGeneratorFactory learningRateGeneratorFactory,
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory,
-    CostFunctionType costFunctionType,
-    LearningRateType learningRateType,
-    InitialWeightsType initialWeightsType,
-    ScoreToProbMapperType scoreToProbMapperType,
-    double initialLearningRate,
-    double minCoefficientsUpdate,
-    int iterationLimit,
-    double lambda,
-    int batchSize,
-    int randomSeed,
-  });
-
-  Optimizer gradient({
-    Type dtype,
+  Optimizer gradient(Matrix points, Matrix labels, {
+    DType dtype,
     RandomizerFactory randomizerFactory,
     CostFunctionFactory costFunctionFactory,
     LearningRateGeneratorFactory learningRateGeneratorFactory,
@@ -47,8 +29,8 @@ abstract class OptimizerFactory {
     int randomSeed,
   });
 
-  Optimizer coordinate({
-    Type dtype,
+  Optimizer coordinate(Matrix points, Matrix labels, {
+    DType dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory,
     CostFunctionFactory costFunctionFactory,
     double minCoefficientsDiff,
