@@ -1,5 +1,10 @@
 # Changelog
 
+## 12.0.2
+- `ScoreToProbMapperFactory` removed
+- `ScoreToProbMapperType` enum removed
+- `ScoreToProbMapper`: the entity renamed to `LinkFunction`
+
 ## 12.0.1
 - Cost function factory removed
 - Cost function type removed

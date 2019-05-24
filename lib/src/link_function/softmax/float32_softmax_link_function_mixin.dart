@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-abstract class Float32x4SoftmaxMapperMixin {
+mixin Float32SoftmaxLinkFunction {
   Matrix float32x4ScoresToProbs(Matrix scores) {
     final maxValue = scores.max();
     final stableScores = scores - maxValue;
