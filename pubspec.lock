@@ -270,9 +270,9 @@ packages:
   ml_linalg:
     dependency: "direct main"
     description:
-      path: "../linalg"
-      relative: true
-    source: path
+      name: ml_linalg
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "10.0.0"
   mockito:
     dependency: "direct dev"
