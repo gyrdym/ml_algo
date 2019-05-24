@@ -1,22 +1,11 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
-import 'package:ml_linalg/dtype.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class LogLikelihoodCost implements CostFunction {
-  LogLikelihoodCost(
-      ScoreToProbMapperType scoreToProbMapperType, {
-        DType dtype = DefaultParameterValues.dtype,
-        ScoreToProbMapperFactory scoreToProbMapperFactory =
-          const ScoreToProbMapperFactoryImpl(),
-      }) : scoreToProbMapper =
-  scoreToProbMapperFactory.fromType(scoreToProbMapperType, dtype);
+  LogLikelihoodCost(this._linkFunction);
 
-  final ScoreToProbMapper scoreToProbMapper;
+  final LinkFunction _linkFunction;
 
   @override
   double getCost(double score, double yOrig) {
@@ -25,7 +14,7 @@ class LogLikelihoodCost implements CostFunction {
 
   @override
   Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
-    x.transpose() * (y - scoreToProbMapper.map(x * w));
+    x.transpose() * (y - _linkFunction.link(x * w));
 
   @override
   Vector getSubDerivative(int wIdx, Matrix x, Matrix w, Matrix y) =>

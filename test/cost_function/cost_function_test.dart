@@ -1,7 +1,5 @@
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -45,15 +43,10 @@ void main() {
   });
 
   group('LogLikelihoodCost', () {
-    final mockedLinkFn = ScoreToProbMapperMock();
-    final scoreToProbMapperFactoryMock =
-        createScoreToProbMapperFactoryMock(DType.float32, mappers: {
-      ScoreToProbMapperType.logit: mockedLinkFn,
-    });
-    final logLikelihoodCost = LogLikelihoodCost(ScoreToProbMapperType.logit,
-        scoreToProbMapperFactory: scoreToProbMapperFactoryMock);
+    final mockedLinkFn = LinkFunctionMock();
+    final logLikelihoodCost = LogLikelihoodCost(mockedLinkFn);
 
-    when(mockedLinkFn.map(any)).thenReturn(Matrix.fromList([
+    when(mockedLinkFn.link(any)).thenReturn(Matrix.fromList([
       [1.0],
       [1.0],
       [1.0],

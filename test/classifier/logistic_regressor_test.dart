@@ -1,7 +1,6 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
@@ -12,11 +11,6 @@ import '../test_utils/mocks.dart';
 void main() {
   group('LogisticRegressor', () {
     test('should initialize properly', () {
-      final scoreToProbFactoryMock = createScoreToProbMapperFactoryMock(
-          DType.float32, mappers: {
-            ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
-          },
-      );
       final observations = Matrix.fromList([[1.0]]);
       final outcomes = Matrix.fromList([[0]]);
       final optimizerMock = OptimizerMock();
@@ -33,14 +27,10 @@ void main() {
         initialLearningRate: 0.01,
         minWeightsUpdate: 0.001,
         lambda: 0.1,
-        scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
 
-      verify(scoreToProbFactoryMock.fromType(
-              ScoreToProbMapperType.logit, DType.float32))
-          .called(1);
       verify(optimizerFactoryMock.gradient(
         argThat(equals([[1.0]])),
         argThat(equals([[0]])),
@@ -66,10 +56,6 @@ void main() {
         [1.0],
         [0.0],
       ]);
-      final scoreToProbFactoryMock =
-          createScoreToProbMapperFactoryMock(DType.float32, mappers: {
-            ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
-          });
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
           observations, outcomes, optimizerMock);
@@ -91,7 +77,6 @@ void main() {
         initialLearningRate: 0.01,
         minWeightsUpdate: 0.001,
         lambda: 0.1,
-        scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizerFactory: optimizerFactoryMock,
         initialWeights: initialWeights,
         randomSeed: 123,
