@@ -1,5 +1,9 @@
 # Changelog
 
+## 12.0.1
+- Cost function factory removed
+- Cost function type removed
+
 ## 12.0.0
 - Breaking change: GradientType enum removed
 - Breaking change: OptimizerType enum removed

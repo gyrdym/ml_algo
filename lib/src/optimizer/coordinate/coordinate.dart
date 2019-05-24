@@ -1,8 +1,4 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
-import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory_impl.dart';
@@ -11,22 +7,22 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CoordinateOptimizer implements Optimizer {
   CoordinateOptimizer(Matrix points, Matrix labels, {
     DType dtype = DefaultParameterValues.dtype,
+    CostFunction costFunction,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
     ConvergenceDetectorFactory convergenceDetectorFactory =
         const ConvergenceDetectorFactoryImpl(),
-    CostFunctionFactory costFunctionFactory = const CostFunctionFactoryImpl(),
     double minCoefficientsDiff = DefaultParameterValues.minCoefficientsUpdate,
     int iterationsLimit = DefaultParameterValues.iterationsLimit,
     double lambda,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    CostFunctionType costFunctionType = CostFunctionType.squared,
     bool isTrainDataNormalized = false,
   })  : _dtype = dtype,
         _points = points,
@@ -36,7 +32,7 @@ class CoordinateOptimizer implements Optimizer {
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
         _convergenceDetector = convergenceDetectorFactory.create(
             minCoefficientsDiff, iterationsLimit),
-        _costFn = costFunctionFactory.fromType(costFunctionType),
+        _costFn = costFunction,
         _normalizer = isTrainDataNormalized
             ? Vector.filled(points.columnsNum, 1.0, dtype: dtype)
             : points.reduceRows(

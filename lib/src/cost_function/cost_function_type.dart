@@ -1,4 +1,0 @@
-enum CostFunctionType {
-  squared,
-  logLikelihood,
-}

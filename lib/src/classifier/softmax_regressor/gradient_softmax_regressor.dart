@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
@@ -51,8 +51,7 @@ class GradientSoftmaxRegressor with LinearClassifierMixin
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           dtype: dtype,
-          costFnType: CostFunctionType.logLikelihood,
-          scoreToProbMapperType: _scoreToProbMapperType,
+          costFunction: LogLikelihoodCost(_scoreToProbMapperType, dtype: dtype),
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,

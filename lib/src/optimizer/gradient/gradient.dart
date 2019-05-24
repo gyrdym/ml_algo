@@ -1,7 +1,4 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
-import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
@@ -27,11 +24,10 @@ class GradientOptimizer implements Optimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
     DType dtype = DefaultParameterValues.dtype,
 
+    CostFunction costFunction,
+
     RandomizerFactory randomizerFactory =
       const RandomizerFactoryImpl(),
-
-    CostFunctionFactory costFunctionFactory =
-      const CostFunctionFactoryImpl(),
 
     LearningRateGeneratorFactory learningRateGeneratorFactory =
       const LearningRateGeneratorFactoryImpl(),
@@ -42,10 +38,8 @@ class GradientOptimizer implements Optimizer {
     ConvergenceDetectorFactory convergenceDetectorFactory =
       const ConvergenceDetectorFactoryImpl(),
 
-    CostFunctionType costFnType,
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
-    ScoreToProbMapperType scoreToProbMapperType,
     double initialLearningRate = DefaultParameterValues.initialLearningRate,
     double minCoefficientsUpdate = DefaultParameterValues.minCoefficientsUpdate,
     int iterationLimit = DefaultParameterValues.iterationsLimit,
@@ -61,8 +55,7 @@ class GradientOptimizer implements Optimizer {
             initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
         _learningRateGenerator =
             learningRateGeneratorFactory.fromType(learningRateType),
-        _costFunction = costFunctionFactory.fromType(costFnType,
-            dtype: dtype, scoreToProbMapperType: scoreToProbMapperType),
+        _costFunction = costFunction,
         _convergenceDetector = convergenceDetectorFactory.create(
             minCoefficientsUpdate, iterationLimit),
         _randomizer = randomizerFactory.create(randomSeed) {

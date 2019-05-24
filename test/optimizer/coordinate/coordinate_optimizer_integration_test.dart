@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -36,7 +36,7 @@ void main() {
       optimizer = CoordinateOptimizer(
           data, labels,
           initialWeightsType: InitialWeightsType.zeroes,
-          costFunctionType: CostFunctionType.squared,
+          costFunction: const SquaredCost(),
           minCoefficientsDiff: 1e-5,
           iterationsLimit: iterationsNumber,
           lambda: lambda);
@@ -73,6 +73,7 @@ void main() {
       ]);
       optimizer = CoordinateOptimizer(
           data, labels,
+          costFunction: const SquaredCost(),
           isTrainDataNormalized: true,
           minCoefficientsDiff: 1e-5,
           iterationsLimit: iterationsNumber,
