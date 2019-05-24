@@ -1,6 +1,5 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -48,10 +47,9 @@ void main() {
         observations,
         outcomes,
         dtype: dtype,
-        costFnType: CostFunctionType.logLikelihood,
+        costFunction: anyNamed('costFunction'),
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
-        scoreToProbMapperType: ScoreToProbMapperType.softmax,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,
@@ -143,10 +141,9 @@ void main() {
           [1.0, 0.0, 0.0],
         ])),
         dtype: dtype,
-        costFnType: CostFunctionType.logLikelihood,
+        costFunction: anyNamed('costFunction'),
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
-        scoreToProbMapperType: ScoreToProbMapperType.softmax,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,

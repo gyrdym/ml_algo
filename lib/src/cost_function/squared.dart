@@ -5,6 +5,8 @@ import 'package:ml_linalg/linalg.dart';
 import 'package:xrange/zrange.dart';
 
 class SquaredCost implements CostFunction {
+  const SquaredCost();
+
   @override
   double getCost(double predictedLabel, double originalLabel) =>
       math.pow(predictedLabel - originalLabel, 2).toDouble();

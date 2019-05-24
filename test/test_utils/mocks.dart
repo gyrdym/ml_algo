@@ -1,6 +1,4 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
@@ -25,8 +23,6 @@ import 'package:mockito/mockito.dart';
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
 class RandomizerMock extends Mock implements Randomizer {}
-
-class CostFunctionFactoryMock extends Mock implements CostFunctionFactory {}
 
 class CostFunctionMock extends Mock implements CostFunction {}
 
@@ -66,16 +62,6 @@ LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   final factory = LearningRateGeneratorFactoryMock();
   generators.forEach((LearningRateType type, LearningRateGenerator generator) {
     when(factory.fromType(type)).thenReturn(generator);
-  });
-  return factory;
-}
-
-CostFunctionFactoryMock createCostFunctionFactoryMock({
-  Map<CostFunctionType, CostFunction> costFunctions,
-}) {
-  final factory = CostFunctionFactoryMock();
-  costFunctions.forEach((CostFunctionType type, CostFunction fn) {
-    when(factory.fromType(type)).thenReturn(fn);
   });
   return factory;
 }
@@ -123,14 +109,12 @@ OptimizerFactoryMock createGradientOptimizerFactoryMock(
     labels,
     dtype: anyNamed('dtype'),
     randomizerFactory: anyNamed('randomizerFactory'),
-    costFunctionFactory: anyNamed('costFunctionFactory'),
+    costFunction: anyNamed('costFunction'),
     learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
     initialWeightsGeneratorFactory:
       anyNamed('initialWeightsGeneratorFactory'),
-    costFnType: anyNamed('costFnType'),
     learningRateType: anyNamed('learningRateType'),
     initialWeightsType: anyNamed('initialWeightsType'),
-    scoreToProbMapperType: anyNamed('scoreToProbMapperType'),
     initialLearningRate: anyNamed('initialLearningRate'),
     minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
     iterationLimit: anyNamed('iterationLimit'),
