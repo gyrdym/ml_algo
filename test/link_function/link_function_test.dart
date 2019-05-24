@@ -1,7 +1,5 @@
-import 'dart:typed_data';
-
-import 'package:ml_algo/src/score_to_prob_mapper/logit/inverse_logit_mapper.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/softmax/softmax_mapper.dart';
+import 'package:ml_algo/src/link_function/logit/inverse_logit_link_function.dart';
+import 'package:ml_algo/src/link_function/softmax/softmax_link_function.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -10,7 +8,7 @@ import 'package:test/test.dart';
 import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 void main() {
-  group('InverseLogitMapper', () {
+  group('InverseLogitLinkFunction', () {
     test('should translate scores to probabilities for Float32x4', () {
       final scores = Matrix.fromList([
         [1.0],
@@ -18,8 +16,8 @@ void main() {
         [3.0],
         [4.0],
       ]);
-      final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.map(scores);
+      final inverseLogitLink = InverseLogitLinkFunction(DType.float32);
+      final probabilities = inverseLogitLink.link(scores);
 
       expect(probabilities,
           matrixAlmostEqualTo([
@@ -37,8 +35,8 @@ void main() {
         [200.0],
         [1000.0],
       ]);
-      final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.map(scores);
+      final inverseLogitLink = InverseLogitLinkFunction(DType.float32);
+      final probabilities = inverseLogitLink.link(scores);
       final probaAsVector = probabilities.getColumn(0);
 
       expect(probaAsVector[0], isNotNaN);
@@ -63,8 +61,8 @@ void main() {
         [12.0],
         [13.0],
       ]);
-      final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.map(scores);
+      final inverseLogitLink = InverseLogitLinkFunction(DType.float32);
+      final probabilities = inverseLogitLink.link(scores);
       final probaAsVector = probabilities.getColumn(0);
 
       expect(probaAsVector[0], isNotNaN);
@@ -89,8 +87,8 @@ void main() {
         [-12.0],
         [-13.0],
       ]);
-      final inverseLogitLink = InverseLogitMapper(DType.float32);
-      final probabilities = inverseLogitLink.map(scores);
+      final inverseLogitLink = InverseLogitLinkFunction(DType.float32);
+      final probabilities = inverseLogitLink.link(scores);
       final probaAsVector = probabilities.getColumn(0);
 
       expect(probaAsVector[0], isNotNaN);
@@ -108,9 +106,9 @@ void main() {
     });
   });
 
-  group('SoftmaxMapper', () {
+  group('SoftmaxLinkFunction', () {
     test('should translate scores to probabilities for Float32x4', () {
-      final logitLink = SoftmaxMapper(DType.float32);
+      final logitLink = SoftmaxLinkFunction(DType.float32);
 
       final scores = Matrix.fromColumns([
         Vector.fromList([10.0, 55.0, 33.0, 29.0, 66.0]),
@@ -118,7 +116,7 @@ void main() {
         Vector.fromList([30.0, 21.0, 77.0, 40.0, 99.0]),
       ]);
 
-      final probabilities = logitLink.map(scores);
+      final probabilities = logitLink.link(scores);
       final expected = [
         [2.061060046209062e-9, 0.00004539786860886666, 0.9999546000703311],
         [0.9999999998973794, 1.0261879630648809e-10, 1.7139084313661305e-15],
