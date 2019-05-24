@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
@@ -12,7 +10,7 @@ import '../test_utils/mocks.dart';
 
 void main() {
   group('SquaredCost', () {
-    final squaredCost = SquaredCost();
+    final squaredCost = const SquaredCost();
 
     test('should return a proper gradient vector', () {
       // The formula in matrix notation:

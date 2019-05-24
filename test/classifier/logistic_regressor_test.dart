@@ -1,5 +1,4 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
@@ -46,10 +45,9 @@ void main() {
         argThat(equals([[1.0]])),
         argThat(equals([[0]])),
         dtype: DType.float32,
-        costFnType: CostFunctionType.logLikelihood,
+        costFunction: anyNamed('costFunction'),
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
-        scoreToProbMapperType: ScoreToProbMapperType.logit,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,
