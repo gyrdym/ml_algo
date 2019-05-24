@@ -1,7 +1,6 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
@@ -15,11 +14,6 @@ void main() {
     final dtype = DType.float32;
 
     test('should initialize properly', () {
-      final scoreToProbFactoryMock = createScoreToProbMapperFactoryMock(dtype,
-        mappers: {
-          ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
-        },
-      );
       final observations = Matrix.fromList([[1.0]]);
       final outcomes = Matrix.fromList([[0]]);
       final optimizerMock = OptimizerMock();
@@ -35,14 +29,10 @@ void main() {
         initialLearningRate: 0.01,
         minWeightsUpdate: 0.001,
         lambda: 0.1,
-        scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
 
-      verify(scoreToProbFactoryMock
-          .fromType(ScoreToProbMapperType.softmax, dtype))
-          .called(1);
       verify(optimizerFactoryMock.gradient(
         observations,
         outcomes,
@@ -61,12 +51,6 @@ void main() {
 
     test('should call optimizer\'s `findExtrema` method with proper '
         'parameters and consider intercept term', () {
-      final scoreToProbFactoryMock = createScoreToProbMapperFactoryMock(dtype,
-        mappers: {
-          ScoreToProbMapperType.logit: ScoreToProbMapperMock(),
-        },
-      );
-
       final observations = Matrix.fromList([
         [10.1, 10.2, 12.0, 13.4],
         [13.1, 15.2, 61.0, 27.2],
@@ -117,7 +101,6 @@ void main() {
         lambda: 0.1,
         fitIntercept: true,
         interceptScale: 2.0,
-        scoreToProbMapperFactory: scoreToProbFactoryMock,
         optimizerFactory: optimizerFactoryMock,
         initialWeights: initialWeights,
         randomSeed: 123,

@@ -7,10 +7,8 @@ import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_algo/src/link_function/logit/inverse_logit_link_function.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -36,23 +34,18 @@ class GradientLogisticRegressor with LinearClassifierMixin
         this.dtype = DefaultParameterValues.dtype,
         this.probabilityThreshold = 0.5,
 
-        // private arguments
-        ScoreToProbMapperFactory scoreToProbMapperFactory =
-          const ScoreToProbMapperFactoryImpl(),
-
         OptimizerFactory optimizerFactory =
           const OptimizerFactoryImpl(),
       }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
-        scoreToProbMapper =
-          scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
+        linkFunction = InverseLogitLinkFunction(dtype),
         classLabels = trainingOutcomes.uniqueRows(),
         coefficientsByClasses = optimizerFactory.gradient(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           dtype: dtype,
-          costFunction: LogLikelihoodCost(_scoreToProbMapperType, dtype: dtype),
+          costFunction: LogLikelihoodCost(InverseLogitLinkFunction(dtype)),
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
@@ -65,9 +58,6 @@ class GradientLogisticRegressor with LinearClassifierMixin
             initialWeights: initialWeights,
             isMinimizingObjective: false,
         );
-
-  static const ScoreToProbMapperType _scoreToProbMapperType =
-      ScoreToProbMapperType.logit;
 
   @override
   final Matrix coefficientsByClasses;
@@ -86,14 +76,14 @@ class GradientLogisticRegressor with LinearClassifierMixin
   final double probabilityThreshold;
 
   @override
-  final ScoreToProbMapper scoreToProbMapper;
+  final LinkFunction linkFunction;
 
   @override
   Matrix predictClasses(Matrix features) {
     final processedFeatures = addInterceptIf(fitIntercept, features,
         interceptScale);
     final classesSource = getProbabilities(processedFeatures,
-        coefficientsByClasses, scoreToProbMapper)
+        coefficientsByClasses, linkFunction)
         .getColumn(0)
         // TODO: use SIMD
         .map((value) => value >= probabilityThreshold ? 1.0 : 0.0)

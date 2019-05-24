@@ -7,10 +7,8 @@ import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory_impl.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/softmax/softmax_link_function.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -35,23 +33,18 @@ class GradientSoftmaxRegressor with LinearClassifierMixin
 
         this.dtype = DefaultParameterValues.dtype,
 
-        // private arguments
-        ScoreToProbMapperFactory scoreToProbMapperFactory =
-          const ScoreToProbMapperFactoryImpl(),
-
         OptimizerFactory optimizerFactory =
           const OptimizerFactoryImpl(),
       }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
-        scoreToProbMapper =
-          scoreToProbMapperFactory.fromType(_scoreToProbMapperType, dtype),
+        linkFunction = SoftmaxLinkFunction(dtype),
         classLabels = trainingOutcomes.uniqueRows(),
         coefficientsByClasses = optimizerFactory.gradient(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           dtype: dtype,
-          costFunction: LogLikelihoodCost(_scoreToProbMapperType, dtype: dtype),
+          costFunction: LogLikelihoodCost(SoftmaxLinkFunction(dtype)),
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
@@ -64,8 +57,6 @@ class GradientSoftmaxRegressor with LinearClassifierMixin
           initialWeights: initialWeights,
           isMinimizingObjective: false,
         );
-
-  static const _scoreToProbMapperType = ScoreToProbMapperType.softmax;
 
   @override
   final bool fitIntercept;
@@ -82,14 +73,14 @@ class GradientSoftmaxRegressor with LinearClassifierMixin
   final DType dtype;
 
   @override
-  final ScoreToProbMapper scoreToProbMapper;
+  final LinkFunction linkFunction;
 
   @override
   Matrix predictClasses(Matrix features) {
     final processedFeatures = addInterceptIf(fitIntercept, features,
         interceptScale);
     return getProbabilities(processedFeatures, coefficientsByClasses,
-        scoreToProbMapper)
+        linkFunction)
         .mapRows((probabilities) {
           final labelIdx = probabilities.toList().indexOf(probabilities.max());
           return classLabels.getRow(labelIdx);

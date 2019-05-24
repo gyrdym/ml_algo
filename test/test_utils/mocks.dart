@@ -13,10 +13,7 @@ import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_
 import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/optimizer.dart';
 import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_factory.dart';
-import 'package:ml_algo/src/score_to_prob_mapper/score_to_prob_mapper_type.dart';
-import 'package:ml_linalg/dtype.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
@@ -38,10 +35,7 @@ class InitialWeightsGeneratorFactoryMock extends Mock
 class InitialWeightsGeneratorMock extends Mock
     implements InitialWeightsGenerator {}
 
-class ScoreToProbMapperMock extends Mock implements ScoreToProbMapper {}
-
-class ScoreToProbMapperFactoryMock extends Mock
-    implements ScoreToProbMapperFactory {}
+class LinkFunctionMock extends Mock implements LinkFunction {}
 
 class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
 
@@ -83,17 +77,6 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
   generators
       .forEach((InitialWeightsType type, InitialWeightsGenerator generator) {
     when(factory.fromType(type, any)).thenReturn(generator);
-  });
-  return factory;
-}
-
-ScoreToProbMapperFactoryMock createScoreToProbMapperFactoryMock(
-  DType dtype, {
-  Map<ScoreToProbMapperType, ScoreToProbMapper> mappers,
-}) {
-  final factory = ScoreToProbMapperFactoryMock();
-  mappers.forEach((ScoreToProbMapperType type, ScoreToProbMapper fn) {
-    when(factory.fromType(type, dtype)).thenReturn(fn);
   });
   return factory;
 }
