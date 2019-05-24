@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
@@ -33,7 +33,7 @@ class GradientRegressor implements LinearRegressor {
         coefficients = GradientOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
-          costFnType: CostFunctionType.squared,
+          costFunction: SquaredCost(),
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,

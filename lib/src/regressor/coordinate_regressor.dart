@@ -1,5 +1,5 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
+import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
@@ -29,9 +29,9 @@ class CoordinateRegressor implements LinearRegressor {
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
           initialWeightsType: initialWeightsType,
-          costFunctionType: CostFunctionType.squared,
           iterationsLimit: iterationsLimit,
           minCoefficientsDiff: minWeightsUpdate,
+          costFunction: const SquaredCost(),
           lambda: lambda,
           dtype: dtype,
           isTrainDataNormalized: isTrainDataNormalized,

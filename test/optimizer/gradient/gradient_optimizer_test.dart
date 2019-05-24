@@ -3,6 +3,7 @@ import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../../test_utils/mocks.dart';
 import 'gradient_common.dart';
 
 Matrix getPoints() => Matrix.fromList([
@@ -11,15 +12,6 @@ Matrix getPoints() => Matrix.fromList([
       [10.0, 20.0, 30.0],
       [100.0, 200.0, 300.0],
     ]);
-
-void verifyNeverGetGradientCall(
-    {Iterable<Iterable<double>> x, Iterable<double> w, Iterable<double> y}) {
-  verifyNever(costFunctionMock.getGradient(
-    argThat(equals(x)),
-    argThat(equals(w)),
-    argThat(equals(y)),
-  ));
-}
 
 void verifyGetGradientCall(CostFunction mock,
     {Iterable<Iterable<double>> x,
@@ -35,7 +27,7 @@ void verifyGetGradientCall(CostFunction mock,
 
 void main() {
   group('Gradient descent optimizer', () {
-    tearDown(resetMockitoState);
+    final costFunction = CostFunctionMock();
 
     test('should properly process `batchSize` parameter when the latter is '
         'equal to `1` (stochastic case)', () {
@@ -72,18 +64,18 @@ void main() {
       ]);
       final interval = [2, 3];
 
-      mockGetGradient(costFunctionMock, x: x, w: w1, y: y, gradient: grad);
-      mockGetGradient(costFunctionMock, x: x, w: w2, y: y, gradient: grad);
-      mockGetGradient(costFunctionMock, x: x, w: w3, y: y, gradient: grad);
+      mockGetGradient(costFunction, x: x, w: w1, y: y, gradient: grad);
+      mockGetGradient(costFunction, x: x, w: w2, y: y, gradient: grad);
+      mockGetGradient(costFunction, x: x, w: w3, y: y, gradient: grad);
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 1))
           .thenReturn(interval);
 
-      testOptimizer(points, labels, (optimizer) {
+      testOptimizer(points, labels, costFunction, (optimizer) {
         optimizer.findExtrema();
-        verifyGetGradientCall(costFunctionMock, x: x, w: w1, y: y, calls: 1);
-        verifyGetGradientCall(costFunctionMock, x: x, w: w2, y: y, calls: 1);
-        verifyGetGradientCall(costFunctionMock, x: x, w: w3, y: y, calls: 1);
+        verifyGetGradientCall(costFunction, x: x, w: w1, y: y, calls: 1);
+        verifyGetGradientCall(costFunction, x: x, w: w2, y: y, calls: 1);
+        verifyGetGradientCall(costFunction, x: x, w: w3, y: y, calls: 1);
       }, iterations: 3, batchSize: 1);
     });
 
@@ -113,13 +105,13 @@ void main() {
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 2))
           .thenReturn([0, 2]);
 
-      when(costFunctionMock.getGradient(
+      when(costFunction.getGradient(
               argThat(equals(batch)), any, argThat(equals(y))))
           .thenReturn(Matrix.fromList(grad));
 
-      testOptimizer(points, labels, (optimizer) {
+      testOptimizer(points, labels, costFunction, (optimizer) {
         optimizer.findExtrema();
-        verify(costFunctionMock.getGradient(
+        verify(costFunction.getGradient(
                 argThat(equals(batch)), any, argThat(equals(y))))
             .called(3); // 3 iterations
       }, iterations: 3, batchSize: 2);
@@ -137,7 +129,7 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4))
           .thenReturn([0, 4]);
-      when(costFunctionMock.getGradient(
+      when(costFunction.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
           .thenReturn(Matrix.fromList([
             [10.0],
@@ -145,9 +137,9 @@ void main() {
             [10.0]
       ]));
 
-      testOptimizer(points, labels, (optimizer) {
+      testOptimizer(points, labels, costFunction, (optimizer) {
         optimizer.findExtrema();
-        verify(costFunctionMock.getGradient(
+        verify(costFunction.getGradient(
                 argThat(equals(points)), any, argThat(equals(labels))))
             .called(3); // 3 iterations
       }, iterations: 3, batchSize: 4);
@@ -172,12 +164,12 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 4, intervalLength: 4))
           .thenReturn(interval);
-      when(costFunctionMock.getGradient(any, any, any))
+      when(costFunction.getGradient(any, any, any))
           .thenReturn(Matrix.fromList(grad));
 
-      testOptimizer(points, labels, (optimizer) {
+      testOptimizer(points, labels, costFunction, (optimizer) {
         optimizer.findExtrema();
-        verify(costFunctionMock.getGradient(
+        verify(costFunction.getGradient(
                 argThat(equals(points)), any, argThat(equals(labels))))
             .called(iterationLimit);
         verify(learningRateGeneratorMock.getNextValue()).called(iterationLimit);
@@ -197,7 +189,7 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2))
           .thenReturn([0, 2]);
-      when(costFunctionMock.getGradient(
+      when(costFunction.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
           .thenReturn(Matrix.fromList([
             [8.0],
@@ -205,7 +197,7 @@ void main() {
             [8.0]
       ]));
 
-      testOptimizer(points, labels, (optimizer) {
+      testOptimizer(points, labels, costFunction, (optimizer) {
         final optimalCoefficients = optimizer.findExtrema();
         expect(optimalCoefficients, equals([
           [-48.0],
@@ -235,11 +227,11 @@ void main() {
 
       when(randomizerMock.getIntegerInterval(0, 2, intervalLength: 2))
           .thenReturn([0, 2]);
-      when(costFunctionMock.getGradient(
+      when(costFunction.getGradient(
               argThat(equals(points)), any, argThat(equals(labels))))
           .thenReturn(gradient);
 
-      testOptimizer(points, labels, (optimizer) {
+      testOptimizer(points, labels, costFunction, (optimizer) {
         final optimalCoefficients = optimizer.findExtrema();
         expect(optimalCoefficients, equals([
           [-23728.0],
@@ -254,14 +246,15 @@ void main() {
     test('should consider `learningRate` parameter', () {
       final initialLearningRate = 10.0;
       final iterations = 3;
-      testOptimizer(Matrix.fromList([[]]), Matrix.fromList([[]]), (optimizer) {
-        verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
-      },
-          iterations: iterations,
-          batchSize: 1,
-          lambda: 0.0,
-          eta: initialLearningRate,
-          verifyConvergenceDetectorCall: false);
+      testOptimizer(Matrix.fromList([[]]), Matrix.fromList([[]]), costFunction,
+        (optimizer) {
+          verify(learningRateGeneratorMock.init(initialLearningRate)).called(1);
+        },
+        iterations: iterations,
+        batchSize: 1,
+        lambda: 0.0,
+        eta: initialLearningRate,
+        verifyConvergenceDetectorCall: false);
     });
   });
 }

@@ -1,29 +1,23 @@
-import 'package:ml_algo/src/metric/classification/metric_factory.dart';
+import 'package:ml_algo/src/metric/classification/accuracy.dart';
 import 'package:ml_algo/src/metric/metric.dart';
-import 'package:ml_algo/src/metric/regression/metric_factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/metric/regression/mape.dart';
+import 'package:ml_algo/src/metric/regression/rmse.dart';
 
 class MetricFactory {
   static Metric createByType(MetricType type) {
-    Metric metric;
-
     switch (type) {
       case MetricType.rmse:
-        metric = RegressionMetricFactory.rmse();
-        break;
+        return const RMSEMetric();
 
       case MetricType.mape:
-        metric = RegressionMetricFactory.mape();
-        break;
+        return const MAPEMetric();
 
       case MetricType.accuracy:
-        metric = ClassificationMetricFactory.accuracy();
-        break;
+        return const AccuracyMetric();
 
       default:
         throw UnsupportedError('Unsupported metric type $type');
     }
-
-    return metric;
   }
 }
