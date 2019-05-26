@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/optimizer/coordinate/coordinate.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/linear/coordinate/coordinate.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 

@@ -1,6 +1,6 @@
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/optimizer/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';

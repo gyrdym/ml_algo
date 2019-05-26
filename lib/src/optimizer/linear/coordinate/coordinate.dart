@@ -1,17 +1,17 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory_impl.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/optimizer/linear/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/optimizer/linear/convergence_detector/convergence_detector_factory.dart';
+import 'package:ml_algo/src/optimizer/linear/convergence_detector/convergence_detector_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_generator_factory_impl.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class CoordinateOptimizer implements Optimizer {
+class CoordinateOptimizer implements LinearOptimizer {
   CoordinateOptimizer(Matrix points, Matrix labels, {
     DType dtype = DefaultParameterValues.dtype,
     CostFunction costFunction,

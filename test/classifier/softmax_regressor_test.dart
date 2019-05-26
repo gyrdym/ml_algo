@@ -1,6 +1,6 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';

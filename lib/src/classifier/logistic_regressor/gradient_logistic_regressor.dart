@@ -3,12 +3,12 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dar
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/get_probabilities.dart';
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
-import 'package:ml_algo/src/optimizer/optimizer_factory_impl.dart';
-import 'package:ml_algo/src/link_function/logit/inverse_logit_link_function.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/logit/inverse_logit_link_function.dart';
+import 'package:ml_algo/src/optimizer/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory_impl.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -34,8 +34,8 @@ class GradientLogisticRegressor with LinearClassifierMixin
         this.dtype = DefaultParameterValues.dtype,
         this.probabilityThreshold = 0.5,
 
-        OptimizerFactory optimizerFactory =
-          const OptimizerFactoryImpl(),
+        LinearOptimizerFactory optimizerFactory =
+          const LinearOptimizerFactoryImpl(),
       }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
