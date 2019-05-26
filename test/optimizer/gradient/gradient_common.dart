@@ -1,10 +1,10 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/optimizer/gradient/gradient.dart';
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/optimizer/optimizer.dart';
+import 'package:ml_algo/src/optimizer/linear/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/optimizer/linear/gradient/gradient.dart';
+import 'package:ml_algo/src/optimizer/linear/gradient/learning_rate_generator/learning_rate_generator.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -84,7 +84,7 @@ void mockGetGradient(CostFunction mock, {
 
 void testOptimizer(
   Matrix points, Matrix labels, CostFunction costFunction,
-  Function callback(Optimizer optimizer), {
+  Function callback(LinearOptimizer optimizer), {
   int iterations,
   int batchSize = 1,
   double minCoeffUpdate = 1e-100,

@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/optimizer/linear/convergence_detector/convergence_detector.dart';
 
 class ConvergenceDetectorImpl implements ConvergenceDetector {
   ConvergenceDetectorImpl(this.minDiff, this.iterationsLimit) {

@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_impl.dart';
+import 'package:ml_algo/src/optimizer/linear/convergence_detector/convergence_detector_impl.dart';
 import 'package:test/test.dart';
 
 void main() {

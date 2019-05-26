@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/optimizer/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
