@@ -20,65 +20,70 @@ class DecisionTreeOptimizer {
 
   /// Builds a tree, where each node is a logical rule, that divides given data
   /// into several parts
-  DecisionTreeNode _createNode(Matrix features, Matrix outcomes,
-      int nodesCount) {
-    final labels = outcomes.uniqueRows();
-    if (_isLeaf(features, outcomes, labels, nodesCount)) {
+  DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
+    if (_isLeaf(observations, nodesCount)) {
       return DecisionTreeNode([]);
     }
-    final range = _findSplittingFeatureValuesRange(features, outcomes);
-    final data = features.submatrix(columns: range);
-    final children = _getSplittingValues(data)
-        .map((value) => _selectObservations(features, outcomes, range, value))
-        .map((selected) => _createNode(selected.first, selected.last,
-        nodesCount + 1));
+    final range = _findSplittingFeatureRange(observations);
+    final children = _learnStump(observations, range)
+        .map((selected) => _createNode(selected, nodesCount + 1));
     return DecisionTreeNode(children);
   }
 
-  ZRange _findSplittingFeatureValuesRange(Matrix features, Matrix labels) {
+  ZRange _findSplittingFeatureRange(Matrix observations) {
     final errors = <double, List<ZRange>>{};
-    for (final range in _featuresRanges) {
-      final column = features.submatrix(columns: range);
-      final stump = _getSplittingValues(column)
-          .map((value) => _selectObservations(features, labels, range, value));
+    _featuresRanges.forEach((range) {
+      final stump = _learnStump(observations, range);
       final error = _getErrorOnStump(stump);
       errors.putIfAbsent(error, () => []);
       errors[error].add(range);
-    }
+    });
     final sorted = errors.keys.toList(growable: false)
       ..sort();
     final minError = sorted.first;
     return errors[minError].first;
   }
 
-  List<Vector> _getSplittingValues(Matrix column,
-      [List<Vector> categoricalValues]) {
-    if (categoricalValues?.isNotEmpty == true) {
-      return categoricalValues;
-    }
+  Iterable<Matrix> _learnStump(Matrix observations, ZRange target,
+      [List<Vector> categoricalValues]) =>
+      categoricalValues?.isNotEmpty == true
+          ? _getObservationsByCategoricalValues(observations, target,
+          categoricalValues)
+          : _getObservationsByRealValue(observations, target);
 
+  List<Matrix> _getObservationsByCategoricalValues(Matrix observations,
+      ZRange range, List<Vector> splittingValues) =>
+    splittingValues.map((value) {
+      final foundRows = observations.rows
+          .where((row) => row.subvectorByRange(range) == value)
+          .toList(growable: false);
+      return Matrix.fromRows(foundRows);
+    }).toList(growable: false);
+
+  List<Matrix> _getObservationsByRealValue(Matrix observations, ZRange range) {
+    final value = 20;
+    final rows = observations.rows
+        .where((row) => row.subvectorByRange(range) == value)
+        .toList(growable: false);
+    
   }
 
-  Iterable<Matrix> _selectObservations(Matrix features, Matrix outcomes,
-      ZRange rangeToSplit, Vector value) {}
-
-  bool _isLeaf(Matrix features, Matrix outcomes, Matrix labels,
-      int nodesCount) {
+  bool _isLeaf(Matrix features, Matrix outcomes, int nodesCount) {
     if (nodesCount >= _maxNodesCount) {
       return true;
     }
-    if (labels.rowsNum == outcomes.rowsNum) {
+    if (outcomes.uniqueRows().rowsNum == 1) {
       return true;
     }
-    if (_isGoodQualityReached(outcomes, labels)) {
+    if (_isGoodQualityReached(outcomes)) {
       return true;
     }
     return false;
   }
 
-  bool _isGoodQualityReached(Matrix outcomes, Matrix labels) {
+  bool _isGoodQualityReached(Matrix outcomes) {
 
   }
 
-  double _getErrorOnStump(Iterable<Iterable<Matrix>> data) {}
+  double _getErrorOnStump(Iterable<Matrix> data) {}
 }
