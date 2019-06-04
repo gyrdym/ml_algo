@@ -1,3 +1,4 @@
+import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
@@ -10,12 +11,20 @@ class DecisionTreeNode {
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(Matrix features, Matrix outcomes,
-      [this._maxNodesCount, this._featuresRanges]) {
-    _root = _createNode(features, outcomes, 0);
+      [this._maxNodesCount, this._featuresRanges]) :
+        _outcomesRange = ZRange.closedOpen(
+            features.columnsNum,
+            features.columnsNum + outcomes.columnsNum
+        ) {
+    _root = _createNode(Matrix.fromColumns([
+      ...features.columns,
+      ...outcomes.columns,
+    ]), 0);
   }
 
   final int _maxNodesCount;
   final Iterable<ZRange> _featuresRanges;
+  final ZRange _outcomesRange;
   DecisionTreeNode _root;
 
   /// Builds a tree, where each node is a logical rule, that divides given data
@@ -49,7 +58,7 @@ class DecisionTreeOptimizer {
       categoricalValues?.isNotEmpty == true
           ? _getObservationsByCategoricalValues(observations, target,
           categoricalValues)
-          : _getObservationsByRealValue(observations, target);
+          : _getObservationsByRealValue(observations, target.firstValue);
 
   List<Matrix> _getObservationsByCategoricalValues(Matrix observations,
       ZRange range, List<Vector> splittingValues) =>
@@ -60,15 +69,34 @@ class DecisionTreeOptimizer {
       return Matrix.fromRows(foundRows);
     }).toList(growable: false);
 
-  List<Matrix> _getObservationsByRealValue(Matrix observations, ZRange range) {
-    final value = 20;
-    final rows = observations.rows
-        .where((row) => row.subvectorByRange(range) == value)
-        .toList(growable: false);
-    
+  List<Matrix> _getObservationsByRealValue(Matrix observations, int index) {
+    final errors = <double, List<Matrix>>{};
+    final rows = observations.sort((row) => row[index], Axis.rows).rows;
+    var prevValue = rows.first[index];
+    for (final row in rows.skip(1)) {
+      final splittingValue = (prevValue + row[index]) / 2;
+      final stump = _splitByRealValue(observations, index, splittingValue);
+      final error = _getErrorOnStump(stump);
+      errors[error] = stump;
+      prevValue = row[index];
+    }
+    final sorted = errors.keys.toList(growable: false)
+      ..sort();
+    final minError = sorted.first;
+    return errors[minError];
   }
 
-  bool _isLeaf(Matrix features, Matrix outcomes, int nodesCount) {
+  List<Matrix> _splitByRealValue(Matrix observations, int targetIdx,
+      double value) {
+    final source1 = <Vector>[];
+    final source2 = <Vector>[];
+    observations.rows.forEach((row) =>
+      row[targetIdx] >= value ? source2.add(row) : source1.add(row));
+    return [Matrix.fromRows(source1), Matrix.fromRows(source2)];
+  }
+
+  bool _isLeaf(Matrix observations, int nodesCount) {
+    final outcomes = observations.submatrix(columns: _outcomesRange);
     if (nodesCount >= _maxNodesCount) {
       return true;
     }
@@ -84,6 +112,11 @@ class DecisionTreeOptimizer {
   bool _isGoodQualityReached(Matrix outcomes) {
 
   }
+  // divide by total number
+  double _getErrorOnStump(Iterable<Matrix> data) => data.fold(0,
+          (error, observations) => error += _getErrorOnNode(observations));
 
-  double _getErrorOnStump(Iterable<Matrix> data) {}
+  double _getErrorOnNode(Matrix observations) {
+    final outcomes = observations.submatrix(columns: _outcomesRange);
+  }
 }
