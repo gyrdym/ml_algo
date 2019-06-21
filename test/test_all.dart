@@ -13,14 +13,16 @@ import 'data_splitter/lpo_splitter_test.dart' as lpo_splitter_test;
 import 'helpers/add_intercept.dart' as add_intercept_test;
 import 'link_function/link_function_test.dart' as link_function_test;
 import 'math/randomizer_test.dart' as randomizer_test;
-import 'optimizer/convergence_detector/convergence_detector_impl_test.dart'
+import 'optimizer/linear/convergence_detector/convergence_detector_impl_test.dart'
     as convergence_detector_test;
-import 'optimizer/coordinate/coordinate_optimizer_integration_test.dart'
+import 'optimizer/linear/coordinate/coordinate_optimizer_integration_test.dart'
     as coord_optimizer_integration_test;
-import 'optimizer/gradient/gradient_optimizer_integration_test.dart'
+import 'optimizer/linear/gradient/gradient_optimizer_integration_test.dart'
     as gradient_optimizer_integration_test;
-import 'optimizer/gradient/gradient_optimizer_test.dart'
+import 'optimizer/linear/gradient/gradient_optimizer_test.dart'
     as gradient_optimizer_test;
+import 'optimizer/non_linear/decision_tree/assessor/classifier_stump_assesor_test.dart'
+    as classifier_stump_assesor_test;
 import 'regressor/knn_regressor_integration_test.dart'
     as knn_regressor_integration_test;
 import 'regressor/knn_regressor_test.dart'
@@ -43,6 +45,7 @@ void main() {
   coord_optimizer_integration_test.main();
   gradient_optimizer_integration_test.main();
   gradient_optimizer_test.main();
+  classifier_stump_assesor_test.main();
   knn_regressor_integration_test.main();
   knn_regressor_test.main();
   link_function_test.main();

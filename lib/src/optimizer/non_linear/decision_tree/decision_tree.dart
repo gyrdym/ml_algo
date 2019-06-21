@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -10,8 +11,8 @@ class DecisionTreeNode {
 }
 
 class DecisionTreeOptimizer {
-  DecisionTreeOptimizer(Matrix features, Matrix outcomes,
-      [this._maxNodesCount, this._featuresRanges]) :
+  DecisionTreeOptimizer(Matrix features, Matrix outcomes, this._assessor,
+      [this._maxNodesCount, this._minErrorOnNode, this._featuresRanges]) :
         _outcomesRange = ZRange.closedOpen(
             features.columnsNum,
             features.columnsNum + outcomes.columnsNum
@@ -22,7 +23,9 @@ class DecisionTreeOptimizer {
     ]), 0);
   }
 
+  final StumpAssessor _assessor;
   final int _maxNodesCount;
+  final int _minErrorOnNode;
   final Iterable<ZRange> _featuresRanges;
   final ZRange _outcomesRange;
   DecisionTreeNode _root;
@@ -43,7 +46,7 @@ class DecisionTreeOptimizer {
     final errors = <double, List<ZRange>>{};
     _featuresRanges.forEach((range) {
       final stump = _learnStump(observations, range);
-      final error = _getErrorOnStump(stump);
+      final error = _assessor.getErrorOnStump(stump);
       errors.putIfAbsent(error, () => []);
       errors[error].add(range);
     });
@@ -76,7 +79,7 @@ class DecisionTreeOptimizer {
     for (final row in rows.skip(1)) {
       final splittingValue = (prevValue + row[index]) / 2;
       final stump = _splitByRealValue(observations, index, splittingValue);
-      final error = _getErrorOnStump(stump);
+      final error = _assessor.getErrorOnStump(stump);
       errors[error] = stump;
       prevValue = row[index];
     }
@@ -109,14 +112,6 @@ class DecisionTreeOptimizer {
     return false;
   }
 
-  bool _isGoodQualityReached(Matrix outcomes) {
-
-  }
-  // divide by total number
-  double _getErrorOnStump(Iterable<Matrix> data) => data.fold(0,
-          (error, observations) => error += _getErrorOnNode(observations));
-
-  double _getErrorOnNode(Matrix observations) {
-    final outcomes = observations.submatrix(columns: _outcomesRange);
-  }
+  bool _isGoodQualityReached(Matrix outcomes) =>
+      _assessor.getErrorOnNode(outcomes) <= _minErrorOnNode;
 }
