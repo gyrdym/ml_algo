@@ -3,7 +3,7 @@ import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../test_utils/mocks.dart';
+import '../../../test_utils/mocks.dart';
 import 'gradient_common.dart';
 
 Matrix getPoints() => Matrix.fromList([

@@ -4,7 +4,7 @@ import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_w
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
-import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../../../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 /// L1 regularization, as known as Lasso, is aimed to penalize unimportant features, setting their weights to the zero,
 /// therefore, we can treat the objective of the Lasso Optimizer like feature selection. Since lasso optimizer regularizes
