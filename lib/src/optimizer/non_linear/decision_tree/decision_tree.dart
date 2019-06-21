@@ -4,6 +4,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
+import 'leaf_detector/leaf_detector.dart';
+
 class DecisionTreeNode {
   DecisionTreeNode(this.children);
 
@@ -12,11 +14,7 @@ class DecisionTreeNode {
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(Matrix features, Matrix outcomes, this._assessor,
-      [this._maxNodesCount, this._minErrorOnNode, this._featuresRanges]) :
-        _outcomesRange = ZRange.closedOpen(
-            features.columnsNum,
-            features.columnsNum + outcomes.columnsNum
-        ) {
+      this._leafDetector, [this._featuresRanges]) {
     _root = _createNode(Matrix.fromColumns([
       ...features.columns,
       ...outcomes.columns,
@@ -24,16 +22,14 @@ class DecisionTreeOptimizer {
   }
 
   final StumpAssessor _assessor;
-  final int _maxNodesCount;
-  final int _minErrorOnNode;
+  final LeafDetector _leafDetector;
   final Iterable<ZRange> _featuresRanges;
-  final ZRange _outcomesRange;
   DecisionTreeNode _root;
 
   /// Builds a tree, where each node is a logical rule, that divides given data
   /// into several parts
   DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
-    if (_isLeaf(observations, nodesCount)) {
+    if (_leafDetector.isLeaf(observations, nodesCount)) {
       return DecisionTreeNode([]);
     }
     final range = _findSplittingFeatureRange(observations);
@@ -97,21 +93,4 @@ class DecisionTreeOptimizer {
       row[targetIdx] >= value ? source2.add(row) : source1.add(row));
     return [Matrix.fromRows(source1), Matrix.fromRows(source2)];
   }
-
-  bool _isLeaf(Matrix observations, int nodesCount) {
-    final outcomes = observations.submatrix(columns: _outcomesRange);
-    if (nodesCount >= _maxNodesCount) {
-      return true;
-    }
-    if (outcomes.uniqueRows().rowsNum == 1) {
-      return true;
-    }
-    if (_isGoodQualityReached(outcomes)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool _isGoodQualityReached(Matrix outcomes) =>
-      _assessor.getErrorOnNode(outcomes) <= _minErrorOnNode;
 }

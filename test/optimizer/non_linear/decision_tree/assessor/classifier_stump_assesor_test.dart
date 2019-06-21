@@ -6,6 +6,27 @@ import 'package:test/test.dart';
 void main() {
   group('ClassifierStumpAssessor', () {
     group('when vectors are used as class labels', () {
+      test('should return majority-based error on node', () {
+        final node = Matrix.fromList([
+          [1, 0, 0],
+          [0, 0, 1],
+          [0, 0, 1],
+          [0, 1, 0],
+        ]);
+        final error = ClassifierStumpAssessor().getErrorOnNode(node);
+        expect(error, 0.5);
+      });
+
+      test('should return 0 majority-based error on node if the node has only '
+          'one class label', () {
+        final node = Matrix.fromList([
+          [1, 0, 0],
+          [1, 0, 0],
+        ]);
+        final error = ClassifierStumpAssessor().getErrorOnNode(node);
+        expect(error, 0);
+      });
+
       test('should return majority-based error on decision stump when all nodes'
           'in the stump have distinct majority class', () {
         final node1 = Matrix.fromList([
