@@ -14,7 +14,7 @@ void main() {
           [0, 1, 0],
         ]);
         final error = ClassifierStumpAssessor().getErrorOnNode(node);
-        expect(error, 2);
+        expect(error, 0.5);
       });
 
       test('should return 0 majority-based error on node if the node has only '
@@ -53,7 +53,7 @@ void main() {
         final stump = [node1, node2, node3];
         final error = ClassifierStumpAssessor().getErrorOnStump(stump);
 
-        expect(error, 5);
+        expect(error, 5 / 12);
       });
 
       test('should return correct error if nodes have different length', () {
@@ -79,7 +79,7 @@ void main() {
         final stump = [node1, node2, node3];
         final error = ClassifierStumpAssessor().getErrorOnStump(stump);
 
-        expect(error, 4);
+        expect(error, 4 / 10);
       });
 
       test('should return majority-based error, that is equal to 0, if all '
@@ -177,7 +177,7 @@ void main() {
         final stump = [node1, node2, node3];
         final error = ClassifierStumpAssessor().getErrorOnStump(stump);
 
-        expect(error, 6);
+        expect(error, 0.5);
       });
     });
 
@@ -193,7 +193,7 @@ void main() {
           Matrix.fromColumns([node3]),
         ];
         final error = ClassifierStumpAssessor().getErrorOnStump(stump);
-        expect(error, 5);
+        expect(error, 5 / 12);
       });
 
       test('should return correct error if nodes have different length', () {
@@ -206,7 +206,7 @@ void main() {
           Matrix.fromColumns([node3]),
         ];
         final error = ClassifierStumpAssessor().getErrorOnStump(stump);
-        expect(error, 8);
+        expect(error, 8 / 15);
       });
 
       test('should return majority-based error, that is equal to 0, if all '
@@ -264,7 +264,7 @@ void main() {
           Matrix.fromColumns([node3]),
         ];
         final error = ClassifierStumpAssessor().getErrorOnStump(stump);
-        expect(error, 6);
+        expect(error, 0.5);
       });
     });
   });
