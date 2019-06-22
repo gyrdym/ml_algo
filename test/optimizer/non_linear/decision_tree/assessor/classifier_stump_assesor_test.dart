@@ -13,7 +13,7 @@ void main() {
           [0, 0, 1],
           [0, 1, 0],
         ]);
-        final error = ClassifierStumpAssessor().getErrorOnNode(node);
+        final error = const ClassifierStumpAssessor().getErrorOnNode(node);
         expect(error, 0.5);
       });
 
@@ -23,7 +23,7 @@ void main() {
           [1, 0, 0],
           [1, 0, 0],
         ]);
-        final error = ClassifierStumpAssessor().getErrorOnNode(node);
+        final error = const ClassifierStumpAssessor().getErrorOnNode(node);
         expect(error, 0);
       });
 
@@ -51,7 +51,7 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
 
         expect(error, 5 / 12);
       });
@@ -77,7 +77,7 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
 
         expect(error, 4 / 10);
       });
@@ -106,7 +106,7 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
 
         expect(error, 0);
       });
@@ -126,7 +126,7 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
 
         expect(error, 0);
       });
@@ -146,7 +146,7 @@ void main() {
         final stump = [node1, node2, node3];
 
         expect(
-            () => ClassifierStumpAssessor().getErrorOnStump(stump),
+            () => const ClassifierStumpAssessor().getErrorOnStump(stump),
             throwsException,
         );
       });
@@ -175,7 +175,7 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
 
         expect(error, 0.5);
       });
@@ -192,7 +192,7 @@ void main() {
           Matrix.fromColumns([node2]),
           Matrix.fromColumns([node3]),
         ];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
         expect(error, 5 / 12);
       });
 
@@ -205,7 +205,7 @@ void main() {
           Matrix.fromColumns([node2]),
           Matrix.fromColumns([node3]),
         ];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
         expect(error, 8 / 15);
       });
 
@@ -219,7 +219,7 @@ void main() {
           Matrix.fromColumns([node2]),
           Matrix.fromColumns([node3]),
         ];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
         expect(error, 0);
       });
 
@@ -233,7 +233,7 @@ void main() {
           Matrix.fromColumns([node2]),
           Matrix.fromColumns([node3]),
         ];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
         expect(error, 0);
       });
 
@@ -248,7 +248,7 @@ void main() {
           Matrix.fromColumns([node3]),
         ];
         expect(
-            () => ClassifierStumpAssessor().getErrorOnStump(stump),
+            () => const ClassifierStumpAssessor().getErrorOnStump(stump),
             throwsException,
         );
       });
@@ -263,7 +263,7 @@ void main() {
           Matrix.fromColumns([node2]),
           Matrix.fromColumns([node3]),
         ];
-        final error = ClassifierStumpAssessor().getErrorOnStump(stump);
+        final error = const ClassifierStumpAssessor().getErrorOnStump(stump);
         expect(error, 0.5);
       });
     });

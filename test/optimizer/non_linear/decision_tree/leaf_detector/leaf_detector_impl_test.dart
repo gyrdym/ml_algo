@@ -7,14 +7,14 @@ import 'package:test/test.dart';
 void main() {
   group('LeafDetectorImpl', () {
     test('should detect tree leaf if maximum node count was reached', () {
-      final detector = LeafDetectorImpl(null, null, 10);
+      final detector = const LeafDetectorImpl(null, null, 10);
       final isLeaf = detector.isLeaf(null, 10);
       expect(isLeaf, isTrue);
     });
 
     test('should detect tree leaf if current node count exceeded the '
         'limit', () {
-      final detector = LeafDetectorImpl(null, null, 10);
+      final detector = const LeafDetectorImpl(null, null, 10);
       final isLeaf = detector.isLeaf(null, 11);
       expect(isLeaf, isTrue);
     });
@@ -26,7 +26,7 @@ void main() {
         [1, 0, 0],
         [1, 0, 0],
       ]);
-      final detector = LeafDetectorImpl(null, null, 10);
+      final detector = const LeafDetectorImpl(null, null, 10);
       final isLeaf = detector.isLeaf(outcomes, 3);
       expect(isLeaf, isTrue);
     });

@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/node_splitter/node_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/number_based/node_splitter/node_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/number_based/number_based_stump_selector.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
