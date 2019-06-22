@@ -1,6 +1,6 @@
 import 'package:ml_linalg/matrix.dart';
 
-abstract class NumberBasedNodeSplitter {
+abstract class NodeSplitter {
   List<Matrix> split(Matrix observations, int splittingColumnIdx,
       double splittingValue);
 }

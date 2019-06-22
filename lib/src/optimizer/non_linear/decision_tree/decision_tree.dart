@@ -5,7 +5,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 import 'leaf_detector/leaf_detector.dart';
-import 'number_based_node_splitter/number_based_node_splitter.dart';
+import 'node_splitter/node_splitter.dart';
 
 class DecisionTreeNode {
   DecisionTreeNode(this.children);
@@ -29,7 +29,7 @@ class DecisionTreeOptimizer {
 
   final StumpAssessor _assessor;
   final LeafDetector _leafDetector;
-  final NumberBasedNodeSplitter _numberBasedNodeSplitter;
+  final NodeSplitter _numberBasedNodeSplitter;
   final Iterable<ZRange> _featuresRanges;
   final ZRange _outcomesRange;
   DecisionTreeNode _root;

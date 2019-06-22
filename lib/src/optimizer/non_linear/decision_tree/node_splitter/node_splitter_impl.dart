@@ -1,9 +1,9 @@
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-import 'number_based_node_splitter.dart';
+import 'node_splitter.dart';
 
-class NumberBasedNodeSplitterImpl implements NumberBasedNodeSplitter {
+class NodeSplitterImpl implements NodeSplitter {
   @override
   List<Matrix> split(Matrix observations, int splittingColumnIdx,
       double splittingValue) {
