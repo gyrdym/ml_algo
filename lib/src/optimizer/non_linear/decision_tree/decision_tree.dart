@@ -14,7 +14,11 @@ class DecisionTreeNode {
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(Matrix features, Matrix outcomes, this._assessor,
-      this._leafDetector, [this._featuresRanges]) {
+      this._leafDetector, [this._featuresRanges]) :
+        _outcomesRange = ZRange.closedOpen(
+            features.columnsNum,
+            features.columnsNum + outcomes.columnsNum
+        ) {
     _root = _createNode(Matrix.fromColumns([
       ...features.columns,
       ...outcomes.columns,
@@ -24,12 +28,14 @@ class DecisionTreeOptimizer {
   final StumpAssessor _assessor;
   final LeafDetector _leafDetector;
   final Iterable<ZRange> _featuresRanges;
+  final ZRange _outcomesRange;
   DecisionTreeNode _root;
 
   /// Builds a tree, where each node is a logical rule, that divides given data
   /// into several parts
   DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
-    if (_leafDetector.isLeaf(observations, nodesCount)) {
+    final outcomes = observations.submatrix(columns: _outcomesRange);
+    if (_leafDetector.isLeaf(outcomes, nodesCount)) {
       return DecisionTreeNode([]);
     }
     final range = _findSplittingFeatureRange(observations);

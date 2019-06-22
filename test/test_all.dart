@@ -23,6 +23,8 @@ import 'optimizer/linear/gradient/gradient_optimizer_test.dart'
     as gradient_optimizer_test;
 import 'optimizer/non_linear/decision_tree/assessor/classifier_stump_assesor_test.dart'
     as classifier_stump_assesor_test;
+import 'optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl_test.dart'
+    as leaf_detector_impl_test;
 import 'regressor/knn_regressor_integration_test.dart'
     as knn_regressor_integration_test;
 import 'regressor/knn_regressor_test.dart'
@@ -46,6 +48,7 @@ void main() {
   gradient_optimizer_integration_test.main();
   gradient_optimizer_test.main();
   classifier_stump_assesor_test.main();
+  leaf_detector_impl_test.main();
   knn_regressor_integration_test.main();
   knn_regressor_test.main();
   link_function_test.main();
