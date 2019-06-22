@@ -4,6 +4,8 @@ import 'package:ml_linalg/vector.dart';
 import 'node_splitter.dart';
 
 class NodeSplitterImpl implements NodeSplitter {
+  const NodeSplitterImpl();
+
   @override
   List<Matrix> split(Matrix observations, int splittingColumnIdx,
       double splittingValue) {

@@ -3,7 +3,8 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/lea
 import 'package:ml_linalg/matrix.dart';
 
 class LeafDetectorImpl implements LeafDetector {
-  LeafDetectorImpl(this._assessor, this._minErrorOnNode, this._maxNodesCount);
+  const LeafDetectorImpl(this._assessor, this._minErrorOnNode,
+      this._maxNodesCount);
 
   final StumpAssessor _assessor;
   final int _maxNodesCount;
