@@ -6,6 +6,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class ClassifierStumpAssessor implements StumpAssessor {
+  const ClassifierStumpAssessor();
+
   @override
   double getErrorOnStump(Iterable<Matrix> stump) {
     int errorCount = 0;

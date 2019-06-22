@@ -1,11 +1,9 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
-import 'package:ml_linalg/axis.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/number_based/number_based_stump_selector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
-
-import 'leaf_detector/leaf_detector.dart';
-import 'node_splitter/node_splitter.dart';
 
 class DecisionTreeNode {
   DecisionTreeNode(this.children);
@@ -15,7 +13,7 @@ class DecisionTreeNode {
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(Matrix features, Matrix outcomes, this._assessor,
-      this._leafDetector, this._numberBasedNodeSplitter,
+      this._leafDetector, this._numberBasedStumpSelector,
       [this._featuresRanges]) :
         _outcomesRange = ZRange.closedOpen(
             features.columnsNum,
@@ -29,7 +27,7 @@ class DecisionTreeOptimizer {
 
   final StumpAssessor _assessor;
   final LeafDetector _leafDetector;
-  final NodeSplitter _numberBasedNodeSplitter;
+  final NumberBasedStumpSelector _numberBasedStumpSelector;
   final Iterable<ZRange> _featuresRanges;
   final ZRange _outcomesRange;
   DecisionTreeNode _root;
@@ -66,7 +64,7 @@ class DecisionTreeOptimizer {
       categoricalValues?.isNotEmpty == true
           ? _getObservationsByCategoricalValues(observations, target,
           categoricalValues)
-          : _getObservationsByRealValue(observations, target.firstValue);
+          : _numberBasedStumpSelector.select(observations, target.firstValue);
 
   List<Matrix> _getObservationsByCategoricalValues(Matrix observations,
       ZRange range, List<Vector> splittingValues) =>
@@ -76,22 +74,4 @@ class DecisionTreeOptimizer {
           .toList(growable: false);
       return Matrix.fromRows(foundRows);
     }).toList(growable: false);
-
-  List<Matrix> _getObservationsByRealValue(Matrix observations, int index) {
-    final errors = <double, List<Matrix>>{};
-    final rows = observations.sort((row) => row[index], Axis.rows).rows;
-    var prevValue = rows.first[index];
-    for (final row in rows.skip(1)) {
-      final splittingValue = (prevValue + row[index]) / 2;
-      final stump = _numberBasedNodeSplitter
-          .split(observations, index, splittingValue);
-      final error = _assessor.getErrorOnStump(stump);
-      errors[error] = stump;
-      prevValue = row[index];
-    }
-    final sorted = errors.keys.toList(growable: false)
-      ..sort();
-    final minError = sorted.first;
-    return errors[minError];
-  }
 }
