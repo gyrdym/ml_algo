@@ -48,7 +48,7 @@ class DecisionTreeOptimizer {
   }
 
   ZRange _findSplittingFeatureRange(Matrix observations) {
-    final errors = <int, List<ZRange>>{};
+    final errors = <double, List<ZRange>>{};
     _featuresRanges.forEach((range) {
       final stump = _learnStump(observations, range);
       final error = _assessor.getErrorOnStump(stump);
@@ -78,7 +78,7 @@ class DecisionTreeOptimizer {
     }).toList(growable: false);
 
   List<Matrix> _getObservationsByRealValue(Matrix observations, int index) {
-    final errors = <int, List<Matrix>>{};
+    final errors = <double, List<Matrix>>{};
     final rows = observations.sort((row) => row[index], Axis.rows).rows;
     var prevValue = rows.first[index];
     for (final row in rows.skip(1)) {

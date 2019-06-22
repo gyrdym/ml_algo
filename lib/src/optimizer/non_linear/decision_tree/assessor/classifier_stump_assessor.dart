@@ -7,22 +7,28 @@ import 'package:ml_linalg/vector.dart';
 
 class ClassifierStumpAssessor implements StumpAssessor {
   @override
-  int getErrorOnStump(Iterable<Matrix> stump) => stump.fold(0,
-          (error, observations) => error += getErrorOnNode(observations));
+  double getErrorOnStump(Iterable<Matrix> stump) {
+    int errorCount = 0;
+    int totalCount = 0;
+    for (final node in stump) {
+      errorCount += _getErrorCount(node);
+      totalCount += node.rowsNum;
+    }
+    return errorCount / totalCount;
+  }
 
   @override
-  int getErrorOnNode(Matrix observations) {
+  double getErrorOnNode(Matrix observations) =>
+      _getErrorCount(observations) / observations.rowsNum;
+
+  int _getErrorCount(Matrix observations) {
     if (observations.rowsNum == 0) {
       throw Exception('Given node does not have any observations');
     }
-    return observations.columnsNum == 1
-        ? _getError<double>(observations.toVector(), observations.rowsNum)
-        : _getError<Vector>(observations.rows, observations.rowsNum);
-  }
-
-  int _getError<T>(Iterable<T> iterable, int length) {
-    final maxCount = _getMajorityCount<T>(iterable);
-    return length - maxCount;
+    final majorityCount = observations.columnsNum == 1
+        ? _getMajorityCount<double>(observations.toVector())
+        : _getMajorityCount<Vector>(observations.rows);
+    return observations.rowsNum - majorityCount;
   }
 
   int _getMajorityCount<T>(Iterable<T> iterable) {
