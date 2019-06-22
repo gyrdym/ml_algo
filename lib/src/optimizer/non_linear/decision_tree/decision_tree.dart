@@ -5,6 +5,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 import 'leaf_detector/leaf_detector.dart';
+import 'number_based_node_splitter/number_based_node_splitter.dart';
 
 class DecisionTreeNode {
   DecisionTreeNode(this.children);
@@ -14,7 +15,8 @@ class DecisionTreeNode {
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(Matrix features, Matrix outcomes, this._assessor,
-      this._leafDetector, [this._featuresRanges]) :
+      this._leafDetector, this._numberBasedNodeSplitter,
+      [this._featuresRanges]) :
         _outcomesRange = ZRange.closedOpen(
             features.columnsNum,
             features.columnsNum + outcomes.columnsNum
@@ -27,6 +29,7 @@ class DecisionTreeOptimizer {
 
   final StumpAssessor _assessor;
   final LeafDetector _leafDetector;
+  final NumberBasedNodeSplitter _numberBasedNodeSplitter;
   final Iterable<ZRange> _featuresRanges;
   final ZRange _outcomesRange;
   DecisionTreeNode _root;
@@ -80,7 +83,8 @@ class DecisionTreeOptimizer {
     var prevValue = rows.first[index];
     for (final row in rows.skip(1)) {
       final splittingValue = (prevValue + row[index]) / 2;
-      final stump = _splitByRealValue(observations, index, splittingValue);
+      final stump = _numberBasedNodeSplitter
+          .split(observations, index, splittingValue);
       final error = _assessor.getErrorOnStump(stump);
       errors[error] = stump;
       prevValue = row[index];
@@ -89,14 +93,5 @@ class DecisionTreeOptimizer {
       ..sort();
     final minError = sorted.first;
     return errors[minError];
-  }
-
-  List<Matrix> _splitByRealValue(Matrix observations, int targetIdx,
-      double value) {
-    final source1 = <Vector>[];
-    final source2 = <Vector>[];
-    observations.rows.forEach((row) =>
-      row[targetIdx] >= value ? source2.add(row) : source1.add(row));
-    return [Matrix.fromRows(source1), Matrix.fromRows(source2)];
   }
 }
