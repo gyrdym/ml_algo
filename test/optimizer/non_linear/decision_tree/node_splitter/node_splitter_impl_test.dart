@@ -1,9 +1,9 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/number_based_node_splitter/number_based_node_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/node_splitter/node_splitter_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('NumberBasedNodeSplitterImpl', () {
+  group('NodeSplitterImpl', () {
     test('should split given matrix into two parts: first part should contain '
         'values less than the splitting value, right part should contain '
         'values greater than the splitting value', () {
@@ -16,7 +16,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 10.0;
-      final splitter = NumberBasedNodeSplitterImpl();
+      final splitter = NodeSplitterImpl();
       final actual = splitter.split(observations, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -44,7 +44,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 10.0;
-      final splitter = NumberBasedNodeSplitterImpl();
+      final splitter = NodeSplitterImpl();
       final actual = splitter.split(observations, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -70,7 +70,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 0.0;
-      final splitter = NumberBasedNodeSplitterImpl();
+      final splitter = NodeSplitterImpl();
       final actual = splitter.split(observations, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -97,7 +97,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 1000.0;
-      final splitter = NumberBasedNodeSplitterImpl();
+      final splitter = NodeSplitterImpl();
       final actual = splitter.split(observations, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -123,7 +123,7 @@ void main() {
       ]);
       final splittingColumnIdx = 0;
       final splittingValue = 2.0;
-      final splitter = NumberBasedNodeSplitterImpl();
+      final splitter = NodeSplitterImpl();
       final actual = splitter.split(observations, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -150,7 +150,7 @@ void main() {
       ]);
       final splittingColumnIdx = 3;
       final splittingValue = 20.0;
-      final splitter = NumberBasedNodeSplitterImpl();
+      final splitter = NodeSplitterImpl();
       final actual = splitter.split(observations, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
