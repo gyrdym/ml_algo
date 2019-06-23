@@ -4,6 +4,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../../../../test_utils/mocks.dart';
+
 void main() {
   group('LeafDetectorImpl', () {
     test('should detect tree leaf if maximum node count was reached', () {
@@ -77,5 +79,3 @@ void main() {
     });
   });
 }
-
-class StumpAssessorMock extends Mock implements StumpAssessor {}

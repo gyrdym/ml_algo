@@ -5,22 +5,24 @@ import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class GreedyNumberBasedStumpSelector implements NumberBasedStumpSelector {
-  const GreedyNumberBasedStumpSelector(this._assessor, this._nodeSplitter);
+  GreedyNumberBasedStumpSelector(this._assessor, this._nodeSplitter);
 
   final StumpAssessor _assessor;
   final NodeSplitter _nodeSplitter;
 
   @override
-  List<Matrix> select(Matrix observations, int index) {
+  List<Matrix> select(Matrix observations, int selectedColumnIdx) {
     final errors = <double, List<Matrix>>{};
-    final rows = observations.sort((row) => row[index], Axis.rows).rows;
-    var prevValue = rows.first[index];
-    for (final row in rows.skip(1)) {
-      final splittingValue = (prevValue + row[index]) / 2;
-      final stump = _nodeSplitter.split(observations, index, splittingValue);
+    final sortedRows = observations
+        .sort((row) => row[selectedColumnIdx], Axis.rows).rows;
+    var prevValue = sortedRows.first[selectedColumnIdx];
+    for (final row in sortedRows.skip(1)) {
+      final splittingValue = (prevValue + row[selectedColumnIdx]) / 2;
+      final stump = _nodeSplitter
+          .split(observations, selectedColumnIdx, splittingValue);
       final error = _assessor.getErrorOnStump(stump);
       errors[error] = stump;
-      prevValue = row[index];
+      prevValue = row[selectedColumnIdx];
     }
     final sorted = errors.keys.toList(growable: false)
       ..sort();
