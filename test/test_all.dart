@@ -25,6 +25,8 @@ import 'optimizer/non_linear/decision_tree/assessor/classifier_stump_assesor_tes
     as classifier_stump_assesor_test;
 import 'optimizer/non_linear/decision_tree/stump_selector/number_based/node_splitter/node_splitter_impl_test.dart'
     as node_splitter_impl_test;
+import 'optimizer/non_linear/decision_tree/stump_selector/number_based/greedy_number_based_stump_selector_test.dart'
+    as greedy_number_based_stump_selector_test;
 import 'optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl_test.dart'
     as leaf_detector_impl_test;
 import 'regressor/knn_regressor_integration_test.dart'
@@ -52,6 +54,7 @@ void main() {
   classifier_stump_assesor_test.main();
   leaf_detector_impl_test.main();
   node_splitter_impl_test.main();
+  greedy_number_based_stump_selector_test.main();
   knn_regressor_integration_test.main();
   knn_regressor_test.main();
   link_function_test.main();

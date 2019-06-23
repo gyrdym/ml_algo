@@ -3,6 +3,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/nu
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:xrange/zrange.dart';
 
 import '../../../../../test_utils/mocks.dart';
 
@@ -17,6 +18,8 @@ void main() {
         [4.0, 34.0],
         [0.0, 10.0],
       ]);
+
+      final outcomesRange = ZRange.singleton(1);
 
       final bestSplittingValue = 4.5;
       final splittingColumn = 0;
@@ -62,18 +65,27 @@ void main() {
 
       final assessor = StumpAssessorMock();
 
-      when(assessor.getErrorOnStump(argThat(equals(mockedWorstStump))))
-          .thenReturn(0.99);
-      when(assessor.getErrorOnStump(argThat(equals(mockedWorseStump))))
-          .thenReturn(0.8);
-      when(assessor.getErrorOnStump(argThat(equals(mockedGoodStump))))
-          .thenReturn(0.4);
-      when(assessor.getErrorOnStump(argThat(equals(mockedBestStump))))
-          .thenReturn(0.1);
+      when(assessor.getErrorOnStump(
+        argThat(equals(mockedWorstStump)),
+        outcomesRange
+      )).thenReturn(0.99);
+      when(assessor.getErrorOnStump(
+        argThat(equals(mockedWorseStump)),
+        outcomesRange,
+      )).thenReturn(0.8);
+      when(assessor.getErrorOnStump(
+        argThat(equals(mockedGoodStump)),
+        outcomesRange,
+      )).thenReturn(0.4);
+      when(assessor.getErrorOnStump(
+        argThat(equals(mockedBestStump)),
+        outcomesRange,
+      )).thenReturn(0.1);
 
       final splitter = createSplitter(mockedSplitDataToBeReturned);
       final selector = GreedyNumberBasedStumpSelector(assessor, splitter);
-      final nodes = selector.select(inputObservations, splittingColumn);
+      final nodes = selector.select(inputObservations, splittingColumn,
+          outcomesRange);
 
       for (final splitInfo in mockedSplitDataToBeReturned) {
         final splittingValue = splitInfo['splittingValue'] as double;
