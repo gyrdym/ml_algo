@@ -14,6 +14,8 @@ import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_w
 import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/number_based/node_splitter/node_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
@@ -49,6 +51,10 @@ class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 class SplitterMock extends Mock implements Splitter {}
 
 class PredictorMock extends Mock implements Assessable {}
+
+class StumpAssessorMock extends Mock implements StumpAssessor {}
+
+class NodeSplitterMock extends Mock implements NodeSplitter {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,
