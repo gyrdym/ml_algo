@@ -3,6 +3,6 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 abstract class VectorBasedStumpSelector {
-  List<Matrix> select(Matrix observations, ZRange range,
+  List<Matrix> select(Matrix observations, ZRange splittingColumnRange,
       List<Vector> splittingValues);
 }
