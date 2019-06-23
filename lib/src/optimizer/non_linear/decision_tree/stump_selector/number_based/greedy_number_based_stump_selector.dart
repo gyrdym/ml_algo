@@ -3,6 +3,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/nu
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/number_based/number_based_stump_selector.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:xrange/zrange.dart';
 
 class GreedyNumberBasedStumpSelector implements NumberBasedStumpSelector {
   GreedyNumberBasedStumpSelector(this._assessor, this._nodeSplitter);
@@ -11,7 +12,8 @@ class GreedyNumberBasedStumpSelector implements NumberBasedStumpSelector {
   final NodeSplitter _nodeSplitter;
 
   @override
-  List<Matrix> select(Matrix observations, int selectedColumnIdx) {
+  List<Matrix> select(Matrix observations, int selectedColumnIdx,
+      ZRange outcomesRange) {
     final errors = <double, List<Matrix>>{};
     final sortedRows = observations
         .sort((row) => row[selectedColumnIdx], Axis.rows).rows;
@@ -20,7 +22,7 @@ class GreedyNumberBasedStumpSelector implements NumberBasedStumpSelector {
       final splittingValue = (prevValue + row[selectedColumnIdx]) / 2;
       final stump = _nodeSplitter
           .split(observations, selectedColumnIdx, splittingValue);
-      final error = _assessor.getErrorOnStump(stump);
+      final error = _assessor.getErrorOnStump(stump, outcomesRange);
       errors[error] = stump;
       prevValue = row[selectedColumnIdx];
     }

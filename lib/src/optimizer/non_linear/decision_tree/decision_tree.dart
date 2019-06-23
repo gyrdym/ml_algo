@@ -45,8 +45,7 @@ class DecisionTreeOptimizer {
   /// Builds a tree, where each node is a logical rule, that divides given data
   /// into several parts
   DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
-    final outcomes = observations.submatrix(columns: _outcomesRange);
-    if (_leafDetector.isLeaf(outcomes, nodesCount)) {
+    if (_leafDetector.isLeaf(observations, _outcomesRange, nodesCount)) {
       return DecisionTreeNode([]);
     }
     final range = _findSplittingFeatureRange(observations);
@@ -59,7 +58,7 @@ class DecisionTreeOptimizer {
     final errors = <double, List<ZRange>>{};
     _featuresRanges.forEach((range) {
       final stump = _learnStump(observations, range);
-      final error = _assessor.getErrorOnStump(stump);
+      final error = _assessor.getErrorOnStump(stump, _outcomesRange);
       errors.putIfAbsent(error, () => []);
       errors[error].add(range);
     });
@@ -69,10 +68,17 @@ class DecisionTreeOptimizer {
     return errors[minError].first;
   }
 
-  Iterable<Matrix> _learnStump(Matrix observations, ZRange target,
-      [List<Vector> categoricalValues]) =>
+  Iterable<Matrix> _learnStump(Matrix observations,
+      ZRange splittingFeatureRange, [List<Vector> categoricalValues]) =>
       categoricalValues?.isNotEmpty == true
-          ? _vectorBasedStumpSelector.select(observations, target,
-          categoricalValues)
-          : _numberBasedStumpSelector.select(observations, target.firstValue);
+          ? _vectorBasedStumpSelector.select(
+              observations,
+              splittingFeatureRange,
+              categoricalValues
+            )
+          : _numberBasedStumpSelector.select(
+              observations,
+              splittingFeatureRange.firstValue,
+              _outcomesRange,
+            );
 }
