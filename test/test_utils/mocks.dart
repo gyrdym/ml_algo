@@ -16,6 +16,7 @@ import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/node_splitter/node_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/stump_selector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
@@ -53,6 +54,8 @@ class SplitterMock extends Mock implements Splitter {}
 class PredictorMock extends Mock implements Assessable {}
 
 class StumpAssessorMock extends Mock implements StumpAssessor {}
+
+class StumpSelectorMock extends Mock implements StumpSelector {}
 
 class NodeSplitterMock extends Mock implements NodeSplitter {}
 

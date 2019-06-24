@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class DecisionTreeNode {
@@ -13,11 +14,10 @@ class DecisionTreeOptimizer {
   DecisionTreeOptimizer(
       Matrix features,
       Matrix outcomes,
+      this._featuresRanges,
+      this._rangeToCategoricalValues,
       this._leafDetector,
       this._bestStumpFinder,
-      [
-        this._featuresRanges,
-      ]
   ) :
         _outcomesRange = ZRange.closedOpen(
             features.columnsNum,
@@ -29,9 +29,10 @@ class DecisionTreeOptimizer {
     ]), 0);
   }
 
+  final Iterable<ZRange> _featuresRanges;
+  final Map<ZRange, List<Vector>> _rangeToCategoricalValues;
   final LeafDetector _leafDetector;
   final BestStumpFinder _bestStumpFinder;
-  final Iterable<ZRange> _featuresRanges;
   final ZRange _outcomesRange;
   DecisionTreeNode _root;
 
@@ -42,8 +43,8 @@ class DecisionTreeOptimizer {
       return DecisionTreeNode([]);
     }
 
-    final bestStump = _bestStumpFinder
-        .find(observations, _outcomesRange, _featuresRanges);
+    final bestStump = _bestStumpFinder.find(observations, _outcomesRange,
+        _featuresRanges, _rangeToCategoricalValues);
 
     final childNodes = bestStump.map((nodeObservations) =>
         _createNode(nodeObservations, nodesCount + 1));
