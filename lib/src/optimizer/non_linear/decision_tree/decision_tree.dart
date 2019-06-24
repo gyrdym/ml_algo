@@ -1,14 +1,9 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
-
-class DecisionTreeNode {
-  DecisionTreeNode(this.children);
-
-  final Iterable<DecisionTreeNode> children;
-}
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(
@@ -40,7 +35,7 @@ class DecisionTreeOptimizer {
   /// into several parts
   DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
     if (_leafDetector.isLeaf(observations, _outcomesRange, nodesCount)) {
-      return DecisionTreeNode([]);
+      return DecisionTreeNode(null, observations);
     }
 
     final bestStump = _bestStumpFinder.find(observations, _outcomesRange,
@@ -49,6 +44,6 @@ class DecisionTreeOptimizer {
     final childNodes = bestStump.map((nodeObservations) =>
         _createNode(nodeObservations, nodesCount + 1));
 
-    return DecisionTreeNode(childNodes);
+    return DecisionTreeNode(childNodes, observations);
   }
 }
