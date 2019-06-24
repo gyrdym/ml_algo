@@ -1,9 +1,7 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/number_based/number_based_stump_selector.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/vector_based/vector_based_stump_selector.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/stump_selector.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class DecisionTreeNode {
@@ -18,8 +16,7 @@ class DecisionTreeOptimizer {
       Matrix outcomes,
       this._assessor,
       this._leafDetector,
-      this._numberBasedStumpSelector,
-      this._vectorBasedStumpSelector,
+      this._stumpSelector,
       [
         this._featuresRanges,
       ]
@@ -28,7 +25,7 @@ class DecisionTreeOptimizer {
             features.columnsNum,
             features.columnsNum + outcomes.columnsNum
         ) {
-    _root = _createNode(Matrix.fromColumns([
+    _root = _createTree(Matrix.fromColumns([
       ...features.columns,
       ...outcomes.columns,
     ]), 0);
@@ -36,28 +33,29 @@ class DecisionTreeOptimizer {
 
   final StumpAssessor _assessor;
   final LeafDetector _leafDetector;
-  final NumberBasedStumpSelector _numberBasedStumpSelector;
-  final VectorBasedStumpSelector _vectorBasedStumpSelector;
+  final StumpSelector _stumpSelector;
   final Iterable<ZRange> _featuresRanges;
   final ZRange _outcomesRange;
   DecisionTreeNode _root;
 
   /// Builds a tree, where each node is a logical rule, that divides given data
   /// into several parts
-  DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
+  DecisionTreeNode _createTree(Matrix observations, int nodesCount) {
     if (_leafDetector.isLeaf(observations, _outcomesRange, nodesCount)) {
       return DecisionTreeNode([]);
     }
     final range = _findSplittingFeatureRange(observations);
-    final children = _learnStump(observations, range)
-        .map((selected) => _createNode(selected, nodesCount + 1));
+    final children = _stumpSelector.select(observations, range,
+        _outcomesRange)
+        .map((selected) => _createTree(selected, nodesCount + 1));
     return DecisionTreeNode(children);
   }
 
   ZRange _findSplittingFeatureRange(Matrix observations) {
     final errors = <double, List<ZRange>>{};
     _featuresRanges.forEach((range) {
-      final stump = _learnStump(observations, range);
+      final stump = _stumpSelector.select(observations, range,
+          _outcomesRange);
       final error = _assessor.getErrorOnStump(stump, _outcomesRange);
       errors.putIfAbsent(error, () => []);
       errors[error].add(range);
@@ -67,18 +65,4 @@ class DecisionTreeOptimizer {
     final minError = sorted.first;
     return errors[minError].first;
   }
-
-  Iterable<Matrix> _learnStump(Matrix observations,
-      ZRange splittingFeatureRange, [List<Vector> categoricalValues]) =>
-      categoricalValues?.isNotEmpty == true
-          ? _vectorBasedStumpSelector.select(
-              observations,
-              splittingFeatureRange,
-              categoricalValues
-            )
-          : _numberBasedStumpSelector.select(
-              observations,
-              splittingFeatureRange.firstValue,
-              _outcomesRange,
-            );
 }
