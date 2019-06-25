@@ -115,7 +115,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump, equals([
+        expect(stump.observations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
@@ -152,7 +152,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump, equals([
+        expect(stump.observations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
@@ -185,7 +185,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump, equals([
+        expect(stump.observations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
@@ -211,7 +211,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump, equals(<Matrix>[]));
+        expect(stump.observations, equals(<Matrix>[]));
       });
 
       test('should return an empty stump if no one value from the splitting'
@@ -236,7 +236,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump, equals(<Matrix>[]));
+        expect(stump.observations, equals(<Matrix>[]));
       });
 
       test('should not throw an error if at least one\'s length of the given '
@@ -263,7 +263,7 @@ void main() {
           splittingValues,
         );
 
-        expect(stump, equals([
+        expect(stump.observations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
