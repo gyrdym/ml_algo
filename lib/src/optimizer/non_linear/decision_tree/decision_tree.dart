@@ -7,21 +7,14 @@ import 'package:xrange/zrange.dart';
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(
-      Matrix features,
-      Matrix outcomes,
+      Matrix observations,
       this._featuresRanges,
+      this._outcomesRange,
       this._rangeToCategoricalValues,
       this._leafDetector,
       this._bestStumpFinder,
-  ) :
-        _outcomesRange = ZRange.closedOpen(
-            features.columnsNum,
-            features.columnsNum + outcomes.columnsNum
-        ) {
-    _root = _createNode(Matrix.fromColumns([
-      ...features.columns,
-      ...outcomes.columns,
-    ]), 0);
+  ) {
+    _root = _createNode(observations, 0);
   }
 
   final Iterable<ZRange> _featuresRanges;
@@ -35,15 +28,15 @@ class DecisionTreeOptimizer {
   /// into several parts
   DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
     if (_leafDetector.isLeaf(observations, _outcomesRange, nodesCount)) {
-      return DecisionTreeNode(null, observations);
+      return DecisionTreeNode.leaf(observations);
     }
 
     final bestStump = _bestStumpFinder.find(observations, _outcomesRange,
         _featuresRanges, _rangeToCategoricalValues);
 
-    final childNodes = bestStump.map((nodeObservations) =>
+    final childNodes = bestStump.observations.map((nodeObservations) =>
         _createNode(nodeObservations, nodesCount + 1));
 
-    return DecisionTreeNode(childNodes, observations);
+    return DecisionTreeNode.fromStump(bestStump, childNodes);
   }
 }
