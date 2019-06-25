@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/greedy_stump_selector.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/node_splitter/node_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/observations_splitter/observations_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -325,7 +325,7 @@ void main() {
   });
 }
 
-NodeSplitter createSplitter(List<Map<String, dynamic>> mockedData) {
+ObservationsSplitter createSplitter(List<Map<String, dynamic>> mockedData) {
   final splitter = NodeSplitterMock();
   for (final splitInfo in mockedData) {
     final splittingValue = splitInfo['splittingValue'] as double;
