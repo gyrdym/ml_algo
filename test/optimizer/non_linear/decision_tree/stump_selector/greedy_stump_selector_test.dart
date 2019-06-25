@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/greedy_stump_selector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/node_splitter/node_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -26,25 +27,25 @@ void main() {
         final bestSplittingValue = 4.5;
         final splittingColumn = 0;
 
-        final mockedWorstStump = [
-          [[12.0, 22.0]],
-          [[19.0, 31.0]],
-        ];
+        final mockedWorstStump = DecisionTreeStump(null, null, null, [
+          Matrix.fromList([[12.0, 22.0]]),
+          Matrix.fromList([[19.0, 31.0]]),
+        ]);
 
-        final mockedWorseStump = [
-          [[13.0, 24.0]],
-          [[29.0, 53.0]],
-        ];
+        final mockedWorseStump = DecisionTreeStump(null, null, null, [
+          Matrix.fromList([[13.0, 24.0]]),
+          Matrix.fromList([[29.0, 53.0]]),
+        ]);
 
-        final mockedGoodStump = [
-          [[1.0, 2.0]],
-          [[9.0, 3.0]],
-        ];
+        final mockedGoodStump = DecisionTreeStump(null, null, null, [
+          Matrix.fromList([[1.0, 2.0]]),
+          Matrix.fromList([[9.0, 3.0]]),
+        ]);
 
-        final mockedBestStump = [
-          [[100.0, 200.0]],
-          [[300.0, 400.0]],
-        ];
+        final mockedBestStump = DecisionTreeStump(null, null, null, [
+          Matrix.fromList([[100.0, 200.0]]),
+          Matrix.fromList([[300.0, 400.0]]),
+        ]);
 
         final mockedSplitDataToBeReturned = [
           {
@@ -67,35 +68,27 @@ void main() {
 
         final assessor = StumpAssessorMock();
 
-        when(assessor.getErrorOnStump(
-            argThat(equals(mockedWorstStump)),
-            outcomesRange
-        )).thenReturn(0.99);
-        when(assessor.getErrorOnStump(
-          argThat(equals(mockedWorseStump)),
-          outcomesRange,
-        )).thenReturn(0.8);
-        when(assessor.getErrorOnStump(
-          argThat(equals(mockedGoodStump)),
-          outcomesRange,
-        )).thenReturn(0.4);
-        when(assessor.getErrorOnStump(
-          argThat(equals(mockedBestStump)),
-          outcomesRange,
-        )).thenReturn(0.1);
+        when(assessor.getErrorOnStump(mockedWorstStump.observations,
+            outcomesRange)).thenReturn(0.99);
+        when(assessor.getErrorOnStump(mockedWorseStump.observations,
+            outcomesRange)).thenReturn(0.8);
+        when(assessor.getErrorOnStump(mockedGoodStump.observations,
+            outcomesRange)).thenReturn(0.4);
+        when(assessor.getErrorOnStump(mockedBestStump.observations,
+            outcomesRange)).thenReturn(0.1);
 
         final splitter = createSplitter(mockedSplitDataToBeReturned);
         final selector = GreedyStumpSelector(assessor, splitter);
-        final nodes = selector.select(inputObservations,
+        final stump = selector.select(inputObservations,
             ZRange.singleton(splittingColumn), outcomesRange);
 
         for (final splitInfo in mockedSplitDataToBeReturned) {
           final splittingValue = splitInfo['splittingValue'] as double;
-          verify(splitter.split(argThat(equals(inputObservations)),
-              splittingColumn, splittingValue)).called(1);
+          verify(splitter.split(inputObservations, splittingColumn,
+              splittingValue)).called(1);
         }
 
-        expect(nodes, equals(mockedBestStump));
+        expect(stump.observations, equals(mockedBestStump.observations));
       });
     });
 
@@ -337,8 +330,8 @@ NodeSplitter createSplitter(List<Map<String, dynamic>> mockedData) {
   for (final splitInfo in mockedData) {
     final splittingValue = splitInfo['splittingValue'] as double;
     when(splitter.split(any, any, splittingValue)).thenAnswer((_) {
-      final stump = splitInfo['stump'] as List<List<List<double>>>;
-      return List.generate(stump.length, (i) => Matrix.fromList(stump[i]));
+      final stump = splitInfo['stump'] as DecisionTreeStump;
+      return stump.observations.toList();
     });
   }
   return splitter;

@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/greedy_stump_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -24,25 +25,25 @@ void main() {
       final goodRange = ZRange.singleton(3);
       final bestRange = ZRange.singleton(1);
 
-      final worstStump = [
+      final worstStump = DecisionTreeStump(null, null, null, [
         Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
         Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
-      ];
+      ]);
 
-      final worseStump = [
+      final worseStump = DecisionTreeStump(null, null, null, [
         Matrix.fromList([[5, 6, 7, 8, -1, -1, 0]]),
         Matrix.fromList([[50, 60, 70, 80, -1, -1, 0]]),
-      ];
+      ]);
 
-      final goodStump = [
+      final goodStump = DecisionTreeStump(null, null, null, [
         Matrix.fromList([[15, 16, 17, 18, -1, 0, 0]]),
         Matrix.fromList([[150, 160, 170, 180, -1, 0, 0]]),
-      ];
+      ]);
 
-      final bestStump = [
+      final bestStump = DecisionTreeStump(null, null, null, [
         Matrix.fromList([[125, 126, 127, 128, 0, 0, 0]]),
         Matrix.fromList([[1500, 1600, 1700, 1800, 0, 0, 0]]),
-      ];
+      ]);
 
       final featuresRanges = [
         worstRange, bestRange, worseRange, goodRange,
@@ -59,13 +60,13 @@ void main() {
       when(selector.select(observations, bestRange, outcomesRange))
           .thenReturn(bestStump);
 
-      when(assessor.getErrorOnStump(worstStump, outcomesRange))
+      when(assessor.getErrorOnStump(worstStump.observations, outcomesRange))
           .thenReturn(0.999);
-      when(assessor.getErrorOnStump(worseStump, outcomesRange))
+      when(assessor.getErrorOnStump(worseStump.observations, outcomesRange))
           .thenReturn(0.8);
-      when(assessor.getErrorOnStump(goodStump, outcomesRange))
+      when(assessor.getErrorOnStump(goodStump.observations, outcomesRange))
           .thenReturn(0.4);
-      when(assessor.getErrorOnStump(bestStump, outcomesRange))
+      when(assessor.getErrorOnStump(bestStump.observations, outcomesRange))
           .thenReturn(0.1);
 
       final finder = GreedyStumpFinder(assessor, selector);
@@ -88,21 +89,21 @@ void main() {
       final goodFeatureRange = ZRange.singleton(4);
       final bestFeatureRange = ZRange.closed(1, 3);
 
-      final badStump = [
+      final badStump = DecisionTreeStump(null, null, null, [
         Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
         Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
-      ];
+      ]);
 
-      final goodStump = [
+      final goodStump = DecisionTreeStump(null, null, null, [
         Matrix.fromList([[15, 16, 17, 18, -1, 0, 0]]),
         Matrix.fromList([[150, 160, 170, 180, -1, 0, 0]]),
-      ];
+      ]);
 
-      final bestStump = [
+      final bestStump = DecisionTreeStump(null, null, null, [
         Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
         Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
         Matrix.fromList([[12, 23, 33, 44, -1, -1, -1]]),
-      ];
+      ]);
 
       final featuresRanges = [
         badFeatureRange, bestFeatureRange, goodFeatureRange,
@@ -124,9 +125,12 @@ void main() {
       when(selector.select(observations, bestFeatureRange, outcomesRange,
           categoricalValues)).thenReturn(bestStump);
 
-      when(assessor.getErrorOnStump(badStump, outcomesRange)).thenReturn(0.999);
-      when(assessor.getErrorOnStump(goodStump, outcomesRange)).thenReturn(0.4);
-      when(assessor.getErrorOnStump(bestStump, outcomesRange)).thenReturn(0.1);
+      when(assessor.getErrorOnStump(badStump.observations, outcomesRange))
+          .thenReturn(0.999);
+      when(assessor.getErrorOnStump(goodStump.observations, outcomesRange))
+          .thenReturn(0.4);
+      when(assessor.getErrorOnStump(bestStump.observations, outcomesRange))
+          .thenReturn(0.1);
 
       final finder = GreedyStumpFinder(assessor, selector);
       final stump = finder.find(observations, outcomesRange, featuresRanges,
