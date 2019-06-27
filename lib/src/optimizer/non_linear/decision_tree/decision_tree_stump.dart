@@ -1,13 +1,12 @@
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decisition_tree_base_node.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class DecisionTreeStump {
-  DecisionTreeStump(this.splittingValue, this.categoricalValues,
-      this.splittingColumnRange, this.observations);
+class DecisionTreeStump extends DecisionTreeBaseNode {
+  DecisionTreeStump(double splittingValue, List<Vector> categoricalValues,
+      ZRange splittingColumnRange, this.outputObservations) :
+        super(splittingValue, categoricalValues, splittingColumnRange);
 
-  final double splittingValue;
-  final List<Vector> categoricalValues;
-  final ZRange splittingColumnRange;
-  final Iterable<Matrix> observations;
+  final Iterable<Matrix> outputObservations;
 }

@@ -28,13 +28,13 @@ class DecisionTreeOptimizer {
   /// into several parts
   DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
     if (_leafDetector.isLeaf(observations, _outcomesRange, nodesCount)) {
-      return DecisionTreeNode.leaf(observations);
+      return DecisionTreeNode.leaf();
     }
 
     final bestStump = _bestStumpFinder.find(observations, _outcomesRange,
         _featuresRanges, _rangeToCategoricalValues);
 
-    final childNodes = bestStump.observations.map((nodeObservations) =>
+    final childNodes = bestStump.outputObservations.map((nodeObservations) =>
         _createNode(nodeObservations, nodesCount + 1));
 
     return DecisionTreeNode.fromStump(bestStump, childNodes);

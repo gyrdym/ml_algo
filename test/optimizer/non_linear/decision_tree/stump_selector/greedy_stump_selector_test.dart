@@ -68,13 +68,13 @@ void main() {
 
         final assessor = StumpAssessorMock();
 
-        when(assessor.getErrorOnStump(mockedWorstStump.observations,
+        when(assessor.getErrorOnStump(mockedWorstStump.outputObservations,
             outcomesRange)).thenReturn(0.99);
-        when(assessor.getErrorOnStump(mockedWorseStump.observations,
+        when(assessor.getErrorOnStump(mockedWorseStump.outputObservations,
             outcomesRange)).thenReturn(0.8);
-        when(assessor.getErrorOnStump(mockedGoodStump.observations,
+        when(assessor.getErrorOnStump(mockedGoodStump.outputObservations,
             outcomesRange)).thenReturn(0.4);
-        when(assessor.getErrorOnStump(mockedBestStump.observations,
+        when(assessor.getErrorOnStump(mockedBestStump.outputObservations,
             outcomesRange)).thenReturn(0.1);
 
         final splitter = createSplitter(mockedSplitDataToBeReturned);
@@ -88,7 +88,7 @@ void main() {
               splittingValue)).called(1);
         }
 
-        expect(stump.observations, equals(mockedBestStump.observations));
+        expect(stump.outputObservations, equals(mockedBestStump.outputObservations));
       });
     });
 
@@ -115,7 +115,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump.observations, equals([
+        expect(stump.outputObservations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
@@ -152,7 +152,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump.observations, equals([
+        expect(stump.outputObservations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
@@ -185,7 +185,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump.observations, equals([
+        expect(stump.outputObservations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
@@ -211,7 +211,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump.observations, equals(<Matrix>[]));
+        expect(stump.outputObservations, equals(<Matrix>[]));
       });
 
       test('should return an empty stump if no one value from the splitting'
@@ -236,7 +236,7 @@ void main() {
           null,
           splittingValues,
         );
-        expect(stump.observations, equals(<Matrix>[]));
+        expect(stump.outputObservations, equals(<Matrix>[]));
       });
 
       test('should not throw an error if at least one\'s length of the given '
@@ -263,7 +263,7 @@ void main() {
           splittingValues,
         );
 
-        expect(stump.observations, equals([
+        expect(stump.outputObservations, equals([
           [
             [11, 22, 0, 0, 1, 30],
             [60, 23, 0, 0, 1, 20],
@@ -331,7 +331,7 @@ ObservationsSplitter createSplitter(List<Map<String, dynamic>> mockedData) {
     final splittingValue = splitInfo['splittingValue'] as double;
     when(splitter.split(any, any, splittingValue)).thenAnswer((_) {
       final stump = splitInfo['stump'] as DecisionTreeStump;
-      return stump.observations.toList();
+      return stump.outputObservations.toList();
     });
   }
   return splitter;

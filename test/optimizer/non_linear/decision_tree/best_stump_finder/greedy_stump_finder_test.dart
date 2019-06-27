@@ -60,13 +60,13 @@ void main() {
       when(selector.select(observations, bestRange, outcomesRange))
           .thenReturn(bestStump);
 
-      when(assessor.getErrorOnStump(worstStump.observations, outcomesRange))
+      when(assessor.getErrorOnStump(worstStump.outputObservations, outcomesRange))
           .thenReturn(0.999);
-      when(assessor.getErrorOnStump(worseStump.observations, outcomesRange))
+      when(assessor.getErrorOnStump(worseStump.outputObservations, outcomesRange))
           .thenReturn(0.8);
-      when(assessor.getErrorOnStump(goodStump.observations, outcomesRange))
+      when(assessor.getErrorOnStump(goodStump.outputObservations, outcomesRange))
           .thenReturn(0.4);
-      when(assessor.getErrorOnStump(bestStump.observations, outcomesRange))
+      when(assessor.getErrorOnStump(bestStump.outputObservations, outcomesRange))
           .thenReturn(0.1);
 
       final finder = GreedyStumpFinder(assessor, selector);
@@ -125,11 +125,11 @@ void main() {
       when(selector.select(observations, bestFeatureRange, outcomesRange,
           categoricalValues)).thenReturn(bestStump);
 
-      when(assessor.getErrorOnStump(badStump.observations, outcomesRange))
+      when(assessor.getErrorOnStump(badStump.outputObservations, outcomesRange))
           .thenReturn(0.999);
-      when(assessor.getErrorOnStump(goodStump.observations, outcomesRange))
+      when(assessor.getErrorOnStump(goodStump.outputObservations, outcomesRange))
           .thenReturn(0.4);
-      when(assessor.getErrorOnStump(bestStump.observations, outcomesRange))
+      when(assessor.getErrorOnStump(bestStump.outputObservations, outcomesRange))
           .thenReturn(0.1);
 
       final finder = GreedyStumpFinder(assessor, selector);
