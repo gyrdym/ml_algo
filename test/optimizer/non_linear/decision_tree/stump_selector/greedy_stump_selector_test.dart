@@ -68,13 +68,13 @@ void main() {
 
         final assessor = StumpAssessorMock();
 
-        when(assessor.getErrorOnStump(mockedWorstStump.outputObservations,
+        when(assessor.getAggregatedError(mockedWorstStump.outputObservations,
             outcomesRange)).thenReturn(0.99);
-        when(assessor.getErrorOnStump(mockedWorseStump.outputObservations,
+        when(assessor.getAggregatedError(mockedWorseStump.outputObservations,
             outcomesRange)).thenReturn(0.8);
-        when(assessor.getErrorOnStump(mockedGoodStump.outputObservations,
+        when(assessor.getAggregatedError(mockedGoodStump.outputObservations,
             outcomesRange)).thenReturn(0.4);
-        when(assessor.getErrorOnStump(mockedBestStump.outputObservations,
+        when(assessor.getAggregatedError(mockedBestStump.outputObservations,
             outcomesRange)).thenReturn(0.1);
 
         final splitter = createSplitter(mockedSplitDataToBeReturned);

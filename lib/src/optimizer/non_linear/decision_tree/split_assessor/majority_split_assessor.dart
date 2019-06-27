@@ -1,20 +1,20 @@
 import 'dart:collection';
 import 'dart:math' as math;
 
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class ClassifierStumpAssessor implements StumpAssessor {
-  const ClassifierStumpAssessor();
+class MajoritySplitAssessor implements SplitAssessor {
+  const MajoritySplitAssessor();
 
   @override
-  double getErrorOnStump(Iterable<Matrix> stumpObservations,
+  double getAggregatedError(Iterable<Matrix> splitObservations,
       ZRange outcomesRange) {
     int errorCount = 0;
     int totalCount = 0;
-    for (final nodeObservations in stumpObservations) {
+    for (final nodeObservations in splitObservations) {
       errorCount += _getErrorCount(nodeObservations
           .submatrix(columns: outcomesRange));
       totalCount += nodeObservations.rowsNum;
@@ -23,9 +23,9 @@ class ClassifierStumpAssessor implements StumpAssessor {
   }
 
   @override
-  double getErrorOnNode(Matrix nodeObservations, ZRange outcomesRange) =>
-      _getErrorCount(nodeObservations.submatrix(columns: outcomesRange)) /
-          nodeObservations.rowsNum;
+  double getError(Matrix splitObservations, ZRange outcomesRange) =>
+      _getErrorCount(splitObservations.submatrix(columns: outcomesRange)) /
+          splitObservations.rowsNum;
 
   int _getErrorCount(Matrix outcomes) {
     if (outcomes.rowsNum == 0) {

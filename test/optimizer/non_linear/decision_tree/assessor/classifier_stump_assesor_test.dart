@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/classifier_stump_assessor.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/majority_split_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
@@ -14,9 +14,9 @@ void main() {
           [30, 20, 30, 0, 0, 1],
           [40, 10, 20, 0, 1, 0],
         ]);
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.closed(3, 5);
-        final error = assessor.getErrorOnNode(node, outcomesRange);
+        final error = assessor.getError(node, outcomesRange);
         expect(error, 0.5);
       });
 
@@ -26,9 +26,9 @@ void main() {
           [10, 30, 1, 0, 0],
           [14, 20, 1, 0, 0],
         ]);
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.closed(2, 4);
-        final error = assessor.getErrorOnNode(node, outcomesRange);
+        final error = assessor.getError(node, outcomesRange);
         expect(error, 0);
       });
 
@@ -56,9 +56,9 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.closed(2, 4);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 5 / 12);
       });
@@ -84,9 +84,9 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.closed(2, 4);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 4 / 10);
       });
@@ -115,9 +115,9 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.closed(2, 4);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 0);
       });
@@ -137,9 +137,9 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.closed(2, 4);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 0);
       });
@@ -159,8 +159,8 @@ void main() {
         final stump = [node1, node2, node3];
 
         expect(
-            () => const ClassifierStumpAssessor()
-                .getErrorOnStump(stump, ZRange.closed(2, 4)),
+            () => const MajoritySplitAssessor()
+                .getAggregatedError(stump, ZRange.closed(2, 4)),
             throwsException,
         );
       });
@@ -189,9 +189,9 @@ void main() {
         ]);
 
         final stump = [node1, node2, node3];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.closed(2, 4);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 0.5);
       });
@@ -208,9 +208,9 @@ void main() {
           Matrix.fromColumns([Vector.randomFilled(4), outcomes2]),
           Matrix.fromColumns([Vector.randomFilled(4), outcomes3]),
         ];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.singleton(1);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 5 / 12);
       });
@@ -224,9 +224,9 @@ void main() {
           Matrix.fromColumns([Vector.randomFilled(5), outcomes2]),
           Matrix.fromColumns([Vector.randomFilled(6), outcomes3]),
         ];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.singleton(1);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 8 / 15);
       });
@@ -241,9 +241,9 @@ void main() {
           Matrix.fromColumns([Vector.randomFilled(4), outcomes2]),
           Matrix.fromColumns([Vector.randomFilled(4), outcomes3]),
         ];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.singleton(1);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 0);
       });
@@ -258,9 +258,9 @@ void main() {
           Matrix.fromColumns([Vector.randomFilled(1), outcomes2]),
           Matrix.fromColumns([Vector.randomFilled(1), outcomes3]),
         ];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.singleton(1);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 0);
       });
@@ -276,8 +276,8 @@ void main() {
           Matrix.fromColumns([Vector.randomFilled(2), outcomes3]),
         ];
         expect(
-            () => const ClassifierStumpAssessor()
-                .getErrorOnStump(stump, ZRange.singleton(1)),
+            () => const MajoritySplitAssessor()
+                .getAggregatedError(stump, ZRange.singleton(1)),
             throwsException,
         );
       });
@@ -292,9 +292,9 @@ void main() {
           Matrix.fromColumns([Vector.randomFilled(4), outcomes2]),
           Matrix.fromColumns([Vector.randomFilled(4), outcomes3]),
         ];
-        final assessor = const ClassifierStumpAssessor();
+        final assessor = const MajoritySplitAssessor();
         final outcomesRange = ZRange.singleton(1);
-        final error = assessor.getErrorOnStump(stump, outcomesRange);
+        final error = assessor.getAggregatedError(stump, outcomesRange);
 
         expect(error, 0.5);
       });
