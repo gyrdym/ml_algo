@@ -44,7 +44,7 @@ void main() {
       final assessor = StumpAssessorMock();
       final detector = LeafDetectorImpl(assessor, 3, 10);
 
-      when(assessor.getErrorOnNode(observations, ZRange.closed(2, 4)))
+      when(assessor.getError(observations, ZRange.closed(2, 4)))
           .thenReturn(3);
 
       final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4), 3);
@@ -61,7 +61,7 @@ void main() {
       final assessor = StumpAssessorMock();
       final detector = LeafDetectorImpl(assessor, 3, 10);
 
-      when(assessor.getErrorOnNode(observations, ZRange.closed(2, 4)))
+      when(assessor.getError(observations, ZRange.closed(2, 4)))
           .thenReturn(2);
 
       final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4), 3);
@@ -79,7 +79,7 @@ void main() {
       final assessor = StumpAssessorMock();
       final detector = LeafDetectorImpl(assessor, 3, 10);
 
-      when(assessor.getErrorOnNode(observations, ZRange.closed(1, 3)))
+      when(assessor.getError(observations, ZRange.closed(1, 3)))
           .thenReturn(4);
 
       final isLeaf = detector.isLeaf(observations, ZRange.closed(1, 3), 3);

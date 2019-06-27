@@ -1,6 +1,6 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/assessor/stump_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/stump_selector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -9,7 +9,7 @@ import 'package:xrange/zrange.dart';
 class GreedyStumpFinder implements BestStumpFinder {
   GreedyStumpFinder(this._assessor, this._stumpSelector);
 
-  final StumpAssessor _assessor;
+  final SplitAssessor _assessor;
   final StumpSelector _stumpSelector;
 
   @override
@@ -23,7 +23,7 @@ class GreedyStumpFinder implements BestStumpFinder {
           : null;
       final stump = _stumpSelector.select(observations, range,
           outcomesRange, categoricalValues);
-      final error = _assessor.getErrorOnStump(stump.outputObservations,
+      final error = _assessor.getAggregatedError(stump.outputObservations,
           outcomesRange);
       errors.update(error, (stumps) => stumps..add(stump),
           ifAbsent: () => [stump]);
