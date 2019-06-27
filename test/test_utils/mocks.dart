@@ -15,8 +15,8 @@ import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_w
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/observations_splitter/observations_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/stump_selector.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
@@ -53,11 +53,11 @@ class SplitterMock extends Mock implements Splitter {}
 
 class PredictorMock extends Mock implements Assessable {}
 
-class StumpAssessorMock extends Mock implements SplitAssessor {}
+class SplitAssessorMock extends Mock implements SplitAssessor {}
 
-class StumpSelectorMock extends Mock implements StumpSelector {}
+class StumpFactoryMock extends Mock implements StumpFactory {}
 
-class NodeSplitterMock extends Mock implements ObservationsSplitter {}
+class ObservationsSplitterMock extends Mock implements ObservationsSplitter {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,

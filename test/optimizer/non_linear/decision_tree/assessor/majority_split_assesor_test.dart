@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
 
 void main() {
-  group('ClassifierStumpAssessor', () {
+  group('MajorityStumpAssessor', () {
     group('when vectors are used as class labels', () {
       test('should return majority-based error on node', () {
         final node = Matrix.fromList([

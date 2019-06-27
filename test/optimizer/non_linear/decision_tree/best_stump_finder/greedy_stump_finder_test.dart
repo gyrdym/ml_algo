@@ -48,26 +48,26 @@ void main() {
       final featuresRanges = [
         worstRange, bestRange, worseRange, goodRange,
       ];
-      final assessor = StumpAssessorMock();
-      final selector = StumpSelectorMock();
+      final assessor = SplitAssessorMock();
+      final selector = StumpFactoryMock();
 
-      when(selector.select(observations, worstRange, outcomesRange))
+      when(selector.create(observations, worstRange, outcomesRange))
           .thenReturn(worstStump);
-      when(selector.select(observations, worseRange, outcomesRange))
+      when(selector.create(observations, worseRange, outcomesRange))
           .thenReturn(worseStump);
-      when(selector.select(observations, goodRange, outcomesRange))
+      when(selector.create(observations, goodRange, outcomesRange))
           .thenReturn(goodStump);
-      when(selector.select(observations, bestRange, outcomesRange))
+      when(selector.create(observations, bestRange, outcomesRange))
           .thenReturn(bestStump);
 
-      when(assessor.getAggregatedError(worstStump.outputObservations, outcomesRange))
-          .thenReturn(0.999);
-      when(assessor.getAggregatedError(worseStump.outputObservations, outcomesRange))
-          .thenReturn(0.8);
-      when(assessor.getAggregatedError(goodStump.outputObservations, outcomesRange))
-          .thenReturn(0.4);
-      when(assessor.getAggregatedError(bestStump.outputObservations, outcomesRange))
-          .thenReturn(0.1);
+      when(assessor.getAggregatedError(worstStump.outputObservations,
+          outcomesRange)).thenReturn(0.999);
+      when(assessor.getAggregatedError(worseStump.outputObservations,
+          outcomesRange)).thenReturn(0.8);
+      when(assessor.getAggregatedError(goodStump.outputObservations,
+          outcomesRange)).thenReturn(0.4);
+      when(assessor.getAggregatedError(bestStump.outputObservations,
+          outcomesRange)).thenReturn(0.1);
 
       final finder = GreedyStumpFinder(assessor, selector);
       final stump = finder.find(observations, outcomesRange, featuresRanges);
@@ -109,8 +109,8 @@ void main() {
         badFeatureRange, bestFeatureRange, goodFeatureRange,
       ];
 
-      final assessor = StumpAssessorMock();
-      final selector = StumpSelectorMock();
+      final assessor = SplitAssessorMock();
+      final selector = StumpFactoryMock();
       final categoricalValues = [
         Vector.fromList([1, 1, 1]),
         Vector.fromList([2, 2, 2]),
@@ -118,19 +118,19 @@ void main() {
       ];
       final rangeToCategoricalValues = {bestFeatureRange: categoricalValues};
 
-      when(selector.select(observations, badFeatureRange, outcomesRange))
+      when(selector.create(observations, badFeatureRange, outcomesRange))
           .thenReturn(badStump);
-      when(selector.select(observations, goodFeatureRange, outcomesRange))
+      when(selector.create(observations, goodFeatureRange, outcomesRange))
           .thenReturn(goodStump);
-      when(selector.select(observations, bestFeatureRange, outcomesRange,
+      when(selector.create(observations, bestFeatureRange, outcomesRange,
           categoricalValues)).thenReturn(bestStump);
 
-      when(assessor.getAggregatedError(badStump.outputObservations, outcomesRange))
-          .thenReturn(0.999);
-      when(assessor.getAggregatedError(goodStump.outputObservations, outcomesRange))
-          .thenReturn(0.4);
-      when(assessor.getAggregatedError(bestStump.outputObservations, outcomesRange))
-          .thenReturn(0.1);
+      when(assessor.getAggregatedError(badStump.outputObservations,
+          outcomesRange)).thenReturn(0.999);
+      when(assessor.getAggregatedError(goodStump.outputObservations,
+          outcomesRange)).thenReturn(0.4);
+      when(assessor.getAggregatedError(bestStump.outputObservations,
+          outcomesRange)).thenReturn(0.1);
 
       final finder = GreedyStumpFinder(assessor, selector);
       final stump = finder.find(observations, outcomesRange, featuresRanges,

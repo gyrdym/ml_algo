@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/greedy_stump_selector.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/observations_splitter/observations_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -10,10 +10,10 @@ import 'package:xrange/zrange.dart';
 import '../../../../test_utils/mocks.dart';
 
 void main() {
-  group('GreedyStumpSelector', () {
+  group('GreedyStumpFactory', () {
     group('(splitting by real number)', () {
       test('should sort observations (ASC-direction) by given column and '
-          'select stump with minimal error', () {
+          'create stump with minimal error on split', () {
         final inputObservations = Matrix.fromList([
           [10.0, 5.0],
           [-10.0, -20.0],
@@ -66,7 +66,7 @@ void main() {
           },
         ];
 
-        final assessor = StumpAssessorMock();
+        final assessor = SplitAssessorMock();
 
         when(assessor.getAggregatedError(mockedWorstStump.outputObservations,
             outcomesRange)).thenReturn(0.99);
@@ -78,8 +78,8 @@ void main() {
             outcomesRange)).thenReturn(0.1);
 
         final splitter = createSplitter(mockedSplitDataToBeReturned);
-        final selector = GreedyStumpSelector(assessor, splitter);
-        final stump = selector.select(inputObservations,
+        final stumpFactory = GreedyStumpFactory(assessor, splitter);
+        final stump = stumpFactory.create(inputObservations,
             ZRange.singleton(splittingColumn), outcomesRange);
 
         for (final splitInfo in mockedSplitDataToBeReturned) {
@@ -88,7 +88,8 @@ void main() {
               splittingValue)).called(1);
         }
 
-        expect(stump.outputObservations, equals(mockedBestStump.outputObservations));
+        expect(stump.outputObservations,
+            equals(mockedBestStump.outputObservations));
       });
     });
 
@@ -108,8 +109,8 @@ void main() {
           Vector.fromList([0, 1, 0]),
           Vector.fromList([1, 0, 0]),
         ];
-        final selector = GreedyStumpSelector(null, null);
-        final stump = selector.select(
+        final selector = GreedyStumpFactory(null, null);
+        final stump = selector.create(
           observations,
           splittingColumnRange,
           null,
@@ -145,8 +146,8 @@ void main() {
         final splittingValues = [
           Vector.fromList([0, 0, 1]),
         ];
-        final selector = GreedyStumpSelector(null, null);
-        final stump = selector.select(
+        final stumpFactory = GreedyStumpFactory(null, null);
+        final stump = stumpFactory.create(
           observations,
           splittingColumnRange,
           null,
@@ -178,8 +179,8 @@ void main() {
         final splittingValues = [
           Vector.fromList([0, 0, 1]),
         ];
-        final selector = GreedyStumpSelector(null, null);
-        final stump = selector.select(
+        final stumpFactory = GreedyStumpFactory(null, null);
+        final stump = stumpFactory.create(
           observations,
           splittingColumnRange,
           null,
@@ -204,8 +205,8 @@ void main() {
         ]);
         final splittingColumnRange = ZRange.closed(2, 4);
         final splittingValues = <Vector>[];
-        final selector = GreedyStumpSelector(null, null);
-        final stump = selector.select(
+        final stumpFactory = GreedyStumpFactory(null, null);
+        final stump = stumpFactory.create(
           observations,
           splittingColumnRange,
           null,
@@ -229,8 +230,8 @@ void main() {
           Vector.randomFilled(3),
           Vector.randomFilled(3),
         ];
-        final selector = GreedyStumpSelector(null, null);
-        final stump = selector.select(
+        final stumpFactory = GreedyStumpFactory(null, null);
+        final stump = stumpFactory.create(
           observations,
           splittingColumnRange,
           null,
@@ -255,8 +256,8 @@ void main() {
           Vector.fromList([0, 1, 0]),
           Vector.fromList([1, 0, 0, 0]),
         ];
-        final selector = GreedyStumpSelector(null, null);
-        final stump = selector.select(
+        final stumpFactory = GreedyStumpFactory(null, null);
+        final stump = stumpFactory.create(
           observations,
           splittingColumnRange,
           null,
@@ -288,8 +289,8 @@ void main() {
           Vector.fromList([0, 0, 1]),
           Vector.fromList([0, 1, 0]),
         ];
-        final selector = GreedyStumpSelector(null, null);
-        final actual = () => selector.select(
+        final stumpFactory = GreedyStumpFactory(null, null);
+        final actual = () => stumpFactory.create(
           observations,
           splittingColumnRange,
           null,
@@ -312,8 +313,8 @@ void main() {
           Vector.fromList([0, 0, 1]),
           Vector.fromList([0, 1, 0]),
         ];
-        final selector = GreedyStumpSelector(null, null);
-        final actual = () => selector.select(
+        final selector = GreedyStumpFactory(null, null);
+        final actual = () => selector.create(
           observations,
           splittingColumnRange,
           null,
@@ -326,7 +327,7 @@ void main() {
 }
 
 ObservationsSplitter createSplitter(List<Map<String, dynamic>> mockedData) {
-  final splitter = NodeSplitterMock();
+  final splitter = ObservationsSplitterMock();
   for (final splitInfo in mockedData) {
     final splittingValue = splitInfo['splittingValue'] as double;
     when(splitter.split(any, any, splittingValue)).thenAnswer((_) {
