@@ -41,7 +41,7 @@ void main() {
         [10, 2, 1, 0, 0],
         [20, 3, 0, 1, 0],
       ]);
-      final assessor = StumpAssessorMock();
+      final assessor = SplitAssessorMock();
       final detector = LeafDetectorImpl(assessor, 3, 10);
 
       when(assessor.getError(observations, ZRange.closed(2, 4)))
@@ -58,7 +58,7 @@ void main() {
         [10, 30, 1, 0, 0],
         [40, 50, 0, 1, 0],
       ]);
-      final assessor = StumpAssessorMock();
+      final assessor = SplitAssessorMock();
       final detector = LeafDetectorImpl(assessor, 3, 10);
 
       when(assessor.getError(observations, ZRange.closed(2, 4)))
@@ -76,7 +76,7 @@ void main() {
         [10, 1, 0, 0],
         [20, 0, 1, 0],
       ]);
-      final assessor = StumpAssessorMock();
+      final assessor = SplitAssessorMock();
       final detector = LeafDetectorImpl(assessor, 3, 10);
 
       when(assessor.getError(observations, ZRange.closed(1, 3)))

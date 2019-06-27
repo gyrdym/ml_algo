@@ -1,20 +1,20 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/observations_splitter/observations_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_selector/stump_selector.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class GreedyStumpSelector implements StumpSelector {
-  GreedyStumpSelector(this._assessor, this._nodeSplitter);
+class GreedyStumpFactory implements StumpFactory {
+  GreedyStumpFactory(this._assessor, this._nodeSplitter);
 
   final SplitAssessor _assessor;
   final ObservationsSplitter _nodeSplitter;
 
   @override
-  DecisionTreeStump select(Matrix observations, ZRange splittingColumnRange,
+  DecisionTreeStump create(Matrix observations, ZRange splittingColumnRange,
       ZRange outcomesRange, [List<Vector> categoricalValues]) =>
       categoricalValues != null
           ? _selectByCategoricalValues(observations, splittingColumnRange,

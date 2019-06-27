@@ -21,12 +21,12 @@ import 'optimizer/linear/gradient/gradient_optimizer_integration_test.dart'
     as gradient_optimizer_integration_test;
 import 'optimizer/linear/gradient/gradient_optimizer_test.dart'
     as gradient_optimizer_test;
-import 'optimizer/non_linear/decision_tree/assessor/classifier_stump_assesor_test.dart'
-    as classifier_stump_assesor_test;
-import 'optimizer/non_linear/decision_tree/stump_selector/observations_splitter/observations_splitter_impl_test.dart'
+import 'optimizer/non_linear/decision_tree/assessor/majority_split_assesor_test.dart'
+    as majority_split_assesor_test;
+import 'optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter_impl_test.dart'
     as obervations_splitter_impl_test;
-import 'optimizer/non_linear/decision_tree/stump_selector/greedy_stump_selector_test.dart'
-    as greedy_stump_selector_test;
+import 'optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory_test.dart'
+    as greedy_stump_factory_test;
 import 'optimizer/non_linear/decision_tree/best_stump_finder/greedy_stump_finder_test.dart'
     as greedy_stump_finder_test;
 import 'optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl_test.dart'
@@ -53,10 +53,10 @@ void main() {
   coord_optimizer_integration_test.main();
   gradient_optimizer_integration_test.main();
   gradient_optimizer_test.main();
-  classifier_stump_assesor_test.main();
+  majority_split_assesor_test.main();
   leaf_detector_impl_test.main();
   obervations_splitter_impl_test.main();
-  greedy_stump_selector_test.main();
+  greedy_stump_factory_test.main();
   greedy_stump_finder_test.main();
   knn_regressor_integration_test.main();
   knn_regressor_test.main();
