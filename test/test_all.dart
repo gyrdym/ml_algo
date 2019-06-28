@@ -31,6 +31,8 @@ import 'optimizer/non_linear/decision_tree/best_stump_finder/greedy_stump_finder
     as greedy_stump_finder_test;
 import 'optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl_test.dart'
     as leaf_detector_impl_test;
+import 'optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory_test.dart'
+    as majority_leaf_label_factory_test;
 import 'regressor/knn_regressor_integration_test.dart'
     as knn_regressor_integration_test;
 import 'regressor/knn_regressor_test.dart'
@@ -55,6 +57,7 @@ void main() {
   gradient_optimizer_test.main();
   majority_split_assesor_test.main();
   leaf_detector_impl_test.main();
+  majority_leaf_label_factory_test.main();
   obervations_splitter_impl_test.main();
   greedy_stump_factory_test.main();
   greedy_stump_finder_test.main();

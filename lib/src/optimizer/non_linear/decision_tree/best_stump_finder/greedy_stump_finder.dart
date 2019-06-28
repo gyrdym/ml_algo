@@ -7,10 +7,10 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class GreedyStumpFinder implements BestStumpFinder {
-  GreedyStumpFinder(this._assessor, this._stumpSelector);
+  GreedyStumpFinder(this._assessor, this._stumpFactory);
 
   final SplitAssessor _assessor;
-  final StumpFactory _stumpSelector;
+  final StumpFactory _stumpFactory;
 
   @override
   DecisionTreeStump find(Matrix observations, ZRange outcomesRange,
@@ -21,7 +21,7 @@ class GreedyStumpFinder implements BestStumpFinder {
       final categoricalValues = rangeToCategoricalValues != null
           ? rangeToCategoricalValues[range]
           : null;
-      final stump = _stumpSelector.create(observations, range,
+      final stump = _stumpFactory.create(observations, range,
           outcomesRange, categoricalValues);
       final error = _assessor.getAggregatedError(stump.outputObservations,
           outcomesRange);

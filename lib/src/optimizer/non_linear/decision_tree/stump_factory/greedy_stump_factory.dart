@@ -17,11 +17,11 @@ class GreedyStumpFactory implements StumpFactory {
   DecisionTreeStump create(Matrix observations, ZRange splittingColumnRange,
       ZRange outcomesRange, [List<Vector> categoricalValues]) =>
       categoricalValues != null
-          ? _selectByCategoricalValues(observations, splittingColumnRange,
+          ? _createByCategoricalValues(observations, splittingColumnRange,
             categoricalValues)
-          : _selectByNumber(observations, splittingColumnRange, outcomesRange);
+          : _createByNumber(observations, splittingColumnRange, outcomesRange);
 
-  DecisionTreeStump _selectByCategoricalValues(Matrix observations,
+  DecisionTreeStump _createByCategoricalValues(Matrix observations,
       ZRange splittingColumnRange, List<Vector> categoricalValues) {
     if (splittingColumnRange.firstValue < 0 ||
         splittingColumnRange.lastValue > observations.columnsNum) {
@@ -40,7 +40,7 @@ class GreedyStumpFactory implements StumpFactory {
         stumpObservations);
   }
 
-  DecisionTreeStump _selectByNumber(Matrix observations,
+  DecisionTreeStump _createByNumber(Matrix observations,
       ZRange splittingColumnRange, ZRange outcomesRange) {
     final selectedColumnIdx = splittingColumnRange.firstValue;
     final errors = <double, DecisionTreeStump>{};
@@ -51,7 +51,8 @@ class GreedyStumpFactory implements StumpFactory {
       final splittingValue = (prevValue + row[selectedColumnIdx]) / 2;
       final stumpObservations = _nodeSplitter
           .split(observations, selectedColumnIdx, splittingValue);
-      final error = _assessor.getAggregatedError(stumpObservations, outcomesRange);
+      final error = _assessor
+          .getAggregatedError(stumpObservations, outcomesRange);
       errors[error] = DecisionTreeStump(splittingValue, null,
           splittingColumnRange, stumpObservations);
       prevValue = row[selectedColumnIdx];
