@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/class_labels_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/class_labels_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -150,7 +150,7 @@ ClassLabelsDistributionCalculator createDistributionCounter<T>(
     Iterable<T> values, HashMap<T, double> distribution) {
   final distributionCalculator = ClassLabelsDistributionCalculatorMock();
 
-  when(distributionCalculator.count<T>(argThat(equals(values)), any))
+  when(distributionCalculator.calculate<T>(argThat(equals(values)), any))
       .thenReturn(distribution);
 
   return distributionCalculator;

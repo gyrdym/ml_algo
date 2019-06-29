@@ -14,7 +14,7 @@ import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_w
 import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/class_labels_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/class_labels_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';

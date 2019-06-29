@@ -1,11 +1,12 @@
 import 'dart:collection';
 
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/class_labels_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/class_labels_distribution_calculator/distribution_calculator.dart';
 
 class ClassLabelsDistributionCalculatorImpl implements
     ClassLabelsDistributionCalculator {
   @override
-  HashMap<T, double> count<T>(Iterable<T> classLabels, int classLabelsLength) {
+  HashMap<T, double> calculate<T>(Iterable<T> classLabels,
+      int classLabelsLength) {
     final bins = HashMap<T, double>();
     final probabilityStep = 1 / classLabelsLength;
     classLabels.forEach((value) =>
