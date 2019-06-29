@@ -5,10 +5,14 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/observations_dist
 class ObservationsDistributionCounterImpl implements
     ObservationsDistributionCounter {
   @override
-  HashMap<T, int> count<T>(Iterable<T> observations) {
-    final bins = HashMap<T, int>();
-    observations.forEach((value) =>
-        bins.update(value, (existing) => existing + 1, ifAbsent: () => 1));
+  HashMap<T, double> count<T>(Iterable<T> values, int valuesLength) {
+    final bins = HashMap<T, double>();
+    final probabilityStep = 1 / valuesLength;
+    values.forEach((value) =>
+        bins.update(value,
+            (existing) => existing + probabilityStep,
+            ifAbsent: () => probabilityStep),
+    );
     return bins;
   }
 }
