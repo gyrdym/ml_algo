@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/class_labels_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/class_labels_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -10,9 +10,9 @@ import 'package:tuple/tuple.dart';
 import 'package:xrange/zrange.dart';
 
 class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
-  MajorityLeafLabelFactory(this.distributionCounter);
+  MajorityLeafLabelFactory(this.distributionCalculator);
 
-  final ClassLabelsDistributionCalculator distributionCounter;
+  final ClassLabelsDistributionCalculator distributionCalculator;
 
   @override
   DecisionTreeLeafLabel create(Matrix observations, ZRange outcomesColumnRange,
@@ -33,7 +33,7 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   }
 
   Tuple2<T, double> _getLabelData<T>(Iterable<T> values, int totalCount) {
-    final distribution = distributionCounter.count<T>(values, totalCount);
+    final distribution = distributionCalculator.calculate<T>(values, totalCount);
     final targetLabelEntry = _findEntryWithMaxProbability(distribution);
     return Tuple2(targetLabelEntry.key, targetLabelEntry.value);
   }
