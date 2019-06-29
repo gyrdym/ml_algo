@@ -1,7 +1,7 @@
 import 'dart:collection';
 
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/class_labels_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/observations_distribution_counter/distribution_counter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -36,11 +36,11 @@ void main() {
         secondClassLabel: secondClassProbability,
         thirdClassLabel: thirdClassProbability,
       });
-      final distributionCounter = createDistributionCounter<double>(
+      final distributionCalculator = createDistributionCounter<double>(
           observations.getColumn(3),
           distribution,
       );
-      final labelFactory = MajorityLeafLabelFactory(distributionCounter);
+      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, outcomesColumnRange,
           false);
 
@@ -66,11 +66,11 @@ void main() {
         classLabel: classProbability,
       });
 
-      final distributionCounter = createDistributionCounter<double>(
+      final distributionCalculator = createDistributionCounter<double>(
         observations.getColumn(3),
         distribution,
       );
-      final labelFactory = MajorityLeafLabelFactory(distributionCounter);
+      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, outcomesColumnRange,
           false);
 
@@ -103,11 +103,11 @@ void main() {
         secondClassLabel: secondClassProbability,
         thirdClassLabel: thirdClassProbability,
       });
-      final distributionCounter = createDistributionCounter<Vector>(
+      final distributionCalculator = createDistributionCounter<Vector>(
         [Vector.fromList([0, 0, 1])],
         distribution,
       );
-      final labelFactory = MajorityLeafLabelFactory(distributionCounter);
+      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, outcomesColumnRange,
           true);
 
@@ -131,11 +131,11 @@ void main() {
         classLabel: classProbability,
       });
 
-      final distributionCounter = createDistributionCounter<Vector>(
+      final distributionCalculator = createDistributionCounter<Vector>(
         [Vector.fromList([0, 1, 0])],
         distribution,
       );
-      final labelFactory = MajorityLeafLabelFactory(distributionCounter);
+      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, outcomesColumnRange,
           true);
 
@@ -146,12 +146,12 @@ void main() {
   });
 }
 
-ObservationsDistributionCounter createDistributionCounter<T>(
+ClassLabelsDistributionCalculator createDistributionCounter<T>(
     Iterable<T> values, HashMap<T, double> distribution) {
-  final distributionCounter = ObservationsDistributionCounterMock();
+  final distributionCalculator = ClassLabelsDistributionCalculatorMock();
 
-  when(distributionCounter.count<T>(argThat(equals(values)), any))
+  when(distributionCalculator.count<T>(argThat(equals(values)), any))
       .thenReturn(distribution);
 
-  return distributionCounter;
+  return distributionCalculator;
 }

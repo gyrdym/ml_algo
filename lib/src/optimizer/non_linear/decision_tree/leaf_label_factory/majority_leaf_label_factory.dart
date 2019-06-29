@@ -1,8 +1,8 @@
 import 'dart:collection';
 
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/class_labels_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/observations_distribution_counter/distribution_counter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart' as quiver_iterables;
@@ -12,7 +12,7 @@ import 'package:xrange/zrange.dart';
 class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   MajorityLeafLabelFactory(this.distributionCounter);
 
-  final ObservationsDistributionCounter distributionCounter;
+  final ClassLabelsDistributionCalculator distributionCounter;
 
   @override
   DecisionTreeLeafLabel create(Matrix observations, ZRange outcomesColumnRange,
