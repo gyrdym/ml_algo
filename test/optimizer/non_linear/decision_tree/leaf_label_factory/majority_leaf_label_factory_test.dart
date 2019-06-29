@@ -23,18 +23,18 @@ void main() {
       final outcomesColumnRange = ZRange.singleton(3);
 
       final firstClassLabel = 0.0;
-      final firstClassLabelCount = 10000;
+      final firstClassProbability = 0.7;
 
       final secondClassLabel = 2.0;
-      final secondClassLabelCount = 50;
+      final secondClassProbability = 0.1;
 
       final thirdClassLabel = 3.0;
-      final thirdClassLabelCount = 1;
+      final thirdClassProbability = 0.2;
 
-      final distribution = HashMap<double, int>.from(<double, int>{
-        firstClassLabel: firstClassLabelCount,
-        secondClassLabel: secondClassLabelCount,
-        thirdClassLabel: thirdClassLabelCount,
+      final distribution = HashMap<double, double>.from(<double, double>{
+        firstClassLabel: firstClassProbability,
+        secondClassLabel: secondClassProbability,
+        thirdClassLabel: thirdClassProbability,
       });
       final distributionCounter = createDistributionCounter<double>(
           observations.getColumn(3),
@@ -45,6 +45,8 @@ void main() {
           false);
 
       expect(label.numericalValue, equals(0));
+      expect(label.categoricalValue, isNull);
+      expect(label.probability, equals(firstClassProbability));
     });
 
     test('should create decision tree leaf label in case when the class '
@@ -52,14 +54,16 @@ void main() {
         'label', () {
       final observations = Matrix.fromList([
         [10, 20, 30, 3],
+        [17, 10, 32, 3],
+        [70, 80, 90, 3],
       ]);
       final outcomesColumnRange = ZRange.singleton(3);
 
       final classLabel = 3.0;
-      final classLabelCount = 20;
+      final classProbability = 1.0;
 
-      final distribution = HashMap<double, int>.from(<double, int>{
-        classLabel: classLabelCount,
+      final distribution = HashMap<double, double>.from(<double, double>{
+        classLabel: classProbability,
       });
 
       final distributionCounter = createDistributionCounter<double>(
@@ -70,7 +74,9 @@ void main() {
       final label = labelFactory.create(observations, outcomesColumnRange,
           false);
 
-      expect(label.numericalValue, equals(3));
+      expect(label.numericalValue, equals(classLabel));
+      expect(label.categoricalValue, isNull);
+      expect(label.probability, equals(classProbability));
     });
 
     test('should create decision tree leaf label in case when the class '
@@ -84,18 +90,18 @@ void main() {
       final outcomesColumnRange = ZRange.closed(3, 5);
 
       final firstClassLabel = Vector.fromList([0, 0, 1]);
-      final firstClassLabelCount = 550;
+      final firstClassProbability = 0.09;
 
       final secondClassLabel = Vector.fromList([1, 0, 0]);
-      final secondClassLabelCount = 549;
+      final secondClassProbability = 0.6;
 
       final thirdClassLabel = Vector.fromList([0, 1, 0]);
-      final thirdClassLabelCount = 551;
+      final thirdClassProbability = 0.31;
 
-      final distribution = HashMap<Vector, int>.from(<Vector, int>{
-        firstClassLabel: firstClassLabelCount,
-        secondClassLabel: secondClassLabelCount,
-        thirdClassLabel: thirdClassLabelCount,
+      final distribution = HashMap<Vector, double>.from(<Vector, double>{
+        firstClassLabel: firstClassProbability,
+        secondClassLabel: secondClassProbability,
+        thirdClassLabel: thirdClassProbability,
       });
       final distributionCounter = createDistributionCounter<Vector>(
         [Vector.fromList([0, 0, 1])],
@@ -105,8 +111,9 @@ void main() {
       final label = labelFactory.create(observations, outcomesColumnRange,
           true);
 
-      expect(label.categoricalValue, equals(thirdClassLabel));
+      expect(label.categoricalValue, equals(secondClassLabel));
       expect(label.numericalValue, isNull);
+      expect(label.probability, equals(secondClassProbability));
     });
 
     test('should create decision tree leaf label in case when the class '
@@ -118,10 +125,10 @@ void main() {
       final outcomesColumnRange = ZRange.closed(3, 5);
 
       final classLabel = Vector.fromList([0, 0, 1]);
-      final classLabelCount = 121;
+      final classProbability = 1.0;
 
-      final distribution = HashMap<Vector, int>.from(<Vector, int>{
-        classLabel: classLabelCount,
+      final distribution = HashMap<Vector, double>.from(<Vector, double>{
+        classLabel: classProbability,
       });
 
       final distributionCounter = createDistributionCounter<Vector>(
@@ -134,15 +141,16 @@ void main() {
 
       expect(label.categoricalValue, equals(classLabel));
       expect(label.numericalValue, isNull);
+      expect(label.probability, classProbability);
     });
   });
 }
 
 ObservationsDistributionCounter createDistributionCounter<T>(
-    Iterable<T> values, HashMap<T, int> distribution) {
+    Iterable<T> values, HashMap<T, double> distribution) {
   final distributionCounter = ObservationsDistributionCounterMock();
 
-  when(distributionCounter.count<T>(argThat(equals(values))))
+  when(distributionCounter.count<T>(argThat(equals(values)), any))
       .thenReturn(distribution);
 
   return distributionCounter;

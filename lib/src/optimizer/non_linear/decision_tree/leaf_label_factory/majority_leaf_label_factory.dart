@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/observations_distribution_counter/distribution_counter.dart';
@@ -31,12 +33,19 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   }
 
   Tuple2<T, double> _getLabelData<T>(Iterable<T> values, int totalCount) {
-    final distribution = distributionCounter.count<T>(values);
-    final targetLabelEntry = quiver_iterables.max<MapEntry<T, int>>(
-      distribution.entries,
-      (first, second) => first.value - second.value,
-    );
-    final probability = targetLabelEntry.value / totalCount;
-    return Tuple2(targetLabelEntry.key, probability);
+    final distribution = distributionCounter.count<T>(values, totalCount);
+    final targetLabelEntry = _findEntryWithMaxProbability(distribution);
+    return Tuple2(targetLabelEntry.key, targetLabelEntry.value);
   }
+
+  MapEntry<T, double> _findEntryWithMaxProbability<T>(
+      HashMap<T, double> distribution) =>
+    quiver_iterables.max<MapEntry<T, double>>(
+      distribution.entries, (first, second) {
+        final diff = first.value - second.value;
+        if (diff < 0) return -1;
+        if (diff > 0) return 1;
+        return 0;
+      },
+    );
 }
