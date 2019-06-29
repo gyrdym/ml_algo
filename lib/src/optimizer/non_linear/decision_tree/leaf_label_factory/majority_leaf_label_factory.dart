@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:ml_algo/src/common/class_labels_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -12,7 +12,7 @@ import 'package:xrange/zrange.dart';
 class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   MajorityLeafLabelFactory(this.distributionCalculator);
 
-  final ClassLabelsDistributionCalculator distributionCalculator;
+  final SequenceElementsDistributionCalculator distributionCalculator;
 
   @override
   DecisionTreeLeafLabel create(Matrix observations, ZRange outcomesColumnRange,

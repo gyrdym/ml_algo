@@ -5,8 +5,8 @@ import 'classifier/logistic_regressor_integration_test.dart'
     as logistic_regressor_integration_test;
 import 'classifier/logistic_regressor_test.dart' as logistic_regressor_test;
 import 'classifier/softmax_regressor_test.dart' as softmax_regressor_test;
-import 'common/class_labels_distribution_calculator/distribution_calculator_impl_test.dart'
-    as distribution_calculator_impl_test;
+import 'common/sequence_elements_distribution_calculator/distribution_calculator_impl_test.dart'
+    as sequence_elements_distribution_calculator_impl_test;
 import 'cost_function/cost_function_test.dart' as cost_function_test;
 import 'cross_validator/cross_validator_impl_test.dart'
     as cross_validator_impl_test;
@@ -47,7 +47,7 @@ void main() {
   logistic_regressor_integration_test.main();
   logistic_regressor_test.main();
   softmax_regressor_test.main();
-  distribution_calculator_impl_test.main();
+  sequence_elements_distribution_calculator_impl_test.main();
   cost_function_test.main();
   cross_validator_impl_test.main();
   k_fold_splitter_test.main();
