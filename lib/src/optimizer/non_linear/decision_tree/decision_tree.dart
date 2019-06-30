@@ -6,31 +6,31 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class DecisionTreeOptimizer<T> {
+class DecisionTreeOptimizer {
   DecisionTreeOptimizer(
       Matrix observations,
-      this._featuresRanges,
+      this._featuresColumnRanges,
       this._outcomesColumnRange,
       this._rangeToCategoricalValues,
       this._leafDetector,
       this._leafLabelFactory,
       this._bestStumpFinder,
   ) {
-    _root = _createNode(observations, 0);
+    _root = _createNode(observations);
   }
 
-  final Iterable<ZRange> _featuresRanges;
+  final Iterable<ZRange> _featuresColumnRanges;
+  final ZRange _outcomesColumnRange;
   final Map<ZRange, List<Vector>> _rangeToCategoricalValues;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
   final BestStumpFinder _bestStumpFinder;
-  final ZRange _outcomesColumnRange;
+
+  DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
 
-  /// Builds a tree, where each node is a logical rule, that divides given data
-  /// into several parts
-  DecisionTreeNode _createNode(Matrix observations, int nodesCount) {
-    if (_leafDetector.isLeaf(observations, _outcomesColumnRange, nodesCount)) {
+  DecisionTreeNode _createNode(Matrix observations) {
+    if (_leafDetector.isLeaf(observations, _outcomesColumnRange)) {
       return DecisionTreeNode.leaf(_leafLabelFactory.create(
           observations,
           _outcomesColumnRange,
@@ -39,11 +39,11 @@ class DecisionTreeOptimizer<T> {
     }
 
     final bestStump = _bestStumpFinder.find(observations, _outcomesColumnRange,
-        _featuresRanges, _rangeToCategoricalValues);
+        _featuresColumnRanges, _rangeToCategoricalValues);
 
-    final childNodes = bestStump.outputObservations.map((nodeObservations) =>
-        _createNode(nodeObservations, nodesCount + 1));
+    final childNodes = bestStump.outputObservations.map(_createNode);
 
-    return DecisionTreeNode.fromStump(bestStump, childNodes);
+    return DecisionTreeNode.fromStump(bestStump,
+        childNodes.toList(growable: false));
   }
 }

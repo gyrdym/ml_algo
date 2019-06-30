@@ -4,16 +4,16 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/zrange.dart';
 
 class LeafDetectorImpl implements LeafDetector {
-  const LeafDetectorImpl(this._assessor, this._minErrorOnNode,
-      this._maxNodesCount);
+  LeafDetectorImpl(this._assessor, this._minErrorOnNode,
+      this._minSamplesCount);
 
   final SplitAssessor _assessor;
-  final int _maxNodesCount;
-  final int _minErrorOnNode;
+  final int _minSamplesCount;
+  final double _minErrorOnNode;
 
   @override
-  bool isLeaf(Matrix observations, ZRange outcomesRange, int nodesCount) {
-    if (nodesCount >= _maxNodesCount) {
+  bool isLeaf(Matrix observations, ZRange outcomesRange) {
+    if (observations.rowsNum <= _minSamplesCount) {
       return true;
     }
     final outcomes = observations.submatrix(columns: outcomesRange);
