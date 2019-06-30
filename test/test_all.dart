@@ -35,6 +35,8 @@ import 'optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory_te
     as greedy_stump_factory_test;
 import 'optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter_impl_test.dart'
     as obervations_splitter_impl_test;
+import 'optimizer/non_linear/decision_tree/decision_tree_test.dart'
+    as decision_tree_optimizer_test;
 import 'regressor/knn_regressor_integration_test.dart'
     as knn_regressor_integration_test;
 import 'regressor/knn_regressor_test.dart'
@@ -64,8 +66,8 @@ void main() {
   obervations_splitter_impl_test.main();
   greedy_stump_factory_test.main();
   greedy_stump_finder_test.main();
+  decision_tree_optimizer_test.main();
   knn_regressor_integration_test.main();
   knn_regressor_test.main();
   link_function_test.main();
-
 }

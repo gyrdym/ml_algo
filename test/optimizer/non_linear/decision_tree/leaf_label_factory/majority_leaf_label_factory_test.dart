@@ -36,7 +36,7 @@ void main() {
         secondClassLabel: secondClassProbability,
         thirdClassLabel: thirdClassProbability,
       });
-      final distributionCalculator = createDistributionCounter<double>(
+      final distributionCalculator = createDistributionCalculator<double>(
           observations.getColumn(3),
           distribution,
       );
@@ -66,7 +66,7 @@ void main() {
         classLabel: classProbability,
       });
 
-      final distributionCalculator = createDistributionCounter<double>(
+      final distributionCalculator = createDistributionCalculator<double>(
         observations.getColumn(3),
         distribution,
       );
@@ -103,7 +103,7 @@ void main() {
         secondClassLabel: secondClassProbability,
         thirdClassLabel: thirdClassProbability,
       });
-      final distributionCalculator = createDistributionCounter<Vector>(
+      final distributionCalculator = createDistributionCalculator<Vector>(
         [Vector.fromList([0, 0, 1])],
         distribution,
       );
@@ -131,7 +131,7 @@ void main() {
         classLabel: classProbability,
       });
 
-      final distributionCalculator = createDistributionCounter<Vector>(
+      final distributionCalculator = createDistributionCalculator<Vector>(
         [Vector.fromList([0, 1, 0])],
         distribution,
       );
@@ -146,7 +146,7 @@ void main() {
   });
 }
 
-SequenceElementsDistributionCalculator createDistributionCounter<T>(
+SequenceElementsDistributionCalculator createDistributionCalculator<T>(
     Iterable<T> values, HashMap<T, double> distribution) {
   final distributionCalculator = DistributionCalculatorMock();
 

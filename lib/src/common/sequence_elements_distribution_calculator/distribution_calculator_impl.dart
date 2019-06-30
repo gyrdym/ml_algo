@@ -4,6 +4,8 @@ import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/dis
 
 class SequenceElementsDistributionCalculatorImpl implements
     SequenceElementsDistributionCalculator {
+  const SequenceElementsDistributionCalculatorImpl();
+
   @override
   HashMap<T, double> calculate<T>(Iterable<T> sequence,
       [int classLabelsLength]) {

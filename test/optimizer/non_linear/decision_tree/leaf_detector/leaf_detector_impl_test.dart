@@ -8,17 +8,23 @@ import '../../../../test_utils/mocks.dart';
 
 void main() {
   group('LeafDetectorImpl', () {
-    test('should detect tree leaf if maximum node count was reached', () {
-      final detector = const LeafDetectorImpl(null, null, 10);
-      final isLeaf = detector.isLeaf(null, null, 10);
+    test('should detect tree leaf if given samples number is equal to minimum '
+        'allowed samples number', () {
+      final detector = LeafDetectorImpl(null, null, 2);
+      final isLeaf = detector.isLeaf(Matrix.fromList([
+        [1, 2, 3],
+        [2, 3, 4],
+      ]), null);
 
       expect(isLeaf, isTrue);
     });
 
-    test('should detect tree leaf if current node count exceeded the '
-        'limit', () {
-      final detector = const LeafDetectorImpl(null, null, 10);
-      final isLeaf = detector.isLeaf(null, null, 11);
+    test('should detect tree leaf if given samples number is less than the '
+        'minimum allowed number', () {
+      final detector = LeafDetectorImpl(null, null, 2);
+      final isLeaf = detector.isLeaf(Matrix.fromList([
+        [1, 2, 3],
+      ]), null);
 
       expect(isLeaf, isTrue);
     });
@@ -30,8 +36,8 @@ void main() {
         [10, 20, 1, 0, 0],
         [10, 20, 1, 0, 0],
       ]);
-      final detector = const LeafDetectorImpl(null, null, 10);
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4), 3);
+      final detector = LeafDetectorImpl(null, null, 2);
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4));
 
       expect(isLeaf, isTrue);
     });
@@ -42,12 +48,12 @@ void main() {
         [20, 3, 0, 1, 0],
       ]);
       final assessor = SplitAssessorMock();
-      final detector = LeafDetectorImpl(assessor, 3, 10);
+      final detector = LeafDetectorImpl(assessor, 3, 1);
 
       when(assessor.getError(observations, ZRange.closed(2, 4)))
           .thenReturn(3);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4), 3);
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4));
 
       expect(isLeaf, isTrue);
     });
@@ -59,12 +65,12 @@ void main() {
         [40, 50, 0, 1, 0],
       ]);
       final assessor = SplitAssessorMock();
-      final detector = LeafDetectorImpl(assessor, 3, 10);
+      final detector = LeafDetectorImpl(assessor, 3, 1);
 
       when(assessor.getError(observations, ZRange.closed(2, 4)))
           .thenReturn(2);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4), 3);
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4));
 
       expect(isLeaf, isTrue);
     });
@@ -77,12 +83,12 @@ void main() {
         [20, 0, 1, 0],
       ]);
       final assessor = SplitAssessorMock();
-      final detector = LeafDetectorImpl(assessor, 3, 10);
+      final detector = LeafDetectorImpl(assessor, 3, 1);
 
       when(assessor.getError(observations, ZRange.closed(1, 3)))
           .thenReturn(4);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(1, 3), 3);
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(1, 3));
 
       expect(isLeaf, isFalse);
     });
