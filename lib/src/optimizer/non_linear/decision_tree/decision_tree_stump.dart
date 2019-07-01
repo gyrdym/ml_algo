@@ -5,8 +5,8 @@ import 'package:xrange/zrange.dart';
 
 class DecisionTreeStump extends DecisionTreeBaseNode {
   DecisionTreeStump(double splittingValue, List<Vector> categoricalValues,
-      ZRange splittingColumnRange, this.outputObservations) :
+      ZRange splittingColumnRange, this.outputSamples) :
         super(splittingValue, categoricalValues, splittingColumnRange);
 
-  final Iterable<Matrix> outputObservations;
+  final Iterable<Matrix> outputSamples;
 }

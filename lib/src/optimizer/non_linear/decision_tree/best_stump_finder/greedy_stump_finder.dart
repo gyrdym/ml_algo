@@ -23,7 +23,7 @@ class GreedyStumpFinder implements BestStumpFinder {
           : null;
       final stump = _stumpFactory.create(observations, range,
           outcomesRange, categoricalValues);
-      final error = _assessor.getAggregatedError(stump.outputObservations,
+      final error = _assessor.getAggregatedError(stump.outputSamples,
           outcomesRange);
       errors.update(error, (stumps) => stumps..add(stump),
           ifAbsent: () => [stump]);
