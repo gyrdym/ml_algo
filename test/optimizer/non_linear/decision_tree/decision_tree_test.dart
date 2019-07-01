@@ -42,47 +42,53 @@ void main() {
       final leafDetector = LeafDetectorMock();
       final leafLabelFactory = LeafLabelFactoryMock();
       final bestStumpFinder = BestStumpFinderMock();
-      final mockIsLeafFn = (Matrix samples, bool isLeaf) =>
+
+      final mockIsLeafFnCall = (Matrix samples, bool isLeaf) =>
           mockLeafDetectorCall(leafDetector, samples, outcomesColumnRange,
               isLeaf);
-      final mockFindBestStumpFn = (Matrix input, double splitValue,
-          ZRange splitRange, List<Matrix> output) =>
+
+      final mockFindBestStumpFnCall = (Matrix input, {double expectedSplitValue,
+          ZRange expectedSplitRange, List<Matrix> expectedOutput}) =>
           mockStumpFinderCall(bestStumpFinder, input, outcomesColumnRange,
-              featuresColumnRange, rangeToCategoricalValues, output, splitValue,
-              null, splitRange);
+              featuresColumnRange, rangeToCategoricalValues, expectedOutput,
+              expectedSplitValue, null, expectedSplitRange);
 
-      mockIsLeafFn(observations, false);
+      mockIsLeafFnCall(observations, false);
 
-      mockFindBestStumpFn(observations, 34, ZRange.singleton(2), [
-        Matrix.fromList([
-          [10, 20, 30, 40, 0, 0, 1],
-        ]),
-        Matrix.fromList([
-          [90, 51, 34, 31, 0, 0, 1],
-          [23, 40, 90, 50, 0, 1, 0],
-          [55, 10, 22, 80, 1, 0, 0],
-        ]),
-      ]);
+      mockFindBestStumpFnCall(observations,
+          expectedSplitValue: 34,
+          expectedSplitRange: ZRange.singleton(2),
+          expectedOutput: [
+            Matrix.fromList([
+              [10, 20, 30, 40, 0, 0, 1],
+            ]),
+            Matrix.fromList([
+              [90, 51, 34, 31, 0, 0, 1],
+              [23, 40, 90, 50, 0, 1, 0],
+              [55, 10, 22, 80, 1, 0, 0],
+            ]),
+          ]
+      );
 
-      mockIsLeafFn(Matrix.fromList([
+      mockIsLeafFnCall(Matrix.fromList([
         [10, 20, 30, 40, 0, 0, 1]
       ]), true);
 
-      mockIsLeafFn(Matrix.fromList([
+      mockIsLeafFnCall(Matrix.fromList([
         [90, 51, 34, 31, 0, 0, 1],
         [23, 40, 90, 50, 0, 1, 0],
         [55, 10, 22, 80, 1, 0, 0],
       ]), false);
 
-      mockFindBestStumpFn(
+      mockFindBestStumpFnCall(
         Matrix.fromList([
           [90, 51, 34, 31, 0, 0, 1],
           [23, 40, 90, 50, 0, 1, 0],
           [55, 10, 22, 80, 1, 0, 0],
         ]),
-        50,
-        ZRange.singleton(3),
-        [
+        expectedSplitValue: 50,
+        expectedSplitRange: ZRange.singleton(3),
+        expectedOutput: [
           Matrix.fromList([
             [90, 51, 34, 31, 0, 0, 1],
             [23, 40, 90, 50, 0, 1, 0],
@@ -93,19 +99,19 @@ void main() {
         ],
       );
 
-      mockIsLeafFn(Matrix.fromList([
+      mockIsLeafFnCall(Matrix.fromList([
         [90, 51, 34, 31, 0, 0, 1],
         [23, 40, 90, 50, 0, 1, 0],
       ]), false);
 
-      mockFindBestStumpFn(
+      mockFindBestStumpFnCall(
         Matrix.fromList([
           [90, 51, 34, 31, 0, 0, 1],
           [23, 40, 90, 50, 0, 1, 0],
         ]),
-        90,
-        ZRange.singleton(0),
-        [
+        expectedSplitValue: 90,
+        expectedSplitRange: ZRange.singleton(0),
+        expectedOutput: [
           Matrix.fromList([
             [90, 51, 34, 31, 0, 0, 1],
           ]),
@@ -115,19 +121,19 @@ void main() {
         ],
       );
 
-      mockIsLeafFn(Matrix.fromList([
+      mockIsLeafFnCall(Matrix.fromList([
         [90, 51, 34, 31, 0, 0, 1],
       ]), true);
 
-      mockIsLeafFn(Matrix.fromList([
+      mockIsLeafFnCall(Matrix.fromList([
         [23, 40, 90, 50, 0, 1, 0],
       ]), true);
 
-      mockIsLeafFn(Matrix.fromList([
+      mockIsLeafFnCall(Matrix.fromList([
         [55, 10, 22, 80, 1, 0, 0],
       ]), true);
 
-      final tree = DecisionTreeOptimizer(
+      final rootNode = DecisionTreeOptimizer(
           observations,
           featuresColumnRange,
           outcomesColumnRange,
@@ -137,18 +143,45 @@ void main() {
           bestStumpFinder,
       ).root;
 
-      testTreeNode(tree, false, 34.0, ZRange.singleton(2), null, 2, null);
+      testTreeNode(rootNode,
+          shouldBeLeaf: false,
+          expectedSplittingNumericalValue: 34.0,
+          expectedSplittingColumnRange: ZRange.singleton(2),
+          expectedSplittingNominalValues: null,
+          expectedChildrenLength: 2,
+          expectedLabel: null
+      );
 
-      final firstLevel = tree.children;
+      final firstLevelNodes = rootNode.children;
 
-      testTreeNode(firstLevel.first, true, null, null, null, null, null);
-      testTreeNode(firstLevel.last, false, 50, ZRange.singleton(3), null, 2,
-          null);
+      testTreeNode(firstLevelNodes.first,
+          shouldBeLeaf: true,
+          expectedSplittingNumericalValue: null,
+          expectedSplittingColumnRange: null,
+          expectedSplittingNominalValues: null,
+          expectedChildrenLength: null,
+          expectedLabel: null,
+      );
 
-      final secondLevelRight = firstLevel.last.children;
+      testTreeNode(firstLevelNodes.last,
+          shouldBeLeaf: false,
+          expectedSplittingNumericalValue: 50,
+          expectedSplittingColumnRange: ZRange.singleton(3),
+          expectedSplittingNominalValues: null,
+          expectedChildrenLength: 2,
+          expectedLabel: null
+      );
 
-      testTreeNode(secondLevelRight.first, false, 90, ZRange.singleton(0), null,
-          2, null);
+      final secondLevelNodes = firstLevelNodes.last.children;
+
+      testTreeNode(secondLevelNodes.first,
+          shouldBeLeaf: false,
+          expectedSplittingNumericalValue: 90,
+          expectedSplittingColumnRange: ZRange.singleton(0),
+          expectedSplittingNominalValues: null,
+          expectedChildrenLength: 2,
+          expectedLabel: null
+      );
     });
   });
 }
@@ -193,25 +226,30 @@ void mockStumpFinderCall(
 
 void testTreeNode(
     DecisionTreeNode node,
-    bool isLeaf,
-    double splittingNumericalValue,
-    ZRange splittingColumnRange,
-    List<Vector> splittingNominalValues,
-    int childrenLength,
-    DecisionTreeLeafLabel expectedLabel,
+    {
+      bool shouldBeLeaf,
+      double expectedSplittingNumericalValue,
+      ZRange expectedSplittingColumnRange,
+      List<Vector> expectedSplittingNominalValues,
+      int expectedChildrenLength,
+      DecisionTreeLeafLabel expectedLabel,
+    }
 ) {
-  expect(node.isLeaf, equals(isLeaf));
-  expect(node.splittingNumericalValue, equals(splittingNumericalValue));
-  expect(node.splittingColumnRange, equals(splittingColumnRange));
-  expect(node.splittingNominalValues, equals(splittingNominalValues));
-  childrenLength == null
+  expect(node.isLeaf, equals(shouldBeLeaf));
+  expect(node.splittingNumericalValue, equals(expectedSplittingNumericalValue));
+  expect(node.splittingColumnRange, equals(expectedSplittingColumnRange));
+  expect(node.splittingNominalValues, equals(expectedSplittingNominalValues));
+  expectedChildrenLength == null
       ? expect(node.children, isNull)
-      : expect(node.children, hasLength(childrenLength));
+      : expect(node.children, hasLength(expectedChildrenLength));
   expectedLabel == null
       ? expect(node.label, isNull)
       : testLeafLabel(node.label, expectedLabel);
 }
 
-void testLeafLabel(DecisionTreeLeafLabel label, DecisionTreeLeafLabel expectedLabel) {
-
+void testLeafLabel(DecisionTreeLeafLabel label,
+    DecisionTreeLeafLabel expectedLabel) {
+  expect(label.nominalValue, equals(expectedLabel.nominalValue));
+  expect(label.numericalValue, equals(expectedLabel.numericalValue));
+  expect(label.probability, equals(expectedLabel.probability));
 }

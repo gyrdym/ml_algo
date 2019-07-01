@@ -1,13 +1,13 @@
 import 'package:ml_linalg/vector.dart';
 
 class DecisionTreeLeafLabel {
-  DecisionTreeLeafLabel.categorical(this.categoricalValue, {this.probability})
+  DecisionTreeLeafLabel.nominal(this.nominalValue, {this.probability})
       : numericalValue = null;
 
   DecisionTreeLeafLabel.numerical(this.numericalValue, {this.probability})
-      : categoricalValue = null;
+      : nominalValue = null;
 
-  final Vector categoricalValue;
+  final Vector nominalValue;
   final double numericalValue;
   final double probability;
 }

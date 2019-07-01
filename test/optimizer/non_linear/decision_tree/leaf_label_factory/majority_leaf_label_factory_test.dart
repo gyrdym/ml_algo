@@ -45,7 +45,7 @@ void main() {
           false);
 
       expect(label.numericalValue, equals(0));
-      expect(label.categoricalValue, isNull);
+      expect(label.nominalValue, isNull);
       expect(label.probability, equals(firstClassProbability));
     });
 
@@ -75,7 +75,7 @@ void main() {
           false);
 
       expect(label.numericalValue, equals(classLabel));
-      expect(label.categoricalValue, isNull);
+      expect(label.nominalValue, isNull);
       expect(label.probability, equals(classProbability));
     });
 
@@ -111,7 +111,7 @@ void main() {
       final label = labelFactory.create(observations, outcomesColumnRange,
           true);
 
-      expect(label.categoricalValue, equals(secondClassLabel));
+      expect(label.nominalValue, equals(secondClassLabel));
       expect(label.numericalValue, isNull);
       expect(label.probability, equals(secondClassProbability));
     });
@@ -139,7 +139,7 @@ void main() {
       final label = labelFactory.create(observations, outcomesColumnRange,
           true);
 
-      expect(label.categoricalValue, equals(classLabel));
+      expect(label.nominalValue, equals(classLabel));
       expect(label.numericalValue, isNull);
       expect(label.probability, classProbability);
     });
