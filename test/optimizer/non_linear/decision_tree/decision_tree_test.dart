@@ -4,6 +4,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_lea
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -47,6 +48,14 @@ void main() {
           mockLeafDetectorCall(leafDetector, samples, outcomesColumnRange,
               isLeaf);
 
+      final mockLeafLabelFactoryFnCall = ({Matrix leafObservations,
+        DecisionTreeLeafLabel expectedLabel}) =>
+          mockLeafLabelFactoryCall(leafLabelFactory: leafLabelFactory,
+              leafObservations: leafObservations,
+              outcomesColumnRange: outcomesColumnRange,
+              isClassLabelNominal: true,
+              expectedLabel: expectedLabel);
+
       final mockFindBestStumpFnCall = (Matrix input, {double expectedSplitValue,
           ZRange expectedSplitRange, List<Matrix> expectedOutput}) =>
           mockStumpFinderCall(bestStumpFinder, input, outcomesColumnRange,
@@ -73,6 +82,14 @@ void main() {
       mockIsLeafFnCall(Matrix.fromList([
         [10, 20, 30, 40, 0, 0, 1]
       ]), true);
+
+      mockLeafLabelFactoryFnCall(
+          leafObservations: Matrix.fromList([
+            [10, 20, 30, 40, 0, 0, 1]
+          ]),
+          expectedLabel: DecisionTreeLeafLabel
+              .nominal(Vector.fromList([0, 0, 1])),
+      );
 
       mockIsLeafFnCall(Matrix.fromList([
         [90, 51, 34, 31, 0, 0, 1],
@@ -125,13 +142,37 @@ void main() {
         [90, 51, 34, 31, 0, 0, 1],
       ]), true);
 
+      mockLeafLabelFactoryFnCall(
+        leafObservations: Matrix.fromList([
+          [90, 51, 34, 31, 0, 0, 1],
+        ]),
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 0, 1])),
+      );
+
       mockIsLeafFnCall(Matrix.fromList([
         [23, 40, 90, 50, 0, 1, 0],
       ]), true);
 
+      mockLeafLabelFactoryFnCall(
+        leafObservations: Matrix.fromList([
+          [23, 40, 90, 50, 0, 1, 0],
+        ]),
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 1, 0])),
+      );
+
       mockIsLeafFnCall(Matrix.fromList([
         [55, 10, 22, 80, 1, 0, 0],
       ]), true);
+
+      mockLeafLabelFactoryFnCall(
+        leafObservations: Matrix.fromList([
+          [55, 10, 22, 80, 1, 0, 0],
+        ]),
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([1, 0, 0])),
+      );
 
       final rootNode = DecisionTreeOptimizer(
           observations,
@@ -149,10 +190,12 @@ void main() {
           expectedSplittingColumnRange: ZRange.singleton(2),
           expectedSplittingNominalValues: null,
           expectedChildrenLength: 2,
-          expectedLabel: null
+          expectedLabel: null,
       );
 
       final firstLevelNodes = rootNode.children;
+      final secondLevelNodes = firstLevelNodes.last.children;
+      final thirdLevelNodes = secondLevelNodes.first.children;
 
       testTreeNode(firstLevelNodes.first,
           shouldBeLeaf: true,
@@ -160,7 +203,8 @@ void main() {
           expectedSplittingColumnRange: null,
           expectedSplittingNominalValues: null,
           expectedChildrenLength: null,
-          expectedLabel: null,
+          expectedLabel: DecisionTreeLeafLabel
+              .nominal(Vector.fromList([0, 0, 1])),
       );
 
       testTreeNode(firstLevelNodes.last,
@@ -172,8 +216,6 @@ void main() {
           expectedLabel: null
       );
 
-      final secondLevelNodes = firstLevelNodes.last.children;
-
       testTreeNode(secondLevelNodes.first,
           shouldBeLeaf: false,
           expectedSplittingNumericalValue: 90,
@@ -181,6 +223,36 @@ void main() {
           expectedSplittingNominalValues: null,
           expectedChildrenLength: 2,
           expectedLabel: null
+      );
+
+      testTreeNode(secondLevelNodes.last,
+          shouldBeLeaf: true,
+          expectedSplittingNumericalValue: null,
+          expectedSplittingColumnRange: null,
+          expectedSplittingNominalValues: null,
+          expectedChildrenLength: null,
+          expectedLabel: DecisionTreeLeafLabel
+              .nominal(Vector.fromList([1, 0, 0])),
+      );
+
+      testTreeNode(thirdLevelNodes.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingColumnRange: null,
+        expectedSplittingNominalValues: null,
+        expectedChildrenLength: null,
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 0, 1])),
+      );
+
+      testTreeNode(thirdLevelNodes.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingColumnRange: null,
+        expectedSplittingNominalValues: null,
+        expectedChildrenLength: null,
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 1, 0])),
       );
     });
   });
@@ -196,6 +268,20 @@ void mockLeafDetectorCall(
     argThat(equals(split)),
     outcomesColumnRange,
   )).thenReturn(returnValue);
+}
+
+void mockLeafLabelFactoryCall({
+  DecisionTreeLeafLabelFactory leafLabelFactory,
+  Matrix leafObservations,
+  ZRange outcomesColumnRange,
+  bool isClassLabelNominal,
+  DecisionTreeLeafLabel expectedLabel,
+}) {
+  when(leafLabelFactory.create(
+      argThat(equals(leafObservations)),
+      outcomesColumnRange,
+      isClassLabelNominal
+  )).thenReturn(expectedLabel);
 }
 
 void mockStumpFinderCall(

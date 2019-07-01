@@ -4,5 +4,5 @@ import 'package:xrange/zrange.dart';
 
 abstract class DecisionTreeLeafLabelFactory {
   DecisionTreeLeafLabel create(Matrix observations, ZRange outcomesColumnRange,
-      bool isClassLabelCategorical);
+      bool isClassLabelNominal);
 }
