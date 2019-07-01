@@ -32,7 +32,7 @@ void main() {
 
       final outcomesColumnRange = ZRange.closed(4, 6);
 
-      final rangeToCategoricalValues = {
+      final rangeToNominalValues = {
         outcomesColumnRange: [
           Vector.fromList([0, 0, 1]),
           Vector.fromList([0, 1, 0]),
@@ -59,7 +59,7 @@ void main() {
       final mockFindBestStumpFnCall = (Matrix input, {double expectedSplitValue,
           ZRange expectedSplitRange, List<Matrix> expectedOutput}) =>
           mockStumpFinderCall(bestStumpFinder, input, outcomesColumnRange,
-              featuresColumnRange, rangeToCategoricalValues, expectedOutput,
+              featuresColumnRange, rangeToNominalValues, expectedOutput,
               expectedSplitValue, null, expectedSplitRange);
 
       mockIsLeafFnCall(observations, false);
@@ -178,7 +178,7 @@ void main() {
           observations,
           featuresColumnRange,
           outcomesColumnRange,
-          rangeToCategoricalValues,
+          rangeToNominalValues,
           leafDetector,
           leafLabelFactory,
           bestStumpFinder,
@@ -255,6 +255,235 @@ void main() {
             .nominal(Vector.fromList([0, 1, 0])),
       );
     });
+
+    test('should exclude nominal feature range after splitting by this '
+        'feature', () {
+      final samples = Matrix.fromList([
+        [10, 1, 0, 0, 0, 0, 1],
+        [90, 1, 0, 0, 0, 1, 0],
+        [23, 0, 0, 1, 0, 1, 0],
+        [55, 0, 1, 0, 1, 0, 0],
+      ]);
+
+      final nominalFeatureRange = ZRange.closed(1, 3);
+      final featuresColumnRanges = Set<ZRange>.from(<ZRange>[
+        ZRange.singleton(0),
+        nominalFeatureRange,
+      ]);
+
+      final outcomesColumnRange = ZRange.closed(4, 6);
+
+      final rangeToNominalValues = {
+        nominalFeatureRange: [
+          Vector.fromList([0, 0, 1]),
+          Vector.fromList([0, 1, 0]),
+          Vector.fromList([1, 0, 0]),
+        ],
+        outcomesColumnRange: [
+          Vector.fromList([0, 0, 1]),
+          Vector.fromList([0, 1, 0]),
+          Vector.fromList([1, 0, 0]),
+        ],
+      };
+
+      final leafDetector = LeafDetectorMock();
+      final leafLabelFactory = LeafLabelFactoryMock();
+      final bestStumpFinder = BestStumpFinderMock();
+
+      final mockBoundIsLeafFnCall = (Matrix samples, bool isLeaf) =>
+          mockLeafDetectorCall(leafDetector, samples, outcomesColumnRange,
+              isLeaf);
+
+      final mockBoundLeafLabelFactoryFnCall = ({Matrix leafObservations,
+        DecisionTreeLeafLabel expectedLabel}) =>
+          mockLeafLabelFactoryCall(leafLabelFactory: leafLabelFactory,
+              leafObservations: leafObservations,
+              outcomesColumnRange: outcomesColumnRange,
+              isClassLabelNominal: true,
+              expectedLabel: expectedLabel);
+
+      final mockBoundFindBestStumpFnCall = (Matrix input, {
+        Set<ZRange> featuresColumnRanges, double expectedSplitValue,
+        List<Vector> expectedSplitNominalValues, ZRange expectedSplitRange,
+        List<Matrix> expectedOutput}) =>
+          mockStumpFinderCall(bestStumpFinder, input, outcomesColumnRange,
+              featuresColumnRanges, rangeToNominalValues, expectedOutput,
+              expectedSplitValue, expectedSplitNominalValues,
+              expectedSplitRange);
+
+      mockBoundIsLeafFnCall(samples, false);
+      mockBoundFindBestStumpFnCall(samples,
+          featuresColumnRanges: featuresColumnRanges,
+          expectedSplitValue: null,
+          expectedSplitNominalValues: [
+            Vector.fromList([0, 0, 1]),
+            Vector.fromList([0, 1, 0]),
+            Vector.fromList([1, 0, 0]),
+          ],
+          expectedSplitRange: nominalFeatureRange,
+          expectedOutput: [
+            Matrix.fromList([
+              [10, 1, 0, 0, 0, 1, 0],
+              [90, 1, 0, 0, 0, 0, 1],
+            ]),
+            Matrix.fromList([
+              [23, 0, 0, 1, 0, 1, 0],
+            ]),
+            Matrix.fromList([
+              [55, 0, 1, 0, 1, 0, 0],
+            ]),
+          ],
+      );
+
+      mockBoundIsLeafFnCall(Matrix.fromList([
+        [10, 1, 0, 0, 0, 1, 0],
+        [90, 1, 0, 0, 0, 0, 1],
+      ]), false);
+      mockBoundFindBestStumpFnCall(Matrix.fromList([
+          [10, 1, 0, 0, 0, 1, 0],
+          [90, 1, 0, 0, 0, 0, 1],
+        ]),
+        featuresColumnRanges: Set.from(<ZRange>[ZRange.singleton(0)]),
+        expectedSplitValue: 10,
+        expectedSplitNominalValues: null,
+        expectedSplitRange: ZRange.singleton(0),
+        expectedOutput: [
+          Matrix.fromList([
+            [10, 1, 0, 0, 0, 1, 0],
+          ]),
+          Matrix.fromList([
+            [90, 1, 0, 0, 0, 0, 1],
+          ]),
+        ],
+      );
+
+      mockBoundIsLeafFnCall(Matrix.fromList([
+        [10, 1, 0, 0, 0, 1, 0],
+      ]), true);
+      mockBoundLeafLabelFactoryFnCall(
+        leafObservations: Matrix.fromList([
+          [10, 1, 0, 0, 0, 1, 0],
+        ]),
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 1, 0])),
+      );
+
+      mockBoundIsLeafFnCall(Matrix.fromList([
+        [90, 1, 0, 0, 0, 0, 1],
+      ]), true);
+      mockBoundLeafLabelFactoryFnCall(
+        leafObservations: Matrix.fromList([
+          [90, 1, 0, 0, 0, 0, 1],
+        ]),
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 0, 1])),
+      );
+
+      mockBoundIsLeafFnCall(Matrix.fromList([
+        [23, 0, 0, 1, 0, 1, 0],
+      ]), true);
+      mockBoundLeafLabelFactoryFnCall(
+        leafObservations: Matrix.fromList([
+          [23, 0, 0, 1, 0, 1, 0],
+        ]),
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 1, 0])),
+      );
+
+      mockBoundIsLeafFnCall(Matrix.fromList([
+        [55, 0, 1, 0, 1, 0, 0],
+      ]), true);
+      mockBoundLeafLabelFactoryFnCall(
+        leafObservations: Matrix.fromList([
+          [55, 0, 1, 0, 1, 0, 0],
+        ]),
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([1, 0, 0])),
+      );
+
+      final rootNode = DecisionTreeOptimizer(
+        samples,
+        featuresColumnRanges,
+        outcomesColumnRange,
+        rangeToNominalValues,
+        leafDetector,
+        leafLabelFactory,
+        bestStumpFinder,
+      ).root;
+
+      testTreeNode(rootNode,
+        shouldBeLeaf: false,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingNominalValues: [
+          Vector.fromList([0, 0, 1]),
+          Vector.fromList([0, 1, 0]),
+          Vector.fromList([1, 0, 0]),
+        ],
+        expectedSplittingColumnRange: nominalFeatureRange,
+        expectedChildrenLength: 3,
+        expectedLabel: null,
+      );
+
+      final firstLevelNodes = rootNode.children;
+      final secondLevelNodes = firstLevelNodes.first.children;
+
+      testTreeNode(firstLevelNodes[0],
+        shouldBeLeaf: false,
+        expectedSplittingNumericalValue: 10,
+        expectedSplittingNominalValues: null,
+        expectedSplittingColumnRange: ZRange.singleton(0),
+        expectedChildrenLength: 2,
+        expectedLabel: null,
+      );
+
+      testTreeNode(firstLevelNodes[1],
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingNominalValues: null,
+        expectedSplittingColumnRange: null,
+        expectedChildrenLength: null,
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 1, 0])),
+      );
+
+      testTreeNode(secondLevelNodes.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingNominalValues: null,
+        expectedSplittingColumnRange: null,
+        expectedChildrenLength: null,
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 1, 0])),
+      );
+
+      testTreeNode(secondLevelNodes.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingNominalValues: null,
+        expectedSplittingColumnRange: null,
+        expectedChildrenLength: null,
+        expectedLabel: DecisionTreeLeafLabel
+            .nominal(Vector.fromList([0, 0, 1])),
+      );
+
+      verify(bestStumpFinder.find(
+          any,
+          any,
+          argThat(unorderedEquals(featuresColumnRanges)),
+          any)
+      ).called(1);
+
+      verify(bestStumpFinder.find(
+          any,
+          any,
+          argThat(
+              unorderedEquals(
+                  Set<ZRange>.from(<ZRange>[ZRange.singleton(0)]),
+              )
+          ),
+          any)
+      ).called(1);
+    });
   });
 }
 
@@ -289,7 +518,7 @@ void mockStumpFinderCall(
     Matrix input,
     ZRange outcomesColumnRange,
     Set<ZRange> featuresColumnRange,
-    Map<ZRange, List<Vector>> rangeToCategoricalValues,
+    Map<ZRange, List<Vector>> rangeToNominalValues,
     List<Matrix> expectedOutput,
     double expectedSplittingValue,
     List<Vector> expectedSplittingNominalValues,
@@ -298,8 +527,8 @@ void mockStumpFinderCall(
   when(bestStumpFinder.find(
     argThat(equals(input)),
     outcomesColumnRange,
-    featuresColumnRange,
-    rangeToCategoricalValues,
+    argThat(unorderedEquals(featuresColumnRange)),
+    rangeToNominalValues,
   )).thenReturn(
     DecisionTreeStump(
       expectedSplittingValue,
