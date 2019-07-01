@@ -4,7 +4,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 abstract class BestStumpFinder {
-  DecisionTreeStump find(Matrix observations,
-      ZRange outcomesRange, Iterable<ZRange> featuresRanges,
-      [Map<ZRange, List<Vector>> rangeToCategoricalValues]);
+  DecisionTreeStump find(Matrix samples, ZRange outcomesColumnRange,
+      Iterable<ZRange> featuresColumnRanges,
+      [Map<ZRange, List<Vector>> rangeToNominalValues]);
 }
