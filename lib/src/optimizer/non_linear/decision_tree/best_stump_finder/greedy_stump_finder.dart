@@ -13,18 +13,18 @@ class GreedyStumpFinder implements BestStumpFinder {
   final StumpFactory _stumpFactory;
 
   @override
-  DecisionTreeStump find(Matrix observations, ZRange outcomesRange,
-      Iterable<ZRange> featuresRanges,
-      [Map<ZRange, List<Vector>> rangeToCategoricalValues]) {
+  DecisionTreeStump find(Matrix samples, ZRange outcomesColumnRange,
+      Iterable<ZRange> featuresColumnRanges,
+      [Map<ZRange, List<Vector>> rangeToNominalValues]) {
     final errors = <double, List<DecisionTreeStump>>{};
-    featuresRanges.forEach((range) {
-      final categoricalValues = rangeToCategoricalValues != null
-          ? rangeToCategoricalValues[range]
+    featuresColumnRanges.forEach((range) {
+      final nominalValues = rangeToNominalValues != null
+          ? rangeToNominalValues[range]
           : null;
-      final stump = _stumpFactory.create(observations, range,
-          outcomesRange, categoricalValues);
+      final stump = _stumpFactory.create(samples, range,
+          outcomesColumnRange, nominalValues);
       final error = _assessor.getAggregatedError(stump.outputSamples,
-          outcomesRange);
+          outcomesColumnRange);
       errors.update(error, (stumps) => stumps..add(stump),
           ifAbsent: () => [stump]);
     });
