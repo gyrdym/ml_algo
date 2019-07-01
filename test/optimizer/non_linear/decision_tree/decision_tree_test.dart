@@ -23,12 +23,12 @@ void main() {
         [55, 10, 22, 80, 1, 0, 0],
       ]);
 
-      final featuresColumnRange = [
+      final featuresColumnRange = Set<ZRange>.from(<ZRange>[
         ZRange.singleton(0),
         ZRange.singleton(1),
         ZRange.singleton(2),
         ZRange.singleton(3),
-      ];
+      ]);
 
       final outcomesColumnRange = ZRange.closed(4, 6);
 
@@ -288,7 +288,7 @@ void mockStumpFinderCall(
     BestStumpFinder bestStumpFinder,
     Matrix input,
     ZRange outcomesColumnRange,
-    List<ZRange> featuresColumnRange,
+    Set<ZRange> featuresColumnRange,
     Map<ZRange, List<Vector>> rangeToCategoricalValues,
     List<Matrix> expectedOutput,
     double expectedSplittingValue,

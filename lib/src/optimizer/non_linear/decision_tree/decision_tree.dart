@@ -8,20 +8,22 @@ import 'package:xrange/zrange.dart';
 
 class DecisionTreeOptimizer {
   DecisionTreeOptimizer(
-      Matrix observations,
+      Matrix samples,
       this._featuresColumnRanges,
-      this._outcomesColumnRange,
-      this._rangeToCategoricalValues,
+      this._outcomeColumnRange,
+      this._rangeToNominalValues,
       this._leafDetector,
       this._leafLabelFactory,
       this._bestStumpFinder,
-  ) {
-    _root = _createNode(observations);
+  ) : _isOutcomeNominal = _rangeToNominalValues
+      .containsKey(_outcomeColumnRange) {
+    _root = _createNode(samples, _featuresColumnRanges);
   }
 
-  final Iterable<ZRange> _featuresColumnRanges;
-  final ZRange _outcomesColumnRange;
-  final Map<ZRange, List<Vector>> _rangeToCategoricalValues;
+  final Set<ZRange> _featuresColumnRanges;
+  final ZRange _outcomeColumnRange;
+  final Map<ZRange, List<Vector>> _rangeToNominalValues;
+  final bool _isOutcomeNominal;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
   final BestStumpFinder _bestStumpFinder;
@@ -29,19 +31,27 @@ class DecisionTreeOptimizer {
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
 
-  DecisionTreeNode _createNode(Matrix observations) {
-    if (_leafDetector.isLeaf(observations, _outcomesColumnRange)) {
+  DecisionTreeNode _createNode(Matrix samples,
+      Set<ZRange> featureColumnRanges) {
+    if (_leafDetector.isLeaf(samples, _outcomeColumnRange)) {
       return DecisionTreeNode.leaf(_leafLabelFactory.create(
-          observations,
-          _outcomesColumnRange,
-          _rangeToCategoricalValues.containsKey(_outcomesColumnRange)),
-      );
+          samples,
+          _outcomeColumnRange,
+          _isOutcomeNominal,
+      ));
     }
 
-    final bestStump = _bestStumpFinder.find(observations, _outcomesColumnRange,
-        _featuresColumnRanges, _rangeToCategoricalValues);
+    final bestStump = _bestStumpFinder.find(samples, _outcomeColumnRange,
+        featureColumnRanges, _rangeToNominalValues);
+    final bestSplittingRange = bestStump.splittingColumnRange;
+    final isBestSplitByNominalValue = _rangeToNominalValues
+        .containsKey(bestSplittingRange);
+    final updatedColumnRanges = isBestSplitByNominalValue
+        ? (Set<ZRange>.from(featureColumnRanges)..remove(bestSplittingRange))
+        : featureColumnRanges;
 
-    final childNodes = bestStump.outputSamples.map(_createNode);
+    final childNodes = bestStump.outputSamples.map((samples) =>
+        _createNode(samples, updatedColumnRanges));
 
     return DecisionTreeNode.fromStump(bestStump,
         childNodes.toList(growable: false));
