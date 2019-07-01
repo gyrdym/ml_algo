@@ -22,7 +22,7 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
 
     if (isClassLabelCategorical) {
       final labelData = _getLabelData<Vector>(outcomes.rows, totalRecordsCount);
-      return DecisionTreeLeafLabel.categorical(labelData.item1,
+      return DecisionTreeLeafLabel.nominal(labelData.item1,
           probability: labelData.item2);
     }
 
