@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
@@ -41,129 +42,90 @@ void main() {
       final leafDetector = LeafDetectorMock();
       final leafLabelFactory = LeafLabelFactoryMock();
       final bestStumpFinder = BestStumpFinderMock();
+      final mockIsLeafFn = (Matrix samples, bool isLeaf) =>
+          mockLeafDetectorCall(leafDetector, samples, outcomesColumnRange,
+              isLeaf);
+      final mockFindBestStumpFn = (Matrix input, double splitValue,
+          ZRange splitRange, List<Matrix> output) =>
+          mockStumpFinderCall(bestStumpFinder, input, outcomesColumnRange,
+              featuresColumnRange, rangeToCategoricalValues, output, splitValue,
+              null, splitRange);
 
-      when(leafDetector.isLeaf(
-          observations,
-          outcomesColumnRange,
-      )).thenReturn(false);
+      mockIsLeafFn(observations, false);
 
-      when(bestStumpFinder.find(
-          observations,
-          outcomesColumnRange,
-          featuresColumnRange,
-          rangeToCategoricalValues,
-      )).thenReturn(
-          DecisionTreeStump(
-            34,
-            null,
-            ZRange.singleton(2),
-            [
-              Matrix.fromList([
-                [10, 20, 30, 40, 0, 0, 1],
-              ]),
-              Matrix.fromList([
-                [90, 51, 34, 31, 0, 0, 1],
-                [23, 40, 90, 50, 0, 1, 0],
-                [55, 10, 22, 80, 1, 0, 0],
-              ]),
-            ],
-          ),
-      );
-
-      when(leafDetector.isLeaf(
-          argThat(equals([
-            [10, 20, 30, 40, 0, 0, 1]
-          ])),
-          outcomesColumnRange,
-      )).thenReturn(true);
-
-      when(leafDetector.isLeaf(
-          argThat(equals([
-            [90, 51, 34, 31, 0, 0, 1],
-            [23, 40, 90, 50, 0, 1, 0],
-            [55, 10, 22, 80, 1, 0, 0],
-          ])),
-          outcomesColumnRange,
-      )).thenReturn(false);
-
-      when(bestStumpFinder.find(
-          argThat(equals([
-            [90, 51, 34, 31, 0, 0, 1],
-            [23, 40, 90, 50, 0, 1, 0],
-            [55, 10, 22, 80, 1, 0, 0],
-          ])),
-          outcomesColumnRange,
-          featuresColumnRange,
-          rangeToCategoricalValues,
-      )).thenReturn(
-        DecisionTreeStump(
-          50,
-          null,
-          ZRange.singleton(3),
-          [
-            Matrix.fromList([
-              [90, 51, 34, 31, 0, 0, 1],
-              [23, 40, 90, 50, 0, 1, 0],
-            ]),
-            Matrix.fromList([
-              [55, 10, 22, 80, 1, 0, 0],
-            ]),
-          ],
-        ),
-      );
-
-      when(leafDetector.isLeaf(
-          argThat(equals([
-            [90, 51, 34, 31, 0, 0, 1],
-            [23, 40, 90, 50, 0, 1, 0],
-          ])),
-          outcomesColumnRange,
-      )).thenReturn(false);
-
-      when(bestStumpFinder.find(
-        argThat(equals([
+      mockFindBestStumpFn(observations, 34, ZRange.singleton(2), [
+        Matrix.fromList([
+          [10, 20, 30, 40, 0, 0, 1],
+        ]),
+        Matrix.fromList([
           [90, 51, 34, 31, 0, 0, 1],
           [23, 40, 90, 50, 0, 1, 0],
-        ])),
-        outcomesColumnRange,
-        featuresColumnRange,
-        rangeToCategoricalValues,
-      )).thenReturn(
-        DecisionTreeStump(
-          90,
-          null,
-          ZRange.singleton(0),
-          [
-            Matrix.fromList([
-              [90, 51, 34, 31, 0, 0, 1],
-            ]),
-            Matrix.fromList([
-              [23, 40, 90, 50, 0, 1, 0],
-            ]),
-          ],
-        ),
+          [55, 10, 22, 80, 1, 0, 0],
+        ]),
+      ]);
+
+      mockIsLeafFn(Matrix.fromList([
+        [10, 20, 30, 40, 0, 0, 1]
+      ]), true);
+
+      mockIsLeafFn(Matrix.fromList([
+        [90, 51, 34, 31, 0, 0, 1],
+        [23, 40, 90, 50, 0, 1, 0],
+        [55, 10, 22, 80, 1, 0, 0],
+      ]), false);
+
+      mockFindBestStumpFn(
+        Matrix.fromList([
+          [90, 51, 34, 31, 0, 0, 1],
+          [23, 40, 90, 50, 0, 1, 0],
+          [55, 10, 22, 80, 1, 0, 0],
+        ]),
+        50,
+        ZRange.singleton(3),
+        [
+          Matrix.fromList([
+            [90, 51, 34, 31, 0, 0, 1],
+            [23, 40, 90, 50, 0, 1, 0],
+          ]),
+          Matrix.fromList([
+            [55, 10, 22, 80, 1, 0, 0],
+          ]),
+        ],
       );
 
-      when(leafDetector.isLeaf(
-        argThat(equals([
+      mockIsLeafFn(Matrix.fromList([
+        [90, 51, 34, 31, 0, 0, 1],
+        [23, 40, 90, 50, 0, 1, 0],
+      ]), false);
+
+      mockFindBestStumpFn(
+        Matrix.fromList([
           [90, 51, 34, 31, 0, 0, 1],
-        ])),
-        outcomesColumnRange,
-      )).thenReturn(true);
-
-      when(leafDetector.isLeaf(
-        argThat(equals([
           [23, 40, 90, 50, 0, 1, 0],
-        ])),
-        outcomesColumnRange,
-      )).thenReturn(true);
+        ]),
+        90,
+        ZRange.singleton(0),
+        [
+          Matrix.fromList([
+            [90, 51, 34, 31, 0, 0, 1],
+          ]),
+          Matrix.fromList([
+            [23, 40, 90, 50, 0, 1, 0],
+          ]),
+        ],
+      );
 
-      when(leafDetector.isLeaf(
-          argThat(equals([
-            [55, 10, 22, 80, 1, 0, 0],
-          ])),
-          outcomesColumnRange,
-      )).thenReturn(true);
+      mockIsLeafFn(Matrix.fromList([
+        [90, 51, 34, 31, 0, 0, 1],
+      ]), true);
+
+      mockIsLeafFn(Matrix.fromList([
+        [23, 40, 90, 50, 0, 1, 0],
+      ]), true);
+
+      mockIsLeafFn(Matrix.fromList([
+        [55, 10, 22, 80, 1, 0, 0],
+      ]), true);
 
       final tree = DecisionTreeOptimizer(
           observations,
@@ -193,13 +155,40 @@ void main() {
 
 void mockLeafDetectorCall(
     LeafDetector leafDetector,
-    List<List<double>> split,
+    Matrix split,
     ZRange outcomesColumnRange,
+    bool returnValue,
 ) {
   when(leafDetector.isLeaf(
     argThat(equals(split)),
     outcomesColumnRange,
-  )).thenReturn(true);
+  )).thenReturn(returnValue);
+}
+
+void mockStumpFinderCall(
+    BestStumpFinder bestStumpFinder,
+    Matrix input,
+    ZRange outcomesColumnRange,
+    List<ZRange> featuresColumnRange,
+    Map<ZRange, List<Vector>> rangeToCategoricalValues,
+    List<Matrix> expectedOutput,
+    double expectedSplittingValue,
+    List<Vector> expectedSplittingNominalValues,
+    ZRange expectedSplittingRange,
+) {
+  when(bestStumpFinder.find(
+    argThat(equals(input)),
+    outcomesColumnRange,
+    featuresColumnRange,
+    rangeToCategoricalValues,
+  )).thenReturn(
+    DecisionTreeStump(
+      expectedSplittingValue,
+      expectedSplittingNominalValues,
+      expectedSplittingRange,
+      expectedOutput,
+    ),
+  );
 }
 
 void testTreeNode(

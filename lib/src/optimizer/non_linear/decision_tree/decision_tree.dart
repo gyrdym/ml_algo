@@ -41,7 +41,7 @@ class DecisionTreeOptimizer {
     final bestStump = _bestStumpFinder.find(observations, _outcomesColumnRange,
         _featuresColumnRanges, _rangeToCategoricalValues);
 
-    final childNodes = bestStump.outputObservations.map(_createNode);
+    final childNodes = bestStump.outputSamples.map(_createNode);
 
     return DecisionTreeNode.fromStump(bestStump,
         childNodes.toList(growable: false));
