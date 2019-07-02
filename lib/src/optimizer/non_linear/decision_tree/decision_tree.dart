@@ -32,8 +32,9 @@ class DecisionTreeOptimizer {
   DecisionTreeNode _root;
 
   DecisionTreeNode _createNode(Matrix samples,
-      Set<ZRange> featureColumnRanges) {
-    if (_leafDetector.isLeaf(samples, _outcomeColumnRange)) {
+      Set<ZRange> featuresColumnRanges) {
+    if (_leafDetector.isLeaf(samples, _outcomeColumnRange,
+        featuresColumnRanges)) {
       return DecisionTreeNode.leaf(_leafLabelFactory.create(
           samples,
           _outcomeColumnRange,
@@ -42,13 +43,13 @@ class DecisionTreeOptimizer {
     }
 
     final bestStump = _bestStumpFinder.find(samples, _outcomeColumnRange,
-        featureColumnRanges, _rangeToNominalValues);
+        featuresColumnRanges, _rangeToNominalValues);
     final bestSplittingRange = bestStump.splittingColumnRange;
     final isBestSplitByNominalValue = _rangeToNominalValues
         .containsKey(bestSplittingRange);
     final updatedColumnRanges = isBestSplitByNominalValue
-        ? (Set<ZRange>.from(featureColumnRanges)..remove(bestSplittingRange))
-        : featureColumnRanges;
+        ? (Set<ZRange>.from(featuresColumnRanges)..remove(bestSplittingRange))
+        : featuresColumnRanges;
 
     final childNodes = bestStump.outputSamples.map((samples) =>
         _createNode(samples, updatedColumnRanges));
