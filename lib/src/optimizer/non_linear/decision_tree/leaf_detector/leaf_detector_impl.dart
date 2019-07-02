@@ -12,7 +12,11 @@ class LeafDetectorImpl implements LeafDetector {
   final double _minErrorOnNode;
 
   @override
-  bool isLeaf(Matrix observations, ZRange outcomesRange) {
+  bool isLeaf(Matrix observations, ZRange outcomesRange,
+      Iterable<ZRange> featureColumnRanges) {
+    if (featureColumnRanges.isEmpty) {
+      return true;
+    }
     if (observations.rowsNum <= _minSamplesCount) {
       return true;
     }

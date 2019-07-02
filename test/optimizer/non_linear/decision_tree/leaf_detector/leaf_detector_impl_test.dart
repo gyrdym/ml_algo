@@ -8,13 +8,26 @@ import '../../../../test_utils/mocks.dart';
 
 void main() {
   group('LeafDetectorImpl', () {
+    test('should detect tree leaf if given features column ranges collection '
+        'is empty', () {
+      final detector = LeafDetectorImpl(null, null, 2);
+      final isLeaf = detector.isLeaf(Matrix.fromList([
+        [1, 2, 3],
+        [2, 3, 4],
+        [2, 3, 4],
+        [2, 3, 4],
+      ]), null, []);
+
+      expect(isLeaf, isTrue);
+    });
+
     test('should detect tree leaf if given samples number is equal to minimum '
         'allowed samples number', () {
       final detector = LeafDetectorImpl(null, null, 2);
       final isLeaf = detector.isLeaf(Matrix.fromList([
         [1, 2, 3],
         [2, 3, 4],
-      ]), null);
+      ]), null, [ZRange.all()]);
 
       expect(isLeaf, isTrue);
     });
@@ -24,7 +37,7 @@ void main() {
       final detector = LeafDetectorImpl(null, null, 2);
       final isLeaf = detector.isLeaf(Matrix.fromList([
         [1, 2, 3],
-      ]), null);
+      ]), null, [ZRange.all()]);
 
       expect(isLeaf, isTrue);
     });
@@ -37,7 +50,8 @@ void main() {
         [10, 20, 1, 0, 0],
       ]);
       final detector = LeafDetectorImpl(null, null, 2);
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4));
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4),
+          [ZRange.all()]);
 
       expect(isLeaf, isTrue);
     });
@@ -53,7 +67,8 @@ void main() {
       when(assessor.getError(observations, ZRange.closed(2, 4)))
           .thenReturn(3);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4));
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4),
+          [ZRange.all()]);
 
       expect(isLeaf, isTrue);
     });
@@ -70,7 +85,8 @@ void main() {
       when(assessor.getError(observations, ZRange.closed(2, 4)))
           .thenReturn(2);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4));
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4),
+          [ZRange.all()]);
 
       expect(isLeaf, isTrue);
     });
@@ -88,7 +104,8 @@ void main() {
       when(assessor.getError(observations, ZRange.closed(1, 3)))
           .thenReturn(4);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(1, 3));
+      final isLeaf = detector.isLeaf(observations, ZRange.closed(1, 3),
+          [ZRange.all()]);
 
       expect(isLeaf, isFalse);
     });
