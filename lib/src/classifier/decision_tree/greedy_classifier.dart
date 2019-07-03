@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/classifier/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/decision_tree/decision_tree.dart';
+import 'package:ml_algo/src/classifier/mixin/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_impl.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/greedy_stump_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree.dart';
@@ -7,7 +7,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/lea
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/majority_split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/observations_splitter/samples_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_splitter/samples_splitter_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 

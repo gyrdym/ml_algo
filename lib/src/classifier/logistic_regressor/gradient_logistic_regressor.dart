@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/classifier/asessable_classifier_mixin.dart';
-import 'package:ml_algo/src/classifier/linear_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/mixin/asessable_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/mixin/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
