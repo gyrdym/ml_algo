@@ -8,6 +8,7 @@ environment:
   sdk: '>=2.3.0 <3.0.0'
 
 dependencies:
+  ml_preprocessing: 3.4.0+1
   ml_linalg: ^10.3.5
   xrange: ^0.0.6
   tuple: ^1.0.2
@@ -20,3 +21,7 @@ dev_dependencies:
   build_runner: ^1.1.2
   build_test: ^0.10.2
   pedantic: 1.1.0
+
+dependency_overrides:
+  ml_preprocessing:
+    path: ../ml_preprocessing

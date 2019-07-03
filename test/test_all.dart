@@ -33,7 +33,7 @@ import 'optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_labe
     as majority_leaf_label_factory_test;
 import 'optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory_test.dart'
     as greedy_stump_factory_test;
-import 'optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter_impl_test.dart'
+import 'optimizer/non_linear/decision_tree/stump_factory/observations_splitter/samples_splitter_impl_test.dart'
     as obervations_splitter_impl_test;
 import 'optimizer/non_linear/decision_tree/decision_tree_test.dart'
     as decision_tree_optimizer_test;

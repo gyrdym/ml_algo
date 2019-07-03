@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/observations_splitter/observations_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/observations_splitter/samples_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -11,7 +11,7 @@ class GreedyStumpFactory implements StumpFactory {
   GreedyStumpFactory(this._assessor, this._nodeSplitter);
 
   final SplitAssessor _assessor;
-  final ObservationsSplitter _nodeSplitter;
+  final SamplesSplitter _nodeSplitter;
 
   @override
   DecisionTreeStump create(Matrix observations, ZRange splittingColumnRange,

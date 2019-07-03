@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/classifier/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
@@ -14,8 +15,9 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class GradientLogisticRegressor with LinearClassifierMixin
-    implements LogisticRegressor {
+class GradientLogisticRegressor with LinearClassifierMixin,
+    AssessableClassifierMixin implements LogisticRegressor {
+
   GradientLogisticRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
