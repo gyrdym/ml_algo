@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/classifier/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
@@ -13,8 +14,9 @@ import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
-class GradientSoftmaxRegressor with LinearClassifierMixin
-    implements SoftmaxRegressor {
+class GradientSoftmaxRegressor with LinearClassifierMixin,
+    AssessableClassifierMixin implements SoftmaxRegressor {
+
   GradientSoftmaxRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {

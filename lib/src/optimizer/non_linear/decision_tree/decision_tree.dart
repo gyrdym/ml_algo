@@ -20,7 +20,7 @@ class DecisionTreeOptimizer {
     _root = _createNode(samples, _featuresColumnRanges);
   }
 
-  final Set<ZRange> _featuresColumnRanges;
+  final Iterable<ZRange> _featuresColumnRanges;
   final ZRange _outcomeColumnRange;
   final Map<ZRange, List<Vector>> _rangeToNominalValues;
   final bool _isOutcomeNominal;
@@ -32,7 +32,7 @@ class DecisionTreeOptimizer {
   DecisionTreeNode _root;
 
   DecisionTreeNode _createNode(Matrix samples,
-      Set<ZRange> featuresColumnRanges) {
+      Iterable<ZRange> featuresColumnRanges) {
     if (_leafDetector.isLeaf(samples, _outcomeColumnRange,
         featuresColumnRanges)) {
       return DecisionTreeNode.leaf(_leafLabelFactory.create(
