@@ -27,16 +27,16 @@ import 'optimizer/non_linear/decision_tree/assessor/majority_split_assesor_test.
     as majority_split_assesor_test;
 import 'optimizer/non_linear/decision_tree/best_stump_finder/greedy_stump_finder_test.dart'
     as greedy_stump_finder_test;
+import 'optimizer/non_linear/decision_tree/decision_tree_test.dart'
+    as decision_tree_optimizer_test;
 import 'optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl_test.dart'
     as leaf_detector_impl_test;
 import 'optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory_test.dart'
     as majority_leaf_label_factory_test;
 import 'optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory_test.dart'
     as greedy_stump_factory_test;
-import 'optimizer/non_linear/decision_tree/stump_factory/observations_splitter/samples_splitter_impl_test.dart'
-    as obervations_splitter_impl_test;
-import 'optimizer/non_linear/decision_tree/decision_tree_test.dart'
-    as decision_tree_optimizer_test;
+import 'optimizer/non_linear/decision_tree/stump_factory/samples_splitter/samples_splitter_impl_test.dart'
+    as samples_splitter_impl_test;
 import 'regressor/knn_regressor_integration_test.dart'
     as knn_regressor_integration_test;
 import 'regressor/knn_regressor_test.dart'
@@ -63,7 +63,7 @@ void main() {
   majority_split_assesor_test.main();
   leaf_detector_impl_test.main();
   majority_leaf_label_factory_test.main();
-  obervations_splitter_impl_test.main();
+  samples_splitter_impl_test.main();
   greedy_stump_factory_test.main();
   greedy_stump_finder_test.main();
   decision_tree_optimizer_test.main();
