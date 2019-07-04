@@ -19,7 +19,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_splitter/samples_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_numerical_splitter/samples_numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
@@ -61,7 +61,7 @@ class SplitAssessorMock extends Mock implements SplitAssessor {}
 
 class StumpFactoryMock extends Mock implements StumpFactory {}
 
-class ObservationsSplitterMock extends Mock implements SamplesSplitter {}
+class ObservationsSplitterMock extends Mock implements SamplesNumericalSplitter {}
 
 class DistributionCalculatorMock extends Mock implements
     SequenceElementsDistributionCalculator {}

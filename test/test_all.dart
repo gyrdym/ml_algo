@@ -35,7 +35,7 @@ import 'optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_labe
     as majority_leaf_label_factory_test;
 import 'optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory_test.dart'
     as greedy_stump_factory_test;
-import 'optimizer/non_linear/decision_tree/stump_factory/samples_splitter/samples_splitter_impl_test.dart'
+import 'optimizer/non_linear/decision_tree/stump_factory/samples_numerical_splitter/samples_splitter_impl_test.dart'
     as samples_splitter_impl_test;
 import 'regressor/knn_regressor_integration_test.dart'
     as knn_regressor_integration_test;
