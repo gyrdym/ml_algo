@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_splitter/samples_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_numerical_splitter/samples_numerical_splitter_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
@@ -16,7 +16,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 10.0;
-      final splitter = const SamplesSplitterImpl();
+      final splitter = const SamplesNumericalSplitterImpl();
       final actual = splitter.split(samples, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -44,7 +44,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 10.0;
-      final splitter = const SamplesSplitterImpl();
+      final splitter = const SamplesNumericalSplitterImpl();
       final actual = splitter.split(samples, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -70,7 +70,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 0.0;
-      final splitter = const SamplesSplitterImpl();
+      final splitter = const SamplesNumericalSplitterImpl();
       final actual = splitter.split(samples, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -97,7 +97,7 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValue = 1000.0;
-      final splitter = const SamplesSplitterImpl();
+      final splitter = const SamplesNumericalSplitterImpl();
       final actual = splitter.split(samples, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -123,7 +123,7 @@ void main() {
       ]);
       final splittingColumnIdx = 0;
       final splittingValue = 2.0;
-      final splitter = const SamplesSplitterImpl();
+      final splitter = const SamplesNumericalSplitterImpl();
       final actual = splitter.split(samples, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([
@@ -150,7 +150,7 @@ void main() {
       ]);
       final splittingColumnIdx = 3;
       final splittingValue = 20.0;
-      final splitter = const SamplesSplitterImpl();
+      final splitter = const SamplesNumericalSplitterImpl();
       final actual = splitter.split(samples, splittingColumnIdx,
           splittingValue);
       expect(actual, equals([

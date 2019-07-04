@@ -9,8 +9,8 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factor
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/majority_split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_splitter/samples_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_splitter/samples_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_numerical_splitter/samples_numerical_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/samples_numerical_splitter/samples_numerical_splitter_impl.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
 
 Injector getGreedyDecisionTreeDependencies(double minError,
@@ -22,12 +22,12 @@ Injector getGreedyDecisionTreeDependencies(double minError,
 
     ..registerSingleton<SplitAssessor>((_) => const MajoritySplitAssessor())
 
-    ..registerSingleton<SamplesSplitter>((_) => const SamplesSplitterImpl())
+    ..registerSingleton<SamplesNumericalSplitter>((_) => const SamplesNumericalSplitterImpl())
 
     ..registerSingleton<StumpFactory>((injector) =>
       GreedyStumpFactory(
         injector.getDependency<SplitAssessor>(),
-        injector.getDependency<SamplesSplitter>(),
+        injector.getDependency<SamplesNumericalSplitter>(),
       ),
     )
     ..registerSingleton<LeafDetector>((injector) =>
