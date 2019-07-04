@@ -8,11 +8,11 @@ class SamplesSplitterImpl implements SamplesSplitter {
   @override
   List<Matrix> split(Matrix samples, int splittingColumnIdx,
       double splittingValue) {
-    final source1 = <Vector>[];
-    final source2 = <Vector>[];
-    samples.rows.forEach((row) => row[splittingColumnIdx] >= splittingValue
-        ? source2.add(row)
-        : source1.add(row));
-    return [Matrix.fromRows(source1), Matrix.fromRows(source2)];
+    final left = <Vector>[];
+    final right = <Vector>[];
+    samples.rows.forEach((row) => row[splittingColumnIdx] < splittingValue
+        ? left.add(row)
+        : right.add(row));
+    return [Matrix.fromRows(left), Matrix.fromRows(right)];
   }
 }

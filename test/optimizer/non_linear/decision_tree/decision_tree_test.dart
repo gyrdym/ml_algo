@@ -182,6 +182,7 @@ void main() {
           leafDetector,
           leafLabelFactory,
           bestStumpFinder,
+          null,
       ).root;
 
       testTreeNode(rootNode,
@@ -413,6 +414,7 @@ void main() {
         leafDetector,
         leafLabelFactory,
         bestStumpFinder,
+        null,
       ).root;
 
       testTreeNode(rootNode,
