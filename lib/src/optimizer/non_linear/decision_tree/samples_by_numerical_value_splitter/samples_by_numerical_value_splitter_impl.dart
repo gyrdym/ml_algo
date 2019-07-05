@@ -1,9 +1,11 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_numerical_splitter/samples_numerical_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_numerical_value_splitter/samples_by_numerical_value_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class SamplesNumericalSplitterImpl implements SamplesNumericalSplitter {
-  const SamplesNumericalSplitterImpl();
+class SamplesByNumericalValueSplitterImpl implements
+    SamplesByNumericalValueSplitter {
+
+  const SamplesByNumericalValueSplitterImpl();
 
   @override
   List<Matrix> split(Matrix samples, int splittingColumnIdx,

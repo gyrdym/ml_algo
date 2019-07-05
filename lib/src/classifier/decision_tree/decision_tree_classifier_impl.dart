@@ -5,7 +5,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_numerical_splitter/samples_numerical_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_numerical_value_splitter/samples_by_numerical_value_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
@@ -21,7 +21,7 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
             dependencies.getDependency<LeafDetector>(),
             dependencies.getDependency<DecisionTreeLeafLabelFactory>(),
             dependencies.getDependency<BestStumpFinder>(),
-            dependencies.getDependency<SamplesNumericalSplitter>(),
+            dependencies.getDependency<SamplesByNumericalValueSplitter>(),
         );
 
   final DecisionTreeOptimizer _optimizer;
