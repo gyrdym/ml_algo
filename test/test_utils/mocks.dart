@@ -18,6 +18,7 @@ import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_numerical_splitter/samples_numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
@@ -61,7 +62,11 @@ class SplitAssessorMock extends Mock implements SplitAssessor {}
 
 class StumpFactoryMock extends Mock implements StumpFactory {}
 
-class ObservationsSplitterMock extends Mock implements SamplesNumericalSplitter {}
+class SamplesByNumericalValueSplitterMock extends Mock implements
+    SamplesNumericalSplitter {}
+
+class SamplesByNominalValueSplitterMock extends Mock implements
+    SamplesByNominalValueSplitter {}
 
 class DistributionCalculatorMock extends Mock implements
     SequenceElementsDistributionCalculator {}

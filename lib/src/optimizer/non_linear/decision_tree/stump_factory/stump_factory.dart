@@ -4,6 +4,6 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 abstract class StumpFactory {
-  DecisionTreeStump create(Matrix observations, ZRange splittingFeatureRange,
-      ZRange outcomesRange, [List<Vector> categoricalValues]);
+  DecisionTreeStump create(Matrix samples, ZRange splittingColumnRange,
+      ZRange outcomeColumnRange, [List<Vector> nominalValues]);
 }
