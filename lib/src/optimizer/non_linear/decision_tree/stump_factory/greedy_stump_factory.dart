@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_numerical_splitter/samples_numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
@@ -8,55 +9,57 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class GreedyStumpFactory implements StumpFactory {
-  GreedyStumpFactory(this._assessor, this._nodeSplitter);
+  GreedyStumpFactory(this._assessor, this._byNumericalValueSplitter,
+      this._byNominalValueSplitter);
 
   final SplitAssessor _assessor;
-  final SamplesNumericalSplitter _nodeSplitter;
+  final SamplesNumericalSplitter _byNumericalValueSplitter;
+  final SamplesByNominalValueSplitter _byNominalValueSplitter;
 
   @override
-  DecisionTreeStump create(Matrix observations, ZRange splittingColumnRange,
-      ZRange outcomesRange, [List<Vector> categoricalValues]) =>
-      categoricalValues != null
-          ? _createByCategoricalValues(observations, splittingColumnRange,
-            categoricalValues)
-          : _createByNumber(observations, splittingColumnRange, outcomesRange);
+  DecisionTreeStump create(Matrix samples, ZRange splittingColumnRange,
+      ZRange outcomeColumnRange, [List<Vector> nominalValues]) =>
+      nominalValues != null
+          ? _createByNominalValues(samples, splittingColumnRange,
+            nominalValues)
+          : _createByNumericalValue(samples, splittingColumnRange,
+          outcomeColumnRange);
 
-  DecisionTreeStump _createByCategoricalValues(Matrix observations,
-      ZRange splittingColumnRange, List<Vector> categoricalValues) {
+  DecisionTreeStump _createByNominalValues(Matrix samples,
+      ZRange splittingColumnRange, List<Vector> nominalValues) {
     if (splittingColumnRange.firstValue < 0 ||
-        splittingColumnRange.lastValue > observations.columnsNum) {
+        splittingColumnRange.lastValue > samples.columnsNum) {
       throw Exception('Unappropriate range given: $splittingColumnRange, '
           'expected a range within or equal '
-          '${ZRange.closed(0, observations.columnsNum)}');
+          '${ZRange.closed(0, samples.columnsNum)}');
     }
-    final stumpObservations = categoricalValues.map((value) {
-      final foundRows = observations.rows
-          .where((row) => row.subvectorByRange(splittingColumnRange) == value)
-          .toList(growable: false);
-      return Matrix.fromRows(foundRows);
-    }).where((node) => node.rowsNum > 0).toList(growable: false);
-
-    return DecisionTreeStump(null, categoricalValues, splittingColumnRange,
+    final stumpObservations = _byNominalValueSplitter.split(samples,
+        splittingColumnRange, nominalValues);
+    return DecisionTreeStump(null, nominalValues, splittingColumnRange,
         stumpObservations);
   }
 
-  DecisionTreeStump _createByNumber(Matrix observations,
+  DecisionTreeStump _createByNumericalValue(Matrix observations,
       ZRange splittingColumnRange, ZRange outcomesRange) {
     final selectedColumnIdx = splittingColumnRange.firstValue;
     final errors = <double, DecisionTreeStump>{};
     final sortedRows = observations
         .sort((row) => row[selectedColumnIdx], Axis.rows).rows;
     var prevValue = sortedRows.first[selectedColumnIdx];
+
     for (final row in sortedRows.skip(1)) {
       final splittingValue = (prevValue + row[selectedColumnIdx]) / 2;
-      final stumpObservations = _nodeSplitter
+      final stumpObservations = _byNumericalValueSplitter
           .split(observations, selectedColumnIdx, splittingValue);
       final error = _assessor
           .getAggregatedError(stumpObservations, outcomesRange);
+
       errors[error] = DecisionTreeStump(splittingValue, null,
           splittingColumnRange, stumpObservations);
+
       prevValue = row[selectedColumnIdx];
     }
+
     final sorted = errors.keys.toList(growable: false)
       ..sort();
     final minError = sorted.first;
