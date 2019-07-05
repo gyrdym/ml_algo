@@ -151,81 +151,6 @@ void main() {
             splittingValues)).called(1);
       });
 
-//      test('should return just one node in stump that is equal to the given '
-//          'matrix if splitting value collection contains the only value and '
-//          'the observations contain just this value in the target column '
-//          'range', () {
-//        final observations = Matrix.fromList([
-//          [11, 22, 0, 0, 1, 30],
-//          [60, 23, 0, 0, 1, 20],
-//          [20, 25, 0, 0, 1, 10],
-//          [17, 66, 0, 0, 1, 70],
-//          [13, 99, 0, 0, 1, 30],
-//        ]);
-//        final splittingColumnRange = ZRange.closed(2, 4);
-//        final splittingValues = [
-//          Vector.fromList([0, 0, 1]),
-//        ];
-//        final nominalSplitter = createNominalSplitter(
-//            splittingValues, [
-//              Matrix.fromList([
-//                [11, 22, 0, 0, 1, 30],
-//                [60, 23, 0, 0, 1, 20],
-//                [20, 25, 0, 0, 1, 10],
-//                [17, 66, 0, 0, 1, 70],
-//                [13, 99, 0, 0, 1, 30],
-//              ]),
-//            ],
-//        );
-//
-//        final stumpFactory = GreedyStumpFactory(null, null, nominalSplitter);
-//        final stump = stumpFactory.create(
-//          observations,
-//          splittingColumnRange,
-//          null,
-//          splittingValues,
-//        );
-//        expect(stump.outputSamples, equals([
-//          [
-//            [11, 22, 0, 0, 1, 30],
-//            [60, 23, 0, 0, 1, 20],
-//            [20, 25, 0, 0, 1, 10],
-//            [17, 66, 0, 0, 1, 70],
-//            [13, 99, 0, 0, 1, 30],
-//          ],
-//        ]));
-//      });
-
-//      test('should return just one node in stump that is just a part of the '
-//          'given matrix if splitting value collection contains the only value '
-//          'and the observations contain different values in the target column '
-//          'range', () {
-//        final observations = Matrix.fromList([
-//          [11, 22, 0, 0, 1, 30],
-//          [60, 23, 0, 0, 1, 20],
-//          [20, 25, 1, 0, 0, 10],
-//          [17, 66, 1, 0, 0, 70],
-//          [13, 99, 0, 1, 0, 30],
-//        ]);
-//        final splittingColumnRange = ZRange.closed(2, 4);
-//        final splittingValues = [
-//          Vector.fromList([0, 0, 1]),
-//        ];
-//        final stumpFactory = GreedyStumpFactory(null, null);
-//        final stump = stumpFactory.create(
-//          observations,
-//          splittingColumnRange,
-//          null,
-//          splittingValues,
-//        );
-//        expect(stump.outputSamples, equals([
-//          [
-//            [11, 22, 0, 0, 1, 30],
-//            [60, 23, 0, 0, 1, 20],
-//          ],
-//        ]));
-//      });
-
       test('should return an empty stum if splitting values collection is '
           'empty', () {
         final samples = Matrix.fromList([
@@ -254,113 +179,53 @@ void main() {
             .called(1);
       });
 
-//      test('should return an empty stump if no one value from the splitting'
-//          'value collection is contained in the target column range', () {
-//        final observations = Matrix.fromList([
-//          [11, 22, 0, 0, 1, 30],
-//          [60, 23, 0, 0, 1, 20],
-//          [20, 25, 1, 0, 0, 10],
-//          [17, 66, 1, 0, 0, 70],
-//          [13, 99, 0, 1, 0, 30],
-//        ]);
-//        final splittingColumnRange = ZRange.closed(2, 4);
-//        final splittingValues = [
-//          Vector.randomFilled(3),
-//          Vector.randomFilled(3),
-//          Vector.randomFilled(3),
-//        ];
-//        final stumpFactory = GreedyStumpFactory(null, null);
-//        final stump = stumpFactory.create(
-//          observations,
-//          splittingColumnRange,
-//          null,
-//          splittingValues,
-//        );
-//        expect(stump.outputSamples, equals(<Matrix>[]));
-//      });
+      test('should throw an error if unappropriate range is given (left '
+          'boundary is less than 0)', () {
+        final samples = Matrix.fromList([
+          [11, 22, 0, 0, 1, 30],
+          [60, 23, 0, 0, 1, 20],
+          [20, 25, 1, 0, 0, 10],
+          [17, 66, 1, 0, 0, 70],
+          [13, 99, 0, 1, 0, 30],
+        ]);
+        final splittingColumnRange = ZRange.closed(-2, 4);
+        final splittingValues = [
+          Vector.fromList([0, 0, 1]),
+          Vector.fromList([0, 1, 0]),
+        ];
+        final stumpFactory = GreedyStumpFactory(null, null, null);
+        final actual = () => stumpFactory.create(
+          samples,
+          splittingColumnRange,
+          null,
+          splittingValues,
+        );
+        expect(actual, throwsException);
+      });
 
-//      test('should not throw an error if at least one\'s length of the given '
-//          'splitting vectors does not match the length of the target column'
-//          'range', () {
-//        final observations = Matrix.fromList([
-//          [11, 22, 0, 0, 1, 30],
-//          [60, 23, 0, 0, 1, 20],
-//          [20, 25, 1, 0, 0, 10],
-//          [17, 66, 1, 0, 0, 70],
-//          [13, 99, 0, 1, 0, 30],
-//        ]);
-//        final splittingColumnRange = ZRange.closed(2, 4);
-//        final splittingValues = [
-//          Vector.fromList([0, 0, 1]),
-//          Vector.fromList([0, 1, 0]),
-//          Vector.fromList([1, 0, 0, 0]),
-//        ];
-//        final stumpFactory = GreedyStumpFactory(null, null);
-//        final stump = stumpFactory.create(
-//          observations,
-//          splittingColumnRange,
-//          null,
-//          splittingValues,
-//        );
-//
-//        expect(stump.outputSamples, equals([
-//          [
-//            [11, 22, 0, 0, 1, 30],
-//            [60, 23, 0, 0, 1, 20],
-//          ],
-//          [
-//            [13, 99, 0, 1, 0, 30],
-//          ],
-//        ]));
-//      });
-
-//      test('should throw an error if unappropriate range is given (left '
-//          'boundary is less than 0)', () {
-//        final observations = Matrix.fromList([
-//          [11, 22, 0, 0, 1, 30],
-//          [60, 23, 0, 0, 1, 20],
-//          [20, 25, 1, 0, 0, 10],
-//          [17, 66, 1, 0, 0, 70],
-//          [13, 99, 0, 1, 0, 30],
-//        ]);
-//        final splittingColumnRange = ZRange.closed(-2, 4);
-//        final splittingValues = [
-//          Vector.fromList([0, 0, 1]),
-//          Vector.fromList([0, 1, 0]),
-//        ];
-//        final stumpFactory = GreedyStumpFactory(null, null);
-//        final actual = () => stumpFactory.create(
-//          observations,
-//          splittingColumnRange,
-//          null,
-//          splittingValues,
-//        );
-//        expect(actual, throwsException);
-//      });
-
-//      test('should throw an error if unappropriate range is given (right '
-//          'boundary is greater than the observations columns number)', () {
-//        final observations = Matrix.fromList([
-//          [11, 22, 0, 0, 1, 30],
-//          [60, 23, 0, 0, 1, 20],
-//          [20, 25, 1, 0, 0, 10],
-//          [17, 66, 1, 0, 0, 70],
-//          [13, 99, 0, 1, 0, 30],
-//        ]);
-//        final splittingColumnRange = ZRange.closed(0, 10);
-//        final splittingValues = [
-//          Vector.fromList([0, 0, 1]),
-//          Vector.fromList([0, 1, 0]),
-//        ];
-//        final selector = GreedyStumpFactory(null, null);
-//        final actual = () => selector.create(
-//          observations,
-//          splittingColumnRange,
-//          null,
-//          splittingValues,
-//        );
-//        expect(actual, throwsException);
-//      });
+      test('should throw an error if unappropriate range is given (right '
+          'boundary is greater than the observations columns number)', () {
+        final samples = Matrix.fromList([
+          [11, 22, 0, 0, 1, 30],
+          [60, 23, 0, 0, 1, 20],
+          [20, 25, 1, 0, 0, 10],
+          [17, 66, 1, 0, 0, 70],
+          [13, 99, 0, 1, 0, 30],
+        ]);
+        final splittingColumnRange = ZRange.closed(0, 10);
+        final splittingValues = [
+          Vector.fromList([0, 0, 1]),
+          Vector.fromList([0, 1, 0]),
+        ];
+        final selector = GreedyStumpFactory(null, null, null);
+        final actual = () => selector.create(
+          samples,
+          splittingColumnRange,
+          null,
+          splittingValues,
+        );
+        expect(actual, throwsException);
+      });
     });
   });
 }

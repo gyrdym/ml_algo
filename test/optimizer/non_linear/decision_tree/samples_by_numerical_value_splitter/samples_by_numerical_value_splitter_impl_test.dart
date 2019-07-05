@@ -3,7 +3,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('SamplesSplitterImpl', () {
+  group('SamplesByNumericalValueSplitterImpl', () {
     test('should split given matrix into two parts: first part should contain '
         'values less than the splitting value, right part should contain '
         'values greater than the splitting value', () {
