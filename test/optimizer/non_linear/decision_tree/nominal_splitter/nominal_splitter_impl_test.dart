@@ -1,12 +1,12 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
 
 void main() {
-  group('SamplesByNominalValueSplitterImpl', () {
-    final splitter = const SamplesByNominalValueSplitterImpl();
+  group('NominalSplitterImpl', () {
+    final splitter = const NominalSplitterImpl();
 
     test('should perform split only by one splitting value, splitting column '
         'contains only this splitting value', () {
