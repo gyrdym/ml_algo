@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_numerical_value_splitter/samples_by_numerical_value_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
 import 'package:ml_linalg/axis.dart';
@@ -13,8 +13,8 @@ class GreedyStumpFactory implements StumpFactory {
       this._byNominalValueSplitter);
 
   final SplitAssessor _assessor;
-  final SamplesByNumericalValueSplitter _byNumericalValueSplitter;
-  final SamplesByNominalValueSplitter _byNominalValueSplitter;
+  final NumericalSplitter _byNumericalValueSplitter;
+  final NominalSplitter _byNominalValueSplitter;
 
   @override
   DecisionTreeStump create(Matrix samples, ZRange splittingColumnRange,

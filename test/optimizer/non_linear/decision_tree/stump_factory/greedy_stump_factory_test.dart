@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_numerical_value_splitter/samples_by_numerical_value_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -163,7 +163,7 @@ void main() {
         final splittingColumnRange = ZRange.closed(2, 4);
         final splittingValues = <Vector>[];
 
-        final splitter = SamplesByNominalValueSplitterMock();
+        final splitter = NominalSplitterMock();
         when(splitter.split(any, any, any)).thenReturn([]);
 
         final stumpFactory = GreedyStumpFactory(null, null, splitter);
@@ -230,7 +230,7 @@ void main() {
   });
 }
 
-SamplesByNumericalValueSplitter createNumericalSplitter(
+NumericalSplitter createNumericalSplitter(
     List<Map<String, dynamic>> mockedData) {
   final splitter = SamplesByNumericalValueSplitterMock();
   for (final splitInfo in mockedData) {
@@ -243,9 +243,9 @@ SamplesByNumericalValueSplitter createNumericalSplitter(
   return splitter;
 }
 
-SamplesByNominalValueSplitter createNominalSplitter(List<Vector> nominalValues,
+NominalSplitter createNominalSplitter(List<Vector> nominalValues,
     List<Matrix> stumpSamples) {
-  final splitter = SamplesByNominalValueSplitterMock();
+  final splitter = NominalSplitterMock();
   when(splitter.split(any, any, nominalValues)).thenReturn(stumpSamples);
   return splitter;
 }

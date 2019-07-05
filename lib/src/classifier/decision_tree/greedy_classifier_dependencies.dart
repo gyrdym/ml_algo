@@ -6,10 +6,10 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/lea
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter_impl.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_numerical_value_splitter/samples_by_numerical_value_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_numerical_value_splitter/samples_by_numerical_value_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter_impl.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/majority_split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory.dart';
@@ -24,17 +24,17 @@ Injector getGreedyDecisionTreeDependencies(double minError,
 
     ..registerSingleton<SplitAssessor>((_) => const MajoritySplitAssessor())
 
-    ..registerSingleton<SamplesByNumericalValueSplitter>(
-            (_) => const SamplesByNumericalValueSplitterImpl())
+    ..registerSingleton<NumericalSplitter>(
+            (_) => const NumericalSplitterImpl())
 
-    ..registerSingleton<SamplesByNominalValueSplitter>(
-            (_) => const SamplesByNominalValueSplitterImpl())
+    ..registerSingleton<NominalSplitter>(
+            (_) => const NominalSplitterImpl())
 
     ..registerSingleton<StumpFactory>((injector) =>
       GreedyStumpFactory(
         injector.getDependency<SplitAssessor>(),
-        injector.getDependency<SamplesByNumericalValueSplitter>(),
-        injector.getDependency<SamplesByNominalValueSplitter>(),
+        injector.getDependency<NumericalSplitter>(),
+        injector.getDependency<NominalSplitter>(),
       ),
     )
     ..registerSingleton<LeafDetector>((injector) =>

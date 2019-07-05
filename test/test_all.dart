@@ -33,10 +33,10 @@ import 'optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl_test
     as leaf_detector_impl_test;
 import 'optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory_test.dart'
     as majority_leaf_label_factory_test;
-import 'optimizer/non_linear/decision_tree/samples_by_numerical_value_splitter/samples_by_numerical_value_splitter_impl_test.dart'
-    as samples_by_numerical_value_splitter_impl_test;
-import 'optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_values_splitter_impl_test.dart'
-    as samples_by_nominal_value_splitter_impl_test;
+import 'optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter_impl_test.dart'
+    as nominal_splitter_impl_test;
+import 'optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter_impl_test.dart'
+    as numerical_splitter_impl_test;
 import 'optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory_test.dart'
     as greedy_stump_factory_test;
 import 'regressor/knn_regressor_integration_test.dart'
@@ -65,8 +65,8 @@ void main() {
   majority_split_assesor_test.main();
   leaf_detector_impl_test.main();
   majority_leaf_label_factory_test.main();
-  samples_by_numerical_value_splitter_impl_test.main();
-  samples_by_nominal_value_splitter_impl_test.main();
+  numerical_splitter_impl_test.main();
+  nominal_splitter_impl_test.main();
   greedy_stump_factory_test.main();
   greedy_stump_finder_test.main();
   decision_tree_optimizer_test.main();

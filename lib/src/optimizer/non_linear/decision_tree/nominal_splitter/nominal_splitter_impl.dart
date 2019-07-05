@@ -1,12 +1,10 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/samples_by_nominal_value_splitter/samples_by_nominal_value_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class SamplesByNominalValueSplitterImpl implements
-    SamplesByNominalValueSplitter {
-
-  const SamplesByNominalValueSplitterImpl();
+class NominalSplitterImpl implements NominalSplitter {
+  const NominalSplitterImpl();
 
   @override
   List<Matrix> split(Matrix samples, ZRange splittingColumnRange,
