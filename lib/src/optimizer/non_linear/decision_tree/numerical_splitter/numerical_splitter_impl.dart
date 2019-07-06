@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:quiver/iterables.dart';
 
 class NumericalSplitterImpl implements NumericalSplitter {
 
@@ -15,5 +16,18 @@ class NumericalSplitterImpl implements NumericalSplitter {
         ? left.add(row)
         : right.add(row));
     return [Matrix.fromRows(left), Matrix.fromRows(right)];
+  }
+
+  @override
+  Iterable<List<int>> getSplittingIndices(Matrix samples,
+      int splittingColumnIdx, double splittingValue) {
+    final left = <int>[];
+    final right = <int>[];
+    enumerate(samples.rows).forEach(
+            (row) => row.value[splittingColumnIdx] < splittingValue
+            ? left.add(row.index)
+            : right.add(row.index)
+    );
+    return [left, right];
   }
 }

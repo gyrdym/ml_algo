@@ -2,7 +2,10 @@ import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/mixin/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_builder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_traverser.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
@@ -14,7 +17,7 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
     implements DecisionTreeClassifier {
 
   DecisionTreeClassifierImpl(DataSet data, Injector dependencies) :
-        _optimizer = DecisionTreeOptimizer(
+        _treeRoot = DecisionTreeBuilder(
             data.toMatrix(),
             data.columnRanges,
             data.outcomeRange,
@@ -22,11 +25,14 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
             dependencies.getDependency<LeafDetector>(),
             dependencies.getDependency<DecisionTreeLeafLabelFactory>(),
             dependencies.getDependency<BestStumpFinder>(),
-            dependencies.getDependency<NumericalSplitter>(),
-            dependencies.getDependency<NominalSplitter>(),
+        ).root,
+        _treeTraverser = DecisionTreeTraverser(
+          dependencies.getDependency<NumericalSplitter>(),
+          dependencies.getDependency<NominalSplitter>(),
         );
 
-  final DecisionTreeOptimizer _optimizer;
+  final DecisionTreeNode _treeRoot;
+  final DecisionTreeTraverser _treeTraverser;
 
   @override
   Matrix get classLabels => null;
@@ -38,6 +44,12 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
   Matrix predictClasses(Matrix features) => null;
 
   @override
-  Matrix predictProbabilities(Matrix features) => null;
+  Matrix predictProbabilities(Matrix features) {
+    final probabilities = <List<double>>[];
+    _treeTraverser.traverse(features, _treeRoot, (List<int> indices,
+        DecisionTreeLeafLabel label) {
 
+    });
+    return Matrix.fromList(probabilities);
+  }
 }
