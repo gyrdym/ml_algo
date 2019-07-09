@@ -4,10 +4,14 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/lea
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:quiver/iterables.dart';
 import 'package:xrange/zrange.dart';
 
-class DecisionTreeBuilder {
-  DecisionTreeBuilder(
+import 'nominal_splitter/nominal_splitter.dart';
+import 'numerical_splitter/numerical_splitter.dart';
+
+class DecisionTreeSolver {
+  DecisionTreeSolver(
       Matrix samples,
       this._featuresColumnRanges,
       this._outcomeColumnRange,
@@ -15,6 +19,8 @@ class DecisionTreeBuilder {
       this._leafDetector,
       this._leafLabelFactory,
       this._bestStumpFinder,
+      this._nominalSplitter,
+      this._numericalSplitter,
   ) : _isOutcomeNominal = _rangeToNominalValues
       .containsKey(_outcomeColumnRange) {
     _root = _createNode(samples, _featuresColumnRanges);
@@ -27,9 +33,14 @@ class DecisionTreeBuilder {
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
   final BestStumpFinder _bestStumpFinder;
+  final NumericalSplitter _numericalSplitter;
+  final NominalSplitter _nominalSplitter;
 
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
+
+  Map<DecisionTreeNode, Matrix> traverse(Matrix samples) =>
+      _traverse(samples, _root, {});
 
   DecisionTreeNode _createNode(Matrix samples,
       Iterable<ZRange> featuresColumnRanges) {
@@ -59,5 +70,35 @@ class DecisionTreeBuilder {
 
     return DecisionTreeNode.fromStump(bestStump,
         childNodes.toList(growable: false));
+  }
+
+  Map<DecisionTreeNode, Matrix> _traverse(Matrix samples, DecisionTreeNode node,
+      Map<DecisionTreeNode, Matrix> leafNodesToSamples) {
+    if (node.isLeaf) {
+      return leafNodesToSamples
+        ..update(node, null, ifAbsent: () => samples);
+    }
+
+    final split = node.splittingNumericalValue != null
+        ? _numericalSplitter.split(
+        samples,
+        node.splittingColumnRange.firstValue,
+        node.splittingNumericalValue
+    )
+        : _nominalSplitter.split(
+        samples,
+        node.splittingColumnRange,
+        node.splittingNominalValues
+    );
+
+    enumerate(split).forEach((indexedSplitPart) =>
+        _traverse(
+          indexedSplitPart.value,
+          node.children[indexedSplitPart.index],
+          leafNodesToSamples,
+        )
+    );
+
+    return leafNodesToSamples;
   }
 }
