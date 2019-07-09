@@ -9,53 +9,53 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class GreedyStumpFactory implements StumpFactory {
-  GreedyStumpFactory(this._assessor, this._byNumericalValueSplitter,
-      this._byNominalValueSplitter);
+  GreedyStumpFactory(this._assessor, this._numericalSplitter,
+      this._nominalSplitter);
 
   final SplitAssessor _assessor;
-  final NumericalSplitter _byNumericalValueSplitter;
-  final NominalSplitter _byNominalValueSplitter;
+  final NumericalSplitter _numericalSplitter;
+  final NominalSplitter _nominalSplitter;
 
   @override
-  DecisionTreeStump create(Matrix samples, ZRange splittingColumnRange,
+  DecisionTreeStump create(Matrix samples, ZRange splittingRange,
       ZRange outcomeColumnRange, [List<Vector> nominalValues]) =>
       nominalValues != null
-          ? _createByNominalValues(samples, splittingColumnRange,
+          ? _createByNominalValues(samples, splittingRange,
             nominalValues)
-          : _createByNumericalValue(samples, splittingColumnRange,
+          : _createByNumericalValue(samples, splittingRange,
           outcomeColumnRange);
 
   DecisionTreeStump _createByNominalValues(Matrix samples,
-      ZRange splittingColumnRange, List<Vector> nominalValues) {
-    if (splittingColumnRange.firstValue < 0 ||
-        splittingColumnRange.lastValue > samples.columnsNum) {
-      throw Exception('Unappropriate range given: $splittingColumnRange, '
+      ZRange splittingRange, List<Vector> values) {
+    if (splittingRange.firstValue < 0 ||
+        splittingRange.lastValue > samples.columnsNum) {
+      throw Exception('Unappropriate range given: $splittingRange, '
           'expected a range within or equal '
           '${ZRange.closed(0, samples.columnsNum)}');
     }
-    final stumpObservations = _byNominalValueSplitter.split(samples,
-        splittingColumnRange, nominalValues);
-    return DecisionTreeStump(null, nominalValues, splittingColumnRange,
+    final stumpObservations = _nominalSplitter.split(samples,
+        splittingRange, values);
+    return DecisionTreeStump(null, values, splittingRange,
         stumpObservations);
   }
 
-  DecisionTreeStump _createByNumericalValue(Matrix observations,
-      ZRange splittingColumnRange, ZRange outcomesRange) {
-    final selectedColumnIdx = splittingColumnRange.firstValue;
+  DecisionTreeStump _createByNumericalValue(Matrix samples,
+      ZRange splittingRange, ZRange outcomesRange) {
+    final selectedColumnIdx = splittingRange.firstValue;
     final errors = <double, DecisionTreeStump>{};
-    final sortedRows = observations
+    final sortedRows = samples
         .sort((row) => row[selectedColumnIdx], Axis.rows).rows;
     var prevValue = sortedRows.first[selectedColumnIdx];
 
     for (final row in sortedRows.skip(1)) {
       final splittingValue = (prevValue + row[selectedColumnIdx]) / 2;
-      final stumpObservations = _byNumericalValueSplitter
-          .split(observations, selectedColumnIdx, splittingValue);
+      final stumpObservations = _numericalSplitter
+          .split(samples, selectedColumnIdx, splittingValue);
       final error = _assessor
           .getAggregatedError(stumpObservations, outcomesRange);
 
       errors[error] = DecisionTreeStump(splittingValue, null,
-          splittingColumnRange, stumpObservations);
+          splittingRange, stumpObservations);
 
       prevValue = row[selectedColumnIdx];
     }

@@ -4,7 +4,6 @@ import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart';
 
 class NumericalSplitterImpl implements NumericalSplitter {
-
   const NumericalSplitterImpl();
 
   @override
@@ -16,18 +15,5 @@ class NumericalSplitterImpl implements NumericalSplitter {
         ? left.add(row)
         : right.add(row));
     return [Matrix.fromRows(left), Matrix.fromRows(right)];
-  }
-
-  @override
-  Iterable<List<int>> getSplittingIndices(Matrix samples,
-      int splittingColumnIdx, double splittingValue) {
-    final left = <int>[];
-    final right = <int>[];
-    enumerate(samples.rows).forEach(
-            (row) => row.value[splittingColumnIdx] < splittingValue
-            ? left.add(row.index)
-            : right.add(row.index)
-    );
-    return [left, right];
   }
 }
