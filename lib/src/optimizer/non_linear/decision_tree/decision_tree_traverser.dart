@@ -5,7 +5,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitte
 import 'package:ml_linalg/matrix.dart';
 import 'package:quiver/iterables.dart';
 
-typedef OnLeafReachedCallbackFn = void Function(List<int> indices,
+typedef OnLeafReachedCallbackFn = void Function(Matrix samples,
     DecisionTreeLeafLabel label);
 
 class DecisionTreeTraverser {
@@ -14,38 +14,30 @@ class DecisionTreeTraverser {
   final NumericalSplitter _numericalSplitter;
   final NominalSplitter _nominalSplitter;
 
-  Matrix _samples;
-  OnLeafReachedCallbackFn _onLeafReached;
-
   void traverse(Matrix samples, DecisionTreeNode node,
-      void onLeafReached(List<int> indices, DecisionTreeLeafLabel label)) {
-    _samples = samples;
-    _onLeafReached = onLeafReached;
-    _traverse([], node);
-  }
-
-  void _traverse(List<int> indices, DecisionTreeNode node) {
+      OnLeafReachedCallbackFn onLeafReached) {
     if (node.isLeaf) {
-      _onLeafReached(indices, node.label);
+      onLeafReached(samples, node.label);
       return;
     }
 
-    final splitIndices = node.splittingNumericalValue != null
-        ? _numericalSplitter.getSplittingIndices(
-        _samples,
+    final split = node.splittingNumericalValue != null
+        ? _numericalSplitter.split(
+        samples,
         node.splittingColumnRange.firstValue,
         node.splittingNumericalValue
     )
-        : _nominalSplitter.getSplittingIndices(
-        _samples,
+        : _nominalSplitter.split(
+        samples,
         node.splittingColumnRange,
         node.splittingNominalValues
     );
 
-    enumerate(splitIndices).forEach((indicesGroup) =>
-        _traverse(
-          indicesGroup.value,
-          node.children[indicesGroup.index],
+    enumerate(split).forEach((indexedSplitPart) =>
+        traverse(
+          indexedSplitPart.value,
+          node.children[indexedSplitPart.index],
+          onLeafReached,
         )
     );
   }
