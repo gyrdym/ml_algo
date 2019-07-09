@@ -2,9 +2,7 @@ import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/mixin/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_builder.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_traverser.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
@@ -16,7 +14,7 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
     implements DecisionTreeClassifier {
 
   DecisionTreeClassifierImpl(DataSet data, Injector dependencies) :
-        _treeRoot = DecisionTreeBuilder(
+        _solver = DecisionTreeSolver(
             data.toMatrix(),
             data.columnRanges,
             data.outcomeRange,
@@ -24,14 +22,11 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
             dependencies.getDependency<LeafDetector>(),
             dependencies.getDependency<DecisionTreeLeafLabelFactory>(),
             dependencies.getDependency<BestStumpFinder>(),
-        ).root,
-        _treeTraverser = DecisionTreeTraverser(
-          dependencies.getDependency<NumericalSplitter>(),
-          dependencies.getDependency<NominalSplitter>(),
+            dependencies.getDependency<NominalSplitter>(),
+            dependencies.getDependency<NumericalSplitter>(),
         );
 
-  final DecisionTreeNode _treeRoot;
-  final DecisionTreeTraverser _treeTraverser;
+  final DecisionTreeSolver _solver;
 
   @override
   Matrix get classLabels => null;

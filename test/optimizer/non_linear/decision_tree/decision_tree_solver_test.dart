@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_builder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
@@ -14,7 +14,7 @@ import 'package:xrange/zrange.dart';
 import '../../../test_utils/mocks.dart';
 
 void main() {
-  group('DecisionTreeOptimizer', () {
+  group('DecisionTreeSolver', () {
     test('should build a greedy classifier tree', () {
       final observations = Matrix.fromList([
         [10, 20, 30, 40, 0, 0, 1],
@@ -174,7 +174,7 @@ void main() {
             .nominal(Vector.fromList([1, 0, 0])),
       );
 
-      final rootNode = DecisionTreeBuilder(
+      final rootNode = DecisionTreeSolver(
           observations,
           featuresColumnRanges,
           outcomesColumnRange,
@@ -182,6 +182,8 @@ void main() {
           leafDetector,
           leafLabelFactory,
           bestStumpFinder,
+          null,
+          null,
       ).root;
 
       testTreeNode(rootNode,
@@ -405,7 +407,7 @@ void main() {
             .nominal(Vector.fromList([1, 0, 0])),
       );
 
-      final rootNode = DecisionTreeBuilder(
+      final rootNode = DecisionTreeSolver(
         samples,
         featuresColumnRangesFull,
         outcomesColumnRange,
@@ -413,6 +415,8 @@ void main() {
         leafDetector,
         leafLabelFactory,
         bestStumpFinder,
+        null,
+        null,
       ).root;
 
       testTreeNode(rootNode,
