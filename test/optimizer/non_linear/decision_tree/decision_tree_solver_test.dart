@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
@@ -521,7 +521,7 @@ void mockLeafLabelFactoryCall({
 }
 
 void mockStumpFinderCall(
-    BestStumpFinder bestStumpFinder,
+    BestSplitFinder bestStumpFinder,
     Matrix input,
     ZRange outcomesColumnRange,
     Set<ZRange> featuresColumnRange,

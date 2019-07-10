@@ -3,7 +3,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-abstract class BestStumpFinder {
+abstract class BestSplitFinder {
   Map<DecisionTreeNode, Matrix> find(Matrix samples, ZRange outcomesColumnRange,
       Iterable<ZRange> featuresColumnRanges,
       [Map<ZRange, List<Vector>> rangeToNominalValues]);

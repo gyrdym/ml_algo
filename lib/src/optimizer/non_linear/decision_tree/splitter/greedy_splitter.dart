@@ -1,15 +1,15 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/splitter.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class GreedyStumpFactory implements StumpFactory {
-  GreedyStumpFactory(this._assessor, this._numericalSplitter,
+class GreedySplitFactory implements Splitter {
+  GreedySplitFactory(this._assessor, this._numericalSplitter,
       this._nominalSplitter);
 
   final SplitAssessor _assessor;

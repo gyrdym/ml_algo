@@ -1,5 +1,4 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_base_node.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
@@ -27,7 +26,7 @@ class DecisionTreeSolver {
   final bool _isOutcomeNominal;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
-  final BestStumpFinder _bestStumpFinder;
+  final BestSplitFinder _bestStumpFinder;
 
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
