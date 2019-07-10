@@ -15,13 +15,13 @@ import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_w
 import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_split_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/splitter.dart' as decision_tree_splitter;
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
@@ -60,7 +60,7 @@ class PredictorMock extends Mock implements Assessable {}
 
 class SplitAssessorMock extends Mock implements SplitAssessor {}
 
-class StumpFactoryMock extends Mock implements SplitFactory {}
+class StumpFactoryMock extends Mock implements decision_tree_splitter.Splitter {}
 
 class SamplesByNumericalValueSplitterMock extends Mock implements
     NumericalSplitter {}

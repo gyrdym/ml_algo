@@ -1,8 +1,10 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter_impl.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
+
+import '../../test_utils.dart';
 
 void main() {
   group('NominalSplitterImpl', () {
@@ -25,7 +27,7 @@ void main() {
       final split = splitter.split(samples, splittingColumnRange,
           splittingValues);
 
-      expect(split, equals([
+      expect(split.values, equals([
         [
           [11, 22, 0, 0, 1, 30],
           [60, 23, 0, 0, 1, 20],
@@ -34,6 +36,14 @@ void main() {
           [13, 99, 0, 0, 1, 30],
         ],
       ]));
+      testTreeNode(split.keys.first,
+          shouldBeLeaf: true,
+          expectedSplittingNumericalValue: null,
+          expectedSplittingNominalValue: Vector.fromList([0, 0, 1]),
+          expectedSplittingColumnRange: splittingColumnRange,
+          expectedChildrenLength: null,
+          expectedLabel: null,
+      );
     });
 
     test('should perform split only by one splitting value, splitting column '
@@ -53,12 +63,20 @@ void main() {
       final split = splitter.split(samples, splittingColumnRange,
           splittingValues);
 
-      expect(split, equals([
+      expect(split.values, equals([
         [
           [11, 22, 0, 0, 1, 30],
           [60, 23, 0, 0, 1, 20],
         ],
       ]));
+      testTreeNode(split.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingNominalValue: Vector.fromList([0, 0, 1]),
+        expectedSplittingColumnRange: splittingColumnRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
     });
 
     test('should return an empty list if no one value from the splitting value '
@@ -80,7 +98,7 @@ void main() {
       final split = splitter.split(samples, splittingColumnRange,
           splittingValues);
 
-      expect(split, equals(<Matrix>[]));
+      expect(split, hasLength(0));
     });
 
     test('should ignore splitting vectors with improper length', () {
@@ -101,7 +119,7 @@ void main() {
       final split = splitter.split(samples, splittingColumnRange,
           splittingValues);
 
-      expect(split, equals([
+      expect(split.values, equals([
         [
           [11, 22, 0, 0, 1, 30],
           [60, 23, 0, 0, 1, 20],
@@ -110,6 +128,22 @@ void main() {
           [13, 99, 0, 1, 0, 30],
         ],
       ]));
+      testTreeNode(split.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingNominalValue: Vector.fromList([0, 0, 1]),
+        expectedSplittingColumnRange: splittingColumnRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+      testTreeNode(split.keys.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: null,
+        expectedSplittingNominalValue: Vector.fromList([0, 1, 0]),
+        expectedSplittingColumnRange: splittingColumnRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
     });
   });
 }

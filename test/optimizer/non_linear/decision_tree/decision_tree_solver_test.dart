@@ -545,33 +545,3 @@ void mockStumpFinderCall(
     ),
   );
 }
-
-void testTreeNode(
-    DecisionTreeNode node,
-    {
-      bool shouldBeLeaf,
-      double expectedSplittingNumericalValue,
-      ZRange expectedSplittingColumnRange,
-      List<Vector> expectedSplittingNominalValues,
-      int expectedChildrenLength,
-      DecisionTreeLeafLabel expectedLabel,
-    }
-) {
-  expect(node.isLeaf, equals(shouldBeLeaf));
-  expect(node.splittingNumericalValue, equals(expectedSplittingNumericalValue));
-  expect(node.splittingColumnRange, equals(expectedSplittingColumnRange));
-  expect(node.splittingNominalValues, equals(expectedSplittingNominalValues));
-  expectedChildrenLength == null
-      ? expect(node.children, isNull)
-      : expect(node.children, hasLength(expectedChildrenLength));
-  expectedLabel == null
-      ? expect(node.label, isNull)
-      : testLeafLabel(node.label, expectedLabel);
-}
-
-void testLeafLabel(DecisionTreeLeafLabel label,
-    DecisionTreeLeafLabel expectedLabel) {
-  expect(label.nominalValue, equals(expectedLabel.nominalValue));
-  expect(label.numericalValue, equals(expectedLabel.numericalValue));
-  expect(label.probability, equals(expectedLabel.probability));
-}

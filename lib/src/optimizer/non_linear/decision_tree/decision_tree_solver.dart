@@ -66,16 +66,18 @@ class DecisionTreeSolver {
         _rangeToNominalValues,
     );
 
-    final isSplitByNominalValue = _rangeToNominalValues
-        .containsKey(splittingRange);
-
-    final updatedColumnRanges = isSplitByNominalValue
-        ? (Set<ZRange>.from(featuresColumnRanges)..remove(splittingRange))
-        : featuresColumnRanges;
-
     final childNodes = bestSplit.entries.map((entry) {
       final splitNode = entry.key;
       final splitSamples = entry.value;
+
+      final isSplitByNominalValue = _rangeToNominalValues
+          .containsKey(splitNode.splittingColumnRange);
+
+      final updatedColumnRanges = isSplitByNominalValue
+          ? (Set<ZRange>.from(featuresColumnRanges)
+              ..remove(splitNode.splittingColumnRange))
+          : featuresColumnRanges;
+
       return _createNode(
           splitSamples,
           splitNode.splittingNumericalValue,
