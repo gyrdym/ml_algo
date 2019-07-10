@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
@@ -17,7 +17,7 @@ class GreedyStumpFactory implements StumpFactory {
   final NominalSplitter _nominalSplitter;
 
   @override
-  DecisionTreeStump create(Matrix samples, ZRange splittingRange,
+  Map<DecisionTreeNode, Matrix> create(Matrix samples, ZRange splittingRange,
       ZRange outcomeColumnRange, [List<Vector> nominalValues]) =>
       nominalValues != null
           ? _createByNominalValues(samples, splittingRange,
@@ -25,7 +25,7 @@ class GreedyStumpFactory implements StumpFactory {
           : _createByNumericalValue(samples, splittingRange,
           outcomeColumnRange);
 
-  DecisionTreeStump _createByNominalValues(Matrix samples,
+  Map<DecisionTreeNode, Matrix> _createByNominalValues(Matrix samples,
       ZRange splittingRange, List<Vector> values) {
     if (splittingRange.firstValue < 0 ||
         splittingRange.lastValue > samples.columnsNum) {
@@ -33,29 +33,26 @@ class GreedyStumpFactory implements StumpFactory {
           'expected a range within or equal '
           '${ZRange.closed(0, samples.columnsNum)}');
     }
-    final stumpObservations = _nominalSplitter.split(samples,
+    return _nominalSplitter.split(samples,
         splittingRange, values);
-    return DecisionTreeStump(null, values, splittingRange,
-        stumpObservations);
   }
 
-  DecisionTreeStump _createByNumericalValue(Matrix samples,
+  Map<DecisionTreeNode, Matrix> _createByNumericalValue(Matrix samples,
       ZRange splittingRange, ZRange outcomesRange) {
     final selectedColumnIdx = splittingRange.firstValue;
-    final errors = <double, DecisionTreeStump>{};
+    final errors = <double, Map<DecisionTreeNode, Matrix>>{};
     final sortedRows = samples
         .sort((row) => row[selectedColumnIdx], Axis.rows).rows;
     var prevValue = sortedRows.first[selectedColumnIdx];
 
     for (final row in sortedRows.skip(1)) {
       final splittingValue = (prevValue + row[selectedColumnIdx]) / 2;
-      final stumpObservations = _numericalSplitter
-          .split(samples, selectedColumnIdx, splittingValue);
+      final split = _numericalSplitter
+          .split(samples, splittingRange, splittingValue);
       final error = _assessor
-          .getAggregatedError(stumpObservations, outcomesRange);
+          .getAggregatedError(split.values, outcomesRange);
 
-      errors[error] = DecisionTreeStump(splittingValue, null,
-          splittingRange, stumpObservations);
+      errors[error] = split;
 
       prevValue = row[selectedColumnIdx];
     }

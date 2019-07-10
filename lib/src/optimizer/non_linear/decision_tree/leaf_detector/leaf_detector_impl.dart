@@ -12,19 +12,19 @@ class LeafDetectorImpl implements LeafDetector {
   final double _minErrorOnNode;
 
   @override
-  bool isLeaf(Matrix observations, ZRange outcomesRange,
+  bool isLeaf(Matrix samples, ZRange outcomesRange,
       Iterable<ZRange> featureColumnRanges) {
     if (featureColumnRanges.isEmpty) {
       return true;
     }
-    if (observations.rowsNum <= _minSamplesCount) {
+    if (samples.rowsNum <= _minSamplesCount) {
       return true;
     }
-    final outcomes = observations.submatrix(columns: outcomesRange);
+    final outcomes = samples.submatrix(columns: outcomesRange);
     if (outcomes.uniqueRows().rowsNum == 1) {
       return true;
     }
-    final errorOnNode = _assessor.getError(observations, outcomesRange);
+    final errorOnNode = _assessor.getError(samples, outcomesRange);
     return errorOnNode <= _minErrorOnNode;
   }
 }

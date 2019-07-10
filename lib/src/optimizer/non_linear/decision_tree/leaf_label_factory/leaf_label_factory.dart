@@ -3,6 +3,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/zrange.dart';
 
 abstract class DecisionTreeLeafLabelFactory {
-  DecisionTreeLeafLabel create(Matrix observations, ZRange outcomesColumnRange,
+  DecisionTreeLeafLabel create(Matrix samples, ZRange outcomesColumnRange,
       bool isClassLabelNominal);
 }
