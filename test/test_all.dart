@@ -33,9 +33,9 @@ import 'optimizer/non_linear/decision_tree/leaf_detector/leaf_detector_impl_test
     as leaf_detector_impl_test;
 import 'optimizer/non_linear/decision_tree/leaf_label_factory/majority_leaf_label_factory_test.dart'
     as majority_leaf_label_factory_test;
-import 'optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter_impl_test.dart'
+import 'optimizer/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter_impl_test.dart'
     as nominal_splitter_impl_test;
-import 'optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter_impl_test.dart'
+import 'optimizer/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter_impl_test.dart'
     as numerical_splitter_impl_test;
 import 'optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory_test.dart'
     as greedy_stump_factory_test;

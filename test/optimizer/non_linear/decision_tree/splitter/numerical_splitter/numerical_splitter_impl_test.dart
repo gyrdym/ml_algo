@@ -1,0 +1,274 @@
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter_impl.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:test/test.dart';
+import 'package:xrange/zrange.dart';
+
+import '../../test_utils.dart';
+
+void main() {
+  group('SamplesByNumericalValueSplitterImpl', () {
+    test('should split given matrix into two parts: first part should contain '
+        'values less than the splitting value, right part should contain '
+        'values greater than the splitting value', () {
+      final samples = Matrix.fromList([
+        [111, 2,  30, 4],
+        [1,   32, 10, 44],
+        [11,  22, 10, 14],
+        [33,  12, 5,  55],
+        [0,   20, 60, 10],
+      ]);
+      final splittingRange = ZRange.singleton(2);
+      final splittingValue = 10.0;
+      final splitter = const NumericalSplitterImpl();
+      final actual = splitter.split(samples, splittingRange,
+          splittingValue);
+
+      expect(actual.values, equals([
+        [
+          [33,  12, 5,  55],
+        ],
+        [
+          [111, 2,  30, 4],
+          [1,   32, 10, 44],
+          [11,  22, 10, 14],
+          [0,   20, 60, 10],
+        ],
+      ]));
+      testTreeNode(actual.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+      testTreeNode(actual.keys.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+    });
+
+    test('should split given matrix into two parts if all the values are '
+        'greater or equal than the splitting value: the first part should be '
+        'empty', () {
+      final samples = Matrix.fromList([
+        [111, 2,  30, 4],
+        [1,   32, 10, 44],
+        [11,  22, 10, 14],
+        [33,  12, 500,  55],
+        [0,   20, 60, 10],
+      ]);
+      final splittingRange = ZRange.singleton(2);
+      final splittingValue = 10.0;
+      final splitter = const NumericalSplitterImpl();
+      final actual = splitter.split(samples, splittingRange,
+          splittingValue);
+
+      expect(actual.values, equals([
+        <double>[],
+        [
+          [111, 2,  30, 4],
+          [1,   32, 10, 44],
+          [11,  22, 10, 14],
+          [33,  12, 500,  55],
+          [0,   20, 60, 10],
+        ],
+      ]));
+      testTreeNode(actual.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+      testTreeNode(actual.keys.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+    });
+
+    test('should split given matrix into two parts if splitting value is '
+        '0', () {
+      final samples = Matrix.fromList([
+        [111, 2,  30, 4],
+        [1,   32, -10, 44],
+        [11,  22, 0, 14],
+        [33,  12, 500,  55],
+        [0,   20, -60, 10],
+      ]);
+      final splittingRange = ZRange.singleton(2);
+      final splittingValue = 0.0;
+      final splitter = const NumericalSplitterImpl();
+      final actual = splitter.split(samples, splittingRange,
+          splittingValue);
+
+      expect(actual.values, equals([
+        [
+          [1,   32, -10, 44],
+          [0,   20, -60, 10],
+        ],
+        [
+          [111, 2,  30, 4],
+          [11,  22, 0, 14],
+          [33,  12, 500,  55],
+        ],
+      ]));
+      testTreeNode(actual.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+      testTreeNode(actual.keys.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+    });
+
+    test('should split given matrix into two parts if all the values are '
+        'less than the splitting value: the second part should be empty', () {
+      final samples = Matrix.fromList([
+        [111, 2,  30, 4],
+        [1,   32, 10, 44],
+        [11,  22, 10, 14],
+        [33,  12, 500,  55],
+        [0,   20, 60, 10],
+      ]);
+      final splittingRange = ZRange.singleton(2);
+      final splittingValue = 1000.0;
+      final splitter = const NumericalSplitterImpl();
+      final actual = splitter.split(samples, splittingRange,
+          splittingValue);
+
+      expect(actual.values, equals([
+        [
+          [111, 2,  30, 4],
+          [1,   32, 10, 44],
+          [11,  22, 10, 14],
+          [33,  12, 500,  55],
+          [0,   20, 60, 10],
+        ],
+        <double>[],
+      ]));
+      testTreeNode(actual.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+      testTreeNode(actual.keys.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+    });
+
+    test('should split given matrix into two parts if splitting column index is'
+        ' 0', () {
+      final samples = Matrix.fromList([
+        [111, 2,  30, 4],
+        [1,   32, 10, 44],
+        [11,  22, 10, 14],
+        [33,  12, 500,  55],
+        [0,   20, 60, 10],
+      ]);
+      final splittingRange = ZRange.singleton(0);
+      final splittingValue = 2.0;
+      final splitter = const NumericalSplitterImpl();
+      final actual = splitter.split(samples, splittingRange,
+          splittingValue);
+
+      expect(actual.values, equals([
+        [
+          [1,   32, 10, 44],
+          [0,   20, 60, 10],
+        ],
+        [
+          [111, 2,  30, 4],
+          [11,  22, 10, 14],
+          [33,  12, 500,  55],
+        ],
+      ]));
+      testTreeNode(actual.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+      testTreeNode(actual.keys.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+    });
+
+    test('should split given matrix into two parts if splitting column is the '
+        'last column', () {
+      final samples = Matrix.fromList([
+        [111, 2,  30, 4],
+        [1,   32, 10, 44],
+        [11,  22, 10, 14],
+        [33,  12, 500,  55],
+        [0,   20, 60, 10],
+      ]);
+      final splittingRange = ZRange.singleton(3);
+      final splittingValue = 20.0;
+      final splitter = const NumericalSplitterImpl();
+      final actual = splitter.split(samples, splittingRange,
+          splittingValue);
+
+      expect(actual.values, equals([
+        [
+          [111, 2,  30, 4],
+          [11,  22, 10, 14],
+          [0,   20, 60, 10],
+        ],
+        [
+          [1,   32, 10, 44],
+          [33,  12, 500,  55],
+        ],
+      ]));
+      testTreeNode(actual.keys.first,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+      testTreeNode(actual.keys.last,
+        shouldBeLeaf: true,
+        expectedSplittingNumericalValue: splittingValue,
+        expectedSplittingNominalValue: null,
+        expectedSplittingColumnRange: splittingRange,
+        expectedChildrenLength: null,
+        expectedLabel: null,
+      );
+    });
+  });
+}
