@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/greedy_stump_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/greedy_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -69,7 +69,7 @@ void main() {
       when(assessor.getAggregatedError(bestStump.outputSamples,
           outcomesRange)).thenReturn(0.1);
 
-      final finder = GreedyStumpFinder(assessor, selector);
+      final finder = GreedySplitFinder(assessor, selector);
       final stump = finder.find(samples, outcomesRange, featuresRanges);
 
       expect(stump, equals(bestStump));
@@ -132,7 +132,7 @@ void main() {
       when(assessor.getAggregatedError(bestStump.outputSamples,
           outcomesRange)).thenReturn(0.1);
 
-      final finder = GreedyStumpFinder(assessor, selector);
+      final finder = GreedySplitFinder(assessor, selector);
       final stump = finder.find(samples, outcomesRange, featuresRanges,
           rangeToNominalValues);
 
@@ -186,7 +186,7 @@ void main() {
       when(assessor.getAggregatedError(bestStump.outputSamples,
           outcomesRange)).thenReturn(0.1);
 
-      final finder = GreedyStumpFinder(assessor, selector);
+      final finder = GreedySplitFinder(assessor, selector);
       final stump = finder.find(observations, outcomesRange,
           featuresColumnRanges, rangeToCategoricalValues);
 

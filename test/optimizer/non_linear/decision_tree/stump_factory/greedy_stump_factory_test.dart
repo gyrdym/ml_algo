@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/numerical_splitter/numerical_splitter.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/greedy_stump_factory.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/greedy_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
@@ -79,7 +79,7 @@ void main() {
             outcomesRange)).thenReturn(0.1);
 
         final splitter = createNumericalSplitter(mockedSplitDataToBeReturned);
-        final stumpFactory = GreedyStumpFactory(assessor, splitter, null);
+        final stumpFactory = GreedySplitFactory(assessor, splitter, null);
         final stump = stumpFactory.create(inputObservations,
             ZRange.singleton(splittingColumn), outcomesRange);
 
@@ -125,7 +125,7 @@ void main() {
             ]),
           ],
         );
-        final selector = GreedyStumpFactory(null, null, splitter);
+        final selector = GreedySplitFactory(null, null, splitter);
         final stump = selector.create(
           samples,
           splittingColumnRange,
@@ -166,7 +166,7 @@ void main() {
         final splitter = NominalSplitterMock();
         when(splitter.split(any, any, any)).thenReturn([]);
 
-        final stumpFactory = GreedyStumpFactory(null, null, splitter);
+        final stumpFactory = GreedySplitFactory(null, null, splitter);
 
         final stump = stumpFactory.create(
           samples,
@@ -193,7 +193,7 @@ void main() {
           Vector.fromList([0, 0, 1]),
           Vector.fromList([0, 1, 0]),
         ];
-        final stumpFactory = GreedyStumpFactory(null, null, null);
+        final stumpFactory = GreedySplitFactory(null, null, null);
         final actual = () => stumpFactory.create(
           samples,
           splittingColumnRange,
@@ -217,7 +217,7 @@ void main() {
           Vector.fromList([0, 0, 1]),
           Vector.fromList([0, 1, 0]),
         ];
-        final selector = GreedyStumpFactory(null, null, null);
+        final selector = GreedySplitFactory(null, null, null);
         final actual = () => selector.create(
           samples,
           splittingColumnRange,

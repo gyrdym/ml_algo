@@ -3,7 +3,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-abstract class StumpFactory {
+abstract class Splitter {
   Map<DecisionTreeNode, Matrix> create(Matrix samples,
       ZRange splittingColumnRange, ZRange outcomeColumnRange,
       [List<Vector> nominalValues]);

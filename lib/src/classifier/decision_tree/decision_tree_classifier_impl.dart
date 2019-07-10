@@ -1,7 +1,7 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/mixin/asessable_classifier_mixin.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
@@ -19,7 +19,7 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
             data.rangeToEncoded,
             dependencies.getDependency<LeafDetector>(),
             dependencies.getDependency<DecisionTreeLeafLabelFactory>(),
-            dependencies.getDependency<BestStumpFinder>(),
+            dependencies.getDependency<BestSplitFinder>(),
         );
 
   final DecisionTreeSolver _solver;
