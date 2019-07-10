@@ -1,14 +1,18 @@
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
+typedef FilterPredicate = bool Function(Vector sample);
+
 abstract class DecisionTreeBaseNode {
   DecisionTreeBaseNode(
+      this.isSampleAcceptable,
       this.splittingNumericalValue,
-      this.splittingNominalValues,
+      this.splittingNominalValue,
       this.splittingColumnRange,
   );
 
+  final FilterPredicate isSampleAcceptable;
   final double splittingNumericalValue;
-  final List<Vector> splittingNominalValues;
+  final Vector splittingNominalValue;
   final ZRange splittingColumnRange;
 }

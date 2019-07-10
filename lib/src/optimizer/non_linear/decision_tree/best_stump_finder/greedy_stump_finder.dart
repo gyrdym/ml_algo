@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/stump_factory/stump_factory.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -13,20 +13,22 @@ class GreedyStumpFinder implements BestStumpFinder {
   final StumpFactory _stumpFactory;
 
   @override
-  DecisionTreeStump find(Matrix samples, ZRange outcomesColumnRange,
+  Map<DecisionTreeNode, Matrix> find(
+      Matrix samples,
+      ZRange outcomesColumnRange,
       Iterable<ZRange> featuresColumnRanges,
       [Map<ZRange, List<Vector>> rangeToNominalValues]) {
-    final errors = <double, List<DecisionTreeStump>>{};
+    final errors = <double, List<Map<DecisionTreeNode, Matrix>>>{};
     featuresColumnRanges.forEach((range) {
       final nominalValues = rangeToNominalValues != null
           ? rangeToNominalValues[range]
           : null;
-      final stump = _stumpFactory.create(samples, range,
+      final split = _stumpFactory.create(samples, range,
           outcomesColumnRange, nominalValues);
-      final error = _assessor.getAggregatedError(stump.outputSamples,
+      final error = _assessor.getAggregatedError(split.values,
           outcomesColumnRange);
-      errors.update(error, (stumps) => stumps..add(stump),
-          ifAbsent: () => [stump]);
+      errors.update(error, (splits) => splits..add(split),
+          ifAbsent: () => [split]);
     });
     final sorted = errors.keys.toList(growable: false)
       ..sort();

@@ -15,12 +15,12 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   final SequenceElementsDistributionCalculator distributionCalculator;
 
   @override
-  DecisionTreeLeafLabel create(Matrix observations, ZRange outcomesColumnRange,
-      bool isClassLabelCategorical) {
-    final outcomes = observations.submatrix(columns: outcomesColumnRange);
+  DecisionTreeLeafLabel create(Matrix samples, ZRange outcomesColumnRange,
+      bool isClassLabelNominal) {
+    final outcomes = samples.submatrix(columns: outcomesColumnRange);
     final totalRecordsCount = outcomes.rowsNum;
 
-    if (isClassLabelCategorical) {
+    if (isClassLabelNominal) {
       final labelData = _getLabelData<Vector>(outcomes.rows, totalRecordsCount);
       return DecisionTreeLeafLabel.nominal(labelData.item1,
           probability: labelData.item2);

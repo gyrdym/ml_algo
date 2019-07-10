@@ -1,14 +1,11 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_stump_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_base_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
-import 'package:quiver/iterables.dart';
 import 'package:xrange/zrange.dart';
-
-import 'nominal_splitter/nominal_splitter.dart';
-import 'numerical_splitter/numerical_splitter.dart';
 
 class DecisionTreeSolver {
   DecisionTreeSolver(
@@ -19,11 +16,9 @@ class DecisionTreeSolver {
       this._leafDetector,
       this._leafLabelFactory,
       this._bestStumpFinder,
-      this._nominalSplitter,
-      this._numericalSplitter,
   ) : _isOutcomeNominal = _rangeToNominalValues
       .containsKey(_outcomeColumnRange) {
-    _root = _createNode(samples, _featuresColumnRanges);
+    _root = _createNode(samples, null, null, null, null, _featuresColumnRanges);
   }
 
   final Iterable<ZRange> _featuresColumnRanges;
@@ -33,8 +28,6 @@ class DecisionTreeSolver {
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
   final BestStumpFinder _bestStumpFinder;
-  final NumericalSplitter _numericalSplitter;
-  final NominalSplitter _nominalSplitter;
 
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
@@ -42,34 +35,64 @@ class DecisionTreeSolver {
   Map<DecisionTreeNode, Matrix> traverse(Matrix samples) =>
       _traverse(samples, _root, {});
 
-  DecisionTreeNode _createNode(Matrix samples,
-      Iterable<ZRange> featuresColumnRanges) {
+  DecisionTreeNode _createNode(
+      Matrix samples,
+      double splittingNumericalValue,
+      Vector splittingNominalValue,
+      ZRange splittingRange,
+      FilterPredicate splittingClause,
+      Iterable<ZRange> featuresColumnRanges,
+  ) {
     if (_leafDetector.isLeaf(samples, _outcomeColumnRange,
         featuresColumnRanges)) {
-      return DecisionTreeNode.leaf(_leafLabelFactory.create(
-          samples,
-          _outcomeColumnRange,
-          _isOutcomeNominal,
-      ));
+      final label = _leafLabelFactory.create(
+        samples,
+        _outcomeColumnRange,
+        _isOutcomeNominal,
+      );
+      return DecisionTreeNode(
+        splittingClause,
+        splittingNumericalValue,
+        splittingNominalValue,
+        splittingRange,
+        null,
+        label,
+      );
     }
 
-    final bestStump = _bestStumpFinder.find(samples, _outcomeColumnRange,
-        featuresColumnRanges, _rangeToNominalValues);
+    final bestSplit = _bestStumpFinder.find(
+        samples,
+        _outcomeColumnRange,
+        featuresColumnRanges,
+        _rangeToNominalValues,
+    );
 
-    final bestSplittingRange = bestStump.splittingColumnRange;
+    final isSplitByNominalValue = _rangeToNominalValues
+        .containsKey(splittingRange);
 
-    final isBestSplitByNominalValue = _rangeToNominalValues
-        .containsKey(bestSplittingRange);
-
-    final updatedColumnRanges = isBestSplitByNominalValue
-        ? (Set<ZRange>.from(featuresColumnRanges)..remove(bestSplittingRange))
+    final updatedColumnRanges = isSplitByNominalValue
+        ? (Set<ZRange>.from(featuresColumnRanges)..remove(splittingRange))
         : featuresColumnRanges;
 
-    final childNodes = bestStump.outputSamples.map((samples) =>
-        _createNode(samples, updatedColumnRanges));
+    final childNodes = bestSplit.entries.map((entry) {
+      final splitNode = entry.key;
+      final splitSamples = entry.value;
+      return _createNode(
+          splitSamples,
+          splitNode.splittingNumericalValue,
+          splitNode.splittingNominalValue,
+          splitNode.splittingColumnRange,
+          splitNode.isSampleAcceptable,
+          updatedColumnRanges);
+    });
 
-    return DecisionTreeNode.fromStump(bestStump,
-        childNodes.toList(growable: false));
+    return DecisionTreeNode(
+        splittingClause,
+        splittingNumericalValue,
+        splittingNominalValue,
+        splittingRange,
+        childNodes.toList(growable: false),
+        null);
   }
 
   Map<DecisionTreeNode, Matrix> _traverse(Matrix samples, DecisionTreeNode node,
@@ -79,25 +102,12 @@ class DecisionTreeSolver {
         ..update(node, null, ifAbsent: () => samples);
     }
 
-    final split = node.splittingNumericalValue != null
-        ? _numericalSplitter.split(
-        samples,
-        node.splittingColumnRange.firstValue,
-        node.splittingNumericalValue
-    )
-        : _nominalSplitter.split(
-        samples,
-        node.splittingColumnRange,
-        node.splittingNominalValues
-    );
-
-    enumerate(split).forEach((indexedSplitPart) =>
-        _traverse(
-          indexedSplitPart.value,
-          node.children[indexedSplitPart.index],
-          leafNodesToSamples,
-        )
-    );
+    node.children.forEach((node) {
+      final nodeSamplesSource = samples.rows.where(node.isSampleAcceptable)
+          .toList();
+      final nodeSamples = Matrix.fromRows(nodeSamplesSource);
+      _traverse(nodeSamples, node, leafNodesToSamples);
+    });
 
     return leafNodesToSamples;
   }
