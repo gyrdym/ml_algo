@@ -83,7 +83,7 @@ void main() {
 
         final numericalSplitter = createNumericalSplitter(
             mockedSplitDataToBeReturned);
-        final splitter = GreedySplitFactory(assessor, numericalSplitter, null);
+        final splitter = GreedySplitter(assessor, numericalSplitter, null);
         final actualSplit = splitter.split(inputObservations,
             splittingColumn, outcomesRange);
 
@@ -128,7 +128,7 @@ void main() {
           ]),
         };
         final splitter = createNominalSplitter(splittingValues, mockedSplit);
-        final selector = GreedySplitFactory(null, null, splitter);
+        final selector = GreedySplitter(null, null, splitter);
         final actualSplit = selector.split(
           samples,
           splittingColumnRange,
@@ -158,7 +158,7 @@ void main() {
         final nominalSplitter = NominalSplitterMock();
         when(nominalSplitter.split(any, any, any)).thenReturn({});
 
-        final splitter = GreedySplitFactory(null, null, nominalSplitter);
+        final splitter = GreedySplitter(null, null, nominalSplitter);
 
         final split = splitter.split(
           samples,
@@ -185,7 +185,7 @@ void main() {
           Vector.fromList([0, 0, 1]),
           Vector.fromList([0, 1, 0]),
         ];
-        final splitter = GreedySplitFactory(null, null, null);
+        final splitter = GreedySplitter(null, null, null);
         final actual = () => splitter.split(
           samples,
           splittingColumnRange,
@@ -209,7 +209,7 @@ void main() {
           Vector.fromList([0, 0, 1]),
           Vector.fromList([0, 1, 0]),
         ];
-        final selector = GreedySplitFactory(null, null, null);
+        final selector = GreedySplitter(null, null, null);
         final actual = () => selector.split(
           samples,
           splittingColumnRange,
