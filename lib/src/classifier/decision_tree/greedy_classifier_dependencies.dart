@@ -31,7 +31,7 @@ Injector getGreedyDecisionTreeDependencies(double minError,
             (_) => const NominalSplitterImpl())
 
     ..registerSingleton<Splitter>((injector) =>
-      GreedySplitFactory(
+      GreedySplitter(
         injector.getDependency<SplitAssessor>(),
         injector.getDependency<NumericalSplitter>(),
         injector.getDependency<NominalSplitter>(),

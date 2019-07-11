@@ -8,8 +8,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class GreedySplitFactory implements Splitter {
-  GreedySplitFactory(this._assessor, this._numericalSplitter,
+class GreedySplitter implements Splitter {
+  GreedySplitter(this._assessor, this._numericalSplitter,
       this._nominalSplitter);
 
   final SplitAssessor _assessor;
