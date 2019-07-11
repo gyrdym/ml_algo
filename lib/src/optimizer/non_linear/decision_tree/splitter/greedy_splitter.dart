@@ -17,7 +17,7 @@ class GreedySplitFactory implements Splitter {
   final NominalSplitter _nominalSplitter;
 
   @override
-  Map<DecisionTreeNode, Matrix> create(Matrix samples, ZRange splittingRange,
+  Map<DecisionTreeNode, Matrix> split(Matrix samples, ZRange splittingRange,
       ZRange outcomeColumnRange, [List<Vector> nominalValues]) =>
       nominalValues != null
           ? _createByNominalValues(samples, splittingRange,

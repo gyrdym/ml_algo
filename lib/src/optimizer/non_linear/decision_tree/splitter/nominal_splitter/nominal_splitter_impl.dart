@@ -13,8 +13,7 @@ class NominalSplitterImpl implements NominalSplitter {
         final splittingClause =
             (Vector sample) => sample.subvectorByRange(splittingRange) == value;
 
-        final foundRows = samples.rows
-            .where((row) => row.subvectorByRange(splittingRange) == value)
+        final foundRows = samples.rows.where(splittingClause)
             .toList(growable: false);
 
         final node = DecisionTreeNode(splittingClause, null, value,

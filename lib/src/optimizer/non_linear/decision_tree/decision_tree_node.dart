@@ -2,11 +2,11 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_lea
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-typedef FilterPredicate = bool Function(Vector sample);
+typedef SplittingClausePredicate = bool Function(Vector sample);
 
 class DecisionTreeNode {
   DecisionTreeNode(
-      this.isSampleAcceptable,
+      this.splittingClause,
       this.splittingNumericalValue,
       this.splittingNominalValue,
       this.splittingColumnRange,
@@ -16,7 +16,7 @@ class DecisionTreeNode {
 
   final List<DecisionTreeNode> children;
   final DecisionTreeLeafLabel label;
-  final FilterPredicate isSampleAcceptable;
+  final SplittingClausePredicate splittingClause;
   final double splittingNumericalValue;
   final Vector splittingNominalValue;
   final ZRange splittingColumnRange;

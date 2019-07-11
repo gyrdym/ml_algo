@@ -39,7 +39,7 @@ class DecisionTreeSolver {
       double splittingNumericalValue,
       Vector splittingNominalValue,
       ZRange splittingRange,
-      FilterPredicate splittingClause,
+      SplittingClausePredicate splittingClause,
       Iterable<ZRange> featuresColumnRanges,
   ) {
     if (_leafDetector.isLeaf(samples, _outcomeColumnRange,
@@ -83,7 +83,7 @@ class DecisionTreeSolver {
           splitNode.splittingNumericalValue,
           splitNode.splittingNominalValue,
           splitNode.splittingColumnRange,
-          splitNode.isSampleAcceptable,
+          splitNode.splittingClause,
           updatedColumnRanges);
     });
 
@@ -104,7 +104,7 @@ class DecisionTreeSolver {
     }
 
     node.children.forEach((node) {
-      final nodeSamplesSource = samples.rows.where(node.isSampleAcceptable)
+      final nodeSamplesSource = samples.rows.where(node.splittingClause)
           .toList();
       final nodeSamples = Matrix.fromRows(nodeSamplesSource);
       _traverse(nodeSamples, node, leafNodesToSamples);

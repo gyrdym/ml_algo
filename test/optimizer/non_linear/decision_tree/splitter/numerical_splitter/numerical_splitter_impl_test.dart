@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter_impl.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
 
@@ -143,11 +144,11 @@ void main() {
     test('should split given matrix into two parts if all the values are '
         'less than the splitting value: the second part should be empty', () {
       final samples = Matrix.fromList([
-        [111, 2,  30, 4],
-        [1,   32, 10, 44],
-        [11,  22, 10, 14],
-        [33,  12, 500,  55],
-        [0,   20, 60, 10],
+        [111, 2,  30,  4],
+        [1,   32, 10,  44],
+        [11,  22, 10,  14],
+        [33,  12, 500, 55],
+        [0,   20, 60,  10],
       ]);
       final splittingRange = ZRange.singleton(2);
       final splittingValue = 1000.0;
@@ -260,6 +261,17 @@ void main() {
         expectedSplittingColumnRange: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
+        samplesToCheck: {
+          Vector.fromList([111, 2,  30, 4]): true,
+          Vector.fromList([111, 2,  30, -14]): true,
+          Vector.fromList([111, 2,  33, 19]): true,
+          Vector.fromList([111, 2,  33, 19, 10]): true,
+
+          Vector.fromList([111, 2,  30, 40]): false,
+          Vector.fromList([111, 2,  30, 140]): false,
+          Vector.fromList([111, 2,  33, 20]): false,
+          Vector.fromList([111, 2,  33, 21, 10]): false,
+        },
       );
       testTreeNode(actual.keys.last,
         shouldBeLeaf: true,
@@ -268,6 +280,17 @@ void main() {
         expectedSplittingColumnRange: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
+          samplesToCheck: {
+            Vector.fromList([111, 2,  30, 4]): false,
+            Vector.fromList([111, 2,  30, -14]): false,
+            Vector.fromList([111, 2,  33, 19]): false,
+            Vector.fromList([111, 2,  33, 19, 10]): false,
+
+            Vector.fromList([111, 2,  30, 40]): true,
+            Vector.fromList([111, 2,  30, 140]): true,
+            Vector.fromList([111, 2,  33, 20]): true,
+            Vector.fromList([111, 2,  33, 21, 10]): true,
+          }
       );
     });
   });

@@ -1,8 +1,7 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_stump_finder/best_split_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_stump.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -12,6 +11,7 @@ import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
 
 import '../../../test_utils/mocks.dart';
+import 'test_utils.dart';
 
 void main() {
   group('DecisionTreeSolver', () {
@@ -42,7 +42,7 @@ void main() {
 
       final leafDetector = LeafDetectorMock();
       final leafLabelFactory = LeafLabelFactoryMock();
-      final bestStumpFinder = BestStumpFinderMock();
+      final bestStumpFinder = BestSplitFinderMock();
 
       final mockIsLeafFnCall = (Matrix samples, bool isLeaf) =>
           mockLeafDetectorCall(leafDetector, samples, outcomesColumnRange,
@@ -182,15 +182,13 @@ void main() {
           leafDetector,
           leafLabelFactory,
           bestStumpFinder,
-          null,
-          null,
       ).root;
 
       testTreeNode(rootNode,
           shouldBeLeaf: false,
           expectedSplittingNumericalValue: 34.0,
           expectedSplittingColumnRange: ZRange.singleton(2),
-          expectedSplittingNominalValues: null,
+          expectedSplittingNominalValue: null,
           expectedChildrenLength: 2,
           expectedLabel: null,
       );
@@ -203,7 +201,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: null,
           expectedSplittingColumnRange: null,
-          expectedSplittingNominalValues: null,
+          expectedSplittingNominalValue: null,
           expectedChildrenLength: null,
           expectedLabel: DecisionTreeLeafLabel
               .nominal(Vector.fromList([0, 0, 1])),
@@ -213,7 +211,7 @@ void main() {
           shouldBeLeaf: false,
           expectedSplittingNumericalValue: 50,
           expectedSplittingColumnRange: ZRange.singleton(3),
-          expectedSplittingNominalValues: null,
+          expectedSplittingNominalValue: null,
           expectedChildrenLength: 2,
           expectedLabel: null
       );
@@ -222,7 +220,7 @@ void main() {
           shouldBeLeaf: false,
           expectedSplittingNumericalValue: 90,
           expectedSplittingColumnRange: ZRange.singleton(0),
-          expectedSplittingNominalValues: null,
+          expectedSplittingNominalValue: null,
           expectedChildrenLength: 2,
           expectedLabel: null
       );
@@ -231,7 +229,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: null,
           expectedSplittingColumnRange: null,
-          expectedSplittingNominalValues: null,
+          expectedSplittingNominalValue: null,
           expectedChildrenLength: null,
           expectedLabel: DecisionTreeLeafLabel
               .nominal(Vector.fromList([1, 0, 0])),
@@ -241,7 +239,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
         expectedSplittingColumnRange: null,
-        expectedSplittingNominalValues: null,
+        expectedSplittingNominalValue: null,
         expectedChildrenLength: null,
         expectedLabel: DecisionTreeLeafLabel
             .nominal(Vector.fromList([0, 0, 1])),
@@ -251,7 +249,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
         expectedSplittingColumnRange: null,
-        expectedSplittingNominalValues: null,
+        expectedSplittingNominalValue: null,
         expectedChildrenLength: null,
         expectedLabel: DecisionTreeLeafLabel
             .nominal(Vector.fromList([0, 1, 0])),
@@ -297,7 +295,7 @@ void main() {
 
       final leafDetector = LeafDetectorMock();
       final leafLabelFactory = LeafLabelFactoryMock();
-      final bestStumpFinder = BestStumpFinderMock();
+      final bestStumpFinder = BestSplitFinderMock();
 
       final mockBoundIsLeafFnCall = (Matrix samples,
           Iterable<ZRange> featuresRanges, bool isLeaf) =>
@@ -415,14 +413,12 @@ void main() {
         leafDetector,
         leafLabelFactory,
         bestStumpFinder,
-        null,
-        null,
       ).root;
 
       testTreeNode(rootNode,
         shouldBeLeaf: false,
         expectedSplittingNumericalValue: null,
-        expectedSplittingNominalValues: nominalFeatureValues,
+        expectedSplittingNominalValue: nominalFeatureValues,
         expectedSplittingColumnRange: nominalFeatureRange,
         expectedChildrenLength: 3,
         expectedLabel: null,
@@ -434,7 +430,7 @@ void main() {
       testTreeNode(firstLevelNodes[0],
         shouldBeLeaf: false,
         expectedSplittingNumericalValue: 10,
-        expectedSplittingNominalValues: null,
+        expectedSplittingNominalValue: null,
         expectedSplittingColumnRange: ZRange.singleton(0),
         expectedChildrenLength: 2,
         expectedLabel: null,
@@ -443,7 +439,7 @@ void main() {
       testTreeNode(firstLevelNodes[1],
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
-        expectedSplittingNominalValues: null,
+        expectedSplittingNominalValue: null,
         expectedSplittingColumnRange: null,
         expectedChildrenLength: null,
         expectedLabel: DecisionTreeLeafLabel
@@ -453,7 +449,7 @@ void main() {
       testTreeNode(secondLevelNodes.first,
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
-        expectedSplittingNominalValues: null,
+        expectedSplittingNominalValue: null,
         expectedSplittingColumnRange: null,
         expectedChildrenLength: null,
         expectedLabel: DecisionTreeLeafLabel
@@ -463,7 +459,7 @@ void main() {
       testTreeNode(secondLevelNodes.last,
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
-        expectedSplittingNominalValues: null,
+        expectedSplittingNominalValue: null,
         expectedSplittingColumnRange: null,
         expectedChildrenLength: null,
         expectedLabel: DecisionTreeLeafLabel

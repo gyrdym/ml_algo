@@ -7,10 +7,10 @@ import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class GreedySplitFinder implements BestSplitFinder {
-  GreedySplitFinder(this._assessor, this._stumpFactory);
+  GreedySplitFinder(this._assessor, this._splitter);
 
   final SplitAssessor _assessor;
-  final Splitter _stumpFactory;
+  final Splitter _splitter;
 
   @override
   Map<DecisionTreeNode, Matrix> find(
@@ -23,7 +23,7 @@ class GreedySplitFinder implements BestSplitFinder {
       final nominalValues = rangeToNominalValues != null
           ? rangeToNominalValues[range]
           : null;
-      final split = _stumpFactory.create(samples, range,
+      final split = _splitter.split(samples, range,
           outcomesColumnRange, nominalValues);
       final error = _assessor.getAggregatedError(split.values,
           outcomesColumnRange);
