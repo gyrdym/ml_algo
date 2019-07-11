@@ -49,15 +49,15 @@ void main() {
         worstRange, bestRange, worseRange, goodRange,
       ];
       final assessor = SplitAssessorMock();
-      final selector = StumpFactoryMock();
+      final selector = DecisionTreeSplitterMock();
 
-      when(selector.create(samples, worstRange, outcomesRange))
+      when(selector.split(samples, worstRange, outcomesRange))
           .thenReturn(worstStump);
-      when(selector.create(samples, worseRange, outcomesRange))
+      when(selector.split(samples, worseRange, outcomesRange))
           .thenReturn(worseStump);
-      when(selector.create(samples, goodRange, outcomesRange))
+      when(selector.split(samples, goodRange, outcomesRange))
           .thenReturn(goodStump);
-      when(selector.create(samples, bestRange, outcomesRange))
+      when(selector.split(samples, bestRange, outcomesRange))
           .thenReturn(bestStump);
 
       when(assessor.getAggregatedError(worstStump.outputSamples,
@@ -110,7 +110,7 @@ void main() {
       ];
 
       final assessor = SplitAssessorMock();
-      final selector = StumpFactoryMock();
+      final selector = DecisionTreeSplitterMock();
       final nominalValues = [
         Vector.fromList([1, 1, 1]),
         Vector.fromList([2, 2, 2]),
@@ -118,11 +118,11 @@ void main() {
       ];
       final rangeToNominalValues = {bestFeatureRange: nominalValues};
 
-      when(selector.create(samples, badFeatureRange, outcomesRange))
+      when(selector.split(samples, badFeatureRange, outcomesRange))
           .thenReturn(badStump);
-      when(selector.create(samples, goodFeatureRange, outcomesRange))
+      when(selector.split(samples, goodFeatureRange, outcomesRange))
           .thenReturn(goodStump);
-      when(selector.create(samples, bestFeatureRange, outcomesRange,
+      when(selector.split(samples, bestFeatureRange, outcomesRange,
           nominalValues)).thenReturn(bestStump);
 
       when(assessor.getAggregatedError(badStump.outputSamples,
@@ -168,7 +168,7 @@ void main() {
       ];
 
       final assessor = SplitAssessorMock();
-      final selector = StumpFactoryMock();
+      final selector = DecisionTreeSplitterMock();
       final categoricalValues = [
         Vector.fromList([1, 1, 1]),
         Vector.fromList([2, 2, 2]),
@@ -176,9 +176,9 @@ void main() {
       ];
       final rangeToCategoricalValues = {ignoredFeatureRange: categoricalValues};
 
-      when(selector.create(observations, goodFeatureRange, outcomesRange))
+      when(selector.split(observations, goodFeatureRange, outcomesRange))
           .thenReturn(goodStump);
-      when(selector.create(observations, bestFeatureRange, outcomesRange))
+      when(selector.split(observations, bestFeatureRange, outcomesRange))
           .thenReturn(bestStump);
 
       when(assessor.getAggregatedError(goodStump.outputSamples,
@@ -192,7 +192,7 @@ void main() {
 
       expect(stump, equals(bestStump));
 
-      verifyNever(selector.create(observations, ignoredFeatureRange,
+      verifyNever(selector.split(observations, ignoredFeatureRange,
           outcomesRange));
     });
   });

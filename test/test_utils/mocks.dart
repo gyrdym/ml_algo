@@ -16,6 +16,7 @@ import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_w
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
@@ -60,7 +61,8 @@ class PredictorMock extends Mock implements Assessable {}
 
 class SplitAssessorMock extends Mock implements SplitAssessor {}
 
-class StumpFactoryMock extends Mock implements decision_tree_splitter.Splitter {}
+class DecisionTreeSplitterMock extends Mock implements
+    decision_tree_splitter.Splitter {}
 
 class SamplesByNumericalValueSplitterMock extends Mock implements
     NumericalSplitter {}
@@ -75,7 +77,9 @@ class LeafDetectorMock extends Mock implements LeafDetector {}
 class LeafLabelFactoryMock extends Mock implements
     DecisionTreeLeafLabelFactory {}
 
-class BestStumpFinderMock extends Mock implements BestSplitFinder {}
+class BestSplitFinderMock extends Mock implements BestSplitFinder {}
+
+class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,

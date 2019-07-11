@@ -128,6 +128,7 @@ void main() {
           [13, 99, 0, 1, 0, 30],
         ],
       ]));
+
       testTreeNode(split.keys.first,
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
@@ -135,7 +136,16 @@ void main() {
         expectedSplittingColumnRange: splittingColumnRange,
         expectedChildrenLength: null,
         expectedLabel: null,
+        samplesToCheck: {
+          Vector.fromList([1e3, -22, 0, 0, 1, 30000]): true,
+          Vector.fromList([1.3, 22, 0, 0, 1, 11111]): true,
+          Vector.fromList([1.3, 22, 0, 0, 1]): true,
+          Vector.fromList([1e3, -22, 0, 1, 0, 30000]): false,
+          Vector.fromList([1e3, -22, 1, 1, 1, 30000]): false,
+          Vector.fromList([1e3, 0, 0, 1, 30000]): false,
+        }
       );
+
       testTreeNode(split.keys.last,
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
@@ -143,6 +153,14 @@ void main() {
         expectedSplittingColumnRange: splittingColumnRange,
         expectedChildrenLength: null,
         expectedLabel: null,
+        samplesToCheck: {
+          Vector.fromList([1e3, -22, 0, 1, 0, 30000]): true,
+          Vector.fromList([1e3, -22, 0, 1, 0]): true,
+          Vector.fromList([0, 0, 0, 1, 0]): true,
+          Vector.fromList([1e3, -22, 0, 0, 1, 30000]): false,
+          Vector.fromList([1e3, -22, 33, 20, 1, 30000]): false,
+          Vector.fromList([1e3, 0, 1, 0, 30000]): false,
+        }
       );
     });
   });

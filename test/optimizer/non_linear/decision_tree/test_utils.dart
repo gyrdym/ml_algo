@@ -13,6 +13,7 @@ void testTreeNode(
       Vector expectedSplittingNominalValue,
       int expectedChildrenLength,
       DecisionTreeLeafLabel expectedLabel,
+      Map<Vector, bool> samplesToCheck,
     }
 ) {
   expect(node.isLeaf, equals(shouldBeLeaf));
@@ -25,6 +26,9 @@ void testTreeNode(
   expectedLabel == null
       ? expect(node.label, isNull)
       : testLeafLabel(node.label, expectedLabel);
+  samplesToCheck?.entries?.forEach((entry) {
+    expect(node.splittingClause(entry.key), entry.value);
+  });
 }
 
 void testLeafLabel(DecisionTreeLeafLabel label,
