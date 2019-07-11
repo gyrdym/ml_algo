@@ -1,7 +1,7 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_selector/split_selector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
@@ -14,7 +14,7 @@ class DecisionTreeSolver {
       this._rangeToNominalValues,
       this._leafDetector,
       this._leafLabelFactory,
-      this._bestStumpFinder,
+      this._splitSelector,
   ) : _isOutcomeNominal = _rangeToNominalValues
       .containsKey(_outcomeColumnRange) {
     _root = _createNode(samples, null, null, null, null, _featuresColumnRanges);
@@ -26,7 +26,7 @@ class DecisionTreeSolver {
   final bool _isOutcomeNominal;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
-  final BestSplitFinder _bestStumpFinder;
+  final SplitSelector _splitSelector;
 
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
@@ -59,7 +59,7 @@ class DecisionTreeSolver {
       );
     }
 
-    final bestSplit = _bestStumpFinder.find(
+    final bestSplit = _splitSelector.select(
         samples,
         _outcomeColumnRange,
         featuresColumnRanges,

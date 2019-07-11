@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_selector/split_selector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
@@ -471,14 +471,14 @@ void main() {
       verify(leafDetector.isLeaf(any, outcomesColumnRange,
           featuresColumnRangesReduced)).called(5);
 
-      verify(bestStumpFinder.find(
+      verify(bestStumpFinder.select(
           any,
           any,
           argThat(unorderedEquals(featuresColumnRangesFull)),
           any)
       ).called(1);
 
-      verify(bestStumpFinder.find(
+      verify(bestStumpFinder.select(
           any,
           any,
           argThat(unorderedEquals(featuresColumnRangesReduced)),
@@ -517,7 +517,7 @@ void mockLeafLabelFactoryCall({
 }
 
 void mockStumpFinderCall(
-    BestSplitFinder bestStumpFinder,
+    SplitSelector bestStumpFinder,
     Matrix input,
     ZRange outcomesColumnRange,
     Set<ZRange> featuresColumnRange,
@@ -527,7 +527,7 @@ void mockStumpFinderCall(
     List<Vector> expectedSplittingNominalValues,
     ZRange expectedSplittingRange,
 ) {
-  when(bestStumpFinder.find(
+  when(bestStumpFinder.select(
     argThat(equals(input)),
     outcomesColumnRange,
     argThat(unorderedEquals(featuresColumnRange)),
