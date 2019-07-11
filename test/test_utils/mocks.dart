@@ -15,7 +15,7 @@ import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_w
 import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/optimizer/linear/linear_optimizer_factory.dart';
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_selector/split_selector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
@@ -77,7 +77,7 @@ class LeafDetectorMock extends Mock implements LeafDetector {}
 class LeafLabelFactoryMock extends Mock implements
     DecisionTreeLeafLabelFactory {}
 
-class BestSplitFinderMock extends Mock implements BestSplitFinder {}
+class BestSplitFinderMock extends Mock implements SplitSelector {}
 
 class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
 

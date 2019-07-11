@@ -3,8 +3,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-abstract class BestSplitFinder {
-  Map<DecisionTreeNode, Matrix> find(Matrix samples, ZRange outcomesColumnRange,
+abstract class SplitSelector {
+  Map<DecisionTreeNode, Matrix> select(Matrix samples, ZRange outcomesColumnRange,
       Iterable<ZRange> featuresColumnRanges,
       [Map<ZRange, List<Vector>> rangeToNominalValues]);
 }

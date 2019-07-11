@@ -1,19 +1,19 @@
-import 'package:ml_algo/src/optimizer/non_linear/decision_tree/best_split_finder/best_split_finder.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/split_selector/split_selector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
-class GreedySplitFinder implements BestSplitFinder {
-  GreedySplitFinder(this._assessor, this._splitter);
+class GreedySplitSelector implements SplitSelector {
+  GreedySplitSelector(this._assessor, this._splitter);
 
   final SplitAssessor _assessor;
   final Splitter _splitter;
 
   @override
-  Map<DecisionTreeNode, Matrix> find(
+  Map<DecisionTreeNode, Matrix> select(
       Matrix samples,
       ZRange outcomesColumnRange,
       Iterable<ZRange> featuresColumnRanges,
