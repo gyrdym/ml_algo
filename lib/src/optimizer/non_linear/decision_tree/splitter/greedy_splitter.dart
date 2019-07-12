@@ -40,7 +40,7 @@ class GreedySplitter implements Splitter {
   Map<DecisionTreeNode, Matrix> _createByNumericalValue(Matrix samples,
       ZRange splittingRange, ZRange outcomesRange) {
     final selectedColumnIdx = splittingRange.firstValue;
-    final errors = <double, Map<DecisionTreeNode, Matrix>>{};
+    final errors = <double, List<Map<DecisionTreeNode, Matrix>>>{};
     final sortedRows = samples
         .sort((row) => row[selectedColumnIdx], Axis.rows).rows;
     var prevValue = sortedRows.first[selectedColumnIdx];
@@ -52,7 +52,8 @@ class GreedySplitter implements Splitter {
       final error = _assessor
           .getAggregatedError(split.values, outcomesRange);
 
-      errors[error] = split;
+      errors.update(error, (splits) => splits..add(split),
+          ifAbsent: () => [split]);
 
       prevValue = row[selectedColumnIdx];
     }
@@ -60,6 +61,6 @@ class GreedySplitter implements Splitter {
     final sorted = errors.keys.toList(growable: false)
       ..sort();
     final minError = sorted.first;
-    return errors[minError];
+    return errors[minError].first;
   }
 }
