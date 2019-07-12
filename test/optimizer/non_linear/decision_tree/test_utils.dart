@@ -27,7 +27,7 @@ void testTreeNode(
       ? expect(node.label, isNull)
       : testLeafLabel(node.label, expectedLabel);
   samplesToCheck?.entries?.forEach((entry) {
-    expect(node.splittingClause(entry.key), entry.value);
+    expect(node.testSample(entry.key), entry.value);
   });
 }
 

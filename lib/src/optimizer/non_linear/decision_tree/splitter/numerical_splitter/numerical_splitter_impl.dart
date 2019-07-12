@@ -20,7 +20,7 @@ class NumericalSplitterImpl implements NumericalSplitter {
         ? left.add(row)
         : right.add(row));
 
-    final createNode = (SplittingClausePredicate splittingClause) =>
+    final createNode = (TestSamplePredicate splittingClause) =>
         DecisionTreeNode(splittingClause, splittingValue, null, splittingRange,
             null, null);
 
