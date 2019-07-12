@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
@@ -31,15 +32,15 @@ class DecisionTreeSolver {
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
 
-  Map<DecisionTreeNode, Matrix> traverse(Matrix samples) =>
-      _traverse(samples, _root, {});
+  DecisionTreeLeafLabel getLeafLabelBySample(Vector sample) =>
+      _getLeafLabelBySample(sample, _root);
 
   DecisionTreeNode _createNode(
       Matrix samples,
       double splittingNumericalValue,
       Vector splittingNominalValue,
       ZRange splittingRange,
-      SplittingClausePredicate splittingClause,
+      TestSamplePredicate splittingClause,
       Iterable<ZRange> featuresColumnRanges,
   ) {
     if (_leafDetector.isLeaf(samples, _outcomeColumnRange,
@@ -83,7 +84,7 @@ class DecisionTreeSolver {
           splitNode.splittingNumericalValue,
           splitNode.splittingNominalValue,
           splitNode.splittingColumnRange,
-          splitNode.splittingClause,
+          splitNode.testSample,
           updatedColumnRanges);
     });
 
@@ -96,20 +97,19 @@ class DecisionTreeSolver {
         null);
   }
 
-  Map<DecisionTreeNode, Matrix> _traverse(Matrix samples, DecisionTreeNode node,
-      Map<DecisionTreeNode, Matrix> leafNodesToSamples) {
+  DecisionTreeLeafLabel _getLeafLabelBySample(Vector sample,
+      DecisionTreeNode node) {
     if (node.isLeaf) {
-      return leafNodesToSamples
-        ..update(node, null, ifAbsent: () => samples);
+      return node.label;
     }
 
-    node.children.forEach((node) {
-      final nodeSamplesSource = samples.rows.where(node.splittingClause)
-          .toList();
-      final nodeSamples = Matrix.fromRows(nodeSamplesSource);
-      _traverse(nodeSamples, node, leafNodesToSamples);
-    });
+    for (final child in node.children) {
+      if (child.testSample(sample)) {
+        return _getLeafLabelBySample(sample, child);
+      }
+    };
 
-    return leafNodesToSamples;
+    throw Exception('The given sample does not conform any splitting '
+        'condition');
   }
 }
