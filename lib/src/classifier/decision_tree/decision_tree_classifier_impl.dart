@@ -35,7 +35,7 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
 
   @override
   Matrix predictClasses(Matrix features) {
-    final predictedLabels = features.rows.map(_solver.getLeafLabelBySample);
+    final predictedLabels = features.rows.map(_solver.getLabelForSample);
 
     if (_isOutcomeNominal) {
       return Matrix.fromColumns(
