@@ -3,5 +3,5 @@ import 'package:xrange/zrange.dart';
 
 abstract class LeafDetector {
   bool isLeaf(Matrix sample, ZRange outcomesRange,
-      Iterable<ZRange> featureColumnRanges);
+      Iterable<ZRange> featureColumnRanges, int treeDepth);
 }

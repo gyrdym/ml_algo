@@ -9,8 +9,9 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
       DataSet data,
       double minError,
       int minSamplesCount,
+      int maxDepth,
   ) => DecisionTreeClassifierImpl(
     data,
-    getGreedyDecisionTreeDependencies(minError, minSamplesCount),
+    getGreedyDecisionTreeDependencies(minError, minSamplesCount, maxDepth),
   );
 }
