@@ -147,11 +147,6 @@ void main() {
         );
       });
 
-      test('should make calls of appropriate dependencies when building '
-          'a tree', () {
-
-      });
-
       test('should get a label for given sample, leaf 1', () {
         final sample = Vector.fromList([40, 10, 1, 0, 1, 0, 10040]);
         final label = solver.getLabelForSample(sample);
