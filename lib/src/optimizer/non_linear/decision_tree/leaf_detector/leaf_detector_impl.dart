@@ -5,15 +5,19 @@ import 'package:xrange/zrange.dart';
 
 class LeafDetectorImpl implements LeafDetector {
   LeafDetectorImpl(this._assessor, this._minErrorOnNode,
-      this._minSamplesCount);
+      this._minSamplesCount, this._maxDepth);
 
   final SplitAssessor _assessor;
   final int _minSamplesCount;
   final double _minErrorOnNode;
+  final int _maxDepth;
 
   @override
   bool isLeaf(Matrix samples, ZRange outcomesRange,
-      Iterable<ZRange> featureColumnRanges) {
+      Iterable<ZRange> featureColumnRanges, int treeDepth) {
+    if (_maxDepth <= treeDepth) {
+      return true;
+    }
     if (featureColumnRanges.isEmpty) {
       return true;
     }

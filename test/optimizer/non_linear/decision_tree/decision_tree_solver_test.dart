@@ -14,7 +14,7 @@ import 'test_utils.dart';
 void main() {
   group('DecisionTreeSolver', () {
     group('for greedy classifier', () {
-      final dependencies = getGreedyDecisionTreeDependencies(0.3, 1);
+      final dependencies = getGreedyDecisionTreeDependencies(0.3, 1, 3);
 
       final observations = Matrix.fromList([
         [10, 20, 1, 0, 0, 30, 40, 0, 0, 1],
@@ -145,6 +145,11 @@ void main() {
             probability: 1,
           ),
         );
+      });
+
+      test('should make calls of appropriate dependencies when building '
+          'a tree', () {
+
       });
 
       test('should get a label for given sample, leaf 1', () {

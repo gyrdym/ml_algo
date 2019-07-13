@@ -17,7 +17,7 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/numerica
 import 'package:ml_algo/src/optimizer/non_linear/decision_tree/splitter/splitter.dart';
 
 Injector getGreedyDecisionTreeDependencies(double minError,
-    int minSamplesCount) => Injector()
+    int minSamplesCount, int maxDepth) => Injector()
     ..registerSingleton<SplitAssessor>((_) => const MajoritySplitAssessor())
 
     ..registerSingleton<SequenceElementsDistributionCalculator>(
@@ -49,6 +49,7 @@ Injector getGreedyDecisionTreeDependencies(double minError,
           injector.getDependency<SplitAssessor>(),
           minError,
           minSamplesCount,
+          maxDepth,
       )
     )
     ..registerSingleton((injector) =>
