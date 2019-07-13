@@ -32,8 +32,8 @@ class DecisionTreeSolver {
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;
 
-  DecisionTreeLeafLabel getLeafLabelBySample(Vector sample) =>
-      _getLeafLabelBySample(sample, _root);
+  DecisionTreeLeafLabel getLabelForSample(Vector sample) =>
+      _getLabelForSample(sample, _root);
 
   DecisionTreeNode _createNode(
       Matrix samples,
@@ -97,7 +97,7 @@ class DecisionTreeSolver {
         null);
   }
 
-  DecisionTreeLeafLabel _getLeafLabelBySample(Vector sample,
+  DecisionTreeLeafLabel _getLabelForSample(Vector sample,
       DecisionTreeNode node) {
     if (node.isLeaf) {
       return node.label;
@@ -105,7 +105,7 @@ class DecisionTreeSolver {
 
     for (final child in node.children) {
       if (child.testSample(sample)) {
-        return _getLeafLabelBySample(sample, child);
+        return _getLabelForSample(sample, child);
       }
     };
 
