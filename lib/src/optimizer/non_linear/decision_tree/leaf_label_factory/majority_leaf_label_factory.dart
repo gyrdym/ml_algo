@@ -6,7 +6,6 @@ import 'package:ml_algo/src/optimizer/non_linear/decision_tree/leaf_label_factor
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart' as quiver_iterables;
-import 'package:tuple/tuple.dart';
 import 'package:xrange/zrange.dart';
 
 class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
@@ -22,20 +21,21 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
 
     if (isClassLabelNominal) {
       final labelData = _getLabelData<Vector>(outcomes.rows, totalRecordsCount);
-      return DecisionTreeLeafLabel.nominal(labelData.item1,
-          probability: labelData.item2);
+      return DecisionTreeLeafLabel.nominal(labelData.value,
+          probability: labelData.probability);
     }
 
     final labelColumn = outcomes.toVector();
     final labelData = _getLabelData<double>(labelColumn, totalRecordsCount);
-    return DecisionTreeLeafLabel.numerical(labelData.item1,
-        probability: labelData.item2);
+    return DecisionTreeLeafLabel.numerical(labelData.value,
+        probability: labelData.probability);
   }
 
-  Tuple2<T, double> _getLabelData<T>(Iterable<T> values, int totalCount) {
-    final distribution = distributionCalculator.calculate<T>(values, totalCount);
+  _LabelData<T> _getLabelData<T>(Iterable<T> values, int totalCount) {
+    final distribution = distributionCalculator
+        .calculate<T>(values, totalCount);
     final targetLabelEntry = _findEntryWithMaxProbability(distribution);
-    return Tuple2(targetLabelEntry.key, targetLabelEntry.value);
+    return _LabelData<T>(targetLabelEntry.key, targetLabelEntry.value);
   }
 
   MapEntry<T, double> _findEntryWithMaxProbability<T>(
@@ -48,4 +48,11 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
         return 0;
       },
     );
+}
+
+class _LabelData<T> {
+  _LabelData(this.value, this.probability);
+
+  final T value;
+  final double probability;
 }
