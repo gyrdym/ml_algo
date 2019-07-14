@@ -1,9 +1,5 @@
-import 'package:ml_algo/src/classifier/decision_tree/greedy_classifier_dependencies.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_label.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_solver.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/split_selector/split_selector.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/solver_factory/greedy_solver.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
@@ -14,8 +10,6 @@ import 'test_utils.dart';
 void main() {
   group('DecisionTreeSolver', () {
     group('for greedy classifier', () {
-      final dependencies = getGreedyDecisionTreeDependencies(0.3, 1, 3);
-
       final observations = Matrix.fromList([
         [10, 20, 1, 0, 0, 30, 40, 0, 0, 1],
         [90, 51, 0, 0, 1, 34, 31, 0, 0, 1],
@@ -50,14 +44,14 @@ void main() {
         ],
       };
 
-      final solver = DecisionTreeSolver(
+      final solver = createGreedySolver(
         observations,
         featuresColumnRanges,
         outcomesColumnRange,
         rangeToNominalValues,
-        dependencies.getDependency<LeafDetector>(),
-        dependencies.getDependency<DecisionTreeLeafLabelFactory>(),
-        dependencies.getDependency<SplitSelector>(),
+        0.3,
+        1,
+        3,
       );
 
       test('should build a tree', () {
