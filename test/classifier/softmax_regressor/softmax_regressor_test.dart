@@ -6,8 +6,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../test_utils/helpers/floating_point_iterable_matchers.dart';
-import '../test_utils/mocks.dart';
+import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../../test_utils/mocks.dart';
 
 void main() {
   group('SoftmaxRegressor', () {

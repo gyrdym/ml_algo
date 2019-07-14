@@ -224,7 +224,7 @@ void main() {
 
 NumericalSplitter createNumericalSplitter(
     List<Map<String, dynamic>> mockedData) {
-  final splitter = SamplesByNumericalValueSplitterMock();
+  final splitter = NumericalSplitterMock();
   for (final splitInfo in mockedData) {
     final splittingValue = splitInfo['splittingValue'] as double;
     when(splitter.split(any, any, splittingValue)).thenAnswer((_) =>
