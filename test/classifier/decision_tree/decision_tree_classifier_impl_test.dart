@@ -27,10 +27,10 @@ void main() {
       final label3 = Vector.fromList([1, 0, 0]);
 
       final solverMock = createSolver<Vector>({
-        sample1: label1,
-        sample2: label2,
-        sample3: label3,
-      }, true);
+        sample1: DecisionTreeLeafLabel.nominal(label1),
+        sample2: DecisionTreeLeafLabel.nominal(label2),
+        sample3: DecisionTreeLeafLabel.nominal(label3),
+      });
 
       final classifier = DecisionTreeClassifierImpl(solverMock);
       final predictedLabels = classifier.predictClasses(features);
@@ -48,19 +48,55 @@ void main() {
 
       expect(predictedLabels, isEmpty);
     });
+
+    test('should call appropriate method from `solver` when making '
+        'classes prediction for nominal class probabilities', () {
+      final sample1 = Vector.fromList([1, 2, 3]);
+      final sample2 = Vector.fromList([10, 20, 30]);
+      final sample3 = Vector.fromList([100, 200, 300]);
+
+      final features = Matrix.fromRows([
+        sample1,
+        sample2,
+        sample3,
+      ]);
+
+      final label1 = DecisionTreeLeafLabel.nominal(
+        Vector.fromList([1, 0, 0]),
+        probability: 0.7,
+      );
+      final label2 = DecisionTreeLeafLabel.nominal(
+        Vector.fromList([0, 0, 1]),
+        probability: 0.6,
+      );
+      final label3 = DecisionTreeLeafLabel.nominal(
+        Vector.fromList([1, 0, 0]),
+        probability: 0.8,
+      );
+
+      final solverMock = createSolver<Vector>({
+        sample1: label1,
+        sample2: label2,
+        sample3: label3,
+      });
+
+      final classifier = DecisionTreeClassifierImpl(solverMock);
+      final predictedLabels = classifier.predictProbabilities(features);
+
+      expect(predictedLabels, equals(Matrix.fromColumns([
+        Vector.fromList([
+          label1.probability,
+          label2.probability,
+          label3.probability
+        ]),
+      ])));
+    });
   });
 }
 
-DecisionTreeSolver createSolver<T>(Map<Vector, T> samples, bool isNominal) {
+DecisionTreeSolver createSolver<T>(Map<Vector, DecisionTreeLeafLabel> samples) {
   final solverMock = DecisionTreeSolverMock();
-
-  samples.forEach((sample, classLabel) {
-    when(solverMock.getLabelForSample(sample))
-        .thenReturn(isNominal
-        ? DecisionTreeLeafLabel.nominal(classLabel as Vector)
-        : DecisionTreeLeafLabel.numerical(classLabel as double),
-    );
-  });
-
+  samples.forEach((sample, leafLabel) =>
+    when(solverMock.getLabelForSample(sample)).thenReturn(leafLabel));
   return solverMock;
 }
