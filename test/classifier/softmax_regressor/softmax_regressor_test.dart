@@ -1,6 +1,6 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
-import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
@@ -49,7 +49,7 @@ void main() {
       )).called(1);
     });
 
-    test('should call optimizer\'s `findExtrema` method with proper '
+    test('should call solver\'s `findExtrema` method with proper '
         'parameters and consider intercept term', () {
       final observations = Matrix.fromList([
         [10.1, 10.2, 12.0, 13.4],

@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/optimizer/linear/gradient/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/optimizer/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
@@ -19,7 +19,7 @@ import 'package:ml_linalg/vector.dart';
 /// to make a best prediction of `y` term.
 abstract class LinearRegressor implements Regressor, Assessable {
   /**
-   * Creates a gradient linear regressor. Uses gradient descent optimizer to
+   * Creates a gradient linear regressor. Uses gradient descent solver to
    * find the optimal weights
    *
    * Parameters:
@@ -31,14 +31,14 @@ abstract class LinearRegressor implements Regressor, Assessable {
    * observation from [trainingFeatures]
    *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
-   * convergence in the optimizer. Default
+   * convergence in the solver. Default
    * value is `100`
    *
    * [initialLearningRate] A value, defining velocity of the convergence of the
-   * gradient descent optimizer.
+   * gradient descent solver.
    *
    * [minWeightsUpdate] A minimum distance between weights vectors in two
-   * subsequent iterations. Uses as a condition of convergence in the optimizer.
+   * subsequent iterations. Uses as a condition of convergence in the solver.
    * In other words, if difference is small, there is no reason to continue
    * fitting. Default value is `1e-12`
    *
@@ -46,7 +46,7 @@ abstract class LinearRegressor implements Regressor, Assessable {
    * there is only L2 regularization type.
    *
    * [randomSeed] A seed, that will be passed to a random value generator, used
-   * by stochastic optimizers. Will be ignored, if the optimizer is not
+   * by stochastic optimizers. Will be ignored, if the solver is not
    * stochastic. Remember, each time you run the regressor with the same
    * parameters, you will receive a different result. To avoid it, define
    * [randomSeed]
@@ -84,7 +84,7 @@ abstract class LinearRegressor implements Regressor, Assessable {
       }) = GradientRegressor;
 
   /**
-   * Creates a linear regressor with a coordinate descent optimizer to use L1
+   * Creates a linear regressor with a coordinate descent solver to use L1
    * regularization.
    *
    * L1 regularization allows to select more important features, make less
@@ -99,10 +99,10 @@ abstract class LinearRegressor implements Regressor, Assessable {
    * observation from [trainingFeatures]
    *
    * [iterationsLimit] A number of fitting iterations. Uses as a condition of
-   * convergence in the optimizer. Default value is `100`
+   * convergence in the solver. Default value is `100`
    *
    * [minWeightsUpdate] A minimum distance between weights vectors in two
-   * subsequent iterations. Uses as a condition of convergence in the optimizer.
+   * subsequent iterations. Uses as a condition of convergence in the solver.
    * In other words, if difference is small, there is no reason to continue
    * fitting. Default value is `1e-12`
    *
