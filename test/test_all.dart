@@ -12,15 +12,15 @@ import 'data_splitter/lpo_splitter_test.dart' as lpo_splitter_test;
 import 'helpers/add_intercept.dart' as add_intercept_test;
 import 'link_function/link_function_test.dart' as link_function_test;
 import 'math/randomizer_test.dart' as randomizer_test;
-import 'optimizer/linear/convergence_detector/convergence_detector_impl_test.dart'
+import 'solver/linear/convergence_detector/convergence_detector_impl_test.dart'
     as convergence_detector_test;
-import 'optimizer/linear/coordinate/coordinate_optimizer_integration_test.dart'
+import 'solver/linear/coordinate/coordinate_optimizer_integration_test.dart'
     as coord_optimizer_integration_test;
-import 'optimizer/linear/gradient/gradient_optimizer_integration_test.dart'
+import 'solver/linear/gradient/gradient_optimizer_integration_test.dart'
     as gradient_optimizer_integration_test;
-import 'optimizer/linear/gradient/gradient_optimizer_test.dart'
+import 'solver/linear/gradient/gradient_optimizer_test.dart'
     as gradient_optimizer_test;
-import 'optimizer/non_linear/decision_tree/test_all.dart'
+import 'solver/non_linear/decision_tree/test_all.dart'
   as decision_tree_unit_tests;
 import 'regressor/knn_regressor_integration_test.dart'
     as knn_regressor_integration_test;

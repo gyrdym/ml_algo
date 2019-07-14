@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/optimizer/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -32,21 +32,21 @@ abstract class SoftmaxRegressor implements Classifier, Assessable {
   /// variables) for each observation from [trainingFeatures]
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
-  /// convergence in the [optimizer]. Default value is 100
+  /// convergence in the [solver]. Default value is 100
   ///
   /// [initialLearningRate] A value, defining velocity of the convergence of the
-  /// gradient descent optimizer. Default value is 1e-3
+  /// gradient descent solver. Default value is 1e-3
   ///
   /// [minWeightsUpdate] A minimum distance between weights vectors in two
   /// subsequent iterations. Uses as a condition of convergence in the
-  /// [optimizer]. In other words, if difference is small, there is no reason to
+  /// [solver]. In other words, if difference is small, there is no reason to
   /// continue fitting. Default value is 1e-12
   ///
   /// [lambda] A coefficient of regularization. In gradient version of softmax
   /// regression L2 regularisation is used.
   ///
   /// [randomSeed] A seed, that will be passed to a random value generator,
-  /// used by stochastic optimizers. Will be ignored, if the [optimizer] is not
+  /// used by stochastic optimizers. Will be ignored, if the [solver] is not
   /// a stochastic. Remember, each time you run the regressor based on, for
   /// instance, stochastic gradient descent, with the same parameters, you will
   /// receive a different result. To avoid it, define [randomSeed]
