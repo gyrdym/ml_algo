@@ -1,13 +1,13 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/gradient_softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/linear/softmax_regressor/gradient_softmax_regressor.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
-import '../../test_utils/mocks.dart';
+import '../../../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../../../test_utils/mocks.dart';
 
 void main() {
   group('SoftmaxRegressor', () {

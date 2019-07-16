@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/classifier/decision_tree/decision_tree_classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier_impl.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
@@ -67,7 +67,6 @@ void main() {
       test('should create classifier', () {
         expect(classifier, isA<DecisionTreeClassifierImpl>());
         expect(classifier.classLabels, isNull);
-        expect(classifier.coefficientsByClasses, isNull);
       });
 
       test('should predict class labels', () {
