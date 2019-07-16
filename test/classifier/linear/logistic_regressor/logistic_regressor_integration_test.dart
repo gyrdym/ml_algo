@@ -1,10 +1,10 @@
-import 'package:ml_algo/src/classifier/logistic_regressor/gradient_logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
-import '../../test_utils/helpers/floating_point_iterable_matchers.dart';
+import '../../../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 void main() {
   final firstClass = [1.0];
