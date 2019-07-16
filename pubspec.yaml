@@ -24,4 +24,6 @@ dev_dependencies:
 
 dependency_overrides:
   ml_preprocessing:
-    path: ../ml_preprocessing
+    git:
+      ref: separate-entity-for-preprocessing
+      url: https://github.com/gyrdym/ml_preprocessing.git
