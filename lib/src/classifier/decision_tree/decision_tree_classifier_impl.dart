@@ -28,7 +28,7 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
     final _isOutcomeNominal = predictedLabels.first.nominalValue != null;
 
     if (_isOutcomeNominal) {
-      return Matrix.fromColumns(
+      return Matrix.fromRows(
           predictedLabels.map((label) => label.nominalValue).toList());
     }
 

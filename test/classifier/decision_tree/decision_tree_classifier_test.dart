@@ -14,6 +14,13 @@ void main() {
       [55, 10, 1, 0, 0, 22, 80, 1, 0, 0],
     ]);
 
+    final featuresForPrediction = Matrix.fromList([
+      [200,  300, 1, 0, 0, 10, -40],
+      [190, -500, 1, 0, 0, 11, -31],
+      [2563, 16,  0, 0, 1, 22,  50],
+      [5598, 14,  0, 1, 0, 99, 100],
+    ]);
+
     final nominalFeatureRange = ZRange.closed(2, 4);
     final outcomesColumnRange = ZRange.closed(7, 9);
 
@@ -33,25 +40,54 @@ void main() {
       ],
     };
 
-    final idxToRanges = {
-      0: ZRange.singleton(0),
-      1: ZRange.singleton(1),
-      2: nominalFeatureRange,
-      3: nominalFeatureRange,
-      4: nominalFeatureRange,
-      5: ZRange.singleton(5),
-      6: ZRange.singleton(6),
-      7: outcomesColumnRange,
-      8: outcomesColumnRange,
-      9: outcomesColumnRange,
-    };
+    final dataSet = DataSet(observations, outcomesColumnRange,
+        rangeToNominalValues);
 
-    test('should create greedy decision tree classifier', () {
-      final dataSet = DataSet(observations, outcomesColumnRange, idxToRanges,
-          rangeToNominalValues);
-      final classifier = DecisionTreeClassifier.greedy(dataSet, 0.3, 3, 4);
+    group('greedy', () {
+      final classifier = DecisionTreeClassifier.greedy(dataSet, 0.3, 1, 3);
 
-      expect(classifier, isA<DecisionTreeClassifierImpl>());
+      /*
+       *          The tree structure:
+       *
+       *                 (root)
+       *                *     *
+       *            *             *
+       *         *                    *
+       *  index: 1                 index: 1
+       *  condition: <15           condition: >=15
+       *  prediction: 1,0,0           * * *
+       *                          *     *      *
+       *                      *         *           *
+       *                  *             *                *
+       *    index: (2-4)         index: (2-4)            index: (2-4)
+       *    condition: == 0,0,1  condition: == 0,1,0     condition: == 1,0,0
+       *    prediction: 0,0,1    prediction: 0,1,0       prediction: 0,0,1
+       */
+
+      test('should create classifier', () {
+        expect(classifier, isA<DecisionTreeClassifierImpl>());
+        expect(classifier.classLabels, isNull);
+        expect(classifier.coefficientsByClasses, isNull);
+      });
+
+      test('should predict class labels', () {
+        expect(classifier.predictClasses(featuresForPrediction),
+            equals([
+              [0, 0, 1],
+              [1, 0, 0],
+              [0, 0, 1],
+              [1, 0, 0],
+            ]));
+      });
+
+      test('should predict probability of classes', () {
+        expect(classifier.predictProbabilities(featuresForPrediction), equals([
+              [1],
+              [1],
+              [1],
+              [1],
+            ]));
+      });
     });
   });
 }

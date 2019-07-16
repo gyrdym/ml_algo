@@ -13,7 +13,7 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
   ) {
     final solver = createGreedySolver(
         data.toMatrix(),
-        data.columnRanges,
+        data.featureRanges,
         data.outcomeRange,
         data.rangeToEncoded,
         minError,

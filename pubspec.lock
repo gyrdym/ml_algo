@@ -277,9 +277,11 @@ packages:
   ml_preprocessing:
     dependency: "direct main"
     description:
-      path: "../ml_preprocessing"
-      relative: true
-    source: path
+      path: "."
+      ref: separate-entity-for-preprocessing
+      resolved-ref: "0b2023f4d7f323898090cacdb3422296db50f07a"
+      url: "https://github.com/gyrdym/ml_preprocessing.git"
+    source: git
     version: "3.4.0+1"
   mockito:
     dependency: "direct dev"
