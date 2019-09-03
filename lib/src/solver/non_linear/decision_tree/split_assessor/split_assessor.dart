@@ -1,11 +1,10 @@
 import 'package:ml_linalg/matrix.dart';
-import 'package:xrange/zrange.dart';
 
 abstract class SplitAssessor {
   /// Returns error on the whole split subset
   double getAggregatedError(Iterable<Matrix> splitObservations,
-      ZRange outcomesRange);
+      int targetId);
 
   /// Returns error on a single split subset
-  double getError(Matrix splitObservations, ZRange outcomesRange);
+  double getError(Matrix splitObservations, int targetId);
 }

@@ -5,7 +5,6 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_s
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/splitter.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:xrange/zrange.dart';
 
 class GreedySplitter implements Splitter {
@@ -17,45 +16,38 @@ class GreedySplitter implements Splitter {
   final NominalSplitter _nominalSplitter;
 
   @override
-  Map<DecisionTreeNode, Matrix> split(Matrix samples, ZRange splittingRange,
-      ZRange outcomeColumnRange, [List<Vector> nominalValues]) =>
-      nominalValues != null
-          ? _createByNominalValues(samples, splittingRange,
-            nominalValues)
-          : _createByNumericalValue(samples, splittingRange,
-          outcomeColumnRange);
+  Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
+      int targetId, [List<double> uniqueValues]) =>
+      uniqueValues != null
+          ? _createByNominalValues(samples, splittingIdx, uniqueValues)
+          : _createByNumericalValue(samples, splittingIdx, targetId);
 
   Map<DecisionTreeNode, Matrix> _createByNominalValues(Matrix samples,
-      ZRange splittingRange, List<Vector> values) {
-    if (splittingRange.firstValue < 0 ||
-        splittingRange.lastValue > samples.columnsNum) {
-      throw Exception('Unappropriate range given: $splittingRange, '
+      int splittingIdx, List<double> values) {
+    if (splittingIdx < 0 || splittingIdx > samples.columnsNum) {
+      throw Exception('Unappropriate range given: $splittingIdx, '
           'expected a range within or equal '
           '${ZRange.closed(0, samples.columnsNum)}');
     }
-    return _nominalSplitter.split(samples,
-        splittingRange, values);
+    return _nominalSplitter.split(samples, splittingIdx, values);
   }
 
   Map<DecisionTreeNode, Matrix> _createByNumericalValue(Matrix samples,
-      ZRange splittingRange, ZRange outcomesRange) {
-    final selectedColumnIdx = splittingRange.firstValue;
+      int splittingIdx, int targetId) {
     final errors = <double, List<Map<DecisionTreeNode, Matrix>>>{};
-    final sortedRows = samples
-        .sort((row) => row[selectedColumnIdx], Axis.rows).rows;
-    var prevValue = sortedRows.first[selectedColumnIdx];
+    final sortedRows = samples.sort((row) => row[splittingIdx], Axis.rows).rows;
+    var prevValue = sortedRows.first[splittingIdx];
 
     for (final row in sortedRows.skip(1)) {
-      final splittingValue = (prevValue + row[selectedColumnIdx]) / 2;
+      final splittingValue = (prevValue + row[splittingIdx]) / 2;
       final split = _numericalSplitter
-          .split(samples, splittingRange, splittingValue);
-      final error = _assessor
-          .getAggregatedError(split.values, outcomesRange);
+          .split(samples, splittingIdx, splittingValue);
+      final error = _assessor.getAggregatedError(split.values, targetId);
 
       errors.update(error, (splits) => splits..add(split),
           ifAbsent: () => [split]);
 
-      prevValue = row[selectedColumnIdx];
+      prevValue = row[splittingIdx];
     }
 
     final sorted = errors.keys.toList(growable: false)

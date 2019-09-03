@@ -14,19 +14,18 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   final SequenceElementsDistributionCalculator distributionCalculator;
 
   @override
-  DecisionTreeLeafLabel create(Matrix samples, ZRange outcomesColumnRange,
+  DecisionTreeLeafLabel create(Matrix samples, int targetIdx,
       bool isClassLabelNominal) {
-    final outcomes = samples.submatrix(columns: outcomesColumnRange);
-    final totalRecordsCount = outcomes.rowsNum;
+    final outcomes = samples.getColumn(targetIdx);
+    final totalRecordsCount = outcomes.length;
 
     if (isClassLabelNominal) {
-      final labelData = _getLabelData<Vector>(outcomes.rows, totalRecordsCount);
+      final labelData = _getLabelData<double>(outcomes, totalRecordsCount);
       return DecisionTreeLeafLabel.nominal(labelData.value,
           probability: labelData.probability);
     }
 
-    final labelColumn = outcomes.toVector();
-    final labelData = _getLabelData<double>(labelColumn, totalRecordsCount);
+    final labelData = _getLabelData<double>(outcomes, totalRecordsCount);
     return DecisionTreeLeafLabel.numerical(labelData.value,
         probability: labelData.probability);
   }

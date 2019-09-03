@@ -8,12 +8,12 @@ class NumericalSplitterImpl implements NumericalSplitter {
   const NumericalSplitterImpl();
 
   @override
-  Map<DecisionTreeNode, Matrix> split(Matrix samples, ZRange splittingRange,
+  Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
       double splittingValue) {
     final left = <Vector>[];
     final right = <Vector>[];
-    final index = splittingRange.firstValue;
-    final splittingClause = (Vector sample) => sample[index] < splittingValue;
+    final splittingClause =
+        (Vector sample) => sample[splittingIdx] < splittingValue;
     final oppositeClause = (Vector sample) => !splittingClause(sample);
 
     samples.rows.forEach((row) => splittingClause(row)
@@ -21,7 +21,7 @@ class NumericalSplitterImpl implements NumericalSplitter {
         : right.add(row));
 
     final createNode = (TestSamplePredicate splittingClause) =>
-        DecisionTreeNode(splittingClause, splittingValue, null, splittingRange,
+        DecisionTreeNode(splittingClause, splittingValue, null, splittingIdx,
             null, null);
 
     final leftNode = createNode(splittingClause);

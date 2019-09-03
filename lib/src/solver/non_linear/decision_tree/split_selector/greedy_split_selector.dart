@@ -3,8 +3,6 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/split_assessor/split
 import 'package:ml_algo/src/solver/non_linear/decision_tree/split_selector/split_selector.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/splitter.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
-import 'package:xrange/zrange.dart';
 
 class GreedySplitSelector implements SplitSelector {
   GreedySplitSelector(this._assessor, this._splitter);
@@ -15,18 +13,16 @@ class GreedySplitSelector implements SplitSelector {
   @override
   Map<DecisionTreeNode, Matrix> select(
       Matrix samples,
-      ZRange outcomesColumnRange,
-      Iterable<ZRange> featuresColumnRanges,
-      [Map<ZRange, List<Vector>> rangeToNominalValues]) {
+      int targetId,
+      Iterable<int> featuresColumnIdxs,
+      [Map<int, List<double>> columnIdToUniqueValues]) {
     final errors = <double, List<Map<DecisionTreeNode, Matrix>>>{};
-    featuresColumnRanges.forEach((range) {
-      final nominalValues = rangeToNominalValues != null
-          ? rangeToNominalValues[range]
+    featuresColumnIdxs.forEach((colIdx) {
+      final uniqueValues = columnIdToUniqueValues != null
+          ? columnIdToUniqueValues[colIdx]
           : null;
-      final split = _splitter.split(samples, range,
-          outcomesColumnRange, nominalValues);
-      final error = _assessor.getAggregatedError(split.values,
-          outcomesColumnRange);
+      final split = _splitter.split(samples, colIdx, targetId, uniqueValues);
+      final error = _assessor.getAggregatedError(split.values, targetId);
       errors.update(error, (splits) => splits..add(split),
           ifAbsent: () => [split]);
     });

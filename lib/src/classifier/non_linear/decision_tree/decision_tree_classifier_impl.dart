@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/mixin/asessable_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/_mixin/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -25,8 +25,11 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
     final _isOutcomeNominal = predictedLabels.first.nominalValue != null;
 
     if (_isOutcomeNominal) {
-      return Matrix.fromRows(
-          predictedLabels.map((label) => label.nominalValue).toList());
+      final outcomeList = predictedLabels.map((label) => label.nominalValue)
+          .toList();
+      final outcomeVector = Vector.fromList(outcomeList);
+
+      return Matrix.fromColumns([outcomeVector]);
     }
 
     return Matrix.fromColumns([

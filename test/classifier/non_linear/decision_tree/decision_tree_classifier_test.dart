@@ -1,7 +1,6 @@
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier_impl.dart';
 import 'package:ml_linalg/linalg.dart';
-import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
 
