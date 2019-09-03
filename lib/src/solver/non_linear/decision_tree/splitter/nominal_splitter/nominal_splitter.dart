@@ -4,6 +4,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/zrange.dart';
 
 abstract class NominalSplitter {
-  Map<DecisionTreeNode, Matrix> split(Matrix samples, ZRange splittingRange,
-      List<Vector> nominalValues);
+  Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
+      List<double> uniqueValues);
 }

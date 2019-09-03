@@ -10,21 +10,21 @@ import 'package:xrange/zrange.dart';
 class DecisionTreeSolver {
   DecisionTreeSolver(
       Matrix samples,
-      this._featuresColumnRanges,
-      this._outcomeColumnRange,
-      this._rangeToNominalValues,
+      this._featuresColumnIdxs,
+      this._targetIdx,
+      this._colIdxToUniqueValues,
       this._leafDetector,
       this._leafLabelFactory,
       this._splitSelector,
-  ) : _isOutcomeNominal = _rangeToNominalValues
-      .containsKey(_outcomeColumnRange) {
+  ) : _isOutcomeNominal = _colIdxToUniqueValues
+      .containsKey(_targetIdx) {
     _root = _createNode(samples, null, null, null, null,
-        _featuresColumnRanges, 0);
+        _featuresColumnIdxs, 0);
   }
 
-  final Iterable<ZRange> _featuresColumnRanges;
-  final ZRange _outcomeColumnRange;
-  final Map<ZRange, List<Vector>> _rangeToNominalValues;
+  final Iterable<int> _featuresColumnIdxs;
+  final int _targetIdx;
+  final Map<int, List<double>> _colIdxToUniqueValues;
   final bool _isOutcomeNominal;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
@@ -39,24 +39,23 @@ class DecisionTreeSolver {
   DecisionTreeNode _createNode(
       Matrix samples,
       double splittingNumericalValue,
-      Vector splittingNominalValue,
-      ZRange splittingRange,
+      double splittingNominalValue,
+      int splittingIdx,
       TestSamplePredicate splittingClause,
-      Iterable<ZRange> featuresColumnRanges,
+      Iterable<int> featuresColumnIdxs,
       int depth,
   ) {
-    if (_leafDetector.isLeaf(samples, _outcomeColumnRange,
-        featuresColumnRanges, depth)) {
+    if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, depth)) {
       final label = _leafLabelFactory.create(
         samples,
-        _outcomeColumnRange,
+        _targetIdx,
         _isOutcomeNominal,
       );
       return DecisionTreeNode(
         splittingClause,
         splittingNumericalValue,
         splittingNominalValue,
-        splittingRange,
+        splittingIdx,
         null,
         label,
       );
@@ -64,9 +63,9 @@ class DecisionTreeSolver {
 
     final bestSplit = _splitSelector.select(
         samples,
-        _outcomeColumnRange,
-        featuresColumnRanges,
-        _rangeToNominalValues,
+        _targetIdx,
+        featuresColumnIdxs,
+        _colIdxToUniqueValues,
     );
 
     final newDepth = depth + 1;
@@ -75,19 +74,19 @@ class DecisionTreeSolver {
       final splitNode = entry.key;
       final splitSamples = entry.value;
 
-      final isSplitByNominalValue = _rangeToNominalValues
-          .containsKey(splitNode.splittingColumnRange);
+      final isSplitByNominalValue = _colIdxToUniqueValues
+          .containsKey(splitNode.splittingIdx);
 
       final updatedColumnRanges = isSplitByNominalValue
-          ? (Set<ZRange>.from(featuresColumnRanges)
-              ..remove(splitNode.splittingColumnRange))
-          : featuresColumnRanges;
+          ? (Set<int>.from(featuresColumnIdxs)
+              ..remove(splitNode.splittingIdx))
+          : featuresColumnIdxs;
 
       return _createNode(
           splitSamples,
           splitNode.splittingNumericalValue,
           splitNode.splittingNominalValue,
-          splitNode.splittingColumnRange,
+          splitNode.splittingIdx,
           splitNode.testSample,
           updatedColumnRanges,
           newDepth);
@@ -97,7 +96,7 @@ class DecisionTreeSolver {
         splittingClause,
         splittingNumericalValue,
         splittingNominalValue,
-        splittingRange,
+        splittingIdx,
         childNodes.toList(growable: false),
         null);
   }

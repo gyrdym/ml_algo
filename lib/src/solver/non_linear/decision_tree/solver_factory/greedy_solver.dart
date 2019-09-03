@@ -7,19 +7,17 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/split_selector/greed
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/greedy_splitter.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter_impl.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter_impl.dart';
-import 'package:ml_linalg/linalg.dart';
-import 'package:ml_linalg/matrix.dart';
-import 'package:xrange/zrange.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:quiver/iterables.dart';
 
 DecisionTreeSolver createGreedySolver(
-    Matrix samples,
-    Iterable<ZRange> columnRanges,
-    ZRange outcomeRange,
-    Map<ZRange, List<Vector>> rangeToEncoded,
+    DataFrame samples,
+    int targetIdx,
+    String targetName,
     double minErrorOnNode,
     int minSamplesCountOnNode,
-    int maxDepth) {
-
+    int maxDepth,
+) {
   final assessor = const MajoritySplitAssessor();
 
   final numericalSplitter = const NumericalSplitterImpl();
@@ -33,11 +31,19 @@ DecisionTreeSolver createGreedySolver(
   final distributionCalculator =
     const SequenceElementsDistributionCalculatorImpl();
 
+  final featuresIndexedSeries = enumerate(samples.series)
+      .where((indexed) => indexed.index != targetIdx);
+
   return DecisionTreeSolver(
-    samples,
-    columnRanges,
-    outcomeRange,
-    rangeToEncoded,
+    samples.toMatrix(),
+    featuresIndexedSeries.map((indexed) => indexed.index),
+    targetIdx,
+    Map.fromEntries(
+      featuresIndexedSeries
+          .where((indexed) => indexed.value.isDiscrete)
+          .map((indexed) => MapEntry(indexed.index, indexed.value.discreteValues),
+      ),
+    ),
     LeafDetectorImpl(
       assessor,
       minErrorOnNode,

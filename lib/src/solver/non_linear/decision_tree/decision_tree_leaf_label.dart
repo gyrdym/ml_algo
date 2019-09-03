@@ -7,7 +7,7 @@ class DecisionTreeLeafLabel {
   DecisionTreeLeafLabel.numerical(this.numericalValue, {this.probability})
       : nominalValue = null;
 
-  final Vector nominalValue;
+  final double nominalValue;
   final double numericalValue;
   final double probability;
 }

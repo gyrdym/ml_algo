@@ -3,6 +3,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/zrange.dart';
 
 abstract class NumericalSplitter {
-  Map<DecisionTreeNode, Matrix> split(Matrix samples, ZRange splittingRange,
+  Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
       double splittingValue);
 }

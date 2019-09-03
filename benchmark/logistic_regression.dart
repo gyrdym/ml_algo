@@ -5,6 +5,7 @@ import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regres
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:xrange/zrange.dart';
 
 const observationsNum = 200;
 const featuresNum = 20;
@@ -12,9 +13,8 @@ const featuresNum = 20;
 class LogisticRegressorBenchmark extends BenchmarkBase {
   LogisticRegressorBenchmark() : super('Logistic regressor');
 
-  final Matrix features = Matrix.fromRows(List.generate(observationsNum,
+  final Matrix observations = Matrix.fromRows(List.generate(observationsNum,
     (i) => Vector.randomFilled(featuresNum)));
-  final Matrix labels = Matrix.fromColumns([Vector.zero(observationsNum)]);
 
   static void main() {
     LogisticRegressorBenchmark().report();
@@ -22,7 +22,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    LogisticRegressor.gradient(features, labels,
+    LogisticRegressor.gradient(DataSet(observations, ZRange.singleton(19)),
         dtype: DType.float32, minWeightsUpdate: null, iterationsLimit: 200);
   }
 

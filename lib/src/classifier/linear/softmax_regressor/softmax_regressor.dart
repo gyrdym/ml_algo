@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/classifier/linear/softmax_regressor/gradient_softmax_regressor.dart';
-import 'package:ml_algo/src/classifier/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_linalg/dtype.dart';

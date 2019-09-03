@@ -84,7 +84,7 @@ void mockGetGradient(CostFunction mock, {
 
 void testOptimizer(
   Matrix points, Matrix labels, CostFunction costFunction,
-  Function callback(LinearOptimizer optimizer), {
+  void callback(LinearOptimizer optimizer), {
   int iterations,
   int batchSize = 1,
   double minCoeffUpdate = 1e-100,
