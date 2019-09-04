@@ -8,7 +8,8 @@ class NominalSplitterImpl implements NominalSplitter {
 
   @override
   Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      List<double> uniqueValues) => Map.fromEntries(uniqueValues.map((value) {
+      List<dynamic> uniqueValues) =>
+      Map.fromEntries(uniqueValues.map((dynamic value) {
         final splittingClause =
             (Vector sample) => sample[splittingIdx] == value;
 

@@ -22,11 +22,7 @@ DecisionTreeSolver createGreedySolver(
 
   final numericalSplitter = const NumericalSplitterImpl();
   final nominalSplitter = const NominalSplitterImpl();
-  final splitter = GreedySplitter(
-    assessor,
-    numericalSplitter,
-    nominalSplitter,
-  );
+  final splitter = GreedySplitter(assessor, numericalSplitter, nominalSplitter);
 
   final distributionCalculator =
     const SequenceElementsDistributionCalculatorImpl();
@@ -34,28 +30,29 @@ DecisionTreeSolver createGreedySolver(
   final featuresIndexedSeries = enumerate(samples.series)
       .where((indexed) => indexed.index != targetIdx);
 
+  final colIdxToUniqueValues = Map.fromEntries(
+      featuresIndexedSeries
+        .where((indexed) => indexed.value.isDiscrete)
+        .map((indexed) => MapEntry(indexed.index, indexed
+          .value
+          .discreteValues
+          .toList(growable: false),
+        ),
+      ),
+  );
+
+  final leafDetector = LeafDetectorImpl(assessor, minErrorOnNode,
+    minSamplesCountOnNode, maxDepth);
+  final leafLabelFactory = MajorityLeafLabelFactory(distributionCalculator);
+  final splitSelector = GreedySplitSelector(assessor, splitter);
+
   return DecisionTreeSolver(
     samples.toMatrix(),
     featuresIndexedSeries.map((indexed) => indexed.index),
     targetIdx,
-    Map.fromEntries(
-      featuresIndexedSeries
-          .where((indexed) => indexed.value.isDiscrete)
-          .map((indexed) => MapEntry(indexed.index, indexed.value.discreteValues),
-      ),
-    ),
-    LeafDetectorImpl(
-      assessor,
-      minErrorOnNode,
-      minSamplesCountOnNode,
-      maxDepth,
-    ),
-    MajorityLeafLabelFactory(
-      distributionCalculator,
-    ),
-    GreedySplitSelector(
-      assessor,
-      splitter,
-    ),
+    colIdxToUniqueValues,
+    leafDetector,
+    leafLabelFactory,
+    splitSelector,
   );
 }

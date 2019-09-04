@@ -17,7 +17,7 @@ class DecisionTreeNode {
   final DecisionTreeLeafLabel label;
   final TestSamplePredicate testSample;
   final double splittingNumericalValue;
-  final double splittingNominalValue;
+  final dynamic splittingNominalValue;
   final int splittingIdx;
 
   bool get isLeaf => children == null || children.isEmpty;
