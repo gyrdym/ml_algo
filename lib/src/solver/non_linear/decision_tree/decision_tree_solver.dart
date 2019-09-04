@@ -5,7 +5,6 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_label_factory/l
 import 'package:ml_algo/src/solver/non_linear/decision_tree/split_selector/split_selector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
-import 'package:xrange/zrange.dart';
 
 class DecisionTreeSolver {
   DecisionTreeSolver(
@@ -24,7 +23,7 @@ class DecisionTreeSolver {
 
   final Iterable<int> _featuresColumnIdxs;
   final int _targetIdx;
-  final Map<int, List<double>> _colIdxToUniqueValues;
+  final Map<int, List<dynamic>> _colIdxToUniqueValues;
   final bool _isOutcomeNominal;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
@@ -39,7 +38,7 @@ class DecisionTreeSolver {
   DecisionTreeNode _createNode(
       Matrix samples,
       double splittingNumericalValue,
-      double splittingNominalValue,
+      dynamic splittingNominalValue,
       int splittingIdx,
       TestSamplePredicate splittingClause,
       Iterable<int> featuresColumnIdxs,

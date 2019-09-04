@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier_impl.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
@@ -39,11 +40,10 @@ void main() {
       ],
     };
 
-    final dataSet = DataSet(observations, outcomesColumnRange,
-        rangeToNominalValues);
+    final dataFrame = DataFrame(observations);
 
     group('greedy', () {
-      final classifier = DecisionTreeClassifier.greedy(dataSet, 0.3, 1, 3);
+      final classifier = DecisionTreeClassifier.greedy(dataFrame, 0.3, 1, 3);
 
       /*
        *          The tree structure:
