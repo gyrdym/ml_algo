@@ -13,6 +13,14 @@ class MajoritySplitAssessor implements SplitAssessor {
     int errorCount = 0;
     int totalCount = 0;
     for (final nodeObservations in splitObservations) {
+      if (nodeObservations.columnsNum == 0) {
+        throw Exception('Observations on the node are empty');
+      }
+      if (targetId >= nodeObservations.columnsNum) {
+        throw ArgumentError.value(targetId, 'targetId',
+            'the value should be in [0..${nodeObservations.columnsNum - 1}] '
+                'range, but given');
+      }
       errorCount += _getErrorCount(nodeObservations
           .getColumn(targetId));
       totalCount += nodeObservations.rowsNum;

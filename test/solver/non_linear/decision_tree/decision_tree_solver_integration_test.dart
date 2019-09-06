@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/solver_factory/greedy_solver.dart';
-import 'package:ml_linalg/matrix.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
@@ -10,49 +10,18 @@ import 'test_utils.dart';
 void main() {
   group('DecisionTreeSolver', () {
     group('for greedy classifier', () {
-      final observations = Matrix.fromList([
-        [10, 20, 1, 0, 0, 30, 40, 0, 0, 1],
-        [90, 51, 0, 0, 1, 34, 31, 0, 0, 1],
-        [23, 40, 0, 1, 0, 90, 50, 0, 1, 0],
-        [55, 10, 1, 0, 0, 22, 80, 1, 0, 0],
+      final dataFrame = DataFrame.fromSeries([
+        Series('col_1', <int>[10, 90, 23, 55]),
+        Series('col_2', <int>[20, 51, 40, 10]),
+        Series('col_3', <int>[1, 0, 0, 1], isDiscrete: true),
+        Series('col_4', <int>[0, 0, 1, 0], isDiscrete: true),
+        Series('col_5', <int>[0, 1, 0, 0], isDiscrete: true),
+        Series('col_6', <int>[30, 34, 90, 22]),
+        Series('col_7', <int>[40, 31, 50, 80]),
+        Series('col_8', <int>[0, 0, 1, 2], isDiscrete: true),
       ]);
 
-      final nominalFeatureRange = ZRange.closed(2, 4);
-      final outcomesColumnRange = ZRange.closed(7, 9);
-
-      final featuresColumnRanges = Set<ZRange>.from(<ZRange>[
-        ZRange.singleton(0),
-        ZRange.singleton(1),
-        nominalFeatureRange,
-        ZRange.singleton(5),
-        ZRange.singleton(6),
-      ]);
-
-      final rangeToNominalValues = {
-        nominalFeatureRange: [
-          // order of nominal features is valuable for building the tree -
-          // the earlier value is in the list, the earlier the appropriate
-          // node will be built
-          Vector.fromList([0, 0, 1]),
-          Vector.fromList([0, 1, 0]),
-          Vector.fromList([1, 0, 0]),
-        ],
-        outcomesColumnRange: [
-          Vector.fromList([0, 0, 1]),
-          Vector.fromList([0, 1, 0]),
-          Vector.fromList([1, 0, 0]),
-        ],
-      };
-
-      final solver = createGreedySolver(
-        observations,
-        featuresColumnRanges,
-        outcomesColumnRange,
-        rangeToNominalValues,
-        0.3,
-        1,
-        3,
-      );
+      final solver = createGreedySolver(dataFrame, 7, null, 0.3, 1, 3);
 
       test('should build a tree', () {
         final rootNode = solver.root;
@@ -88,7 +57,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: 15,
           expectedSplittingNominalValue: null,
-          expectedSplittingColumnIdx: ZRange.singleton(1),
+          expectedSplittingColumnIdx: 1,
           expectedChildrenLength: null,
           expectedLabel: DecisionTreeLeafLabel.nominal(
             Vector.fromList([1, 0, 0]),
@@ -100,7 +69,7 @@ void main() {
           shouldBeLeaf: false,
           expectedSplittingNumericalValue: 15,
           expectedSplittingNominalValue: null,
-          expectedSplittingColumnIdx: ZRange.singleton(1),
+          expectedSplittingColumnIdx: 1,
           expectedChildrenLength: 3,
         );
 

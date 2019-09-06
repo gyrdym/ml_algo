@@ -3,17 +3,9 @@ import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_cl
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
-import 'package:xrange/zrange.dart';
 
 void main() {
   group('DecisionTreeClassifier', () {
-    final observations = Matrix.fromList([
-      [10, 20, 1, 0, 0, 30, 40, 0],
-      [90, 51, 0, 0, 1, 34, 31, 0],
-      [23, 40, 0, 1, 0, 90, 50, 1],
-      [55, 10, 1, 0, 0, 22, 80, 2],
-    ]);
-
     final featuresForPrediction = Matrix.fromList([
       [200,  300, 1, 0, 0, 10, -40],
       [190, -500, 1, 0, 0, 11, -31],
@@ -29,7 +21,7 @@ void main() {
       Series('col_5', <int>[0, 1, 0, 0], isDiscrete: true),
       Series('col_6', <int>[30, 34, 90, 22]),
       Series('col_7', <int>[40, 31, 50, 80]),
-      Series('col_8', <int>[0, 0, 2, 2], isDiscrete: true),
+      Series('col_8', <int>[0, 0, 1, 2], isDiscrete: true),
     ]);
 
     group('greedy', () {
@@ -62,10 +54,10 @@ void main() {
       test('should predict class labels', () {
         expect(classifier.predictClasses(featuresForPrediction),
             equals([
-              [0, 0, 1],
-              [1, 0, 0],
-              [0, 0, 1],
-              [1, 0, 0],
+              [0],
+              [2],
+              [0],
+              [2],
             ]));
       });
 
