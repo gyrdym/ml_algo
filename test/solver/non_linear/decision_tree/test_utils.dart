@@ -9,7 +9,7 @@ void testTreeNode(
     {
       bool shouldBeLeaf,
       double expectedSplittingNumericalValue,
-      ZRange expectedSplittingColumnRange,
+      int expectedSplittingColumnIdx,
       Vector expectedSplittingNominalValue,
       int expectedChildrenLength,
       DecisionTreeLeafLabel expectedLabel,
@@ -18,7 +18,7 @@ void testTreeNode(
 ) {
   expect(node.isLeaf, equals(shouldBeLeaf));
   expect(node.splittingNumericalValue, equals(expectedSplittingNumericalValue));
-  expect(node.splittingColumnRange, equals(expectedSplittingColumnRange));
+  expect(node.splittingIdx, equals(expectedSplittingColumnIdx));
   expect(node.splittingNominalValue, equals(expectedSplittingNominalValue));
   expectedChildrenLength == null
       ? expect(node.children, isNull)

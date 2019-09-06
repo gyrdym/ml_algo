@@ -40,7 +40,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: null,
           expectedSplittingNominalValue: Vector.fromList([0, 0, 1]),
-          expectedSplittingColumnRange: splittingColumnRange,
+          expectedSplittingColumnIdx: splittingColumnRange,
           expectedChildrenLength: null,
           expectedLabel: null,
       );
@@ -73,7 +73,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
         expectedSplittingNominalValue: Vector.fromList([0, 0, 1]),
-        expectedSplittingColumnRange: splittingColumnRange,
+        expectedSplittingColumnIdx: splittingColumnRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -133,7 +133,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
         expectedSplittingNominalValue: Vector.fromList([0, 0, 1]),
-        expectedSplittingColumnRange: splittingColumnRange,
+        expectedSplittingColumnIdx: splittingColumnRange,
         expectedChildrenLength: null,
         expectedLabel: null,
         samplesToCheck: {
@@ -150,7 +150,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: null,
         expectedSplittingNominalValue: Vector.fromList([0, 1, 0]),
-        expectedSplittingColumnRange: splittingColumnRange,
+        expectedSplittingColumnIdx: splittingColumnRange,
         expectedChildrenLength: null,
         expectedLabel: null,
         samplesToCheck: {

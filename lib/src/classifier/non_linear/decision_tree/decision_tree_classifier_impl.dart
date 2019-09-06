@@ -26,8 +26,8 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
 
     if (_isOutcomeNominal) {
       final outcomeList = predictedLabels
-          .map((label) => double.parse(label.nominalValue.toString()))
-          .toList();
+          .map((label) => label.nominalValue as double)
+          .toList(growable: false);
       final outcomeVector = Vector.fromList(outcomeList);
 
       return Matrix.fromColumns([outcomeVector]);

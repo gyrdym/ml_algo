@@ -39,7 +39,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -47,7 +47,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -83,7 +83,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -91,7 +91,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -127,7 +127,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -135,7 +135,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -170,7 +170,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -178,7 +178,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -214,7 +214,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -222,7 +222,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -258,7 +258,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
         samplesToCheck: {
@@ -277,7 +277,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnRange: splittingRange,
+        expectedSplittingColumnIdx: splittingRange,
         expectedChildrenLength: null,
         expectedLabel: null,
           samplesToCheck: {
