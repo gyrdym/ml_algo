@@ -79,7 +79,7 @@ void main() {
           shouldBeLeaf: false,
           expectedSplittingNumericalValue: null,
           expectedSplittingNominalValue: null,
-          expectedSplittingColumnRange: null,
+          expectedSplittingColumnIdx: null,
           expectedChildrenLength: 2,
           expectedLabel: null,
         );
@@ -88,7 +88,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: 15,
           expectedSplittingNominalValue: null,
-          expectedSplittingColumnRange: ZRange.singleton(1),
+          expectedSplittingColumnIdx: ZRange.singleton(1),
           expectedChildrenLength: null,
           expectedLabel: DecisionTreeLeafLabel.nominal(
             Vector.fromList([1, 0, 0]),
@@ -100,7 +100,7 @@ void main() {
           shouldBeLeaf: false,
           expectedSplittingNumericalValue: 15,
           expectedSplittingNominalValue: null,
-          expectedSplittingColumnRange: ZRange.singleton(1),
+          expectedSplittingColumnIdx: ZRange.singleton(1),
           expectedChildrenLength: 3,
         );
 
@@ -108,7 +108,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: null,
           expectedSplittingNominalValue: Vector.fromList([0, 0, 1]),
-          expectedSplittingColumnRange: nominalFeatureRange,
+          expectedSplittingColumnIdx: nominalFeatureRange,
           expectedChildrenLength: null,
           expectedLabel: DecisionTreeLeafLabel.nominal(
             Vector.fromList([0, 0, 1]),
@@ -120,7 +120,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: null,
           expectedSplittingNominalValue: Vector.fromList([0, 1, 0]),
-          expectedSplittingColumnRange: nominalFeatureRange,
+          expectedSplittingColumnIdx: nominalFeatureRange,
           expectedChildrenLength: null,
           expectedLabel: DecisionTreeLeafLabel.nominal(
             Vector.fromList([0, 1, 0]),
@@ -132,7 +132,7 @@ void main() {
           shouldBeLeaf: true,
           expectedSplittingNumericalValue: null,
           expectedSplittingNominalValue: Vector.fromList([1, 0, 0]),
-          expectedSplittingColumnRange: nominalFeatureRange,
+          expectedSplittingColumnIdx: nominalFeatureRange,
           expectedChildrenLength: null,
           expectedLabel: DecisionTreeLeafLabel.nominal(
             Vector.fromList([0, 0, 1]),

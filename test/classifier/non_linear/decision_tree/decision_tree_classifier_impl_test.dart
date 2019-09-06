@@ -3,6 +3,7 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_l
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -22,11 +23,11 @@ void main() {
         sample3,
       ]);
 
-      final label1 = Vector.fromList([1, 0, 0]);
-      final label2 = Vector.fromList([0, 0, 1]);
-      final label3 = Vector.fromList([1, 0, 0]);
+      final label1 = 0.0;
+      final label2 = 1.0;
+      final label3 = 2.0;
 
-      final solverMock = createSolver<Vector>({
+      final solverMock = createSolver({
         sample1: DecisionTreeLeafLabel.nominal(label1),
         sample2: DecisionTreeLeafLabel.nominal(label2),
         sample3: DecisionTreeLeafLabel.nominal(label3),
@@ -35,11 +36,11 @@ void main() {
       final classifier = DecisionTreeClassifierImpl(solverMock);
       final predictedLabels = classifier.predictClasses(features);
 
-      expect(predictedLabels, equals(Matrix.fromRows([
-        label1,
-        label2,
-        label3,
-      ])));
+      expect(predictedLabels, equals([
+        [label1],
+        [label2],
+        [label3],
+      ]));
     });
 
     test('should return an empty matrix if input features matrix is '
@@ -63,20 +64,11 @@ void main() {
         sample3,
       ]);
 
-      final label1 = DecisionTreeLeafLabel.nominal(
-        Vector.fromList([1, 0, 0]),
-        probability: 0.7,
-      );
-      final label2 = DecisionTreeLeafLabel.nominal(
-        Vector.fromList([0, 0, 1]),
-        probability: 0.6,
-      );
-      final label3 = DecisionTreeLeafLabel.nominal(
-        Vector.fromList([1, 0, 0]),
-        probability: 0.8,
-      );
+      final label1 = DecisionTreeLeafLabel.nominal(0, probability: 0.7);
+      final label2 = DecisionTreeLeafLabel.nominal(1, probability: 0.55);
+      final label3 = DecisionTreeLeafLabel.nominal(2, probability: 0.5);
 
-      final solverMock = createSolver<Vector>({
+      final solverMock = createSolver({
         sample1: label1,
         sample2: label2,
         sample3: label3,
@@ -85,18 +77,19 @@ void main() {
       final classifier = DecisionTreeClassifierImpl(solverMock);
       final predictedLabels = classifier.predictProbabilities(features);
 
-      expect(predictedLabels, equals(Matrix.fromColumns([
-        Vector.fromList([
-          label1.probability,
-          label2.probability,
-          label3.probability
-        ]),
-      ])));
+      expect(
+          predictedLabels,
+          iterable2dAlmostEqualTo([
+            [label1.probability],
+            [label2.probability],
+            [label3.probability],
+          ]),
+      );
     });
   });
 }
 
-DecisionTreeSolver createSolver<T>(Map<Vector, DecisionTreeLeafLabel> samples) {
+DecisionTreeSolver createSolver(Map<Vector, DecisionTreeLeafLabel> samples) {
   final solverMock = DecisionTreeSolverMock();
   samples.forEach((sample, leafLabel) =>
     when(solverMock.getLabelForSample(sample)).thenReturn(leafLabel));

@@ -8,10 +8,10 @@ import 'package:xrange/zrange.dart';
 void main() {
   group('DecisionTreeClassifier', () {
     final observations = Matrix.fromList([
-      [10, 20, 1, 0, 0, 30, 40, 0, 0, 1],
-      [90, 51, 0, 0, 1, 34, 31, 0, 0, 1],
-      [23, 40, 0, 1, 0, 90, 50, 0, 1, 0],
-      [55, 10, 1, 0, 0, 22, 80, 1, 0, 0],
+      [10, 20, 1, 0, 0, 30, 40, 0],
+      [90, 51, 0, 0, 1, 34, 31, 0],
+      [23, 40, 0, 1, 0, 90, 50, 1],
+      [55, 10, 1, 0, 0, 22, 80, 2],
     ]);
 
     final featuresForPrediction = Matrix.fromList([
@@ -21,29 +21,20 @@ void main() {
       [5598, 14,  0, 1, 0, 99, 100],
     ]);
 
-    final nominalFeatureRange = ZRange.closed(2, 4);
-    final outcomesColumnRange = ZRange.closed(7, 9);
-
-    final rangeToNominalValues = {
-      nominalFeatureRange: [
-        // order of nominal features is valuable for building the tree -
-        // the earlier value is in the list, the earlier the appropriate
-        // node will be built
-        Vector.fromList([0, 0, 1]),
-        Vector.fromList([0, 1, 0]),
-        Vector.fromList([1, 0, 0]),
-      ],
-      outcomesColumnRange: [
-        Vector.fromList([0, 0, 1]),
-        Vector.fromList([0, 1, 0]),
-        Vector.fromList([1, 0, 0]),
-      ],
-    };
-
-    final dataFrame = DataFrame(observations);
+    final dataFrame = DataFrame.fromSeries([
+      Series('col_1', <int>[10, 90, 23, 55]),
+      Series('col_2', <int>[20, 51, 40, 10]),
+      Series('col_3', <int>[1, 0, 0, 1], isDiscrete: true),
+      Series('col_4', <int>[0, 0, 1, 0], isDiscrete: true),
+      Series('col_5', <int>[0, 1, 0, 0], isDiscrete: true),
+      Series('col_6', <int>[30, 34, 90, 22]),
+      Series('col_7', <int>[40, 31, 50, 80]),
+      Series('col_8', <int>[0, 0, 2, 2], isDiscrete: true),
+    ]);
 
     group('greedy', () {
-      final classifier = DecisionTreeClassifier.greedy(dataFrame, 0.3, 1, 3);
+      final classifier = DecisionTreeClassifier(dataFrame, targetId: 7,
+          minError: 0.3, minSamplesCount: 1, maxDepth: 3);
 
       /*
        *          The tree structure:

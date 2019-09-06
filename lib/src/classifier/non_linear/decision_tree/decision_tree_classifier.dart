@@ -7,11 +7,13 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 abstract class DecisionTreeClassifier implements Classifier, Assessable {
   factory DecisionTreeClassifier(
       DataFrame samples,
-      int targetId,
-      String targetName,
-      double minError,
-      int minSamplesCount,
-      int maxDepth,
+      {
+        int targetId,
+        String targetName,
+        double minError,
+        int minSamplesCount,
+        int maxDepth,
+      }
   ) {
     final solver = createGreedySolver(
       samples,
