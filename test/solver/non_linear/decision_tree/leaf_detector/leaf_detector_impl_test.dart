@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_detector/leaf_detector_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
+import 'package:quiver/iterables.dart';
 import 'package:test/test.dart';
 import 'package:xrange/zrange.dart';
 
@@ -26,7 +27,7 @@ void main() {
         [2, 3, 4],
         [2, 3, 4],
         [2, 3, 4],
-      ]), null, [ZRange.all()], 10);
+      ]), null, count(0).take(2), 10);
 
       expect(isLeaf, isTrue);
     });
@@ -44,7 +45,7 @@ void main() {
         [2, 3, 4],
         [2, 3, 4],
         [2, 3, 4],
-      ]), null, [ZRange.all()], 4);
+      ]), null, count(0).take(2), 4);
 
       expect(isLeaf, isTrue);
     });
@@ -78,7 +79,7 @@ void main() {
       final isLeaf = detector.isLeaf(Matrix.fromList([
         [1, 2, 3],
         [2, 3, 4],
-      ]), null, [ZRange.all()], 0);
+      ]), null, count(0).take(2), 0);
 
       expect(isLeaf, isTrue);
     });
@@ -93,7 +94,7 @@ void main() {
 
       final isLeaf = detector.isLeaf(Matrix.fromList([
         [1, 2, 3],
-      ]), null, [ZRange.all()], 0);
+      ]), null, count(0).take(2), 0);
 
       expect(isLeaf, isTrue);
     });
@@ -101,9 +102,9 @@ void main() {
     test('should detect tree leaf if all labels on node belong to one '
         'class', () {
       final observations = Matrix.fromList([
-        [10, 20, 1, 0, 0],
-        [10, 20, 1, 0, 0],
-        [10, 20, 1, 0, 0],
+        [10, 20, 1],
+        [10, 20, 1],
+        [10, 20, 1],
       ]);
 
       final assessor = SplitAssessorMock();
@@ -112,18 +113,17 @@ void main() {
       final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4),
-          [ZRange.all()], 0);
+      final isLeaf = detector.isLeaf(observations, 2, count(0).take(2), 0);
 
       expect(isLeaf, isTrue);
     });
 
     test('should detect tree leaf if mnimum error reached', () {
       final observations = Matrix.fromList([
-        [10, 2, 1, 0, 0],
-        [20, 3, 0, 1, 0],
-        [20, 3, 0, 1, 0],
-        [20, 3, 1, 0, 0],
+        [10, 2, 1],
+        [20, 3, 2],
+        [20, 3, 2],
+        [20, 3, 1],
       ]);
       final assessor = SplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(0.3);
@@ -131,8 +131,7 @@ void main() {
       final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4),
-          [ZRange.all()], 0);
+      final isLeaf = detector.isLeaf(observations, 2, count(0).take(2), 0);
 
       expect(isLeaf, isTrue);
     });
@@ -140,10 +139,10 @@ void main() {
     test('should detect tree leaf if current error is less than minimum '
         'error', () {
       final observations = Matrix.fromList([
-        [10, 30, 1, 0, 0],
-        [40, 50, 0, 1, 0],
-        [40, 50, 0, 1, 0],
-        [40, 50, 1, 0, 0],
+        [10, 30, 1],
+        [40, 50, 2],
+        [40, 50, 2],
+        [40, 50, 1],
       ]);
 
       final assessor = SplitAssessorMock();
@@ -152,8 +151,7 @@ void main() {
       final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(2, 4),
-          [ZRange.all()], 0);
+      final isLeaf = detector.isLeaf(observations, 2, count(0).take(2), 0);
 
       expect(isLeaf, isTrue);
     });
@@ -162,10 +160,10 @@ void main() {
         'all class labels on node do not belong to one class and error on node'
         'is greater than minimum error', () {
       final observations = Matrix.fromList([
-        [10, 1, 0, 0],
-        [20, 0, 1, 0],
-        [20, 0, 0, 1],
-        [20, 1, 0, 0],
+        [10, 1],
+        [20, 2],
+        [20, 3],
+        [20, 1],
       ]);
 
       final assessor = SplitAssessorMock();
@@ -174,8 +172,7 @@ void main() {
       final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
-      final isLeaf = detector.isLeaf(observations, ZRange.closed(1, 3),
-          [ZRange.all()], 0);
+      final isLeaf = detector.isLeaf(observations, 1, count(0).take(1), 0);
 
       expect(isLeaf, isFalse);
     });
