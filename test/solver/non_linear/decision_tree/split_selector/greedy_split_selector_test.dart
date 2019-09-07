@@ -12,17 +12,17 @@ void main() {
     test('should find best split when splitting the samples by real number '
         'value', () {
       final samples = Matrix.fromList([
-        [10, 20, 30, 40, 0, 0, 1],
-        [12, 22, 32, 42, 0, 1, 0],
-        [11, 21, 31, 41, 1, 0, 0],
+        [10, 20, 30, 40, 1],
+        [12, 22, 32, 42, 2],
+        [11, 21, 31, 41, 3],
       ]);
 
-      final outcomesRange = ZRange.closed(4, 6);
+      final targetColIdx = 4;
 
-      final worstRange = ZRange.singleton(0);
-      final worseRange = ZRange.singleton(2);
-      final goodRange = ZRange.singleton(3);
-      final bestRange = ZRange.singleton(1);
+      final worstSplitIdx = 0;
+      final worseSplitIdx = 2;
+      final goodSplitIdx = 3;
+      final bestSplitIdx = 1;
 
       final worstSplit = {
         DecisionTreeNodeMock(): Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
@@ -36,10 +36,10 @@ void main() {
 
       final goodSplit = {
         DecisionTreeNodeMock(): Matrix.fromList([
-          [15, 16, 17, 18, -1, 0, 0]
+          [15, 16, 17, 18, -1, 0, 0],
         ]),
         DecisionTreeNodeMock(): Matrix.fromList([
-          [150, 160, 170, 180, -1, 0, 0]
+          [150, 160, 170, 180, -1, 0, 0],
         ]),
       };
 
@@ -52,33 +52,33 @@ void main() {
         ]),
       };
 
-      final featuresRanges = [
-        worstRange, bestRange, worseRange, goodRange,
+      final featuresIdxs = [
+        worstSplitIdx, bestSplitIdx, worseSplitIdx, goodSplitIdx,
       ];
       final assessor = SplitAssessorMock();
       final splitter = DecisionTreeSplitterMock();
 
-      when(splitter.split(samples, worstRange, outcomesRange))
+      when(splitter.split(samples, worstSplitIdx, targetColIdx))
           .thenReturn(worstSplit);
-      when(splitter.split(samples, worseRange, outcomesRange))
+      when(splitter.split(samples, worseSplitIdx, targetColIdx))
           .thenReturn(worseSplit);
-      when(splitter.split(samples, goodRange, outcomesRange))
+      when(splitter.split(samples, goodSplitIdx, targetColIdx))
           .thenReturn(goodSplit);
-      when(splitter.split(samples, bestRange, outcomesRange))
+      when(splitter.split(samples, bestSplitIdx, targetColIdx))
           .thenReturn(bestSplit);
 
       when(assessor.getAggregatedError(worstSplit.values,
-          outcomesRange)).thenReturn(0.999);
+          targetColIdx)).thenReturn(0.999);
       when(assessor.getAggregatedError(worseSplit.values,
-          outcomesRange)).thenReturn(0.8);
+          targetColIdx)).thenReturn(0.8);
       when(assessor.getAggregatedError(goodSplit.values,
-          outcomesRange)).thenReturn(0.4);
+          targetColIdx)).thenReturn(0.4);
       when(assessor.getAggregatedError(bestSplit.values,
-          outcomesRange)).thenReturn(0.1);
+          targetColIdx)).thenReturn(0.1);
 
       final selector = GreedySplitSelector(assessor, splitter);
       final actualSplit = selector
-          .select(samples, outcomesRange, featuresRanges);
+          .select(samples, targetColIdx, featuresIdxs);
 
       expect(actualSplit.keys, equals(bestSplit.keys));
       expect(actualSplit.values, equals(bestSplit.values));
@@ -87,16 +87,16 @@ void main() {
     test('should find best split when splitting the samples by nominal '
         'feature', () {
       final samples = Matrix.fromList([
-        [10, 1, 1, 1, 50, 0, 0, 1],
-        [12, 2, 2, 2, 52, 0, 1, 0],
-        [11, 3, 3, 3, 53, 1, 0, 0],
+        [10, 1, 50, 1],
+        [12, 2, 52, 2],
+        [11, 3, 53, 3],
       ]);
 
-      final outcomesRange = ZRange.closed(4, 6);
+      final targetColIdx = 3;
 
-      final badFeatureRange = ZRange.singleton(0);
-      final goodFeatureRange = ZRange.singleton(4);
-      final bestFeatureRange = ZRange.closed(1, 3);
+      final badFeatureIdx = 0;
+      final bestFeatureIdx = 1;
+      final goodFeatureIdx = 2;
 
       final badSplit = {
         DecisionTreeNodeMock(): Matrix.fromList([
@@ -128,36 +128,30 @@ void main() {
         ]),
       };
 
-      final featuresRanges = {
-        badFeatureRange, bestFeatureRange, goodFeatureRange,
-      };
+      final featuresIdxs = {badFeatureIdx, bestFeatureIdx, goodFeatureIdx};
 
       final assessor = SplitAssessorMock();
       final splitter = DecisionTreeSplitterMock();
-      final nominalValues = [
-        Vector.fromList([1, 1, 1]),
-        Vector.fromList([2, 2, 2]),
-        Vector.fromList([3, 3, 3]),
-      ];
-      final rangeToNominalValues = {bestFeatureRange: nominalValues};
+      final nominalValues = [1, 2, 3];
+      final colIdxToUniqueValues = {bestFeatureIdx: nominalValues};
 
-      when(splitter.split(samples, badFeatureRange, outcomesRange))
+      when(splitter.split(samples, badFeatureIdx, targetColIdx))
           .thenReturn(badSplit);
-      when(splitter.split(samples, goodFeatureRange, outcomesRange))
+      when(splitter.split(samples, goodFeatureIdx, targetColIdx))
           .thenReturn(goodSplit);
-      when(splitter.split(samples, bestFeatureRange, outcomesRange,
+      when(splitter.split(samples, bestFeatureIdx, targetColIdx,
           nominalValues)).thenReturn(bestSplit);
 
       when(assessor.getAggregatedError(badSplit.values,
-          outcomesRange)).thenReturn(0.999);
+          targetColIdx)).thenReturn(0.999);
       when(assessor.getAggregatedError(goodSplit.values,
-          outcomesRange)).thenReturn(0.4);
+          targetColIdx)).thenReturn(0.4);
       when(assessor.getAggregatedError(bestSplit.values,
-          outcomesRange)).thenReturn(0.1);
+          targetColIdx)).thenReturn(0.1);
 
       final selector = GreedySplitSelector(assessor, splitter);
-      final actualSplit = selector.select(samples, outcomesRange, featuresRanges,
-          rangeToNominalValues);
+      final actualSplit = selector.select(samples, targetColIdx, featuresIdxs,
+          colIdxToUniqueValues);
 
       expect(actualSplit.keys, equals(bestSplit.keys));
       expect(actualSplit.values, equals(bestSplit.values));
@@ -166,16 +160,16 @@ void main() {
     test('should select input matrix columns for splitting according to given '
         'feature columns ranges', () {
       final observations = Matrix.fromList([
-        [10, 1, 1, 1, 50, 0, 0, 1],
-        [12, 2, 2, 2, 52, 0, 1, 0],
-        [11, 3, 3, 3, 53, 1, 0, 0],
+        [10, 1, 50, 1],
+        [12, 2, 52, 2],
+        [11, 3, 53, 3],
       ]);
 
-      final outcomesRange = ZRange.closed(4, 6);
+      final targetColIdx = 3;
 
-      final goodFeatureRange = ZRange.singleton(0);
-      final bestFeatureRange = ZRange.singleton(4);
-      final ignoredFeatureRange = ZRange.closed(1, 3);
+      final goodFeatureColIdx = 0;
+      final ignoredFeatureColIdx = 1;
+      final bestFeatureColIdx = 2;
 
       final goodSplit = {
         DecisionTreeNodeMock(): Matrix.fromList([
@@ -195,38 +189,32 @@ void main() {
         ]),
       };
 
-      final featuresColumnRanges = {
-        goodFeatureRange, bestFeatureRange,
-      };
+      final featuresIdxs = {goodFeatureColIdx, bestFeatureColIdx};
 
       final assessor = SplitAssessorMock();
       final splitter = DecisionTreeSplitterMock();
-      final categoricalValues = [
-        Vector.fromList([1, 1, 1]),
-        Vector.fromList([2, 2, 2]),
-        Vector.fromList([3, 3, 3]),
-      ];
-      final rangeToCategoricalValues = {ignoredFeatureRange: categoricalValues};
+      final categoricalValues = [1, 2, 3];
+      final colIdxToUniqueValues = {ignoredFeatureColIdx: categoricalValues};
 
-      when(splitter.split(observations, goodFeatureRange, outcomesRange))
+      when(splitter.split(observations, goodFeatureColIdx, targetColIdx))
           .thenReturn(goodSplit);
-      when(splitter.split(observations, bestFeatureRange, outcomesRange))
+      when(splitter.split(observations, bestFeatureColIdx, targetColIdx))
           .thenReturn(bestSplit);
 
       when(assessor.getAggregatedError(goodSplit.values,
-          outcomesRange)).thenReturn(0.51);
+          targetColIdx)).thenReturn(0.51);
       when(assessor.getAggregatedError(bestSplit.values,
-          outcomesRange)).thenReturn(0.1);
+          targetColIdx)).thenReturn(0.1);
 
       final selector = GreedySplitSelector(assessor, splitter);
-      final stump = selector.select(observations, outcomesRange,
-          featuresColumnRanges, rangeToCategoricalValues);
+      final stump = selector.select(observations, targetColIdx,
+          featuresIdxs, colIdxToUniqueValues);
 
       expect(stump.keys, equals(bestSplit.keys));
       expect(stump.values, equals(bestSplit.values));
 
-      verifyNever(splitter.split(observations, ignoredFeatureRange,
-          outcomesRange));
+      verifyNever(splitter.split(observations, ignoredFeatureColIdx,
+          targetColIdx));
     });
   });
 }
