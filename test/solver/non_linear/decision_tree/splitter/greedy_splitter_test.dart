@@ -3,10 +3,8 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/greedy_spli
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:xrange/zrange.dart';
 
 import '../../../../test_utils/mocks.dart';
 
@@ -23,10 +21,10 @@ void main() {
           [0.0, 10.0],
         ]);
 
-        final outcomesRange = ZRange.singleton(1);
+        final targetIdx = 1;
 
         final bestSplittingValue = 4.5;
-        final splittingColumn = ZRange.singleton(0);
+        final splittingColumnIdx = 0;
 
         final mockedWorstSplit = {
           DecisionTreeNodeMock(): Matrix.fromList([[12.0, 22.0]]),
@@ -73,23 +71,23 @@ void main() {
         final assessor = SplitAssessorMock();
 
         when(assessor.getAggregatedError(mockedWorstSplit.values,
-            outcomesRange)).thenReturn(0.99);
+            targetIdx)).thenReturn(0.99);
         when(assessor.getAggregatedError(mockedWorseSplit.values,
-            outcomesRange)).thenReturn(0.8);
+            targetIdx)).thenReturn(0.8);
         when(assessor.getAggregatedError(mockedGoodSplit.values,
-            outcomesRange)).thenReturn(0.4);
+            targetIdx)).thenReturn(0.4);
         when(assessor.getAggregatedError(mockedBestSplit.values,
-            outcomesRange)).thenReturn(0.1);
+            targetIdx)).thenReturn(0.1);
 
         final numericalSplitter = createNumericalSplitter(
             mockedSplitDataToBeReturned);
         final splitter = GreedySplitter(assessor, numericalSplitter, null);
         final actualSplit = splitter.split(inputObservations,
-            splittingColumn, outcomesRange);
+            splittingColumnIdx, targetIdx);
 
         for (final splitInfo in mockedSplitDataToBeReturned) {
           final splittingValue = splitInfo['splittingValue'] as double;
-          verify(numericalSplitter.split(inputObservations, splittingColumn,
+          verify(numericalSplitter.split(inputObservations, splittingColumnIdx,
               splittingValue)).called(1);
         }
 
@@ -100,38 +98,34 @@ void main() {
 
     group('(splitting by categorical values)', () {
       test('should create split, splitting the observations into parts by '
-          'given column range', () {
+          'given splitting column index', () {
         final samples = Matrix.fromList([
-          [11, 22, 0, 0, 1, 30],
-          [60, 23, 0, 0, 1, 20],
-          [20, 25, 1, 0, 0, 10],
-          [17, 66, 1, 0, 0, 70],
-          [13, 99, 0, 1, 0, 30],
+          [11, 22, 1, 30],
+          [60, 23, 1, 20],
+          [20, 25, 2, 10],
+          [17, 66, 2, 70],
+          [13, 99, 3, 30],
         ]);
-        final splittingColumnRange = ZRange.closed(2, 4);
-        final splittingValues = [
-          Vector.fromList([0, 0, 1]),
-          Vector.fromList([0, 1, 0]),
-          Vector.fromList([1, 0, 0]),
-        ];
+        final splittingColumnIdx = 2;
+        final splittingValues = [1, 3, 2];
         final mockedSplit = {
           DecisionTreeNodeMock(): Matrix.fromList([
-            [11, 22, 0, 0, 1, 30],
-            [60, 23, 0, 0, 1, 20],
+            [11, 22, 1, 30],
+            [60, 23, 1, 20],
           ]),
           DecisionTreeNodeMock(): Matrix.fromList([
-            [13, 99, 0, 1, 0, 30],
+            [13, 99, 3, 30],
           ]),
           DecisionTreeNodeMock(): Matrix.fromList([
-            [20, 25, 1, 0, 0, 10],
-            [17, 66, 1, 0, 0, 70],
+            [20, 25, 2, 10],
+            [17, 66, 2, 70],
           ]),
         };
         final splitter = createNominalSplitter(splittingValues, mockedSplit);
         final selector = GreedySplitter(null, null, splitter);
         final actualSplit = selector.split(
           samples,
-          splittingColumnRange,
+          splittingColumnIdx,
           null,
           splittingValues,
         );
@@ -139,21 +133,21 @@ void main() {
         expect(actualSplit.keys, equals(mockedSplit.keys));
         expect(actualSplit.values, equals(mockedSplit.values));
 
-        verify(splitter.split(samples, splittingColumnRange,
+        verify(splitter.split(samples, splittingColumnIdx,
             splittingValues)).called(1);
       });
 
       test('should return an empty stum if splitting values collection is '
           'empty', () {
         final samples = Matrix.fromList([
-          [11, 22, 0, 0, 1, 30],
-          [60, 23, 0, 0, 1, 20],
-          [20, 25, 1, 0, 0, 10],
-          [17, 66, 1, 0, 0, 70],
-          [13, 99, 0, 1, 0, 30],
+          [11, 22, 1, 30],
+          [60, 23, 1, 20],
+          [20, 25, 2, 10],
+          [17, 66, 2, 70],
+          [13, 99, 3, 30],
         ]);
-        final splittingColumnRange = ZRange.closed(2, 4);
-        final splittingValues = <Vector>[];
+        final splittingColumnIdx = 2;
+        final splittingValues = <num>[];
 
         final nominalSplitter = NominalSplitterMock();
         when(nominalSplitter.split(any, any, any)).thenReturn({});
@@ -162,57 +156,50 @@ void main() {
 
         final split = splitter.split(
           samples,
-          splittingColumnRange,
+          splittingColumnIdx,
           null,
           splittingValues,
         );
         expect(split.values, equals(<Matrix>[]));
-        verify(nominalSplitter.split(samples, splittingColumnRange, splittingValues))
-            .called(1);
+        verify(nominalSplitter.split(samples, splittingColumnIdx,
+            splittingValues)).called(1);
       });
 
-      test('should throw an error if unappropriate range is given (left '
-          'boundary is less than 0)', () {
+      test('should throw an error if negative splitting index is given', () {
         final samples = Matrix.fromList([
-          [11, 22, 0, 0, 1, 30],
-          [60, 23, 0, 0, 1, 20],
-          [20, 25, 1, 0, 0, 10],
-          [17, 66, 1, 0, 0, 70],
-          [13, 99, 0, 1, 0, 30],
+          [11, 22, 1, 30],
+          [60, 23, 1, 20],
+          [20, 25, 2, 10],
+          [17, 66, 2, 70],
+          [13, 99, 3, 30],
         ]);
-        final splittingColumnRange = ZRange.closed(-2, 4);
-        final splittingValues = [
-          Vector.fromList([0, 0, 1]),
-          Vector.fromList([0, 1, 0]),
-        ];
+        final splittingColumnIdx = -2;
+        final splittingValues = [1, 3];
         final splitter = GreedySplitter(null, null, null);
         final actual = () => splitter.split(
           samples,
-          splittingColumnRange,
+          splittingColumnIdx,
           null,
           splittingValues,
         );
         expect(actual, throwsException);
       });
 
-      test('should throw an error if unappropriate range is given (right '
-          'boundary is greater than the observations columns number)', () {
+      test('should throw an error if splitting index is greater than the '
+          'number of columns', () {
         final samples = Matrix.fromList([
-          [11, 22, 0, 0, 1, 30],
-          [60, 23, 0, 0, 1, 20],
-          [20, 25, 1, 0, 0, 10],
-          [17, 66, 1, 0, 0, 70],
-          [13, 99, 0, 1, 0, 30],
+          [11, 22, 1, 30],
+          [60, 23, 1, 20],
+          [20, 25, 2, 10],
+          [17, 66, 2, 70],
+          [13, 99, 3, 30],
         ]);
-        final splittingColumnRange = ZRange.closed(0, 10);
-        final splittingValues = [
-          Vector.fromList([0, 0, 1]),
-          Vector.fromList([0, 1, 0]),
-        ];
+        final splittingColumnIdx = 10;
+        final splittingValues = [1, 3];
         final selector = GreedySplitter(null, null, null);
         final actual = () => selector.split(
           samples,
-          splittingColumnRange,
+          splittingColumnIdx,
           null,
           splittingValues,
         );
@@ -233,7 +220,7 @@ NumericalSplitter createNumericalSplitter(
   return splitter;
 }
 
-NominalSplitter createNominalSplitter(List<Vector> nominalValues,
+NominalSplitter createNominalSplitter(List<num> nominalValues,
     Map<DecisionTreeNode, Matrix> split) {
   final splitter = NominalSplitterMock();
   when(splitter.split(any, any, nominalValues)).thenReturn(split);
