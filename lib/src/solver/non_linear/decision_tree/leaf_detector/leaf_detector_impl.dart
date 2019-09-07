@@ -13,7 +13,7 @@ class LeafDetectorImpl implements LeafDetector {
 
   @override
   bool isLeaf(Matrix samples, int targetIdx,
-      Iterable<int> featureColumnIdxs, int treeDepth) {
+      Iterable<num> featureColumnIdxs, int treeDepth) {
     if (_maxDepth <= treeDepth) {
       return true;
     }
