@@ -10,7 +10,7 @@ void testTreeNode(
       bool shouldBeLeaf,
       double expectedSplittingNumericalValue,
       int expectedSplittingColumnIdx,
-      Vector expectedSplittingNominalValue,
+      double expectedSplittingNominalValue,
       int expectedChildrenLength,
       DecisionTreeLeafLabel expectedLabel,
       Map<Vector, bool> samplesToCheck,
