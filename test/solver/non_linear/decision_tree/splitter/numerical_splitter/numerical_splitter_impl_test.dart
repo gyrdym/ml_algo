@@ -18,11 +18,10 @@ void main() {
         [33,  12, 5,  55],
         [0,   20, 60, 10],
       ]);
-      final splittingRange = ZRange.singleton(2);
+      final splittingIdx = 2;
       final splittingValue = 10.0;
       final splitter = const NumericalSplitterImpl();
-      final actual = splitter.split(samples, splittingRange,
-          splittingValue);
+      final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([
         [
@@ -39,7 +38,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -47,7 +46,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -63,10 +62,10 @@ void main() {
         [33,  12, 500,  55],
         [0,   20, 60, 10],
       ]);
-      final splittingRange = ZRange.singleton(2);
+      final splittingIdx = 2;
       final splittingValue = 10.0;
       final splitter = const NumericalSplitterImpl();
-      final actual = splitter.split(samples, splittingRange,
+      final actual = splitter.split(samples, splittingIdx,
           splittingValue);
 
       expect(actual.values, equals([
@@ -83,7 +82,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -91,7 +90,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -106,10 +105,10 @@ void main() {
         [33,  12, 500,  55],
         [0,   20, -60, 10],
       ]);
-      final splittingRange = ZRange.singleton(2);
+      final splittingIdx = 2;
       final splittingValue = 0.0;
       final splitter = const NumericalSplitterImpl();
-      final actual = splitter.split(samples, splittingRange,
+      final actual = splitter.split(samples, splittingIdx,
           splittingValue);
 
       expect(actual.values, equals([
@@ -127,7 +126,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -135,7 +134,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -150,11 +149,10 @@ void main() {
         [33,  12, 500, 55],
         [0,   20, 60,  10],
       ]);
-      final splittingRange = ZRange.singleton(2);
+      final splittingIdx = 2;
       final splittingValue = 1000.0;
       final splitter = const NumericalSplitterImpl();
-      final actual = splitter.split(samples, splittingRange,
-          splittingValue);
+      final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([
         [
@@ -170,7 +168,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -178,7 +176,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -193,11 +191,10 @@ void main() {
         [33,  12, 500,  55],
         [0,   20, 60, 10],
       ]);
-      final splittingRange = ZRange.singleton(0);
+      final splittingIdx = 0;
       final splittingValue = 2.0;
       final splitter = const NumericalSplitterImpl();
-      final actual = splitter.split(samples, splittingRange,
-          splittingValue);
+      final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([
         [
@@ -214,7 +211,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -222,7 +219,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
       );
@@ -237,11 +234,10 @@ void main() {
         [33,  12, 500,  55],
         [0,   20, 60, 10],
       ]);
-      final splittingRange = ZRange.singleton(3);
+      final splittingIdx = 3;
       final splittingValue = 20.0;
       final splitter = const NumericalSplitterImpl();
-      final actual = splitter.split(samples, splittingRange,
-          splittingValue);
+      final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([
         [
@@ -258,7 +254,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
         samplesToCheck: {
@@ -277,7 +273,7 @@ void main() {
         shouldBeLeaf: true,
         expectedSplittingNumericalValue: splittingValue,
         expectedSplittingNominalValue: null,
-        expectedSplittingColumnIdx: splittingRange,
+        expectedSplittingColumnIdx: splittingIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
           samplesToCheck: {
