@@ -10,9 +10,8 @@ import '../../../../test_utils/mocks.dart';
 
 void main() {
   group('MajorityLeafLabelFactory', () {
-    test('should create decision tree leaf label in case when the class '
-        'labels are numbers - label should be a majority class label among the '
-        'whole observation matrix', () {
+    test('should create decision tree leaf label - label should be a majority '
+        'class label among the whole observation matrix', () {
 
       final observations = Matrix.fromList([
         [10, 20, 30, 0],
@@ -44,9 +43,8 @@ void main() {
       expect(label.probability, equals(firstClassProbability));
     });
 
-    test('should create decision tree leaf label in case when the class '
-        'labels are numbers and the observations contain only one class '
-        'label', () {
+    test('should create decision tree leaf label if the observations contain '
+        'only one class label', () {
       final observations = Matrix.fromList([
         [10, 20, 30, 3],
         [17, 10, 32, 3],
@@ -95,9 +93,7 @@ void main() {
         thirdClassLabel: thirdClassProbability,
       });
       final distributionCalculator = createDistributionCalculator(
-        [1],
-        distribution,
-      );
+        [1], distribution);
       final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, 3, true);
 
