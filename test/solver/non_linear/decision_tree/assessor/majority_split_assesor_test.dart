@@ -17,8 +17,8 @@ void main() {
       expect(error, 0.5);
     });
 
-    test('should return 0 majority-based error on node if the node has only '
-        'one class label', () {
+    test('should return majority-based error on node equal to 0 if the node '
+        'has only one class label', () {
       final node = Matrix.fromList([
         [10, 30, 0],
         [14, 20, 0],

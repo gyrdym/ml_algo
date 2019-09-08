@@ -11,6 +11,9 @@ class DecisionTreeNode {
       this.splittingIdx,
       this.children,
       this.label,
+      [
+        this.level = 0,
+      ]
   );
 
   final List<DecisionTreeNode> children;
@@ -19,6 +22,33 @@ class DecisionTreeNode {
   final double splittingNumericalValue;
   final dynamic splittingNominalValue;
   final int splittingIdx;
+  final int level;
 
   bool get isLeaf => children == null || children.isEmpty;
+
+  List<List<DecisionTreeNode>> buildSchema() {
+    var levelNodes = <DecisionTreeNode>[];
+    final queue = [this];
+    final levels = <List<DecisionTreeNode>>[];
+    int level = this.level;
+
+    while (queue.isNotEmpty) {
+      final node = queue.removeAt(0);
+      if (level != node.level) {
+        levels.add(levelNodes);
+        levelNodes = [];
+      }
+      level = node.level;
+      levelNodes.add(node);
+      if (!node.isLeaf) {
+        node.children.forEach(queue.add);
+      }
+    }
+
+    if (levelNodes.isNotEmpty) {
+      levels.add(levelNodes);
+    }
+
+    return levels;
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -22,7 +23,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    LogisticRegressor.gradient(DataSet(observations, ZRange.singleton(19)),
+    LogisticRegressor.gradient(DataFrame(observations, ZRange.singleton(19)),
         dtype: DType.float32, minWeightsUpdate: null, iterationsLimit: 200);
   }
 
