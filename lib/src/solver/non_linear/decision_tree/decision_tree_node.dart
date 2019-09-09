@@ -6,8 +6,7 @@ typedef TestSamplePredicate = bool Function(Vector sample);
 class DecisionTreeNode {
   DecisionTreeNode(
       this.testSample,
-      this.splittingNumericalValue,
-      this.splittingNominalValue,
+      this.splittingValue,
       this.splittingIdx,
       this.children,
       this.label,
@@ -19,14 +18,15 @@ class DecisionTreeNode {
   final List<DecisionTreeNode> children;
   final DecisionTreeLeafLabel label;
   final TestSamplePredicate testSample;
-  final double splittingNumericalValue;
-  final dynamic splittingNominalValue;
+  final num splittingValue;
   final int splittingIdx;
   final int level;
 
   bool get isLeaf => children == null || children.isEmpty;
 
   List<List<DecisionTreeNode>> buildSchema() {
+    // TODO: reconsider the algorithm of building - it my be implemented in more
+    // TODO: optimal way
     var levelNodes = <DecisionTreeNode>[];
     final queue = [this];
     final levels = <List<DecisionTreeNode>>[];

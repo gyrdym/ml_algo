@@ -2,7 +2,6 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.d
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
-import 'package:xrange/zrange.dart';
 
 class NumericalSplitterImpl implements NumericalSplitter {
   const NumericalSplitterImpl();
@@ -21,7 +20,7 @@ class NumericalSplitterImpl implements NumericalSplitter {
         : right.add(row));
 
     final createNode = (TestSamplePredicate splittingClause) =>
-        DecisionTreeNode(splittingClause, splittingValue, null, splittingIdx,
+        DecisionTreeNode(splittingClause, splittingValue, splittingIdx,
             null, null);
 
     final leftNode = createNode(splittingClause);

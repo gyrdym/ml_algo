@@ -36,10 +36,9 @@ void main() {
           distribution,
       );
       final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
-      final label = labelFactory.create(observations, 3, false);
+      final label = labelFactory.create(observations, 3);
 
-      expect(label.numericalValue, equals(0));
-      expect(label.nominalValue, isNull);
+      expect(label.value, equals(0));
       expect(label.probability, equals(firstClassProbability));
     });
 
@@ -63,10 +62,9 @@ void main() {
         distribution,
       );
       final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
-      final label = labelFactory.create(observations, 3, false);
+      final label = labelFactory.create(observations, 3,);
 
-      expect(label.numericalValue, equals(classLabel));
-      expect(label.nominalValue, isNull);
+      expect(label.value, equals(classLabel));
       expect(label.probability, equals(classProbability));
     });
 
@@ -95,10 +93,9 @@ void main() {
       final distributionCalculator = createDistributionCalculator(
         [1], distribution);
       final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
-      final label = labelFactory.create(observations, 3, true);
+      final label = labelFactory.create(observations, 3);
 
-      expect(label.nominalValue, equals(secondClassLabel));
-      expect(label.numericalValue, isNull);
+      expect(label.value, equals(secondClassLabel));
       expect(label.probability, equals(secondClassProbability));
     });
 
@@ -121,10 +118,9 @@ void main() {
         distribution,
       );
       final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
-      final label = labelFactory.create(observations, 3, true);
+      final label = labelFactory.create(observations, 3);
 
-      expect(label.nominalValue, equals(classLabel));
-      expect(label.numericalValue, isNull);
+      expect(label.value, equals(classLabel));
       expect(label.probability, classProbability);
     });
   });

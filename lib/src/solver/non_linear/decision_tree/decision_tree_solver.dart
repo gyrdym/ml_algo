@@ -15,16 +15,13 @@ class DecisionTreeSolver {
       this._leafDetector,
       this._leafLabelFactory,
       this._splitSelector,
-  ) : _isOutcomeNominal = _colIdxToUniqueValues
-      .containsKey(_targetIdx) {
-    _root = _createNode(samples, null, null, null, null,
-        _featuresColumnIdxs, 0);
+  ) {
+    _root = _createNode(samples, null, null, null, _featuresColumnIdxs, 0);
   }
 
   final Iterable<int> _featuresColumnIdxs;
   final int _targetIdx;
-  final Map<int, List<dynamic>> _colIdxToUniqueValues;
-  final bool _isOutcomeNominal;
+  final Map<int, List<num>> _colIdxToUniqueValues;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
   final SplitSelector _splitSelector;
@@ -37,26 +34,21 @@ class DecisionTreeSolver {
 
   DecisionTreeNode _createNode(
       Matrix samples,
-      double splittingNumericalValue,
-      dynamic splittingNominalValue,
+      num splittingValue,
       int splittingIdx,
       TestSamplePredicate splittingClause,
       Iterable<int> featuresColumnIdxs,
-      int depth,
+      int level,
   ) {
-    if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, depth)) {
-      final label = _leafLabelFactory.create(
-        samples,
-        _targetIdx,
-        _isOutcomeNominal,
-      );
+    if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, level)) {
+      final label = _leafLabelFactory.create(samples, _targetIdx);
       return DecisionTreeNode(
         splittingClause,
-        splittingNumericalValue,
-        splittingNominalValue,
+        splittingValue,
         splittingIdx,
         null,
         label,
+        level,
       );
     }
 
@@ -67,7 +59,7 @@ class DecisionTreeSolver {
         _colIdxToUniqueValues,
     );
 
-    final newDepth = depth + 1;
+    final newLevel = level + 1;
 
     final childNodes = bestSplit.entries.map((entry) {
       final splitNode = entry.key;
@@ -83,21 +75,20 @@ class DecisionTreeSolver {
 
       return _createNode(
           splitSamples,
-          splitNode.splittingNumericalValue,
-          splitNode.splittingNominalValue,
+          splitNode.splittingValue,
           splitNode.splittingIdx,
           splitNode.testSample,
           updatedColumnRanges,
-          newDepth);
+          newLevel);
     });
 
     return DecisionTreeNode(
         splittingClause,
-        splittingNumericalValue,
-        splittingNominalValue,
+        splittingValue,
         splittingIdx,
         childNodes.toList(growable: false),
-        null);
+        null,
+        level);
   }
 
   DecisionTreeLeafLabel _getLabelForSample(Vector sample,

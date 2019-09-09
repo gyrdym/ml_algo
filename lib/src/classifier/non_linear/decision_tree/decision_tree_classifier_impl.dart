@@ -22,21 +22,12 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
       return Matrix.fromColumns([]);
     }
 
-    final _isOutcomeNominal = predictedLabels.first.nominalValue != null;
+    final outcomeList = predictedLabels
+        .map((label) => label.value)
+        .toList(growable: false);
+    final outcomeVector = Vector.fromList(outcomeList);
 
-    if (_isOutcomeNominal) {
-      final outcomeList = predictedLabels
-          .map((label) => label.nominalValue as double)
-          .toList(growable: false);
-      final outcomeVector = Vector.fromList(outcomeList);
-
-      return Matrix.fromColumns([outcomeVector]);
-    }
-
-    return Matrix.fromColumns([
-      Vector.fromList(predictedLabels.map((label) => label.numericalValue)
-          .toList()),
-    ]);
+    return Matrix.fromColumns([outcomeVector]);
   }
 
   @override

@@ -19,7 +19,7 @@ void main() {
         [13, 99, 1, 30],
       ]);
       final splittingColumnIdx = 2;
-      final splittingValues = [1];
+      final splittingValues = [1.0];
 
       final split = splitter.split(samples, splittingColumnIdx,
           splittingValues);
@@ -35,8 +35,7 @@ void main() {
       ]));
       testTreeNode(split.keys.first,
           shouldBeLeaf: true,
-          expectedSplittingNumericalValue: null,
-          expectedSplittingNominalValue: 1,
+          expectedSplittingValue: 1,
           expectedSplittingColumnIdx: splittingColumnIdx,
           expectedChildrenLength: null,
           expectedLabel: null,
@@ -53,7 +52,7 @@ void main() {
         [13, 99, 3, 30],
       ]);
       final splittingColumnIdx = 2;
-      final splittingValues = [1];
+      final splittingValues = [1.0];
 
       final split = splitter.split(samples, splittingColumnIdx,
           splittingValues);
@@ -66,8 +65,7 @@ void main() {
       ]));
       testTreeNode(split.keys.first,
         shouldBeLeaf: true,
-        expectedSplittingNumericalValue: null,
-        expectedSplittingNominalValue: 1,
+        expectedSplittingValue: 1,
         expectedSplittingColumnIdx: splittingColumnIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
@@ -85,9 +83,9 @@ void main() {
       ]);
       final splittingColumnIdx = 2;
       final splittingValues = [
-        100,
-        200,
-        300,
+        100.0,
+        200.0,
+        300.0,
       ];
 
       final split = splitter.split(samples, splittingColumnIdx,
@@ -105,7 +103,7 @@ void main() {
         [13, 99, 3, 30],
       ]);
       final splittingColumnIdx = 2;
-      final splittingValues = [1, 3, 1000];
+      final splittingValues = [1.0, 3.0, 1000.0];
 
       final split = splitter.split(samples, splittingColumnIdx,
           splittingValues);
@@ -122,8 +120,7 @@ void main() {
 
       testTreeNode(split.keys.first,
         shouldBeLeaf: true,
-        expectedSplittingNumericalValue: null,
-        expectedSplittingNominalValue: 1.0,
+        expectedSplittingValue: 1,
         expectedSplittingColumnIdx: splittingColumnIdx,
         expectedChildrenLength: null,
         expectedLabel: null,
@@ -139,8 +136,7 @@ void main() {
 
       testTreeNode(split.keys.last,
         shouldBeLeaf: true,
-        expectedSplittingNumericalValue: null,
-        expectedSplittingNominalValue: 3,
+        expectedSplittingValue: 3,
         expectedSplittingColumnIdx: splittingColumnIdx,
         expectedChildrenLength: null,
         expectedLabel: null,

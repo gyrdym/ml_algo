@@ -107,7 +107,7 @@ void main() {
           [13, 99, 3, 30],
         ]);
         final splittingColumnIdx = 2;
-        final splittingValues = [1, 3, 2];
+        final splittingValues = [1.0, 3.0, 2.0];
         final mockedSplit = {
           DecisionTreeNodeMock(): Matrix.fromList([
             [11, 22, 1, 30],
@@ -147,7 +147,7 @@ void main() {
           [13, 99, 3, 30],
         ]);
         final splittingColumnIdx = 2;
-        final splittingValues = <num>[];
+        final splittingValues = <double>[];
 
         final nominalSplitter = NominalSplitterMock();
         when(nominalSplitter.split(any, any, any)).thenReturn({});
@@ -174,7 +174,7 @@ void main() {
           [13, 99, 3, 30],
         ]);
         final splittingColumnIdx = -2;
-        final splittingValues = [1, 3];
+        final splittingValues = [1.0, 3.0];
         final splitter = GreedySplitter(null, null, null);
         final actual = () => splitter.split(
           samples,
@@ -195,7 +195,7 @@ void main() {
           [13, 99, 3, 30],
         ]);
         final splittingColumnIdx = 10;
-        final splittingValues = [1, 3];
+        final splittingValues = [1.0, 3.0];
         final selector = GreedySplitter(null, null, null);
         final actual = () => selector.split(
           samples,
@@ -220,7 +220,7 @@ NumericalSplitter createNumericalSplitter(
   return splitter;
 }
 
-NominalSplitter createNominalSplitter(List<num> nominalValues,
+NominalSplitter createNominalSplitter(List<double> nominalValues,
     Map<DecisionTreeNode, Matrix> split) {
   final splitter = NominalSplitterMock();
   when(splitter.split(any, any, nominalValues)).thenReturn(split);

@@ -28,24 +28,6 @@ void main() {
       final classifier = DecisionTreeClassifier(dataFrame, targetId: 7,
           minError: 0.3, minSamplesCount: 1, maxDepth: 3);
 
-      /*
-       *          The tree structure:
-       *
-       *                 (root)
-       *                *     *
-       *            *             *
-       *         *                    *
-       *  index: 1                 index: 1
-       *  condition: <15           condition: >=15
-       *  prediction: 1,0,0           * * *
-       *                          *     *      *
-       *                      *         *           *
-       *                  *             *                *
-       *    index: (2-4)         index: (2-4)            index: (2-4)
-       *    condition: == 0,0,1  condition: == 0,1,0     condition: == 1,0,0
-       *    prediction: 0,0,1    prediction: 0,1,0       prediction: 0,0,1
-       */
-
       test('should create classifier', () {
         expect(classifier, isA<DecisionTreeClassifierImpl>());
         expect(classifier.classLabels, isNull);

@@ -2,24 +2,21 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_l
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
-import 'package:xrange/zrange.dart';
 
 void testTreeNode(
     DecisionTreeNode node,
     {
       bool shouldBeLeaf,
-      double expectedSplittingNumericalValue,
+      double expectedSplittingValue,
       int expectedSplittingColumnIdx,
-      double expectedSplittingNominalValue,
       int expectedChildrenLength,
       DecisionTreeLeafLabel expectedLabel,
       Map<Vector, bool> samplesToCheck,
     }
 ) {
   expect(node.isLeaf, equals(shouldBeLeaf));
-  expect(node.splittingNumericalValue, equals(expectedSplittingNumericalValue));
+  expect(node.splittingValue, equals(expectedSplittingValue));
   expect(node.splittingIdx, equals(expectedSplittingColumnIdx));
-  expect(node.splittingNominalValue, equals(expectedSplittingNominalValue));
   expectedChildrenLength == null
       ? expect(node.children, isNull)
       : expect(node.children, hasLength(expectedChildrenLength));
@@ -33,7 +30,6 @@ void testTreeNode(
 
 void testLeafLabel(DecisionTreeLeafLabel label,
     DecisionTreeLeafLabel expectedLabel) {
-  expect(label.nominalValue, equals(expectedLabel.nominalValue));
-  expect(label.numericalValue, equals(expectedLabel.numericalValue));
+  expect(label.value, equals(expectedLabel.value));
   expect(label.probability, equals(expectedLabel.probability));
 }
