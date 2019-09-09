@@ -17,13 +17,13 @@ class GreedySplitter implements Splitter {
 
   @override
   Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      int targetId, [List<dynamic> uniqueValues]) =>
+      int targetId, [List<num> uniqueValues]) =>
       uniqueValues != null
           ? _createByNominalValues(samples, splittingIdx, uniqueValues)
           : _createByNumericalValue(samples, splittingIdx, targetId);
 
   Map<DecisionTreeNode, Matrix> _createByNominalValues(Matrix samples,
-      int splittingIdx, List<dynamic> values) {
+      int splittingIdx, List<num> values) {
     if (splittingIdx < 0 || splittingIdx > samples.columnsNum) {
       throw Exception('Unappropriate range given: $splittingIdx, '
           'expected a range within or equal '

@@ -28,9 +28,9 @@ void main() {
       final label3 = 2.0;
 
       final solverMock = createSolver({
-        sample1: DecisionTreeLeafLabel.nominal(label1),
-        sample2: DecisionTreeLeafLabel.nominal(label2),
-        sample3: DecisionTreeLeafLabel.nominal(label3),
+        sample1: DecisionTreeLeafLabel(label1),
+        sample2: DecisionTreeLeafLabel(label2),
+        sample3: DecisionTreeLeafLabel(label3),
       });
 
       final classifier = DecisionTreeClassifierImpl(solverMock);
@@ -64,9 +64,9 @@ void main() {
         sample3,
       ]);
 
-      final label1 = DecisionTreeLeafLabel.nominal(0, probability: 0.7);
-      final label2 = DecisionTreeLeafLabel.nominal(1, probability: 0.55);
-      final label3 = DecisionTreeLeafLabel.nominal(2, probability: 0.5);
+      final label1 = DecisionTreeLeafLabel(0, probability: 0.7);
+      final label2 = DecisionTreeLeafLabel(1, probability: 0.55);
+      final label3 = DecisionTreeLeafLabel(2, probability: 0.5);
 
       final solverMock = createSolver({
         sample1: label1,

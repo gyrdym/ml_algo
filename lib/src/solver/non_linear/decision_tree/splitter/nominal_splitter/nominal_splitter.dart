@@ -4,5 +4,5 @@ import 'package:ml_linalg/matrix.dart';
 
 abstract class NominalSplitter {
   Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      List<dynamic> uniqueValues);
+      List<num> uniqueValues);
 }

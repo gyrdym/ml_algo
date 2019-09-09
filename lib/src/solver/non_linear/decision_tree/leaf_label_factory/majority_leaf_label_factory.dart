@@ -4,9 +4,7 @@ import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/dis
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart' as quiver_iterables;
-import 'package:xrange/zrange.dart';
 
 class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   MajorityLeafLabelFactory(this.distributionCalculator);
@@ -14,19 +12,12 @@ class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
   final SequenceElementsDistributionCalculator distributionCalculator;
 
   @override
-  DecisionTreeLeafLabel create(Matrix samples, int targetIdx,
-      bool isClassLabelNominal) {
+  DecisionTreeLeafLabel create(Matrix samples, int targetIdx) {
     final outcomes = samples.getColumn(targetIdx);
     final totalRecordsCount = outcomes.length;
 
-    if (isClassLabelNominal) {
-      final labelData = _getLabelData<double>(outcomes, totalRecordsCount);
-      return DecisionTreeLeafLabel.nominal(labelData.value,
-          probability: labelData.probability);
-    }
-
     final labelData = _getLabelData<double>(outcomes, totalRecordsCount);
-    return DecisionTreeLeafLabel.numerical(labelData.value,
+    return DecisionTreeLeafLabel(labelData.value,
         probability: labelData.probability);
   }
 

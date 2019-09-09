@@ -15,7 +15,7 @@ class GreedySplitSelector implements SplitSelector {
       Matrix samples,
       int targetId,
       Iterable<int> featuresColumnIdxs,
-      [Map<int, List<dynamic>> columnIdToUniqueValues]) {
+      [Map<int, List<num>> columnIdToUniqueValues]) {
     final errors = <double, List<Map<DecisionTreeNode, Matrix>>>{};
     featuresColumnIdxs.forEach((colIdx) {
       final uniqueValues = columnIdToUniqueValues != null

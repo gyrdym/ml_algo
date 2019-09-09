@@ -8,15 +8,15 @@ class NominalSplitterImpl implements NominalSplitter {
 
   @override
   Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      List<dynamic> uniqueValues) =>
-      Map.fromEntries(uniqueValues.map((dynamic value) {
+      List<num> uniqueValues) =>
+      Map.fromEntries(uniqueValues.map((value) {
         final splittingClause =
             (Vector sample) => sample[splittingIdx] == value;
 
         final foundRows = samples.rows.where(splittingClause)
             .toList(growable: false);
 
-        final node = DecisionTreeNode(splittingClause, null, value,
+        final node = DecisionTreeNode(splittingClause, value,
             splittingIdx, null, null);
 
         return MapEntry(node, Matrix.fromRows(foundRows));

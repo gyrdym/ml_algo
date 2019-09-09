@@ -132,7 +132,7 @@ void main() {
 
       final assessor = SplitAssessorMock();
       final splitter = DecisionTreeSplitterMock();
-      final nominalValues = [1, 2, 3];
+      final nominalValues = [1.0, 2.0, 3.0];
       final colIdxToUniqueValues = {bestFeatureIdx: nominalValues};
 
       when(splitter.split(samples, badFeatureIdx, targetColIdx))
@@ -193,7 +193,7 @@ void main() {
 
       final assessor = SplitAssessorMock();
       final splitter = DecisionTreeSplitterMock();
-      final categoricalValues = [1, 2, 3];
+      final categoricalValues = [1.0, 2.0, 3.0];
       final colIdxToUniqueValues = {ignoredFeatureColIdx: categoricalValues};
 
       when(splitter.split(observations, goodFeatureColIdx, targetColIdx))

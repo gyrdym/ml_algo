@@ -36,6 +36,7 @@ DecisionTreeSolver createGreedySolver(
         .map((indexed) => MapEntry(indexed.index, indexed
           .value
           .discreteValues
+          .map((dynamic value) => value as num)
           .toList(growable: false),
         ),
       ),

@@ -1,11 +1,6 @@
 class DecisionTreeLeafLabel {
-  DecisionTreeLeafLabel.nominal(this.nominalValue, {this.probability})
-      : numericalValue = null;
+  DecisionTreeLeafLabel(this.value, {this.probability});
 
-  DecisionTreeLeafLabel.numerical(this.numericalValue, {this.probability})
-      : nominalValue = null;
-
-  final dynamic nominalValue;
-  final double numericalValue;
+  final double value;
   final double probability;
 }
