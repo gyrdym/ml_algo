@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -24,31 +26,13 @@ class DecisionTreeNode {
 
   bool get isLeaf => children == null || children.isEmpty;
 
-  List<List<DecisionTreeNode>> buildSchema() {
-    // TODO: reconsider the algorithm of building - it my be implemented in more
-    // TODO: optimal way
-    var levelNodes = <DecisionTreeNode>[];
-    final queue = [this];
-    final levels = <List<DecisionTreeNode>>[];
-    int level = this.level;
+  String toJSON() => jsonEncode(serialize());
 
-    while (queue.isNotEmpty) {
-      final node = queue.removeAt(0);
-      if (level != node.level) {
-        levels.add(levelNodes);
-        levelNodes = [];
-      }
-      level = node.level;
-      levelNodes.add(node);
-      if (!node.isLeaf) {
-        node.children.forEach(queue.add);
-      }
-    }
-
-    if (levelNodes.isNotEmpty) {
-      levels.add(levelNodes);
-    }
-
-    return levels;
-  }
+  Map<String, dynamic> serialize() => <String, dynamic>{
+    'splittingValue': splittingValue,
+    'splittingIdx': splittingIdx,
+    'level': level,
+    'label': label?.serialize(),
+    'children': children.map((node) => node.serialize()).toList(),
+  };
 }

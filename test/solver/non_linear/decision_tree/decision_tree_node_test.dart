@@ -1,10 +1,11 @@
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('DecisionTreeNode', () {
-    test('should build a tree node schema', () {
+    test('should build a tree node schema', () async {
       final dummyTestFn = (Vector v) => true;
 
       final child31 = DecisionTreeNode(dummyTestFn, 600, null, [],
@@ -59,14 +60,12 @@ void main() {
         child13,
       ], null);
 
-      final schema = root.buildSchema();
+      final snapshotFileName = 'test/solver/non_linear/decision_tree/'
+          'decision_tree_node_tets.json';
+      final actual = root.serialize();
+      final expected = await readJSON(snapshotFileName);
 
-      expect(schema, equals([
-        [root],
-        [child11, child12, child13],
-        [child21, child22, child23, child24, child25],
-        [child31, child32, child33, child34, child35, child36, child37],
-      ]));
+      expect(actual, expected);
     });
   });
 }
