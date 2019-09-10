@@ -1,11 +1,13 @@
+import 'dart:math';
+
 import 'package:ml_algo/src/solver/non_linear/decision_tree/solver_factory/greedy_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('DecisionTreeSolver', () {
-    group('for greedy classifier', ()
-    {
+    group('majorityBased', () {
       final dataFrame = DataFrame.fromSeries([
         Series('col_1', <int>[10, 90, 23, 55]),
         Series('col_2', <int>[20, 51, 40, 10]),
@@ -17,7 +19,15 @@ void main() {
         Series('col_8', <int>[0, 0, 1, 2], isDiscrete: true),
       ]);
 
-      final solver = createGreedySolver(dataFrame, 7, null, 0.3, 1, 3);
+      test('should build a decision tree structure', () async {
+        final snapshotFileName = 'test/solver/non_linear/decision_tree/'
+            'decision_tree_solver_integration_test.json';
+        final solver = createGreedySolver(dataFrame, 7, null, 0.3, 1, 3);
+        final actual = solver.root.serialize();
+        final expected = await readJSON(snapshotFileName);
+
+        expect(actual, equals(expected));
+      });
     });
   });
 }

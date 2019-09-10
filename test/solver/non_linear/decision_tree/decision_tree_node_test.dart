@@ -61,7 +61,7 @@ void main() {
       ], null);
 
       final snapshotFileName = 'test/solver/non_linear/decision_tree/'
-          'decision_tree_node_tets.json';
+          'decision_tree_node_test.json';
       final actual = root.serialize();
       final expected = await readJSON(snapshotFileName);
 
