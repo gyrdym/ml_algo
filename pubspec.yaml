@@ -20,5 +20,4 @@ dev_dependencies:
   build_test: ^0.10.2
   ml_tech: ^0.0.8
   mockito: ^3.0.0
-  pedantic: 1.1.0
   test: ^1.2.0

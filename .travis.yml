@@ -1,8 +1,5 @@
 language: dart
 dart:
-  - "2.3.0"
-dart_task:
-  - test: --platform vm
-  - dartanalyzer: true
-  - dartfmt: true
-script: ./tool/coverage.sh
+  - "2.4.1"
+script: pub run grinder start
+after_success: pub run grinder finish
