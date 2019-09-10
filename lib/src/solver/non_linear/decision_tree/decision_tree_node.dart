@@ -1,11 +1,10 @@
-import 'dart:convert';
-
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_label.dart';
 import 'package:ml_linalg/vector.dart';
 
 typedef TestSamplePredicate = bool Function(Vector sample);
 
-class DecisionTreeNode {
+class DecisionTreeNode with SerializableMixin {
   DecisionTreeNode(
       this.testSample,
       this.splittingValue,
@@ -26,13 +25,12 @@ class DecisionTreeNode {
 
   bool get isLeaf => children == null || children.isEmpty;
 
-  String toJSON() => jsonEncode(serialize());
-
+  @override
   Map<String, dynamic> serialize() => <String, dynamic>{
     'splittingValue': splittingValue,
     'splittingIdx': splittingIdx,
     'level': level,
     'label': label?.serialize(),
-    'children': children.map((node) => node.serialize()).toList(),
+    'children': children?.map((node) => node.serialize())?.toList(),
   };
 }
