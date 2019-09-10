@@ -3,4 +3,9 @@ class DecisionTreeLeafLabel {
 
   final double value;
   final double probability;
+
+  Map<String, dynamic> serialize() => <String, dynamic>{
+    'value': value,
+    'probability': probability,
+  };
 }
