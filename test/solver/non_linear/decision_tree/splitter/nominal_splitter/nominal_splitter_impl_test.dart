@@ -9,8 +9,8 @@ void main() {
   group('NominalSplitterImpl', () {
     final splitter = const NominalSplitterImpl();
 
-    test('should perform split only by one splitting value, splitting column '
-        'contains only this splitting value', () {
+    test('should perform split, splitting column contains only splitting '
+        'value', () {
       final samples = Matrix.fromList([
         [11, 22, 1, 30],
         [60, 23, 1, 20],
@@ -42,8 +42,8 @@ void main() {
       );
     });
 
-    test('should perform split only by one splitting value, splitting column '
-        'contains different values', () {
+    test('should perform split, splitting column contains different '
+        'values', () {
       final samples = Matrix.fromList([
         [11, 22, 1, 30],
         [60, 23, 1, 20],
@@ -94,7 +94,7 @@ void main() {
       expect(split, hasLength(0));
     });
 
-    test('should ignore splitting vectors with improper length', () {
+    test('should ignore unknown splitting values', () {
       final samples = Matrix.fromList([
         [11, 22, 1, 30],
         [60, 23, 1, 20],
