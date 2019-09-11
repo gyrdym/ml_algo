@@ -1,5 +1,8 @@
 # Changelog
 
+## 12.1.0
+- Decision tree classifier added
+
 ## 12.0.2
 - `ScoreToProbMapperFactory` removed
 - `ScoreToProbMapperType` enum removed

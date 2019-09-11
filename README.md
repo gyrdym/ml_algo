@@ -28,6 +28,9 @@ the lib, please, do not use it in a browser.
     - Logistic regression
     - Softmax regression
     
+- *Non-linear classifier:*
+    - Decision tree classifier (majority-based prediction)
+    
 - *Non-parametric regression:*
     - KNN regression
     
@@ -43,26 +46,29 @@ the lib, please, do not use it in a browser.
     - ##### Linear classification
         - ###### Logistic regression
             An algorithm, that performs linear binary classification. 
-            - [LogisticRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
+            - [LogisticRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear/logistic_regressor/logistic_regressor.dart). 
             Logistic regression with gradient ascent optimization of log-likelihood cost function. To use this kind 
             of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
             
-            - [LogisticRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
+            - [LogisticRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear/logistic_regressor/logistic_regressor.dart). 
             Not implemented yet. Logistic regression with coordinate descent optimization of negated log-likelihood cost 
             function. Coordinate descent allows to do feature selection (aka `L1 regularization`) To use this kind of 
             classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
         
         - ##### Softmax regression
             An algorithm, that performs linear multiclass classification.
-            - [SoftmaxRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/softmax_regressor.dart). 
+            - [SoftmaxRegressor.gradient](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear/softmax_regressor/softmax_regressor.dart). 
             Softmax regression with gradient ascent optimization of log-likelihood cost function. To use this kind 
             of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
             
-            - [SoftmaxRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/logistic_regressor.dart). 
+            - [SoftmaxRegressor.coordinate](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear/softmax_regressor/logistic_regressor.dart). 
             Not implemented yet. Softmax regression with coordinate descent optimization of negated log-likelihood cost 
             function. As in case of logistic regression, coordinate descent allows to do feature selection (aka 
             `L1 regularization`) To use this kind of classifier your data have to be 
             [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+    - ##### Nonlinear classification
+        - ###### Decision tree classifier
+            - [DecisionTreeClassifier.majority](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart)
 
 - #### Regression algorithms
     - ##### Linear regression
