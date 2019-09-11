@@ -1,19 +1,29 @@
+import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/optimizer/convergence_detector/convergence_detector_factory.dart';
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/optimizer/optimizer.dart';
-import 'package:ml_algo/src/optimizer/optimizer_factory.dart';
-import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector_factory.dart';
+import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_generator.dart';
+import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
+import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_solver.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_label_factory/leaf_label_factory.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/split_selector/split_selector.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter.dart';
+import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/splitter.dart' as decision_tree_splitter;
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 
@@ -37,9 +47,9 @@ class InitialWeightsGeneratorMock extends Mock
 
 class LinkFunctionMock extends Mock implements LinkFunction {}
 
-class OptimizerFactoryMock extends Mock implements OptimizerFactory {}
+class OptimizerFactoryMock extends Mock implements LinearOptimizerFactory {}
 
-class OptimizerMock extends Mock implements Optimizer {}
+class OptimizerMock extends Mock implements LinearOptimizer {}
 
 class ConvergenceDetectorFactoryMock extends Mock
     implements ConvergenceDetectorFactory {}
@@ -49,6 +59,29 @@ class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 class SplitterMock extends Mock implements Splitter {}
 
 class PredictorMock extends Mock implements Assessable {}
+
+class SplitAssessorMock extends Mock implements SplitAssessor {}
+
+class DecisionTreeSplitterMock extends Mock implements
+    decision_tree_splitter.Splitter {}
+
+class NumericalSplitterMock extends Mock implements NumericalSplitter {}
+
+class NominalSplitterMock extends Mock implements NominalSplitter {}
+
+class DistributionCalculatorMock extends Mock implements
+    SequenceElementsDistributionCalculator {}
+
+class LeafDetectorMock extends Mock implements LeafDetector {}
+
+class LeafLabelFactoryMock extends Mock implements
+    DecisionTreeLeafLabelFactory {}
+
+class SplitSelectorMock extends Mock implements SplitSelector {}
+
+class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
+
+class DecisionTreeSolverMock extends Mock implements DecisionTreeSolver {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   Map<LearningRateType, LearningRateGenerator> generators,
@@ -84,7 +117,7 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
 OptimizerFactoryMock createGradientOptimizerFactoryMock(
     Matrix points,
     Matrix labels,
-    Optimizer optimizer,
+    LinearOptimizer optimizer,
 ) {
   final factory = OptimizerFactoryMock();
   when(factory.gradient(
