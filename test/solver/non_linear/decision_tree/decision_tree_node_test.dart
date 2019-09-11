@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('DecisionTreeNode', () {
-    test('should build a tree node schema', () async {
+    test('should serialize itself', () async {
       final dummyTestFn = (Vector v) => true;
 
       final child31 = DecisionTreeNode(dummyTestFn, 600, null, [],

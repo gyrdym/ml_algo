@@ -67,62 +67,6 @@ void main() {
       expect(label.value, equals(classLabel));
       expect(label.probability, equals(classProbability));
     });
-
-    test('should create decision tree leaf label in case when the class '
-        'labels are vectors (encoded categories) - label should be a majority '
-        'class label among the whole observation matrix', () {
-
-      final observations = Matrix.fromList([
-        [10, 20, 30, 1],
-      ]);
-
-      final firstClassLabel = 1.0;
-      final firstClassProbability = 0.09;
-
-      final secondClassLabel = 2.0;
-      final secondClassProbability = 0.6;
-
-      final thirdClassLabel = 3.0;
-      final thirdClassProbability = 0.31;
-
-      final distribution = HashMap<double, double>.from(<double, double>{
-        firstClassLabel: firstClassProbability,
-        secondClassLabel: secondClassProbability,
-        thirdClassLabel: thirdClassProbability,
-      });
-      final distributionCalculator = createDistributionCalculator(
-        [1], distribution);
-      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
-      final label = labelFactory.create(observations, 3);
-
-      expect(label.value, equals(secondClassLabel));
-      expect(label.probability, equals(secondClassProbability));
-    });
-
-    test('should create decision tree leaf label in case when the class '
-        'labels are vectors and the observations contain only one class '
-        'label', () {
-      final observations = Matrix.fromList([
-        [10, 20, 30, 1],
-      ]);
-
-      final classLabel = 2.0;
-      final classProbability = 1.0;
-
-      final distribution = HashMap<double, double>.from(<double, double>{
-        classLabel: classProbability,
-      });
-
-      final distributionCalculator = createDistributionCalculator(
-        [1],
-        distribution,
-      );
-      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
-      final label = labelFactory.create(observations, 3);
-
-      expect(label.value, equals(classLabel));
-      expect(label.probability, classProbability);
-    });
   });
 }
 

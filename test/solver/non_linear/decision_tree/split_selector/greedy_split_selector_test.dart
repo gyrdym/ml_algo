@@ -1,16 +1,13 @@
 import 'package:ml_algo/src/solver/non_linear/decision_tree/split_selector/greedy_split_selector.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:xrange/zrange.dart';
 
 import '../../../../test_utils/mocks.dart';
 
 void main() {
   group('GreedySplitSelector', () {
-    test('should find best split when splitting the samples by real number '
-        'value', () {
+    test('should find the best split', () {
       final samples = Matrix.fromList([
         [10, 20, 30, 40, 1],
         [12, 22, 32, 42, 2],
@@ -84,81 +81,8 @@ void main() {
       expect(actualSplit.values, equals(bestSplit.values));
     });
 
-    test('should find best split when splitting the samples by nominal '
-        'feature', () {
-      final samples = Matrix.fromList([
-        [10, 1, 50, 1],
-        [12, 2, 52, 2],
-        [11, 3, 53, 3],
-      ]);
-
-      final targetColIdx = 3;
-
-      final badFeatureIdx = 0;
-      final bestFeatureIdx = 1;
-      final goodFeatureIdx = 2;
-
-      final badSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([
-          [1, 2, 3, 4, -1, -1, -1],
-        ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
-          [10, 20, 30, 40, -1, -1, -1],
-        ]),
-      };
-
-      final goodSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([
-          [15, 16, 17, 18, -1, 0, 0],
-        ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
-          [150, 160, 170, 180, -1, 0, 0],
-        ]),
-      };
-
-      final bestSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([
-          [1, 2, 3, 4, -1, -1, -1],
-        ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
-          [10, 20, 30, 40, -1, -1, -1],
-        ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
-          [12, 23, 33, 44, -1, -1, -1],
-        ]),
-      };
-
-      final featuresIdxs = {badFeatureIdx, bestFeatureIdx, goodFeatureIdx};
-
-      final assessor = SplitAssessorMock();
-      final splitter = DecisionTreeSplitterMock();
-      final nominalValues = [1.0, 2.0, 3.0];
-      final colIdxToUniqueValues = {bestFeatureIdx: nominalValues};
-
-      when(splitter.split(samples, badFeatureIdx, targetColIdx))
-          .thenReturn(badSplit);
-      when(splitter.split(samples, goodFeatureIdx, targetColIdx))
-          .thenReturn(goodSplit);
-      when(splitter.split(samples, bestFeatureIdx, targetColIdx,
-          nominalValues)).thenReturn(bestSplit);
-
-      when(assessor.getAggregatedError(badSplit.values,
-          targetColIdx)).thenReturn(0.999);
-      when(assessor.getAggregatedError(goodSplit.values,
-          targetColIdx)).thenReturn(0.4);
-      when(assessor.getAggregatedError(bestSplit.values,
-          targetColIdx)).thenReturn(0.1);
-
-      final selector = GreedySplitSelector(assessor, splitter);
-      final actualSplit = selector.select(samples, targetColIdx, featuresIdxs,
-          colIdxToUniqueValues);
-
-      expect(actualSplit.keys, equals(bestSplit.keys));
-      expect(actualSplit.values, equals(bestSplit.values));
-    });
-
-    test('should select input matrix columns for splitting according to given '
-        'feature columns ranges', () {
+    test('should select columns for splitting according to given feature '
+        'columns indices', () {
       final observations = Matrix.fromList([
         [10, 1, 50, 1],
         [12, 2, 52, 2],

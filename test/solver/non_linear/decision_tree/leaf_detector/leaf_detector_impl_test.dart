@@ -3,7 +3,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:quiver/iterables.dart';
 import 'package:test/test.dart';
-import 'package:xrange/zrange.dart';
 
 import '../../../../test_utils/mocks.dart';
 
@@ -118,7 +117,7 @@ void main() {
       expect(isLeaf, isTrue);
     });
 
-    test('should detect tree leaf if mnimum error reached', () {
+    test('should detect tree leaf if minimum error reached', () {
       final observations = Matrix.fromList([
         [10, 2, 1],
         [20, 3, 2],
@@ -156,9 +155,9 @@ void main() {
       expect(isLeaf, isTrue);
     });
 
-    test('should not detect tree leaf if node count have not reached the limit,'
+    test('should not detect tree leaf if node count has not hit the limit,'
         'all class labels on node do not belong to one class and error on node'
-        'is greater than minimum error', () {
+        'is greater than the minimum error', () {
       final observations = Matrix.fromList([
         [10, 1],
         [20, 2],
