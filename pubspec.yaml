@@ -1,6 +1,6 @@
 name: ml_algo
 description: Machine learning algorithms written in native dart
-version: 12.0.2
+version: 12.1.0
 author: Ilia Gyrdymov <ilgyrd@gmail.com>
 homepage: https://github.com/gyrdym/ml_algo
 
@@ -8,15 +8,17 @@ environment:
   sdk: '>=2.3.0 <3.0.0'
 
 dependencies:
-  ml_linalg: ^10.0.0
-  xrange: ^0.0.5
-  tuple: ^1.0.2
+  ml_dataframe: ^0.0.3
+  ml_linalg: ^10.3.5
   quiver: ^2.0.2
+  tuple: ^1.0.2
+  xrange: ^0.0.6
 
 dev_dependencies:
-  benchmark_harness: ">=1.0.0 <2.0.0"
-  test: ^1.2.0
-  mockito: ^3.0.0
+  benchmark_harness: '>=1.0.0 <2.0.0'
   build_runner: ^1.1.2
   build_test: ^0.10.2
-  pedantic: 1.1.0
+  grinder: ^0.8.3
+  ml_tech: ^0.0.8
+  mockito: ^3.0.0
+  test: ^1.2.0
