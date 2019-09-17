@@ -2,9 +2,8 @@ import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/solver/linear/coordinate/coordinate.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/linalg.dart';
+import 'package:ml_tech/unit_testing/matchers/iterable_almost_equal_to.dart';
 import 'package:test/test.dart';
-
-import '../../../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 /// L1 regularization, as known as Lasso, is aimed to penalize unimportant features, setting their weights to the zero,
 /// therefore, we can treat the objective of the Lasso Optimizer like feature selection. Since lasso solver regularizes
@@ -48,7 +47,7 @@ void main() {
       final expected = [-81796400.0, -81295300.0, -85285400.0];
       expect(weights.rowsNum, 1);
       expect(weights.columnsNum, 3);
-      expect(weights.getRow(0), vectorAlmostEqualTo(expected, 5.0));
+      expect(weights.getRow(0), iterableAlmostEqualTo(expected, 5.0));
     });
   });
 

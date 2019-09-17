@@ -3,10 +3,10 @@ import 'package:ml_algo/src/classifier/linear/softmax_regressor/gradient_softmax
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../../test_utils/helpers/floating_point_iterable_matchers.dart';
 import '../../../test_utils/mocks.dart';
 
 void main() {
@@ -79,7 +79,7 @@ void main() {
 
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
-        argThat(matrixAlmostEqualTo([
+        argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 13.1, 15.2, 61.0, 27.2],
           [2.0, 30.1, 25.2, 62.0, 34.1],
@@ -107,7 +107,7 @@ void main() {
       );
 
       verify(optimizerFactoryMock.gradient(
-        argThat(matrixAlmostEqualTo([
+        argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 13.1, 15.2, 61.0, 27.2],
           [2.0, 30.1, 25.2, 62.0, 34.1],

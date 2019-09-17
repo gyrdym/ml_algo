@@ -63,7 +63,7 @@ packages:
       name: build_daemon
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   build_resolvers:
     dependency: transitive
     description:
@@ -77,14 +77,14 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.9"
+    version: "1.7.0"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "4.0.0"
   build_test:
     dependency: "direct dev"
     description:
@@ -329,14 +329,14 @@ packages:
       name: ml_dataframe
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.3"
+    version: "0.0.4"
   ml_linalg:
     dependency: "direct main"
     description:
       name: ml_linalg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.3.7"
+    version: "11.0.0"
   ml_tech:
     dependency: "direct dev"
     description:
@@ -518,7 +518,7 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.9"
+    version: "1.6.10"
   test_api:
     dependency: transitive
     description:
@@ -532,7 +532,7 @@ packages:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.9"
+    version: "0.2.9+1"
   timing:
     dependency: transitive
     description:
@@ -560,7 +560,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "2.0.0"
   vm_service_lib:
     dependency: transitive
     description:
