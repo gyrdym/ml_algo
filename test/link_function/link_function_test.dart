@@ -3,9 +3,8 @@ import 'package:ml_algo/src/link_function/softmax/softmax_link_function.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
-
-import '../test_utils/helpers/floating_point_iterable_matchers.dart';
 
 void main() {
   group('InverseLogitLinkFunction', () {
@@ -20,7 +19,7 @@ void main() {
       final probabilities = inverseLogitLink.link(scores);
 
       expect(probabilities,
-          matrixAlmostEqualTo([
+          iterable2dAlmostEqualTo([
             [0.73105],
             [0.88079],
             [0.9525],
@@ -124,7 +123,7 @@ void main() {
         [8.756510762696521e-27, 1.0, 5.242885663363464e-22],
         [4.6588861451033764e-15, 6.47023492564543e-26, 0.9999999999999953],
       ];
-      expect(probabilities, matrixAlmostEqualTo(expected, 1e-4));
+      expect(probabilities, iterable2dAlmostEqualTo(expected, 1e-4));
     });
   });
 }
