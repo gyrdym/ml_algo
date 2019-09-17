@@ -1,5 +1,9 @@
 # Changelog
 
+## 12.1.1
+- `ml_linalg` 11.0.0 supported
+- `Unit tests`: `iterable2dAlmostEqualTo` and `iterableAlmostEqualTo` matchers used from `ml_tech`
+
 ## 12.1.0
 - Decision tree classifier added
 
