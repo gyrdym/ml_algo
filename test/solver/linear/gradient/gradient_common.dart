@@ -7,10 +7,10 @@ import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weig
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../../test_utils/helpers/floating_point_iterable_matchers.dart';
 import '../../../test_utils/mocks.dart';
 
 Randomizer randomizerMock = RandomizerMock();
@@ -76,9 +76,9 @@ void mockGetGradient(CostFunction mock, {
   Matrix gradient
 }) {
   when(mock.getGradient(
-    x == null ? any : argThat(matrixAlmostEqualTo(x)),
-    w == null ? any : argThat(matrixAlmostEqualTo(w)),
-    y == null ? any : argThat(matrixAlmostEqualTo(y)),
+    x == null ? any : argThat(iterable2dAlmostEqualTo(x)),
+    w == null ? any : argThat(iterable2dAlmostEqualTo(w)),
+    y == null ? any : argThat(iterable2dAlmostEqualTo(y)),
   )).thenReturn(gradient ?? Matrix.fromList([[]]));
 }
 
