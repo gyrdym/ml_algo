@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
@@ -17,12 +17,17 @@ import 'package:ml_linalg/matrix.dart';
 abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// Parameters:
   ///
-  /// [trainingFeatures] A matrix with observations, that will be used by the
+  /// [fittingData] A [DataFrame] with observations, that will be used by the
   /// classifier to learn coefficients of the hyperplane, which divides the
-  /// features space, forming classes of the features
+  /// features space, forming classes of the features. Should contain target
+  /// column id (index or name)
   ///
-  /// [trainingOutcomes] A matrix with outcomes (class labels, or dependant
-  /// variables) for each observation from [trainingFeatures]
+  /// [targetIndex] An index of the target column (a column, that contains
+  /// class labels or outcomes for the associated features)
+  ///
+  /// [targetName] A string, that serves as a name of the target column (a
+  /// column, that contains class labels or outcomes for the associated
+  /// features)
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the solver. Default value is 100
@@ -110,12 +115,17 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   ///
   /// Parameters:
   ///
-  /// [trainingFeatures] A matrix with observations, that will be used by the
+  /// [fittingData] A [DataFrame] with observations, that will be used by the
   /// classifier to learn coefficients of the hyperplane, which divides the
-  /// features space, forming classes of the features
+  /// features space, forming classes of the features. Should contain target
+  /// column id (index or name)
   ///
-  /// [trainingOutcomes] A matrix with outcomes (class labels, or dependant
-  /// variables) for each observation from [trainingFeatures]
+  /// [targetIndex] An index of the target column (a column, that contains
+  /// class labels or outcomes for the associated features)
+  ///
+  /// [targetName] A string, that serves as a name of the target column (a
+  /// column, that contains class labels or outcomes for the associated
+  /// features)
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the [solver]. Default value is 100
