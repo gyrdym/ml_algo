@@ -1,7 +1,9 @@
 import 'package:ml_algo/src/classifier/linear/softmax_regressor/gradient_softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
+import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -24,15 +26,20 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   ///
   /// Parameters:
   ///
-  /// [trainingFeatures] A matrix with observations, that will be used by the
+  /// [fittingData] A [DataFrame] with observations, that will be used by the
   /// classifier to learn coefficients of the hyperplane, which divides the
-  /// features space, forming classes of the features
+  /// features space, forming classes of the features. Should contain target
+  /// column id (index or name)
   ///
-  /// [trainingOutcomes] A matrix with outcomes (class labels, or dependant
-  /// variables) for each observation from [trainingFeatures]
+  /// [targetIndices] A collection of indices of encoded target columns (a
+  /// column, that contains class labels or outcomes for the associated
+  /// features)
   ///
-  /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
-  /// convergence in the [solver]. Default value is 100
+  /// [targetNames] A collection of strings, that serves as names for the
+  /// encoded target columns (a column, that contains class labels or outcomes
+  /// for the associated features)
+  ///
+  /// [iterationsLimit] A number of fitting iterations. Default value is 100
   ///
   /// [initialLearningRate] A value, defining velocity of the convergence of the
   /// gradient descent solver. Default value is 1e-3
@@ -68,9 +75,9 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
-  factory SoftmaxRegressor.gradient(
-      Matrix trainingFeatures,
-      Matrix trainingOutcomes, {
+  factory SoftmaxRegressor.gradient(DataFrame fittingData, {
+        Iterable<int> targetIndices = const [],
+        Iterable<String> targetNames = const [],
         int iterationsLimit,
         double initialLearningRate,
         double minWeightsUpdate,
@@ -82,5 +89,32 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         LearningRateType learningRateType,
         Matrix initialWeights,
         DType dtype,
-      }) = GradientSoftmaxRegressor;
+  }) {
+        if (targetIndices.isNotEmpty && targetIndices.length < 2 ||
+            targetNames.isNotEmpty && targetNames.length < 2) {
+            throw Exception('The target column should be encoded properly '
+                '(e.g., via one-hot encoder)');
+        }
+
+        final featuresTargetSplits = featuresTargetSplit(fittingData,
+              targetIndices: targetIndices,
+              targetNames: targetNames,
+        ).toList();
+
+        return GradientSoftmaxRegressor(
+              featuresTargetSplits[0],
+              featuresTargetSplits[1],
+              iterationsLimit: iterationsLimit,
+              initialLearningRate: initialLearningRate,
+              minWeightsUpdate: minWeightsUpdate,
+              lambda: lambda,
+              randomSeed: randomSeed,
+              batchSize: batchSize,
+              fitIntercept: fitIntercept,
+              interceptScale: interceptScale,
+              learningRateType: learningRateType,
+              initialWeights: initialWeights,
+              dtype: dtype,
+        );
+  }
 }
