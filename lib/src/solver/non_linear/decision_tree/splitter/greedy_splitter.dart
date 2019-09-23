@@ -5,7 +5,7 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_s
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/splitter.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:xrange/zrange.dart';
+import 'package:xrange/integers.dart';
 
 class GreedySplitter implements Splitter {
   GreedySplitter(this._assessor, this._numericalSplitter,
@@ -27,7 +27,7 @@ class GreedySplitter implements Splitter {
     if (splittingIdx < 0 || splittingIdx > samples.columnsNum) {
       throw Exception('Unappropriate range given: $splittingIdx, '
           'expected a range within or equal '
-          '${ZRange.closed(0, samples.columnsNum)}');
+          '${integers(0, samples.columnsNum)}');
     }
     return _nominalSplitter.split(samples, splittingIdx, values);
   }

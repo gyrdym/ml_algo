@@ -17,7 +17,7 @@ import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:xrange/zrange.dart';
+import 'package:xrange/integers.dart';
 
 class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
@@ -110,8 +110,10 @@ class GradientOptimizer implements LinearOptimizer {
     final range = _getBatchRange(batchSize);
     final start = range.first;
     final end = range.last;
-    final pointsBatch = _points.submatrix(rows: ZRange.closedOpen(start, end));
-    final labelsBatch = labels.submatrix(rows: ZRange.closedOpen(start, end));
+    final pointsBatch = _points
+        .sample(rowIndices: integers(start, end, upperClosed: false));
+    final labelsBatch = labels
+        .sample(rowIndices: integers(start, end, upperClosed: false));
 
     return _makeGradientStep(coefficients, pointsBatch, labelsBatch, eta,
         isMinimization: isMinimization);
