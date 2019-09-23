@@ -8,11 +8,11 @@ environment:
   sdk: '>=2.3.0 <3.0.0'
 
 dependencies:
-  ml_dataframe: ^0.0.4
-  ml_linalg: ^11.0.0
+  ml_dataframe: ^0.0.8
+  ml_linalg: ^12.0.2
   quiver: ^2.0.2
   tuple: ^1.0.2
-  xrange: ^0.0.6
+  xrange: 0.0.8
 
 dev_dependencies:
   benchmark_harness: '>=1.0.0 <2.0.0'

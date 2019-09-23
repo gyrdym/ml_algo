@@ -1,7 +1,9 @@
 import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
+import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -65,21 +67,44 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory LogisticRegressor.gradient(
-      Matrix trainingFeatures,
-      Matrix trainingOutcomes, {
-        int iterationsLimit,
-        double initialLearningRate,
-        double minWeightsUpdate,
-        double probabilityThreshold,
-        double lambda,
-        int randomSeed,
-        int batchSize,
-        bool fitIntercept,
-        double interceptScale,
-        LearningRateType learningRateType,
-        Matrix initialWeights,
-        DType dtype,
-      }) = GradientLogisticRegressor;
+      DataFrame fittingData, {
+            int targetIndex,
+            String targetName,
+            int iterationsLimit,
+            double initialLearningRate,
+            double minWeightsUpdate,
+            double probabilityThreshold,
+            double lambda,
+            int randomSeed,
+            int batchSize,
+            bool fitIntercept,
+            double interceptScale,
+            LearningRateType learningRateType,
+            Matrix initialWeights,
+            DType dtype,
+      }) {
+    final featuresTargetSplits = featuresTargetSplit(fittingData,
+        targetIndices: [targetIndex],
+        targetNames: [targetName],
+    ).toList();
+
+    return GradientLogisticRegressor(
+      featuresTargetSplits[0],
+      featuresTargetSplits[1],
+      iterationsLimit: iterationsLimit,
+      initialLearningRate: initialLearningRate,
+      minWeightsUpdate: minWeightsUpdate,
+      probabilityThreshold: probabilityThreshold,
+      lambda: lambda,
+      randomSeed: randomSeed,
+      batchSize: batchSize,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      learningRateType: learningRateType,
+      initialWeights: initialWeights,
+      dtype: dtype,
+    );
+  }
 
   /// Creates a logistic regressor classifier based on coordinate descent
   ///
@@ -110,8 +135,9 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory LogisticRegressor.coordinate(
-      Matrix trainingFeatures,
-      Matrix trainingOutcomes, {
+      DataFrame fittingData, {
+        int targetIndex,
+        String targetName,
         int iterationsLimit,
         double minWeightsUpdate,
         double lambda,
