@@ -20,7 +20,6 @@ class GradientSoftmaxRegressor with LinearClassifierMixin,
   GradientSoftmaxRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-        // public arguments
         int iterationsLimit = DefaultParameterValues.iterationsLimit,
         double initialLearningRate = DefaultParameterValues.initialLearningRate,
         double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,

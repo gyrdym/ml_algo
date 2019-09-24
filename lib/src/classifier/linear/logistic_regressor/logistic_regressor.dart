@@ -3,6 +3,8 @@ import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logist
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/utils/default_parameter_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -74,16 +76,17 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   factory LogisticRegressor.gradient(DataFrame fittingData, {
     int targetIndex,
     String targetName,
-    int iterationsLimit,
-    double initialLearningRate,
-    double minWeightsUpdate,
+    int iterationsLimit = DefaultParameterValues.iterationsLimit,
+    double initialLearningRate = DefaultParameterValues.initialLearningRate,
+    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
     double probabilityThreshold,
     double lambda,
     int randomSeed,
-    int batchSize,
-    bool fitIntercept,
-    double interceptScale,
-    LearningRateType learningRateType,
+    int batchSize = 1,
+    bool fitIntercept = false,
+    double interceptScale = 1.0,
+    LearningRateType learningRateType = LearningRateType.constant,
+    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     Matrix initialWeights,
     DType dtype,
   }) {
@@ -106,6 +109,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
       interceptScale: interceptScale,
       learningRateType: learningRateType,
       initialWeights: initialWeights,
+      initialWeightsType: initialWeightsType,
       dtype: dtype,
     );
   }
