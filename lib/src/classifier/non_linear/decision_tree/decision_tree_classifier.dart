@@ -13,16 +13,13 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
   ///
   /// Majority based decision tree - a simplest tree algorithm, that uses
   /// majority label on a tree node as a prediction.
-  factory DecisionTreeClassifier.majority(
-      DataFrame samples,
-      {
-        int targetId,
-        String targetName,
-        double minError,
-        int minSamplesCount,
-        int maxDepth,
-      }
-  ) {
+  factory DecisionTreeClassifier.majority(DataFrame samples, {
+    int targetId,
+    String targetName,
+    double minError,
+    int minSamplesCount,
+    int maxDepth,
+  }) {
     final solver = createGreedySolver(
       samples,
       targetId,

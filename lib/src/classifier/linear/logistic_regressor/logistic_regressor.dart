@@ -71,23 +71,22 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
-  factory LogisticRegressor.gradient(
-      DataFrame fittingData, {
-            int targetIndex,
-            String targetName,
-            int iterationsLimit,
-            double initialLearningRate,
-            double minWeightsUpdate,
-            double probabilityThreshold,
-            double lambda,
-            int randomSeed,
-            int batchSize,
-            bool fitIntercept,
-            double interceptScale,
-            LearningRateType learningRateType,
-            Matrix initialWeights,
-            DType dtype,
-      }) {
+  factory LogisticRegressor.gradient(DataFrame fittingData, {
+    int targetIndex,
+    String targetName,
+    int iterationsLimit,
+    double initialLearningRate,
+    double minWeightsUpdate,
+    double probabilityThreshold,
+    double lambda,
+    int randomSeed,
+    int batchSize,
+    bool fitIntercept,
+    double interceptScale,
+    LearningRateType learningRateType,
+    Matrix initialWeights,
+    DType dtype,
+  }) {
     final featuresTargetSplits = featuresTargetSplit(fittingData,
         targetIndices: [targetIndex],
         targetNames: [targetName],
