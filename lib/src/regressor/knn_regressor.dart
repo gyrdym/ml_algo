@@ -6,7 +6,7 @@ import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -18,7 +18,7 @@ class KNNRegressor implements ParameterlessRegressor {
     Distance distance = Distance.euclidean,
     FindKnnFn solverFn = findKNeighbours,
     Kernel kernel = Kernel.uniform,
-    DType dtype = DefaultParameterValues.dtype,
+    DType dtype = ParameterDefaultValues.dtype,
 
     KernelFunctionFactory kernelFnFactory = const KernelFunctionFactoryImpl(),
   }) :

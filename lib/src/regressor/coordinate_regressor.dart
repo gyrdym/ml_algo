@@ -5,7 +5,7 @@ import 'package:ml_algo/src/metric/factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/solver/linear/coordinate/coordinate.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
@@ -13,12 +13,12 @@ class CoordinateRegressor implements LinearRegressor {
   CoordinateRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-        int iterationsLimit = DefaultParameterValues.iterationsLimit,
-        double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+        int iterationsLimit = ParameterDefaultValues.iterationsLimit,
+        double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
         double lambda,
         bool fitIntercept = false,
         double interceptScale = 1.0,
-        DType dtype = DefaultParameterValues.dtype,
+        DType dtype = ParameterDefaultValues.dtype,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
         Matrix initialWeights,
         bool isTrainDataNormalized = false,

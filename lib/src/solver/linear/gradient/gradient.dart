@@ -14,14 +14,14 @@ import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weig
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/integers.dart';
 
 class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
-    DType dtype = DefaultParameterValues.dtype,
+    DType dtype = ParameterDefaultValues.dtype,
 
     CostFunction costFunction,
 
@@ -39,9 +39,9 @@ class GradientOptimizer implements LinearOptimizer {
 
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
-    double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minCoefficientsUpdate = DefaultParameterValues.minCoefficientsUpdate,
-    int iterationLimit = DefaultParameterValues.iterationsLimit,
+    double initialLearningRate = ParameterDefaultValues.initialLearningRate,
+    double minCoefficientsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
+    int iterationLimit = ParameterDefaultValues.iterationsLimit,
     double lambda,
     int batchSize,
     int randomSeed,
