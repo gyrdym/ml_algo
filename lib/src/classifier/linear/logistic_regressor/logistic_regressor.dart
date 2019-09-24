@@ -4,7 +4,7 @@ import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -76,9 +76,9 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   factory LogisticRegressor.gradient(DataFrame fittingData, {
     int targetIndex,
     String targetName,
-    int iterationsLimit = DefaultParameterValues.iterationsLimit,
-    double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+    int iterationsLimit = ParameterDefaultValues.iterationsLimit,
+    double initialLearningRate = ParameterDefaultValues.initialLearningRate,
+    double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
     double probabilityThreshold,
     double lambda,
     int randomSeed,

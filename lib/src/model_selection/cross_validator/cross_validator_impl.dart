@@ -2,14 +2,14 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class CrossValidatorImpl implements CrossValidator {
   CrossValidatorImpl(DType dtype, this._splitter)
-      : dtype = dtype ?? DefaultParameterValues.dtype;
+      : dtype = dtype ?? ParameterDefaultValues.dtype;
 
   final DType dtype;
   final Splitter _splitter;

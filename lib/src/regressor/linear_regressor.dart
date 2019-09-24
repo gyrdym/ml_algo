@@ -5,7 +5,7 @@ import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weig
 import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/regressor/regressor.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -73,11 +73,11 @@ abstract class LinearRegressor implements Regressor, Assessable {
   factory LinearRegressor.gradient(DataFrame fittingData, {
     int targetIndex,
     String targetName,
-    int iterationsLimit = DefaultParameterValues.iterationsLimit,
+    int iterationsLimit = ParameterDefaultValues.iterationsLimit,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    double initialLearningRate = DefaultParameterValues.initialLearningRate,
-    double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+    double initialLearningRate = ParameterDefaultValues.initialLearningRate,
+    double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
     double lambda,
     bool fitIntercept = false,
     double interceptScale = 1.0,

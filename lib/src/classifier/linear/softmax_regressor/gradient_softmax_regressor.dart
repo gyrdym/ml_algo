@@ -10,7 +10,7 @@ import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learn
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer_factory_impl.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -20,9 +20,9 @@ class GradientSoftmaxRegressor with LinearClassifierMixin,
   GradientSoftmaxRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-        int iterationsLimit = DefaultParameterValues.iterationsLimit,
-        double initialLearningRate = DefaultParameterValues.initialLearningRate,
-        double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+        int iterationsLimit = ParameterDefaultValues.iterationsLimit,
+        double initialLearningRate = ParameterDefaultValues.initialLearningRate,
+        double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
         double lambda,
         int randomSeed,
         int batchSize = 1,
@@ -32,7 +32,7 @@ class GradientSoftmaxRegressor with LinearClassifierMixin,
         LearningRateType learningRateType = LearningRateType.constant,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
 
-        this.dtype = DefaultParameterValues.dtype,
+        this.dtype = ParameterDefaultValues.dtype,
 
         LinearOptimizerFactory optimizerFactory =
           const LinearOptimizerFactoryImpl(),

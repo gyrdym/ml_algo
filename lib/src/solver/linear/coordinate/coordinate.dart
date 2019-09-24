@@ -7,20 +7,20 @@ import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weig
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CoordinateOptimizer implements LinearOptimizer {
   CoordinateOptimizer(Matrix points, Matrix labels, {
-    DType dtype = DefaultParameterValues.dtype,
+    DType dtype = ParameterDefaultValues.dtype,
     CostFunction costFunction,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
     ConvergenceDetectorFactory convergenceDetectorFactory =
         const ConvergenceDetectorFactoryImpl(),
-    double minCoefficientsDiff = DefaultParameterValues.minCoefficientsUpdate,
-    int iterationsLimit = DefaultParameterValues.iterationsLimit,
+    double minCoefficientsDiff = ParameterDefaultValues.minCoefficientsUpdate,
+    int iterationsLimit = ParameterDefaultValues.iterationsLimit,
     double lambda,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     bool isTrainDataNormalized = false,

@@ -11,7 +11,7 @@ import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weig
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer_factory.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -20,7 +20,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
 
   @override
   LinearOptimizer coordinate(Matrix points, Matrix labels, {
-    DType dtype = DefaultParameterValues.dtype,
+    DType dtype = ParameterDefaultValues.dtype,
     InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
         const InitialWeightsGeneratorFactoryImpl(),
     CostFunction costFunction,
@@ -42,7 +42,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
 
   @override
   LinearOptimizer gradient(Matrix points, Matrix labels, {
-    DType dtype = DefaultParameterValues.dtype,
+    DType dtype = ParameterDefaultValues.dtype,
     RandomizerFactory randomizerFactory = const RandomizerFactoryImpl(),
     CostFunction costFunction,
     LearningRateGeneratorFactory learningRateGeneratorFactory =

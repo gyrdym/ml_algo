@@ -6,7 +6,7 @@ import 'package:ml_algo/src/solver/linear/gradient/gradient.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -15,15 +15,15 @@ class GradientRegressor implements LinearRegressor {
   GradientRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
-        int iterationsLimit = DefaultParameterValues.iterationsLimit,
-        double initialLearningRate = DefaultParameterValues.initialLearningRate,
-        double minWeightsUpdate = DefaultParameterValues.minCoefficientsUpdate,
+        int iterationsLimit = ParameterDefaultValues.iterationsLimit,
+        double initialLearningRate = ParameterDefaultValues.initialLearningRate,
+        double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
         double lambda,
         bool fitIntercept = false,
         double interceptScale = 1.0,
         int randomSeed,
         int batchSize = 1,
-        DType dtype = DefaultParameterValues.dtype,
+        DType dtype = ParameterDefaultValues.dtype,
         Matrix initialWeights,
         LearningRateType learningRateType = LearningRateType.constant,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
