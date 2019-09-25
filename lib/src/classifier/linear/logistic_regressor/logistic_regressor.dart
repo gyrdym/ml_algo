@@ -96,8 +96,8 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     ).toList();
 
     return GradientLogisticRegressor(
-      featuresTargetSplits[0],
-      featuresTargetSplits[1],
+      featuresTargetSplits[0].toMatrix(),
+      featuresTargetSplits[1].toMatrix(),
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
       minWeightsUpdate: minWeightsUpdate,

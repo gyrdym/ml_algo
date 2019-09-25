@@ -90,8 +90,8 @@ abstract class LinearRegressor implements Regressor, Assessable {
         .toList();
 
     return GradientRegressor(
-      featuresTargetSplits[0],
-      featuresTargetSplits[1],
+      featuresTargetSplits[0].toMatrix(),
+      featuresTargetSplits[1].toMatrix(),
       iterationsLimit: iterationsLimit,
       learningRateType: learningRateType,
       initialWeightsType: initialWeightsType,
@@ -160,8 +160,8 @@ abstract class LinearRegressor implements Regressor, Assessable {
         .toList();
 
     return CoordinateRegressor(
-      featuresTargetSplits[0],
-      featuresTargetSplits[1],
+      featuresTargetSplits[0].toMatrix(),
+      featuresTargetSplits[1].toMatrix(),
       iterationsLimit: iterationsLimit,
       minWeightsUpdate: minWeightsUpdate,
       lambda: lambda,

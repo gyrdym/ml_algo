@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/regressor/knn_regressor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -23,7 +24,7 @@ class CrossValidatorBenchmark extends BenchmarkBase {
   @override
   void run() {
     crossValidator.evaluate((trainFeatures, trainLabels) =>
-        ParameterlessRegressor.knn(trainFeatures, trainLabels, k: 7),
+        KNNRegressor(trainFeatures, trainLabels, k: 7),
         features, labels, MetricType.mape);
   }
 
