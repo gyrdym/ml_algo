@@ -103,8 +103,8 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         ).toList();
 
         return GradientSoftmaxRegressor(
-              featuresTargetSplits[0],
-              featuresTargetSplits[1],
+              featuresTargetSplits[0].toMatrix(),
+              featuresTargetSplits[1].toMatrix(),
               iterationsLimit: iterationsLimit,
               initialLearningRate: initialLearningRate,
               minWeightsUpdate: minWeightsUpdate,

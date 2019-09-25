@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('KNNRegressor (integration)', () {
-    test('should predict values with help of uniform kernel', () {
+    test('should predict values using uniform kernel', () {
       final k = 2;
       final data = DataFrame(<Iterable<num>>[
         [20, 20, 20, 20, 20, 1],
@@ -27,7 +27,7 @@ void main() {
       expect(actual, equals([[4.0]]));
     });
 
-    test('should predict values with help of epanechnikov kernel', () {
+    test('should predict values using epanechnikov kernel', () {
       final k = 2;
       final data = DataFrame(<Iterable<num>>[
         [20, 20, 20, 20, 20, 1],
