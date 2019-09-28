@@ -4,7 +4,6 @@ import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learn
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
-import 'package:ml_algo/src/regressor/regressor.dart';
 import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -20,7 +19,7 @@ import 'package:ml_linalg/vector.dart';
 /// as one knows all the `x` values (since it is the input for the algorithm),
 /// the regressor should find the best coefficients (weights) (they are unknown)
 /// to make a best prediction of `y` term.
-abstract class LinearRegressor implements Regressor, Assessable {
+abstract class LinearRegressor implements Assessable {
   /// Creates a gradient linear regressor. Uses gradient descent solver to
   /// find the optimal weights
   ///
@@ -28,9 +27,6 @@ abstract class LinearRegressor implements Regressor, Assessable {
   ///
   /// [fittingData] A [DataFrame] with observations, that will be used by the
   /// regressor to learn coefficients of the predicting line
-  ///
-  /// [targetIndex] An index of the target column (a column, that contains
-  /// outcomes for the associated features)
   ///
   /// [targetName] A string, that serves as a name of the target column (a
   /// column, that contains outcomes for the associated features)
@@ -70,9 +66,7 @@ abstract class LinearRegressor implements Regressor, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm.
   /// Can affect performance or accuracy of the computations. Default value is
   /// [Float32x4]
-  factory LinearRegressor.gradient(DataFrame fittingData, {
-    int targetIndex,
-    String targetName,
+  factory LinearRegressor.gradient(DataFrame fittingData, String targetName, {
     int iterationsLimit = ParameterDefaultValues.iterationsLimit,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
@@ -86,8 +80,8 @@ abstract class LinearRegressor implements Regressor, Assessable {
     Matrix initialWeights,
     DType dtype,
   }) {
-    final featuresTargetSplits = featuresTargetSplit(fittingData)
-        .toList();
+    final featuresTargetSplits = featuresTargetSplit(fittingData,
+        targetNames: [targetName]).toList();
 
     return GradientRegressor(
       featuresTargetSplits[0].toMatrix(),
@@ -143,9 +137,7 @@ abstract class LinearRegressor implements Regressor, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm.
   /// Can affect performance or accuracy of the computations. Default value is
   /// [Float32x4]
-  factory LinearRegressor.coordinate(DataFrame fittingData, {
-    int targetIndex,
-    String targetName,
+  factory LinearRegressor.coordinate(DataFrame fittingData, String targetName, {
     int iterationsLimit,
     double minWeightsUpdate,
     double lambda,
@@ -156,8 +148,8 @@ abstract class LinearRegressor implements Regressor, Assessable {
     Matrix initialWeights,
     bool isTrainDataNormalized = false,
   }) {
-    final featuresTargetSplits = featuresTargetSplit(fittingData)
-        .toList();
+    final featuresTargetSplits = featuresTargetSplit(fittingData,
+        targetNames: [targetName]).toList();
 
     return CoordinateRegressor(
       featuresTargetSplits[0].toMatrix(),
@@ -176,4 +168,8 @@ abstract class LinearRegressor implements Regressor, Assessable {
 
   /// Learned coefficients (or weights) for given features
   Vector get coefficients;
+
+  bool get fitIntercept;
+
+  double get interceptScale;
 }

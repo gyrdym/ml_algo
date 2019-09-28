@@ -13,15 +13,13 @@ void main() {
         [15, 15, 15, 15, 15, 3],
         [25, 25, 25, 25, 25, 4],
         [10, 10, 10, 10, 10, 5],
-      ], headerExists: false);
+      ], header: ['first', 'second', 'third', 'fourth', 'fifth', 'target']);
 
       final testFeatures = Matrix.fromList([
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
-      final regressor = ParameterlessRegressor.knn(data,
-        targetIndex: 5,
-        k: k,
-      );
+
+      final regressor = ParameterlessRegressor.knn(data, 'target', k: k);
 
       final actual = regressor.predict(testFeatures);
       expect(actual, equals([[4.0]]));
@@ -35,14 +33,16 @@ void main() {
         [15, 15, 15, 15, 15, 3],
         [25, 25, 25, 25, 25, 4],
         [10, 10, 10, 10, 10, 5],
-      ], headerExists: false);
+      ],
+          header: ['first', 'second', 'third', 'fourth', 'fifth', 'target'],
+          headerExists: false
+      );
 
       final testFeatures = Matrix.fromList([
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
 
-      final regressor = ParameterlessRegressor.knn(data,
-        targetIndex: 5,
+      final regressor = ParameterlessRegressor.knn(data, 'target',
         k: k,
         kernel: Kernel.epanechnikov,
       );

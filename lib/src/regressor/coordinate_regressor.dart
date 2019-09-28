@@ -1,15 +1,17 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/common/mixins/assessable_predictor_mixin.dart';
+import 'package:ml_algo/src/regressor/_mixin/linear_regressor_mixin.dart';
 import 'package:ml_algo/src/solver/linear/coordinate/coordinate.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class CoordinateRegressor implements LinearRegressor {
+class CoordinateRegressor with AssessablePredictorMixin, LinearRegressorMixin
+    implements LinearRegressor {
+
   CoordinateRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
@@ -23,8 +25,8 @@ class CoordinateRegressor implements LinearRegressor {
         Matrix initialWeights,
         bool isTrainDataNormalized = false,
       }) :
-        _fitIntercept = fitIntercept,
-        _interceptScale = interceptScale,
+        fitIntercept = fitIntercept,
+        interceptScale = interceptScale,
         coefficients = CoordinateOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
@@ -40,21 +42,12 @@ class CoordinateRegressor implements LinearRegressor {
           isMinimizingObjective: true,
         ).getRow(0);
 
-  final bool _fitIntercept;
+  @override
+  final bool fitIntercept;
 
-  final double _interceptScale;
+  @override
+  final double interceptScale;
 
   @override
   final Vector coefficients;
-
-  @override
-  double assess(Matrix features, Matrix origLabels, MetricType metricType) {
-    final metric = MetricFactory.createByType(metricType);
-    final prediction = predict(features);
-    return metric.getScore(prediction, origLabels);
-  }
-
-  @override
-  Matrix predict(Matrix features) =>
-      addInterceptIf(_fitIntercept, features, _interceptScale) * coefficients;
 }

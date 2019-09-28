@@ -1,17 +1,19 @@
 import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/common/mixins/assessable_predictor_mixin.dart';
+import 'package:ml_algo/src/regressor/_mixin/linear_regressor_mixin.dart';
+import 'package:ml_algo/src/regressor/linear_regressor.dart';
 import 'package:ml_algo/src/solver/linear/gradient/gradient.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/regressor/linear_regressor.dart';
 import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class GradientRegressor implements LinearRegressor {
+class GradientRegressor with AssessablePredictorMixin, LinearRegressorMixin
+    implements LinearRegressor {
+
   GradientRegressor(
       Matrix trainingFeatures,
       Matrix trainingOutcomes, {
@@ -28,12 +30,12 @@ class GradientRegressor implements LinearRegressor {
         LearningRateType learningRateType = LearningRateType.constant,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
       }) :
-        _fitIntercept = fitIntercept,
-        _interceptScale = interceptScale,
+        fitIntercept = fitIntercept,
+        interceptScale = interceptScale,
         coefficients = GradientOptimizer(
           addInterceptIf(fitIntercept, trainingFeatures, interceptScale),
           trainingOutcomes,
-          costFunction: SquaredCost(),
+          costFunction: const SquaredCost(),
           learningRateType: learningRateType,
           initialWeightsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
@@ -47,20 +49,12 @@ class GradientRegressor implements LinearRegressor {
           isMinimizingObjective: true,
         ).getColumn(0);
 
-  final bool _fitIntercept;
-  final double _interceptScale;
+  @override
+  final bool fitIntercept;
+
+  @override
+  final double interceptScale;
 
   @override
   final Vector coefficients;
-
-  @override
-  double assess(Matrix features, Matrix origLabels, MetricType metricType) {
-    final metric = MetricFactory.createByType(metricType);
-    final prediction = predict(features);
-    return metric.getScore(prediction, origLabels);
-  }
-
-  @override
-  Matrix predict(Matrix features) =>
-      addInterceptIf(_fitIntercept, features, _interceptScale) * coefficients;
 }

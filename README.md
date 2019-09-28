@@ -92,21 +92,23 @@ the lib, please, do not use it in a browser.
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart)
 
-Import all necessary packages. First, it's needed to ensure, if you have `ml_preprocessing` package in your 
-dependencies:
+Import all necessary packages. First, it's needed to ensure, if you have `ml_preprocessing` and `ml_dataframe` package 
+in your dependencies:
 
 ````
 dependencies:
-  ml_preprocessing: ^3.2.0
+  ml_dataframe: ^0.0.8
+  ml_preprocessing: ^5.0.1
 ````
 
-We need this repo to parse raw data in order to use it farther. For more details, please,
+We need these repos to parse raw data in order to use it farther. For more details, please,
 visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page.
 
 ````dart  
 import 'dart:async';
 
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 ````
 
@@ -114,23 +116,13 @@ Download dataset from [Pima Indians Diabets Database](https://www.kaggle.com/uci
 read it (of course, you should provide a proper path to your downloaded file): 
 
 ````dart
-final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
-  labelName: 'class variable (0 or 1)');
-final features = (await data.features)
-      .mapColumns((column) => column.normalize()); // it's needed to normalize the matrix column-wise to reach 
-                                                   // computational stability and provide uniform scale for all 
-                                                   // the values in the column
-final labels = await data.labels;
+final dataFrame = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
 ````
 
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. Therefore, we 
-should point, where to get label values. Let's use `labelName` parameter for that (labels column name, 'class variable 
-(0 or 1)' in our case).  
+should point, where to get label values.
  
-Processed features and labels are contained in data structures of `Matrix` type. To get more information about 
-`Matrix` type, please, visit [ml_linal repo](https://github.com/gyrdym/ml_linalg)
-
 Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
 of our model
 ````dart
@@ -143,7 +135,8 @@ Evaluate our model via accuracy metric:
 ````dart
 final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
     LogisticRegressor.gradient(
-        trainFeatures, trainLabels,
+        dataFrame,
+        targetName: 'class variable (0 or 1)',
         initialLearningRate: .8,
         iterationsLimit: 500,
         batchSize: 768,
@@ -172,10 +165,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 Future main() async {
-  final data = DataFrame.fromCsv('datasets/pima_indians_diabetes_database.csv', 
-     labelName: 'class variable (0 or 1)');
-  final features = (await data.features).mapColumns((column) => column.normalize());
-  final labels = await data.labels;
+  final dataFrame = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
   final validator = CrossValidator.kFold(numberOfFolds: 5);
   final accuracy = validator.evaluate((trainFeatures, trainLabels) => 
     LogisticRegressor.gradient(

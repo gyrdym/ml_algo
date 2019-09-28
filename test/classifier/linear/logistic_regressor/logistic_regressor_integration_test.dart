@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
@@ -140,14 +141,13 @@ void main() {
           fitIntercept: false
       );
 
-      final newFeatures = Matrix.fromList([
-        [2.0, 4.0, 1.0],
-      ]);
-      final origLabels = Matrix.fromList([
-        [1.0]
-      ]);
-      final score =
-          classifier.assess(newFeatures, origLabels, MetricType.accuracy);
+      final newSamples = DataFrame([
+        <num>[2.0, 4.0, 1.0, 1.0],
+      ], header: ['first', 'second', 'third', 'target']);
+
+      final score = classifier.assess(newSamples, ['target'],
+          MetricType.accuracy);
+
       expect(score, equals(0.0));
     });
 
@@ -176,14 +176,13 @@ void main() {
           fitIntercept: false
       );
 
-      final newFeatures = Matrix.fromList([
-        [2.0, 4.0, 1.0],
-      ]);
-      final newLabels = Matrix.fromList([
-        thirdClass,
-      ]);
-      final score =
-          classifier.assess(newFeatures, newLabels, MetricType.accuracy);
+      final newFeatures = DataFrame([
+        <num>[2, 4, 1, 0],
+      ], header: ['first', 'second', 'third', 'target']);
+
+      final score = classifier.assess(newFeatures, ['target'],
+          MetricType.accuracy);
+
       expect(score, equals(1.0));
     });
 
