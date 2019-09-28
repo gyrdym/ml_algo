@@ -25,8 +25,8 @@ void main() {
     ]);
 
     group('greedy', () {
-      final classifier = DecisionTreeClassifier.majority(dataFrame,
-          targetId: 7, minError: 0.3, minSamplesCount: 1, maxDepth: 3);
+      final classifier = DecisionTreeClassifier.majority(dataFrame, 'col_8',
+          minError: 0.3, minSamplesCount: 1, maxDepth: 3);
 
       test('should create classifier', () {
         expect(classifier, isA<DecisionTreeClassifierImpl>());

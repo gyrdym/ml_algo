@@ -32,10 +32,6 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// features space, forming classes of the features. Should contain target
   /// column id (index or name)
   ///
-  /// [targetIndices] A collection of indices of encoded target columns (a
-  /// column, that contains class labels or outcomes for the associated
-  /// features)
-  ///
   /// [targetNames] A collection of strings, that serves as names for the
   /// encoded target columns (a column, that contains class labels or outcomes
   /// for the associated features)
@@ -76,9 +72,9 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
-  factory SoftmaxRegressor.gradient(DataFrame fittingData, {
-        Iterable<int> targetIndices = const [],
-        Iterable<String> targetNames = const [],
+  factory SoftmaxRegressor.gradient(
+      DataFrame fittingData,
+      Iterable<String> targetNames, {
         int iterationsLimit = ParameterDefaultValues.iterationsLimit,
         double initialLearningRate = ParameterDefaultValues.initialLearningRate,
         double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
@@ -91,14 +87,12 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         Matrix initialWeights,
         DType dtype,
   }) {
-        if (targetIndices.isNotEmpty && targetIndices.length < 2 ||
-            targetNames.isNotEmpty && targetNames.length < 2) {
+        if (targetNames.isNotEmpty && targetNames.length < 2) {
             throw Exception('The target column should be encoded properly '
                 '(e.g., via one-hot encoder)');
         }
 
         final featuresTargetSplits = featuresTargetSplit(fittingData,
-              targetIndices: targetIndices,
               targetNames: targetNames,
         ).toList();
 

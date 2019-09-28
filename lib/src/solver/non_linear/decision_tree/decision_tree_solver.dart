@@ -9,19 +9,19 @@ import 'package:ml_linalg/vector.dart';
 class DecisionTreeSolver {
   DecisionTreeSolver(
       Matrix samples,
-      this._featuresColumnIdxs,
+      this._featureIndices,
       this._targetIdx,
-      this._colIdxToUniqueValues,
+      this._featureToUniqueValues,
       this._leafDetector,
       this._leafLabelFactory,
       this._splitSelector,
   ) {
-    _root = _createNode(samples, null, null, null, _featuresColumnIdxs, 0);
+    _root = _createNode(samples, null, null, null, _featureIndices, 0);
   }
 
-  final Iterable<int> _featuresColumnIdxs;
+  final Iterable<int> _featureIndices;
   final int _targetIdx;
-  final Map<int, List<num>> _colIdxToUniqueValues;
+  final Map<int, List<num>> _featureToUniqueValues;
   final LeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
   final SplitSelector _splitSelector;
@@ -56,7 +56,7 @@ class DecisionTreeSolver {
         samples,
         _targetIdx,
         featuresColumnIdxs,
-        _colIdxToUniqueValues,
+        _featureToUniqueValues,
     );
 
     final newLevel = level + 1;
@@ -65,7 +65,7 @@ class DecisionTreeSolver {
       final splitNode = entry.key;
       final splitSamples = entry.value;
 
-      final isSplitByNominalValue = _colIdxToUniqueValues
+      final isSplitByNominalValue = _featureToUniqueValues
           .containsKey(splitNode.splittingIdx);
 
       final updatedColumnRanges = isSplitByNominalValue

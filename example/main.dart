@@ -17,8 +17,7 @@ Future main() async {
 
   // Let's create a regressor itself and train it
   final regressor = LinearRegressor.gradient(
-      dataFrame,
-      targetIndex: 4,
+      dataFrame, 'col_4',
       iterationsLimit: 100,
       initialLearningRate: 0.0005,
       learningRateType: LearningRateType.constant);

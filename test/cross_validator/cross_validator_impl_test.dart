@@ -1,10 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -20,31 +18,30 @@ void main() {
   group('CrossValidatorImpl', () {
     test('should perform validation of a model on given test indices of'
         'observations', () {
-      final allObservations = Matrix.fromList([
-        [330, 930, 130],
-        [630, 830, 230],
-        [730, 730, 330],
-        [830, 630, 430],
-        [930, 530, 530],
-        [130, 430, 630],
-        [230, 330, 730],
-        [430, 230, 830],
-        [530, 130, 930],
-      ]);
-      final allOutcomes = Matrix.fromList([
-        [100],[200],[300],[400],[500],[600],[700],[800],[900],
-      ]);
+      final allObservations = DataFrame(<Iterable<num>>[
+        [330, 930, 130, 100],
+        [630, 830, 230, 200],
+        [730, 730, 330, 300],
+        [830, 630, 430, 400],
+        [930, 530, 530, 500],
+        [130, 430, 630, 600],
+        [230, 330, 730, 700],
+        [430, 230, 830, 800],
+        [530, 130, 930, 900],
+      ], header: ['first', 'second', 'third', 'target']);
+
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
       final predictor = PredictorMock();
-      final validator = CrossValidatorImpl(DType.float32, splitter);
+      final validator = CrossValidatorImpl(allObservations,
+          ['target'], splitter, DType.float32);
 
       var score = 20.0;
       when(predictor.assess(any, any, any))
           .thenAnswer((Invocation inv) => score = score + 10);
 
-      final actual = validator.evaluate((observations, outcomes) => predictor,
-          allObservations, allOutcomes, metric);
+      final actual = validator
+          .evaluate((observations, outcomes) => predictor, metric);
 
       expect(actual, 35);
 
@@ -58,24 +55,6 @@ void main() {
         [230, 330, 730],
         [530, 130, 930],
       ])), argThat(equals([[700], [900]])), metric)).called(1);
-    });
-
-    test('should throw an exception if observations number and outcomes number '
-        'mismatch', () {
-      final allObservations = Matrix.fromList([
-        [330, 930, 130],
-        [630, 830, 230],
-      ]);
-      final allOutcomes = Matrix.fromList([
-        [100],
-      ]);
-      final metric = MetricType.mape;
-      final splitter = SplitterMock();
-      final predictor = PredictorMock();
-      final validator = CrossValidatorImpl(DType.float32, splitter);
-
-      expect(() => validator.evaluate((observations, outcomes) => predictor,
-          allObservations, allOutcomes, metric), throwsException);
     });
   });
 }

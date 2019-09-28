@@ -12,7 +12,6 @@ import 'package:quiver/iterables.dart';
 
 DecisionTreeSolver createGreedySolver(
     DataFrame samples,
-    int targetIdx,
     String targetName,
     double minErrorOnNode,
     int minSamplesCountOnNode,
@@ -26,6 +25,10 @@ DecisionTreeSolver createGreedySolver(
 
   final distributionCalculator =
     const SequenceElementsDistributionCalculatorImpl();
+
+  final targetIdx = enumerate(samples.header)
+      .firstWhere((indexedName) => indexedName.value == targetName)
+      .index;
 
   final featuresIndexedSeries = enumerate(samples.series)
       .where((indexed) => indexed.index != targetIdx);

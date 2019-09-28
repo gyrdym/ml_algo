@@ -24,9 +24,6 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// features space, forming classes of the features. Should contain target
   /// column id (index or name)
   ///
-  /// [targetIndex] An index of the target column (a column, that contains
-  /// class labels or outcomes for the associated features)
-  ///
   /// [targetName] A string, that serves as a name of the target column (a
   /// column, that contains class labels or outcomes for the associated
   /// features)
@@ -73,9 +70,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
-  factory LogisticRegressor.gradient(DataFrame fittingData, {
-    int targetIndex,
-    String targetName,
+  factory LogisticRegressor.gradient(DataFrame fittingData, String targetName, {
     int iterationsLimit = ParameterDefaultValues.iterationsLimit,
     double initialLearningRate = ParameterDefaultValues.initialLearningRate,
     double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
@@ -91,8 +86,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     DType dtype,
   }) {
     final featuresTargetSplits = featuresTargetSplit(fittingData,
-        targetIndices: [targetIndex],
-        targetNames: [targetName],
+      targetNames: [targetName],
     ).toList();
 
     return GradientLogisticRegressor(

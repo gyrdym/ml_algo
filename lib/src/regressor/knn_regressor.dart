@@ -3,8 +3,7 @@ import 'package:ml_algo/src/algorithms/knn/kernel_function_factory.dart';
 import 'package:ml_algo/src/algorithms/knn/kernel_function_factory_impl.dart';
 import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/algorithms/knn/knn.dart';
-import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/common/mixins/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
 import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/distance.dart';
@@ -12,7 +11,9 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KNNRegressor implements ParameterlessRegressor {
+class KNNRegressor with AssessablePredictorMixin
+    implements ParameterlessRegressor {
+
   KNNRegressor(this._trainingFeatures, this._trainingOutcomes, {
     int k,
     Distance distance = Distance.euclidean,
@@ -51,7 +52,10 @@ class KNNRegressor implements ParameterlessRegressor {
 
   @override
   Matrix predict(Matrix observations) => Matrix.fromRows(
-    _generateOutcomes(observations).toList(growable: false), dtype: _dtype);
+      _generateOutcomes(observations)
+          .toList(growable: false),
+      dtype: _dtype
+  );
 
   Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
     for (final kNeighbours in _solverFn(_k, _trainingFeatures, _trainingOutcomes,
@@ -60,12 +64,5 @@ class KNNRegressor implements ParameterlessRegressor {
           .fold<Vector>(_zeroVector,
               (sum, pair) => sum + pair.label * _kernelFn(pair.distance)) / _k;
     }
-  }
-
-  @override
-  double assess(Matrix features, Matrix origLabels, MetricType metricType) {
-    final metric = MetricFactory.createByType(metricType);
-    final prediction = predict(features);
-    return metric.getScore(prediction, origLabels);
   }
 }
