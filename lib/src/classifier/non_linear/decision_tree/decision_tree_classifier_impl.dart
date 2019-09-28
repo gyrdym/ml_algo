@@ -15,7 +15,7 @@ class DecisionTreeClassifierImpl with AssessableClassifierMixin
   Matrix get classLabels => null;
 
   @override
-  Matrix predictClasses(Matrix features) {
+  Matrix predict(Matrix features) {
     final predictedLabels = features.rows.map(_solver.getLabelForSample);
 
     if (predictedLabels.isEmpty) {

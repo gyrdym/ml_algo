@@ -110,7 +110,7 @@ void main() {
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
-      final classes = classifier.predictClasses(newFeatures);
+      final classes = classifier.predict(newFeatures);
 
       expect(probabilities, equals([[0.01798621006309986]]));
       expect(classes, equals([thirdClass]));

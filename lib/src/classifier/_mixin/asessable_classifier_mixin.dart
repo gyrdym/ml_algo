@@ -14,7 +14,7 @@ mixin AssessableClassifierMixin implements Assessable, Classifier {
     ).toList();
 
     final metric = MetricFactory.createByType(metricType);
-    final prediction = predictClasses(splits[0].toMatrix());
+    final prediction = predict(splits[0].toMatrix());
     final origLabels = splits[1].toMatrix();
 
     return metric.getScore(prediction, origLabels);

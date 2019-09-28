@@ -34,7 +34,7 @@ void main() {
       });
 
       final classifier = DecisionTreeClassifierImpl(solverMock);
-      final predictedLabels = classifier.predictClasses(features);
+      final predictedLabels = classifier.predict(features);
 
       expect(predictedLabels, equals([
         [label1],
@@ -47,7 +47,7 @@ void main() {
         'empty', () {
       final solverMock = DecisionTreeSolverMock();
       final classifier = DecisionTreeClassifierImpl(solverMock);
-      final predictedLabels = classifier.predictClasses(Matrix.fromRows([]));
+      final predictedLabels = classifier.predict(Matrix.fromRows([]));
 
       expect(predictedLabels, isEmpty);
     });
