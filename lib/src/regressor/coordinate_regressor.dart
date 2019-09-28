@@ -1,7 +1,7 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/common/mixins/assessable_predictor_mixin.dart';
+import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/regressor/_mixin/linear_regressor_mixin.dart';
 import 'package:ml_algo/src/solver/linear/coordinate/coordinate.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
@@ -32,11 +32,11 @@ class CoordinateRegressor with AssessablePredictorMixin, LinearRegressorMixin
           trainingOutcomes,
           initialWeightsType: initialWeightsType,
           iterationsLimit: iterationsLimit,
-          minCoefficientsDiff: minWeightsUpdate,
+          minCoefficientsUpdate: minWeightsUpdate,
           costFunction: const SquaredCost(),
           lambda: lambda,
           dtype: dtype,
-          isTrainDataNormalized: isTrainDataNormalized,
+          isFittingDataNormalized: isTrainDataNormalized,
         ).findExtrema(
           initialWeights: initialWeights,
           isMinimizingObjective: true,

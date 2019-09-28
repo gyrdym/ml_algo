@@ -1,23 +1,19 @@
 import 'dart:async';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 const observationsNum = 200;
-const featuresNum = 20;
+const columnsNum = 21;
 
 class LogisticRegressorBenchmark extends BenchmarkBase {
   LogisticRegressorBenchmark() : super('Logistic regressor');
 
-  final Matrix features = Matrix.fromRows(List.generate(observationsNum,
-    (i) => Vector.randomFilled(featuresNum)));
-
-  final Matrix outcomes = Matrix.fromColumns([
-    Vector.randomFilled(observationsNum),
-  ]);
+  DataFrame _data;
 
   static void main() {
     LogisticRegressorBenchmark().report();
@@ -25,8 +21,16 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    GradientLogisticRegressor(features, outcomes,
+    LogisticRegressor(_data, 'col_20',
         dtype: DType.float32, minWeightsUpdate: null, iterationsLimit: 200);
+  }
+
+  @override
+  void setup() {
+    final Matrix observations = Matrix.fromRows(List.generate(observationsNum,
+            (i) => Vector.randomFilled(columnsNum)));
+
+    _data = DataFrame.fromMatrix(observations);
   }
 
   void tearDown() {}

@@ -1,9 +1,13 @@
-import 'package:ml_algo/src/classifier/linear/softmax_regressor/gradient_softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/linear/softmax_regressor/softmax_regressor_impl.dart';
+import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/utils/parameter_default_values.dart';
+import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -72,12 +76,13 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
-  factory SoftmaxRegressor.gradient(
+  factory SoftmaxRegressor(
       DataFrame fittingData,
       Iterable<String> targetNames, {
-        int iterationsLimit = ParameterDefaultValues.iterationsLimit,
-        double initialLearningRate = ParameterDefaultValues.initialLearningRate,
-        double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
+        LinearOptimizerType optimizerType = LinearOptimizerType.vanillaGD,
+        int iterationsLimit = 100,
+        double initialLearningRate = 1e-3,
+        double minWeightsUpdate = 1e-12,
         double lambda,
         int randomSeed,
         int batchSize = 1,
@@ -85,6 +90,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         double interceptScale = 1.0,
         LearningRateType learningRateType,
         Matrix initialWeights,
+        InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
         DType dtype,
   }) {
         if (targetNames.isNotEmpty && targetNames.length < 2) {
@@ -92,22 +98,37 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
                 '(e.g., via one-hot encoder)');
         }
 
-        final featuresTargetSplits = featuresTargetSplit(fittingData,
+        final splits = featuresTargetSplit(fittingData,
               targetNames: targetNames,
         ).toList();
 
-        return GradientSoftmaxRegressor(
-              featuresTargetSplits[0].toMatrix(),
-              featuresTargetSplits[1].toMatrix(),
-              iterationsLimit: iterationsLimit,
+        final points = splits[0].toMatrix();
+        final labels = splits[1].toMatrix();
+
+        final optimizerFactory = getDependencies()
+            .getDependency<LinearOptimizerFactory>();
+
+        final optimizer = optimizerFactory.createByType(
+              optimizerType,
+              addInterceptIf(fitIntercept, points, interceptScale),
+              labels,
+              iterationLimit: iterationsLimit,
               initialLearningRate: initialLearningRate,
-              minWeightsUpdate: minWeightsUpdate,
+              minCoefficientsUpdate: minWeightsUpdate,
               lambda: lambda,
               randomSeed: randomSeed,
               batchSize: batchSize,
+              learningRateType: learningRateType,
+              initialWeightsType: initialWeightsType,
+              dtype: dtype,
+        );
+
+        return SoftmaxRegressorImpl(
+              optimizer,
+              labels.uniqueRows(),
+              batchSize: batchSize,
               fitIntercept: fitIntercept,
               interceptScale: interceptScale,
-              learningRateType: learningRateType,
               initialWeights: initialWeights,
               dtype: dtype,
         );

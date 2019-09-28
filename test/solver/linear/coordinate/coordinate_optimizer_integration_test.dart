@@ -36,7 +36,7 @@ void main() {
           data, labels,
           initialWeightsType: InitialWeightsType.zeroes,
           costFunction: const SquaredCost(),
-          minCoefficientsDiff: 1e-5,
+          minCoefficientsUpdate: 1e-5,
           iterationsLimit: iterationsNumber,
           lambda: lambda);
     });
@@ -73,8 +73,8 @@ void main() {
       optimizer = CoordinateOptimizer(
           data, labels,
           costFunction: const SquaredCost(),
-          isTrainDataNormalized: true,
-          minCoefficientsDiff: 1e-5,
+          isFittingDataNormalized: true,
+          minCoefficientsUpdate: 1e-5,
           iterationsLimit: iterationsNumber,
           initialWeightsType: InitialWeightsType.zeroes,
           lambda: lambda);

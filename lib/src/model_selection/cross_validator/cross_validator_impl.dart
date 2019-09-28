@@ -35,13 +35,13 @@ class CrossValidatorImpl implements CrossValidator {
       int trainPointsCounter = 0;
       int testPointsCounter = 0;
 
-      for (int index = 0; index < samplesAsMatrix.rowsNum; index++) {
-        if (testRowsIndicesAsSet.contains(index)) {
-          testSamples[testPointsCounter++] = samplesAsMatrix[index];
+      samplesAsMatrix.rowIndices.forEach((i) {
+        if (testRowsIndicesAsSet.contains(i)) {
+          testSamples[testPointsCounter++] = samplesAsMatrix[i];
         } else {
-          trainSamples[trainPointsCounter++] = samplesAsMatrix[index];
+          trainSamples[trainPointsCounter++] = samplesAsMatrix[i];
         }
-      }
+      });
 
       final trainingDataFrame = DataFrame.fromMatrix(
         Matrix.fromRows(trainSamples),

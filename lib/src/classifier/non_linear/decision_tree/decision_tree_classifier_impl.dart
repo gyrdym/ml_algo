@@ -1,10 +1,10 @@
-import 'package:ml_algo/src/classifier/_mixin/asessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
+import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class DecisionTreeClassifierImpl with AssessableClassifierMixin
+class DecisionTreeClassifierImpl with AssessablePredictorMixin
     implements DecisionTreeClassifier {
 
   DecisionTreeClassifierImpl(this._solver);

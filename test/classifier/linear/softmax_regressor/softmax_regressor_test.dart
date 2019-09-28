@@ -1,5 +1,5 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/linear/softmax_regressor/gradient_softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/linear/softmax_regressor/softmax_regressor_impl.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -20,7 +20,7 @@ void main() {
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
         observations, outcomes, optimizerMock);
 
-      GradientSoftmaxRegressor(
+      SoftmaxRegressorImpl(
         observations, outcomes,
         dtype: dtype,
         learningRateType: LearningRateType.constant,
@@ -89,7 +89,7 @@ void main() {
         ], 1e-2)), outcomes, optimizerMock,
       );
 
-      GradientSoftmaxRegressor(
+      SoftmaxRegressorImpl(
         observations,
         outcomes,
         dtype: dtype,
