@@ -34,7 +34,7 @@ void main() {
       });
 
       test('should predict class labels', () {
-        expect(classifier.predictClasses(featuresForPrediction),
+        expect(classifier.predict(featuresForPrediction),
             equals([
               [0],
               [2],

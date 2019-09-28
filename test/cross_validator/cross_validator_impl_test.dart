@@ -28,7 +28,7 @@ void main() {
         [230, 330, 730, 700],
         [430, 230, 830, 800],
         [530, 130, 930, 900],
-      ], header: ['first', 'second', 'third', 'target']);
+      ], header: ['first', 'second', 'third', 'target'], headerExists: false);
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
@@ -45,16 +45,26 @@ void main() {
 
       expect(actual, 35);
 
-      verify(predictor.assess(argThat(equals([
-        [330, 930, 130],
-        [730, 730, 330],
-        [930, 530, 530],
-      ])), argThat(equals([[100], [300], [500]])), metric)).called(1);
+      final verificationResult = verify(
+        predictor.assess(
+          captureThat(isNotNull),
+          argThat(equals(['target'])),
+          metric,
+        ));
+      final firstAssessCallArgs = verificationResult.captured;
 
-      verify(predictor.assess(argThat(equals([
-        [230, 330, 730],
-        [530, 130, 930],
-      ])), argThat(equals([[700], [900]])), metric)).called(1);
+      expect((firstAssessCallArgs[0] as DataFrame).rows, equals([
+        [330, 930, 130, 100],
+        [730, 730, 330, 300],
+        [930, 530, 530, 500],
+      ]));
+
+      expect((firstAssessCallArgs[1] as DataFrame).rows, equals([
+        [230, 330, 730, 700],
+        [530, 130, 930, 900],
+      ]));
+
+      verificationResult.called(2);
     });
   });
 }

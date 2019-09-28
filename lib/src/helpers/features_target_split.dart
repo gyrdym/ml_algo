@@ -5,7 +5,7 @@ Iterable<DataFrame> featuresTargetSplit(DataFrame dataset, {
   Iterable<int> targetIndices = const [],
   Iterable<String> targetNames = const [],
 }) {
-  if (targetIndices.isNotEmpty != null) {
+  if (targetIndices.isNotEmpty) {
     final uniqueTargetIndices = Set<int>.from(targetIndices);
 
     final featuresIndices = enumerate(dataset.header)

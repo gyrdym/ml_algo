@@ -77,7 +77,7 @@ class GradientSoftmaxRegressor with LinearClassifierMixin,
   final LinkFunction linkFunction;
 
   @override
-  Matrix predictClasses(Matrix features) {
+  Matrix predict(Matrix features) {
     final processedFeatures = addInterceptIf(fitIntercept, features,
         interceptScale);
     return getProbabilities(processedFeatures, coefficientsByClasses,
