@@ -1,10 +1,13 @@
 import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
-import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/utils/parameter_default_values.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -70,10 +73,11 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
-  factory LogisticRegressor.gradient(DataFrame fittingData, String targetName, {
-    int iterationsLimit = ParameterDefaultValues.iterationsLimit,
-    double initialLearningRate = ParameterDefaultValues.initialLearningRate,
-    double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
+  factory LogisticRegressor(DataFrame fittingData, String targetName, {
+    LinearOptimizerType optimizerType = LinearOptimizerType.vanillaGD,
+    int iterationsLimit = 100,
+    double initialLearningRate = 1e-3,
+    double minWeightsUpdate = 1e-12,
     double probabilityThreshold,
     double lambda,
     int randomSeed,
@@ -85,72 +89,39 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     Matrix initialWeights,
     DType dtype,
   }) {
-    final featuresTargetSplits = featuresTargetSplit(fittingData,
+    final splits = featuresTargetSplit(fittingData,
       targetNames: [targetName],
     ).toList();
 
-    return GradientLogisticRegressor(
-      featuresTargetSplits[0].toMatrix(),
-      featuresTargetSplits[1].toMatrix(),
-      iterationsLimit: iterationsLimit,
+    final points = splits[0].toMatrix();
+    final labels = splits[1].toMatrix();
+
+    final optimizerFactory = getDependencies()
+        .getDependency<LinearOptimizerFactory>();
+
+    final optimizer = optimizerFactory.createByType(
+      optimizerType,
+      addInterceptIf(fitIntercept, points, interceptScale),
+      labels,
+      iterationLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
-      minWeightsUpdate: minWeightsUpdate,
-      probabilityThreshold: probabilityThreshold,
+      minCoefficientsUpdate: minWeightsUpdate,
       lambda: lambda,
       randomSeed: randomSeed,
       batchSize: batchSize,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
       learningRateType: learningRateType,
-      initialWeights: initialWeights,
       initialWeightsType: initialWeightsType,
       dtype: dtype,
     );
-  }
 
-  /// Creates a logistic regressor classifier based on coordinate descent
-  ///
-  /// Parameters:
-  ///
-  /// [fittingData] A [DataFrame] with observations, that will be used by the
-  /// classifier to learn coefficients of the hyperplane, which divides the
-  /// features space, forming classes of the features. Should contain target
-  /// column id (index or name)
-  ///
-  /// [targetIndex] An index of the target column (a column, that contains
-  /// class labels or outcomes for the associated features)
-  ///
-  /// [targetName] A string, that serves as a name of the target column (a
-  /// column, that contains class labels or outcomes for the associated
-  /// features)
-  ///
-  /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
-  /// convergence in the [solver]. Default value is 100
-  ///
-  /// [minWeightsUpdate] A minimum distance between weights vectors in two
-  /// subsequent iterations. Uses as a condition of convergence in the
-  ///
-  /// [lambda] A coefficient of regularization. In coordinate descent version
-  /// of the classifier L1 regularization is used
-  ///
-  /// [fitIntercept] Whether or not to fit intercept term. Default value is
-  /// `false`.
-  ///
-  /// [interceptScale] A value, defining a size of the intercept term
-  ///
-  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
-  /// affect performance or accuracy of the computations. Default value is
-  /// [DType.float32]
-  factory LogisticRegressor.coordinate(
-      DataFrame fittingData, {
-        int targetIndex,
-        String targetName,
-        int iterationsLimit,
-        double minWeightsUpdate,
-        double lambda,
-        bool fitIntercept,
-        double interceptScale,
-        Matrix initialWeights,
-        DType dtype,
-      }) => throw UnimplementedError();
+    return LogisticRegressorImpl(
+      optimizer,
+      labels.uniqueRows(),
+      probabilityThreshold: probabilityThreshold,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      initialWeights: initialWeights,
+      dtype: dtype,
+    );
+  }
 }

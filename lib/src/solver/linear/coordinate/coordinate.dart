@@ -1,41 +1,40 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector_factory.dart';
-import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
-import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CoordinateOptimizer implements LinearOptimizer {
-  CoordinateOptimizer(Matrix points, Matrix labels, {
-    DType dtype = ParameterDefaultValues.dtype,
+  CoordinateOptimizer(Matrix fittingPoints, Matrix fittingLabels, {
+    DType dtype = DType.float32,
     CostFunction costFunction,
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
-        const InitialWeightsGeneratorFactoryImpl(),
-    ConvergenceDetectorFactory convergenceDetectorFactory =
-        const ConvergenceDetectorFactoryImpl(),
-    double minCoefficientsDiff = ParameterDefaultValues.minCoefficientsUpdate,
-    int iterationsLimit = ParameterDefaultValues.iterationsLimit,
+    double minCoefficientsUpdate = 1e-12,
+    int iterationsLimit = 100,
     double lambda,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    bool isTrainDataNormalized = false,
+    bool isFittingDataNormalized = false,
   })  : _dtype = dtype,
-        _points = points,
-        _labels = labels,
+        _points = fittingPoints,
+        _labels = fittingLabels,
         _lambda = lambda ?? 0.0,
-        _initialCoefficientsGenerator =
-            initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
-        _convergenceDetector = convergenceDetectorFactory.create(
-            minCoefficientsDiff, iterationsLimit),
+
+        _initialCoefficientsGenerator = injector
+            .getDependency<InitialWeightsGeneratorFactory>()
+            .fromType(initialWeightsType, dtype),
+
+        _convergenceDetector = injector
+            .getDependency<ConvergenceDetectorFactory>()
+            .create(minCoefficientsUpdate, iterationsLimit),
+
         _costFn = costFunction,
-        _normalizer = isTrainDataNormalized
-            ? Vector.filled(points.columnsNum, 1.0, dtype: dtype)
-            : points.reduceRows(
+        _normalizer = isFittingDataNormalized
+            ? Vector.filled(fittingPoints.columnsNum, 1.0, dtype: dtype)
+            : fittingPoints.reduceRows(
                 (combine, vector) => (combine + vector * vector));
 
   final Matrix _points;

@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/linear/logistic_regressor/gradient_logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -17,7 +17,7 @@ void main() {
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
           observations, outcomes, optimizerMock);
 
-      GradientLogisticRegressor(
+      LogisticRegressorImpl(
         observations,
         outcomes,
         dtype: DType.float32,
@@ -67,7 +67,7 @@ void main() {
         [40.0],
       ]);
 
-      GradientLogisticRegressor(
+      LogisticRegressorImpl(
         observations,
         outcomes,
         dtype: DType.float32,

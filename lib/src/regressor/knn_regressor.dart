@@ -3,7 +3,7 @@ import 'package:ml_algo/src/algorithms/knn/kernel_function_factory.dart';
 import 'package:ml_algo/src/algorithms/knn/kernel_function_factory_impl.dart';
 import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/algorithms/knn/knn.dart';
-import 'package:ml_algo/src/common/mixins/assessable_predictor_mixin.dart';
+import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
 import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/distance.dart';

@@ -1,17 +1,14 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector_factory.dart';
-import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_generator_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/utils/parameter_default_values.dart';
@@ -21,22 +18,8 @@ import 'package:xrange/integers.dart';
 
 class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
-    DType dtype = ParameterDefaultValues.dtype,
-
+    DType dtype = DType.float32,
     CostFunction costFunction,
-
-    RandomizerFactory randomizerFactory =
-      const RandomizerFactoryImpl(),
-
-    LearningRateGeneratorFactory learningRateGeneratorFactory =
-      const LearningRateGeneratorFactoryImpl(),
-
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactory =
-      const InitialWeightsGeneratorFactoryImpl(),
-
-    ConvergenceDetectorFactory convergenceDetectorFactory =
-      const ConvergenceDetectorFactoryImpl(),
-
     LearningRateType learningRateType,
     InitialWeightsType initialWeightsType,
     double initialLearningRate = ParameterDefaultValues.initialLearningRate,
@@ -50,14 +33,23 @@ class GradientOptimizer implements LinearOptimizer {
         _labels = labels,
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
-        _initialWeightsGenerator =
-            initialWeightsGeneratorFactory.fromType(initialWeightsType, dtype),
-        _learningRateGenerator =
-            learningRateGeneratorFactory.fromType(learningRateType),
         _costFunction = costFunction,
-        _convergenceDetector = convergenceDetectorFactory.create(
-            minCoefficientsUpdate, iterationLimit),
-        _randomizer = randomizerFactory.create(randomSeed) {
+
+        _initialWeightsGenerator = injector
+            .getDependency<InitialWeightsGeneratorFactory>()
+            .fromType(initialWeightsType, dtype),
+
+        _learningRateGenerator = injector
+            .getDependency<LearningRateGeneratorFactory>()
+            .fromType(learningRateType),
+
+        _convergenceDetector = injector
+            .getDependency<ConvergenceDetectorFactory>()
+            .create(minCoefficientsUpdate, iterationLimit),
+
+        _randomizer = injector
+            .getDependency<RandomizerFactory>()
+            .create(randomSeed) {
     if (batchSize < 1 || batchSize > points.rowsNum) {
       throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '
           'value');

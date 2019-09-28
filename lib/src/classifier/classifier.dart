@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/common/predictor.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_linalg/matrix.dart';
 
 /// An interface for any classifier (linear, non-linear, parametric,
