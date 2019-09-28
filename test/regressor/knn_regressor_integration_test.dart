@@ -13,7 +13,9 @@ void main() {
         [15, 15, 15, 15, 15, 3],
         [25, 25, 25, 25, 25, 4],
         [10, 10, 10, 10, 10, 5],
-      ], header: ['first', 'second', 'third', 'fourth', 'fifth', 'target']);
+      ],
+          header: ['first', 'second', 'third', 'fourth', 'fifth', 'target'],
+          headerExists: false);
 
       final testFeatures = Matrix.fromList([
         [9.0, 9.0, 9.0, 9.0, 9.0],

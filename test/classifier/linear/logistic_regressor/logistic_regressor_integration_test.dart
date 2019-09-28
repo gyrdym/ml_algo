@@ -143,7 +143,7 @@ void main() {
 
       final newSamples = DataFrame([
         <num>[2.0, 4.0, 1.0, 1.0],
-      ], header: ['first', 'second', 'third', 'target']);
+      ], header: ['first', 'second', 'third', 'target'], headerExists: false);
 
       final score = classifier.assess(newSamples, ['target'],
           MetricType.accuracy);
@@ -178,7 +178,7 @@ void main() {
 
       final newFeatures = DataFrame([
         <num>[2, 4, 1, 0],
-      ], header: ['first', 'second', 'third', 'target']);
+      ], header: ['first', 'second', 'third', 'target'], headerExists: false);
 
       final score = classifier.assess(newFeatures, ['target'],
           MetricType.accuracy);
