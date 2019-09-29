@@ -16,7 +16,7 @@ void main() {
     test('should initialize properly', () {
       final observations = Matrix.fromList([[1.0]]);
       final outcomes = Matrix.fromList([[0]]);
-      final optimizerMock = OptimizerMock();
+      final optimizerMock = LinearOptimizerMock();
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
         observations, outcomes, optimizerMock);
 
@@ -77,7 +77,7 @@ void main() {
         [40.0],
       ]);
 
-      final optimizerMock = OptimizerMock();
+      final optimizerMock = LinearOptimizerMock();
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
         argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
