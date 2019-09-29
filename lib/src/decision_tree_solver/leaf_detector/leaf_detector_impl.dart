@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_detector/leaf_detector.dart';
+import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class LeafDetectorImpl implements LeafDetector {

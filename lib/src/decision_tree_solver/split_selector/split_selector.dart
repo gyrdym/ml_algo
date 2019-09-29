@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.dart';
+import 'package:ml_algo/src/decision_tree_solver/decision_tree_node.dart';
 import 'package:ml_linalg/matrix.dart';
 
 abstract class SplitSelector {

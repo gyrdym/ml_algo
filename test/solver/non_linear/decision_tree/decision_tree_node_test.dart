@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.dart';
+import 'package:ml_algo/src/decision_tree_solver/decision_tree_node.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
@@ -60,7 +60,7 @@ void main() {
         child13,
       ], null);
 
-      final snapshotFileName = 'test/solver/non_linear/decision_tree/'
+      final snapshotFileName = 'test/decision_tree_solver/'
           'decision_tree_node_test.json';
       final actual = root.serialize();
       final expected = await readJSON(snapshotFileName);
