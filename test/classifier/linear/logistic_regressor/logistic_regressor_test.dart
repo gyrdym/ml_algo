@@ -25,7 +25,7 @@ void main() {
     final costFunctionFactoryMock = createCostFunctionFactoryMock(costFunction);
 
     final optimizerMock = LinearOptimizerMock();
-    final optimizerFactoryMock = createGradientOptimizerFactoryMock(
+    final optimizerFactoryMock = createOptimizerFactoryMock(
         optimizerMock);
 
     setUp(() => injector = Injector()
@@ -45,12 +45,13 @@ void main() {
       LogisticRegressor(
         observations,
         'col_1',
+        optimizerType: LinearOptimizerType.vanillaGD,
         dtype: DType.float32,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         iterationsLimit: 100,
         initialLearningRate: 0.01,
-        minWeightsUpdate: 0.001,
+        minCoefficientsUpdate: 0.001,
         lambda: 0.1,
         randomSeed: 123,
       );
@@ -95,7 +96,7 @@ void main() {
         initialWeightsType: InitialWeightsType.zeroes,
         iterationsLimit: 100,
         initialLearningRate: 0.01,
-        minWeightsUpdate: 0.001,
+        minCoefficientsUpdate: 0.001,
         lambda: 0.1,
         initialWeights: initialWeights,
         randomSeed: 123,

@@ -1,6 +1,13 @@
+import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/linear/softmax_regressor/softmax_regressor_impl.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
@@ -13,31 +20,59 @@ void main() {
   group('SoftmaxRegressor', () {
     final dtype = DType.float32;
 
-    test('should initialize properly', () {
-      final observations = Matrix.fromList([[1.0]]);
-      final outcomes = Matrix.fromList([[0]]);
-      final optimizerMock = LinearOptimizerMock();
-      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
-        observations, outcomes, optimizerMock);
+    final linkFunction = LinkFunctionMock();
+    final linkFunctionFactoryMock = createLinkFunctionFactoryMock(
+        linkFunction);
 
-      SoftmaxRegressorImpl(
-        observations, outcomes,
-        dtype: dtype,
+    final costFunction = CostFunctionMock();
+    final costFunctionFactoryMock = createCostFunctionFactoryMock(costFunction);
+
+    final optimizerMock = LinearOptimizerMock();
+    final optimizerFactoryMock = createOptimizerFactoryMock(
+        optimizerMock);
+
+    setUp(() => injector = Injector()
+      ..registerSingleton<LinkFunctionFactory>(
+              (_) => linkFunctionFactoryMock)
+      ..registerDependency<CostFunctionFactory>(
+              (_) => costFunctionFactoryMock)
+      ..registerSingleton<LinearOptimizerFactory>(
+              (_) => optimizerFactoryMock),
+    );
+
+    tearDownAll(() => injector.clearAll());
+
+    test('should initialize properly', () {
+      final observations = DataFrame([
+        <num>[1,  10, 100, 0, 1],
+        <num>[20, 30, 400, 1, 0],
+      ], headerExists: false);
+
+      SoftmaxRegressor(
+        observations, ['col_3', 'col_4'],
+        optimizerType: LinearOptimizerType.vanillaGD,
+        dtype: DType.float32,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         iterationsLimit: 100,
         initialLearningRate: 0.01,
-        minWeightsUpdate: 0.001,
+        minCoefficientsUpdate: 0.001,
         lambda: 0.1,
-        optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
 
-      verify(optimizerFactoryMock.gradient(
-        observations,
-        outcomes,
-        dtype: dtype,
-        costFunction: anyNamed('costFunction'),
+      verify(optimizerFactoryMock.createByType(
+        LinearOptimizerType.vanillaGD,
+        argThat(equals([
+          [1,  10, 100],
+          [20, 30, 400],
+        ])),
+        argThat(equals([
+          [0, 1],
+          [1, 0],
+        ])),
+        dtype: DType.float32,
+        costFunction: costFunction,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         initialLearningRate: 0.01,
@@ -46,12 +81,13 @@ void main() {
         lambda: 0.1,
         batchSize: 1,
         randomSeed: 123,
+        isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
       )).called(1);
     });
 
     test('should call solver\'s `findExtrema` method with proper '
         'parameters and consider intercept term', () {
-      final observations = Matrix.fromList([
+      final features = Matrix.fromList([
         [10.1, 10.2, 12.0, 13.4],
         [13.1, 15.2, 61.0, 27.2],
         [30.1, 25.2, 62.0, 34.1],
@@ -69,6 +105,14 @@ void main() {
         [1.0, 0.0, 0.0],
       ]);
 
+      final observations = DataFrame.fromMatrix(
+          Matrix.fromColumns([
+            ...features.columns,
+            ...outcomes.columns,
+          ], dtype: DType.float32),
+        header: ['a', 'b', 'c', 'd', 'target_1', 'target_2', 'target_3'],
+      );
+
       final initialWeights = Matrix.fromList([
         [1.0],
         [10.0],
@@ -77,36 +121,25 @@ void main() {
         [40.0],
       ]);
 
-      final optimizerMock = LinearOptimizerMock();
-      final optimizerFactoryMock = createGradientOptimizerFactoryMock(
-        argThat(iterable2dAlmostEqualTo([
-          [2.0, 10.1, 10.2, 12.0, 13.4],
-          [2.0, 13.1, 15.2, 61.0, 27.2],
-          [2.0, 30.1, 25.2, 62.0, 34.1],
-          [2.0, 32.1, 35.2, 36.0, 41.5],
-          [2.0, 35.1, 95.2, 56.0, 52.6],
-          [2.0, 90.1, 20.2, 10.0, 12.1],
-        ], 1e-2)), outcomes, optimizerMock,
-      );
-
-      SoftmaxRegressorImpl(
+      SoftmaxRegressor(
         observations,
-        outcomes,
+        ['target_1', 'target_2', 'target_3'],
+        optimizerType: LinearOptimizerType.vanillaGD,
         dtype: dtype,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         iterationsLimit: 100,
         initialLearningRate: 0.01,
-        minWeightsUpdate: 0.001,
+        minCoefficientsUpdate: 0.001,
         lambda: 0.1,
         fitIntercept: true,
         interceptScale: 2.0,
-        optimizerFactory: optimizerFactoryMock,
         initialWeights: initialWeights,
         randomSeed: 123,
       );
 
-      verify(optimizerFactoryMock.gradient(
+      verify(optimizerFactoryMock.createByType(
+        LinearOptimizerType.vanillaGD,
         argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 13.1, 15.2, 61.0, 27.2],
@@ -124,7 +157,7 @@ void main() {
           [1.0, 0.0, 0.0],
         ])),
         dtype: dtype,
-        costFunction: anyNamed('costFunction'),
+        costFunction: costFunction,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
         initialLearningRate: 0.01,
