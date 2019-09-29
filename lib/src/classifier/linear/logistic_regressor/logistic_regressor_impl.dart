@@ -3,7 +3,6 @@ import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regres
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/logit/inverse_logit_link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -13,7 +12,10 @@ import 'package:ml_linalg/vector.dart';
 class LogisticRegressorImpl with LinearClassifierMixin,
     AssessablePredictorMixin implements LogisticRegressor {
 
-  LogisticRegressorImpl(LinearOptimizer _optimizer, this.classLabels, {
+  LogisticRegressorImpl(
+      LinearOptimizer _optimizer,
+      this.classLabels,
+      this.linkFunction, {
     bool fitIntercept = false,
     double interceptScale = 1.0,
     Matrix initialWeights,
@@ -22,7 +24,6 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
-        linkFunction = InverseLogitLinkFunction(dtype),
         coefficientsByClasses = _optimizer.findExtrema(
             initialWeights: initialWeights,
             isMinimizingObjective: false,
