@@ -22,7 +22,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
   @override
   void run() {
     LogisticRegressor(_data, 'col_20',
-        dtype: DType.float32, minWeightsUpdate: null, iterationsLimit: 200);
+        dtype: DType.float32, minCoefficientsUpdate: null, iterationsLimit: 200);
   }
 
   @override

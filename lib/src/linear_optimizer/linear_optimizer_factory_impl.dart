@@ -43,6 +43,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           lambda: lambda,
           batchSize: batchSize,
           randomSeed: randomSeed,
+          dtype: dtype,
         );
 
       case LinearOptimizerType.vanillaCD:

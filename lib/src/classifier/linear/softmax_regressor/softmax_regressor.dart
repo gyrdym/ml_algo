@@ -1,13 +1,14 @@
 import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/linear/log_likelihood_optimizer_factory.dart';
 import 'package:ml_algo/src/classifier/linear/softmax_regressor/softmax_regressor_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
-import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -45,7 +46,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// [initialLearningRate] A value, defining velocity of the convergence of the
   /// gradient descent solver. Default value is 1e-3
   ///
-  /// [minWeightsUpdate] A minimum distance between weights vectors in two
+  /// [minCoefficientsUpdate] A minimum distance between weights vectors in two
   /// subsequent iterations. Uses as a condition of convergence in the
   /// [solver]. In other words, if difference is small, there is no reason to
   /// continue fitting. Default value is 1e-12
@@ -82,7 +83,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         LinearOptimizerType optimizerType = LinearOptimizerType.vanillaGD,
         int iterationsLimit = 100,
         double initialLearningRate = 1e-3,
-        double minWeightsUpdate = 1e-12,
+        double minCoefficientsUpdate = 1e-12,
         double lambda,
         int randomSeed,
         int batchSize = 1,
@@ -91,12 +92,20 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         LearningRateType learningRateType,
         Matrix initialWeights,
         InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-        DType dtype,
+        DType dtype = DType.float32,
   }) {
         if (targetNames.isNotEmpty && targetNames.length < 2) {
             throw Exception('The target column should be encoded properly '
                 '(e.g., via one-hot encoder)');
         }
+
+        final dependencies = getDependencies();
+
+        final linkFunctionFactory = dependencies
+            .getDependency<LinkFunctionFactory>();
+
+        final linkFunction = linkFunctionFactory
+            .createByType(LinkFunctionType.inverseLogit, dtype: dtype);
 
         final splits = featuresTargetSplit(fittingData,
               targetNames: targetNames,
@@ -105,27 +114,28 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         final points = splits[0].toMatrix();
         final labels = splits[1].toMatrix();
 
-        final optimizerFactory = getDependencies()
-            .getDependency<LinearOptimizerFactory>();
-
-        final optimizer = optimizerFactory.createByType(
-              optimizerType,
-              addInterceptIf(fitIntercept, points, interceptScale),
+        final optimizer = createLogLikelihoodOptimizer(
+              points,
               labels,
-              iterationLimit: iterationsLimit,
+              LinkFunctionType.softmax,
+              optimizerType: optimizerType,
+              iterationsLimit: iterationsLimit,
               initialLearningRate: initialLearningRate,
-              minCoefficientsUpdate: minWeightsUpdate,
+              minCoefficientsUpdate: minCoefficientsUpdate,
               lambda: lambda,
               randomSeed: randomSeed,
               batchSize: batchSize,
               learningRateType: learningRateType,
               initialWeightsType: initialWeightsType,
+              fitIntercept: fitIntercept,
+              interceptScale: interceptScale,
               dtype: dtype,
         );
 
         return SoftmaxRegressorImpl(
               optimizer,
               labels.uniqueRows(),
+              linkFunction,
               batchSize: batchSize,
               fitIntercept: fitIntercept,
               interceptScale: interceptScale,
