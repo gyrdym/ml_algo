@@ -15,6 +15,7 @@ import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weig
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
 import 'package:ml_algo/src/solver/linear/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer_type.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_solver.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_detector/leaf_detector.dart';
@@ -115,20 +116,19 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
 }
 
 OptimizerFactoryMock createGradientOptimizerFactoryMock(
+    LinearOptimizerType optimizerType,
     Matrix points,
     Matrix labels,
     LinearOptimizer optimizer,
 ) {
   final factory = OptimizerFactoryMock();
-  when(factory.gradient(
+
+  when(factory.createByType(
+    optimizerType,
     points,
     labels,
     dtype: anyNamed('dtype'),
-    randomizerFactory: anyNamed('randomizerFactory'),
     costFunction: anyNamed('costFunction'),
-    learningRateGeneratorFactory: anyNamed('learningRateGeneratorFactory'),
-    initialWeightsGeneratorFactory:
-      anyNamed('initialWeightsGeneratorFactory'),
     learningRateType: anyNamed('learningRateType'),
     initialWeightsType: anyNamed('initialWeightsType'),
     initialLearningRate: anyNamed('initialLearningRate'),
@@ -137,6 +137,8 @@ OptimizerFactoryMock createGradientOptimizerFactoryMock(
     lambda: anyNamed('lambda'),
     batchSize: anyNamed('batchSize'),
     randomSeed: anyNamed('randomSeed'),
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized')
   )).thenReturn(optimizer);
+
   return factory;
 }

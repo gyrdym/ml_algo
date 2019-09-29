@@ -1,4 +1,8 @@
 import 'package:injector/injector.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
+import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
 import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector_factory.dart';
@@ -16,11 +20,21 @@ Injector getDependencies() =>
     injector ??= Injector()
           ..registerSingleton<LinearOptimizerFactory>(
                   (_) => const LinearOptimizerFactoryImpl())
+
           ..registerSingleton<RandomizerFactory>(
                   (_) => const RandomizerFactoryImpl())
+
           ..registerSingleton<LearningRateGeneratorFactory>(
                   (_) => const LearningRateGeneratorFactoryImpl())
+
           ..registerSingleton<InitialWeightsGeneratorFactory>(
                   (_) => const InitialWeightsGeneratorFactoryImpl())
+
           ..registerDependency<ConvergenceDetectorFactory>(
-                  (_) => const ConvergenceDetectorFactoryImpl());
+                  (_) => const ConvergenceDetectorFactoryImpl())
+
+          ..registerSingleton<CostFunctionFactory>(
+                  (_) => const CostFunctionFactoryImpl())
+
+          ..registerSingleton<LinkFunctionFactory>(
+                  (_) => const LinkFunctionFactoryImpl());

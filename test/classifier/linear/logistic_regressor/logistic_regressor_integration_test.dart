@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -7,33 +7,20 @@ import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final firstClass = [1.0];
-  final secondClass = [0.0];
-  final thirdClass = [0.0];
-
   group('Logistic regressor', () {
-    test('should extract class labels from the test_data', () {
-      final features = Matrix.fromList([
-        [5.0, 7.0, 6.0],
-        [1.0, 2.0, 3.0],
-        [10.0, 12.0, 31.0],
-        [9.0, 8.0, 5.0],
-        [4.0, 0.0, 1.0],
-        [4.0, 0.0, 1.0],
-        [4.0, 0.0, 1.0],
-      ]);
-      final labels = Matrix.fromList([
-        [3.0],
-        [1.0],
-        [3.0],
-        [2.0],
-        [2.0],
-        [0.0],
-        [0.0],
-      ]);
+    test('should extract class labels from the data', () {
+      final samples = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 3.0],
+        [1.0, 2.0, 3.0, 1.0],
+        [10.0, 12.0, 31.0, 3.0],
+        [9.0, 8.0, 5.0, 2.0],
+        [4.0, 0.0, 1.0, 2.0],
+        [4.0, 0.0, 1.0, 0.0],
+        [4.0, 0.0, 1.0, 0.0],
+      ], headerExists: false);
 
-      final classifier = LogisticRegressorImpl(
-          features, labels,
+      final classifier = LogisticRegressor(
+          samples, 'col_3',
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -48,24 +35,17 @@ void main() {
       ]));
     });
 
-    test('should properly fit given test_data', () {
-      final features = Matrix.fromList([
-        [5.0, 7.0, 6.0],
-        [1.0, 2.0, 3.0],
-        [10.0, 12.0, 31.0],
-        [9.0, 8.0, 5.0],
-        [4.0, 0.0, 1.0],
-      ]);
-      final labels = Matrix.fromList([
-        firstClass,
-        secondClass,
-        secondClass,
-        thirdClass,
-        firstClass,
-      ]);
+    test('should fit given data', () {
+      final samples = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 1.0],
+        [1.0, 2.0, 3.0, 0.0],
+        [10.0, 12.0, 31.0, 0.0],
+        [9.0, 8.0, 5.0, 0.0],
+        [4.0, 0.0, 1.0, 1.0],
+      ], headerExists: false);
 
-      final classifier = LogisticRegressorImpl(
-          features, labels,
+      final classifier = LogisticRegressor(
+          samples, 'col_3',
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -81,24 +61,16 @@ void main() {
     });
 
     test('should make prediction', () {
-      final features = Matrix.fromList([
-        [5.0, 7.0, 6.0],
-        [1.0, 2.0, 3.0],
-        [10.0, 12.0, 31.0],
-        [9.0, 8.0, 5.0],
-        [4.0, 0.0, 1.0],
-      ]);
+      final samples = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 1.0],
+        [1.0, 2.0, 3.0, 0.0],
+        [10.0, 12.0, 31.0, 0.0],
+        [9.0, 8.0, 5.0, 0.0],
+        [4.0, 0.0, 1.0, 1.0],
+      ], headerExists: false);
 
-      final labels = Matrix.fromList([
-        firstClass,
-        secondClass,
-        secondClass,
-        thirdClass,
-        firstClass,
-      ]);
-
-      final classifier = LogisticRegressorImpl(
-          features, labels,
+      final classifier = LogisticRegressor(
+          samples, 'col_3',
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -113,27 +85,20 @@ void main() {
       final classes = classifier.predict(newFeatures);
 
       expect(probabilities, equals([[0.01798621006309986]]));
-      expect(classes, equals([thirdClass]));
+      expect(classes, equals([[0.0]]));
     });
 
     test('should evaluate prediction quality, accuracy = 0', () {
-      final features = Matrix.fromList([
-        [5.0, 7.0, 6.0],
-        [1.0, 2.0, 3.0],
-        [10.0, 12.0, 31.0],
-        [9.0, 8.0, 5.0],
-        [4.0, 0.0, 1.0],
-      ]);
-      final labels = Matrix.fromList([
-        firstClass,
-        secondClass,
-        secondClass,
-        thirdClass,
-        firstClass,
-      ]);
+      final samples = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 1.0],
+        [1.0, 2.0, 3.0, 0.0],
+        [10.0, 12.0, 31.0, 0.0],
+        [9.0, 8.0, 5.0, 0.0],
+        [4.0, 0.0, 1.0, 1.0],
+      ], headerExists: false);
 
-      final classifier = LogisticRegressorImpl(
-          features, labels,
+      final classifier = LogisticRegressor(
+          samples, 'col_3',
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -152,23 +117,16 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 1', () {
-      final features = Matrix.fromList([
-        [5.0, 7.0, 6.0],
-        [1.0, 2.0, 3.0],
-        [10.0, 12.0, 31.0],
-        [9.0, 8.0, 5.0],
-        [4.0, 0.0, 1.0],
-      ]);
-      final labels = Matrix.fromList([
-        firstClass,
-        secondClass,
-        secondClass,
-        thirdClass,
-        firstClass,
-      ]);
+      final samples = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 1.0],
+        [1.0, 2.0, 3.0, 0.0],
+        [10.0, 12.0, 31.0, 0.0],
+        [9.0, 8.0, 5.0, 0.0],
+        [4.0, 0.0, 1.0, 1.0],
+      ], headerExists: false);
 
-      final classifier = LogisticRegressorImpl(
-          features, labels,
+      final classifier = LogisticRegressor(
+          samples, 'col_3',
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -187,16 +145,13 @@ void main() {
     });
 
     test('should consider intercept term', () {
-      final features = Matrix.fromList([
-        [5.0, 7.0, 6.0],
-        [1.0, 2.0, 3.0],
-      ]);
-      final labels = Matrix.fromList([
-        [1.0],
-        [0.0],
-      ]);
-      final classifier = LogisticRegressorImpl(
-          features, labels,
+      final features = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 1.0],
+        [1.0, 2.0, 3.0, 0.0],
+      ], headerExists: false);
+
+      final classifier = LogisticRegressor(
+          features, 'col_3',
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -266,19 +221,14 @@ void main() {
 
     test('should consider intercept scale if intercept term is going to be '
         'fitted', () {
-      final features = Matrix.fromList([
-        [5.0, 7.0, 6.0],
-        [1.0, 2.0, 3.0],
-        [3.0, 4.0, 5.0],
-      ]);
-      final labels = Matrix.fromList([
-        [1.0],
-        [0.0],
-        [1.0],
-      ]);
+      final samples = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 1.0],
+        [1.0, 2.0, 3.0, 0.0],
+        [3.0, 4.0, 5.0, 1.0],
+      ], headerExists: false);
 
-      final classifier = LogisticRegressorImpl(
-          features, labels,
+      final classifier = LogisticRegressor(
+          samples, 'col_3',
           iterationsLimit: 1,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
