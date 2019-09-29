@@ -105,7 +105,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
             .getDependency<LinkFunctionFactory>();
 
         final linkFunction = linkFunctionFactory
-            .createByType(LinkFunctionType.inverseLogit, dtype: dtype);
+            .createByType(LinkFunctionType.softmax, dtype: dtype);
 
         final splits = featuresTargetSplit(fittingData,
               targetNames: targetNames,
