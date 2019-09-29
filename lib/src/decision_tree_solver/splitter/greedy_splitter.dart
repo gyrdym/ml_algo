@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_node.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/splitter.dart';
+import 'package:ml_algo/src/decision_tree_solver/decision_tree_node.dart';
+import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
+import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/integers.dart';

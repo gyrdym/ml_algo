@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/solver/non_linear/decision_tree/leaf_detector/leaf_detector_impl.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_detector/leaf_detector_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:quiver/iterables.dart';

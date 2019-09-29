@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:math' as math;
 
-import 'package:ml_algo/src/solver/non_linear/decision_tree/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 

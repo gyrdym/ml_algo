@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier_impl.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_leaf_label.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/decision_tree_solver.dart';
+import 'package:ml_algo/src/decision_tree_solver/decision_tree_leaf_label.dart';
+import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';

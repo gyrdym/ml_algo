@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/solver/non_linear/decision_tree/solver_factory/greedy_solver.dart';
+import 'package:ml_algo/src/decision_tree_solver/solver_factory/greedy_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:quiver/iterables.dart';
 

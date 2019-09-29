@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/solver/non_linear/decision_tree/solver_factory/greedy_solver.dart';
+import 'package:ml_algo/src/decision_tree_solver/solver_factory/greedy_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
@@ -18,7 +18,7 @@ void main() {
       ]);
 
       test('should build a decision tree structure', () async {
-        final snapshotFileName = 'test/solver/non_linear/decision_tree/'
+        final snapshotFileName = 'test/decision_tree_solver/'
             'decision_tree_solver_integration_test.json';
         final solver = createGreedySolver(dataFrame, 'col_8', 0.3, 1, 3);
         final actual = solver.root.serialize();

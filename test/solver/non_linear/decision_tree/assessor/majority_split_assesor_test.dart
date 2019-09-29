@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/solver/non_linear/decision_tree/split_assessor/majority_split_assessor.dart';
+import 'package:ml_algo/src/decision_tree_solver/split_assessor/majority_split_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
