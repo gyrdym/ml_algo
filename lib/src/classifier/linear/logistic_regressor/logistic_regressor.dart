@@ -1,8 +1,13 @@
 import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
+import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/link_function/logit/inverse_logit_link_function.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
@@ -78,8 +83,8 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
     double minWeightsUpdate = 1e-12,
-    double probabilityThreshold,
-    double lambda,
+    double probabilityThreshold = 0.5,
+    double lambda = 0.0,
     int randomSeed,
     int batchSize = 1,
     bool fitIntercept = false,
@@ -87,8 +92,22 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
     Matrix initialWeights,
-    DType dtype,
+    DType dtype = DType.float32,
   }) {
+    final dependencies = getDependencies();
+
+    final optimizerFactory = dependencies
+        .getDependency<LinearOptimizerFactory>();
+
+    final linkFunctionFactory = dependencies
+        .getDependency<LinkFunctionFactory>();
+
+    final linkFunction = linkFunctionFactory
+        .createByType(LinkFunctionType.inverseLogit, dtype: dtype);
+
+    final costFunctionFactory = dependencies
+        .getDependency<CostFunctionFactory>();
+
     final splits = featuresTargetSplit(fittingData,
       targetNames: [targetName],
     ).toList();
@@ -96,13 +115,16 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     final points = splits[0].toMatrix();
     final labels = splits[1].toMatrix();
 
-    final optimizerFactory = getDependencies()
-        .getDependency<LinearOptimizerFactory>();
+    final costFunction = costFunctionFactory.createByType(
+        CostFunctionType.logLikelihood,
+        linkFunction: linkFunction,
+    );
 
     final optimizer = optimizerFactory.createByType(
       optimizerType,
       addInterceptIf(fitIntercept, points, interceptScale),
       labels,
+      costFunction: costFunction,
       iterationLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
       minCoefficientsUpdate: minWeightsUpdate,

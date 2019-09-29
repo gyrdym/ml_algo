@@ -1,6 +1,8 @@
-import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/solver/linear/linear_optimizer_type.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
@@ -11,15 +13,16 @@ import '../../../test_utils/mocks.dart';
 void main() {
   group('LogisticRegressor', () {
     test('should initialize properly', () {
-      final observations = Matrix.fromList([[1.0]]);
+      final observations = DataFrame([<num>[1.0, 0]]);
+      final features = Matrix.fromList([[1.0]]);
       final outcomes = Matrix.fromList([[0]]);
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
-          observations, outcomes, optimizerMock);
+          LinearOptimizerType.vanillaGD, features, outcomes, optimizerMock);
 
-      LogisticRegressorImpl(
+      LogisticRegressor(
         observations,
-        outcomes,
+        'col_1',
         dtype: DType.float32,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
@@ -27,11 +30,11 @@ void main() {
         initialLearningRate: 0.01,
         minWeightsUpdate: 0.001,
         lambda: 0.1,
-        optimizerFactory: optimizerFactoryMock,
         randomSeed: 123,
       );
 
-      verify(optimizerFactoryMock.gradient(
+      verify(optimizerFactoryMock.createByType(
+        LinearOptimizerType.vanillaGD,
         argThat(equals([[1.0]])),
         argThat(equals([[0]])),
         dtype: DType.float32,
@@ -47,8 +50,15 @@ void main() {
       )).called(1);
     });
 
-    test('should make calls of appropriate method when `fit` is called', () {
-      final observations = Matrix.fromList([
+    test('should make calls of appropriate method while fitting '
+        '(instantiating)', () {
+
+      final observations = DataFrame([
+        <num>[10.1, 10.2, 12.0, 13.4, 1.0],
+        <num>[3.1, 5.2, 6.0, 77.4, 0.0],
+      ]);
+
+      final features = Matrix.fromList([
         [10.1, 10.2, 12.0, 13.4],
         [3.1, 5.2, 6.0, 77.4],
       ]);
@@ -58,7 +68,7 @@ void main() {
       ]);
       final optimizerMock = OptimizerMock();
       final optimizerFactoryMock = createGradientOptimizerFactoryMock(
-          observations, outcomes, optimizerMock);
+          LinearOptimizerType.vanillaGD, features, outcomes, optimizerMock);
 
       final initialWeights = Matrix.fromList([
         [10.0],
@@ -67,9 +77,9 @@ void main() {
         [40.0],
       ]);
 
-      LogisticRegressorImpl(
+      LogisticRegressor(
         observations,
-        outcomes,
+        'col_4',
         dtype: DType.float32,
         learningRateType: LearningRateType.constant,
         initialWeightsType: InitialWeightsType.zeroes,
@@ -77,7 +87,6 @@ void main() {
         initialLearningRate: 0.01,
         minWeightsUpdate: 0.001,
         lambda: 0.1,
-        optimizerFactory: optimizerFactoryMock,
         initialWeights: initialWeights,
         randomSeed: 123,
       );
