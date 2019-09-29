@@ -28,7 +28,7 @@ void main() {
       <num>[ 3.1,  5.2,  6.0, 77.4, 0],
     ], headerExists: false);
 
-    final initialWeights = Matrix.fromList([
+    final initialCoefficients = Matrix.fromList([
       [10],
       [20],
       [30],
@@ -73,7 +73,7 @@ void main() {
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         lambda: 0.1,
-        initialWeights: initialWeights,
+        initialWeights: initialCoefficients,
         randomSeed: 123,
         fitIntercept: true,
         interceptScale: 2.0,
@@ -82,14 +82,16 @@ void main() {
 
     tearDown(() => injector.clearAll());
 
-    test('should call link function factory twice', () {
+    test('should call link function factory twice in order to create inverse '
+        'logit link function', () {
       verify(linkFunctionFactoryMock.createByType(
         LinkFunctionType.inverseLogit,
         dtype: DType.float32,
       )).called(2);
     });
 
-    test('should call cost function factory', () {
+    test('should call cost function factory in order to create '
+        'loglikelihood cost function', () {
       verify(costFunctionFactoryMock.createByType(
         CostFunctionType.logLikelihood,
         linkFunction: linkFunctionMock,
@@ -126,8 +128,8 @@ void main() {
         'instantiating', () {
       verify(optimizerMock.findExtrema(
           initialCoefficients: argThat(
-              equals(initialWeights),
-              named: 'initialCoefficients'
+              equals(initialCoefficients),
+              named: 'initialCoefficients',
           ),
             isMinimizingObjective: false
       )).called(1);
