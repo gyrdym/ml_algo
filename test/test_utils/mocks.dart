@@ -1,6 +1,10 @@
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
@@ -25,14 +29,18 @@ import 'package:ml_algo/src/solver/non_linear/decision_tree/split_selector/split
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/solver/non_linear/decision_tree/splitter/splitter.dart' as decision_tree_splitter;
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
 class RandomizerMock extends Mock implements Randomizer {}
 
 class CostFunctionMock extends Mock implements CostFunction {}
+
+class CostFunctionFactoryMock extends Mock implements CostFunctionFactory {}
 
 class LearningRateGeneratorFactoryMock extends Mock
     implements LearningRateGeneratorFactory {}
@@ -48,9 +56,12 @@ class InitialWeightsGeneratorMock extends Mock
 
 class LinkFunctionMock extends Mock implements LinkFunction {}
 
-class OptimizerFactoryMock extends Mock implements LinearOptimizerFactory {}
+class LinkFunctionFactoryMock extends Mock implements LinkFunctionFactory {}
 
-class OptimizerMock extends Mock implements LinearOptimizer {}
+class LinearOptimizerFactoryMock extends Mock
+    implements LinearOptimizerFactory {}
+
+class LinearOptimizerMock extends Mock implements LinearOptimizer {}
 
 class ConvergenceDetectorFactoryMock extends Mock
     implements ConvergenceDetectorFactory {}
@@ -59,7 +70,7 @@ class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
 class SplitterMock extends Mock implements Splitter {}
 
-class PredictorMock extends Mock implements Assessable {}
+class AssessableMock extends Mock implements Assessable {}
 
 class SplitAssessorMock extends Mock implements SplitAssessor {}
 
@@ -94,7 +105,7 @@ LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
   return factory;
 }
 
-RandomizerFactoryMock createRandomizerFactoryMock({
+RandomizerFactory createRandomizerFactoryMock({
   Map<int, RandomizerMock> randomizers,
 }) {
   final factory = RandomizerFactoryMock();
@@ -104,7 +115,7 @@ RandomizerFactoryMock createRandomizerFactoryMock({
   return factory;
 }
 
-InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
+InitialWeightsGeneratorFactory createInitialWeightsGeneratorFactoryMock({
   Map<InitialWeightsType, InitialWeightsGenerator> generators,
 }) {
   final factory = InitialWeightsGeneratorFactoryMock();
@@ -115,18 +126,35 @@ InitialWeightsGeneratorFactoryMock createInitialWeightsGeneratorFactoryMock({
   return factory;
 }
 
-OptimizerFactoryMock createGradientOptimizerFactoryMock(
-    LinearOptimizerType optimizerType,
-    Matrix points,
-    Matrix labels,
-    LinearOptimizer optimizer,
-) {
-  final factory = OptimizerFactoryMock();
+LinkFunctionFactory createLinkFunctionFactoryMock(
+    LinkFunction linkFunctionMock) {
+  final factory = LinkFunctionFactoryMock();
+
+  when(factory.createByType(argThat(isNotNull), dtype: anyNamed('dtype')))
+      .thenReturn(linkFunctionMock);
+
+  return factory;
+}
+
+CostFunctionFactory createCostFunctionFactoryMock(
+    CostFunction costFunctionMock) {
+  final costFunctionFactory = CostFunctionFactoryMock();
+
+  when(costFunctionFactory.createByType(argThat(isNotNull),
+      linkFunction: anyNamed('linkFunction'))).thenReturn(costFunctionMock);
+
+  return costFunctionFactory;
+}
+
+LinearOptimizerFactory createGradientOptimizerFactoryMock(
+    LinearOptimizer optimizer) {
+
+  final factory = LinearOptimizerFactoryMock();
 
   when(factory.createByType(
-    optimizerType,
-    points,
-    labels,
+    argThat(isNotNull),
+    argThat(isNotNull),
+    argThat(isNotNull),
     dtype: anyNamed('dtype'),
     costFunction: anyNamed('costFunction'),
     learningRateType: anyNamed('learningRateType'),

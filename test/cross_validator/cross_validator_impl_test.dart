@@ -32,7 +32,7 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
-      final predictor = PredictorMock();
+      final predictor = AssessableMock();
       final validator = CrossValidatorImpl(allObservations,
           ['target'], splitter, DType.float32);
 
