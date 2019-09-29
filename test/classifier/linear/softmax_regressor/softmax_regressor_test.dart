@@ -169,7 +169,7 @@ void main() {
       )).called(1);
 
       verify(optimizerMock.findExtrema(
-        initialWeights: initialWeights,
+        initialCoefficients: initialWeights,
         isMinimizingObjective: false,
       )).called(1);
     });

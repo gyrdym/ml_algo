@@ -119,6 +119,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
       learningRateType: learningRateType,
       initialWeightsType: initialWeightsType,
       fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
       dtype: dtype,
     );
 

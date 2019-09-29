@@ -38,7 +38,7 @@ class CoordinateRegressor with AssessablePredictorMixin, LinearRegressorMixin
           dtype: dtype,
           isFittingDataNormalized: isTrainDataNormalized,
         ).findExtrema(
-          initialWeights: initialWeights,
+          initialCoefficients: initialWeights,
           isMinimizingObjective: true,
         ).getRow(0);
 

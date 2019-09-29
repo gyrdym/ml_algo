@@ -25,7 +25,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         coefficientsByClasses = optimizer.findExtrema(
-          initialWeights: initialWeights,
+          initialCoefficients: initialWeights,
           isMinimizingObjective: false,
         );
 
