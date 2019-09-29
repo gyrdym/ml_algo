@@ -1,6 +1,6 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/linear/softmax_regressor/softmax_regressor_impl.dart';
-import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';

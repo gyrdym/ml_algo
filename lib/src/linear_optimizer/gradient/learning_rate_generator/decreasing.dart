@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
 
 class DecreasingLearningRateGenerator implements LearningRateGenerator {
   double _initialValue;

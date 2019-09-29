@@ -4,7 +4,7 @@ import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
-import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
