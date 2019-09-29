@@ -69,12 +69,12 @@ class GradientOptimizer implements LinearOptimizer {
   final int _batchSize;
 
   @override
-  Matrix findExtrema({Matrix initialWeights,
+  Matrix findExtrema({Matrix initialCoefficients,
     bool isMinimizingObjective = true}) {
     final batchSize =
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
-    Matrix coefficients = initialWeights ??
+    Matrix coefficients = initialCoefficients ??
         Matrix.fromColumns(List.generate(_labels.columnsNum,
             (i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 

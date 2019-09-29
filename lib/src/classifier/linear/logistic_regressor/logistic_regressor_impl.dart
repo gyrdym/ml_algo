@@ -25,7 +25,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         coefficientsByClasses = _optimizer.findExtrema(
-            initialWeights: initialWeights,
+            initialCoefficients: initialWeights,
             isMinimizingObjective: false,
         );
 

@@ -45,7 +45,7 @@ class GradientRegressor with AssessablePredictorMixin, LinearRegressorMixin
           batchSize: batchSize,
           randomSeed: randomSeed,
         ).findExtrema(
-          initialWeights: initialWeights?.transpose(),
+          initialCoefficients: initialWeights?.transpose(),
           isMinimizingObjective: true,
         ).getColumn(0);
 

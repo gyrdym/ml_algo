@@ -48,10 +48,10 @@ class CoordinateOptimizer implements LinearOptimizer {
 
   @override
   Matrix findExtrema({
-    Matrix initialWeights,
+    Matrix initialCoefficients,
     bool isMinimizingObjective = true,
   }) {
-    Matrix coefficients = initialWeights ??
+    Matrix coefficients = initialCoefficients ??
         Matrix.fromRows(List<Vector>.generate(_labels.columnsNum,
                 (int i) => _initialCoefficientsGenerator
                     .generate(_points.columnsNum)), dtype: _dtype);

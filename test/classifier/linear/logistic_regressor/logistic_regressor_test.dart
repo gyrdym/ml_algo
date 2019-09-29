@@ -33,6 +33,7 @@ void main() {
       [20],
       [30],
       [40],
+      [50],
     ]);
 
     LinkFunction linkFunctionMock;
@@ -74,6 +75,8 @@ void main() {
         lambda: 0.1,
         initialWeights: initialWeights,
         randomSeed: 123,
+        fitIntercept: true,
+        interceptScale: 2.0,
       );
     });
 
@@ -93,12 +96,13 @@ void main() {
       )).called(1);
     });
 
-    test('should call linear optimizer factory', () {
+    test('should call linear optimizer factory and consider intercept term '
+        'while calling the factory', () {
       verify(optimizerFactoryMock.createByType(
         LinearOptimizerType.vanillaGD,
         argThat(iterable2dAlmostEqualTo([
-          [10.1, 10.2, 12.0, 13.4],
-          [ 3.1, 5.2, 6.0, 77.4],
+          [2.0, 10.1, 10.2, 12.0, 13.4],
+          [2.0, 3.1, 5.2, 6.0, 77.4],
         ])),
         argThat(equals([
           [1.0],
@@ -118,12 +122,12 @@ void main() {
       )).called(1);
     });
 
-    test('should find extrema for fitting observations while '
+    test('should find the extrema for fitting observations while '
         'instantiating', () {
       verify(optimizerMock.findExtrema(
-          initialWeights: argThat(
+          initialCoefficients: argThat(
               equals(initialWeights),
-              named: 'initialWeights'
+              named: 'initialCoefficients'
           ),
             isMinimizingObjective: false
       )).called(1);
