@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 

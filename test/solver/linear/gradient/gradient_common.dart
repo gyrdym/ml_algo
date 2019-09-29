@@ -1,10 +1,10 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
-import 'package:ml_algo/src/solver/linear/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/solver/linear/gradient/gradient.dart';
-import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/solver/linear/linear_optimizer.dart';
+import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient/gradient.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';

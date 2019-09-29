@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';

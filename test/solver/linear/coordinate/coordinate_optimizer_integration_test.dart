@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/solver/linear/coordinate/coordinate.dart';
-import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/coordinate/coordinate.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_almost_equal_to.dart';
 import 'package:test/test.dart';

@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/solver/linear/gradient/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/solver/linear/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
 import 'package:ml_algo/src/regressor/gradient_regressor.dart';
 import 'package:ml_algo/src/utils/parameter_default_values.dart';
