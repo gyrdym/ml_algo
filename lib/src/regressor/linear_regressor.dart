@@ -1,10 +1,9 @@
-import 'package:ml_algo/src/helpers/features_target_split.dart';
-import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
-import 'package:ml_algo/src/regressor/coordinate_regressor.dart';
-import 'package:ml_algo/src/regressor/gradient_regressor.dart';
-import 'package:ml_algo/src/utils/parameter_default_values.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/regressor/linear_regressor_impl.dart';
+import 'package:ml_algo/src/regressor/squared_cost_optimizer_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -38,7 +37,7 @@ abstract class LinearRegressor implements Assessable {
   /// [initialLearningRate] A value, defining velocity of the convergence of the
   /// gradient descent solver.
   ///
-  /// [minWeightsUpdate] A minimum distance between weights vectors in two
+  /// [minCoefficientsUpdate] A minimum distance between weights vectors in two
   /// subsequent iterations. Uses as a condition of convergence in the solver.
   /// In other words, if difference is small, there is no reason to continue
   /// fitting. Default value is `1e-12`
@@ -66,103 +65,49 @@ abstract class LinearRegressor implements Assessable {
   /// [dtype] A data type for all the numeric values, used by the algorithm.
   /// Can affect performance or accuracy of the computations. Default value is
   /// [Float32x4]
-  factory LinearRegressor.gradient(DataFrame fittingData, String targetName, {
-    int iterationsLimit = ParameterDefaultValues.iterationsLimit,
+  factory LinearRegressor(DataFrame fittingData, String targetName, {
+    LinearOptimizerType optimizerType,
+    int iterationsLimit = 100,
     LearningRateType learningRateType = LearningRateType.constant,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    double initialLearningRate = ParameterDefaultValues.initialLearningRate,
-    double minWeightsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
+    InitialWeightsType initialCoefficientsType = InitialWeightsType.zeroes,
+    double initialLearningRate = 1e-3,
+    double minCoefficientsUpdate = 1e-12,
     double lambda,
     bool fitIntercept = false,
     double interceptScale = 1.0,
     int randomSeed,
     int batchSize = 1,
-    Matrix initialWeights,
-    DType dtype,
+    Matrix initialCoefficients,
+    bool isTrainDataNormalized = false,
+    DType dtype = DType.float32,
   }) {
-    final featuresTargetSplits = featuresTargetSplit(fittingData,
-        targetNames: [targetName]).toList();
-
-    return GradientRegressor(
-      featuresTargetSplits[0].toMatrix(),
-      featuresTargetSplits[1].toMatrix(),
+    final optimizer = createSquaredCostOptimizer(
+      fittingData,
+      targetName,
+      optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
-      learningRateType: learningRateType,
-      initialWeightsType: initialWeightsType,
       initialLearningRate: initialLearningRate,
-      minWeightsUpdate: minWeightsUpdate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
       randomSeed: randomSeed,
       batchSize: batchSize,
-      initialWeights: initialWeights,
-      dtype: dtype,
-    );
-  }
-
-  /// Creates a linear regressor with a coordinate descent solver with
-  /// possibility of using L1 regularization.
-  ///
-  /// L1 regularization allows to select more important features, making
-  /// coefficients of less important ones zeroes.
-  ///
-  /// Parameters:
-  ///
-  /// [fittingData] A [DataFrame] with observations, that will be used by the
-  /// regressor to learn coefficients of the predicting line
-  ///
-  /// [targetIndex] An index of the target column (a column, that contains
-  /// outcomes for the associated features)
-  ///
-  /// [targetName] A string, that serves as a name of the target column (a
-  /// column, that contains outcomes for the associated features)
-  ///
-  /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
-  /// convergence in the solver. Default value is `100`
-  ///
-  /// [minWeightsUpdate] A minimum distance between weights vectors in two
-  /// subsequent iterations. Uses as a condition of convergence in the solver.
-  /// In other words, if difference is small, there is no reason to continue
-  /// fitting. Default value is `1e-12`
-  ///
-  /// [lambda] A coefficient for regularization. For this particular regressor
-  /// there is only L1 regularization type.
-  ///
-  /// [fitIntercept] Whether or not to fit intercept term. Default value is
-  /// `false`.
-  ///
-  /// [interceptScale] A value, defining a size of the intercept term
-  ///
-  /// [dtype] A data type for all the numeric values, used by the algorithm.
-  /// Can affect performance or accuracy of the computations. Default value is
-  /// [Float32x4]
-  factory LinearRegressor.coordinate(DataFrame fittingData, String targetName, {
-    int iterationsLimit,
-    double minWeightsUpdate,
-    double lambda,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    DType dtype,
-    Matrix initialWeights,
-    bool isTrainDataNormalized = false,
-  }) {
-    final featuresTargetSplits = featuresTargetSplit(fittingData,
-        targetNames: [targetName]).toList();
-
-    return CoordinateRegressor(
-      featuresTargetSplits[0].toMatrix(),
-      featuresTargetSplits[1].toMatrix(),
-      iterationsLimit: iterationsLimit,
-      minWeightsUpdate: minWeightsUpdate,
-      lambda: lambda,
+      learningRateType: learningRateType,
+      initialCoefficientsType: initialCoefficientsType,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
-      initialWeightsType: initialWeightsType,
+      isFittingDataNormalized: isTrainDataNormalized,
       dtype: dtype,
-      initialWeights: initialWeights,
-      isTrainDataNormalized: isTrainDataNormalized,
+    );
+
+    final coefficients = optimizer.findExtrema(
+        initialCoefficients: initialCoefficients,
+        isMinimizingObjective: true,
+    ).getColumn(0);
+
+    return LinearRegressorImpl(
+      coefficients,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
     );
   }
 

@@ -127,11 +127,8 @@ void main() {
     test('should find the extrema for fitting observations while '
         'instantiating', () {
       verify(optimizerMock.findExtrema(
-          initialCoefficients: argThat(
-              equals(initialCoefficients),
-              named: 'initialCoefficients',
-          ),
-            isMinimizingObjective: false
+          initialCoefficients: initialCoefficients,
+          isMinimizingObjective: false,
       )).called(1);
     });
   });

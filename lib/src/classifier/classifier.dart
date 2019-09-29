@@ -4,7 +4,7 @@ import 'package:ml_linalg/matrix.dart';
 /// An interface for any classifier (linear, non-linear, parametric,
 /// non-parametric, etc.)
 abstract class Classifier extends Predictor {
-  /// A collection of encoded class labels
+  /// A collection of unique class labels
   Matrix get classLabels;
 
   /// Returns predicted distribution of probabilities for each observation in
