@@ -53,7 +53,7 @@ void main() {
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
 
       optimizerMock = LinearOptimizerMock();
-      optimizerFactoryMock = createOptimizerFactoryMock(optimizerMock);
+      optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
       injector = Injector()
         ..registerSingleton<LinkFunctionFactory>(
@@ -68,15 +68,16 @@ void main() {
         'col_4',
         dtype: DType.float32,
         learningRateType: LearningRateType.constant,
-        initialWeightsType: InitialWeightsType.zeroes,
-        iterationsLimit: 100,
+        initialCoefficientsType: InitialWeightsType.zeroes,
+        iterationsLimit: 1000,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         lambda: 0.1,
-        initialWeights: initialCoefficients,
+        initialCoefficients: initialCoefficients,
         randomSeed: 123,
         fitIntercept: true,
         interceptScale: 2.0,
+        isFittingDataNormalized: true,
       );
     });
 
@@ -116,11 +117,11 @@ void main() {
         initialWeightsType: InitialWeightsType.zeroes,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
-        iterationLimit: 100,
+        iterationLimit: 1000,
         lambda: 0.1,
         batchSize: 1,
         randomSeed: 123,
-        isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
+        isFittingDataNormalized: true,
       )).called(1);
     });
 
