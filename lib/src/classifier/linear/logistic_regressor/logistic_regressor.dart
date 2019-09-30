@@ -85,9 +85,10 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
+    bool isFittingDataNormalized = false,
     LearningRateType learningRateType = LearningRateType.constant,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
-    Matrix initialWeights,
+    InitialWeightsType initialCoefficientsType = InitialWeightsType.zeroes,
+    Matrix initialCoefficients,
     DType dtype = DType.float32,
   }) {
     final dependencies = getDependencies();
@@ -117,9 +118,10 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
       randomSeed: randomSeed,
       batchSize: batchSize,
       learningRateType: learningRateType,
-      initialWeightsType: initialWeightsType,
+      initialWeightsType: initialCoefficientsType,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
+      isFittingDataNormalized: isFittingDataNormalized,
       dtype: dtype,
     );
 
@@ -130,7 +132,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
       probabilityThreshold: probabilityThreshold,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
-      initialWeights: initialWeights,
+      initialWeights: initialCoefficients,
       dtype: dtype,
     );
   }

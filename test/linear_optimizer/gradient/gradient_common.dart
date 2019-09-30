@@ -11,7 +11,7 @@ import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../../test_utils/mocks.dart';
+import '../../test_utils/mocks.dart';
 
 Randomizer randomizerMock = RandomizerMock();
 LearningRateGenerator learningRateGeneratorMock;
@@ -57,11 +57,7 @@ GradientOptimizer createOptimizer(Matrix points, Matrix labels,
 
   return GradientOptimizer(
       points, labels,
-      randomizerFactory: randomizerFactoryMock,
       costFunction: costFunction,
-      learningRateGeneratorFactory: learningRateGeneratorFactoryMock,
-      initialWeightsGeneratorFactory: initialWeightsGeneratorFactoryMock,
-      convergenceDetectorFactory: convergenceDetectorFactoryMock,
       initialLearningRate: eta,
       minCoefficientsUpdate: minCoeffUpdate,
       iterationLimit: iterationsLimit,

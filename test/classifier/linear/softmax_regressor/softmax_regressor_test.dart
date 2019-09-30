@@ -73,7 +73,7 @@ void main() {
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
 
       optimizerMock = LinearOptimizerMock();
-      optimizerFactoryMock = createOptimizerFactoryMock(optimizerMock);
+      optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
       injector = Injector()
         ..registerSingleton<LinkFunctionFactory>((_) => linkFunctionFactoryMock)

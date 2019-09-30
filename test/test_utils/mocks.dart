@@ -141,7 +141,8 @@ CostFunctionFactory createCostFunctionFactoryMock(
   return costFunctionFactory;
 }
 
-LinearOptimizerFactory createOptimizerFactoryMock(LinearOptimizer optimizer) {
+LinearOptimizerFactory createLinearOptimizerFactoryMock(
+    LinearOptimizer optimizer) {
   final factory = LinearOptimizerFactoryMock();
 
   when(factory.createByType(
