@@ -4,7 +4,7 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -102,7 +102,7 @@ void main() {
         optimizerType: LinearOptimizerType.vanillaGD,
         dtype: DType.float32,
         learningRateType: LearningRateType.constant,
-        initialWeightsType: InitialWeightsType.zeroes,
+        initialWeightsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 100,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
@@ -155,7 +155,7 @@ void main() {
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.constant,
-        initialWeightsType: InitialWeightsType.zeroes,
+        initialWeightsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,

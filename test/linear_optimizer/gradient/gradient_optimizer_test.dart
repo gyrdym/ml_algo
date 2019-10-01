@@ -6,8 +6,8 @@ import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_de
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/gradient_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
@@ -28,8 +28,8 @@ void main() {
     LearningRateGenerator learningRateGeneratorMock;
     LearningRateGeneratorFactory learningRateGeneratorFactoryMock;
 
-    InitialWeightsGenerator initialWeightsGeneratorMock;
-    InitialWeightsGeneratorFactory initialWeightsGeneratorFactoryMock;
+    InitialCoefficientsGenerator initialWeightsGeneratorMock;
+    InitialCoefficientsGeneratorFactory initialWeightsGeneratorFactoryMock;
 
     ConvergenceDetector convergenceDetectorMock;
     ConvergenceDetectorFactory convergenceDetectorFactoryMock;
@@ -53,7 +53,7 @@ void main() {
       injector = Injector()
         ..registerDependency<LearningRateGeneratorFactory>(
                 (_) => learningRateGeneratorFactoryMock)
-        ..registerDependency<InitialWeightsGeneratorFactory>(
+        ..registerDependency<InitialCoefficientsGeneratorFactory>(
                 (_) => initialWeightsGeneratorFactoryMock)
         ..registerDependency<ConvergenceDetectorFactory>(
                 (_) => convergenceDetectorFactoryMock)
@@ -424,7 +424,7 @@ LearningRateGenerator createLearningRateGenerator() {
   return mock;
 }
 
-InitialWeightsGenerator createInitialWeightsGenerator() {
+InitialCoefficientsGenerator createInitialWeightsGenerator() {
   final mock = InitialWeightsGeneratorMock();
   when(mock.generate(3)).thenReturn(Vector.fromList([0.0, 0.0, 0.0]));
   return mock;
