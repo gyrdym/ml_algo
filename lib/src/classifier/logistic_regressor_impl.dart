@@ -16,7 +16,6 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   LogisticRegressorImpl(
       LinearOptimizer _optimizer,
       this._className,
-      this.classLabels,
       this.linkFunction, {
     bool fitIntercept = false,
     double interceptScale = 1.0,
@@ -35,9 +34,6 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   final Matrix coefficientsByClasses;
 
   final String _className;
-
-  @override
-  final Matrix classLabels;
 
   @override
   final bool fitIntercept;
