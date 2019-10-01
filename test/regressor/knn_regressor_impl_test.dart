@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/algorithms/knn/neigbour.dart';
-import 'package:ml_algo/src/regressor/knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -9,7 +9,7 @@ void main() {
   final fakeKNeighbours = <Iterable<Neighbour<Vector>>>[[
     Neighbour(1.0, Vector.fromList([1.0]))]];
 
-  group('KNNRegressor', () {
+  group('KnnRegressorImpl', () {
     test('should consider k parameter', () {
       final solverFn = (int k, Matrix trainObservations, Matrix outcomes,
           Matrix observations, {Distance distance}) {
@@ -17,7 +17,7 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressorImpl(
+      KnnRegressorImpl(
           Matrix.fromList([[1.0]]),
           Matrix.fromList([[1.0]]),
           'class_name',
@@ -37,7 +37,7 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressorImpl(
+      KnnRegressorImpl(
           Matrix.fromList([
             [1.0, 2.0, 3.0],
             [4.0, 5.0, 6.0],
@@ -63,7 +63,7 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressorImpl(
+      KnnRegressorImpl(
           Matrix.fromList([
             [1.0, 2.0, 3.0],
             [4.0, 5.0, 6.0],
@@ -86,7 +86,7 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressorImpl(
+      KnnRegressorImpl(
           Matrix.fromList([
             [1.0, 2.0, 3.0],
             [4.0, 5.0, 6.0],
@@ -109,7 +109,7 @@ void main() {
         return fakeKNeighbours;
       };
 
-      KNNRegressorImpl(
+      KnnRegressorImpl(
           Matrix.fromList([[1.0]]),
           Matrix.fromList([[1.0]]),
           'class_name',
@@ -124,7 +124,7 @@ void main() {
       final solverFn = (int k, Matrix trainObservations, Matrix outcomes,
           Matrix observations, {Distance distance}) => fakeKNeighbours;
       expect(
-        () => KNNRegressorImpl(
+        () => KnnRegressorImpl(
           Matrix.fromList([[1.0, 2,0]]),
           Matrix.fromList([
             [1.0],
@@ -144,7 +144,7 @@ void main() {
       final solverFn = (int k, Matrix trainObservations, Matrix outcomes,
           Matrix observations, {Distance distance}) => fakeKNeighbours;
       expect(
-            () => KNNRegressorImpl(
+            () => KnnRegressorImpl(
                 Matrix.fromList([[1.0, 2,0]]),
                 Matrix.fromList([[1.0]]),
                 'class_name',

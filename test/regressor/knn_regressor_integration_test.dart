@@ -4,7 +4,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('KNNRegressor (integration)', () {
+  group('KnnRegressor', () {
     test('should predict values using uniform kernel', () {
       final k = 2;
       final data = DataFrame(<Iterable<num>>[
@@ -21,7 +21,7 @@ void main() {
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
 
-      final regressor = ParameterlessRegressor.knn(data, 'target', k: k);
+      final regressor = KnnRegressor(data, 'target', k: k);
 
       final actual = regressor.predict(testFeatures);
 
@@ -46,7 +46,7 @@ void main() {
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
 
-      final regressor = ParameterlessRegressor.knn(data, 'target',
+      final regressor = KnnRegressor(data, 'target',
         k: k,
         kernel: Kernel.epanechnikov,
       );

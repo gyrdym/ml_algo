@@ -1,80 +1,43 @@
-import 'package:ml_algo/src/algorithms/knn/kernel.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory_impl.dart';
 import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
-import 'package:ml_algo/src/algorithms/knn/knn.dart';
-import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
-import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/helpers/features_target_split.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
-class KNNRegressorImpl with AssessablePredictorMixin
-    implements ParameterlessRegressor {
+/// A factory for all the non parametric family of Machine Learning algorithms
+abstract class KnnRegressor implements Assessable, Predictor {
+  /// Creates an instance of KNN regressor
+  ///
+  /// KNN here means "K nearest neighbor"
+  ///
+  /// [k] a number of nearest neighbours
+  ///
+  /// [kernel] a type of kernel function, that will be used to find an outcome
+  /// for a new observation
+  ///
+  /// [distance] a distance type, that will be used to measure a distance
+  /// between two observation vectors
+  factory KnnRegressor(DataFrame fittingData, String targetName, {
+    int k,
+    Kernel kernel = Kernel.uniform,
+    Distance distance = Distance.euclidean,
+    DType dtype = DType.float32,
+  }) {
+    final featuresTargetSplits = featuresTargetSplit(fittingData,
+      targetNames: [targetName],
+    ).toList();
 
-  KNNRegressorImpl(
-      this._trainingFeatures,
-      this._trainingOutcomes,
-      this._targetName, {
-        int k,
-        Distance distance = Distance.euclidean,
-        FindKnnFn solverFn = findKNeighbours,
-        Kernel kernel = Kernel.uniform,
-        DType dtype = DType.float32,
-
-        KernelFunctionFactory kernelFnFactory =
-          const KernelFunctionFactoryImpl(),
-      }) :
-        _k = k,
-        _distanceType = distance,
-        _solverFn = solverFn,
-        _dtype = dtype,
-        _kernelFn = kernelFnFactory.createByType(kernel) {
-    if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
-      throw Exception('Number of observations and number of outcomes have to be'
-          'equal');
-    }
-    if (_k > _trainingFeatures.rowsNum) {
-      throw Exception('Parameter k should be less than or equal to the number '
-          'of training observations');
-    }
-  }
-
-  final Matrix _trainingFeatures;
-  final Matrix _trainingOutcomes;
-  final String _targetName;
-  final Distance _distanceType;
-  final int _k;
-  final FindKnnFn _solverFn;
-  final KernelFn _kernelFn;
-  final DType _dtype;
-
-  Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(
-      _trainingOutcomes.columnsNum, dtype: _dtype);
-  Vector _cachedZeroVector;
-
-  @override
-  DataFrame predict(Matrix observations) {
-    final prediction = Matrix.fromRows(
-        _generateOutcomes(observations)
-            .toList(growable: false),
-        dtype: _dtype,
+    return KnnRegressorImpl(
+      featuresTargetSplits[0].toMatrix(),
+      featuresTargetSplits[1].toMatrix(),
+      targetName,
+      k: k,
+      kernel: kernel,
+      distance: distance,
+      dtype: dtype,
     );
-
-    return DataFrame.fromMatrix(
-      prediction,
-      header: [_targetName],
-    );
-  }
-
-  Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
-    for (final kNeighbours in _solverFn(_k, _trainingFeatures, _trainingOutcomes,
-        observations, distance: _distanceType)) {
-      yield kNeighbours
-          .fold<Vector>(_zeroVector,
-              (sum, pair) => sum + pair.label * _kernelFn(pair.distance)) / _k;
-    }
   }
 }
