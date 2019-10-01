@@ -23,8 +23,6 @@ import '../../../mocks.dart';
 
 void main() {
   group('LogisticRegressor', () {
-    tearDownAll(() => injector.clearAll());
-
     final observations = DataFrame([
       <num>[10.1, 10.2, 12.0, 13.4, 1],
       <num>[ 3.1,  5.2,  6.0, 77.4, 0],
@@ -83,7 +81,7 @@ void main() {
       );
     });
 
-    tearDown(() => injector.clearAll());
+    tearDownAll(() => injector = null);
 
     test('should call link function factory twice in order to create inverse '
         'logit link function', () {

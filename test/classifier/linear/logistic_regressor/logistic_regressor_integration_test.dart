@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('Logistic regressor', () {
-    tearDownAll(() => injector.clearAll());
+    tearDownAll(() => injector = null);
 
     test('should extract class labels from the data', () {
       final samples = DataFrame(<Iterable<num>>[
