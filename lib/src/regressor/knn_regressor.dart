@@ -5,7 +5,6 @@ import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
-import 'package:ml_algo/src/utils/parameter_default_values.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -19,7 +18,7 @@ class KNNRegressor with AssessablePredictorMixin
     Distance distance = Distance.euclidean,
     FindKnnFn solverFn = findKNeighbours,
     Kernel kernel = Kernel.uniform,
-    DType dtype = ParameterDefaultValues.dtype,
+    DType dtype = DType.float32,
 
     KernelFunctionFactory kernelFnFactory = const KernelFunctionFactoryImpl(),
   }) :

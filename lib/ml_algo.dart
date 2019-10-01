@@ -1,10 +1,10 @@
 export 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 export 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor.dart';
 export 'package:ml_algo/src/classifier/linear/softmax_regressor/softmax_regressor.dart';
+export 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 export 'package:ml_algo/src/metric/classification/type.dart';
 export 'package:ml_algo/src/metric/metric_type.dart';
 export 'package:ml_algo/src/metric/regression/type.dart';
 export 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 export 'package:ml_algo/src/regressor/linear_regressor.dart';
 export 'package:ml_algo/src/regressor/parameterless_regressor.dart';
-export 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
