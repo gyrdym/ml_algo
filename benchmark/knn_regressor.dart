@@ -1,7 +1,7 @@
 // 5.7 sec
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/regressor/knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -15,7 +15,7 @@ class KnnRegressorBenchmark extends BenchmarkBase {
   Matrix testFeatures;
   Matrix labels;
   Matrix testLabels;
-  ParameterlessRegressor regressor;
+  KnnRegressor regressor;
 
 
   static void main() {
@@ -37,7 +37,7 @@ class KnnRegressorBenchmark extends BenchmarkBase {
             (i) => Vector.randomFilled(featuresNum)));
     testLabels = Matrix.fromColumns([Vector.randomFilled(observationsNum)]);
 
-    regressor = KNNRegressorImpl(features, labels, k: 7);
+    regressor = KnnRegressorImpl(features, labels, k: 7);
   }
 
   void tearDown() {}

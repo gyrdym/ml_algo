@@ -7,4 +7,4 @@ export 'package:ml_algo/src/metric/metric_type.dart';
 export 'package:ml_algo/src/metric/regression/type.dart';
 export 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 export 'package:ml_algo/src/regressor/linear_regressor.dart';
-export 'package:ml_algo/src/regressor/parameterless_regressor.dart';
+export 'package:ml_algo/src/regressor/knn_regressor.dart';
