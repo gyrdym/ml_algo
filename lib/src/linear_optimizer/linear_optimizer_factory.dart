@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -14,7 +14,7 @@ abstract class LinearOptimizerFactory {
         DType dtype,
         CostFunction costFunction,
         LearningRateType learningRateType,
-        InitialWeightsType initialWeightsType,
+        InitialCoefficientsType initialWeightsType,
         double initialLearningRate,
         double minCoefficientsUpdate,
         int iterationLimit,

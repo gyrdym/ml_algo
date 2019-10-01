@@ -4,7 +4,7 @@ import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -26,7 +26,7 @@ LinearOptimizer createSquaredCostOptimizer(
       double interceptScale,
       bool isFittingDataNormalized,
       LearningRateType learningRateType,
-      InitialWeightsType initialCoefficientsType,
+      InitialCoefficientsType initialCoefficientsType,
       Matrix initialCoefficients,
       DType dtype,
     }) {

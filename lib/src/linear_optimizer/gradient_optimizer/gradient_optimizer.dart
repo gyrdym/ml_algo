@@ -5,9 +5,9 @@ import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_de
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
@@ -20,7 +20,7 @@ class GradientOptimizer implements LinearOptimizer {
     DType dtype = DType.float32,
     CostFunction costFunction,
     LearningRateType learningRateType = LearningRateType.decreasing,
-    InitialWeightsType initialCoefficientsType = InitialWeightsType.zeroes,
+    InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     int iterationLimit = 100,
@@ -35,7 +35,7 @@ class GradientOptimizer implements LinearOptimizer {
         _costFunction = costFunction,
 
         _initialWeightsGenerator = getDependencies()
-            .getDependency<InitialWeightsGeneratorFactory>()
+            .getDependency<InitialCoefficientsGeneratorFactory>()
             .fromType(initialCoefficientsType, dtype),
 
         _learningRateGenerator = getDependencies()
@@ -61,7 +61,7 @@ class GradientOptimizer implements LinearOptimizer {
   final Randomizer _randomizer;
   final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
-  final InitialWeightsGenerator _initialWeightsGenerator;
+  final InitialCoefficientsGenerator _initialWeightsGenerator;
   final ConvergenceDetector _convergenceDetector;
 
   final double _lambda;

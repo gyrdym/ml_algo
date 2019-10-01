@@ -4,7 +4,7 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -76,7 +76,7 @@ void main() {
         fitIntercept: true,
         interceptScale: 3.0,
         learningRateType: LearningRateType.decreasing,
-        initialCoefficientsType: InitialWeightsType.zeroes,
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialCoefficients: initialCoefficients,
         dtype: DType.float64,
       );
@@ -106,7 +106,7 @@ void main() {
         dtype: DType.float64,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.decreasing,
-        initialWeightsType: InitialWeightsType.zeroes,
+        initialWeightsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 5,
         minCoefficientsUpdate: 1000,
         iterationLimit: 1000,

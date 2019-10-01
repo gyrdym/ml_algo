@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/regressor/linear_regressor_impl.dart';
@@ -69,7 +69,7 @@ abstract class LinearRegressor implements Assessable {
     LinearOptimizerType optimizerType,
     int iterationsLimit = 100,
     LearningRateType learningRateType = LearningRateType.constant,
-    InitialWeightsType initialCoefficientsType = InitialWeightsType.zeroes,
+    InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     double lambda,

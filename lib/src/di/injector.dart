@@ -5,8 +5,8 @@ import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_de
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory_impl.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory_impl.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory_impl.dart';
 import 'package:ml_algo/src/link_function/link_function_factory.dart';
@@ -27,8 +27,8 @@ Injector getDependencies() =>
           ..registerSingleton<LearningRateGeneratorFactory>(
                   (_) => const LearningRateGeneratorFactoryImpl())
 
-          ..registerSingleton<InitialWeightsGeneratorFactory>(
-                  (_) => const InitialWeightsGeneratorFactoryImpl())
+          ..registerSingleton<InitialCoefficientsGeneratorFactory>(
+                  (_) => const InitialCoefficientsGeneratorFactoryImpl())
 
           ..registerDependency<ConvergenceDetectorFactory>(
                   (_) => const ConvergenceDetectorFactoryImpl())

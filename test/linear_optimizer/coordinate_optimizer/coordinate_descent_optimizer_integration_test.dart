@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/cost_function/squared.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_almost_equal_to.dart';
 import 'package:test/test.dart';
@@ -35,7 +35,7 @@ void main() {
       ]);
       optimizer = CoordinateDescentOptimizer(
           data, labels,
-          initialWeightsType: InitialWeightsType.zeroes,
+          initialWeightsType: InitialCoefficientsType.zeroes,
           costFunction: const SquaredCost(),
           minCoefficientsUpdate: 1e-5,
           iterationsLimit: iterationsNumber,
@@ -80,7 +80,7 @@ void main() {
         isFittingDataNormalized: true,
         minCoefficientsUpdate: 1e-5,
         iterationsLimit: iterationsNumber,
-        initialWeightsType: InitialWeightsType.zeroes,
+        initialWeightsType: InitialCoefficientsType.zeroes,
         lambda: lambda,
       );
     });

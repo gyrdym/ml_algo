@@ -2,9 +2,9 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -16,7 +16,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
     double minCoefficientsUpdate = 1e-12,
     int iterationsLimit = 100,
     double lambda,
-    InitialWeightsType initialWeightsType = InitialWeightsType.zeroes,
+    InitialCoefficientsType initialWeightsType = InitialCoefficientsType.zeroes,
     bool isFittingDataNormalized = false,
   })  : _dtype = dtype,
         _points = fittingPoints,
@@ -24,7 +24,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
         _lambda = lambda ?? 0.0,
 
         _initialCoefficientsGenerator = getDependencies()
-            .getDependency<InitialWeightsGeneratorFactory>()
+            .getDependency<InitialCoefficientsGeneratorFactory>()
             .fromType(initialWeightsType, dtype),
 
         _convergenceDetector = getDependencies()
@@ -39,7 +39,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
 
   final Matrix _points;
   final Matrix _labels;
-  final InitialWeightsGenerator _initialCoefficientsGenerator;
+  final InitialCoefficientsGenerator _initialCoefficientsGenerator;
   final ConvergenceDetector _convergenceDetector;
   final CostFunction _costFn;
   final DType _dtype;

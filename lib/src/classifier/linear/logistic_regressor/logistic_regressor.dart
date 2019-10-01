@@ -4,7 +4,7 @@ import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regres
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
@@ -87,7 +87,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     double interceptScale = 1.0,
     bool isFittingDataNormalized = false,
     LearningRateType learningRateType = LearningRateType.constant,
-    InitialWeightsType initialCoefficientsType = InitialWeightsType.zeroes,
+    InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
     Matrix initialCoefficients,
     DType dtype = DType.float32,
   }) {

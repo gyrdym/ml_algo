@@ -14,8 +14,8 @@ import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_de
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -42,10 +42,10 @@ class LearningRateGeneratorMock extends Mock implements
     LearningRateGenerator {}
 
 class InitialWeightsGeneratorFactoryMock extends Mock
-    implements InitialWeightsGeneratorFactory {}
+    implements InitialCoefficientsGeneratorFactory {}
 
 class InitialWeightsGeneratorMock extends Mock
-    implements InitialWeightsGenerator {}
+    implements InitialCoefficientsGenerator {}
 
 class LinkFunctionMock extends Mock implements LinkFunction {}
 
@@ -101,8 +101,8 @@ RandomizerFactory createRandomizerFactoryMock(Randomizer randomizer) {
   return factory;
 }
 
-InitialWeightsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
-    InitialWeightsGenerator generator) {
+InitialCoefficientsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
+    InitialCoefficientsGenerator generator) {
   final factory = InitialWeightsGeneratorFactoryMock();
   when(factory.fromType(any, any)).thenReturn(generator);
   return factory;
