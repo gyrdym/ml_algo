@@ -54,9 +54,9 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
   Vector _cachedZeroVector;
 
   @override
-  DataFrame predict(Matrix observations) {
+  DataFrame predict(DataFrame observations) {
     final prediction = Matrix.fromRows(
-        _generateOutcomes(observations)
+        _generateOutcomes(observations.toMatrix())
             .toList(growable: false),
         dtype: _dtype,
     );
@@ -67,12 +67,14 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
     );
   }
 
-  Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
-    for (final kNeighbours in _solverFn(_k, _trainingFeatures, _trainingOutcomes,
-        observations, distance: _distanceType)) {
-      yield kNeighbours
-          .fold<Vector>(_zeroVector,
-              (sum, pair) => sum + pair.label * _kernelFn(pair.distance)) / _k;
-    }
-  }
+  Iterable<Vector> _generateOutcomes(Matrix observations) =>
+    _solverFn(
+        _k,
+        _trainingFeatures,
+        _trainingOutcomes,
+        observations,
+        distance: _distanceType,
+    ).map((kNeighbours) => kNeighbours
+        .fold<Vector>(_zeroVector,
+            (sum, pair) => sum + pair.label * _kernelFn(pair.distance)) / _k);
 }

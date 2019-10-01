@@ -32,10 +32,10 @@ class LinearRegressorImpl with AssessablePredictorMixin
   final DType dtype;
 
   @override
-  DataFrame predict(Matrix dataFrame) {
+  DataFrame predict(DataFrame features) {
     final prediction = addInterceptIf(
       fitIntercept,
-      dataFrame,
+      features.toMatrix(),
       interceptScale,
     ) * coefficients;
 

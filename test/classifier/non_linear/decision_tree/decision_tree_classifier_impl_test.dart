@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
@@ -34,7 +35,9 @@ void main() {
       });
 
       final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
-      final predictedClasses = classifier.predict(features);
+      final predictedClasses = classifier.predict(
+        DataFrame.fromMatrix(features),
+      );
 
       expect(predictedClasses.header, equals(['class_name']));
 
@@ -49,7 +52,7 @@ void main() {
         'empty', () {
       final solverMock = DecisionTreeSolverMock();
       final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
-      final predictedClasses = classifier.predict(Matrix.fromRows([]));
+      final predictedClasses = classifier.predict(DataFrame([<num>[]]));
 
       expect(predictedClasses.header, isEmpty);
       expect(predictedClasses.toMatrix(), isEmpty);

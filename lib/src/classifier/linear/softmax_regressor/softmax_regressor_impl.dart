@@ -52,10 +52,10 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   final LinkFunction linkFunction;
 
   @override
-  DataFrame predict(Matrix features) {
+  DataFrame predict(DataFrame features) {
     final processedFeatures = addInterceptIf(
       fitIntercept,
-      features,
+      features.toMatrix(),
       interceptScale,
     );
 

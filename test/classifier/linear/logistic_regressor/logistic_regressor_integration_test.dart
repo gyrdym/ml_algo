@@ -85,7 +85,9 @@ void main() {
         [2.0, 4.0, 1.0],
       ]);
       final probabilities = classifier.predictProbabilities(newFeatures);
-      final classes = classifier.predict(newFeatures);
+      final classes = classifier.predict(
+        DataFrame.fromMatrix(newFeatures),
+      );
 
       expect(probabilities, equals([[0.01798621006309986]]));
       expect(classes.header, equals(['col_3']));

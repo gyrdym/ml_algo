@@ -193,7 +193,9 @@ void main() {
         ...features.columns,
       ]);
 
-      final classes = classifier.predict(features);
+      final classes = classifier.predict(
+        DataFrame.fromMatrix(features),
+      );
       
       expect(classes.header, equals(['target_1', 'target_2', 'target_3']));
 
