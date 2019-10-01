@@ -88,7 +88,8 @@ void main() {
       final classes = classifier.predict(newFeatures);
 
       expect(probabilities, equals([[0.01798621006309986]]));
-      expect(classes, equals([[0.0]]));
+      expect(classes.header, equals(['col_3']));
+      expect(classes.toMatrix(), equals([[0.0]]));
     });
 
     test('should evaluate prediction quality, accuracy = 0', () {

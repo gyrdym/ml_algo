@@ -17,6 +17,6 @@ mixin AssessablePredictorMixin implements Assessable, Predictor {
     final prediction = predict(splits[0].toMatrix());
     final origLabels = splits[1].toMatrix();
 
-    return metric.getScore(prediction, origLabels);
+    return metric.getScore(prediction.toMatrix(), origLabels);
   }
 }

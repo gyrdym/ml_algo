@@ -5,6 +5,7 @@ import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -14,6 +15,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
 
   LogisticRegressorImpl(
       LinearOptimizer _optimizer,
+      this._className,
       this.classLabels,
       this.linkFunction, {
     bool fitIntercept = false,
@@ -32,6 +34,8 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   @override
   final Matrix coefficientsByClasses;
 
+  final String _className;
+
   @override
   final Matrix classLabels;
 
@@ -49,15 +53,30 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   final LinkFunction linkFunction;
 
   @override
-  Matrix predict(Matrix features) {
-    final processedFeatures = addInterceptIf(fitIntercept, features,
-        interceptScale);
-    final classesSource = getProbabilities(processedFeatures,
-        coefficientsByClasses, linkFunction)
-        .getColumn(0)
-        // TODO: use SIMD
-        .map((value) => value >= probabilityThreshold ? 1.0 : 0.0)
-        .toList(growable: false);
-    return Matrix.fromColumns([Vector.fromList(classesSource)]);
+  DataFrame predict(Matrix features) {
+    final processedFeatures = addInterceptIf(
+      fitIntercept,
+      features,
+      interceptScale,
+    );
+
+    final classesList = getProbabilities(
+      processedFeatures,
+      coefficientsByClasses,
+      linkFunction,
+    )
+    .getColumn(0)
+    // TODO: use SIMD
+    .map((value) => value >= probabilityThreshold ? 1 : 0)
+    .toList(growable: false);
+
+    final classesMatrix = Matrix.fromColumns([
+      Vector.fromList(classesList),
+    ]);
+
+    return DataFrame.fromMatrix(
+      classesMatrix,
+      header: [_className],
+    );
   }
 }

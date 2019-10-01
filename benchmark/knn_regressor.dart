@@ -37,7 +37,7 @@ class KnnRegressorBenchmark extends BenchmarkBase {
             (i) => Vector.randomFilled(featuresNum)));
     testLabels = Matrix.fromColumns([Vector.randomFilled(observationsNum)]);
 
-    regressor = KNNRegressor(features, labels, k: 7);
+    regressor = KNNRegressorImpl(features, labels, k: 7);
   }
 
   void tearDown() {}

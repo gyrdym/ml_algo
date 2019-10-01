@@ -194,8 +194,10 @@ void main() {
       ]);
 
       final classes = classifier.predict(features);
+      
+      expect(classes.header, equals(['target_1', 'target_2', 'target_3']));
 
-      expect(classes, equals([
+      expect(classes.toMatrix(), equals([
         [0, 1, 0],
         [0, 0, 1],
         [1, 0, 0],

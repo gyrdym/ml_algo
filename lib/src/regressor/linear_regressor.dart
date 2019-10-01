@@ -106,6 +106,7 @@ abstract class LinearRegressor implements Assessable {
 
     return LinearRegressorImpl(
       coefficients,
+      targetName,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
     );

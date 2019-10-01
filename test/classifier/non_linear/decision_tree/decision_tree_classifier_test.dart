@@ -34,7 +34,10 @@ void main() {
       });
 
       test('should predict class labels', () {
-        expect(classifier.predict(featuresForPrediction),
+        final prediction = classifier.predict(featuresForPrediction);
+
+        expect(prediction.header, equals(['col_8']));
+        expect(prediction.toMatrix(),
             equals([
               [0],
               [2],

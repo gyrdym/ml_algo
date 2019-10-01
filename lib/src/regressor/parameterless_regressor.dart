@@ -30,9 +30,10 @@ abstract class ParameterlessRegressor implements Assessable, Predictor {
       targetNames: [targetName],
     ).toList();
 
-    return KNNRegressor(
+    return KNNRegressorImpl(
       featuresTargetSplits[0].toMatrix(),
       featuresTargetSplits[1].toMatrix(),
+      targetName,
       k: k,
       kernel: kernel,
       distance: distance,

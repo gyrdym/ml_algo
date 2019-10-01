@@ -127,6 +127,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
 
     return LogisticRegressorImpl(
       optimizer,
+      targetName,
       labels.uniqueRows(),
       linkFunction,
       probabilityThreshold: probabilityThreshold,
