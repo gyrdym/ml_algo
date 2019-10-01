@@ -9,8 +9,8 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class CoordinateOptimizer implements LinearOptimizer {
-  CoordinateOptimizer(Matrix fittingPoints, Matrix fittingLabels, {
+class CoordinateDescentOptimizer implements LinearOptimizer {
+  CoordinateDescentOptimizer(Matrix fittingPoints, Matrix fittingLabels, {
     DType dtype = DType.float32,
     CostFunction costFunction,
     double minCoefficientsUpdate = 1e-12,

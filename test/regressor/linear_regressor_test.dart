@@ -82,7 +82,7 @@ void main() {
       );
     });
 
-    tearDown(() => injector.clearAll());
+    tearDownAll(() => injector = null);
 
     test('should call cost function factory in order to create '
         'squared cost function', () {

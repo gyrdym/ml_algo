@@ -12,12 +12,10 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/num
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart' as decision_tree_splitter;
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -91,7 +89,7 @@ class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
 class DecisionTreeSolverMock extends Mock implements DecisionTreeSolver {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
-LearningRateGenerator generator) {
+    LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
   when(factory.fromType(any)).thenReturn(generator);
   return factory;

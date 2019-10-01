@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/linear_optimizer/coordinate/coordinate.dart';
+import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_almost_equal_to.dart';
@@ -20,7 +21,7 @@ void main() {
     final point3 = [70.0, 80.0, 90.0];
     final point4 = [20.0, 30.0, 10.0];
 
-    CoordinateOptimizer optimizer;
+    CoordinateDescentOptimizer optimizer;
     Matrix data;
     Matrix labels;
 
@@ -32,7 +33,7 @@ void main() {
         [20.0],
         [40.0]
       ]);
-      optimizer = CoordinateOptimizer(
+      optimizer = CoordinateDescentOptimizer(
           data, labels,
           initialWeightsType: InitialWeightsType.zeroes,
           costFunction: const SquaredCost(),
@@ -40,6 +41,8 @@ void main() {
           iterationsLimit: iterationsNumber,
           lambda: lambda);
     });
+
+    tearDownAll(() => injector = null);
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(unregularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal coefficients for the given data', () {
@@ -59,7 +62,7 @@ void main() {
     final point2 = [20.0, 30.0, 40.0];
     final point3 = [70.0, 80.0, 90.0];
 
-    CoordinateOptimizer optimizer;
+    CoordinateDescentOptimizer optimizer;
     Matrix data;
     Matrix labels;
 
@@ -70,7 +73,7 @@ void main() {
         [3.0],
         [2.0],
       ]);
-      optimizer = CoordinateOptimizer(
+      optimizer = CoordinateDescentOptimizer(
         data,
         labels,
         costFunction: const SquaredCost(),
