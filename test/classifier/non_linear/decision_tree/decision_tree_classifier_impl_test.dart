@@ -33,10 +33,12 @@ void main() {
         sample3: DecisionTreeLeafLabel(label3),
       });
 
-      final classifier = DecisionTreeClassifierImpl(solverMock);
-      final predictedLabels = classifier.predict(features);
+      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
+      final predictedClasses = classifier.predict(features);
 
-      expect(predictedLabels, equals([
+      expect(predictedClasses.header, equals(['class_name']));
+
+      expect(predictedClasses.toMatrix(), equals([
         [label1],
         [label2],
         [label3],
@@ -46,10 +48,11 @@ void main() {
     test('should return an empty matrix if input features matrix is '
         'empty', () {
       final solverMock = DecisionTreeSolverMock();
-      final classifier = DecisionTreeClassifierImpl(solverMock);
-      final predictedLabels = classifier.predict(Matrix.fromRows([]));
+      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
+      final predictedClasses = classifier.predict(Matrix.fromRows([]));
 
-      expect(predictedLabels, isEmpty);
+      expect(predictedClasses.header, isEmpty);
+      expect(predictedClasses.toMatrix(), isEmpty);
     });
 
     test('should call appropriate method from `solver` when making '
@@ -74,7 +77,7 @@ void main() {
         sample3: label3,
       });
 
-      final classifier = DecisionTreeClassifierImpl(solverMock);
+      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
       final predictedLabels = classifier.predictProbabilities(features);
 
       expect(

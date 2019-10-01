@@ -134,6 +134,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
 
         return SoftmaxRegressorImpl(
               optimizer,
+              targetNames,
               labels.uniqueRows(),
               linkFunction,
               batchSize: batchSize,

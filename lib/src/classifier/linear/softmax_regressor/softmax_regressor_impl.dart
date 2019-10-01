@@ -5,6 +5,7 @@ import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -14,6 +15,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
   SoftmaxRegressorImpl(
       LinearOptimizer optimizer,
+      this._classNames,
       this.classLabels,
       this.linkFunction, {
         int batchSize = 1,
@@ -28,6 +30,9 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
           initialCoefficients: initialWeights,
           isMinimizingObjective: false,
         );
+
+  @override
+  final Iterable<String> _classNames;
 
   @override
   final bool fitIntercept;
@@ -47,14 +52,14 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   final LinkFunction linkFunction;
 
   @override
-  Matrix predict(Matrix features) {
+  DataFrame predict(Matrix features) {
     final processedFeatures = addInterceptIf(
       fitIntercept,
       features,
       interceptScale,
     );
 
-    final probabilities = getProbabilities(
+    final classes = getProbabilities(
         processedFeatures,
         coefficientsByClasses,
         linkFunction
@@ -69,6 +74,9 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
       return Vector.fromList(allZeroes, dtype: dtype);
     });
 
-    return probabilities;
+    return DataFrame.fromMatrix(
+      classes,
+      header: _classNames,
+    );
   }
 }

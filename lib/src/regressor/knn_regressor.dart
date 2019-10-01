@@ -5,23 +5,28 @@ import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/algorithms/knn/knn.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KNNRegressor with AssessablePredictorMixin
+class KNNRegressorImpl with AssessablePredictorMixin
     implements ParameterlessRegressor {
 
-  KNNRegressor(this._trainingFeatures, this._trainingOutcomes, {
-    int k,
-    Distance distance = Distance.euclidean,
-    FindKnnFn solverFn = findKNeighbours,
-    Kernel kernel = Kernel.uniform,
-    DType dtype = DType.float32,
+  KNNRegressorImpl(
+      this._trainingFeatures,
+      this._trainingOutcomes,
+      this._targetName, {
+        int k,
+        Distance distance = Distance.euclidean,
+        FindKnnFn solverFn = findKNeighbours,
+        Kernel kernel = Kernel.uniform,
+        DType dtype = DType.float32,
 
-    KernelFunctionFactory kernelFnFactory = const KernelFunctionFactoryImpl(),
-  }) :
+        KernelFunctionFactory kernelFnFactory =
+          const KernelFunctionFactoryImpl(),
+      }) :
         _k = k,
         _distanceType = distance,
         _solverFn = solverFn,
@@ -39,6 +44,7 @@ class KNNRegressor with AssessablePredictorMixin
 
   final Matrix _trainingFeatures;
   final Matrix _trainingOutcomes;
+  final String _targetName;
   final Distance _distanceType;
   final int _k;
   final FindKnnFn _solverFn;
@@ -50,11 +56,18 @@ class KNNRegressor with AssessablePredictorMixin
   Vector _cachedZeroVector;
 
   @override
-  Matrix predict(Matrix observations) => Matrix.fromRows(
-      _generateOutcomes(observations)
-          .toList(growable: false),
-      dtype: _dtype
-  );
+  DataFrame predict(Matrix observations) {
+    final prediction = Matrix.fromRows(
+        _generateOutcomes(observations)
+            .toList(growable: false),
+        dtype: _dtype,
+    );
+
+    return DataFrame.fromMatrix(
+      prediction,
+      header: [_targetName],
+    );
+  }
 
   Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
     for (final kNeighbours in _solverFn(_k, _trainingFeatures, _trainingOutcomes,

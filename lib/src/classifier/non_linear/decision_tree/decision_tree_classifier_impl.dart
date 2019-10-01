@@ -1,25 +1,28 @@
 import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class DecisionTreeClassifierImpl with AssessablePredictorMixin
     implements DecisionTreeClassifier {
 
-  DecisionTreeClassifierImpl(this._solver);
+  DecisionTreeClassifierImpl(this._solver, this._className);
 
   final DecisionTreeSolver _solver;
+
+  final String _className;
 
   @override
   Matrix get classLabels => null;
 
   @override
-  Matrix predict(Matrix features) {
+  DataFrame predict(Matrix features) {
     final predictedLabels = features.rows.map(_solver.getLabelForSample);
 
     if (predictedLabels.isEmpty) {
-      return Matrix.fromColumns([]);
+      return DataFrame([<num>[]]);
     }
 
     final outcomeList = predictedLabels
@@ -27,7 +30,10 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
         .toList(growable: false);
     final outcomeVector = Vector.fromList(outcomeList);
 
-    return Matrix.fromColumns([outcomeVector]);
+    return DataFrame.fromMatrix(
+      Matrix.fromColumns([outcomeVector]),
+      header: [_className],
+    );
   }
 
   @override

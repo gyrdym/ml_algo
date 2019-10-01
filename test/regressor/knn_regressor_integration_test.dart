@@ -24,7 +24,9 @@ void main() {
       final regressor = ParameterlessRegressor.knn(data, 'target', k: k);
 
       final actual = regressor.predict(testFeatures);
-      expect(actual, equals([[4.0]]));
+
+      expect(actual.header, equals(['target']));
+      expect(actual.toMatrix(), equals([[4.0]]));
     });
 
     test('should predict values using epanechnikov kernel', () {
@@ -50,7 +52,9 @@ void main() {
       );
 
       final actual = regressor.predict(testFeatures);
-      expect(actual, equals([[-208.875]]));
+
+      expect(actual.header, equals(['target']));
+      expect(actual.toMatrix(), equals([[-208.875]]));
     });
   });
 }
