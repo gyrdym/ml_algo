@@ -3,7 +3,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/regressor/linear_regressor_impl.dart';
-import 'package:ml_algo/src/regressor/squared_cost_optimizer_factory.dart';
+import 'package:ml_algo/src/regressor/_helpers/squared_cost_optimizer_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';

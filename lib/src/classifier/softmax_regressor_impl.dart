@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/classifier/linear/linear_classifier_mixin.dart';
-import 'package:ml_algo/src/classifier/linear/softmax_regressor/softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';

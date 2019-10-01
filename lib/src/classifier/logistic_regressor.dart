@@ -1,6 +1,6 @@
-import 'package:ml_algo/src/classifier/linear/linear_classifier.dart';
-import 'package:ml_algo/src/classifier/linear/log_likelihood_optimizer_factory.dart';
-import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/classifier/linear_classifier.dart';
+import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
