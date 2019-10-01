@@ -61,7 +61,7 @@ void main() {
                 (_) => randomizerFactoryMock);
     });
 
-    tearDownAll(() => injector.clearAll());
+    tearDownAll(() => injector = null);
 
     test('should process `batchSize` parameter when the latter is equal to '
         '`1` (stochastic case)', () {
