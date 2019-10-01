@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/classifier/linear/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -8,6 +9,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('Logistic regressor', () {
+    tearDownAll(() => injector.clearAll());
+
     test('should extract class labels from the data', () {
       final samples = DataFrame(<Iterable<num>>[
         [5.0, 7.0, 6.0, 3.0],

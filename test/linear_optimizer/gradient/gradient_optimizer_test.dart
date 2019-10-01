@@ -19,7 +19,7 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  group('Gradient descent solver', () {
+  group('Gradient descent optimizer', () {
     final costFunction = CostFunctionMock();
 
     Randomizer randomizerMock;
@@ -60,6 +60,8 @@ void main() {
         ..registerDependency<RandomizerFactory>(
                 (_) => randomizerFactoryMock);
     });
+
+    tearDownAll(() => injector.clearAll());
 
     test('should process `batchSize` parameter when the latter is equal to '
         '`1` (stochastic case)', () {
