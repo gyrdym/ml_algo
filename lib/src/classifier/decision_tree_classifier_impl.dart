@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';

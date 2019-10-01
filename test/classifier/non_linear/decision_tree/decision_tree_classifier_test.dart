@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier.dart';
-import 'package:ml_algo/src/classifier/non_linear/decision_tree/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
