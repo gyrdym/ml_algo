@@ -18,8 +18,11 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
   Matrix get classLabels => null;
 
   @override
-  DataFrame predict(Matrix features) {
-    final predictedLabels = features.rows.map(_solver.getLabelForSample);
+  DataFrame predict(DataFrame features) {
+    final predictedLabels = features
+        .toMatrix()
+        .rows
+        .map(_solver.getLabelForSample);
 
     if (predictedLabels.isEmpty) {
       return DataFrame([<num>[]]);

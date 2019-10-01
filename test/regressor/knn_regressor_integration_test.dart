@@ -23,7 +23,9 @@ void main() {
 
       final regressor = KnnRegressor(data, 'target', k: k);
 
-      final actual = regressor.predict(testFeatures);
+      final actual = regressor.predict(
+        DataFrame.fromMatrix(testFeatures),
+      );
 
       expect(actual.header, equals(['target']));
       expect(actual.toMatrix(), equals([[4.0]]));
@@ -51,7 +53,9 @@ void main() {
         kernel: Kernel.epanechnikov,
       );
 
-      final actual = regressor.predict(testFeatures);
+      final actual = regressor.predict(
+        DataFrame.fromMatrix(testFeatures),
+      );
 
       expect(actual.header, equals(['target']));
       expect(actual.toMatrix(), equals([[-208.875]]));
