@@ -22,8 +22,6 @@ import '../../../mocks.dart';
 
 void main() {
   group('SoftmaxRegressor', () {
-    tearDownAll(() => injector.clearAll());
-
     final features = Matrix.fromList([
       [10.1, 10.2, 12.0, 13.4],
       [13.1, 15.2, 61.0, 27.2],
@@ -100,7 +98,7 @@ void main() {
       );
     });
 
-    tearDown(() => injector.clearAll());
+    tearDownAll(() => injector = null);
 
     test('should call link function factory twice in order to create softmax '
         'link function', () {
