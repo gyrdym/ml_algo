@@ -1,7 +1,5 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient/learning_rate_generator/learning_rate_generator.dart';
@@ -11,7 +9,8 @@ import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_w
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_weights_generator/initial_weights_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
-import 'package:ml_algo/src/utils/parameter_default_values.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/integers.dart';
@@ -20,11 +19,11 @@ class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
     DType dtype = DType.float32,
     CostFunction costFunction,
-    LearningRateType learningRateType,
-    InitialWeightsType initialWeightsType,
-    double initialLearningRate = ParameterDefaultValues.initialLearningRate,
-    double minCoefficientsUpdate = ParameterDefaultValues.minCoefficientsUpdate,
-    int iterationLimit = ParameterDefaultValues.iterationsLimit,
+    LearningRateType learningRateType = LearningRateType.decreasing,
+    InitialWeightsType initialCoefficientsType = InitialWeightsType.zeroes,
+    double initialLearningRate = 1e-3,
+    double minCoefficientsUpdate = 1e-12,
+    int iterationLimit = 100,
     double lambda,
     int batchSize,
     int randomSeed,
@@ -35,19 +34,19 @@ class GradientOptimizer implements LinearOptimizer {
         _batchSize = batchSize,
         _costFunction = costFunction,
 
-        _initialWeightsGenerator = injector
+        _initialWeightsGenerator = getDependencies()
             .getDependency<InitialWeightsGeneratorFactory>()
-            .fromType(initialWeightsType, dtype),
+            .fromType(initialCoefficientsType, dtype),
 
-        _learningRateGenerator = injector
+        _learningRateGenerator = getDependencies()
             .getDependency<LearningRateGeneratorFactory>()
             .fromType(learningRateType),
 
-        _convergenceDetector = injector
+        _convergenceDetector = getDependencies()
             .getDependency<ConvergenceDetectorFactory>()
             .create(minCoefficientsUpdate, iterationLimit),
 
-        _randomizer = injector
+        _randomizer = getDependencies()
             .getDependency<RandomizerFactory>()
             .create(randomSeed) {
     if (batchSize < 1 || batchSize > points.rowsNum) {

@@ -42,12 +42,12 @@ void main() {
     });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(unregularized-case)-should-find-optimal-weights-for-the-given-data]
-    test('should find optimal weights for the given data', () {
-      final weights = optimizer.findExtrema();
+    test('should find optimal coefficients for the given data', () {
+      final coefficients = optimizer.findExtrema();
       final expected = [-81796400.0, -81295300.0, -85285400.0];
-      expect(weights.rowsNum, 1);
-      expect(weights.columnsNum, 3);
-      expect(weights.getRow(0), iterableAlmostEqualTo(expected, 5.0));
+      expect(coefficients.rowsNum, 1);
+      expect(coefficients.columnsNum, 3);
+      expect(coefficients.getRow(0), iterableAlmostEqualTo(expected, 5.0));
     });
   });
 
@@ -71,22 +71,24 @@ void main() {
         [2.0],
       ]);
       optimizer = CoordinateOptimizer(
-          data, labels,
-          costFunction: const SquaredCost(),
-          isFittingDataNormalized: true,
-          minCoefficientsUpdate: 1e-5,
-          iterationsLimit: iterationsNumber,
-          initialWeightsType: InitialWeightsType.zeroes,
-          lambda: lambda);
+        data,
+        labels,
+        costFunction: const SquaredCost(),
+        isFittingDataNormalized: true,
+        minCoefficientsUpdate: 1e-5,
+        iterationsLimit: iterationsNumber,
+        initialWeightsType: InitialWeightsType.zeroes,
+        lambda: lambda,
+      );
     });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(regularized-case)-should-find-optimal-weights-for-the-given-data]
-    test('should find optimal weights for the given data', () {
+    test('should find optimal coefficients for the given data', () {
       // actually, points in this example are not normalized
-      final weights = optimizer
+      final coefficients = optimizer
           .findExtrema()
           .getRow(0);
-      expect(weights, equals([-4381770, -4493700, -4073630]));
+      expect(coefficients, equals([-4381770, -4493700, -4073630]));
     });
   });
 }
