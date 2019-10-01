@@ -36,7 +36,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           fittingPoints, fittingLabels,
           costFunction: costFunction,
           learningRateType: learningRateType,
-          initialWeightsType: initialWeightsType,
+          initialCoefficientsType: initialWeightsType,
           initialLearningRate: initialLearningRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           iterationLimit: iterationLimit,

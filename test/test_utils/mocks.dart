@@ -90,34 +90,23 @@ class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
 
 class DecisionTreeSolverMock extends Mock implements DecisionTreeSolver {}
 
-LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock({
-  Map<LearningRateType, LearningRateGenerator> generators,
-}) {
+LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
+LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
-  generators.forEach((LearningRateType type, LearningRateGenerator generator) {
-    when(factory.fromType(type)).thenReturn(generator);
-  });
+  when(factory.fromType(any)).thenReturn(generator);
   return factory;
 }
 
-RandomizerFactory createRandomizerFactoryMock({
-  Map<int, RandomizerMock> randomizers,
-}) {
+RandomizerFactory createRandomizerFactoryMock(Randomizer randomizer) {
   final factory = RandomizerFactoryMock();
-  randomizers.forEach((int seed, Randomizer randomizer) {
-    when(factory.create(seed)).thenReturn(randomizer);
-  });
+  when(factory.create(any)).thenReturn(randomizer);
   return factory;
 }
 
-InitialWeightsGeneratorFactory createInitialWeightsGeneratorFactoryMock({
-  Map<InitialWeightsType, InitialWeightsGenerator> generators,
-}) {
+InitialWeightsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
+    InitialWeightsGenerator generator) {
   final factory = InitialWeightsGeneratorFactoryMock();
-  generators
-      .forEach((InitialWeightsType type, InitialWeightsGenerator generator) {
-    when(factory.fromType(type, any)).thenReturn(generator);
-  });
+  when(factory.fromType(any, any)).thenReturn(generator);
   return factory;
 }
 
@@ -139,6 +128,13 @@ CostFunctionFactory createCostFunctionFactoryMock(
       linkFunction: anyNamed('linkFunction'))).thenReturn(costFunctionMock);
 
   return costFunctionFactory;
+}
+
+ConvergenceDetectorFactory createConvergenceDetectorFactoryMock(
+    ConvergenceDetector detector) {
+  final convergenceDetectorFactory = ConvergenceDetectorFactoryMock();
+  when(convergenceDetectorFactory.create(any, any)).thenReturn(detector);
+  return convergenceDetectorFactory;
 }
 
 LinearOptimizerFactory createLinearOptimizerFactoryMock(

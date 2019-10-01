@@ -23,11 +23,11 @@ class CoordinateOptimizer implements LinearOptimizer {
         _labels = fittingLabels,
         _lambda = lambda ?? 0.0,
 
-        _initialCoefficientsGenerator = injector
+        _initialCoefficientsGenerator = getDependencies()
             .getDependency<InitialWeightsGeneratorFactory>()
             .fromType(initialWeightsType, dtype),
 
-        _convergenceDetector = injector
+        _convergenceDetector = getDependencies()
             .getDependency<ConvergenceDetectorFactory>()
             .create(minCoefficientsUpdate, iterationsLimit),
 

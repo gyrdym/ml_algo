@@ -8,20 +8,16 @@ class LearningRateGeneratorFactoryImpl implements LearningRateGeneratorFactory {
   const LearningRateGeneratorFactoryImpl();
 
   @override
-  LearningRateGenerator decreasing() => DecreasingLearningRateGenerator();
-
-  @override
-  LearningRateGenerator constant() => ConstantLearningRateGenerator();
-
-  @override
   LearningRateGenerator fromType(LearningRateType type) {
     switch (type) {
       case LearningRateType.constant:
-        return constant();
+        return ConstantLearningRateGenerator();
+
       case LearningRateType.decreasing:
-        return decreasing();
+        return DecreasingLearningRateGenerator();
+
       default:
-        throw UnimplementedError();
+        throw UnsupportedError('Unsupported learning rate type - $type');
     }
   }
 }
