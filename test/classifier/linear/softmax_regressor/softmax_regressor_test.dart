@@ -13,6 +13,7 @@ import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
@@ -33,10 +34,10 @@ void main() {
 
     final outcomes = Matrix.fromList([
       [1.0, 0.0, 0.0],
-      [0.0, 1.0, 0.0],
+      [0.0, 0.0, 1.0],
       [0.0, 1.0, 0.0],
       [1.0, 0.0, 0.0],
-      [1.0, 0.0, 0.0],
+      [0.0, 0.0, 1.0],
       [1.0, 0.0, 0.0],
     ]);
 
@@ -56,6 +57,14 @@ void main() {
       [40.0],
     ]);
 
+    final learnedCoefficients = Matrix.fromList([
+      [1, 2, 3],
+      [1, 2, 3],
+      [1, 2, 3],
+      [1, 2, 3],
+      [1, 2, 3],
+    ]);
+
     LinkFunction linkFunctionMock;
     LinkFunctionFactory linkFunctionFactoryMock;
 
@@ -64,6 +73,8 @@ void main() {
 
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
+
+    SoftmaxRegressor classifier;
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
@@ -80,7 +91,12 @@ void main() {
         ..registerDependency<CostFunctionFactory>((_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock);
 
-      SoftmaxRegressor(
+      when(optimizerMock.findExtrema(
+        initialCoefficients: anyNamed('initialCoefficients'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+      )).thenReturn(learnedCoefficients);
+
+      classifier = SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
         optimizerType: LinearOptimizerType.vanillaGD,
@@ -130,10 +146,10 @@ void main() {
         ], 1e-2)),
         argThat(equals([
           [1.0, 0.0, 0.0],
-          [0.0, 1.0, 0.0],
+          [0.0, 0.0, 1.0],
           [0.0, 1.0, 0.0],
           [1.0, 0.0, 0.0],
-          [1.0, 0.0, 0.0],
+          [0.0, 0.0, 1.0],
           [1.0, 0.0, 0.0],
         ])),
         dtype: DType.float32,
@@ -155,6 +171,39 @@ void main() {
         initialCoefficients: initialCoefficients,
         isMinimizingObjective: false,
       )).called(1);
+    });
+
+    test('should predict classes basing on learned coefficients', () {
+      final probabilities = Matrix.fromList([
+        [0.2, 0.7, 0.1],
+        [0.3, 0.2, 0.5],
+        [0.6, 0.2, 0.2],
+      ]);
+
+      when(linkFunctionMock.link(any)).thenReturn(probabilities);
+      
+      final features = Matrix.fromList([
+        [55, 44, 33, 22],
+        [10, 88, 77, 11],
+        [12, 22, 39, 13],
+      ]);
+
+      final featuresWithIntercept = Matrix.fromColumns([
+        Vector.filled(3, 2),
+        ...features.columns,
+      ]);
+
+      final classes = classifier.predict(features);
+
+      expect(classes, equals([
+        [0, 1, 0],
+        [0, 0, 1],
+        [1, 0, 0],
+      ]));
+
+      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
+          featuresWithIntercept * learnedCoefficients
+      )))).called(1);
     });
   });
 }
