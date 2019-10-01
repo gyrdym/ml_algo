@@ -6,7 +6,7 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../test_utils/mocks.dart';
+import '../mocks.dart';
 
 Splitter createSplitter(Iterable<Iterable<int>> indices) {
   final splitter = SplitterMock();

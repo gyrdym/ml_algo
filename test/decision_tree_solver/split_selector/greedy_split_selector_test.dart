@@ -3,7 +3,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../test_utils/mocks.dart';
+import '../../mocks.dart';
 
 void main() {
   group('GreedySplitSelector', () {

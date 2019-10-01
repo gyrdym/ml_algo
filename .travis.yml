@@ -1,5 +1,5 @@
 language: dart
 dart:
-  - "2.4.1"
+  - "2.3.0"
 script: pub run grinder start
 after_success: pub run grinder finish

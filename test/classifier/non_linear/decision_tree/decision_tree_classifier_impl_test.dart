@@ -7,7 +7,7 @@ import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../../test_utils/mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
   group('DecisionTreeClassifierImpl', () {
