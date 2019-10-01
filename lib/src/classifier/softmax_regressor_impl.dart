@@ -16,7 +16,6 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   SoftmaxRegressorImpl(
       LinearOptimizer optimizer,
       this._classNames,
-      this.classLabels,
       this.linkFunction, {
         int batchSize = 1,
         bool fitIntercept = false,
@@ -31,7 +30,6 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
           isMinimizingObjective: false,
         );
 
-  @override
   final Iterable<String> _classNames;
 
   @override
@@ -39,9 +37,6 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
   @override
   final double interceptScale;
-
-  @override
-  final Matrix classLabels;
 
   @override
   final Matrix coefficientsByClasses;

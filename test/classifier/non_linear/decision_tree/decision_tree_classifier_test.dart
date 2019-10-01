@@ -30,7 +30,6 @@ void main() {
 
       test('should create classifier', () {
         expect(classifier, isA<DecisionTreeClassifierImpl>());
-        expect(classifier.classLabels, isNull);
       });
 
       test('should predict class labels', () {

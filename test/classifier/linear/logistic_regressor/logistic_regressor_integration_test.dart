@@ -11,33 +11,6 @@ void main() {
   group('Logistic regressor', () {
     tearDownAll(() => injector = null);
 
-    test('should extract class labels from the data', () {
-      final samples = DataFrame(<Iterable<num>>[
-        [5.0, 7.0, 6.0, 3.0],
-        [1.0, 2.0, 3.0, 1.0],
-        [10.0, 12.0, 31.0, 3.0],
-        [9.0, 8.0, 5.0, 2.0],
-        [4.0, 0.0, 1.0, 2.0],
-        [4.0, 0.0, 1.0, 0.0],
-        [4.0, 0.0, 1.0, 0.0],
-      ], headerExists: false);
-
-      final classifier = LogisticRegressor(
-          samples, 'col_3',
-          iterationsLimit: 2,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          fitIntercept: false
-      );
-
-      expect(classifier.classLabels, equals([
-        [3.0],
-        [1.0],
-        [2.0],
-        [0.0],
-      ]));
-    });
-
     test('should fit given data', () {
       final samples = DataFrame(<Iterable<num>>[
         [5.0, 7.0, 6.0, 1.0],

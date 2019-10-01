@@ -15,9 +15,6 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
   final String _className;
 
   @override
-  Matrix get classLabels => null;
-
-  @override
   DataFrame predict(DataFrame features) {
     final predictedLabels = features
         .toMatrix()

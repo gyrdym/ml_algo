@@ -1,8 +1,7 @@
-import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
+import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -99,16 +98,9 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     final linkFunction = linkFunctionFactory
         .createByType(LinkFunctionType.inverseLogit, dtype: dtype);
 
-    final splits = featuresTargetSplit(fittingData,
-      targetNames: [targetName],
-    ).toList();
-
-    final points = splits[0].toMatrix();
-    final labels = splits[1].toMatrix();
-
     final optimizer = createLogLikelihoodOptimizer(
-      points,
-      labels,
+      fittingData,
+      [targetName],
       LinkFunctionType.inverseLogit,
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
@@ -128,7 +120,6 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     return LogisticRegressorImpl(
       optimizer,
       targetName,
-      labels.uniqueRows(),
       linkFunction,
       probabilityThreshold: probabilityThreshold,
       fitIntercept: fitIntercept,
