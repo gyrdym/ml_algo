@@ -15,11 +15,12 @@ import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../../mocks.dart';
+import '../mocks.dart';
 
 void main() {
   group('LogisticRegressor', () {
@@ -36,6 +37,14 @@ void main() {
       [50],
     ]);
 
+    final learnedCoefficients = Matrix.fromList([
+      [100],
+      [200],
+      [300],
+      [400],
+      [500],
+    ]);
+
     LinkFunction linkFunctionMock;
     LinkFunctionFactory linkFunctionFactoryMock;
 
@@ -44,6 +53,8 @@ void main() {
 
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
+
+    LogisticRegressor classifier;
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
@@ -63,7 +74,12 @@ void main() {
         ..registerSingleton<LinearOptimizerFactory>(
                 (_) => optimizerFactoryMock);
 
-      LogisticRegressor(
+      when(optimizerMock.findExtrema(
+        initialCoefficients: anyNamed('initialCoefficients'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+      )).thenReturn(learnedCoefficients);
+
+      classifier = LogisticRegressor(
         observations,
         'col_4',
         dtype: DType.float32,
@@ -131,6 +147,43 @@ void main() {
           initialCoefficients: initialCoefficients,
           isMinimizingObjective: false,
       )).called(1);
+    });
+
+    test('should predict classes based on learned coefficients', () {
+      final probabilities = Matrix.fromList([
+        [0.2],
+        [0.3],
+        [0.6],
+      ]);
+
+      when(linkFunctionMock.link(any)).thenReturn(probabilities);
+
+      final features = Matrix.fromList([
+        [55, 44, 33, 22],
+        [10, 88, 77, 11],
+        [12, 22, 39, 13],
+      ]);
+
+      final featuresWithIntercept = Matrix.fromColumns([
+        Vector.filled(3, 2),
+        ...features.columns,
+      ]);
+
+      final classes = classifier.predict(
+        DataFrame.fromMatrix(features),
+      );
+
+      expect(classes.header, equals(['col_4']));
+
+      expect(classes.toMatrix(), equals([
+        [0],
+        [0],
+        [1],
+      ]));
+
+      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
+          featuresWithIntercept * learnedCoefficients
+      )))).called(1);
     });
   });
 }
