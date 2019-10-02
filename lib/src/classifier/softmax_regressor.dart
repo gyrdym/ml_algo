@@ -89,8 +89,10 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         bool fitIntercept = false,
         double interceptScale = 1.0,
         LearningRateType learningRateType,
-        Matrix initialWeights,
-        InitialCoefficientsType initialWeightsType =
+        Matrix initialCoefficients,
+        num positiveLabel = 1,
+        num negativeLabel = 0,
+        InitialCoefficientsType initialCoefficientsType =
             InitialCoefficientsType.zeroes,
         DType dtype = DType.float32,
   }) {
@@ -119,7 +121,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
               randomSeed: randomSeed,
               batchSize: batchSize,
               learningRateType: learningRateType,
-              initialWeightsType: initialWeightsType,
+              initialWeightsType: initialCoefficientsType,
               fitIntercept: fitIntercept,
               interceptScale: interceptScale,
               dtype: dtype,
@@ -132,7 +134,9 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
               batchSize: batchSize,
               fitIntercept: fitIntercept,
               interceptScale: interceptScale,
-              initialWeights: initialWeights,
+              initialCoefficients: initialCoefficients,
+              positiveLabel: positiveLabel,
+              negativeLabel: negativeLabel,
               dtype: dtype,
         );
   }

@@ -22,10 +22,14 @@ class LogisticRegressorImpl with LinearClassifierMixin,
     Matrix initialWeights,
     this.dtype = DType.float32,
     this.probabilityThreshold = 0.5,
+    num negativeLabel = 0,
+    num positiveLabel = 1,
   }) :
         classNames = [className],
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
+        _negativeLabel = negativeLabel,
+        _positiveLabel = positiveLabel,
         coefficientsByClasses = _optimizer.findExtrema(
             initialCoefficients: initialWeights,
             isMinimizingObjective: false,
@@ -47,6 +51,10 @@ class LogisticRegressorImpl with LinearClassifierMixin,
 
   final double probabilityThreshold;
 
+  final num _positiveLabel;
+
+  final num _negativeLabel;
+
   @override
   final LinkFunction linkFunction;
 
@@ -65,7 +73,10 @@ class LogisticRegressorImpl with LinearClassifierMixin,
     )
     .getColumn(0)
     // TODO: use SIMD
-    .map((value) => value >= probabilityThreshold ? 1 : 0)
+    .map((value) => value >= probabilityThreshold
+        ? _positiveLabel
+        : _negativeLabel,
+    )
     .toList(growable: false);
 
     final classesMatrix = Matrix.fromColumns([

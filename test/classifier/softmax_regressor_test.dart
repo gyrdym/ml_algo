@@ -65,6 +65,9 @@ void main() {
       [1, 2, 3],
     ]);
 
+    final negativeLabel = 10;
+    final positiveLabel = 20;
+
     LinkFunction linkFunctionMock;
     LinkFunctionFactory linkFunctionFactoryMock;
 
@@ -102,15 +105,17 @@ void main() {
         optimizerType: LinearOptimizerType.vanillaGD,
         dtype: DType.float32,
         learningRateType: LearningRateType.constant,
-        initialWeightsType: InitialCoefficientsType.zeroes,
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 100,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         lambda: 0.1,
         fitIntercept: true,
         interceptScale: 2.0,
-        initialWeights: initialCoefficients,
+        initialCoefficients: initialCoefficients,
         randomSeed: 123,
+        negativeLabel: negativeLabel,
+        positiveLabel: positiveLabel,
       );
     });
 
@@ -200,9 +205,9 @@ void main() {
       expect(classes.header, equals(['target_1', 'target_2', 'target_3']));
 
       expect(classes.toMatrix(), equals([
-        [0, 1, 0],
-        [0, 0, 1],
-        [1, 0, 0],
+        [negativeLabel, positiveLabel, negativeLabel],
+        [negativeLabel, negativeLabel, positiveLabel],
+        [positiveLabel, negativeLabel, negativeLabel],
       ]));
 
       verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
