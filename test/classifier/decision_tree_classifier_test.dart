@@ -48,8 +48,9 @@ void main() {
       });
 
       test('should predict probabilities of classes', () {
-        final probabilities = classifier
-            .predictProbabilities(featuresForPrediction);
+        final probabilities = classifier.predictProbabilities(
+          DataFrame.fromMatrix(featuresForPrediction),
+        );
 
         expect(probabilities.header, equals(['col_8']));
         expect(probabilities.toMatrix(), equals([

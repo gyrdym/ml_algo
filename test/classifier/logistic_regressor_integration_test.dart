@@ -57,7 +57,11 @@ void main() {
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
       ]);
-      final probabilities = classifier.predictProbabilities(newFeatures);
+
+      final probabilities = classifier.predictProbabilities(
+        DataFrame.fromMatrix(newFeatures),
+      );
+
       final classes = classifier.predict(
         DataFrame.fromMatrix(newFeatures),
       );
