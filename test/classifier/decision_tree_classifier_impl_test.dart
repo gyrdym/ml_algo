@@ -81,7 +81,9 @@ void main() {
       });
 
       final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
-      final predictedLabels = classifier.predictProbabilities(features);
+      final predictedLabels = classifier.predictProbabilities(
+        DataFrame.fromMatrix(features),
+      );
 
       expect(predictedLabels.header, equals(['class_name']));
       expect(

@@ -39,10 +39,12 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
   }
 
   @override
-  DataFrame predictProbabilities(Matrix features) {
+  DataFrame predictProbabilities(DataFrame features) {
     final probabilities = Matrix.fromColumns([
       Vector.fromList(
-        features.rows
+        features
+            .toMatrix()
+            .rows
             .map(_solver.getLabelForSample)
             .map((label) => label.probability)
             .toList(growable: false),
