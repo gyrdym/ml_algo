@@ -78,7 +78,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// [DType.float32]
   factory SoftmaxRegressor(
       DataFrame fittingData,
-      Iterable<String> targetNames, {
+      List<String> targetNames, {
         LinearOptimizerType optimizerType = LinearOptimizerType.vanillaGD,
         int iterationsLimit = 100,
         double initialLearningRate = 1e-3,
@@ -90,7 +90,8 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         double interceptScale = 1.0,
         LearningRateType learningRateType,
         Matrix initialWeights,
-        InitialCoefficientsType initialWeightsType = InitialCoefficientsType.zeroes,
+        InitialCoefficientsType initialWeightsType =
+            InitialCoefficientsType.zeroes,
         DType dtype = DType.float32,
   }) {
         if (targetNames.isNotEmpty && targetNames.length < 2) {

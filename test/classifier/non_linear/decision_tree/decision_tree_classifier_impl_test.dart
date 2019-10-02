@@ -83,8 +83,9 @@ void main() {
       final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
       final predictedLabels = classifier.predictProbabilities(features);
 
+      expect(predictedLabels.header, equals(['class_name']));
       expect(
-          predictedLabels,
+          predictedLabels.toMatrix(),
           iterable2dAlmostEqualTo([
             [label1.probability],
             [label2.probability],
