@@ -45,6 +45,9 @@ void main() {
       [500],
     ]);
 
+    final negativeLabel = 100;
+    final positiveLabel = 200;
+
     LinkFunction linkFunctionMock;
     LinkFunctionFactory linkFunctionFactoryMock;
 
@@ -94,6 +97,8 @@ void main() {
         fitIntercept: true,
         interceptScale: 2.0,
         isFittingDataNormalized: true,
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
       );
     });
 
@@ -176,9 +181,9 @@ void main() {
       expect(classes.header, equals(['col_4']));
 
       expect(classes.toMatrix(), equals([
-        [0],
-        [0],
-        [1],
+        [negativeLabel],
+        [negativeLabel],
+        [positiveLabel],
       ]));
 
       verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(

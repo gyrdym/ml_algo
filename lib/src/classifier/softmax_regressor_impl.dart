@@ -20,16 +20,21 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
         int batchSize = 1,
         bool fitIntercept = false,
         double interceptScale = 1.0,
-        Matrix initialWeights,
+        Matrix initialCoefficients,
+        num positiveLabel = 1,
+        num negativeLabel = 0,
         this.dtype = DType.float32,
       }) :
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
+        _positiveLabel = positiveLabel,
+        _negativeLabel = negativeLabel,
         coefficientsByClasses = optimizer.findExtrema(
-          initialCoefficients: initialWeights,
+          initialCoefficients: initialCoefficients,
           isMinimizingObjective: false,
         );
 
+  @override
   final List<String> classNames;
 
   @override
@@ -45,6 +50,10 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
   @override
   final LinkFunction linkFunction;
+
+  final num _positiveLabel;
+
+  final num _negativeLabel;
 
   @override
   DataFrame predict(DataFrame features) {
@@ -62,9 +71,13 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
       final labelIdx = probabilities
           .toList()
           .indexOf(probabilities.max());
-      final allZeroes = List.filled(coefficientsByClasses.columnsNum, 0);
 
-      allZeroes[labelIdx] = 1;
+      final allZeroes = List.filled(
+        coefficientsByClasses.columnsNum,
+        _negativeLabel,
+      );
+
+      allZeroes[labelIdx] = _positiveLabel;
 
       return Vector.fromList(allZeroes, dtype: dtype);
     });
