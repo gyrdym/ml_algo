@@ -15,7 +15,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
 
   LogisticRegressorImpl(
       LinearOptimizer _optimizer,
-      this._className,
+      String className,
       this.linkFunction, {
     bool fitIntercept = false,
     double interceptScale = 1.0,
@@ -23,6 +23,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
     this.dtype = DType.float32,
     this.probabilityThreshold = 0.5,
   }) :
+        classNames = [className],
         fitIntercept = fitIntercept,
         interceptScale = interceptScale,
         coefficientsByClasses = _optimizer.findExtrema(
@@ -33,7 +34,8 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   @override
   final Matrix coefficientsByClasses;
 
-  final String _className;
+  @override
+  final List<String> classNames;
 
   @override
   final bool fitIntercept;
@@ -72,7 +74,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
 
     return DataFrame.fromMatrix(
       classesMatrix,
-      header: [_className],
+      header: classNames,
     );
   }
 }

@@ -62,7 +62,8 @@ void main() {
         DataFrame.fromMatrix(newFeatures),
       );
 
-      expect(probabilities, equals([[0.01798621006309986]]));
+      expect(probabilities.header, equals(['col_3']));
+      expect(probabilities.toMatrix(), equals([[0.01798621006309986]]));
       expect(classes.header, equals(['col_3']));
       expect(classes.toMatrix(), equals([[0.0]]));
     });

@@ -47,8 +47,12 @@ void main() {
             ]));
       });
 
-      test('should predict probability of classes', () {
-        expect(classifier.predictProbabilities(featuresForPrediction), equals([
+      test('should predict probabilities of classes', () {
+        final probabilities = classifier
+            .predictProbabilities(featuresForPrediction);
+
+        expect(probabilities.header, equals(['col_8']));
+        expect(probabilities.toMatrix(), equals([
               [1],
               [1],
               [1],

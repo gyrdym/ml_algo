@@ -8,11 +8,13 @@ import 'package:ml_linalg/vector.dart';
 class DecisionTreeClassifierImpl with AssessablePredictorMixin
     implements DecisionTreeClassifier {
 
-  DecisionTreeClassifierImpl(this._solver, this._className);
+  DecisionTreeClassifierImpl(this._solver, String className)
+      : classNames = [className];
 
   final DecisionTreeSolver _solver;
 
-  final String _className;
+  @override
+  final List<String> classNames;
 
   @override
   DataFrame predict(DataFrame features) {
@@ -32,17 +34,24 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
 
     return DataFrame.fromMatrix(
       Matrix.fromColumns([outcomeVector]),
-      header: [_className],
+      header: classNames,
     );
   }
 
   @override
-  Matrix predictProbabilities(Matrix features) => Matrix.fromColumns([
-    Vector.fromList(
+  DataFrame predictProbabilities(Matrix features) {
+    final probabilities = Matrix.fromColumns([
+      Vector.fromList(
         features.rows
             .map(_solver.getLabelForSample)
             .map((label) => label.probability)
             .toList(growable: false),
-    ),
-  ]);
+      ),
+    ]);
+
+    return DataFrame.fromMatrix(
+      probabilities,
+      header: classNames,
+    );
+  }
 }

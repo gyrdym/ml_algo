@@ -15,7 +15,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
   SoftmaxRegressorImpl(
       LinearOptimizer optimizer,
-      this._classNames,
+      this.classNames,
       this.linkFunction, {
         int batchSize = 1,
         bool fitIntercept = false,
@@ -30,7 +30,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
           isMinimizingObjective: false,
         );
 
-  final Iterable<String> _classNames;
+  final List<String> classNames;
 
   @override
   final bool fitIntercept;
@@ -71,7 +71,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
     return DataFrame.fromMatrix(
       classes,
-      header: _classNames,
+      header: classNames,
     );
   }
 }
