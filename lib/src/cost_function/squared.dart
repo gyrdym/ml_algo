@@ -16,7 +16,7 @@ class SquaredCost implements CostFunction {
       x.transpose() * -2 * (y - x * w);
 
   @override
-  Vector getSubDerivative(int j, Matrix x, Matrix w, Matrix y) {
+  Vector getSubGradient(int j, Matrix x, Matrix w, Matrix y) {
     final xj = x.sample(columnIndices: List.generate(y.columnsNum, (_) => j));
     final xWithoutJ = _excludeColumn(x, j);
     final wWithoutJ = _excludeColumn(w, j);
