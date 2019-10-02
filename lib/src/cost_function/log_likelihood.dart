@@ -17,6 +17,6 @@ class LogLikelihoodCost implements CostFunction {
     x.transpose() * (y - _linkFunction.link(x * w));
 
   @override
-  Vector getSubDerivative(int wIdx, Matrix x, Matrix w, Matrix y) =>
+  Vector getSubGradient(int wIdx, Matrix x, Matrix w, Matrix y) =>
       throw UnimplementedError();
 }

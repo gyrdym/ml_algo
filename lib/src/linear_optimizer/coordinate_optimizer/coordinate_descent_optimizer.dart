@@ -81,7 +81,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
   Vector _optimizeCoordinate(int j, Matrix x, Matrix y, Matrix w) {
     // coefficients variable here contains coefficients on column j per each
     // label
-    final coefficients = _costFn.getSubDerivative(j, x, w, y);
+    final coefficients = _costFn.getSubGradient(j, x, w, y);
     return Vector
         // TODO Convert the logic into SIMD-way (SIMD way mapping)
         .fromList(coefficients.map((coef) => _regularize(coef, _lambda, j))
