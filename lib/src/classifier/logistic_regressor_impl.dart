@@ -19,7 +19,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
       this.linkFunction, {
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    Matrix initialWeights,
+    Vector initialCoefficients,
     this.dtype = DType.float32,
     this.probabilityThreshold = 0.5,
     num negativeLabel = 0,
@@ -31,7 +31,10 @@ class LogisticRegressorImpl with LinearClassifierMixin,
         _negativeLabel = negativeLabel,
         _positiveLabel = positiveLabel,
         coefficientsByClasses = _optimizer.findExtrema(
-            initialCoefficients: initialWeights,
+            initialCoefficients: Matrix.fromColumns(
+              [initialCoefficients],
+              dtype: dtype,
+            ),
             isMinimizingObjective: false,
         );
 
