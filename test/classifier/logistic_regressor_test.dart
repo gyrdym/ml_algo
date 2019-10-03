@@ -29,12 +29,12 @@ void main() {
       <num>[ 3.1,  5.2,  6.0, 77.4, 0],
     ], headerExists: false);
 
-    final initialCoefficients = Matrix.fromList([
-      [10],
-      [20],
-      [30],
-      [40],
-      [50],
+    final initialCoefficients = Vector.fromList([
+      10,
+      20,
+      30,
+      40,
+      50,
     ]);
 
     final learnedCoefficients = Matrix.fromList([
@@ -149,7 +149,10 @@ void main() {
     test('should find the extrema for fitting observations while '
         'instantiating', () {
       verify(optimizerMock.findExtrema(
-          initialCoefficients: initialCoefficients,
+          initialCoefficients: argThat(
+            equals(Matrix.fromColumns([initialCoefficients])),
+            named: 'initialCoefficients',
+          ),
           isMinimizingObjective: false,
       )).called(1);
     });
