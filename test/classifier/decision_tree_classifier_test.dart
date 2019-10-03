@@ -25,7 +25,7 @@ void main() {
     ]);
 
     group('greedy', () {
-      final classifier = DecisionTreeClassifier.majority(dataFrame, 'col_8',
+      final classifier = DecisionTreeClassifier(dataFrame, 'col_8',
           minError: 0.3, minSamplesCount: 1, maxDepth: 3);
 
       test('should create classifier', () {
