@@ -1,11 +1,10 @@
 import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
-import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
-import 'package:ml_linalg/dtype.dart';
 
 /// A class that performs regression basing on `k nearest neighbours` algorithm
 ///
@@ -37,16 +36,13 @@ abstract class KnnRegressor implements Assessable, Predictor {
   ///
   /// [distance] a distance type, that will be used to measure a distance
   /// between two observation vectors
-  ///
-  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
-  /// affect performance or accuracy of the computations. Default value is
-  /// [DType.float32]
-  factory KnnRegressor(DataFrame fittingData, String targetName, {
-    int k,
-    Kernel kernel = Kernel.uniform,
-    Distance distance = Distance.euclidean,
-    DType dtype = DType.float32,
-  }) {
+  factory KnnRegressor(
+      DataFrame fittingData,
+      String targetName, {
+        int k,
+        Kernel kernel = Kernel.uniform,
+        Distance distance = Distance.euclidean,
+      }) {
     final splits = featuresTargetSplit(fittingData,
       targetNames: [targetName],
     ).toList();
@@ -58,7 +54,7 @@ abstract class KnnRegressor implements Assessable, Predictor {
       k: k,
       kernel: kernel,
       distance: distance,
-      dtype: dtype,
+      dtype: fittingData.dtype,
     );
   }
 }

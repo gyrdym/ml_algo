@@ -85,7 +85,6 @@ void main() {
       classifier = LogisticRegressor(
         observations,
         'col_4',
-        dtype: DType.float32,
         learningRateType: LearningRateType.constant,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 1000,

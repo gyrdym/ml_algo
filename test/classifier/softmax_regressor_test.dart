@@ -103,7 +103,6 @@ void main() {
         observations,
         ['target_1', 'target_2', 'target_3'],
         optimizerType: LinearOptimizerType.vanillaGD,
-        dtype: DType.float32,
         learningRateType: LearningRateType.constant,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 100,

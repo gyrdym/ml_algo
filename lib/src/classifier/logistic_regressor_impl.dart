@@ -31,10 +31,9 @@ class LogisticRegressorImpl with LinearClassifierMixin,
         _negativeLabel = negativeLabel,
         _positiveLabel = positiveLabel,
         coefficientsByClasses = _optimizer.findExtrema(
-            initialCoefficients: Matrix.fromColumns(
-              [initialCoefficients],
-              dtype: dtype,
-            ),
+            initialCoefficients: initialCoefficients != null
+                ? Matrix.fromColumns([initialCoefficients], dtype: dtype)
+                : null,
             isMinimizingObjective: false,
         );
 
