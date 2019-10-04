@@ -8,6 +8,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -20,6 +21,7 @@ LinearOptimizer createSquaredCostOptimizer(
       double minCoefficientsUpdate,
       double probabilityThreshold,
       double lambda,
+      RegularizationType regularizationType,
       int randomSeed,
       int batchSize,
       bool fitIntercept,
@@ -58,6 +60,7 @@ LinearOptimizer createSquaredCostOptimizer(
     initialLearningRate: initialLearningRate,
     minCoefficientsUpdate: minCoefficientsUpdate,
     lambda: lambda,
+    regularizationType: regularizationType,
     randomSeed: randomSeed,
     batchSize: batchSize,
     learningRateType: learningRateType,

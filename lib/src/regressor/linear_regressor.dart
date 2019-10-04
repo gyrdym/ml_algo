@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/regressor/linear_regressor_impl.dart';
 import 'package:ml_algo/src/regressor/_helpers/squared_cost_optimizer_factory.dart';
@@ -48,6 +49,9 @@ abstract class LinearRegressor implements Assessable {
   /// coefficients of the predicting hyperplane are. Extremely large [lambda]
   /// may decrease the coefficients to nothing, otherwise too small [lambda] may
   /// be a cause of too large absolute values of the coefficients.
+  ///
+  /// [regularizationType] A way the coefficients of the regressor will be
+  /// regularized to prevent a model overfitting.
   ///
   /// [randomSeed] A seed, that will be passed to a random value generator,
   /// used by stochastic optimizers. Will be ignored, if the solver cannot be
@@ -98,6 +102,7 @@ abstract class LinearRegressor implements Assessable {
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     double lambda,
+    RegularizationType regularizationType,
     bool fitIntercept = false,
     double interceptScale = 1.0,
     int randomSeed,
@@ -113,6 +118,7 @@ abstract class LinearRegressor implements Assessable {
       initialLearningRate: initialLearningRate,
       minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
+      regularizationType: regularizationType,
       randomSeed: randomSeed,
       batchSize: batchSize,
       learningRateType: learningRateType,

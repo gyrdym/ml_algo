@@ -9,6 +9,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
@@ -91,6 +92,7 @@ void main() {
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         lambda: 0.1,
+        regularizationType: RegularizationType.L2,
         initialCoefficients: initialCoefficients,
         randomSeed: 123,
         fitIntercept: true,
@@ -139,6 +141,7 @@ void main() {
         minCoefficientsUpdate: 0.001,
         iterationLimit: 1000,
         lambda: 0.1,
+        regularizationType: RegularizationType.L2,
         batchSize: 1,
         randomSeed: 123,
         isFittingDataNormalized: true,

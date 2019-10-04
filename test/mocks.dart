@@ -151,6 +151,7 @@ LinearOptimizerFactory createLinearOptimizerFactoryMock(
     minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
     iterationLimit: anyNamed('iterationLimit'),
     lambda: anyNamed('lambda'),
+    regularizationType: anyNamed('regularizationType'),
     batchSize: anyNamed('batchSize'),
     randomSeed: anyNamed('randomSeed'),
     isFittingDataNormalized: anyNamed('isFittingDataNormalized')

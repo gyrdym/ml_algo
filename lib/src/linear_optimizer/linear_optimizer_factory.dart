@@ -3,6 +3,7 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_ge
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -19,6 +20,7 @@ abstract class LinearOptimizerFactory {
         double minCoefficientsUpdate,
         int iterationLimit,
         double lambda,
+        RegularizationType regularizationType,
         int batchSize,
         int randomSeed,
         bool isFittingDataNormalized,
