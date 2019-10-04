@@ -5,6 +5,7 @@ import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
@@ -56,6 +57,9 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// coefficients of log-likelihood cost function are. Extremely large [lambda]
   /// may decrease the coefficients to nothing, otherwise too small [lambda] may
   /// be a cause of too large absolute values of the coefficients.
+  ///
+  /// [regularizationType] A way the coefficients of the classifier will be
+  /// regularized to prevent a model overfitting.
   ///
   /// [randomSeed] A seed, that will be passed to a random value generator,
   /// used by stochastic optimizers. Will be ignored, if the [solver] is not
@@ -110,6 +114,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         double initialLearningRate = 1e-3,
         double minCoefficientsUpdate = 1e-12,
         double lambda,
+        RegularizationType regularizationType,
         int randomSeed,
         int batchSize = 1,
         bool fitIntercept = false,
@@ -144,6 +149,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
           initialLearningRate: initialLearningRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
+          regularizationType: regularizationType,
           randomSeed: randomSeed,
           batchSize: batchSize,
           learningRateType: learningRateType,

@@ -6,6 +6,8 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/optimizer_to_regularization_mapping.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -25,10 +27,18 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
         double minCoefficientsUpdate,
         int iterationLimit,
         double lambda,
+        RegularizationType regularizationType,
         int batchSize,
         int randomSeed,
         bool isFittingDataNormalized,
       }) {
+    if (regularizationType != null &&
+        !optimizerToRegularization[optimizerType]
+            .contains(regularizationType)) {
+      throw UnsupportedError('Regularization type $regularizationType is '
+          'unsupported by optimizer $optimizerType');
+    }
+
     switch (optimizerType) {
 
       case LinearOptimizerType.vanillaGD:

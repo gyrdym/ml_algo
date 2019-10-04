@@ -21,12 +21,13 @@ void main() {
       ], headerExists: false);
 
       final classifier = LogisticRegressor(
-          samples, 'col_3',
-          iterationsLimit: 2,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          batchSize: 5,
-          fitIntercept: false
+        samples,
+        'col_3',
+        iterationsLimit: 2,
+        learningRateType: LearningRateType.constant,
+        initialLearningRate: 1.0,
+        batchSize: 5,
+        fitIntercept: false,
       );
 
       expect(classifier.coefficientsByClasses, iterable2dAlmostEqualTo([
@@ -46,12 +47,13 @@ void main() {
       ], headerExists: false);
 
       final classifier = LogisticRegressor(
-          samples, 'col_3',
-          iterationsLimit: 2,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          batchSize: 5,
-          fitIntercept: false
+        samples,
+        'col_3',
+        iterationsLimit: 2,
+        learningRateType: LearningRateType.constant,
+        initialLearningRate: 1.0,
+        batchSize: 5,
+        fitIntercept: false,
       );
 
       final newFeatures = Matrix.fromList([
@@ -135,12 +137,12 @@ void main() {
       ], headerExists: false);
 
       final classifier = LogisticRegressor(
-          features, 'col_3',
-          iterationsLimit: 1,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          batchSize: 2,
-          fitIntercept: true
+        features, 'col_3',
+        iterationsLimit: 1,
+        learningRateType: LearningRateType.constant,
+        initialLearningRate: 1.0,
+        batchSize: 2,
+        fitIntercept: true,
       );
       // as the intercept is required to be fitted, our test_data should look as follows:
       //
@@ -212,13 +214,14 @@ void main() {
       ], headerExists: false);
 
       final classifier = LogisticRegressor(
-          samples, 'col_3',
-          iterationsLimit: 1,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          batchSize: 3,
-          fitIntercept: true,
-          interceptScale: 2.0
+        samples,
+        'col_3',
+        iterationsLimit: 1,
+        learningRateType: LearningRateType.constant,
+        initialLearningRate: 1.0,
+        batchSize: 3,
+        fitIntercept: true,
+        interceptScale: 2.0,
       );
 
       // as the intercept is required to be fitted, our test_data should look as follows:
