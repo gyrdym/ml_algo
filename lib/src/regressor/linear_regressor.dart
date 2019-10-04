@@ -104,7 +104,6 @@ abstract class LinearRegressor implements Assessable {
     int batchSize = 1,
     Matrix initialCoefficients,
     bool isFittingDataNormalized = false,
-    DType dtype = DType.float32,
   }) {
     final optimizer = createSquaredCostOptimizer(
       fittingData,
@@ -121,12 +120,12 @@ abstract class LinearRegressor implements Assessable {
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
       isFittingDataNormalized: isFittingDataNormalized,
-      dtype: dtype,
+      dtype: fittingData.dtype,
     );
 
     final coefficients = optimizer.findExtrema(
-        initialCoefficients: initialCoefficients,
-        isMinimizingObjective: true,
+      initialCoefficients: initialCoefficients,
+      isMinimizingObjective: true,
     ).getColumn(0);
 
     return LinearRegressorImpl(
@@ -134,6 +133,7 @@ abstract class LinearRegressor implements Assessable {
       targetName,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
+      dtype: fittingData.dtype,
     );
   }
 

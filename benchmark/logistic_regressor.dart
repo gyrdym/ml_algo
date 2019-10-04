@@ -1,7 +1,6 @@
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -19,8 +18,12 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    LogisticRegressor(_data, 'col_20',
-        dtype: DType.float32, minCoefficientsUpdate: null, iterationsLimit: 200);
+    LogisticRegressor(
+      _data,
+      'col_20',
+      minCoefficientsUpdate: null,
+      iterationsLimit: 200,
+    );
   }
 
   @override

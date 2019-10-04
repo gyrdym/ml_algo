@@ -38,6 +38,7 @@ void main() {
       ],
       header: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'target'],
       headerExists: false,
+      dtype: DType.float64,
     );
 
     CostFunction costFunctionMock;
@@ -78,7 +79,6 @@ void main() {
         learningRateType: LearningRateType.decreasing,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialCoefficients: initialCoefficients,
-        dtype: DType.float64,
       );
     });
 
