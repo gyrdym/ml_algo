@@ -10,6 +10,7 @@ import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 /// A class that performs softmax regression-based classification
@@ -106,6 +107,10 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   ///
   /// [negativeLabel] Defines the value, that will be used for `negative` class.
   /// By default, `0`.
+  ///
+  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
+  /// affect performance or accuracy of the computations. Default value is
+  /// [DType.float32]
   factory SoftmaxRegressor(
       DataFrame fittingData,
       List<String> targetNames, {
@@ -126,6 +131,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         Matrix initialCoefficients,
         num positiveLabel = 1,
         num negativeLabel = 0,
+        DType dtype = DType.float32,
       }) {
         if (targetNames.isNotEmpty && targetNames.length < 2) {
             throw Exception('The target column should be encoded properly '
@@ -147,7 +153,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
             .getDependency<LinkFunctionFactory>();
 
         final linkFunction = linkFunctionFactory
-            .createByType(LinkFunctionType.softmax, dtype: fittingData.dtype);
+            .createByType(LinkFunctionType.softmax, dtype: dtype);
 
         final optimizer = createLogLikelihoodOptimizer(
           fittingData,
@@ -166,7 +172,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
           fitIntercept: fitIntercept,
           interceptScale: interceptScale,
           isFittingDataNormalized: isFittingDataNormalized,
-          dtype: fittingData.dtype,
+          dtype: dtype,
         );
 
         return SoftmaxRegressorImpl(
@@ -179,7 +185,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
           initialCoefficients: initialCoefficients,
           positiveLabel: positiveLabel,
           negativeLabel: negativeLabel,
-          dtype: fittingData.dtype,
+          dtype: dtype,
         );
   }
 }

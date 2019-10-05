@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   injector: ^1.0.8
-  ml_dataframe: 0.0.10
+  ml_dataframe: 0.0.11
   ml_linalg: ^12.1.0
   quiver: ^2.0.2
   xrange: 0.0.8

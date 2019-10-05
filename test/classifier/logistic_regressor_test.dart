@@ -140,6 +140,7 @@ void main() {
         isFittingDataNormalized: true,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
+        dtype: DType.float32,
       );
 
       verify(optimizerFactoryMock.createByType(

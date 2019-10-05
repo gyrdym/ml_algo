@@ -176,6 +176,7 @@ void main() {
         randomSeed: 123,
         negativeLabel: negativeLabel,
         positiveLabel: positiveLabel,
+        dtype: DType.float32,
       );
 
       verify(optimizerFactoryMock.createByType(
