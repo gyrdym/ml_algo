@@ -140,13 +140,13 @@ LinearOptimizerFactory createLinearOptimizerFactoryMock(
   final factory = LinearOptimizerFactoryMock();
 
   when(factory.createByType(
-    argThat(isNotNull),
-    argThat(isNotNull),
-    argThat(isNotNull),
+    any,
+    any,
+    any,
     dtype: anyNamed('dtype'),
     costFunction: anyNamed('costFunction'),
     learningRateType: anyNamed('learningRateType'),
-    initialWeightsType: anyNamed('initialWeightsType'),
+    initialCoefficientsType: anyNamed('initialCoefficientsType'),
     initialLearningRate: anyNamed('initialLearningRate'),
     minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
     iterationLimit: anyNamed('iterationLimit'),

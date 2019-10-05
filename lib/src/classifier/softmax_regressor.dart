@@ -136,8 +136,8 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
             .where((series) => targetNames.contains(series.name))
             .isEmpty
         ) {
-          throw Exception('Target columns with names $targetNames does not '
-              'exist in the fitting data. All existing columns: '
+          throw Exception('Target columns with names $targetNames do not '
+              'exist in the fitting data. All the existing columns: '
               '${fittingData.header}');
         }
 

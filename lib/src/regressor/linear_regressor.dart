@@ -3,10 +3,10 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/regressor/linear_regressor_impl.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/_helpers/squared_cost_optimizer_factory.dart';
+import 'package:ml_algo/src/regressor/linear_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -19,7 +19,7 @@ import 'package:ml_linalg/vector.dart';
 /// as all the `x` values are known (since it is the input for the algorithm),
 /// the regressor should find the best coefficients (weights) (they are unknown)
 /// to make a best prediction of `y` term.
-abstract class LinearRegressor implements Assessable {
+abstract class LinearRegressor implements Assessable, Predictor {
   /// Parameters:
   ///
   /// [fittingData] A [DataFrame] with observations, that will be used by the
@@ -90,15 +90,12 @@ abstract class LinearRegressor implements Assessable {
   /// must be equal to the number of features in [fittingData]: the number of
   /// features is equal to the number of columns in [fittingData] minus 1
   /// (target column).
-  ///
-  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
-  /// affect performance or accuracy of the computations. Default value is
-  /// [DType.float32]
   factory LinearRegressor(DataFrame fittingData, String targetName, {
     LinearOptimizerType optimizerType,
     int iterationsLimit = 100,
     LearningRateType learningRateType = LearningRateType.constant,
-    InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
+    InitialCoefficientsType initialCoefficientsType =
+        InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     double lambda,

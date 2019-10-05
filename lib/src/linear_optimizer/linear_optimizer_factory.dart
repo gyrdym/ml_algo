@@ -15,7 +15,7 @@ abstract class LinearOptimizerFactory {
         DType dtype,
         CostFunction costFunction,
         LearningRateType learningRateType,
-        InitialCoefficientsType initialWeightsType,
+        InitialCoefficientsType initialCoefficientsType,
         double initialLearningRate,
         double minCoefficientsUpdate,
         int iterationLimit,

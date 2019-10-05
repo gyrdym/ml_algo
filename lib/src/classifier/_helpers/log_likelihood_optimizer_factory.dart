@@ -75,7 +75,7 @@ LinearOptimizer createLogLikelihoodOptimizer(
     randomSeed: randomSeed,
     batchSize: batchSize,
     learningRateType: learningRateType,
-    initialWeightsType: initialWeightsType,
+    initialCoefficientsType: initialWeightsType,
     dtype: dtype,
     isFittingDataNormalized: isFittingDataNormalized,
   );

@@ -155,7 +155,7 @@ void main() {
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.decreasing,
-        initialWeightsType: InitialCoefficientsType.zeroes,
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 1000,

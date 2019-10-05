@@ -64,7 +64,7 @@ LinearOptimizer createSquaredCostOptimizer(
     randomSeed: randomSeed,
     batchSize: batchSize,
     learningRateType: learningRateType,
-    initialWeightsType: initialCoefficientsType,
+    initialCoefficientsType: initialCoefficientsType,
     dtype: dtype,
     isFittingDataNormalized: isFittingDataNormalized,
   );
