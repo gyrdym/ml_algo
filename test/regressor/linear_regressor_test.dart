@@ -8,6 +8,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -38,7 +39,7 @@ void main() {
       ],
       header: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'target'],
       headerExists: false,
-      dtype: DType.float64,
+      dtype: DType.float32,
     );
 
     CostFunction costFunctionMock;
@@ -72,6 +73,7 @@ void main() {
         initialLearningRate: 5,
         minCoefficientsUpdate: 1000,
         lambda: 20.0,
+        regularizationType: RegularizationType.L1,
         randomSeed: 200,
         batchSize: 100,
         fitIntercept: true,
@@ -103,7 +105,7 @@ void main() {
           [200],
           [500],
         ])),
-        dtype: DType.float64,
+        dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.decreasing,
         initialWeightsType: InitialCoefficientsType.zeroes,
@@ -111,6 +113,7 @@ void main() {
         minCoefficientsUpdate: 1000,
         iterationLimit: 1000,
         lambda: 20.0,
+        regularizationType: RegularizationType.L1,
         batchSize: 100,
         randomSeed: 200,
         isFittingDataNormalized: false,

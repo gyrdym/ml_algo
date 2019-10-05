@@ -103,25 +103,39 @@ void main() {
 
     tearDownAll(() => injector = null);
 
+    test('should throw an exception if some of target columns does not '
+        'exist', () {
+      final targetColumnNames = ['target_1', 'some', 'unknown', 'columns'];
+
+      final actual = () => SoftmaxRegressor(
+        observations,
+        targetColumnNames,
+      );
+
+      expect(actual, throwsException);
+    });
+
+    test('should throw an exception if target columns number is less than '
+        'two, since the SoftmaxRegressor supports only multiclass '
+        'classification with one-hot (or other similar method) encoded '
+        'features', () {
+
+      final targetColumnNames =
+        ['target_1'];
+
+      final actual = () => SoftmaxRegressor(
+        observations,
+        targetColumnNames,
+      );
+
+      expect(actual, throwsException);
+    });
+
     test('should call link function factory twice in order to create softmax '
         'link function', () {
       SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
-        optimizerType: LinearOptimizerType.vanillaGD,
-        learningRateType: LearningRateType.constant,
-        initialCoefficientsType: InitialCoefficientsType.zeroes,
-        iterationsLimit: 100,
-        initialLearningRate: 0.01,
-        minCoefficientsUpdate: 0.001,
-        lambda: 0.1,
-        regularizationType: RegularizationType.L2,
-        fitIntercept: true,
-        interceptScale: 2.0,
-        initialCoefficients: initialCoefficients,
-        randomSeed: 123,
-        negativeLabel: negativeLabel,
-        positiveLabel: positiveLabel,
       );
 
       verify(linkFunctionFactoryMock.createByType(
@@ -135,20 +149,6 @@ void main() {
       SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
-        optimizerType: LinearOptimizerType.vanillaGD,
-        learningRateType: LearningRateType.constant,
-        initialCoefficientsType: InitialCoefficientsType.zeroes,
-        iterationsLimit: 100,
-        initialLearningRate: 0.01,
-        minCoefficientsUpdate: 0.001,
-        lambda: 0.1,
-        regularizationType: RegularizationType.L2,
-        fitIntercept: true,
-        interceptScale: 2.0,
-        initialCoefficients: initialCoefficients,
-        randomSeed: 123,
-        negativeLabel: negativeLabel,
-        positiveLabel: positiveLabel,
       );
 
       verify(costFunctionFactoryMock.createByType(
@@ -215,20 +215,7 @@ void main() {
       SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
-        optimizerType: LinearOptimizerType.vanillaGD,
-        learningRateType: LearningRateType.constant,
-        initialCoefficientsType: InitialCoefficientsType.zeroes,
-        iterationsLimit: 100,
-        initialLearningRate: 0.01,
-        minCoefficientsUpdate: 0.001,
-        lambda: 0.1,
-        regularizationType: RegularizationType.L2,
-        fitIntercept: true,
-        interceptScale: 2.0,
         initialCoefficients: initialCoefficients,
-        randomSeed: 123,
-        negativeLabel: negativeLabel,
-        positiveLabel: positiveLabel,
       );
 
       verify(optimizerMock.findExtrema(
@@ -241,18 +228,9 @@ void main() {
       final classifier = SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
-        optimizerType: LinearOptimizerType.vanillaGD,
-        learningRateType: LearningRateType.constant,
-        initialCoefficientsType: InitialCoefficientsType.zeroes,
-        iterationsLimit: 100,
-        initialLearningRate: 0.01,
-        minCoefficientsUpdate: 0.001,
-        lambda: 0.1,
-        regularizationType: RegularizationType.L2,
         fitIntercept: true,
         interceptScale: 2.0,
         initialCoefficients: initialCoefficients,
-        randomSeed: 123,
         negativeLabel: negativeLabel,
         positiveLabel: positiveLabel,
       );
@@ -286,6 +264,54 @@ void main() {
         [negativeLabel, positiveLabel, negativeLabel],
         [negativeLabel, negativeLabel, positiveLabel],
         [positiveLabel, negativeLabel, negativeLabel],
+      ]));
+
+      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
+          featuresWithIntercept * learnedCoefficients
+      )))).called(1);
+    });
+
+    test('should predict probabilities of classes basing on learned '
+        'coefficients', () {
+      final classifier = SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        fitIntercept: true,
+        interceptScale: 2.0,
+        initialCoefficients: initialCoefficients,
+        negativeLabel: negativeLabel,
+        positiveLabel: positiveLabel,
+      );
+
+      final probabilities = Matrix.fromList([
+        [0.2, 0.7, 0.1],
+        [0.3, 0.2, 0.5],
+        [0.6, 0.2, 0.2],
+      ]);
+
+      when(linkFunctionMock.link(any)).thenReturn(probabilities);
+
+      final features = Matrix.fromList([
+        [55, 44, 33, 22],
+        [10, 88, 77, 11],
+        [12, 22, 39, 13],
+      ]);
+
+      final featuresWithIntercept = Matrix.fromColumns([
+        Vector.filled(3, 2),
+        ...features.columns,
+      ]);
+
+      final prediction = classifier.predictProbabilities(
+        DataFrame.fromMatrix(features),
+      );
+
+      expect(prediction.header, equals(['target_1', 'target_2', 'target_3']));
+
+      expect(prediction.toMatrix(), iterable2dAlmostEqualTo([
+        [0.2, 0.7, 0.1],
+        [0.3, 0.2, 0.5],
+        [0.6, 0.2, 0.2],
       ]));
 
       verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(

@@ -128,6 +128,11 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     num positiveLabel = 1,
     num negativeLabel = 0,
   }) {
+    if (fittingData[targetName] == null) {
+      throw Exception('Target column with name $targetName does not exist in '
+          'the fitting data. All existing columns: ${fittingData.header}');
+    }
+
     final dependencies = getDependencies();
 
     final linkFunctionFactory = dependencies

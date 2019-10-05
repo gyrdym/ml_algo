@@ -132,6 +132,15 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
                 '(e.g., via one-hot encoder)');
         }
 
+        if (fittingData.series
+            .where((series) => targetNames.contains(series.name))
+            .isEmpty
+        ) {
+          throw Exception('Target columns with names $targetNames does not '
+              'exist in the fitting data. All existing columns: '
+              '${fittingData.header}');
+        }
+
         final dependencies = getDependencies();
 
         final linkFunctionFactory = dependencies

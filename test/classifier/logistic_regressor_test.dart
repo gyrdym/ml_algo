@@ -84,6 +84,17 @@ void main() {
 
     tearDownAll(() => injector = null);
 
+    test('should throw an exception if a target column does not exist', () {
+      final targetColumnName = 'col_10';
+
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+      );
+
+      expect(actual, throwsException);
+    });
+
     test('should call link function factory twice in order to create inverse '
         'logit link function', () {
       LogisticRegressor(
@@ -249,13 +260,13 @@ void main() {
         ...features.columns,
       ]);
 
-      final classes = classifier.predictProbabilities(
+      final prediction = classifier.predictProbabilities(
         DataFrame.fromMatrix(features),
       );
 
-      expect(classes.header, equals(['col_4']));
+      expect(prediction.header, equals(['col_4']));
 
-      expect(classes.toMatrix(), iterable2dAlmostEqualTo([
+      expect(prediction.toMatrix(), iterable2dAlmostEqualTo([
         [0.2],
         [0.3],
         [0.6],
