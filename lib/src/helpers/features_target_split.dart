@@ -12,8 +12,10 @@ Iterable<DataFrame> featuresTargetSplit(DataFrame dataset, {
         .where((indexedName) => !uniqueTargetIndices.contains(indexedName.index))
         .map((indexedName) => indexedName.index);
 
-    return dataset
-        .sampleFromSeries(indices: [featuresIndices, uniqueTargetIndices]);
+    return [
+      dataset.sampleFromSeries(indices: featuresIndices),
+      dataset.sampleFromSeries(indices: uniqueTargetIndices),
+    ];
   }
 
   if (targetNames.isNotEmpty) {
@@ -23,8 +25,10 @@ Iterable<DataFrame> featuresTargetSplit(DataFrame dataset, {
          .header
          .where((name) => !uniqueTargetNames.contains(name));
 
-     return dataset
-         .sampleFromSeries(names: [featuresNames, uniqueTargetNames]);
+     return [
+       dataset.sampleFromSeries(names: featuresNames),
+       dataset.sampleFromSeries(names: uniqueTargetNames),
+     ];
   }
 
   throw Exception('Neither target index, nor target name are provided');

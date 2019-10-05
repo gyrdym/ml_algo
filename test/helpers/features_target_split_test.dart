@@ -92,19 +92,10 @@ void main() {
         [11, 22, 33, 44, 55],
       ], headerExists: false);
 
-      final splits = featuresTargetSplit(
-          dataset, targetIndices: [0, 30]).toList();
-
-      expect(splits, hasLength(2));
-
-      expect(splits[0].toMatrix(), equals([
-        [ 1,  2,  4,  5],
-        [20, 30, 40, 50],
-        [77, 88, 99, 11],
-        [22, 33, 44, 55],
-      ]));
-
-      expect(() => splits[1].toMatrix(), throwsRangeError);
+      expect(
+        () => featuresTargetSplit(dataset, targetIndices: [0, 30]),
+        throwsRangeError,
+      );
     });
   });
 }
