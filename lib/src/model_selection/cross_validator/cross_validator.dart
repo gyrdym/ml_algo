@@ -17,13 +17,13 @@ abstract class CrossValidator {
   /// evaluates the predictor on each produced test set
   factory CrossValidator.kFold(
       DataFrame samples,
-      Iterable<String> targetNames, {
+      Iterable<String> targetColumnNames, {
         int numberOfFolds = 5,
         DType dtype = DType.float32,
       }) =>
       CrossValidatorImpl(
         samples,
-        targetNames,
+        targetColumnNames,
         KFoldSplitter(numberOfFolds),
         dtype,
       );
@@ -34,13 +34,13 @@ abstract class CrossValidator {
   /// subsequently evaluates quality of the predictor on each produced test set
   factory CrossValidator.lpo(
       DataFrame samples,
-      Iterable<String> targetNames,
+      Iterable<String> targetColumnNames,
       int p, {
         DType dtype = DType.float32,
       }) =>
       CrossValidatorImpl(
         samples,
-        targetNames,
+        targetColumnNames,
         LeavePOutSplitter(p),
         dtype,
       );
