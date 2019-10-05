@@ -22,7 +22,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
         DType dtype = DType.float32,
         CostFunction costFunction,
         LearningRateType learningRateType,
-        InitialCoefficientsType initialWeightsType,
+        InitialCoefficientsType initialCoefficientsType,
         double initialLearningRate,
         double minCoefficientsUpdate,
         int iterationLimit,
@@ -46,7 +46,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           fittingPoints, fittingLabels,
           costFunction: costFunction,
           learningRateType: learningRateType,
-          initialCoefficientsType: initialWeightsType,
+          initialCoefficientsType: initialCoefficientsType,
           initialLearningRate: initialLearningRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           iterationLimit: iterationLimit,
@@ -64,7 +64,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           minCoefficientsUpdate: minCoefficientsUpdate,
           iterationsLimit: iterationLimit,
           lambda: lambda,
-          initialWeightsType: initialWeightsType,
+          initialWeightsType: initialCoefficientsType,
           isFittingDataNormalized: isFittingDataNormalized,
         );
 
