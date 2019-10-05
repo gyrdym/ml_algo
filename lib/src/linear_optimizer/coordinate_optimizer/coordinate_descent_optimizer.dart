@@ -75,7 +75,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
       iteration++;
     }
 
-    return coefficients;
+    return coefficients.transpose();
   }
 
   Vector _optimizeCoordinate(int j, Matrix x, Matrix y, Matrix w) {
