@@ -99,8 +99,13 @@ void main() {
         initialCoefficients: anyNamed('initialCoefficients'),
         isMinimizingObjective: anyNamed('isMinimizingObjective'),
       )).thenReturn(learnedCoefficients);
+    });
 
-      classifier = SoftmaxRegressor(
+    tearDownAll(() => injector = null);
+
+    test('should call link function factory twice in order to create softmax '
+        'link function', () {
+      SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
         optimizerType: LinearOptimizerType.vanillaGD,
@@ -118,12 +123,7 @@ void main() {
         negativeLabel: negativeLabel,
         positiveLabel: positiveLabel,
       );
-    });
 
-    tearDownAll(() => injector = null);
-
-    test('should call link function factory twice in order to create softmax '
-        'link function', () {
       verify(linkFunctionFactoryMock.createByType(
         LinkFunctionType.softmax,
         dtype: DType.float32,
@@ -132,6 +132,25 @@ void main() {
 
     test('should call cost function factory in order to create '
         'loglikelihood cost function', () {
+      SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        optimizerType: LinearOptimizerType.vanillaGD,
+        learningRateType: LearningRateType.constant,
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
+        iterationsLimit: 100,
+        initialLearningRate: 0.01,
+        minCoefficientsUpdate: 0.001,
+        lambda: 0.1,
+        regularizationType: RegularizationType.L2,
+        fitIntercept: true,
+        interceptScale: 2.0,
+        initialCoefficients: initialCoefficients,
+        randomSeed: 123,
+        negativeLabel: negativeLabel,
+        positiveLabel: positiveLabel,
+      );
+
       verify(costFunctionFactoryMock.createByType(
         CostFunctionType.logLikelihood,
         linkFunction: linkFunctionMock,
@@ -140,6 +159,25 @@ void main() {
 
     test('should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
+      SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        optimizerType: LinearOptimizerType.vanillaGD,
+        learningRateType: LearningRateType.constant,
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
+        iterationsLimit: 100,
+        initialLearningRate: 0.01,
+        minCoefficientsUpdate: 0.001,
+        lambda: 0.1,
+        regularizationType: RegularizationType.L2,
+        fitIntercept: true,
+        interceptScale: 2.0,
+        initialCoefficients: initialCoefficients,
+        randomSeed: 123,
+        negativeLabel: negativeLabel,
+        positiveLabel: positiveLabel,
+      );
+
       verify(optimizerFactoryMock.createByType(
         LinearOptimizerType.vanillaGD,
         argThat(iterable2dAlmostEqualTo([
@@ -174,6 +212,25 @@ void main() {
 
     test('should find the extrema for fitting observations while '
         'instantiating', () {
+      SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        optimizerType: LinearOptimizerType.vanillaGD,
+        learningRateType: LearningRateType.constant,
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
+        iterationsLimit: 100,
+        initialLearningRate: 0.01,
+        minCoefficientsUpdate: 0.001,
+        lambda: 0.1,
+        regularizationType: RegularizationType.L2,
+        fitIntercept: true,
+        interceptScale: 2.0,
+        initialCoefficients: initialCoefficients,
+        randomSeed: 123,
+        negativeLabel: negativeLabel,
+        positiveLabel: positiveLabel,
+      );
+
       verify(optimizerMock.findExtrema(
         initialCoefficients: initialCoefficients,
         isMinimizingObjective: false,
@@ -181,6 +238,25 @@ void main() {
     });
 
     test('should predict classes basing on learned coefficients', () {
+      final classifier = SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        optimizerType: LinearOptimizerType.vanillaGD,
+        learningRateType: LearningRateType.constant,
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
+        iterationsLimit: 100,
+        initialLearningRate: 0.01,
+        minCoefficientsUpdate: 0.001,
+        lambda: 0.1,
+        regularizationType: RegularizationType.L2,
+        fitIntercept: true,
+        interceptScale: 2.0,
+        initialCoefficients: initialCoefficients,
+        randomSeed: 123,
+        negativeLabel: negativeLabel,
+        positiveLabel: positiveLabel,
+      );
+
       final probabilities = Matrix.fromList([
         [0.2, 0.7, 0.1],
         [0.3, 0.2, 0.5],
