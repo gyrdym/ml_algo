@@ -10,6 +10,7 @@ import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
 
 /// A class, performing logistic regression-based classification.
@@ -106,6 +107,10 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   ///
   /// [negativeLabel] Defines the value, that will be used for `negative` class.
   /// By default, `0`.
+  ///
+  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
+  /// affect performance or accuracy of the computations. Default value is
+  /// [DType.float32]
   factory LogisticRegressor(
       DataFrame fittingData,
       String targetName, {
@@ -127,6 +132,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     Vector initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
+    DType dtype = DType.float32,
   }) {
     if (fittingData[targetName] == null) {
       throw Exception('Target column with name $targetName does not exist in '
@@ -139,7 +145,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
         .getDependency<LinkFunctionFactory>();
 
     final linkFunction = linkFunctionFactory
-        .createByType(LinkFunctionType.inverseLogit, dtype: fittingData.dtype);
+        .createByType(LinkFunctionType.inverseLogit, dtype: dtype);
 
     final optimizer = createLogLikelihoodOptimizer(
       fittingData,
@@ -158,7 +164,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
       isFittingDataNormalized: isFittingDataNormalized,
-      dtype: fittingData.dtype,
+      dtype: dtype,
     );
 
     return LogisticRegressorImpl(
@@ -171,7 +177,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
       initialCoefficients: initialCoefficients,
       positiveLabel: positiveLabel,
       negativeLabel: negativeLabel,
-      dtype: fittingData.dtype,
+      dtype: dtype,
     );
   }
 }
