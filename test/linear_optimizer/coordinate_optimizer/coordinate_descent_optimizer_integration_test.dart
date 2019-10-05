@@ -48,9 +48,9 @@ void main() {
     test('should find optimal coefficients for the given data', () {
       final coefficients = optimizer.findExtrema();
       final expected = [-81796400.0, -81295300.0, -85285400.0];
-      expect(coefficients.rowsNum, 1);
-      expect(coefficients.columnsNum, 3);
-      expect(coefficients.getRow(0), iterableAlmostEqualTo(expected, 5.0));
+      expect(coefficients.rowsNum, 3);
+      expect(coefficients.columnsNum, 1);
+      expect(coefficients.getColumn(0), iterableAlmostEqualTo(expected, 5.0));
     });
   });
 
@@ -90,7 +90,7 @@ void main() {
       // actually, points in this example are not normalized
       final coefficients = optimizer
           .findExtrema()
-          .getRow(0);
+          .getColumn(0);
       expect(coefficients, equals([-4381770, -4493700, -4073630]));
     });
   });
