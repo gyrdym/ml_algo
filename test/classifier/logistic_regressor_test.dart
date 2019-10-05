@@ -58,8 +58,6 @@ void main() {
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
 
-    LogisticRegressor classifier;
-
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
       linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctionMock);
@@ -82,11 +80,42 @@ void main() {
         initialCoefficients: anyNamed('initialCoefficients'),
         isMinimizingObjective: anyNamed('isMinimizingObjective'),
       )).thenReturn(learnedCoefficients);
+    });
 
-      classifier = LogisticRegressor(
+    tearDownAll(() => injector = null);
+
+    test('should call link function factory twice in order to create inverse '
+        'logit link function', () {
+      LogisticRegressor(
         observations,
         'col_4',
-        learningRateType: LearningRateType.constant,
+      );
+
+      verify(linkFunctionFactoryMock.createByType(
+        LinkFunctionType.inverseLogit,
+        dtype: DType.float32,
+      )).called(2);
+    });
+
+    test('should call cost function factory in order to create '
+        'loglikelihood cost function', () {
+      LogisticRegressor(
+        observations,
+        'col_4',
+      );
+
+      verify(costFunctionFactoryMock.createByType(
+        CostFunctionType.logLikelihood,
+        linkFunction: linkFunctionMock,
+      )).called(1);
+    });
+
+    test('should call linear optimizer factory and consider intercept term '
+        'while calling the factory', () {
+      LogisticRegressor(
+        observations,
+        'col_4',
+        learningRateType: LearningRateType.decreasing,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 1000,
         initialLearningRate: 0.01,
@@ -101,28 +130,7 @@ void main() {
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
       );
-    });
 
-    tearDownAll(() => injector = null);
-
-    test('should call link function factory twice in order to create inverse '
-        'logit link function', () {
-      verify(linkFunctionFactoryMock.createByType(
-        LinkFunctionType.inverseLogit,
-        dtype: DType.float32,
-      )).called(2);
-    });
-
-    test('should call cost function factory in order to create '
-        'loglikelihood cost function', () {
-      verify(costFunctionFactoryMock.createByType(
-        CostFunctionType.logLikelihood,
-        linkFunction: linkFunctionMock,
-      )).called(1);
-    });
-
-    test('should call linear optimizer factory and consider intercept term '
-        'while calling the factory', () {
       verify(optimizerFactoryMock.createByType(
         LinearOptimizerType.vanillaGD,
         argThat(iterable2dAlmostEqualTo([
@@ -135,7 +143,7 @@ void main() {
         ])),
         dtype: DType.float32,
         costFunction: costFunctionMock,
-        learningRateType: LearningRateType.constant,
+        learningRateType: LearningRateType.decreasing,
         initialWeightsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,
@@ -150,6 +158,12 @@ void main() {
 
     test('should find the extrema for fitting observations while '
         'instantiating', () {
+      LogisticRegressor(
+        observations,
+        'col_4',
+        initialCoefficients: initialCoefficients,
+      );
+
       verify(optimizerMock.findExtrema(
           initialCoefficients: argThat(
             equals(Matrix.fromColumns([initialCoefficients])),
@@ -159,7 +173,17 @@ void main() {
       )).called(1);
     });
 
-    test('should predict classes based on learned coefficients', () {
+    test('should predict classes basing on learned coefficients', () {
+      final classifier = LogisticRegressor(
+        observations,
+        'col_4',
+        initialCoefficients: initialCoefficients,
+        fitIntercept: true,
+        interceptScale: 2.0,
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
+      );
+
       final probabilities = Matrix.fromList([
         [0.2],
         [0.3],
@@ -189,6 +213,52 @@ void main() {
         [negativeLabel],
         [negativeLabel],
         [positiveLabel],
+      ]));
+
+      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
+          featuresWithIntercept * learnedCoefficients
+      )))).called(1);
+    });
+
+    test('should predict probabilities of classes basing on learned '
+        'coefficients', () {
+      final classifier = LogisticRegressor(
+        observations,
+        'col_4',
+        initialCoefficients: initialCoefficients,
+        fitIntercept: true,
+        interceptScale: 2.0,
+      );
+
+      final probabilities = Matrix.fromList([
+        [0.2],
+        [0.3],
+        [0.6],
+      ]);
+
+      when(linkFunctionMock.link(any)).thenReturn(probabilities);
+
+      final features = Matrix.fromList([
+        [55, 44, 33, 22],
+        [10, 88, 77, 11],
+        [12, 22, 39, 13],
+      ]);
+
+      final featuresWithIntercept = Matrix.fromColumns([
+        Vector.filled(3, 2),
+        ...features.columns,
+      ]);
+
+      final classes = classifier.predictProbabilities(
+        DataFrame.fromMatrix(features),
+      );
+
+      expect(classes.header, equals(['col_4']));
+
+      expect(classes.toMatrix(), iterable2dAlmostEqualTo([
+        [0.2],
+        [0.3],
+        [0.6],
       ]));
 
       verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
