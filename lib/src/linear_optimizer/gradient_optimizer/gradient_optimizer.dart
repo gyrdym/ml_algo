@@ -19,7 +19,7 @@ class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
     DType dtype = DType.float32,
     CostFunction costFunction,
-    LearningRateType learningRateType = LearningRateType.decreasing,
+    LearningRateType learningRateType = LearningRateType.decreasingAdaptive,
     InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,

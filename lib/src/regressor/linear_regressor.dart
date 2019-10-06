@@ -33,7 +33,7 @@ abstract class LinearRegressor implements Assessable, Predictor {
   /// [optimizerType] Defines an algorithm of optimization, that will be used
   /// to find the best coefficients of a cost function. Also defines, which
   /// regularization type (L1 or L2) one may use to learn a linear regressor.
-  /// By default - [LinearOptimizerType.vanillaGD]
+  /// By default - [LinearOptimizerType.gradient]
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the optimization algorithm. Default value is `100`.
@@ -77,7 +77,7 @@ abstract class LinearRegressor implements Assessable, Predictor {
   /// [isFittingDataNormalized] Defines, whether the [fittingData] normalized
   /// or not. Normalization should be performed column-wise. Normalized data
   /// may be needed for some optimizers (e.g., for
-  /// [LinearOptimizerType.vanillaCD])
+  /// [LinearOptimizerType.coordinate])
   ///
   /// [learningRateType] A value, defining a strategy for the learning rate
   /// behaviour throughout the whole fitting process.
@@ -97,7 +97,7 @@ abstract class LinearRegressor implements Assessable, Predictor {
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory LinearRegressor(DataFrame fittingData, String targetName, {
-    LinearOptimizerType optimizerType = LinearOptimizerType.vanillaGD,
+    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialCoefficientsType initialCoefficientsType =

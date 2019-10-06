@@ -13,7 +13,7 @@ class LearningRateGeneratorFactoryImpl implements LearningRateGeneratorFactory {
       case LearningRateType.constant:
         return ConstantLearningRateGenerator();
 
-      case LearningRateType.decreasing:
+      case LearningRateType.decreasingAdaptive:
         return DecreasingLearningRateGenerator();
 
       default:

@@ -162,7 +162,7 @@ void main() {
       SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
-        optimizerType: LinearOptimizerType.vanillaGD,
+        optimizerType: LinearOptimizerType.gradient,
         learningRateType: LearningRateType.constant,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 100,
@@ -180,7 +180,7 @@ void main() {
       );
 
       verify(optimizerFactoryMock.createByType(
-        LinearOptimizerType.vanillaGD,
+        LinearOptimizerType.gradient,
         argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 13.1, 15.2, 61.0, 27.2],

@@ -85,7 +85,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// [isFittingDataNormalized] Defines, whether the [fittingData] normalized
   /// or not. Normalization should be performed column-wise. Normalized data
   /// may be needed for some optimizers (e.g., for
-  /// [LinearOptimizerType.vanillaCD])
+  /// [LinearOptimizerType.coordinate])
   ///
   /// [learningRateType] A value, defining a strategy for the learning rate
   /// behaviour throughout the whole fitting process.
@@ -114,7 +114,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   factory LogisticRegressor(
       DataFrame fittingData,
       String targetName, {
-    LinearOptimizerType optimizerType = LinearOptimizerType.vanillaGD,
+    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,

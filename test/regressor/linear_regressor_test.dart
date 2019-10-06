@@ -89,7 +89,7 @@ void main() {
     test('should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
       LinearRegressor(observations, 'target',
-        optimizerType: LinearOptimizerType.vanillaCD,
+        optimizerType: LinearOptimizerType.coordinate,
         iterationsLimit: 1000,
         initialLearningRate: 5,
         minCoefficientsUpdate: 1000,
@@ -99,14 +99,14 @@ void main() {
         batchSize: 100,
         fitIntercept: true,
         interceptScale: 3.0,
-        learningRateType: LearningRateType.decreasing,
+        learningRateType: LearningRateType.decreasingAdaptive,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialCoefficients: initialCoefficients,
         dtype: DType.float32,
       );
 
       verify(linearOptimizerFactoryMock.createByType(
-        LinearOptimizerType.vanillaCD,
+        LinearOptimizerType.coordinate,
         argThat(iterable2dAlmostEqualTo([
           [3.0, 10, 20, 30, 40],
           [3.0, 11, 22, 33, 44],
@@ -117,7 +117,7 @@ void main() {
         ])),
         dtype: DType.float32,
         costFunction: costFunctionMock,
-        learningRateType: LearningRateType.decreasing,
+        learningRateType: LearningRateType.decreasingAdaptive,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 5,
         minCoefficientsUpdate: 1000,
