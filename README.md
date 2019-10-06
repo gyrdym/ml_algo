@@ -11,41 +11,33 @@ The main purpose of the library - to give developers, interested both in Dart la
 implementation of machine learning algorithms. This library targeted to dart vm, so, to get smoothest experience with 
 the lib, please, do not use it in a browser.
 
-## The library's structure
+## The library's content
 
 - #### Model selection
     - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
-    Factory, that creates instances of a cross validator. Cross validation allows researchers to fit different 
+    Factory, that creates instances of cross validators. Cross validation allows researchers to fit different 
     [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms, 
     assessing prediction quality on different parts of a dataset. 
 
 - #### Classification algorithms
-    - ##### Linear classification
-        - ###### Logistic regression 
-            - [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor.dart). 
-            A class, that performs linear binary classification, supports different optimizers. To use this kind of 
-            classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+    - [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor.dart). 
+    A class, that performs linear binary classification of data. To use this kind of classifier your data have to be 
+    [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+
+    - [SoftmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor.dart). 
+    A class, that performs linear multiclass classification of data. To use this kind of classifier your data have to be 
+    [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
         
-        - ##### Softmax regression
-            - [SoftmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor.dart). 
-            A class, that performs linear multiclass classification, supports different optimizers. To use this kind 
-            of classifier your data have to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
-            
-    - ##### Nonlinear classification
-        - ###### Decision tree classifier
-            - [DecisionTreeClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/decision_tree_classifier.dart)
-            A class, that performs classification, using decision trees.
+    - [DecisionTreeClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/decision_tree_classifier.dart)
+    A class, that performs classification, using decision trees. May work with data with non-linear patterns.
 
 - #### Regression algorithms
-    - ##### Linear regression
-        - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). A 
-        class, that performs linear regression, supports different types of optimizers. 
-    
-    - ##### Nonlinear regression
-        - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor.dart)
-        A class, that makes prediction for each new observation basing on first `k` closest observations from 
-        training data. It has quite high computational complexity, but in the same time it may easily catch non-linear 
-        pattern of the data. 
+    - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). A 
+    class, that finds a linear pattern in training data and predicts a real numbers depending on the pattern. 
+
+    - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor.dart)
+    A class, that makes prediction for each new observation basing on first `k` closest observations from 
+    training data. It may catch non-linear pattern of the data. 
 
 ## Examples
 
@@ -186,7 +178,7 @@ print(samples.header);
 
 It will output the following:
 ````dart
-('col_0', 'col_1', 'col_2', 'col_3', 'col_4', 'col_5', 'col_6', 'col_7', 'col_8', 'col_9', 'col_10', 'col_11', 'col_12', 'col_13')
+(col_0, col_1, col_2, col_3, col_4, col_5, col_6, col_7, col_8, col_9, col_10, col_11, col_12, col_13)
 ````
 
 Our target is `col_13`. Let's store it:
