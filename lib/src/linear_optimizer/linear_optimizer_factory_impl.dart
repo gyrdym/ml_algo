@@ -41,7 +41,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
 
     switch (optimizerType) {
 
-      case LinearOptimizerType.vanillaGD:
+      case LinearOptimizerType.gradient:
         return GradientOptimizer(
           fittingPoints, fittingLabels,
           costFunction: costFunction,
@@ -56,7 +56,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           dtype: dtype,
         );
 
-      case LinearOptimizerType.vanillaCD:
+      case LinearOptimizerType.coordinate:
         return CoordinateDescentOptimizer(
           fittingPoints, fittingLabels,
           dtype: dtype,

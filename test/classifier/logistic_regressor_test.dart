@@ -126,7 +126,7 @@ void main() {
       LogisticRegressor(
         observations,
         'col_4',
-        learningRateType: LearningRateType.decreasing,
+        learningRateType: LearningRateType.decreasingAdaptive,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 1000,
         initialLearningRate: 0.01,
@@ -144,7 +144,7 @@ void main() {
       );
 
       verify(optimizerFactoryMock.createByType(
-        LinearOptimizerType.vanillaGD,
+        LinearOptimizerType.gradient,
         argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 3.1, 5.2, 6.0, 77.4],
@@ -155,7 +155,7 @@ void main() {
         ])),
         dtype: DType.float32,
         costFunction: costFunctionMock,
-        learningRateType: LearningRateType.decreasing,
+        learningRateType: LearningRateType.decreasingAdaptive,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 0.01,
         minCoefficientsUpdate: 0.001,

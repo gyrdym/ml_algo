@@ -4,11 +4,11 @@
 /// coefficients of features of predicting line/hyperplane. There are several
 /// algorithms to find the coefficients that minimize a cost function best.
 enum LinearOptimizerType {
-  /// Original gradient descent optimization, only L2 regularization is
+  /// Original gradient descent/ascent optimization, only L2 regularization is
   /// applicable while optimizing a function using this method
-  vanillaGD,
+  gradient,
 
   /// Original coordinate descent optimization, only L1 regularization is
   /// applicable while optimizing a function using this method
-  vanillaCD,
+  coordinate,
 }

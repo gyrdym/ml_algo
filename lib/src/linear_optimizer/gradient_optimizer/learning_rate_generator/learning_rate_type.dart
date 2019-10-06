@@ -1,7 +1,12 @@
 /// A type of learning rate behaviour
-///
-/// [LearningRateType.decreasing] Learning rate will decrease every iteration
-///
-/// [LearningRateType.constant] Learning rate will be constant throughout the
-/// whole fitting process
-enum LearningRateType { decreasing, constant }
+enum LearningRateType {
+  /// Learning rate will decrease every iteration according to the rule:
+  ///
+  /// ````dart
+  /// learningRateValue / iterationNumber
+  /// ````
+  decreasingAdaptive,
+
+  /// Learning rate will be constant throughout the whole fitting process
+  constant,
+}

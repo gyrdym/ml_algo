@@ -12,10 +12,10 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 /// and consider it during the model's learning.
 enum RegularizationType {
   ///uses Manhattan norm of a vector to calculate magnitude of learned
-  ///coefficients. Applicable for [LinearOptimizerType.vanillaCD]
+  ///coefficients. Applicable for [LinearOptimizerType.coordinate]
   L1,
 
   ///uses Euclidean norm of a vector to calculate magnitude of learned
-  ///coefficients. Applicable for [LinearOptimizerType.vanillaGD]
+  ///coefficients. Applicable for [LinearOptimizerType.gradient]
   L2,
 }

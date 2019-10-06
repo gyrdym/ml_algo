@@ -97,8 +97,8 @@ Evaluate our model via accuracy metric:
 final accuracy = validator.evaluate((samples, targetNames) => 
     LogisticRegressor(
         samples,
-        targetNames[0], // remember, we provide a list of just a single name
-        optimizerType: LinearOptimizerType.vanillaGD,  
+        targetNames[0], // remember, we provided a list of just a single name
+        optimizerType: LinearOptimizerType.gradient,  
         initialLearningRate: .8,
         iterationsLimit: 500,
         batchSize: samples.rows.length,
@@ -108,7 +108,7 @@ final accuracy = validator.evaluate((samples, targetNames) =>
     ), MetricType.accuracy);
 ````
 
-Let's print score:
+Let's print the score:
 ````dart
 print('accuracy on classification: ${accuracy.toStringAsFixed(2)}');
 ````
@@ -134,7 +134,7 @@ Future main() async {
       LogisticRegressor(
           samples,
           targetNames[0], // remember, we provide a list of just a single name
-          optimizerType: LinearOptimizerType.vanillaGD,  
+          optimizerType: LinearOptimizerType.gradient,  
           initialLearningRate: .8,
           iterationsLimit: 500,
           batchSize: 768,
