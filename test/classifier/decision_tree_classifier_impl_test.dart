@@ -2,6 +2,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
@@ -34,7 +35,8 @@ void main() {
         sample3: DecisionTreeLeafLabel(label3),
       });
 
-      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
+      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
+          DType.float32);
       final predictedClasses = classifier.predict(
         DataFrame.fromMatrix(features),
       );
@@ -51,7 +53,8 @@ void main() {
     test('should return an empty matrix if input features matrix is '
         'empty', () {
       final solverMock = DecisionTreeSolverMock();
-      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
+      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
+          DType.float32);
       final predictedClasses = classifier.predict(DataFrame([<num>[]]));
 
       expect(predictedClasses.header, isEmpty);
@@ -80,7 +83,8 @@ void main() {
         sample3: label3,
       });
 
-      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name');
+      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
+          DType.float32);
       final predictedLabels = classifier.predictProbabilities(
         DataFrame.fromMatrix(features),
       );

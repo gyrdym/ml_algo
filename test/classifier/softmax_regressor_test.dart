@@ -103,8 +103,7 @@ void main() {
 
     tearDownAll(() => injector = null);
 
-    test('should throw an exception if some of target columns does not '
-        'exist', () {
+    test('should throw an exception if some target columns do not exist', () {
       final targetColumnNames = ['target_1', 'some', 'unknown', 'columns'];
 
       final actual = () => SoftmaxRegressor(

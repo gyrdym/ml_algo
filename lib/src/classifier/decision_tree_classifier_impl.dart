@@ -2,14 +2,17 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class DecisionTreeClassifierImpl with AssessablePredictorMixin
     implements DecisionTreeClassifier {
 
-  DecisionTreeClassifierImpl(this._solver, String className)
+  DecisionTreeClassifierImpl(this._solver, String className, this._dtype)
       : classNames = [className];
+
+  final DType _dtype;
 
   final DecisionTreeSolver _solver;
 
@@ -19,7 +22,7 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
   @override
   DataFrame predict(DataFrame features) {
     final predictedLabels = features
-        .toMatrix()
+        .toMatrix(_dtype)
         .rows
         .map(_solver.getLabelForSample);
 
@@ -30,10 +33,10 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
     final outcomeList = predictedLabels
         .map((label) => label.value)
         .toList(growable: false);
-    final outcomeVector = Vector.fromList(outcomeList);
+    final outcomeVector = Vector.fromList(outcomeList, dtype: _dtype);
 
     return DataFrame.fromMatrix(
-      Matrix.fromColumns([outcomeVector]),
+      Matrix.fromColumns([outcomeVector], dtype: _dtype),
       header: classNames,
     );
   }
@@ -43,13 +46,14 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
     final probabilities = Matrix.fromColumns([
       Vector.fromList(
         features
-            .toMatrix()
+            .toMatrix(_dtype)
             .rows
             .map(_solver.getLabelForSample)
             .map((label) => label.probability)
             .toList(growable: false),
+        dtype: _dtype,
       ),
-    ]);
+    ], dtype: _dtype);
 
     return DataFrame.fromMatrix(
       probabilities,

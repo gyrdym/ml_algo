@@ -1,7 +1,7 @@
 import 'package:ml_linalg/matrix.dart';
 
 abstract class LinearOptimizer {
-  /// Returns a coefficients of the equation of a hyperplane.
+  /// Returns coefficients of the equation of a hyperplane.
   ///
   /// Dimensions of the returning matrix:
   ///
@@ -12,7 +12,7 @@ abstract class LinearOptimizer {
   /// In other words, one column in the coefficients matrix describes its own
   /// dedicated target.
   ///
-  /// Let's say, one has a dataset, consisting of features:
+  /// Let's say, one has a dataset, consisting of the features:
   ///
   /// ````dart
   /// final x = [
@@ -35,7 +35,8 @@ abstract class LinearOptimizer {
   /// ````
   ///
   /// After solving the equation of a hyperplane via the [LinearOptimizer], the
-  /// coefficients will be like that:
+  /// coefficients will be like that (values using below are random, pay
+  /// attention just to the shape of the matrix):
   ///
   /// ````dart
   /// [

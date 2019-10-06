@@ -53,20 +53,21 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// optimization algorithm. If difference between the two vectors is small
   /// enough, there is no reason to continue fitting. Default value is `1e-12`.
   ///
-  /// [lambda] A coefficient of regularization. Uses to prevent the classifier's
+  /// [lambda] A coefficient of regularization. Uses to prevent the regressor's
   /// overfitting. The more the value of [lambda], the more regular the
-  /// coefficients of log-likelihood cost function are. Extremely large [lambda]
-  /// may decrease the coefficients to nothing, otherwise too small [lambda] may
-  /// be a cause of too large absolute values of the coefficients.
+  /// coefficients of the equation of the predicting hyperplane are. Extremely
+  /// large [lambda] may decrease the coefficients to nothing, otherwise too
+  /// small [lambda] may be a cause of too large absolute values of the
+  /// coefficients, that is also bad.
   ///
   /// [regularizationType] A way the coefficients of the classifier will be
   /// regularized to prevent a model overfitting.
   ///
   /// [randomSeed] A seed, that will be passed to a random value generator,
-  /// used by stochastic optimizers. Will be ignored, if the [solver] is not
-  /// a stochastic. Remember, each time you run the regressor based on, for
-  /// instance, stochastic gradient descent, with the same parameters, you will
-  /// receive a different result. To avoid it, define [randomSeed].
+  /// used by stochastic optimizers. Will be ignored, if the solver cannot be
+  /// stochastic. Remember, each time you run the stochastic regressor with the
+  /// same parameters but with unspecified [randomSeed], you will receive
+  /// different results. To avoid it, define [randomSeed]
   ///
   /// [batchSize] A size of data (in rows), that will be used for fitting per
   /// one iteration. Applicable not for all optimizers. If gradient-based

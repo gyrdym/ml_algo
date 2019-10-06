@@ -14,7 +14,7 @@ class LearningRateGeneratorFactoryImpl implements LearningRateGeneratorFactory {
         return ConstantLearningRateGenerator();
 
       case LearningRateType.decreasingAdaptive:
-        return DecreasingLearningRateGenerator();
+        return DecreasingAdaptiveLearningRateGenerator();
 
       default:
         throw UnsupportedError('Unsupported learning rate type - $type');
