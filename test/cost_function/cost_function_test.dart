@@ -4,13 +4,13 @@ import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../test_utils/mocks.dart';
+import '../mocks.dart';
 
 void main() {
   group('SquaredCost', () {
     final squaredCost = const SquaredCost();
 
-    test('should return a proper gradient vector', () {
+    test('should return a gradient vector of quadratic  error function', () {
       // The formula in matrix notation:
       // -2 * X^t * (y - X*w)
       // where X^t - transposed X matrix
@@ -52,7 +52,8 @@ void main() {
       [1.0],
     ]));
 
-    test('should return a proper gradient vector', () {
+    test('should return a gradient vector of log likelihood error '
+        'function', () {
       // The formula in matrix notation:
       // X^t * (indicator(Y, 1) - P(y=+1|X,W))
       // where X^t - transposed X matrix
@@ -86,6 +87,20 @@ void main() {
       final actual = logLikelihoodCost.getGradient(x, w, y);
 
       expect(actual, equals(expected));
+    });
+
+    test('should return error cost value', () {
+      expect(
+        () => logLikelihoodCost.getCost(null, null),
+        throwsUnimplementedError,
+      );
+    });
+
+    test('should return a subgradient vector', () {
+      expect(
+        () => logLikelihoodCost.getSubGradient(null, null, null, null),
+        throwsUnimplementedError,
+      );
     });
   });
 }

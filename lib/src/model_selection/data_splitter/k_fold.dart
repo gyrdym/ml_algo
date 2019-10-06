@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
-import 'package:xrange/zrange.dart';
+import 'package:xrange/integers.dart';
 
 class KFoldSplitter implements Splitter {
   KFoldSplitter(this._numberOfFolds) {
@@ -21,10 +21,10 @@ class KFoldSplitter implements Splitter {
     final remainder = numOfObservations % _numberOfFolds;
     final foldSize = numOfObservations ~/ _numberOfFolds;
     for (int i = 0, startIdx = 0, endIdx = 0; i < _numberOfFolds; i++) {
-      // if we reached last fold of size [foldSize], all the next folds up
+      // if we reached the last fold of size [foldSize], all the next folds up
       // to the last fold will have size that is equal to [foldSize] + 1
       endIdx = startIdx + foldSize + (i >= _numberOfFolds - remainder ? 1 : 0);
-      yield ZRange.closedOpen(startIdx, endIdx).values();
+      yield integers(startIdx, endIdx, upperClosed: false);
       startIdx = endIdx;
     }
   }

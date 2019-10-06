@@ -1,5 +1,9 @@
 # Changelog
 
+## 13.0.0
+- Predictor's API: `DataFrame` used instead of `Matrix`
+- `DecisionTreeSolver`: data splitting logic fixed
+
 ## 12.1.2
 - `xrange` package version locked
 

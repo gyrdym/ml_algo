@@ -1,0 +1,4 @@
+enum LinkFunctionType {
+  inverseLogit,
+  softmax,
+}

@@ -1,19 +1,16 @@
 // 8.5 sec
-import 'dart:async';
-
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 const observationsNum = 1000;
-const featuresNum = 20;
+const columnsNum = 21;
 
 class CrossValidatorBenchmark extends BenchmarkBase {
   CrossValidatorBenchmark() : super('Cross validator benchmark');
 
-  Matrix features;
-  Matrix labels;
   CrossValidator crossValidator;
 
   static void main() {
@@ -22,18 +19,20 @@ class CrossValidatorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    crossValidator.evaluate((trainFeatures, trainLabels) =>
-        ParameterlessRegressor.knn(trainFeatures, trainLabels, k: 7),
-        features, labels, MetricType.mape);
+    crossValidator.evaluate((trainSamples, targetFeatureNames) =>
+        KnnRegressor(trainSamples, targetFeatureNames.first, k: 7),
+        MetricType.mape);
   }
 
   @override
   void setup() {
-    features = Matrix.fromRows(List.generate(observationsNum,
-            (i) => Vector.randomFilled(featuresNum)));
-    labels = Matrix.fromColumns([Vector.randomFilled(observationsNum)]);
+    final samples = Matrix.fromRows(List.generate(observationsNum,
+            (i) => Vector.randomFilled(columnsNum)));
 
-    crossValidator = CrossValidator.kFold(numberOfFolds: 5);
+    final dataFrame = DataFrame.fromMatrix(samples);
+
+    crossValidator = CrossValidator.kFold(dataFrame, ['col_20'],
+        numberOfFolds: 5);
   }
 
   void tearDown() {}

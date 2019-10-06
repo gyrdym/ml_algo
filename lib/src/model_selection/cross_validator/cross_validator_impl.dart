@@ -1,66 +1,64 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
-import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
+import 'package:quiver/iterables.dart';
 
 class CrossValidatorImpl implements CrossValidator {
-  CrossValidatorImpl(DType dtype, this._splitter)
-      : dtype = dtype ?? DefaultParameterValues.dtype;
+  CrossValidatorImpl(this.samples, this.targetNames, this._splitter, this.dtype);
 
+  final DataFrame samples;
   final DType dtype;
+  final Iterable<String> targetNames;
   final Splitter _splitter;
 
   @override
-  double evaluate(Assessable predictorFactory(Matrix features, Matrix outcomes),
-      Matrix observations, Matrix labels, MetricType metric) {
-    if (observations.rowsNum != labels.rowsNum) {
-      throw Exception(
-          'Number of feature objects must be equal to the number of labels!');
-    }
+  double evaluate(PredictorFactory predictorFactory, MetricType metricType) {
+    final samplesAsMatrix = samples.toMatrix();
+    final discreteColumns = enumerate(samples.series)
+        .where((indexedSeries) => indexedSeries.value.isDiscrete)
+        .map((indexedSeries) => indexedSeries.index);
 
-    final allIndicesGroups = _splitter.split(observations.rowsNum);
+    final allIndicesGroups = _splitter.split(samplesAsMatrix.rowsNum);
     var score = 0.0;
     var folds = 0;
 
-    for (final testIndices in allIndicesGroups) {
-      final testIndicesAsSet = Set<int>.from(testIndices);
-      final trainFeatures =
-          List<Vector>(observations.rowsNum - testIndicesAsSet.length);
-      final trainLabels =
-          List<Vector>(observations.rowsNum - testIndicesAsSet.length);
-
-      final testFeatures = List<Vector>(testIndicesAsSet.length);
-      final testLabels = List<Vector>(testIndicesAsSet.length);
+    for (final testRowsIndices in allIndicesGroups) {
+      final testRowsIndicesAsSet = Set<int>.from(testRowsIndices);
+      final trainSamples =
+          List<Vector>(samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length);
+      final testSamples = List<Vector>(testRowsIndicesAsSet.length);
 
       int trainPointsCounter = 0;
       int testPointsCounter = 0;
 
-      for (int index = 0; index < observations.rowsNum; index++) {
-        if (testIndicesAsSet.contains(index)) {
-          testFeatures[testPointsCounter] = observations.getRow(index);
-          testLabels[testPointsCounter] = labels.getRow(index);
-          testPointsCounter++;
+      samplesAsMatrix.rowIndices.forEach((i) {
+        if (testRowsIndicesAsSet.contains(i)) {
+          testSamples[testPointsCounter++] = samplesAsMatrix[i];
         } else {
-          trainFeatures[trainPointsCounter] = observations.getRow(index);
-          trainLabels[trainPointsCounter] = labels.getRow(index);
-          trainPointsCounter++;
+          trainSamples[trainPointsCounter++] = samplesAsMatrix[i];
         }
-      }
+      });
 
-      final predictor = predictorFactory(
-        Matrix.fromRows(trainFeatures, dtype: dtype),
-        Matrix.fromRows(trainLabels, dtype: dtype),
+      final trainingDataFrame = DataFrame.fromMatrix(
+        Matrix.fromRows(trainSamples),
+        header: samples.header,
+        discreteColumns: discreteColumns,
       );
 
-      score += predictor.assess(
-          Matrix.fromRows(testFeatures, dtype: dtype),
-          Matrix.fromRows(testLabels, dtype: dtype),
-          metric
+      final testingDataFrame = DataFrame.fromMatrix(
+        Matrix.fromRows(testSamples),
+        header: samples.header,
+        discreteColumns: discreteColumns,
       );
+
+      final predictor = predictorFactory(trainingDataFrame, targetNames);
+
+      score += predictor.assess(testingDataFrame, targetNames, metricType);
+
       folds++;
     }
 
