@@ -164,6 +164,47 @@ void main() {
         splittingValues)).called(1);
   });
 
+  test('should skip the same values while iterating through the sorted '
+      'rows', () {
+    final samples = Matrix.fromList([
+      [11],
+      [11],
+      [11],
+      [20],
+    ]);
+    final splittingColumnIdx = 0;
+    final targetColumnIdx = 1;
+
+    final numericalSplitter = NumericalSplitterMock();
+    final assessor = SplitAssessorMock();
+
+    when(numericalSplitter.split(samples, splittingColumnIdx, any))
+        .thenReturn({});
+    when(assessor.getError(any, targetColumnIdx)).thenReturn(0.5);
+
+    final splitter = GreedySplitter(assessor, numericalSplitter, null);
+
+    final split = splitter.split(
+      samples,
+      splittingColumnIdx,
+      targetColumnIdx,
+      null,
+    );
+    expect(split.values, equals(<Matrix>[]));
+
+    final verificationResult = verify(
+      numericalSplitter.split(
+        samples,
+        splittingColumnIdx,
+        captureThat(isNotNull),
+      ),
+    );
+
+    verificationResult.called(1);
+
+    expect(verificationResult.captured[0], 15.5);
+  });
+
   test('should throw an error if negative splitting index is given', () {
     final samples = Matrix.fromList([
       [11, 22, 1, 30],
