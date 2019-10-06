@@ -5,35 +5,12 @@
 
 # Machine learning algorithms with dart
 
-**Table of contents**
-- [What for is the library?](#what-is-the-ml_algo-for)
-- [The library's structure](#the-librarys-structure)
-- [Examples](#examples)
-    - [Logistic regression](#logistic-regression)
-    - [Softmax regression](#softmax-regression)
-    - [KNN regression](#k-nearest-neighbour-regression)
-
 ## What is the ml_algo for?
 
 The main purpose of the library - to give developers, interested both in Dart language and data science, native Dart 
 implementation of machine learning algorithms. This library targeted to dart vm, so, to get smoothest experience with 
 the lib, please, do not use it in a browser.
 
-**Following algorithms are implemented:**
-- *Linear regression:*
-    - Gradient descent based linear regression
-    - Coordinate descent based linear regression
-
-- *Linear classifier:*
-    - Logistic regression
-    - Softmax regression
-    
-- *Non-linear classifier:*
-    - Decision tree classifier (majority-based prediction)
-    
-- *Non-parametric regression:*
-    - KNN regression
-    
 ## The library's structure
 
 - #### Model selection
@@ -132,7 +109,7 @@ final accuracy = validator.evaluate((samples, targetNames) =>
         optimizerType: LinearOptimizerType.vanillaGD,  
         initialLearningRate: .8,
         iterationsLimit: 500,
-        batchSize: 768,
+        batchSize: samples.rows.length,
         fitIntercept: true,
         interceptScale: .1,
         learningRateType: LearningRateType.constant
