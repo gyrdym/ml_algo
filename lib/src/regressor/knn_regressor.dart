@@ -1,71 +1,66 @@
-import 'package:ml_algo/src/algorithms/knn/kernel.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory_impl.dart';
 import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
-import 'package:ml_algo/src/algorithms/knn/knn.dart';
-import 'package:ml_algo/src/metric/factory.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/regressor/parameterless_regressor.dart';
-import 'package:ml_algo/src/utils/default_parameter_values.dart';
+import 'package:ml_algo/src/helpers/features_target_split.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
-class KNNRegressor implements ParameterlessRegressor {
-  KNNRegressor(this._trainingFeatures, this._trainingOutcomes, {
-    int k,
-    Distance distance = Distance.euclidean,
-    FindKnnFn solverFn = findKNeighbours,
-    Kernel kernel = Kernel.uniform,
-    DType dtype = DefaultParameterValues.dtype,
+/// A class that performs regression basing on `k nearest neighbours` algorithm
+///
+/// K nearest neighbours algorithm is an algorithm that is targeted to search
+/// most similar labelled observations (number of these observations equals `k`)
+/// for the given unlabelled one.
+///
+/// In order to make a prediction, or rather to set a label for a given new
+/// observation, labels of found `k` observations are being summed up and
+/// divided by `k`.
+///
+/// To get a more precise result, one may use weighted average of found labels -
+/// the farther a found observation from the target one, the lower the weight of
+/// the observation is. To obtain these weights one may use a kernel function.
+abstract class KnnRegressor implements Assessable, Predictor {
+  /// Parameters:
+  ///
+  /// [fittingData] Labelled observations, among which will be searched [k]
+  /// nearest neighbours for unlabelled observations. Must contain [targetName]
+  /// column.
+  ///
+  /// [targetName] A string, that serves as a name of the column, that contains
+  /// labels (or outcomes).
+  ///
+  /// [k] a number of nearest neighbours to be searched among [fittingData]
+  ///
+  /// [kernel] a type of a kernel function, that will be used to predict an
+  /// outcome for a new observation
+  ///
+  /// [distance] a distance type, that will be used to measure a distance
+  /// between two observation vectors
+  ///
+  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
+  /// affect performance or accuracy of the computations. Default value is
+  /// [DType.float32]
+  factory KnnRegressor(
+      DataFrame fittingData,
+      String targetName, {
+        int k,
+        Kernel kernel = Kernel.uniform,
+        Distance distance = Distance.euclidean,
+        DType dtype = DType.float32,
+      }) {
+    final splits = featuresTargetSplit(fittingData,
+      targetNames: [targetName],
+    ).toList();
 
-    KernelFunctionFactory kernelFnFactory = const KernelFunctionFactoryImpl(),
-  }) :
-        _k = k,
-        _distanceType = distance,
-        _solverFn = solverFn,
-        _dtype = dtype,
-        _kernelFn = kernelFnFactory.createByType(kernel) {
-    if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
-      throw Exception('Number of observations and number of outcomes have to be'
-          'equal');
-    }
-    if (_k > _trainingFeatures.rowsNum) {
-      throw Exception('Parameter k should be less than or equal to the number '
-          'of training observations');
-    }
-  }
-
-  final Matrix _trainingFeatures;
-  final Matrix _trainingOutcomes;
-  final Distance _distanceType;
-  final int _k;
-  final FindKnnFn _solverFn;
-  final KernelFn _kernelFn;
-  final DType _dtype;
-
-  Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(
-      _trainingOutcomes.columnsNum, dtype: _dtype);
-  Vector _cachedZeroVector;
-
-  @override
-  Matrix predict(Matrix observations) => Matrix.fromRows(
-    _generateOutcomes(observations).toList(growable: false), dtype: _dtype);
-
-  Iterable<Vector> _generateOutcomes(Matrix observations) sync* {
-    for (final kNeighbours in _solverFn(_k, _trainingFeatures, _trainingOutcomes,
-        observations, distance: _distanceType)) {
-      yield kNeighbours
-          .fold<Vector>(_zeroVector,
-              (sum, pair) => sum + pair.label * _kernelFn(pair.distance)) / _k;
-    }
-  }
-
-  @override
-  double assess(Matrix features, Matrix origLabels, MetricType metricType) {
-    final metric = MetricFactory.createByType(metricType);
-    final prediction = predict(features);
-    return metric.getScore(prediction, origLabels);
+    return KnnRegressorImpl(
+      splits[0].toMatrix(),
+      splits[1].toMatrix(),
+      targetName,
+      k: k,
+      kernel: kernel,
+      distance: distance,
+      dtype: dtype,
+    );
   }
 }
