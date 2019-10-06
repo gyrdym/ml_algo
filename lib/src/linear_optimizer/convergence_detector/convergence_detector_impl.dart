@@ -19,6 +19,6 @@ class ConvergenceDetectorImpl implements ConvergenceDetector {
       return true;
     }
 
-    return false;
+    return minDiff != null && coefficientsDiff <= minDiff;
   }
 }

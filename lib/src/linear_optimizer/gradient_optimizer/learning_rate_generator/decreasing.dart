@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
 
-class DecreasingLearningRateGenerator implements LearningRateGenerator {
+class DecreasingAdaptiveLearningRateGenerator implements LearningRateGenerator {
   double _initialValue;
   int _iterationCounter = 0;
 

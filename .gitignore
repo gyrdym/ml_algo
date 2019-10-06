@@ -7,3 +7,5 @@ build/
 # Directory created by dartdoc
 doc/api/
 /.dart_tool/
+
+pubspec.lock
