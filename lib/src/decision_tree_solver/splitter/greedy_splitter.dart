@@ -39,7 +39,13 @@ class GreedySplitter implements Splitter {
     var prevValue = sortedRows.first[splittingIdx];
 
     for (final row in sortedRows.skip(1)) {
-      final splittingValue = (prevValue + row[splittingIdx]) / 2;
+      final nextValue = row[splittingIdx];
+
+      if (prevValue == nextValue) {
+        continue;
+      }
+
+      final splittingValue = (prevValue + nextValue) / 2;
       final split = _numericalSplitter
           .split(samples, splittingIdx, splittingValue);
       final error = _assessor.getAggregatedError(split.values, targetId);
