@@ -67,9 +67,8 @@ void main() {
       verificationResult.called(2);
     });
 
-    test('should use returned data (first element - training data, second '
-        'element - testing data) from the callback for data preprocessing '
-        'while evaluating a predictor', () {
+    test('should take the first element as train samples from data '
+        'preprocessing callback response while evaluating a predictor', () {
       final allObservations = DataFrame(
         <Iterable<num>>[
           [1, 1, 1, 1],
@@ -94,19 +93,14 @@ void main() {
             [1, 2, 3, 4],
             [7, 8, 9, 0],
           ], headerExists: false),
-          DataFrame(<Iterable<num>>[
-            [14, 50, 39, 24],
-            [77, 38, 29, 70],
-          ], headerExists: false),
+          DataFrame(<Iterable<num>>[[]], headerExists: false),
         ],
         1: [
           DataFrame(<Iterable<num>>[
             [100, 200, 300, 400],
             [117, 118, 119, 110],
           ], headerExists: false),
-          DataFrame(<Iterable<num>>[
-            [154, 550, 939, 124],
-          ], headerExists: false),
+          DataFrame(<Iterable<num>>[[]], headerExists: false),
         ],
         2: [
           DataFrame(<Iterable<num>>[
@@ -114,6 +108,58 @@ void main() {
             [111, 888, 999, 222],
             [301, 403, 501, 607],
           ], headerExists: false),
+          DataFrame(<Iterable<num>>[[]], headerExists: false),
+        ],
+      };
+
+      validator.evaluate(
+        (observations, outcomes) {
+          expect(
+            observations.toMatrix(),
+            equals(dataPreprocessFnResponse[iterationCounter++][0].toMatrix()),
+          );
+          return predictor;
+        },
+        metric,
+        dataPreprocessFn: (trainData, testData) =>
+          dataPreprocessFnResponse[iterationCounter],
+      );
+    });
+
+    test('should take the second element as test samples from data '
+        'preprocessing callback response while evaluating a predictor', () {
+      final allObservations = DataFrame(
+        [<num>[1, 1, 1, 1]],
+        header: ['first', 'second', 'third', 'target'],
+        headerExists: false,
+      );
+
+      final metric = MetricType.mape;
+      final splitter = createSplitter([[0], [0], [0]]);
+      final predictor = AssessableMock();
+      final validator = CrossValidatorImpl(allObservations,
+          ['target'], splitter, DType.float32);
+
+      when(predictor.assess(any, any, any)).thenReturn(1);
+
+      int iterationCounter = 0;
+
+      final dataPreprocessFnResponse = <int, List<DataFrame>>{
+        0: [
+          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[
+            [14, 50, 39, 24],
+            [77, 38, 29, 70],
+          ], headerExists: false),
+        ],
+        1: [
+          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[
+            [154, 550, 939, 124],
+          ], headerExists: false),
+        ],
+        2: [
+          DataFrame(<Iterable<num>>[[]], headerExists: false),
           DataFrame(<Iterable<num>>[
             [44, 55, 66, 11],
             [29, 22, 11,  0],
@@ -126,7 +172,7 @@ void main() {
         (observations, outcomes) => predictor,
         metric,
         dataPreprocessFn: (trainData, testData) =>
-          dataPreprocessFnResponse[iterationCounter++],
+        dataPreprocessFnResponse[iterationCounter++],
       );
 
       final verificationResult = verify(
