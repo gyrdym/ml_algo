@@ -16,7 +16,9 @@ class CrossValidatorImpl implements CrossValidator {
   final Splitter _splitter;
 
   @override
-  double evaluate(PredictorFactory predictorFactory, MetricType metricType) {
+  double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
+    DataPreprocessFn dataPreprocessFn,
+  }) {
     final samplesAsMatrix = samples.toMatrix();
     final discreteColumns = enumerate(samples.series)
         .where((indexedSeries) => indexedSeries.value.isDiscrete)
@@ -55,9 +57,13 @@ class CrossValidatorImpl implements CrossValidator {
         discreteColumns: discreteColumns,
       );
 
-      final predictor = predictorFactory(trainingDataFrame, targetNames);
+      final splits = dataPreprocessFn != null
+          ? dataPreprocessFn(trainingDataFrame, testingDataFrame)
+          : [trainingDataFrame, testingDataFrame];
 
-      score += predictor.assess(testingDataFrame, targetNames, metricType);
+      final predictor = predictorFactory(splits[0], targetNames);
+
+      score += predictor.assess(splits[1], targetNames, metricType);
 
       folds++;
     }
