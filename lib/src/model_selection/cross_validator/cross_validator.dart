@@ -10,6 +10,9 @@ import 'package:ml_linalg/linalg.dart';
 typedef PredictorFactory = Assessable Function(DataFrame observations,
     Iterable<String> targetNames);
 
+typedef DataPreprocessFn = List<DataFrame> Function(DataFrame trainData,
+    DataFrame testData);
+
 /// A factory and an interface for all the cross validator types
 abstract class CrossValidator {
   /// Creates k-fold validator to evaluate quality of a predictor.
@@ -77,5 +80,7 @@ abstract class CrossValidator {
   ///
   /// [metricType] Metric to assess a predictor, that is being created by
   /// [predictorFactory]
-  double evaluate(PredictorFactory predictorFactory, MetricType metricType);
+  double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
+    DataPreprocessFn dataPreprocessFn,
+  });
 }
