@@ -1,8 +1,8 @@
 import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class MAPEMetric implements Metric {
-  const MAPEMetric();
+class MapeMetric implements Metric {
+  const MapeMetric();
 
   @override
   double getScore(Matrix predictedLabels, Matrix origLabels) {
