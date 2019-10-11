@@ -8,10 +8,10 @@ class MetricFactory {
   static Metric createByType(MetricType type) {
     switch (type) {
       case MetricType.rmse:
-        return const RMSEMetric();
+        return const RmseMetric();
 
       case MetricType.mape:
-        return const MAPEMetric();
+        return const MapeMetric();
 
       case MetricType.accuracy:
         return const AccuracyMetric();
