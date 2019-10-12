@@ -1,8 +1,9 @@
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -35,13 +36,18 @@ abstract class CrossValidator {
       Iterable<String> targetColumnNames, {
         int numberOfFolds = 5,
         DType dtype = DType.float32,
-      }) =>
-      CrossValidatorImpl(
-        samples,
-        targetColumnNames,
-        KFoldSplitter(numberOfFolds),
-        dtype,
-      );
+      }) {
+    final dataSplitterFactory = injector.getDependency<DataSplitterFactory>();
+    final dataSplitter = dataSplitterFactory
+        .createByType(DataSplitterType.kFold, numberOfFolds: numberOfFolds);
+
+    return CrossValidatorImpl(
+      samples,
+      targetColumnNames,
+      dataSplitter,
+      dtype,
+    );
+  }
 
   /// Creates LPO validator to evaluate quality of a predictor.
   ///
@@ -63,13 +69,18 @@ abstract class CrossValidator {
       Iterable<String> targetColumnNames,
       int p, {
         DType dtype = DType.float32,
-      }) =>
-      CrossValidatorImpl(
-        samples,
-        targetColumnNames,
-        LeavePOutSplitter(p),
-        dtype,
-      );
+      }) {
+    final dataSplitterFactory = injector.getDependency<DataSplitterFactory>();
+    final dataSplitter = dataSplitterFactory
+        .createByType(DataSplitterType.lpo, p: p);
+
+    return CrossValidatorImpl(
+      samples,
+      targetColumnNames,
+      dataSplitter,
+      dtype,
+    );
+  }
 
   /// Returns a score of quality of passed predictor depending on given
   /// [metricType]

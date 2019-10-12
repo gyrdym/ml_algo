@@ -13,6 +13,8 @@ import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_impl.dart';
 
 Injector injector;
 
@@ -37,4 +39,7 @@ Injector getDependencies() =>
                   (_) => const CostFunctionFactoryImpl())
 
           ..registerSingleton<LinkFunctionFactory>(
-                  (_) => const LinkFunctionFactoryImpl());
+                  (_) => const LinkFunctionFactoryImpl())
+
+          ..registerSingleton<DataSplitterFactory>(
+                  (_) => const DataSplitterFactoryImpl());

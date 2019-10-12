@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out_data_splitter.dart';
 import 'package:test/test.dart';
 
 void main() {

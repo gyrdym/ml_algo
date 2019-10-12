@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -18,7 +18,7 @@ class CrossValidatorImpl implements CrossValidator {
   final DataFrame samples;
   final DType dtype;
   final Iterable<String> targetNames;
-  final Splitter _splitter;
+  final DataSplitter _splitter;
 
   @override
   double evaluate(PredictorFactory predictorFactory, MetricType metricType, {

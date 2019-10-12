@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
@@ -8,8 +8,8 @@ import 'package:test/test.dart';
 
 import '../../mocks.dart';
 
-Splitter createSplitter(Iterable<Iterable<int>> indices) {
-  final splitter = SplitterMock();
+DataSplitter createSplitter(Iterable<Iterable<int>> indices) {
+  final splitter = DataSplitterMock();
   when(splitter.split(any)).thenReturn(indices);
   return splitter;
 }

@@ -1,6 +1,6 @@
-import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
 
-class LeavePOutSplitter implements Splitter {
+class LeavePOutSplitter implements DataSplitter {
   LeavePOutSplitter([this._p = 2]) {
     if (_p == 0) {
       throw UnsupportedError('Value `$_p` for parameter `p` is unsupported');

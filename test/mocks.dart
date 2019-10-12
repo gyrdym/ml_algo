@@ -23,7 +23,8 @@ import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -61,7 +62,9 @@ class ConvergenceDetectorFactoryMock extends Mock
 
 class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
-class SplitterMock extends Mock implements Splitter {}
+class DataSplitterMock extends Mock implements DataSplitter {}
+
+class DataSplitterFactoryMock extends Mock implements DataSplitterFactory {}
 
 class AssessableMock extends Mock implements Assessable {}
 
@@ -159,3 +162,13 @@ LinearOptimizerFactory createLinearOptimizerFactoryMock(
 
   return factory;
 }
+
+DataSplitterFactory createDataSplitterFactoryMock(DataSplitter dataSplitter) {
+  final factory = DataSplitterFactoryMock();
+  when(factory.createByType(any,
+      numberOfFolds: anyNamed('numberOfFolds'),
+      p: anyNamed('p')),
+  ).thenReturn(dataSplitter);
+  return factory;
+}
+
