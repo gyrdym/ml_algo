@@ -8,7 +8,12 @@ import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart';
 
 class CrossValidatorImpl implements CrossValidator {
-  CrossValidatorImpl(this.samples, this.targetNames, this._splitter, this.dtype);
+  CrossValidatorImpl(
+      this.samples,
+      this.targetNames,
+      this._splitter,
+      this.dtype,
+  );
 
   final DataFrame samples;
   final DType dtype;
@@ -19,7 +24,9 @@ class CrossValidatorImpl implements CrossValidator {
   double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
     DataPreprocessFn dataPreprocessFn,
   }) {
-    final samplesAsMatrix = samples.toMatrix();
+    final samplesAsMatrix = samples.toMatrix(dtype);
+    final sourceColumnsNum = samplesAsMatrix.columnsNum;
+
     final discreteColumns = enumerate(samples.series)
         .where((indexedSeries) => indexedSeries.value.isDiscrete)
         .map((indexedSeries) => indexedSeries.index);
@@ -61,9 +68,27 @@ class CrossValidatorImpl implements CrossValidator {
           ? dataPreprocessFn(trainingDataFrame, testingDataFrame)
           : [trainingDataFrame, testingDataFrame];
 
-      final predictor = predictorFactory(splits[0], targetNames);
+      final transformedTrainData = splits[0];
+      final transformedTestData = splits[1];
 
-      score += predictor.assess(splits[1], targetNames, metricType);
+      final transformedTrainDataColumnsNum = transformedTrainData.header.length;
+      final transformedTestDataColumnsNum = transformedTestData.header.length;
+
+      if (transformedTrainDataColumnsNum != sourceColumnsNum) {
+        throw Exception('Unexpected columns number in training data: '
+            'expected $sourceColumnsNum, received '
+            '${transformedTrainDataColumnsNum}');
+      }
+
+      if (transformedTestDataColumnsNum != sourceColumnsNum) {
+        throw Exception('Unexpected columns number in testing data: '
+            'expected $sourceColumnsNum, received '
+            '${transformedTestDataColumnsNum}');
+      }
+
+      final predictor = predictorFactory(transformedTrainData, targetNames);
+
+      score += predictor.assess(transformedTestData, targetNames, metricType);
 
       folds++;
     }
