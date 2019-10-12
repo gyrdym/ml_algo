@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/model_selection/data_splitter/k_fold.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/k_fold_data_splitter.dart';
 import 'package:test/test.dart';
 
 void main() {
