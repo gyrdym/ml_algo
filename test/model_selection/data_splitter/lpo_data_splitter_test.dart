@@ -1,13 +1,13 @@
-import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out_data_splitter.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('LeavePOutSplitter', () {
+  group('LeavePOutDataSplitter', () {
     void testLpoSplitter(int p, int numOfObservations,
         Iterable<Iterable<int>> expected) {
       test('should return proper groups of indices if p is $p and number of '
           'observations is $numOfObservations', () {
-        final splitter = LeavePOutSplitter(p);
+        final splitter = LeavePOutDataSplitter(p);
         expect(splitter.split(numOfObservations).toSet(), equals(expected));
       });
     }
@@ -63,7 +63,7 @@ void main() {
     ].toSet());
 
     test('should throw an error, if p is equal to 0', () {
-      expect(() => LeavePOutSplitter(0), throwsUnsupportedError);
+      expect(() => LeavePOutDataSplitter(0), throwsUnsupportedError);
     });
   });
 }

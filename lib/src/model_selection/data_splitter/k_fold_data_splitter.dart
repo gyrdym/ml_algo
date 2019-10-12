@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/model_selection/data_splitter/splitter.dart';
+import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
 import 'package:xrange/integers.dart';
 
-class KFoldSplitter implements Splitter {
-  KFoldSplitter(this._numberOfFolds) {
+class KFoldDataSplitter implements DataSplitter {
+  KFoldDataSplitter(this._numberOfFolds) {
     if (_numberOfFolds == 0 || _numberOfFolds == 1) {
       throw RangeError(
           'Number of folds must be greater than 1 and less than number of '
