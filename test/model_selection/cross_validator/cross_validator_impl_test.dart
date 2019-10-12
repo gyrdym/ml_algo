@@ -16,8 +16,7 @@ Splitter createSplitter(Iterable<Iterable<int>> indices) {
 
 void main() {
   group('CrossValidatorImpl', () {
-    test('should perform validation of a model on given test indices of'
-        'observations', () {
+    test('should perform validation of a predictor on given test splits', () {
       final allObservations = DataFrame(<Iterable<num>>[
         [330, 930, 130, 100],
         [630, 830, 230, 200],
@@ -69,10 +68,9 @@ void main() {
 
     test('should take the first element as train samples from data '
         'preprocessing callback response while evaluating a predictor', () {
+      // we don't care about data here cause it will be mocked farther
       final allObservations = DataFrame(
-        <Iterable<num>>[
-          [1, 1, 1, 1],
-        ],
+        [<num>[1, 1, 1, 1]],
         header: ['first', 'second', 'third', 'target'],
         headerExists: false,
       );
@@ -87,7 +85,7 @@ void main() {
 
       int iterationCounter = 0;
 
-      final dataPreprocessFnResponse = <int, List<DataFrame>>{
+      final iterationToResponse = <int, List<DataFrame>>{
         0: [
           DataFrame(<Iterable<num>>[
             [1, 2, 3, 4],
@@ -116,18 +114,19 @@ void main() {
         (observations, outcomes) {
           expect(
             observations.toMatrix(),
-            equals(dataPreprocessFnResponse[iterationCounter++][0].toMatrix()),
+            equals(iterationToResponse[iterationCounter++][0].toMatrix()),
           );
           return predictor;
         },
         metric,
         dataPreprocessFn: (trainData, testData) =>
-          dataPreprocessFnResponse[iterationCounter],
+          iterationToResponse[iterationCounter],
       );
     });
 
     test('should take the second element as test samples from data '
         'preprocessing callback response while evaluating a predictor', () {
+      // we don't care about data here cause it will be mocked farther
       final allObservations = DataFrame(
         [<num>[1, 1, 1, 1]],
         header: ['first', 'second', 'third', 'target'],
@@ -144,7 +143,7 @@ void main() {
 
       int iterationCounter = 0;
 
-      final dataPreprocessFnResponse = <int, List<DataFrame>>{
+      final iterationToResponse = <int, List<DataFrame>>{
         0: [
           DataFrame(<Iterable<num>>[[]], headerExists: false),
           DataFrame(<Iterable<num>>[
@@ -172,7 +171,7 @@ void main() {
         (observations, outcomes) => predictor,
         metric,
         dataPreprocessFn: (trainData, testData) =>
-        dataPreprocessFnResponse[iterationCounter++],
+        iterationToResponse[iterationCounter++],
       );
 
       final verificationResult = verify(
@@ -197,6 +196,116 @@ void main() {
         [29, 22, 11,  0],
         [91, 32, 16, 17],
       ]));
+
+      verificationResult.called(3);
+    });
+
+    test('should pass splits into data preprocessing callback', () {
+      final header = ['first', 'second', 'third', 'target'];
+
+      // we don't care about data here cause it will be mocked farther
+      final allObservations = DataFrame(
+        <Iterable<num>>[
+          [ 1,  1,  1,   1],
+          [ 2,  3,  4,   5],
+          [18, 71, 15,  61],
+          [19,  0, 21, 331],
+          [11, 10,  9,  40],
+        ],
+        header: header,
+        headerExists: false,
+      );
+
+      final metric = MetricType.mape;
+      final splitter = createSplitter([[0], [2], [4]]);
+      final predictor = AssessableMock();
+      final validator = CrossValidatorImpl(allObservations,
+          ['target'], splitter, DType.float32);
+
+      when(predictor.assess(any, any, any)).thenReturn(1);
+
+      int iterationCounter = 0;
+
+      final iterationToSplits = {
+        0: {
+          'trainData': DataFrame(
+              <Iterable<num>>[
+                [ 2, 3, 4, 5],
+                [18, 71, 15, 61],
+                [19, 0, 21, 331],
+                [11, 10, 9, 40],
+              ],
+              header: header,
+              headerExists: false,
+          ),
+          'testData': DataFrame(
+              [<num>[ 1, 1, 1, 1]],
+              header: header,
+              headerExists: false,
+          ),
+        },
+        1: {
+          'trainData': DataFrame(
+              <Iterable<num>>[
+                [ 1, 1, 1, 1],
+                [ 2, 3, 4, 5],
+                [19, 0, 21, 331],
+                [11, 10, 9, 40],
+              ],
+              header: header,
+              headerExists: false,
+          ),
+          'testData': DataFrame(
+              [<num>[18, 71, 15, 61]],
+              header: header,
+              headerExists: false,
+          ),
+        },
+        2: {
+          'trainData': DataFrame(
+              <Iterable<num>>[
+                [ 1, 1, 1, 1],
+                [ 2, 3, 4, 5],
+                [18, 71, 15, 61],
+                [19, 0, 21, 331],
+              ],
+              header: header,
+              headerExists: false,
+          ),
+          'testData': DataFrame(
+              [<num>[11, 10, 9, 40]],
+              header: header,
+              headerExists: false,
+          ),
+        },
+      };
+
+      validator.evaluate(
+        (observations, outcomes) => predictor,
+        metric,
+        dataPreprocessFn: (trainData, testData) {
+              final expectedSplits = iterationToSplits[iterationCounter++];
+
+              expect(trainData.header, expectedSplits['trainData'].header);
+              expect(trainData.rows, equals(expectedSplits['trainData'].rows));
+
+              expect(testData.header, expectedSplits['testData'].header);
+              expect(testData.rows, equals(expectedSplits['testData'].rows));
+
+              return [
+                DataFrame([<num>[1, 2, 3, 4]], headerExists: false),
+                DataFrame([<num>[0, 0, 0, 0]], headerExists: false),
+              ];
+        }
+      );
+
+      final verificationResult = verify(
+          predictor.assess(
+            captureThat(isNotNull),
+            argThat(equals(['target'])),
+            metric,
+          ));
+      final firstAssessCallArgs = verificationResult.captured;
 
       verificationResult.called(3);
     });

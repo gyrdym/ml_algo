@@ -328,6 +328,7 @@ void main() {
     test('should consider `learningRate` parameter', () {
       final initialLearningRate = 10.0;
       final iterations = 3;
+
       testOptimizer(
           Matrix.fromList([[]]),
           Matrix.fromList([[]]),
