@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class RMSEMetric implements Metric {
-  const RMSEMetric();
+class RmseMetric implements Metric {
+  const RmseMetric();
 
   @override
   double getScore(Matrix predictedLabels, Matrix origLabels) {
