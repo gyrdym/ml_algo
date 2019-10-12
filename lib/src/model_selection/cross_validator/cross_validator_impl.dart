@@ -22,7 +22,7 @@ class CrossValidatorImpl implements CrossValidator {
 
   @override
   double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
-    DataPreprocessFn dataPreprocessFn,
+    DataPreprocessFn onDataSplit,
   }) {
     final samplesAsMatrix = samples.toMatrix(dtype);
     final sourceColumnsNum = samplesAsMatrix.columnsNum;
@@ -64,8 +64,8 @@ class CrossValidatorImpl implements CrossValidator {
         discreteColumns: discreteColumns,
       );
 
-      final splits = dataPreprocessFn != null
-          ? dataPreprocessFn(trainingDataFrame, testingDataFrame)
+      final splits = onDataSplit != null
+          ? onDataSplit(trainingDataFrame, testingDataFrame)
           : [trainingDataFrame, testingDataFrame];
 
       final transformedTrainData = splits[0];
