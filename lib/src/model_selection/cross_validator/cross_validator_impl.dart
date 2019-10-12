@@ -37,12 +37,12 @@ class CrossValidatorImpl implements CrossValidator {
 
     for (final testRowsIndices in allIndicesGroups) {
       final split = _makeSplit(testRowsIndices, discreteColumns);
-      final trainingDataFrame = split[0];
-      final testingDataFrame = split[1];
+      final trainDataFrame = split[0];
+      final testDataFrame = split[1];
 
       final splits = onDataSplit != null
-          ? onDataSplit(trainingDataFrame, testingDataFrame)
-          : [trainingDataFrame, testingDataFrame];
+          ? onDataSplit(trainDataFrame, testDataFrame)
+          : [trainDataFrame, testDataFrame];
 
       final transformedTrainData = splits[0];
       final transformedTestData = splits[1];
@@ -79,14 +79,14 @@ class CrossValidatorImpl implements CrossValidator {
       List<Vector>(samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length);
     final testSamples = List<Vector>(testRowsIndicesAsSet.length);
 
-    int trainPointsCounter = 0;
-    int testPointsCounter = 0;
+    int trainSamplesCounter = 0;
+    int testSamplesCounter = 0;
 
     samplesAsMatrix.rowIndices.forEach((i) {
       if (testRowsIndicesAsSet.contains(i)) {
-        testSamples[testPointsCounter++] = samplesAsMatrix[i];
+        testSamples[testSamplesCounter++] = samplesAsMatrix[i];
       } else {
-        trainSamples[trainPointsCounter++] = samplesAsMatrix[i];
+        trainSamples[trainSamplesCounter++] = samplesAsMatrix[i];
       }
     });
 
