@@ -80,7 +80,49 @@ abstract class CrossValidator {
   ///
   /// [metricType] Metric to assess a predictor, that is being created by
   /// [predictorFactory]
+  ///
+  /// [onDataSplit] A callback that is called when a new train-test split is
+  /// ready to be passed into evaluating predictor. One may place some
+  /// additional data-dependent logic here, e.g., data preprocessing. The
+  /// callback accepts train and test data from a new split and returns
+  /// transformed split as list, where the first element is training data and
+  /// the second one - test data, both of [DataFrame] type. This new transformed
+  /// split will be passed into the predictor.
+  ///
+  /// Example:
+  ///
+  /// ````dart
+  /// final data = DataFrame(
+  ///   <Iterable<num>>[
+  ///     [ 1,  1,  1,   1],
+  ///     [ 2,  3,  4,   5],
+  ///     [18, 71, 15,  61],
+  ///     [19,  0, 21, 331],
+  ///     [11, 10,  9,  40],
+  ///   ],
+  ///   header: header,
+  ///   headerExists: false,
+  /// );
+  ///
+  /// final predictorFactory = (trainData, _) =>
+  ///   KnnRegressor(trainData, 'col_3', k: 4);
+  ///
+  /// final onDataSplit = (trainData, testData) {
+  ///   final standardizer = Standardizer(trainData);
+  ///   return [
+  ///     standardizer.process(trainData),
+  ///     standardizer.process(testData),
+  ///   ];
+  /// }
+  ///
+  /// final validator = CrossValidator.kFold(data, ['col_3']);
+  /// final score = validator.evaluate(
+  ///   predictorFactory,
+  ///   MetricType.mape,
+  ///   onDataSplit: onDataSplit,
+  /// );
+  /// ````
   double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
-    DataPreprocessFn dataPreprocessFn,
+    DataPreprocessFn onDataSplit,
   });
 }

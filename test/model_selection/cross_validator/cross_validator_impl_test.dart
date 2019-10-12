@@ -119,7 +119,7 @@ void main() {
           return predictor;
         },
         metric,
-        dataPreprocessFn: (trainData, testData) =>
+        onDataSplit: (trainData, testData) =>
           iterationToResponse[iterationCounter],
       );
     });
@@ -170,7 +170,7 @@ void main() {
       validator.evaluate(
         (observations, outcomes) => predictor,
         metric,
-        dataPreprocessFn: (trainData, testData) =>
+        onDataSplit: (trainData, testData) =>
         iterationToResponse[iterationCounter++],
       );
 
@@ -283,7 +283,7 @@ void main() {
       validator.evaluate(
         (observations, outcomes) => predictor,
         metric,
-        dataPreprocessFn: (trainData, testData) {
+        onDataSplit: (trainData, testData) {
           final expectedSplits = iterationToSplits[iterationCounter++];
 
           expect(trainData.header, expectedSplits['trainData'].header);
@@ -334,7 +334,7 @@ void main() {
       final actual = () => validator.evaluate(
               (observations, outcomes) => predictor,
           metric,
-          dataPreprocessFn: (trainData, testData) =>
+          onDataSplit: (trainData, testData) =>
             [
               transformedTrainData,
               transformedTestData,
@@ -378,7 +378,7 @@ void main() {
       final actual = () => validator.evaluate(
         (observations, outcomes) => predictor,
         metric,
-        dataPreprocessFn: (trainData, testData) => [
+        onDataSplit: (trainData, testData) => [
           transformedTrainData,
           transformedTestData,
         ],
@@ -421,7 +421,7 @@ void main() {
       final actual = () => validator.evaluate(
         (observations, outcomes) => predictor,
         metric,
-        dataPreprocessFn: (trainData, testData) => [
+        onDataSplit: (trainData, testData) => [
           transformedTrainData,
           transformedTestData,
         ],
@@ -464,7 +464,7 @@ void main() {
       final actual = () => validator.evaluate(
         (observations, outcomes) => predictor,
         metric,
-        dataPreprocessFn: (trainData, testData) => [
+        onDataSplit: (trainData, testData) => [
           transformedTrainData,
           transformedTestData,
         ],
