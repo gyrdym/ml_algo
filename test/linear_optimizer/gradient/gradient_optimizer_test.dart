@@ -330,8 +330,12 @@ void main() {
       final iterations = 3;
 
       testOptimizer(
-          Matrix.fromList([[]]),
-          Matrix.fromList([[]]),
+          Matrix.fromList([
+            [1, 2, 3, 4],
+          ]),
+          Matrix.fromList([
+            [5, 6, 7, 8],
+          ]),
           costFunction,
           convergenceDetectorMock,
           (optimizer) {
