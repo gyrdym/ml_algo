@@ -91,14 +91,14 @@ void main() {
             [1, 2, 3, 4],
             [7, 8, 9, 0],
           ], headerExists: false),
-          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[[1, 1, 1, 1]], headerExists: false),
         ],
         1: [
           DataFrame(<Iterable<num>>[
             [100, 200, 300, 400],
             [117, 118, 119, 110],
           ], headerExists: false),
-          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[[2, 2, 2, 2]], headerExists: false),
         ],
         2: [
           DataFrame(<Iterable<num>>[
@@ -106,7 +106,7 @@ void main() {
             [111, 888, 999, 222],
             [301, 403, 501, 607],
           ], headerExists: false),
-          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[[3, 3, 3, 3]], headerExists: false),
         ],
       };
 
@@ -145,20 +145,20 @@ void main() {
 
       final iterationToResponse = <int, List<DataFrame>>{
         0: [
-          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[[1, 1, 1, 1]], headerExists: false),
           DataFrame(<Iterable<num>>[
             [14, 50, 39, 24],
             [77, 38, 29, 70],
           ], headerExists: false),
         ],
         1: [
-          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[[2, 2, 2, 2]], headerExists: false),
           DataFrame(<Iterable<num>>[
             [154, 550, 939, 124],
           ], headerExists: false),
         ],
         2: [
-          DataFrame(<Iterable<num>>[[]], headerExists: false),
+          DataFrame(<Iterable<num>>[[3, 3, 3, 3]], headerExists: false),
           DataFrame(<Iterable<num>>[
             [44, 55, 66, 11],
             [29, 22, 11,  0],
@@ -284,30 +284,193 @@ void main() {
         (observations, outcomes) => predictor,
         metric,
         dataPreprocessFn: (trainData, testData) {
-              final expectedSplits = iterationToSplits[iterationCounter++];
+          final expectedSplits = iterationToSplits[iterationCounter++];
 
-              expect(trainData.header, expectedSplits['trainData'].header);
-              expect(trainData.rows, equals(expectedSplits['trainData'].rows));
+          expect(trainData.header, expectedSplits['trainData'].header);
+          expect(trainData.rows, equals(expectedSplits['trainData'].rows));
 
-              expect(testData.header, expectedSplits['testData'].header);
-              expect(testData.rows, equals(expectedSplits['testData'].rows));
+          expect(testData.header, expectedSplits['testData'].header);
+          expect(testData.rows, equals(expectedSplits['testData'].rows));
 
-              return [
-                DataFrame([<num>[1, 2, 3, 4]], headerExists: false),
-                DataFrame([<num>[0, 0, 0, 0]], headerExists: false),
-              ];
+          return [
+            DataFrame([<num>[1, 2, 3, 4]], headerExists: false),
+            DataFrame([<num>[0, 0, 0, 0]], headerExists: false),
+          ];
         }
       );
+    });
 
-      final verificationResult = verify(
-          predictor.assess(
-            captureThat(isNotNull),
-            argThat(equals(['target'])),
-            metric,
-          ));
-      final firstAssessCallArgs = verificationResult.captured;
+    test('should throw an exception if one tries to return a training data '
+        'from data perprocessing callback with number of columns less than '
+        'the number of columns of original data', () {
+      final header = ['first', 'second', 'third', 'target'];
 
-      verificationResult.called(3);
+      // we don't care about data here cause it will be mocked farther
+      final originalData = DataFrame(
+        <Iterable<num>>[
+          [ 1,  1,  1,   1],
+          [ 2,  3,  4,   5],
+          [18, 71, 15,  61],
+          [19,  0, 21, 331],
+          [11, 10,  9,  40],
+        ],
+        header: header,
+        headerExists: false,
+      );
+
+      final metric = MetricType.mape;
+      final splitter = createSplitter([[0], [2], [4]]);
+      final predictor = AssessableMock();
+      final validator = CrossValidatorImpl(originalData,
+          ['target'], splitter, DType.float32);
+
+      when(predictor.assess(any, any, any)).thenReturn(1);
+
+      final transformedTrainData = DataFrame([<num>[1, 2]],
+          headerExists: false);
+      final transformedTestData = DataFrame([<num>[0, 0, 0, 0]],
+          headerExists: false);
+
+      final actual = () => validator.evaluate(
+              (observations, outcomes) => predictor,
+          metric,
+          dataPreprocessFn: (trainData, testData) =>
+            [
+              transformedTrainData,
+              transformedTestData,
+            ],
+      );
+
+      expect(actual, throwsException);
+    });
+
+    test('should throw an exception if one tries to return a training data '
+        'from data perprocessing callback with number of columns greater than '
+        'the number of columns of original data', () {
+      final header = ['first', 'second', 'third', 'target'];
+
+      // we don't care about data here cause it will be mocked farther
+      final originalData = DataFrame(
+        <Iterable<num>>[
+          [ 1,  1,  1,   1],
+          [ 2,  3,  4,   5],
+          [18, 71, 15,  61],
+          [19,  0, 21, 331],
+          [11, 10,  9,  40],
+        ],
+        header: header,
+        headerExists: false,
+      );
+
+      final metric = MetricType.mape;
+      final splitter = createSplitter([[0], [2], [4]]);
+      final predictor = AssessableMock();
+      final validator = CrossValidatorImpl(originalData,
+          ['target'], splitter, DType.float32);
+
+      when(predictor.assess(any, any, any)).thenReturn(1);
+
+      final transformedTrainData = DataFrame([<num>[1, 2, 3, 4, 5]],
+          headerExists: false);
+      final transformedTestData = DataFrame([<num>[0, 0, 0, 0]],
+          headerExists: false);
+
+      final actual = () => validator.evaluate(
+        (observations, outcomes) => predictor,
+        metric,
+        dataPreprocessFn: (trainData, testData) => [
+          transformedTrainData,
+          transformedTestData,
+        ],
+      );
+
+      expect(actual, throwsException);
+    });
+
+    test('should throw an exception if one tries to return a testing data '
+        'from data perprocessing callback with number of columns less than '
+        'the number of columns of original data', () {
+      final header = ['first', 'second', 'third', 'target'];
+
+      // we don't care about data here cause it will be mocked farther
+      final originalData = DataFrame(
+        <Iterable<num>>[
+          [ 1,  1,  1,   1],
+          [ 2,  3,  4,   5],
+          [18, 71, 15,  61],
+          [19,  0, 21, 331],
+          [11, 10,  9,  40],
+        ],
+        header: header,
+        headerExists: false,
+      );
+
+      final metric = MetricType.mape;
+      final splitter = createSplitter([[0], [2], [4]]);
+      final predictor = AssessableMock();
+      final validator = CrossValidatorImpl(originalData,
+          ['target'], splitter, DType.float32);
+
+      when(predictor.assess(any, any, any)).thenReturn(1);
+
+      final transformedTrainData = DataFrame([<num>[1, 2, 3, 4]],
+          headerExists: false);
+      final transformedTestData = DataFrame([<num>[0, 0, 0]],
+          headerExists: false);
+
+      final actual = () => validator.evaluate(
+        (observations, outcomes) => predictor,
+        metric,
+        dataPreprocessFn: (trainData, testData) => [
+          transformedTrainData,
+          transformedTestData,
+        ],
+      );
+
+      expect(actual, throwsException);
+    });
+
+    test('should throw an exception if one tries to return a testing data '
+        'from data perprocessing callback with number of columns greater than '
+        'the number of columns of original data', () {
+      final header = ['first', 'second', 'third', 'target'];
+
+      // we don't care about data here cause it will be mocked farther
+      final originalData = DataFrame(
+        <Iterable<num>>[
+          [ 1,  1,  1,   1],
+          [ 2,  3,  4,   5],
+          [18, 71, 15,  61],
+          [19,  0, 21, 331],
+          [11, 10,  9,  40],
+        ],
+        header: header,
+        headerExists: false,
+      );
+
+      final metric = MetricType.mape;
+      final splitter = createSplitter([[0], [2], [4]]);
+      final predictor = AssessableMock();
+      final validator = CrossValidatorImpl(originalData,
+          ['target'], splitter, DType.float32);
+
+      when(predictor.assess(any, any, any)).thenReturn(1);
+
+      final transformedTrainData = DataFrame([<num>[1, 2, 3, 4]],
+          headerExists: false);
+      final transformedTestData = DataFrame([<num>[0, 0, 0, 0, 0]],
+          headerExists: false);
+
+      final actual = () => validator.evaluate(
+        (observations, outcomes) => predictor,
+        metric,
+        dataPreprocessFn: (trainData, testData) => [
+          transformedTrainData,
+          transformedTestData,
+        ],
+      );
+
+      expect(actual, throwsException);
     });
   });
 }
