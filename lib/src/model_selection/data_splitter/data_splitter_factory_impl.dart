@@ -17,14 +17,14 @@ class DataSplitterFactoryImpl implements DataSplitterFactory {
         if (numberOfFolds == null) {
           throw Exception('Number of folds is not defined for K-fold splitter');
         }
-        return KFoldSplitter(numberOfFolds);
+        return KFoldDataSplitter(numberOfFolds);
 
       case DataSplitterType.lpo:
         if (p == null) {
           throw Exception('`p` parameter is not defined for leave-p-out '
               'splitter');
         }
-        return LeavePOutSplitter(p);
+        return LeavePOutDataSplitter(p);
 
       default:
         throw UnimplementedError('Splitter of type $splitterType is not '
