@@ -36,33 +36,9 @@ class CrossValidatorImpl implements CrossValidator {
     var folds = 0;
 
     for (final testRowsIndices in allIndicesGroups) {
-      final testRowsIndicesAsSet = Set<int>.from(testRowsIndices);
-      final trainSamples =
-          List<Vector>(samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length);
-      final testSamples = List<Vector>(testRowsIndicesAsSet.length);
-
-      int trainPointsCounter = 0;
-      int testPointsCounter = 0;
-
-      samplesAsMatrix.rowIndices.forEach((i) {
-        if (testRowsIndicesAsSet.contains(i)) {
-          testSamples[testPointsCounter++] = samplesAsMatrix[i];
-        } else {
-          trainSamples[trainPointsCounter++] = samplesAsMatrix[i];
-        }
-      });
-
-      final trainingDataFrame = DataFrame.fromMatrix(
-        Matrix.fromRows(trainSamples),
-        header: samples.header,
-        discreteColumns: discreteColumns,
-      );
-
-      final testingDataFrame = DataFrame.fromMatrix(
-        Matrix.fromRows(testSamples),
-        header: samples.header,
-        discreteColumns: discreteColumns,
-      );
+      final split = _makeSplit(testRowsIndices, discreteColumns);
+      final trainingDataFrame = split[0];
+      final testingDataFrame = split[1];
 
       final splits = onDataSplit != null
           ? onDataSplit(trainingDataFrame, testingDataFrame)
@@ -86,13 +62,45 @@ class CrossValidatorImpl implements CrossValidator {
             '${transformedTestDataColumnsNum}');
       }
 
-      final predictor = predictorFactory(transformedTrainData, targetNames);
-
-      score += predictor.assess(transformedTestData, targetNames, metricType);
+      score += predictorFactory(transformedTrainData, targetNames)
+          .assess(transformedTestData, targetNames, metricType);
 
       folds++;
     }
 
     return score / folds;
+  }
+
+  List<DataFrame> _makeSplit(Iterable<int> testRowsIndices,
+      Iterable<int> discreteColumns) {
+    final samplesAsMatrix = samples.toMatrix(dtype);
+    final testRowsIndicesAsSet = Set<int>.from(testRowsIndices);
+    final trainSamples =
+      List<Vector>(samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length);
+    final testSamples = List<Vector>(testRowsIndicesAsSet.length);
+
+    int trainPointsCounter = 0;
+    int testPointsCounter = 0;
+
+    samplesAsMatrix.rowIndices.forEach((i) {
+      if (testRowsIndicesAsSet.contains(i)) {
+        testSamples[testPointsCounter++] = samplesAsMatrix[i];
+      } else {
+        trainSamples[trainPointsCounter++] = samplesAsMatrix[i];
+      }
+    });
+
+    return [
+      DataFrame.fromMatrix(
+        Matrix.fromRows(trainSamples, dtype: dtype),
+        header: samples.header,
+        discreteColumns: discreteColumns,
+      ),
+      DataFrame.fromMatrix(
+        Matrix.fromRows(testSamples, dtype: dtype),
+        header: samples.header,
+        discreteColumns: discreteColumns,
+      ),
+    ];
   }
 }
