@@ -32,6 +32,8 @@ abstract class KnnRegressor implements Assessable, Predictor {
   ///
   /// [k] a number of nearest neighbours to be searched among [fittingData]
   ///
+  /// [lambda] a `bandwidth` value - width of the kernel
+  ///
   /// [kernel] a type of a kernel function, that will be used to predict an
   /// outcome for a new observation
   ///
@@ -45,7 +47,8 @@ abstract class KnnRegressor implements Assessable, Predictor {
       DataFrame fittingData,
       String targetName, {
         int k,
-        Kernel kernel = Kernel.uniform,
+        num lambda = double.infinity,
+        Kernel kernel = Kernel.gaussian,
         Distance distance = Distance.euclidean,
         DType dtype = DType.float32,
       }) {
