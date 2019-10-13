@@ -17,6 +17,7 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
       this._trainingOutcomes,
       this._targetName, {
         int k,
+        num lambda = double.infinity,
         Distance distance = Distance.euclidean,
         FindKnnFn solverFn = findKNeighbours,
         Kernel kernel = Kernel.uniform,
@@ -26,6 +27,7 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
           const KernelFunctionFactoryImpl(),
       }) :
         _k = k,
+        _lambda = lambda,
         _distanceType = distance,
         _solverFn = solverFn,
         _dtype = dtype,
@@ -45,6 +47,7 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
   final String _targetName;
   final Distance _distanceType;
   final int _k;
+  final num _lambda;
   final FindKnnFn _solverFn;
   final KernelFn _kernelFn;
   final DType _dtype;
@@ -56,7 +59,7 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
   @override
   DataFrame predict(DataFrame observations) {
     final prediction = Matrix.fromRows(
-        _generateOutcomes(observations.toMatrix())
+        _predictOutcomes(observations.toMatrix())
             .toList(growable: false),
         dtype: _dtype,
     );
@@ -67,14 +70,26 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
     );
   }
 
-  Iterable<Vector> _generateOutcomes(Matrix observations) =>
-    _solverFn(
-        _k,
-        _trainingFeatures,
-        _trainingOutcomes,
-        observations,
-        distance: _distanceType,
-    ).map((kNeighbours) => kNeighbours
-        .fold<Vector>(_zeroVector,
-            (sum, pair) => sum + pair.label * _kernelFn(pair.distance)) / _k);
+  Iterable<Vector> _predictOutcomes(Matrix observations) {
+    final neighbours = _solverFn(
+      _k,
+      _trainingFeatures,
+      _trainingOutcomes,
+      observations,
+      distance: _distanceType,
+    );
+
+    return neighbours.map((kNeighbours) {
+      final weightedLabel = kNeighbours.fold<Vector>(_zeroVector, (sum, neighbour) {
+        final weightedLabel =
+            neighbour.label * _kernelFn(neighbour.distance, _lambda);
+        return sum + weightedLabel;
+      });
+
+      final weightsSum = kNeighbours.fold<num>(0,
+              (sum, neighbour) => sum + _kernelFn(neighbour.distance, _lambda));
+
+      return weightedLabel / weightsSum;
+    });
+  }
 }

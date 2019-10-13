@@ -1,5 +1,9 @@
 # Changelog
 
+## 13.1.1
+- `KNN regression`: documentation for kernel function types added
+- `KnnRegressor`: finding weighted average using kernel function fixed
+
 ## 13.1.0
 - `CrossValidator`: `onDataSplit` hook added
 
