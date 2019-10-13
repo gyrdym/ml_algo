@@ -10,12 +10,16 @@ class KernelFunctionFactoryImpl implements KernelFunctionFactory {
     switch (type) {
       case Kernel.uniform:
         return uniformKernel;
+
       case Kernel.epanechnikov:
         return epanechnikovKernel;
+
       case Kernel.cosine:
         return cosineKernel;
+
       case Kernel.gaussian:
         return gaussianKernel;
+
       default:
         throw UnsupportedError('Unsupported kernel type - $type');
     }
