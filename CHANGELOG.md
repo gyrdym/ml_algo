@@ -1,5 +1,11 @@
 # Changelog
 
+## 13.2.0
+- `KNN algorithm`: standardization for distance added
+- `KnnRegressor`: 
+    - default kernel changed to gaussian
+    - `k` parameter is required now
+
 ## 13.1.1
 - `KNN regression`: documentation for kernel function types added
 - `KnnRegressor`: finding weighted average using kernel function fixed

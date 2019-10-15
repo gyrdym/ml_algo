@@ -6,7 +6,7 @@ import 'package:quiver/iterables.dart';
 
 typedef FindKnnFn = Iterable<Iterable<Neighbour<Vector>>> Function(int k,
     Matrix trainObservations, Matrix labels, Matrix observations,
-    {Distance distance});
+    {Distance distance, bool standardize});
 
 /// Finds [k] nearest neighbours for either observation in [observations]
 /// basing on [trainObservations] and [labels]
@@ -16,17 +16,20 @@ Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(int k,
     Matrix observations,
     {
       Distance distance = Distance.euclidean,
+      bool standardize = true,
     }
-) sync* {
+) {
   final allNeighbours = zip([trainObservations.rows, labels.rows]);
   final firstKNeighbours = allNeighbours.take(k);
   final restNeighbours = allNeighbours.skip(k);
-  for (final observation in observations.rows) {
+
+  return observations.rows.map((observation) {
     final sortedKNeighbors = firstKNeighbours
         .map((pair) => Neighbour(pair.first
         .distanceTo(observation, distance: distance), pair.last))
         .toList(growable: false)
         ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
+
     restNeighbours.forEach((pair) {
       final newKNeighbour = Neighbour(observation.distanceTo(pair.first),
           pair.last);
@@ -38,8 +41,15 @@ Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(int k,
         sortedKNeighbors[newNeighbourIdx] = newKNeighbour;
       }
     });
-    yield sortedKNeighbors;
-  }
+
+    if (standardize && sortedKNeighbors.isNotEmpty) {
+      final distanceOfLast = sortedKNeighbors.last.distance;
+      return sortedKNeighbors.map((neighbour) =>
+          Neighbour(neighbour.distance / distanceOfLast, neighbour.label));
+    }
+
+    return sortedKNeighbors;
+  });
 }
 
 int _findNewNeighbourIdx(double newNeighbourDist,
