@@ -37,7 +37,8 @@ abstract class CrossValidator {
         int numberOfFolds = 5,
         DType dtype = DType.float32,
       }) {
-    final dataSplitterFactory = injector.getDependency<DataSplitterFactory>();
+    final dataSplitterFactory = getDependencies()
+        .getDependency<DataSplitterFactory>();
     final dataSplitter = dataSplitterFactory
         .createByType(DataSplitterType.kFold, numberOfFolds: numberOfFolds);
 
