@@ -17,17 +17,15 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
       this._trainingOutcomes,
       this._targetName, {
         int k,
-        num lambda = double.infinity,
         Distance distance = Distance.euclidean,
         FindKnnFn solverFn = findKNeighbours,
-        Kernel kernel = Kernel.uniform,
+        Kernel kernel = Kernel.gaussian,
         DType dtype = DType.float32,
 
         KernelFunctionFactory kernelFnFactory =
           const KernelFunctionFactoryImpl(),
       }) :
         _k = k,
-        _lambda = lambda,
         _distanceType = distance,
         _solverFn = solverFn,
         _dtype = dtype,
@@ -47,7 +45,6 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
   final String _targetName;
   final Distance _distanceType;
   final int _k;
-  final num _lambda;
   final FindKnnFn _solverFn;
   final KernelFn _kernelFn;
   final DType _dtype;
@@ -76,20 +73,21 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
       _trainingFeatures,
       _trainingOutcomes,
       observations,
+      standardize: true,
       distance: _distanceType,
     );
 
     return neighbours.map((kNeighbours) {
-      final weightedLabel = kNeighbours.fold<Vector>(_zeroVector, (sum, neighbour) {
-        final weightedLabel =
-            neighbour.label * _kernelFn(neighbour.distance, _lambda);
-        return sum + weightedLabel;
+      final weightedLabels = kNeighbours.fold<Vector>(_zeroVector, (weightedSum, neighbour) {
+        final weight = _kernelFn(neighbour.distance);
+        final weightedLabel = neighbour.label * weight;
+        return weightedSum + weightedLabel;
       });
 
       final weightsSum = kNeighbours.fold<num>(0,
-              (sum, neighbour) => sum + _kernelFn(neighbour.distance, _lambda));
+              (sum, neighbour) => sum + _kernelFn(neighbour.distance));
 
-      return weightedLabel / weightsSum;
+      return weightedLabels / weightsSum;
     });
   }
 }

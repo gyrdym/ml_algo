@@ -20,7 +20,7 @@ class CrossValidatorBenchmark extends BenchmarkBase {
   @override
   void run() {
     crossValidator.evaluate((trainSamples, targetFeatureNames) =>
-        KnnRegressor(trainSamples, targetFeatureNames.first, k: 7),
+        KnnRegressor(trainSamples, targetFeatureNames.first, 7),
         MetricType.mape);
   }
 
