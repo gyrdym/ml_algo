@@ -2,6 +2,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -29,7 +30,7 @@ void main() {
       final regressor = KnnRegressor(
         data,
         targetName,
-        k: k,
+        k,
         kernel: Kernel.uniform,
         distance: Distance.euclidean,
       );
@@ -59,17 +60,15 @@ void main() {
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
 
-      final regressor = KnnRegressor(data, 'target',
-        k: k,
-        kernel: Kernel.gaussian,
-      );
+      final regressor = KnnRegressor(data, 'target', k,
+        kernel: Kernel.epanechnikov);
 
       final actual = regressor.predict(
         DataFrame.fromMatrix(testFeatures),
       );
 
       expect(actual.header, equals(['target']));
-      expect(actual.toMatrix(), equals([[5.0]]));
+      expect(actual.toMatrix(), iterable2dAlmostEqualTo([[5.0]]));
     });
   });
 }
