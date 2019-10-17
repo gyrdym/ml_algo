@@ -1,3 +1,5 @@
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -99,6 +101,10 @@ class KernelFunctionFactoryMock extends Mock implements KernelFunctionFactory {}
 
 class KnnSolverFactoryMock extends Mock implements KnnSolverFactory {}
 
+class KnnClassifierFactoryMock extends Mock implements KnnClassifierFactory {}
+
+class KnnClassifierMock extends Mock implements KnnClassifier {}
+
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
@@ -189,5 +195,11 @@ KernelFunctionFactory createKernelFactoryMock(KernelFn kernelFn) {
 KnnSolverFactory createKnnSolverFactoryMock(FindKnnFn solverFn) {
   final factory = KnnSolverFactoryMock();
   when(factory.create()).thenReturn(solverFn);
+  return factory;
+}
+
+KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
+  final factory = KnnClassifierFactoryMock();
+  when(factory.create(any, any, any, any, any, any)).thenReturn(classifier);
   return factory;
 }
