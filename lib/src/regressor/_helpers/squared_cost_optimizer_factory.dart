@@ -39,8 +39,6 @@ LinearOptimizer createSquaredCostOptimizer(
   final points = splits[0].toMatrix();
   final labels = splits[1].toMatrix();
 
-  final dependencies = getDependencies();
-
   final optimizerFactory = dependencies
       .getDependency<LinearOptimizerFactory>();
 

@@ -16,7 +16,7 @@ abstract class KnnClassifier implements Classifier {
         Distance distance = Distance.euclidean,
         DType dtype = DType.float32,
       }
-  ) => getDependencies()
+  ) => dependencies
       .getDependency<KnnClassifierFactory>()
       .create(fittingData, targetName, k, kernel, distance, dtype);
 }

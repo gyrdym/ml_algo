@@ -140,8 +140,6 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
           'the fitting data. All the existing columns: ${fittingData.header}');
     }
 
-    final dependencies = getDependencies();
-
     final linkFunctionFactory = dependencies
         .getDependency<LinkFunctionFactory>();
 
