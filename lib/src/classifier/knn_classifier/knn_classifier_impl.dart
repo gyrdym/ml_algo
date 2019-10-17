@@ -14,16 +14,17 @@ class KnnClassifierImpl implements KnnClassifier {
       this._trainingOutcomes,
       String targetName,
       this._kernelFn,
-      int k,
-      Distance distance,
-      FindKnnFn solverFn,
-      DType dtype,
-  ) :
-        classNames = [targetName],
-        _k = k,
-        _distanceType = distance,
-        _solverFn = solverFn,
-        _dtype = dtype {
+      this._k,
+      this._distanceType,
+      this._solverFn,
+      this._dtype,
+  ) : classNames = [targetName] {
+    if (!_trainingFeatures.hasData) {
+      throw Exception('Empty features matrix provided');
+    }
+    if (!_trainingOutcomes.hasData) {
+      throw Exception('Empty outcomes matrix provided');
+    }
     if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
       throw Exception('Number of features and number of outcomes must be'
           'equal');
