@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/algorithms/knn/kernel.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory_impl.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
-import 'package:ml_algo/src/algorithms/knn/knn.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory_impl.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/regressor/knn_regressor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';

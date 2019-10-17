@@ -1,10 +1,7 @@
-import 'package:ml_algo/src/algorithms/knn/kernel.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory_impl.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
-import 'package:ml_algo/src/algorithms/knn/knn.dart';
-import 'package:ml_algo/src/algorithms/knn/neigbour.dart';
 import 'package:ml_algo/src/classifier/knn_classifier.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -15,22 +12,18 @@ class KnnClassifierImpl implements KnnClassifier {
   KnnClassifierImpl(
       this._trainingFeatures,
       this._trainingOutcomes,
-      String className, {
+      String targetName,
+      this._kernelFn, {
         int k,
         Distance distance = Distance.euclidean,
         FindKnnFn solverFn = findKNeighbours,
-        Kernel kernel = Kernel.gaussian,
         DType dtype = DType.float32,
-
-        KernelFunctionFactory kernelFnFactory =
-          const KernelFunctionFactoryImpl(),
       }) :
-        classNames = [className],
+        classNames = [targetName],
         _k = k,
         _distanceType = distance,
         _solverFn = solverFn,
-        _dtype = dtype,
-        _kernelFn = kernelFnFactory.createByType(kernel) {
+        _dtype = dtype {
     if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
       throw Exception('Number of features and number of outcomes must be'
           'equal');

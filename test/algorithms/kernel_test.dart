@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/algorithms/knn/kernel.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
 import 'package:test/test.dart';
 
 void main() {
