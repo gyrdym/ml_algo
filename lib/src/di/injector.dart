@@ -24,7 +24,7 @@ import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_
 
 Injector injector;
 
-Injector getDependencies() =>
+Injector get dependencies =>
     injector ??= Injector()
           ..registerSingleton<LinearOptimizerFactory>(
                   (_) => const LinearOptimizerFactoryImpl())

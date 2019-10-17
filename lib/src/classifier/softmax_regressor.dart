@@ -148,8 +148,6 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
               '${fittingData.header}');
         }
 
-        final dependencies = getDependencies();
-
         final linkFunctionFactory = dependencies
             .getDependency<LinkFunctionFactory>();
 
