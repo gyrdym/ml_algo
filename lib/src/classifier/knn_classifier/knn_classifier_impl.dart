@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/knn_classifier.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
@@ -13,12 +13,12 @@ class KnnClassifierImpl implements KnnClassifier {
       this._trainingFeatures,
       this._trainingOutcomes,
       String targetName,
-      this._kernelFn, {
-        int k,
-        Distance distance = Distance.euclidean,
-        FindKnnFn solverFn = findKNeighbours,
-        DType dtype = DType.float32,
-      }) :
+      this._kernelFn,
+      int k,
+      Distance distance,
+      FindKnnFn solverFn,
+      DType dtype,
+  ) :
         classNames = [targetName],
         _k = k,
         _distanceType = distance,

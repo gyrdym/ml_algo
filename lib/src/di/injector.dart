@@ -1,8 +1,12 @@
 import 'package:injector/injector.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory_impl.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
@@ -47,4 +51,13 @@ Injector getDependencies() =>
                   (_) => const DataSplitterFactoryImpl())
 
           ..registerSingleton<KernelFunctionFactory>(
-                  (_) => const KernelFunctionFactoryImpl());
+                  (_) => const KernelFunctionFactoryImpl())
+
+          ..registerDependency<KnnSolverFactory>(
+                  (_) => const KnnSolverFactoryImpl())
+
+          ..registerSingleton<KnnClassifierFactory>(
+                  (injector) => KnnClassifierFactoryImpl(
+                    injector.getDependency<KernelFunctionFactory>(),
+                    injector.getDependency<KnnSolverFactory>(),
+                  ));
