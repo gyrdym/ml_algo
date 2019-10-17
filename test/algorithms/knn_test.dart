@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/algorithms/knn/knn.dart';
-import 'package:ml_algo/src/algorithms/knn/neigbour.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';

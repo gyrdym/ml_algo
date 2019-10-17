@@ -1,7 +1,7 @@
 // MacBook Air 13.3 mid 2017: ~ 5 sec
 
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:ml_algo/src/algorithms/knn/knn.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 

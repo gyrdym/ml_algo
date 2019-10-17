@@ -1,4 +1,4 @@
-export 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
+export 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
 export 'package:ml_algo/src/classifier/decision_tree_classifier.dart';
 export 'package:ml_algo/src/classifier/logistic_regressor.dart';
 export 'package:ml_algo/src/classifier/softmax_regressor.dart';

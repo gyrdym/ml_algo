@@ -1,6 +1,6 @@
-import 'package:ml_algo/src/algorithms/knn/kernel.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_function_factory_impl.dart';
-import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory_impl.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
 import 'package:test/test.dart';
 
 void main() {

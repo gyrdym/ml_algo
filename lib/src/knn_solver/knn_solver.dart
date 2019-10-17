@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/algorithms/knn/neigbour.dart';
+import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';

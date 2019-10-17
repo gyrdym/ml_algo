@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/algorithms/knn/kernel_type.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
