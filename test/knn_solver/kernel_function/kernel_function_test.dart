@@ -3,35 +3,33 @@ import 'package:test/test.dart';
 
 void main() {
   group('Kernel', () {
-    test('uniform should return 1/2 if absolute value of the passed argument is '
-        'less or equal to 1', () {
+    test('uniform should return 1/2 if |lambda| <= 1', () {
       expect(uniformKernel(0), 1/2);
       expect(uniformKernel(0.5), 1/2);
       expect(uniformKernel(1), 1/2);
     });
 
-    test('uniform should return 0 if absolute value of the passed argument is '
-        'greater than 1', () {
+    test('uniform should return 0 if |lambda| > 1', () {
       expect(uniformKernel(1.01), 0);
       expect(uniformKernel(10), 0);
     });
 
-    test('epanechnikov should return proper value if |x| <= 1', () {
+    test('epanechnikov should return proper value if |lambda| <= 1', () {
       expect(epanechnikovKernel(0), 0.75);
       expect(epanechnikovKernel(1), 0);
     });
 
-    test('epanechnikov should return proper value if |x| > 1', () {
+    test('epanechnikov should return proper value if |lambda| > 1', () {
       expect(epanechnikovKernel(1.01), 0);
       expect(epanechnikovKernel(10), 0);
     });
 
-    test('cosine should return proper value if |x| <= 1', () {
+    test('cosine should return proper value if |lambda| <= 1', () {
       expect(cosineKernel(0), closeTo(0.7853, 1e-4));
       expect(cosineKernel(1), closeTo(0.0000, 1e-4));
     });
 
-    test('cosine should return proper value if |x| > 1', () {
+    test('cosine should return proper value if |lambda| > 1', () {
       expect(cosineKernel(1.01), 0);
       expect(cosineKernel(20), 0);
     });

@@ -10,6 +10,10 @@ import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.d
 import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart' as decision_tree_splitter;
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
@@ -90,6 +94,10 @@ class SplitSelectorMock extends Mock implements SplitSelector {}
 class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
 
 class DecisionTreeSolverMock extends Mock implements DecisionTreeSolver {}
+
+class KernelFunctionFactoryMock extends Mock implements KernelFunctionFactory {}
+
+class KnnSolverFactoryMock extends Mock implements KnnSolverFactory {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
@@ -172,3 +180,14 @@ DataSplitterFactory createDataSplitterFactoryMock(DataSplitter dataSplitter) {
   return factory;
 }
 
+KernelFunctionFactory createKernelFactoryMock(KernelFn kernelFn) {
+  final factory = KernelFunctionFactoryMock();
+  when(factory.createByType(any)).thenReturn(kernelFn);
+  return factory;
+}
+
+KnnSolverFactory createKnnSolverFactoryMock(FindKnnFn solverFn) {
+  final factory = KnnSolverFactoryMock();
+  when(factory.create()).thenReturn(solverFn);
+  return factory;
+}

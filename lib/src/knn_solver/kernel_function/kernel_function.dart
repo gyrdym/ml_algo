@@ -1,18 +1,18 @@
 import 'dart:math' as math;
 
-typedef KernelFn = double Function(num u, [num lambda]);
+typedef KernelFn = num Function(num u, [num lambda]);
 
-double uniformKernel(num u, [num lambda = 1]) => u.abs() <= lambda
+num uniformKernel(num u, [num lambda = 1]) => u.abs() <= lambda
     ? 1/2
     : 0;
 
-double epanechnikovKernel(num u, [num lambda = 1]) => u.abs() <= lambda
+num epanechnikovKernel(num u, [num lambda = 1]) => u.abs() <= lambda
     ? 0.75 * (1 - u * u)
     : 0;
 
-double cosineKernel(num u, [num lambda = 1]) => u.abs() <= lambda
+num cosineKernel(num u, [num lambda = 1]) => u.abs() <= lambda
     ? math.pi / 4 * math.cos(math.pi / 2 * u)
     : 0;
 
-double gaussianKernel(num u, [num lambda = 1]) =>
+num gaussianKernel(num u, [num lambda = 1]) =>
     (1 / math.sqrt(2 * math.pi)) * math.exp(-0.5 * u * u);
