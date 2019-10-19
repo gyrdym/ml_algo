@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
-import 'package:ml_algo/src/regressor/linear_regressor.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
