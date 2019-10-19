@@ -1,5 +1,5 @@
 import 'package:injector/injector.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor_classifier/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -21,7 +21,7 @@ import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../mocks.dart';
+import '../../mocks.dart';
 
 void main() {
   group('LogisticRegressor', () {
