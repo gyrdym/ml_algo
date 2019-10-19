@@ -1,7 +1,7 @@
 // 10.0 sec (MacBook Air mid 2017)
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
