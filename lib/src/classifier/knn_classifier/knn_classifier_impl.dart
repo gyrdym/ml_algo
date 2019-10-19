@@ -25,13 +25,18 @@ class KnnClassifierImpl implements KnnClassifier {
     if (!_trainingOutcomes.hasData) {
       throw Exception('Empty outcomes matrix provided');
     }
-    if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
-      throw Exception('Number of features and number of outcomes must be'
-          'equal');
+    if (_trainingOutcomes.columnsNum > 1) {
+      throw Exception('Invalid outcome matrix: it is expected to be a column '
+          'vector, but a matrix of ${_trainingOutcomes.columnsNum} colums is '
+          'given');
     }
-    if (_k > _trainingFeatures.rowsNum) {
-      throw Exception('Parameter k should be less than or equal to the number '
-          'of training observations');
+    if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
+      throw Exception('Number of feature records and number of associated '
+          'outcomes must be equal');
+    }
+    if (_k <= 0 || _k > _trainingFeatures.rowsNum) {
+      throw RangeError.value(_k, 'Parameter k should be within the range '
+          '1..${_trainingFeatures.rowsNum} (both inclusive)');
     }
   }
 
