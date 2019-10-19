@@ -53,6 +53,16 @@ class KnnClassifierImpl implements KnnClassifier {
 
   @override
   DataFrame predict(DataFrame features) {
+    if (!features.toMatrix(_dtype).hasData) {
+      throw Exception('No features provided');
+    }
+
+    if (features.toMatrix(_dtype).columnsNum != _trainingFeatures.columnsNum) {
+      throw Exception('Invalid feature matrix: expected columns number: '
+          '${_trainingFeatures.columnsNum}, given: '
+          '${features.toMatrix(_dtype).columnsNum}');
+    }
+
     final labelsToProbabilities = _getLabelsToProbabilitiesMapping(features);
     final labels = labelsToProbabilities.keys.toList();
     final predictedOutcomes = _getProbabilityMatrix(labelsToProbabilities)
