@@ -15,6 +15,7 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart' as deci
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_impl.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
@@ -105,6 +106,8 @@ class KnnClassifierFactoryMock extends Mock implements KnnClassifierFactory {}
 
 class KnnClassifierMock extends Mock implements KnnClassifier {}
 
+class KnnSolverMock extends Mock implements KnnSolver {}
+
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
@@ -192,9 +195,9 @@ KernelFunctionFactory createKernelFactoryMock(KernelFn kernelFn) {
   return factory;
 }
 
-KnnSolverFactory createKnnSolverFactoryMock(FindKnnFn solverFn) {
+KnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
   final factory = KnnSolverFactoryMock();
-  when(factory.create()).thenReturn(solverFn);
+  when(factory.create(any, any, any, any, any)).thenReturn(solver);
   return factory;
 }
 

@@ -28,17 +28,38 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
       targetNames: [targetName],
     ).toList();
 
-    final kernelFn = kernelFnFactory.createByType(kernel);
-    final solverFn = knnSolverFactory.create();
+    if (fittingData[targetName] == null) {
+      throw Exception('Target column $targetName does not exist in the fitting '
+          'dataframe');
+    }
 
-    return KnnClassifierImpl(
-      splits[0].toMatrix(dtype),
-      splits[1].toMatrix(dtype),
-      targetName,
-      kernelFn,
+    if (!fittingData[targetName].isDiscrete) {
+      throw Exception('Target column must contain only discrete values ('
+          'consider encoding your data)');
+    }
+
+    final trainFeatures = splits[0].toMatrix(dtype);
+    final trainLabels = splits[1].toMatrix(dtype);
+    final classLabels = splits[1][targetName]
+        .discreteValues
+        .map((dynamic value) => value as num)
+        .toList(growable: false);
+
+    final kernelFn = kernelFnFactory.createByType(kernel);
+
+    final solver = knnSolverFactory.create(
+      trainFeatures,
+      trainLabels,
       k,
       distance,
-      solverFn,
+      true,
+    );
+
+    return KnnClassifierImpl(
+      targetName,
+      classLabels,
+      kernelFn,
+      solver,
       dtype,
     );
   }

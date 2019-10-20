@@ -3,64 +3,40 @@ import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class KnnClassifierImpl implements KnnClassifier {
   KnnClassifierImpl(
-      this._trainingFeatures,
-      this._trainingOutcomes,
       String targetName,
+      this._classLabels,
       this._kernelFn,
-      this._k,
-      this._distanceType,
-      this._solverFn,
+      this._solver,
       this._dtype,
-  ) : classNames = [targetName] {
-    if (!_trainingFeatures.hasData) {
-      throw Exception('Empty features matrix provided');
-    }
-    if (!_trainingOutcomes.hasData) {
-      throw Exception('Empty outcomes matrix provided');
-    }
-    if (_trainingOutcomes.columnsNum > 1) {
-      throw Exception('Invalid outcome matrix: it is expected to be a column '
-          'vector, but a matrix of ${_trainingOutcomes.columnsNum} colums is '
-          'given');
-    }
-    if (_trainingFeatures.rowsNum != _trainingOutcomes.rowsNum) {
-      throw Exception('Number of feature records and number of associated '
-          'outcomes must be equal');
-    }
-    if (_k <= 0 || _k > _trainingFeatures.rowsNum) {
-      throw RangeError.value(_k, 'Parameter k should be within the range '
-          '1..${_trainingFeatures.rowsNum} (both inclusive)');
+  ) :
+        classNames = [targetName],
+        _baseProbability = 1 / _classLabels.length
+  {
+    if (_classLabels.isEmpty) {
+      throw Exception('Empty class label list provided');
     }
   }
 
-  final Matrix _trainingFeatures;
-  final Matrix _trainingOutcomes;
-  final Distance _distanceType;
-  final int _k;
-  final FindKnnFn _solverFn;
+  final KnnSolver _solver;
   final KernelFn _kernelFn;
   final DType _dtype;
+  final num _baseProbability;
 
   @override
   final List<String> classNames;
+
+  final List<num> _classLabels;
 
   @override
   DataFrame predict(DataFrame features) {
     if (!features.toMatrix(_dtype).hasData) {
       throw Exception('No features provided');
-    }
-
-    if (features.toMatrix(_dtype).columnsNum != _trainingFeatures.columnsNum) {
-      throw Exception('Invalid feature matrix: expected columns number: '
-          '${_trainingFeatures.columnsNum}, given: '
-          '${features.toMatrix(_dtype).columnsNum}');
     }
 
     final labelsToProbabilities = _getLabelsToProbabilitiesMapping(features);
@@ -90,15 +66,30 @@ class KnnClassifierImpl implements KnnClassifier {
     return DataFrame.fromMatrix(probabilityMatrix, header: header);
   }
 
+  /// Returns a map of the following format:
+  ///
+  /// ```
+  /// class_1_label: probability_1, probability_2, ..., probability_n
+  /// class_2_label: probability_1, probability_2, ..., probability_n
+  /// ...
+  /// class_n_label: probability_1, probability_2, ..., probability_n
+  /// ```
+  ///
+  /// This may be interpreted as a table of probabilities:
+  ///
+  /// ```
+  /// class_1_label   class_2_label  ...  class_n_label
+  /// -------------------------------------------------
+  /// probability_1   probability_1       probability_1
+  /// probability_2   probability_2       probability_2
+  ///      ...             ...                 ...
+  /// probability_n   probability_n       probability_n
+  /// ```
+  ///
+  /// where each row is a classes probability distribution for the appropriate
+  /// feature record from test feature matrix
   Map<num, List<num>> _getLabelsToProbabilitiesMapping(DataFrame features) {
-    final neighbours = _solverFn(
-      _k,
-      _trainingFeatures,
-      _trainingOutcomes,
-      features.toMatrix(_dtype),
-      standardize: true,
-      distance: _distanceType,
-    );
+    final neighbours = _solver.findKNeighbours(features.toMatrix(_dtype));
 
     return neighbours.fold<Map<num, List<num>>>(
         {}, (allLabelsToProbabilities, kNeighbours) {
@@ -112,9 +103,27 @@ class KnnClassifierImpl implements KnnClassifier {
       final labelsToProbabilities = labelsToWeights
           .map((key, weight) => MapEntry(key, weight / sumOfAllWeights));
 
-      return allLabelsToProbabilities
-        ..updateAll(
-                (key, value) => (value ?? [])..add(labelsToProbabilities[key]));
+      final areLabelsEquiprobable = _areLabelsEquiprobable(
+          labelsToProbabilities.values);
+
+      // if labels are equiprobable, make the first neighbour's label
+      // probability equal to 1 and probabilities of the rest neighbour labels -
+      // equal to 0
+      _classLabels.forEach((label) {
+        final probability = areLabelsEquiprobable
+            ? label == kNeighbours.first.label.first
+                ? 1
+                : 0
+            : labelsToProbabilities[label] ?? 0;
+
+        allLabelsToProbabilities.update(
+          label,
+          (probabilities) => probabilities..add(probability),
+          ifAbsent: () => [probability],
+        );
+      });
+
+      return allLabelsToProbabilities;
     });
   }
 
@@ -140,4 +149,7 @@ class KnnClassifierImpl implements KnnClassifier {
         ifAbsent: () => weight,
       );
   }
+
+  bool _areLabelsEquiprobable(Iterable<num> labelProbabilities) =>
+      Set<num>.from(labelProbabilities).length == 1;
 }
