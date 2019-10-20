@@ -11,21 +11,20 @@ import '../../mocks.dart';
 
 void main() {
   group('KnnClassifierFactoryImpl', () {
+    final solverMock = KnnSolverMock();
     final kernelFnFactory = createKernelFactoryMock(($, [$$]) => null);
-    final solverFnFactory = createKnnSolverFactoryMock(
-        ($, $$, $$$, $$$$, {distance, standardize}) => null);
+    final solverFnFactory = createKnnSolverFactoryMock(solverMock);
 
     final factory = KnnClassifierFactoryImpl(kernelFnFactory, solverFnFactory);
 
-    final data = DataFrame(
-      <Iterable<num>>[
-        [1, 2, 2, 4, 5],
-        [1, 2, 2, 4, 5],
-        [1, 2, 2, 4, 5],
-        [1, 2, 2, 4, 5],
-      ],
-      headerExists: false,
-      header: ['first', 'second', 'third', 'fourth', 'fifth'],
+    final data = DataFrame.fromSeries(
+      [
+        Series('first' , <num>[1, 1, 1, 1]),
+        Series('second', <num>[2, 2, 2, 2]),
+        Series('third' , <num>[2, 2, 2, 2]),
+        Series('fourth', <num>[4, 4, 4, 4]),
+        Series('fifth' , <num>[5, 5, 5, 5], isDiscrete: true),
+      ]
     );
 
     final targetName = 'fifth';
@@ -36,12 +35,28 @@ void main() {
         targetName,
         2,
         Kernel.uniform,
-        Distance.euclidean,
+        Distance.hamming,
         DType.float32,
       );
 
       verify(kernelFnFactory.createByType(Kernel.uniform)).called(1);
-      verify(solverFnFactory.create()).called(1);
+      verify(solverFnFactory.create(
+        argThat(equals([
+          [1, 2, 2, 4],
+          [1, 2, 2, 4],
+          [1, 2, 2, 4],
+          [1, 2, 2, 4],
+        ])),
+        argThat(equals([
+          [5],
+          [5],
+          [5],
+          [5],
+        ])),
+        2,
+        Distance.hamming,
+        true,
+      )).called(1);
 
       expect(classifier, isA<KnnClassifierImpl>());
     });

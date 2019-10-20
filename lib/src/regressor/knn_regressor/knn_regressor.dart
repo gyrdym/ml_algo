@@ -1,5 +1,8 @@
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_impl.dart';
@@ -54,14 +57,26 @@ abstract class KnnRegressor implements Assessable, Predictor {
       targetNames: [targetName],
     ).toList();
 
+    final trainFeatures = splits[0];
+    final trainOutcomes = splits[1];
+
+    final solverFactory = dependencies.getDependency<KnnSolverFactory>();
+    final solver = solverFactory.create(
+      trainFeatures.toMatrix(dtype),
+      trainOutcomes.toMatrix(dtype),
+      k,
+      distance,
+      true,
+    );
+
+    final kernelFnFactory = dependencies.getDependency<KernelFunctionFactory>();
+    final kernelFn = kernelFnFactory.createByType(kernel);
+
     return KnnRegressorImpl(
-      splits[0].toMatrix(),
-      splits[1].toMatrix(),
       targetName,
-      k: k,
-      kernel: kernel,
-      distance: distance,
-      dtype: dtype,
+      solver,
+      kernelFn,
+      dtype,
     );
   }
 }
