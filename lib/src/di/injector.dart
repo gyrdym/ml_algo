@@ -21,6 +21,8 @@ import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_impl.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory_impl.dart';
 
 Injector injector;
 
@@ -58,6 +60,12 @@ Injector get dependencies =>
 
           ..registerSingleton<KnnClassifierFactory>(
                   (injector) => KnnClassifierFactoryImpl(
+                    injector.getDependency<KernelFunctionFactory>(),
+                    injector.getDependency<KnnSolverFactory>(),
+                  ))
+
+          ..registerSingleton<KnnRegressorFactory>(
+                  (injector) => KnnRegressorFactoryImpl(
                     injector.getDependency<KernelFunctionFactory>(),
                     injector.getDependency<KnnSolverFactory>(),
                   ));

@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/_mixin/data_validation_mixin.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
@@ -7,7 +8,9 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
+class KnnRegressorImpl with AssessablePredictorMixin, DataValidationMixin
+    implements KnnRegressor {
+
   KnnRegressorImpl(
       this._targetName,
       this._solver,
@@ -25,9 +28,7 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
 
   @override
   DataFrame predict(DataFrame features) {
-    if (!features.toMatrix(_dtype).hasData) {
-      throw Exception('No features provided');
-    }
+    validateTestFeatures(features, _dtype);
 
     final prediction = Matrix.fromRows(
         _predictOutcomes(features.toMatrix(_dtype))

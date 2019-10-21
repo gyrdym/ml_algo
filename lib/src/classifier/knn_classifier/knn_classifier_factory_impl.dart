@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/_mixin/data_validation_mixin.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_impl.dart';
@@ -9,7 +10,9 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 
-class KnnClassifierFactoryImpl implements KnnClassifierFactory {
+class KnnClassifierFactoryImpl with DataValidationMixin implements
+    KnnClassifierFactory {
+
   KnnClassifierFactoryImpl(this.kernelFnFactory, this.knnSolverFactory);
 
   final KernelFunctionFactory kernelFnFactory;
@@ -24,19 +27,11 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
       Distance distance,
       DType dtype,
   ) {
+    validateTrainData(fittingData, [targetName]);
+
     final splits = featuresTargetSplit(fittingData,
       targetNames: [targetName],
     ).toList();
-
-    if (fittingData[targetName] == null) {
-      throw Exception('Target column $targetName does not exist in the fitting '
-          'dataframe');
-    }
-
-    if (!fittingData[targetName].isDiscrete) {
-      throw Exception('Target column must contain only discrete values ('
-          'consider encoding your data)');
-    }
 
     final trainFeatures = splits[0].toMatrix(dtype);
     final trainLabels = splits[1].toMatrix(dtype);
