@@ -3,8 +3,8 @@ import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dar
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory_impl.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_factory_impl.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';

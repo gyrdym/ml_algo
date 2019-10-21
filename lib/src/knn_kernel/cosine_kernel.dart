@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel.dart';
+import 'package:ml_algo/src/knn_kernel/kernel.dart';
 
 class CosineKernel implements Kernel {
   const CosineKernel();

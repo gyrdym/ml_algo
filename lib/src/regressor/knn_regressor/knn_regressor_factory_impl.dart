@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/_mixin/data_validation_mixin.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
