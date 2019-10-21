@@ -137,7 +137,7 @@ void main() {
         expect(actual.header, equals(['target']));
       });
 
-      test('should return a label of first neighbour among founf k neighbours '
+      test('should return a label of first neighbour among found k neighbours '
           'if there is no major class', () {
         final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
