@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/_mixin/data_validation_mixin.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
@@ -7,17 +8,14 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KnnClassifierImpl implements KnnClassifier {
+class KnnClassifierImpl with DataValidationMixin implements KnnClassifier {
   KnnClassifierImpl(
       String targetName,
       this._classLabels,
       this._kernelFn,
       this._solver,
       this._dtype,
-  ) :
-        classNames = [targetName],
-        _baseProbability = 1 / _classLabels.length
-  {
+  ) : classNames = [targetName] {
     if (_classLabels.isEmpty) {
       throw Exception('Empty class label list provided');
     }
@@ -26,7 +24,6 @@ class KnnClassifierImpl implements KnnClassifier {
   final KnnSolver _solver;
   final KernelFn _kernelFn;
   final DType _dtype;
-  final num _baseProbability;
 
   @override
   final List<String> classNames;
@@ -35,9 +32,7 @@ class KnnClassifierImpl implements KnnClassifier {
 
   @override
   DataFrame predict(DataFrame features) {
-    if (!features.toMatrix(_dtype).hasData) {
-      throw Exception('No features provided');
-    }
+    validateTestFeatures(features, _dtype);
 
     final labelsToProbabilities = _getLabelsToProbabilitiesMapping(features);
     final labels = labelsToProbabilities.keys.toList();
