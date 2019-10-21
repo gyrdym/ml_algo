@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/_mixin/data_validation_mixin.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -12,7 +12,7 @@ class KnnClassifierImpl with DataValidationMixin implements KnnClassifier {
   KnnClassifierImpl(
       String targetName,
       this._classLabels,
-      this._kernelFn,
+      this._kernel,
       this._solver,
       this._dtype,
   ) : classNames = [targetName] {
@@ -22,7 +22,7 @@ class KnnClassifierImpl with DataValidationMixin implements KnnClassifier {
   }
 
   final KnnSolver _solver;
-  final KernelFn _kernelFn;
+  final Kernel _kernel;
   final DType _dtype;
 
   @override
@@ -136,11 +136,11 @@ class KnnClassifierImpl with DataValidationMixin implements KnnClassifier {
       Map<num, num> labelToWeightMapping,
       Neighbour<Vector> neighbour,
   ) {
-    final weight = _kernelFn(neighbour.distance);
+    final weight = _kernel.getWeightByDistance(neighbour.distance);
     return labelToWeightMapping
       ..update(
         neighbour.label.first,
-            (totalWeight) => totalWeight + weight,
+        (totalWeight) => totalWeight + weight,
         ifAbsent: () => weight,
       );
   }

@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/_mixin/data_validation_mixin.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
@@ -14,13 +14,13 @@ class KnnRegressorImpl with AssessablePredictorMixin, DataValidationMixin
   KnnRegressorImpl(
       this._targetName,
       this._solver,
-      this._kernelFn,
+      this._kernel,
       this._dtype,
   );
 
   final String _targetName;
   final KnnSolver _solver;
-  final KernelFn _kernelFn;
+  final Kernel _kernel;
   final DType _dtype;
 
   Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(1, dtype: _dtype);
@@ -47,13 +47,13 @@ class KnnRegressorImpl with AssessablePredictorMixin, DataValidationMixin
 
     return neighbours.map((kNeighbours) {
       final weightedLabels = kNeighbours.fold<Vector>(_zeroVector, (weightedSum, neighbour) {
-        final weight = _kernelFn(neighbour.distance);
+        final weight = _kernel.getWeightByDistance(neighbour.distance);
         final weightedLabel = neighbour.label * weight;
         return weightedSum + weightedLabel;
       });
 
       final weightsSum = kNeighbours.fold<num>(0,
-              (sum, neighbour) => sum + _kernelFn(neighbour.distance));
+              (sum, neighbour) => sum + _kernel.getWeightByDistance(neighbour.distance));
 
       return weightedLabels / weightsSum;
     });

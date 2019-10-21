@@ -9,7 +9,7 @@ abstract class KnnClassifierFactory {
       DataFrame fittingData,
       String targetName,
       int k,
-      Kernel kernel,
+      KernelType kernel,
       Distance distance,
       DType dtype,
   );

@@ -11,15 +11,19 @@ void main() {
   group('KnnClassifierImpl', () {
     group('constructor', () {
       final solverMock = KnnSolverMock();
+      final kernelMock = KernelMock();
 
-      tearDown(() => reset(solverMock));
+      tearDown(() {
+        reset(solverMock);
+        reset(kernelMock);
+      });
 
       test('should throw an exception if no class labels are provided', () {
         final classLabels = <num>[];
         final actual = () => KnnClassifierImpl(
           'target',
           classLabels,
-          (_, [__]) => null,
+          kernelMock,
           solverMock,
           DType.float32,
         );
@@ -30,14 +34,20 @@ void main() {
 
     group('predict method', () {
       final solverMock = KnnSolverMock();
+      final kernelMock = KernelMock();
 
-      tearDown(() => reset(solverMock));
+      setUp(() => when(kernelMock.getWeightByDistance(any, any)).thenReturn(1));
+
+      tearDown(() {
+        reset(solverMock);
+        reset(kernelMock);
+      });
 
       test('should throw an exception if no features are provided', () {
         final classifier = KnnClassifierImpl(
           'target',
           [1],
-          (_, [__]) => null,
+          kernelMock,
           solverMock,
           DType.float32,
         );
@@ -54,7 +64,7 @@ void main() {
         final classifier = KnnClassifierImpl(
           'target',
           classLabels,
-          (_, [__]) => 1,
+          kernelMock,
           solverMock,
           DType.float32,
         );
@@ -108,7 +118,7 @@ void main() {
         final classifier = KnnClassifierImpl(
           'target',
           classLabels,
-          (_, [__]) => 1,
+          kernelMock,
           solverMock,
           DType.float32,
         );
@@ -143,7 +153,7 @@ void main() {
         final classifier = KnnClassifierImpl(
           'target',
           classLabels,
-          (_, [__]) => 1,
+          kernelMock,
           solverMock,
           DType.float32,
         );

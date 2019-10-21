@@ -9,7 +9,7 @@ abstract class KnnRegressorFactory {
       DataFrame fittingData,
       String targetName,
       int k,
-      Kernel kernel,
+      KernelType kernel,
       Distance distance,
       DType dtype,
   );

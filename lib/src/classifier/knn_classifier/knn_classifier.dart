@@ -12,7 +12,7 @@ abstract class KnnClassifier implements Classifier {
       String targetName,
       int k,
       {
-        Kernel kernel = Kernel.gaussian,
+        KernelType kernel = KernelType.gaussian,
         Distance distance = Distance.euclidean,
         DType dtype = DType.float32,
       }

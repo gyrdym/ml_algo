@@ -3,7 +3,7 @@ import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_impl.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -15,7 +15,7 @@ class KnnClassifierFactoryImpl with DataValidationMixin implements
 
   KnnClassifierFactoryImpl(this.kernelFnFactory, this.knnSolverFactory);
 
-  final KernelFunctionFactory kernelFnFactory;
+  final KernelFactory kernelFnFactory;
   final KnnSolverFactory knnSolverFactory;
 
   @override
@@ -23,7 +23,7 @@ class KnnClassifierFactoryImpl with DataValidationMixin implements
       DataFrame fittingData,
       String targetName,
       int k,
-      Kernel kernel,
+      KernelType kernel,
       Distance distance,
       DType dtype,
   ) {

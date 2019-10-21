@@ -10,7 +10,7 @@
 /// distance between an observation being evaluated and the target one and
 /// returns a weight denoting, how much the evaluating observation will
 /// contribute in prediction for the target one.
-enum Kernel {
+enum KernelType {
   /// A kernel, that calculates weights, using the following formula:
   ///
   ///
