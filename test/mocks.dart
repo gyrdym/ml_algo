@@ -15,7 +15,6 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart' as deci
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
 import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
-import 'package:ml_algo/src/knn_solver/knn_solver_impl.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
@@ -32,6 +31,8 @@ import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -105,6 +106,10 @@ class KnnSolverFactoryMock extends Mock implements KnnSolverFactory {}
 class KnnClassifierFactoryMock extends Mock implements KnnClassifierFactory {}
 
 class KnnClassifierMock extends Mock implements KnnClassifier {}
+
+class KnnRegressorFactoryMock extends Mock implements KnnRegressorFactory {}
+
+class KnnRegressorMock extends Mock implements KnnRegressor {}
 
 class KnnSolverMock extends Mock implements KnnSolver {}
 
@@ -204,5 +209,11 @@ KnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
 KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
   final factory = KnnClassifierFactoryMock();
   when(factory.create(any, any, any, any, any, any)).thenReturn(classifier);
+  return factory;
+}
+
+KnnRegressorFactory createKnnRegressorFactoryMock(KnnRegressor regressor) {
+  final factory = KnnRegressorFactoryMock();
+  when(factory.create(any, any, any, any, any, any)).thenReturn(regressor);
   return factory;
 }
