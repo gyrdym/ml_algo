@@ -60,5 +60,19 @@ void main() {
 
       expect(classifier, isA<KnnClassifierImpl>());
     });
+
+    test('should throw an exception if target column does not exist in the '
+        'train data', () {
+      final actual = () => factory.create(
+        data,
+        'unknown_column',
+        2,
+        Kernel.uniform,
+        Distance.hamming,
+        DType.float32,
+      );
+
+      expect(actual, throwsException);
+    });
   });
 }
