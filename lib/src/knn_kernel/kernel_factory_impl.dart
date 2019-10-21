@@ -1,10 +1,10 @@
-import 'package:ml_algo/src/knn_solver/kernel_function/cosine_kernel.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/epanechnikov_kernel.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/gaussian_kernel.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_type.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/uniform_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/cosine_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/epanechnikov_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/gaussian_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/kernel.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
+import 'package:ml_algo/src/knn_kernel/uniform_kernel.dart';
 
 class KernelFactoryImpl implements KernelFactory {
   const KernelFactoryImpl();

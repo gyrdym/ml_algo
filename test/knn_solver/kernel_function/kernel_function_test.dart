@@ -1,7 +1,7 @@
-import 'package:ml_algo/src/knn_solver/kernel_function/cosine_kernel.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/epanechnikov_kernel.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/gaussian_kernel.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/uniform_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/cosine_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/epanechnikov_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/gaussian_kernel.dart';
+import 'package:ml_algo/src/knn_kernel/uniform_kernel.dart';
 import 'package:test/test.dart';
 
 void main() {
