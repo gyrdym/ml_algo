@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
-import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';

@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';

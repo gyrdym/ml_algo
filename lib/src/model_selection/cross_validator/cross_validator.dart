@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
@@ -71,7 +71,7 @@ abstract class CrossValidator {
       int p, {
         DType dtype = DType.float32,
       }) {
-    final dataSplitterFactory = injector.getDependency<DataSplitterFactory>();
+    final dataSplitterFactory = dependencies.getDependency<DataSplitterFactory>();
     final dataSplitter = dataSplitterFactory
         .createByType(DataSplitterType.lpo, p: p);
 
