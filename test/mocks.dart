@@ -12,8 +12,8 @@ import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.d
 import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart' as decision_tree_splitter;
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
@@ -99,7 +99,7 @@ class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
 
 class DecisionTreeSolverMock extends Mock implements DecisionTreeSolver {}
 
-class KernelFunctionFactoryMock extends Mock implements KernelFunctionFactory {}
+class KernelFunctionFactoryMock extends Mock implements KernelFactory {}
 
 class KnnSolverFactoryMock extends Mock implements KnnSolverFactory {}
 
@@ -112,6 +112,8 @@ class KnnRegressorFactoryMock extends Mock implements KnnRegressorFactory {}
 class KnnRegressorMock extends Mock implements KnnRegressor {}
 
 class KnnSolverMock extends Mock implements KnnSolver {}
+
+class KernelMock extends Mock implements Kernel {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
@@ -194,9 +196,9 @@ DataSplitterFactory createDataSplitterFactoryMock(DataSplitter dataSplitter) {
   return factory;
 }
 
-KernelFunctionFactory createKernelFactoryMock(KernelFn kernelFn) {
+KernelFactory createKernelFactoryMock(Kernel kernel) {
   final factory = KernelFunctionFactoryMock();
-  when(factory.createByType(any)).thenReturn(kernelFn);
+  when(factory.createByType(any)).thenReturn(kernel);
   return factory;
 }
 

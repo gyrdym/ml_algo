@@ -3,8 +3,8 @@ import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dar
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory.dart';
-import 'package:ml_algo/src/knn_solver/kernel_function/kernel_function_factory_impl.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory.dart';
+import 'package:ml_algo/src/knn_solver/kernel_function/kernel_factory_impl.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
@@ -52,20 +52,20 @@ Injector get dependencies =>
           ..registerSingleton<DataSplitterFactory>(
                   (_) => const DataSplitterFactoryImpl())
 
-          ..registerSingleton<KernelFunctionFactory>(
-                  (_) => const KernelFunctionFactoryImpl())
+          ..registerSingleton<KernelFactory>(
+                  (_) => const KernelFactoryImpl())
 
           ..registerDependency<KnnSolverFactory>(
                   (_) => const KnnSolverFactoryImpl())
 
           ..registerSingleton<KnnClassifierFactory>(
                   (injector) => KnnClassifierFactoryImpl(
-                    injector.getDependency<KernelFunctionFactory>(),
+                    injector.getDependency<KernelFactory>(),
                     injector.getDependency<KnnSolverFactory>(),
                   ))
 
           ..registerSingleton<KnnRegressorFactory>(
                   (injector) => KnnRegressorFactoryImpl(
-                    injector.getDependency<KernelFunctionFactory>(),
+                    injector.getDependency<KernelFactory>(),
                     injector.getDependency<KnnSolverFactory>(),
                   ));

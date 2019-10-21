@@ -40,7 +40,7 @@ void main() {
         data,
         targetName,
         2,
-        kernel: Kernel.uniform,
+        kernel: KernelType.uniform,
         distance: Distance.cosine,
         dtype: DType.float64,
       );
@@ -49,7 +49,7 @@ void main() {
           data,
           targetName,
           2,
-          Kernel.uniform,
+          KernelType.uniform,
           Distance.cosine,
           DType.float64
       )).called(1);

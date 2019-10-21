@@ -40,7 +40,7 @@ void main() {
         data,
         targetName,
         2,
-        kernel: Kernel.epanechnikov,
+        kernel: KernelType.epanechnikov,
         distance: Distance.cosine,
         dtype: DType.float64,
       );
@@ -49,7 +49,7 @@ void main() {
           data,
           targetName,
           2,
-          Kernel.epanechnikov,
+          KernelType.epanechnikov,
           Distance.cosine,
           DType.float64
       )).called(1);

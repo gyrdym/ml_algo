@@ -12,7 +12,8 @@ import '../../mocks.dart';
 void main() {
   group('KnnClassifierFactoryImpl', () {
     final solverMock = KnnSolverMock();
-    final kernelFnFactory = createKernelFactoryMock(($, [$$]) => null);
+    final kernelMock = KernelMock();
+    final kernelFnFactory = createKernelFactoryMock(kernelMock);
     final solverFnFactory = createKnnSolverFactoryMock(solverMock);
 
     final factory = KnnClassifierFactoryImpl(kernelFnFactory, solverFnFactory);
@@ -34,12 +35,12 @@ void main() {
         data,
         targetName,
         2,
-        Kernel.uniform,
+        KernelType.uniform,
         Distance.hamming,
         DType.float32,
       );
 
-      verify(kernelFnFactory.createByType(Kernel.uniform)).called(1);
+      verify(kernelFnFactory.createByType(KernelType.uniform)).called(1);
       verify(solverFnFactory.create(
         argThat(equals([
           [1, 2, 2, 4],
@@ -67,7 +68,7 @@ void main() {
         data,
         'unknown_column',
         2,
-        Kernel.uniform,
+        KernelType.uniform,
         Distance.hamming,
         DType.float32,
       );

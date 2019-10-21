@@ -31,7 +31,7 @@ void main() {
         data,
         targetName,
         k,
-        kernel: Kernel.uniform,
+        kernel: KernelType.uniform,
         distance: Distance.euclidean,
       );
 
@@ -61,7 +61,7 @@ void main() {
       ]);
 
       final regressor = KnnRegressor(data, 'target', k,
-        kernel: Kernel.epanechnikov);
+        kernel: KernelType.epanechnikov);
 
       final actual = regressor.predict(
         DataFrame.fromMatrix(testFeatures),
