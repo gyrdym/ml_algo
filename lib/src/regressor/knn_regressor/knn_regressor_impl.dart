@@ -27,11 +27,11 @@ class KnnRegressorImpl with AssessablePredictorMixin, DataValidationMixin
   Vector _cachedZeroVector;
 
   @override
-  DataFrame predict(DataFrame features) {
-    validateTestFeatures(features, _dtype);
+  DataFrame predict(DataFrame testFeatures) {
+    validateTestFeatures(testFeatures, _dtype);
 
     final prediction = Matrix.fromRows(
-        _predictOutcomes(features.toMatrix(_dtype))
+        _predictOutcomes(testFeatures.toMatrix(_dtype))
             .toList(growable: false),
         dtype: _dtype,
     );
