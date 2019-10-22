@@ -125,6 +125,29 @@ void main() {
 
         expect(actual.rows, iterable2dAlmostEqualTo(expected, 1e-3));
       });
+
+      test('should return a dataframe with a proper header', () {
+        final regressor = KnnRegressorImpl(
+          targetName,
+          solver,
+          kernel,
+          dtype,
+        );
+
+        when(solver.findKNeighbours(any)).thenReturn([
+          [
+            Neighbour(23, Vector.fromList([1]))
+          ],
+        ]);
+
+        when(kernel.getWeightByDistance(any, any)).thenReturn(1);
+
+        final data = DataFrame.fromMatrix(Matrix.fromList([
+          [1, 2, 3],
+        ]));
+
+        expect(regressor.predict(data).header, equals([targetName]));
+      });
     });
   });
 }
