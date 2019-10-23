@@ -22,7 +22,7 @@ class KnnRegressorFactoryImpl implements KnnRegressorFactory {
       DataFrame fittingData,
       String targetName,
       int k,
-      KernelType kernel,
+      KernelType kernelType,
       Distance distance,
       DType dtype,
   ) {
@@ -43,12 +43,12 @@ class KnnRegressorFactoryImpl implements KnnRegressorFactory {
       true,
     );
 
-    final kernelFn = _kernelFnFactory.createByType(kernel);
+    final kernel = _kernelFnFactory.createByType(kernelType);
 
     return KnnRegressorImpl(
       targetName,
       solver,
-      kernelFn,
+      kernel,
       dtype,
     );
   }

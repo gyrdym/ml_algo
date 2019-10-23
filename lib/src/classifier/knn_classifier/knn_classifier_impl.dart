@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
+import 'package:ml_algo/src/helpers/validate_class_label_list.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
@@ -17,9 +18,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
       this._solver,
       this._dtype,
   ) : classNames = [targetName] {
-    if (_classLabels.isEmpty) {
-      throw Exception('Empty class label list provided');
-    }
+    validateClassLabelList(_classLabels);
   }
 
   @override
@@ -29,6 +28,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   final Kernel _kernel;
   final KnnSolver _solver;
   final DType _dtype;
+  final String _columPrefix = 'Class label';
 
   @override
   DataFrame predict(DataFrame features) {
@@ -56,7 +56,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
 
     final header = labelsToProbabilities
         .keys
-        .map((label) => label.toString());
+        .map((label) => '${_columPrefix} ${label.toString()}');
 
     return DataFrame.fromMatrix(probabilityMatrix, header: header);
   }
