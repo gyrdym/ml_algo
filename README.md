@@ -36,10 +36,10 @@ the lib, please, do not use it in a browser.
     first `k` closest observations to the given one.
 
 - #### Regression algorithms
-    - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). A 
+    - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). A 
     class, that finds a linear pattern in training data and predicts a real numbers depending on the pattern. 
 
-    - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor.dart)
+    - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
     A class, that makes prediction for each new observation basing on first `k` closest observations from 
     training data. It may catch non-linear pattern of the data. 
 
