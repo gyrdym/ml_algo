@@ -58,7 +58,7 @@ void main() {
       });
 
       test('should return a dataframe with just one column, consisting of '
-          'majority-based outcomes of closest observations of provided '
+          'weighted majority-based outcomes of closest observations of provided '
           'features', () {
         final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
@@ -96,6 +96,18 @@ void main() {
             Neighbour(-40, Vector.fromList([1])),
           ],
         ];
+
+        when(kernelMock.getWeightByDistance(1)).thenReturn(10);
+        when(kernelMock.getWeightByDistance(20)).thenReturn(15);
+        when(kernelMock.getWeightByDistance(21)).thenReturn(10);
+
+        when(kernelMock.getWeightByDistance(33)).thenReturn(11);
+        when(kernelMock.getWeightByDistance(44)).thenReturn(15);
+        when(kernelMock.getWeightByDistance(93)).thenReturn(15);
+
+        when(kernelMock.getWeightByDistance(-1)).thenReturn(5);
+        when(kernelMock.getWeightByDistance(-30)).thenReturn(5);
+        when(kernelMock.getWeightByDistance(-40)).thenReturn(1);
 
         when(solverMock.findKNeighbours(testFeatureMatrix))
             .thenReturn(mockedNeighbours);
@@ -184,7 +196,49 @@ void main() {
         ];
 
         expect(actual.rows, equals(expectedOutcomes));
-        expect(actual.header, equals(['target']));
+      });
+
+      test('should return a label of neighbours with bigger weights even if '
+          'they are not the majority', () {
+        final classLabels = [1, 2, 3];
+        final classifier = KnnClassifierImpl(
+          'target',
+          classLabels,
+          kernelMock,
+          solverMock,
+          DType.float32,
+        );
+
+        final testFeatureMatrix = Matrix.fromList(
+          [
+            [10, 10, 10, 10],
+          ],
+        );
+
+        final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
+
+        final mockedNeighbours = [
+          [
+            Neighbour(0, Vector.fromList([1])),
+            Neighbour(2, Vector.fromList([2])),
+            Neighbour(3, Vector.fromList([1])),
+          ],
+        ];
+
+        when(kernelMock.getWeightByDistance(0)).thenReturn(1);
+        when(kernelMock.getWeightByDistance(2)).thenReturn(100);
+        when(kernelMock.getWeightByDistance(3)).thenReturn(5);
+
+        when(solverMock.findKNeighbours(testFeatureMatrix))
+            .thenReturn(mockedNeighbours);
+
+        final actual = classifier.predict(testFeatures);
+
+        final expectedOutcomes = [
+          [2],
+        ];
+
+        expect(actual.rows, equals(expectedOutcomes));
       });
     });
   });
