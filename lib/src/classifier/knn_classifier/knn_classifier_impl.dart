@@ -21,14 +21,13 @@ class KnnClassifierImpl with DataValidationMixin implements KnnClassifier {
     }
   }
 
-  final KnnSolver _solver;
-  final Kernel _kernel;
-  final DType _dtype;
-
   @override
   final List<String> classNames;
 
   final List<num> _classLabels;
+  final Kernel _kernel;
+  final KnnSolver _solver;
+  final DType _dtype;
 
   @override
   DataFrame predict(DataFrame features) {

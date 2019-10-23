@@ -24,7 +24,7 @@ void main() {
         Series('second', <num>[2, 2, 2, 2]),
         Series('third' , <num>[2, 2, 2, 2]),
         Series('fourth', <num>[4, 4, 4, 4]),
-        Series('fifth' , <num>[5, 5, 5, 5], isDiscrete: true),
+        Series('fifth' , <num>[1, 3, 2, 1], isDiscrete: true),
       ]
     );
 
@@ -49,10 +49,50 @@ void main() {
           [1, 2, 2, 4],
         ])),
         argThat(equals([
-          [5],
-          [5],
-          [5],
-          [5],
+          [1],
+          [3],
+          [2],
+          [1],
+        ])),
+        2,
+        Distance.hamming,
+        true,
+      )).called(1);
+
+      expect(classifier, isA<KnnClassifierImpl>());
+    });
+
+    test('should extract class label list from target column even if the '
+        'latter is not discrete', () {
+      final data = DataFrame.fromSeries(
+          [
+            Series('first' , <num>[1, 1, 1, 1]),
+            Series('target' , <num>[1, 3, 2, 1]),
+          ]
+      );
+
+      final classifier = factory.create(
+        data,
+        'target',
+        2,
+        KernelType.uniform,
+        Distance.hamming,
+        DType.float32,
+      );
+
+      verify(kernelFnFactory.createByType(KernelType.uniform)).called(1);
+      verify(solverFnFactory.create(
+        argThat(equals([
+          [1],
+          [1],
+          [1],
+          [1],
+        ])),
+        argThat(equals([
+          [1],
+          [3],
+          [2],
+          [1],
         ])),
         2,
         Distance.hamming,
