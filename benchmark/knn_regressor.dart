@@ -1,7 +1,6 @@
 // 10.0 sec (MacBook Air mid 2017)
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/regressor/knn_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -12,10 +11,7 @@ const featuresNum = 20;
 class KnnRegressorBenchmark extends BenchmarkBase {
   KnnRegressorBenchmark() : super('Knn regression benchmark');
 
-  Matrix features;
   DataFrame testFeatures;
-  Matrix labels;
-  Matrix testLabels;
   KnnRegressor regressor;
 
 
@@ -30,9 +26,16 @@ class KnnRegressorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    features = Matrix.fromRows(List.generate(observationsNum * 2,
+    final featureMatrix = Matrix.fromRows(List.generate(observationsNum * 2,
             (i) => Vector.randomFilled(featuresNum)));
-    labels = Matrix.fromColumns([Vector.randomFilled(observationsNum * 2)]);
+
+    final labelMatrix = Matrix
+        .fromColumns([Vector.randomFilled(observationsNum * 2)]);
+
+    final observations = DataFrame.fromMatrix(Matrix.fromColumns([
+      ...featureMatrix.columns,
+      ...labelMatrix.columns,
+    ]));
 
     testFeatures = DataFrame.fromMatrix(
         Matrix.fromRows(
@@ -42,9 +45,8 @@ class KnnRegressorBenchmark extends BenchmarkBase {
             ),
         ),
     );
-    testLabels = Matrix.fromColumns([Vector.randomFilled(observationsNum)]);
 
-    regressor = KnnRegressorImpl(features, labels, 'target', k: 7);
+    regressor = KnnRegressor(observations, observations.header.last, 7);
   }
 
   void tearDown() {}

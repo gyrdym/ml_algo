@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.3.0
+- `KnnClassifier` class added
+
 ## 13.2.0
 - `KNN algorithm`: standardization for distance added
 - `KnnRegressor`: 
