@@ -12,6 +12,7 @@ void main() {
       expect(factory.createByType(KernelType.epanechnikov), isA<Kernel>());
       expect(factory.createByType(KernelType.cosine), isA<Kernel>());
       expect(factory.createByType(KernelType.gaussian), isA<Kernel>());
+      expect(() => factory.createByType(null), throwsUnsupportedError);
     });
   });
 }

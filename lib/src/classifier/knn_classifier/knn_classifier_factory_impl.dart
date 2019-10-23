@@ -12,17 +12,17 @@ import 'package:ml_linalg/dtype.dart';
 
 class KnnClassifierFactoryImpl implements KnnClassifierFactory {
 
-  KnnClassifierFactoryImpl(this.kernelFnFactory, this.knnSolverFactory);
+  KnnClassifierFactoryImpl(this._kernelFactory, this._knnSolverFactory);
 
-  final KernelFactory kernelFnFactory;
-  final KnnSolverFactory knnSolverFactory;
+  final KernelFactory _kernelFactory;
+  final KnnSolverFactory _knnSolverFactory;
 
   @override
   KnnClassifier create(
       DataFrame fittingData,
       String targetName,
       int k,
-      KernelType kernel,
+      KernelType kernelType,
       Distance distance,
       DType dtype,
   ) {
@@ -48,9 +48,9 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
             .unique()
             .toList(growable: false);
 
-    final kernelFn = kernelFnFactory.createByType(kernel);
+    final kernel = _kernelFactory.createByType(kernelType);
 
-    final solver = knnSolverFactory.create(
+    final solver = _knnSolverFactory.create(
       trainFeatures,
       trainLabels,
       k,
@@ -61,7 +61,7 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
     return KnnClassifierImpl(
       targetName,
       classLabels,
-      kernelFn,
+      kernel,
       solver,
       dtype,
     );

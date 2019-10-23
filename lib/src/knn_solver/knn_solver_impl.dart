@@ -7,47 +7,38 @@ import 'package:quiver/iterables.dart';
 
 class KnnSolverImpl implements KnnSolver {
   KnnSolverImpl(
-      this.trainFeatures,
-      this.trainOutcomes,
-      this.k,
-      this.distanceType,
-      this.standardize,
+      this._trainFeatures,
+      this._trainOutcomes,
+      this._k,
+      this._distanceType,
+      this._standardize,
   ) {
-    if (!trainFeatures.hasData) {
+    if (!_trainFeatures.hasData) {
       throw Exception('Empty features matrix provided');
     }
-    if (!trainOutcomes.hasData) {
+    if (!_trainOutcomes.hasData) {
       throw Exception('Empty outcomes matrix provided');
     }
-    if (trainOutcomes.columnsNum > 1) {
+    if (_trainOutcomes.columnsNum > 1) {
       throw Exception('Invalid outcome matrix: it is expected to be a column '
-          'vector, but a matrix of ${trainOutcomes.columnsNum} colums is '
+          'vector, but a matrix of ${_trainOutcomes.columnsNum} colums is '
           'given');
     }
-    if (trainFeatures.rowsNum != trainOutcomes.rowsNum) {
+    if (_trainFeatures.rowsNum != _trainOutcomes.rowsNum) {
       throw Exception('Number of feature records and number of associated '
           'outcomes must be equal');
     }
-    if (k <= 0 || k > trainFeatures.rowsNum) {
-      throw RangeError.value(k, 'Parameter k should be within the range '
-          '1..${trainFeatures.rowsNum} (both inclusive)');
+    if (_k <= 0 || _k > _trainFeatures.rowsNum) {
+      throw RangeError.value(_k, 'Parameter k should be within the range '
+          '1..${_trainFeatures.rowsNum} (both inclusive)');
     }
   }
 
-  @override
-  final Matrix trainFeatures;
-
-  @override
-  final Matrix trainOutcomes;
-
-  @override
-  final int k;
-
-  @override
-  final Distance distanceType;
-
-  @override
-  final bool standardize;
+  final Matrix _trainFeatures;
+  final Matrix _trainOutcomes;
+  final int _k;
+  final Distance _distanceType;
+  final bool _standardize;
 
   @override
   Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(Matrix features) {
@@ -55,20 +46,20 @@ class KnnSolverImpl implements KnnSolver {
       throw Exception('No features provided');
     }
 
-    if (features.columnsNum != trainFeatures.columnsNum) {
+    if (features.columnsNum != _trainFeatures.columnsNum) {
       throw Exception('Invalid feature matrix: expected columns number: '
-          '${trainFeatures.columnsNum}, given: '
+          '${_trainFeatures.columnsNum}, given: '
           '${features.columnsNum}');
     }
 
-    final allNeighbours = zip([trainFeatures.rows, trainOutcomes.rows]);
-    final firstKNeighbours = allNeighbours.take(k);
-    final restNeighbours = allNeighbours.skip(k);
+    final allNeighbours = zip([_trainFeatures.rows, _trainOutcomes.rows]);
+    final firstKNeighbours = allNeighbours.take(_k);
+    final restNeighbours = allNeighbours.skip(_k);
 
     return features.rows.map((observation) {
       final sortedKNeighbors = firstKNeighbours
           .map((pair) => Neighbour(pair.first
-          .distanceTo(observation, distance: distanceType), pair.last))
+          .distanceTo(observation, distance: _distanceType), pair.last))
           .toList(growable: false)
         ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
 
@@ -78,13 +69,13 @@ class KnnSolverImpl implements KnnSolver {
         final newNeighbourIdx = _findNewNeighbourIdx(newKNeighbour.distance,
             sortedKNeighbors);
         if (newNeighbourIdx != -1) {
-          sortedKNeighbors.setRange(newNeighbourIdx + 1, k, sortedKNeighbors,
+          sortedKNeighbors.setRange(newNeighbourIdx + 1, _k, sortedKNeighbors,
               newNeighbourIdx);
           sortedKNeighbors[newNeighbourIdx] = newKNeighbour;
         }
       });
 
-      if (standardize && sortedKNeighbors.isNotEmpty) {
+      if (_standardize && sortedKNeighbors.isNotEmpty) {
         final distanceOfLast = sortedKNeighbors.last.distance;
         return sortedKNeighbors.map((neighbour) =>
             Neighbour(neighbour.distance / distanceOfLast, neighbour.label));
