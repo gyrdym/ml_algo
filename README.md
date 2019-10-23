@@ -20,16 +20,20 @@ the lib, please, do not use it in a browser.
     assessing prediction quality on different parts of a dataset. 
 
 - #### Classification algorithms
-    - [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor.dart). 
+    - [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
     A class, that performs linear binary classification of data. To use this kind of classifier your data have to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
-    - [SoftmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor.dart). 
+    - [SoftmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/softmax_regressor.dart). 
     A class, that performs linear multiclass classification of data. To use this kind of classifier your data have to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
         
-    - [DecisionTreeClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/decision_tree_classifier.dart)
+    - [DecisionTreeClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/decision_tree_classifier/decision_tree_classifier.dart)
     A class, that performs classification, using decision trees. May work with data with non-linear patterns.
+    
+    - [KnnClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/knn_classifier/knn_classifier.dart)
+    A class, that performs classification, using `k nearest neighbours algorithm` - it makes prediction basing on 
+    first `k` closest observations to the given one.
 
 - #### Regression algorithms
     - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor.dart). A 
