@@ -2,6 +2,7 @@ import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
+import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -18,7 +19,7 @@ import 'package:ml_linalg/dtype.dart';
 /// imprecise result. Thus the weighted version of KNN algorithm is used in the
 /// classifier. To get weight of a particular observation one may use a kernel
 /// function.
-abstract class KnnClassifier implements Classifier {
+abstract class KnnClassifier implements Assessable, Classifier {
   /// Parameters:
   ///
   /// [fittingData] Labelled observations, among which will be searched [k]

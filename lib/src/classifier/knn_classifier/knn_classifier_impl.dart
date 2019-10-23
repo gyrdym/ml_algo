@@ -3,12 +3,14 @@ import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
+import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KnnClassifierImpl with DataValidationMixin implements KnnClassifier {
+class KnnClassifierImpl with AssessablePredictorMixin, DataValidationMixin
+    implements KnnClassifier {
   KnnClassifierImpl(
       String targetName,
       this._classLabels,
