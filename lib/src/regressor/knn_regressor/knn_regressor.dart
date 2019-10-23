@@ -24,8 +24,8 @@ abstract class KnnRegressor implements Assessable, Predictor {
   /// Parameters:
   ///
   /// [fittingData] Labelled observations, among which will be searched [k]
-  /// nearest neighbours for unlabelled observations. Must contain [targetName]
-  /// column.
+  /// nearest to the given unlabelled observations neighbours. Must contain
+  /// [targetName] column.
   ///
   /// [targetName] A string, that serves as a name of the column, that contains
   /// labels (or outcomes).
