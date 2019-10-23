@@ -33,12 +33,21 @@ class KnnClassifierFactoryImpl with DataValidationMixin implements
       targetNames: [targetName],
     ).toList();
 
-    final trainFeatures = splits[0].toMatrix(dtype);
-    final trainLabels = splits[1].toMatrix(dtype);
-    final classLabels = splits[1][targetName]
-        .discreteValues
-        .map((dynamic value) => value as num)
-        .toList(growable: false);
+    final featuresSplit = splits[0];
+    final targetSplit = splits[1];
+
+    final trainFeatures = featuresSplit.toMatrix(dtype);
+    final trainLabels = targetSplit.toMatrix(dtype);
+    final classLabels = targetSplit[targetName].isDiscrete
+        ? targetSplit[targetName]
+            .discreteValues
+            .map((dynamic value) => value as num)
+            .toList(growable: false)
+        : targetSplit
+            .toMatrix(dtype)
+            .getColumn(0)
+            .unique()
+            .toList(growable: false);
 
     final kernelFn = kernelFnFactory.createByType(kernel);
 
