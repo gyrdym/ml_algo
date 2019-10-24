@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.3.1
+- `readme`: KnnRegressor usage example fixed 
+
 ## 13.3.0
 - `KnnClassifier` class added
 
