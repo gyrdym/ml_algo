@@ -203,7 +203,7 @@ Assess a knn regressor with the chosen `k` value using MAPE metric
 
 ````dart
 final error = validator.evaluate((samples, targetNames) => 
-  ParameterlessRegressor.knn(samples, targetNames[0], k: 4), MetricType.mape);
+  KnnRegressor(samples, targetNames[0], 4), MetricType.mape);
 ````
 
 Let's print our error
