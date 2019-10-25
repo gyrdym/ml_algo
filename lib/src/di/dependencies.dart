@@ -58,10 +58,7 @@ Injector get dependencies =>
               (_) => const KnnSolverFactoryImpl())
 
       ..registerSingleton<KnnClassifierFactory>(
-              (injector) => KnnClassifierFactoryImpl(
-                injector.getDependency<KernelFactory>(),
-                injector.getDependency<KnnSolverFactory>(),
-          ))
+              (_) => const KnnClassifierFactoryImpl())
 
       ..registerSingleton<KnnRegressorFactory>(
               (injector) => KnnRegressorFactoryImpl(
