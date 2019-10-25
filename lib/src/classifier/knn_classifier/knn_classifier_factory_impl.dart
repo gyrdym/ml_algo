@@ -9,7 +9,8 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
   const KnnClassifierFactoryImpl();
 
   @override
-  KnnClassifier create(String targetName,
+  KnnClassifier create(
+      String targetName,
       List<num> classLabels,
       Kernel kernel,
       KnnSolver solver,

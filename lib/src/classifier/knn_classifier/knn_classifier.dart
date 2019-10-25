@@ -21,14 +21,14 @@ import 'package:ml_linalg/dtype.dart';
 abstract class KnnClassifier implements Assessable, Classifier {
   /// Parameters:
   ///
-  /// [fittingData] Labelled observations, among which will be searched [k]
+  /// [trainData] Labelled observations, among which will be searched [k]
   /// nearest to the given unlabelled observations neighbours. Must contain
   /// [targetName] column.
   ///
   /// [targetName] A string, that serves as a name of the column, that contains
   /// labels (or outcomes).
   ///
-  /// [k] a number of nearest neighbours to be found among [fittingData]
+  /// [k] a number of nearest neighbours to be found among [trainData]
   ///
   /// [kernel] a type of a kernel function, that will be used to predict an
   /// outcome for a new observation
@@ -40,7 +40,7 @@ abstract class KnnClassifier implements Assessable, Classifier {
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory KnnClassifier(
-      DataFrame fittingData,
+      DataFrame trainData,
       String targetName,
       int k,
       {
@@ -48,5 +48,5 @@ abstract class KnnClassifier implements Assessable, Classifier {
         Distance distance = Distance.euclidean,
         DType dtype = DType.float32,
       }
-  ) => createKnnClassifier(fittingData, targetName, k, kernel, distance, dtype);
+  ) => createKnnClassifier(trainData, targetName, k, kernel, distance, dtype);
 }
