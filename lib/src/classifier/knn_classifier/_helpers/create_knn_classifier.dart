@@ -11,16 +11,16 @@ import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 
 KnnClassifier createKnnClassifier(
-    DataFrame fittingData,
+    DataFrame trainData,
     String targetName,
     int k,
     KernelType kernelType,
     Distance distance,
     DType dtype,
 ) {
-  validateTrainData(fittingData, [targetName]);
+  validateTrainData(trainData, [targetName]);
 
-  final splits = featuresTargetSplit(fittingData,
+  final splits = featuresTargetSplit(trainData,
     targetNames: [targetName],
   ).toList();
 
