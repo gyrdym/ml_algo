@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.3.2
+- `KnnClassifier`: classifier instantiating refactored
+
 ## 13.3.1
 - `readme`: KnnRegressor usage example fixed 
 
