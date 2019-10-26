@@ -14,7 +14,7 @@ abstract class LinearClassifier implements Classifier {
 
   /// A value, that defines a size of the intercept, if [fitIntercept] is
   /// `true`
-  double get interceptScale;
+  num get interceptScale;
 
   /// A matrix, where each column is a vector of coefficients, associated with
   /// the specific class

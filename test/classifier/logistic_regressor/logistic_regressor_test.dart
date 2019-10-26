@@ -1,5 +1,6 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -58,6 +59,9 @@ void main() {
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
 
+    LogisticRegressor logisticRegressorMock;
+    LogisticRegressorFactory logisticRegressorFactoryMock;
+
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
       linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctionMock);
@@ -68,13 +72,19 @@ void main() {
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
+      logisticRegressorMock = LogisticRegressorMock();
+      logisticRegressorFactoryMock = createLogisticRegressorFactoryMock(
+          logisticRegressorMock);
+
       injector = Injector()
         ..registerSingleton<LinkFunctionFactory>(
                 (_) => linkFunctionFactoryMock)
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(
-                (_) => optimizerFactoryMock);
+                (_) => optimizerFactoryMock)
+        ..registerSingleton<LogisticRegressorFactory>(
+                (_) => logisticRegressorFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -183,99 +193,6 @@ void main() {
           ),
           isMinimizingObjective: false,
       )).called(1);
-    });
-
-    test('should predict classes basing on learned coefficients', () {
-      final classifier = LogisticRegressor(
-        observations,
-        'col_4',
-        initialCoefficients: initialCoefficients,
-        fitIntercept: true,
-        interceptScale: 2.0,
-        positiveLabel: positiveLabel,
-        negativeLabel: negativeLabel,
-      );
-
-      final probabilities = Matrix.fromList([
-        [0.2],
-        [0.3],
-        [0.6],
-      ]);
-
-      when(linkFunctionMock.link(any)).thenReturn(probabilities);
-
-      final features = Matrix.fromList([
-        [55, 44, 33, 22],
-        [10, 88, 77, 11],
-        [12, 22, 39, 13],
-      ]);
-
-      final featuresWithIntercept = Matrix.fromColumns([
-        Vector.filled(3, 2),
-        ...features.columns,
-      ]);
-
-      final classes = classifier.predict(
-        DataFrame.fromMatrix(features),
-      );
-
-      expect(classes.header, equals(['col_4']));
-
-      expect(classes.toMatrix(), equals([
-        [negativeLabel],
-        [negativeLabel],
-        [positiveLabel],
-      ]));
-
-      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
-          featuresWithIntercept * learnedCoefficients
-      )))).called(1);
-    });
-
-    test('should predict probabilities of classes basing on learned '
-        'coefficients', () {
-      final classifier = LogisticRegressor(
-        observations,
-        'col_4',
-        initialCoefficients: initialCoefficients,
-        fitIntercept: true,
-        interceptScale: 2.0,
-      );
-
-      final probabilities = Matrix.fromList([
-        [0.2],
-        [0.3],
-        [0.6],
-      ]);
-
-      when(linkFunctionMock.link(any)).thenReturn(probabilities);
-
-      final features = Matrix.fromList([
-        [55, 44, 33, 22],
-        [10, 88, 77, 11],
-        [12, 22, 39, 13],
-      ]);
-
-      final featuresWithIntercept = Matrix.fromColumns([
-        Vector.filled(3, 2),
-        ...features.columns,
-      ]);
-
-      final prediction = classifier.predictProbabilities(
-        DataFrame.fromMatrix(features),
-      );
-
-      expect(prediction.header, equals(['col_4']));
-
-      expect(prediction.toMatrix(), iterable2dAlmostEqualTo([
-        [0.2],
-        [0.3],
-        [0.6],
-      ]));
-
-      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
-          featuresWithIntercept * learnedCoefficients
-      )))).called(1);
     });
   });
 }
