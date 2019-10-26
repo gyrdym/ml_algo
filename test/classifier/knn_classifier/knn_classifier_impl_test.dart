@@ -255,7 +255,7 @@ void main() {
       });
 
       test('should return probability distribution of classes for each feature '
-          'row, probability of absent class label should be 0.0', () {
+          'row', () {
         final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
           'target',
@@ -279,17 +279,17 @@ void main() {
           [
             Neighbour(1, Vector.fromList([1])),
             Neighbour(20, Vector.fromList([2])),
-            Neighbour(21, Vector.fromList([1])),
+            Neighbour(21, Vector.fromList([3])),
           ],
           [
             Neighbour(33, Vector.fromList([1])),
             Neighbour(44, Vector.fromList([3])),
-            Neighbour(93, Vector.fromList([3])),
+            Neighbour(93, Vector.fromList([2])),
           ],
           [
             Neighbour(-1, Vector.fromList([2])),
-            Neighbour(-30, Vector.fromList([2])),
-            Neighbour(-40, Vector.fromList([1])),
+            Neighbour(-30, Vector.fromList([1])),
+            Neighbour(-40, Vector.fromList([3])),
           ],
         ];
 
@@ -311,12 +311,63 @@ void main() {
         final actual = classifier.predictProbabilities(testFeatures);
 
         final expectedOutcomes = [
-          [ 20 / 35,  15 / 35,      0.0 ],
-          [ 11 / 41,      0.0,  30 / 41 ],
-          [  1 / 11,  10 / 11,      0.0 ],
+          [ 10 / 35,  15 / 35,  10 / 35 ],
+          [ 11 / 41,  15 / 41,  15 / 41 ],
+          [  5 / 11,  5 / 11,    1 / 11 ],
         ];
 
         expect(actual.rows, iterable2dAlmostEqualTo(expectedOutcomes));
+      });
+
+      test('should return probability distribution of classes where '
+          'probabilities of absent class labels are 0.0', () {
+        final classLabels = [1, 2, 3];
+        final classifier = KnnClassifierImpl(
+          'target',
+          classLabels,
+          kernelMock,
+          solverMock,
+          DType.float32,
+        );
+
+        final testFeatureMatrix = Matrix.fromList(
+          [
+            [10, 10, 10, 10],
+            [20, 20, 20, 20],
+            [30, 30, 30, 30],
+          ],
+        );
+
+        final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
+
+        final mockedNeighbours = [
+          [
+            Neighbour(1, Vector.fromList([2])),
+            Neighbour(20, Vector.fromList([2])),
+            Neighbour(21, Vector.fromList([1])),
+          ],
+          [
+            Neighbour(1, Vector.fromList([3])),
+            Neighbour(20, Vector.fromList([3])),
+            Neighbour(21, Vector.fromList([3])),
+          ],
+        ];
+
+        when(kernelMock.getWeightByDistance(1)).thenReturn(10);
+        when(kernelMock.getWeightByDistance(20)).thenReturn(15);
+        when(kernelMock.getWeightByDistance(21)).thenReturn(10);
+
+        when(solverMock.findKNeighbours(testFeatureMatrix))
+            .thenReturn(mockedNeighbours);
+
+        final actual = classifier.predictProbabilities(testFeatures);
+
+        final expectedProbabilities = [
+          [ 10 / 35,  25 / 35,  0.0 ],
+          [     0.0,      0.0,  1.0 ],
+        ];
+
+        expect(actual.rows, iterable2dAlmostEqualTo(expectedProbabilities));
       });
 
       test('should return a dataframe with a header, containing proper column '
