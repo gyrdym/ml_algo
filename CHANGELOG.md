@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.3.3
+- `KnnClassifierImpl`: unit tests for `predictProbability` method added
+
 ## 13.3.2
 - `KnnClassifier`: classifier instantiating refactored
 
