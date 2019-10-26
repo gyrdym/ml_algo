@@ -310,13 +310,13 @@ void main() {
 
         final actual = classifier.predictProbabilities(testFeatures);
 
-        final expectedOutcomes = [
+        final expectedProbabilities = [
           [ 10 / 35,  15 / 35,  10 / 35 ],
           [ 11 / 41,  15 / 41,  15 / 41 ],
-          [  5 / 11,  5 / 11,    1 / 11 ],
+          [  5 / 11,   5 / 11,   1 / 11 ],
         ];
 
-        expect(actual.rows, iterable2dAlmostEqualTo(expectedOutcomes));
+        expect(actual.rows, iterable2dAlmostEqualTo(expectedProbabilities));
       });
 
       test('should return probability distribution of classes where '
