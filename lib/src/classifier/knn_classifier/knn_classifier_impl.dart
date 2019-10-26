@@ -34,7 +34,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   DataFrame predict(DataFrame features) {
     validateTestFeatures(features, _dtype);
 
-    final labelsToProbabilities = _getLabelsToProbabilitiesMapping(features);
+    final labelsToProbabilities = _getLabelToProbabilityMapping(features);
     final labels = labelsToProbabilities.keys.toList();
     final predictedOutcomes = _getProbabilityMatrix(labelsToProbabilities)
         .rows
@@ -51,7 +51,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
 
   @override
   DataFrame predictProbabilities(DataFrame features) {
-    final labelsToProbabilities = _getLabelsToProbabilitiesMapping(features);
+    final labelsToProbabilities = _getLabelToProbabilityMapping(features);
     final probabilityMatrix = _getProbabilityMatrix(labelsToProbabilities);
 
     final header = labelsToProbabilities
@@ -83,13 +83,21 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   ///
   /// where each row is a classes probability distribution for the appropriate
   /// feature record from test feature matrix
-  Map<num, List<num>> _getLabelsToProbabilitiesMapping(DataFrame features) {
-    final neighbours = _solver.findKNeighbours(features.toMatrix(_dtype));
+  Map<num, List<num>> _getLabelToProbabilityMapping(DataFrame features) {
+    final kNeighbourGroups = _solver.findKNeighbours(features.toMatrix(_dtype));
+    final classLabelsAsSet = Set<num>.from(_classLabels);
 
-    return neighbours.fold<Map<num, List<num>>>(
+    return kNeighbourGroups.fold<Map<num, List<num>>>(
         {}, (allLabelsToProbabilities, kNeighbours) {
-      final labelsToWeights = kNeighbours
-          .fold<Map<num, num>>({}, _getLabelToWeightMapping);
+
+      final labelsToWeights = kNeighbours.fold<Map<num, num>>(
+          {}, (mapping, neighbour) {
+        if (!classLabelsAsSet.contains(neighbour.label.first)) {
+          throw Exception('Wrong KNN solver provided: unexpected neighbour '
+              'class label - ${neighbour.label.first}');
+        }
+        return _updateLabelToWeightMapping(mapping, neighbour);
+      });
 
       final sumOfAllWeights = labelsToWeights
           .values
@@ -132,7 +140,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
         .fromColumns(probabilityVectors, dtype: _dtype);
   }
 
-  Map<num, num> _getLabelToWeightMapping(
+  Map<num, num> _updateLabelToWeightMapping(
       Map<num, num> labelToWeightMapping,
       Neighbour<Vector> neighbour,
   ) {
