@@ -1,8 +1,8 @@
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/helpers/get_probabilities.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
+import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
+import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -14,29 +14,30 @@ class LogisticRegressorImpl with LinearClassifierMixin,
     AssessablePredictorMixin implements LogisticRegressor {
 
   LogisticRegressorImpl(
-      LinearOptimizer _optimizer,
       String className,
-      this.linkFunction, {
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    Vector initialCoefficients,
-    this.dtype = DType.float32,
-    this.probabilityThreshold = 0.5,
-    num negativeLabel = 0,
-    num positiveLabel = 1,
-  }) :
-        classNames = [className],
-        fitIntercept = fitIntercept,
-        interceptScale = interceptScale,
-        _negativeLabel = negativeLabel,
-        _positiveLabel = positiveLabel,
-        coefficientsByClasses = _optimizer.findExtrema(
-            initialCoefficients: initialCoefficients != null
-                ? Matrix.fromColumns([initialCoefficients], dtype: dtype)
-                : null,
-            isMinimizingObjective: false,
-        );
+      this.linkFunction,
+      this.fitIntercept,
+      this.interceptScale,
+      this.coefficientsByClasses,
+      this._probabilityThreshold,
+      this._negativeLabel,
+      this._positiveLabel,
+      this._dtype,
+  ) : classNames = [className] {
+    validateCoefficientsMatrix(coefficientsByClasses);
 
+    // Logistic regression specific check, it cannot be placed in
+    // `validateCoefficientsMatrix`
+    if (coefficientsByClasses.columnsNum > 1) {
+      throw Exception('Expected to have coefficients just for a single class, '
+          'but coefficients for ${coefficientsByClasses.columnsNum} classes '
+          'provided. Please, check your linear optimizer implementation '
+          '(Logistic Regression deals only with single class problem)');
+    }
+  }
+
+  /// N x 1 matrix, where N - number of features. It has only one column since
+  /// in case of Logistic Regression only one class is used
   @override
   final Matrix coefficientsByClasses;
 
@@ -47,39 +48,39 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   final bool fitIntercept;
 
   @override
-  final double interceptScale;
-
-  final DType dtype;
-
-  final double probabilityThreshold;
-
-  final num _positiveLabel;
-
-  final num _negativeLabel;
+  final num interceptScale;
 
   @override
   final LinkFunction linkFunction;
 
+  final DType _dtype;
+  final num _probabilityThreshold;
+  final num _positiveLabel;
+  final num _negativeLabel;
+
   @override
-  DataFrame predict(DataFrame features) {
+  DataFrame predict(DataFrame testFeatures) {
+    validateTestFeatures(testFeatures, _dtype);
+
     final processedFeatures = addInterceptIf(
       fitIntercept,
-      features.toMatrix(),
+      testFeatures.toMatrix(_dtype),
       interceptScale,
     );
 
-    final classesList = getProbabilities(
-      processedFeatures,
-      coefficientsByClasses,
-      linkFunction,
-    )
-    .getColumn(0)
-    // TODO: use SIMD
-    .map((value) => value >= probabilityThreshold
-        ? _positiveLabel
-        : _negativeLabel,
-    )
-    .toList(growable: false);
+    validateCoefficientsMatrix(coefficientsByClasses, processedFeatures.columnsNum);
+
+    final probabilities = linkFunction
+        .link(processedFeatures * coefficientsByClasses)
+        .getColumn(0);
+
+    final classesList = probabilities
+        // TODO: use SIMD
+        .map((value) => value >= _probabilityThreshold
+          ? _positiveLabel
+          : _negativeLabel,
+        )
+        .toList(growable: false);
 
     final classesMatrix = Matrix.fromColumns([
       Vector.fromList(classesList),
