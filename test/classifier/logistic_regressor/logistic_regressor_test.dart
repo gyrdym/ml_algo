@@ -105,6 +105,30 @@ void main() {
       expect(actual, throwsException);
     });
 
+    test('should throw an exception if too few initial coefficients provided', () {
+      final targetColumnName = 'col_4';
+
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        initialCoefficients: Vector.fromList([1, 2]),
+      );
+
+      expect(actual, throwsException);
+    });
+
+    test('should throw an exception if too many initial coefficients provided', () {
+      final targetColumnName = 'col_4';
+
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        initialCoefficients: Vector.fromList([1, 2, 3, 4, 5, 6]),
+      );
+
+      expect(actual, throwsException);
+    });
+
     test('should call link function factory twice in order to create inverse '
         'logit link function', () {
       LogisticRegressor(
@@ -184,6 +208,7 @@ void main() {
         observations,
         'col_4',
         initialCoefficients: initialCoefficients,
+        fitIntercept: true,
       );
 
       verify(optimizerMock.findExtrema(

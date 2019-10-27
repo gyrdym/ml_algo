@@ -147,7 +147,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     isFittingDataNormalized,
     learningRateType,
     initialCoefficientsType,
-    initialCoefficients,
+    initialCoefficients ?? Vector.empty(dtype: dtype),
     positiveLabel,
     negativeLabel,
     dtype,

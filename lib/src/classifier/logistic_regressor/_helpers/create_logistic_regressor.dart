@@ -2,6 +2,8 @@ import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
+import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -35,9 +37,11 @@ LogisticRegressor createLogisticRegressor(
     num negativeLabel,
     DType dtype,
 ) {
-  if (trainData[targetName] == null) {
-    throw Exception('Target column with name $targetName does not exist in '
-        'the train data. All the existing columns: ${trainData.header}');
+  validateTrainData(trainData, [targetName]);
+
+  if (initialCoefficients.isNotEmpty) {
+    validateInitialCoefficients(initialCoefficients, fitIntercept,
+        trainData.toMatrix(dtype).columnsNum - 1);
   }
 
   final linkFunctionFactory = dependencies
@@ -67,7 +71,7 @@ LogisticRegressor createLogisticRegressor(
   );
 
   final coefficientsByClasses = optimizer.findExtrema(
-    initialCoefficients: initialCoefficients != null
+    initialCoefficients: initialCoefficients.isNotEmpty
         ? Matrix.fromColumns([initialCoefficients], dtype: dtype)
         : null,
     isMinimizingObjective: false,
