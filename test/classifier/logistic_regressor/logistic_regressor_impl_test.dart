@@ -130,7 +130,7 @@ void main() {
             .called(1);
       });
 
-      test('should throw an error if provided too much features', () {
+      test('should throw an error if provided too many features', () {
         final testFeatureMatrix = Matrix.fromList([
           [10, 20, 30, 40],
         ]);
