@@ -97,7 +97,10 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// must be equal to the number of features in [trainData] : in case of
   /// logistic regression only one column from [trainData] is used as a
   /// prediction target column, thus the number of features is equal to
-  /// the number of columns in [trainData] minus 1 (target column).
+  /// the number of columns in [trainData] minus 1 (target column). Keep in
+  /// mind, that if your model considers intercept term, [initialCoefficients]
+  /// should contain an extra element in the beginning of the vector and it
+  /// denotes the intercept term coefficient
   ///
   /// [positiveLabel] Defines the value, that will be used for `positive` class.
   /// By default, `1`.
