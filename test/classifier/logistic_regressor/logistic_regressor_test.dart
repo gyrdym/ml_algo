@@ -1,6 +1,7 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -105,7 +106,9 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if too few initial coefficients provided', () {
+    test('should throw an exception if too few initial coefficients '
+        'provided', () {
+
       final targetColumnName = 'col_4';
 
       final actual = () => LogisticRegressor(
@@ -117,7 +120,9 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if too many initial coefficients provided', () {
+    test('should throw an exception if too many initial coefficients '
+        'provided', () {
+
       final targetColumnName = 'col_4';
 
       final actual = () => LogisticRegressor(
@@ -129,8 +134,7 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should call link function factory twice in order to create inverse '
-        'logit link function', () {
+    test('should call link function factory twice', () {
       LogisticRegressor(
         observations,
         'col_4',
@@ -155,8 +159,7 @@ void main() {
       )).called(1);
     });
 
-    test('should call linear optimizer factory and consider intercept term '
-        'while calling the factory', () {
+    test('should call linear optimizer factory and consider intercept term', () {
       LogisticRegressor(
         observations,
         'col_4',
@@ -218,6 +221,41 @@ void main() {
           ),
           isMinimizingObjective: false,
       )).called(1);
+    });
+
+    test('should call logistic regressor factory in order to create the '
+        'classifier instance', () {
+      final targetName = 'col_4';
+      final probabilityThreshold = 0.7;
+      final fitIntercept = true;
+      final interceptScale = -12.0;
+      final dtype = DType.float32;
+
+      final classifier = LogisticRegressor(
+        observations,
+        targetName,
+        probabilityThreshold: probabilityThreshold,
+        fitIntercept: fitIntercept,
+        interceptScale: interceptScale,
+        isFittingDataNormalized: true,
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
+        dtype: dtype,
+      );
+
+      verify(logisticRegressorFactoryMock.create(
+        targetName,
+        linkFunctionMock,
+        probabilityThreshold,
+        fitIntercept,
+        interceptScale,
+        learnedCoefficients,
+        negativeLabel,
+        positiveLabel,
+        dtype,
+      )).called(1);
+
+      expect(classifier, same(logisticRegressorMock));
     });
   });
 }

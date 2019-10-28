@@ -77,7 +77,10 @@ LogisticRegressor createLogisticRegressor(
     isMinimizingObjective: false,
   );
 
-  return dependencies.getDependency<LogisticRegressorFactory>().create(
+  final regressorFactory = dependencies
+      .getDependency<LogisticRegressorFactory>();
+
+  return regressorFactory.create(
     targetName,
     linkFunction,
     probabilityThreshold,

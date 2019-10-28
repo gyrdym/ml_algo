@@ -68,7 +68,8 @@ class LogisticRegressorImpl with LinearClassifierMixin,
       interceptScale,
     );
 
-    validateCoefficientsMatrix(coefficientsByClasses, processedFeatures.columnsNum);
+    validateCoefficientsMatrix(coefficientsByClasses,
+        processedFeatures.columnsNum);
 
     final probabilities = linkFunction
         .link(processedFeatures * coefficientsByClasses)
