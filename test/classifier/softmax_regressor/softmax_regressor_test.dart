@@ -1,6 +1,7 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -79,6 +80,9 @@ void main() {
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
 
+    SoftmaxRegressor softmaxRegressorMock;
+    SoftmaxRegressorFactory softmaxRegressorFactoryMock;
+
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
       linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctionMock);
@@ -89,10 +93,17 @@ void main() {
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
+      softmaxRegressorMock = SoftmaxRegressorMock();
+      softmaxRegressorFactoryMock = createSoftmaxRegressorFactoryMock(
+          softmaxRegressorMock);
+
       injector = Injector()
         ..registerSingleton<LinkFunctionFactory>((_) => linkFunctionFactoryMock)
-        ..registerDependency<CostFunctionFactory>((_) => costFunctionFactoryMock)
-        ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock);
+        ..registerDependency<CostFunctionFactory>(
+                (_) => costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock)
+        ..registerSingleton<SoftmaxRegressorFactory>(
+                (_) => softmaxRegressorFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
