@@ -130,7 +130,7 @@ void main() {
             .called(1);
       });
 
-      test('should throw an error if provided too many features', () {
+      test('should throw an error if too many features provided', () {
         final testFeatureMatrix = Matrix.fromList([
           [10, 20, 30, 40],
         ]);
@@ -139,7 +139,7 @@ void main() {
         expect(() => regressor.predict(testFeatures), throwsException);
       });
 
-      test('should throw an error if provided too few features', () {
+      test('should throw an error if too few features provided', () {
         final testFeatureMatrix = Matrix.fromList([
           [10, 20],
         ]);

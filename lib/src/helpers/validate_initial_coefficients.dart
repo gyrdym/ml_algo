@@ -9,6 +9,7 @@ void validateInitialCoefficients(Vector coefficients, bool fitIntercept,
 
   if (coefficients.length != expectedNumber) {
     throw Exception('Wrong initial coefficients vector provided: expected '
-        'length ${expectedNumber}, but ${coefficients.length} given.');
+        'length ${expectedNumber}, but a vector of length '
+        '${coefficients.length} given.');
   }
 }
