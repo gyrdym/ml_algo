@@ -7,6 +7,6 @@ abstract class Classifier extends Predictor {
   List<String> get classNames;
 
   /// Returns predicted distribution of probabilities for each observation in
-  /// the passed [features]
-  DataFrame predictProbabilities(DataFrame features);
+  /// the passed [testFeatures]
+  DataFrame predictProbabilities(DataFrame testFeatures);
 }
