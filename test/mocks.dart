@@ -1,5 +1,7 @@
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -115,6 +117,11 @@ class KnnSolverMock extends Mock implements KnnSolver {}
 
 class KernelMock extends Mock implements Kernel {}
 
+class LogisticRegressorMock extends Mock implements LogisticRegressor {}
+
+class LogisticRegressorFactoryMock extends Mock implements
+    LogisticRegressorFactory {}
+
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
@@ -217,5 +224,13 @@ KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
 KnnRegressorFactory createKnnRegressorFactoryMock(KnnRegressor regressor) {
   final factory = KnnRegressorFactoryMock();
   when(factory.create(any, any, any, any, any, any)).thenReturn(regressor);
+  return factory;
+}
+
+LogisticRegressorFactory createLogisticRegressorFactoryMock(
+    LogisticRegressor logisticRegressor) {
+  final factory = LogisticRegressorFactoryMock();
+  when(factory.create(any, any, any, any, any, any, any, any, any))
+      .thenReturn(logisticRegressor);
   return factory;
 }

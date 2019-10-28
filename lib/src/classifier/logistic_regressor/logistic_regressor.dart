@@ -1,13 +1,9 @@
-import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -23,7 +19,7 @@ import 'package:ml_linalg/vector.dart';
 abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// Parameters:
   ///
-  /// [fittingData] A [DataFrame] with observations, that will be used by the
+  /// [trainData] A [DataFrame] with observations, that will be used by the
   /// classifier to learn coefficients of the hyperplane, which divides the
   /// features space, forming clusters of positive and negative classes of the
   /// observations. Must contain [targetName] column.
@@ -83,7 +79,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   ///
   /// [interceptScale] A value, defining a size of the intercept.
   ///
-  /// [isFittingDataNormalized] Defines, whether the [fittingData] normalized
+  /// [isFittingDataNormalized] Defines, whether the [trainData] normalized
   /// or not. Normalization should be performed column-wise. Normalized data
   /// may be needed for some optimizers (e.g., for
   /// [LinearOptimizerType.coordinate])
@@ -98,10 +94,13 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   ///
   /// [initialCoefficients] Coefficients to be used in the first iteration of
   /// optimization algorithm. [initialCoefficients] is a vector, length of which
-  /// must be equal to the number of features in [fittingData] : in case of
-  /// logistic regression only one column from [fittingData] is used as a
+  /// must be equal to the number of features in [trainData] : in case of
+  /// logistic regression only one column from [trainData] is used as a
   /// prediction target column, thus the number of features is equal to
-  /// the number of columns in [fittingData] minus 1 (target column).
+  /// the number of columns in [trainData] minus 1 (target column). Keep in
+  /// mind, that if your model considers intercept term, [initialCoefficients]
+  /// should contain an extra element in the beginning of the vector and it
+  /// denotes the intercept term coefficient
   ///
   /// [positiveLabel] Defines the value, that will be used for `positive` class.
   /// By default, `1`.
@@ -113,7 +112,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory LogisticRegressor(
-      DataFrame fittingData,
+      DataFrame trainData,
       String targetName, {
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
@@ -134,49 +133,26 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     num positiveLabel = 1,
     num negativeLabel = 0,
     DType dtype = DType.float32,
-  }) {
-    if (fittingData[targetName] == null) {
-      throw Exception('Target column with name $targetName does not exist in '
-          'the fitting data. All the existing columns: ${fittingData.header}');
-    }
-
-    final linkFunctionFactory = dependencies
-        .getDependency<LinkFunctionFactory>();
-
-    final linkFunction = linkFunctionFactory
-        .createByType(LinkFunctionType.inverseLogit, dtype: dtype);
-
-    final optimizer = createLogLikelihoodOptimizer(
-      fittingData,
-      [targetName],
-      LinkFunctionType.inverseLogit,
-      optimizerType: optimizerType,
-      iterationsLimit: iterationsLimit,
-      initialLearningRate: initialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate,
-      lambda: lambda,
-      regularizationType: regularizationType,
-      randomSeed: randomSeed,
-      batchSize: batchSize,
-      learningRateType: learningRateType,
-      initialWeightsType: initialCoefficientsType,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      isFittingDataNormalized: isFittingDataNormalized,
-      dtype: dtype,
-    );
-
-    return LogisticRegressorImpl(
-      optimizer,
-      targetName,
-      linkFunction,
-      probabilityThreshold: probabilityThreshold,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      initialCoefficients: initialCoefficients,
-      positiveLabel: positiveLabel,
-      negativeLabel: negativeLabel,
-      dtype: dtype,
-    );
-  }
+  }) => createLogisticRegressor(
+    trainData,
+    targetName,
+    optimizerType,
+    iterationsLimit,
+    initialLearningRate,
+    minCoefficientsUpdate,
+    probabilityThreshold,
+    lambda,
+    regularizationType,
+    randomSeed,
+    batchSize,
+    fitIntercept,
+    interceptScale,
+    isFittingDataNormalized,
+    learningRateType,
+    initialCoefficientsType,
+    initialCoefficients ?? Vector.empty(dtype: dtype),
+    positiveLabel,
+    negativeLabel,
+    dtype,
+  );
 }

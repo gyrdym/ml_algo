@@ -1,5 +1,7 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -58,6 +60,9 @@ void main() {
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
 
+    LogisticRegressor logisticRegressorMock;
+    LogisticRegressorFactory logisticRegressorFactoryMock;
+
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
       linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctionMock);
@@ -68,13 +73,19 @@ void main() {
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
+      logisticRegressorMock = LogisticRegressorMock();
+      logisticRegressorFactoryMock = createLogisticRegressorFactoryMock(
+          logisticRegressorMock);
+
       injector = Injector()
         ..registerSingleton<LinkFunctionFactory>(
                 (_) => linkFunctionFactoryMock)
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(
-                (_) => optimizerFactoryMock);
+                (_) => optimizerFactoryMock)
+        ..registerSingleton<LogisticRegressorFactory>(
+                (_) => logisticRegressorFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -95,8 +106,35 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should call link function factory twice in order to create inverse '
-        'logit link function', () {
+    test('should throw an exception if too few initial coefficients '
+        'provided', () {
+
+      final targetColumnName = 'col_4';
+
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        initialCoefficients: Vector.fromList([1, 2]),
+      );
+
+      expect(actual, throwsException);
+    });
+
+    test('should throw an exception if too many initial coefficients '
+        'provided', () {
+
+      final targetColumnName = 'col_4';
+
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        initialCoefficients: Vector.fromList([1, 2, 3, 4, 5, 6]),
+      );
+
+      expect(actual, throwsException);
+    });
+
+    test('should call link function factory twice', () {
       LogisticRegressor(
         observations,
         'col_4',
@@ -121,8 +159,7 @@ void main() {
       )).called(1);
     });
 
-    test('should call linear optimizer factory and consider intercept term '
-        'while calling the factory', () {
+    test('should call linear optimizer factory and consider intercept term', () {
       LogisticRegressor(
         observations,
         'col_4',
@@ -174,6 +211,7 @@ void main() {
         observations,
         'col_4',
         initialCoefficients: initialCoefficients,
+        fitIntercept: true,
       );
 
       verify(optimizerMock.findExtrema(
@@ -185,97 +223,39 @@ void main() {
       )).called(1);
     });
 
-    test('should predict classes basing on learned coefficients', () {
+    test('should call logistic regressor factory in order to create the '
+        'classifier instance', () {
+      final targetName = 'col_4';
+      final probabilityThreshold = 0.7;
+      final fitIntercept = true;
+      final interceptScale = -12.0;
+      final dtype = DType.float32;
+
       final classifier = LogisticRegressor(
         observations,
-        'col_4',
-        initialCoefficients: initialCoefficients,
-        fitIntercept: true,
-        interceptScale: 2.0,
+        targetName,
+        probabilityThreshold: probabilityThreshold,
+        fitIntercept: fitIntercept,
+        interceptScale: interceptScale,
+        isFittingDataNormalized: true,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
+        dtype: dtype,
       );
 
-      final probabilities = Matrix.fromList([
-        [0.2],
-        [0.3],
-        [0.6],
-      ]);
+      verify(logisticRegressorFactoryMock.create(
+        targetName,
+        linkFunctionMock,
+        probabilityThreshold,
+        fitIntercept,
+        interceptScale,
+        learnedCoefficients,
+        negativeLabel,
+        positiveLabel,
+        dtype,
+      )).called(1);
 
-      when(linkFunctionMock.link(any)).thenReturn(probabilities);
-
-      final features = Matrix.fromList([
-        [55, 44, 33, 22],
-        [10, 88, 77, 11],
-        [12, 22, 39, 13],
-      ]);
-
-      final featuresWithIntercept = Matrix.fromColumns([
-        Vector.filled(3, 2),
-        ...features.columns,
-      ]);
-
-      final classes = classifier.predict(
-        DataFrame.fromMatrix(features),
-      );
-
-      expect(classes.header, equals(['col_4']));
-
-      expect(classes.toMatrix(), equals([
-        [negativeLabel],
-        [negativeLabel],
-        [positiveLabel],
-      ]));
-
-      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
-          featuresWithIntercept * learnedCoefficients
-      )))).called(1);
-    });
-
-    test('should predict probabilities of classes basing on learned '
-        'coefficients', () {
-      final classifier = LogisticRegressor(
-        observations,
-        'col_4',
-        initialCoefficients: initialCoefficients,
-        fitIntercept: true,
-        interceptScale: 2.0,
-      );
-
-      final probabilities = Matrix.fromList([
-        [0.2],
-        [0.3],
-        [0.6],
-      ]);
-
-      when(linkFunctionMock.link(any)).thenReturn(probabilities);
-
-      final features = Matrix.fromList([
-        [55, 44, 33, 22],
-        [10, 88, 77, 11],
-        [12, 22, 39, 13],
-      ]);
-
-      final featuresWithIntercept = Matrix.fromColumns([
-        Vector.filled(3, 2),
-        ...features.columns,
-      ]);
-
-      final prediction = classifier.predictProbabilities(
-        DataFrame.fromMatrix(features),
-      );
-
-      expect(prediction.header, equals(['col_4']));
-
-      expect(prediction.toMatrix(), iterable2dAlmostEqualTo([
-        [0.2],
-        [0.3],
-        [0.6],
-      ]));
-
-      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
-          featuresWithIntercept * learnedCoefficients
-      )))).called(1);
+      expect(classifier, same(logisticRegressorMock));
     });
   });
 }
