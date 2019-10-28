@@ -2,7 +2,6 @@ import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/get_probabilities.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -14,25 +13,15 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
     AssessablePredictorMixin implements SoftmaxRegressor {
 
   SoftmaxRegressorImpl(
-      LinearOptimizer optimizer,
+      this.coefficientsByClasses,
       this.classNames,
-      this.linkFunction, {
-        int batchSize = 1,
-        bool fitIntercept = false,
-        double interceptScale = 1.0,
-        Matrix initialCoefficients,
-        num positiveLabel = 1,
-        num negativeLabel = 0,
-        this.dtype = DType.float32,
-      }) :
-        fitIntercept = fitIntercept,
-        interceptScale = interceptScale,
-        _positiveLabel = positiveLabel,
-        _negativeLabel = negativeLabel,
-        coefficientsByClasses = optimizer.findExtrema(
-          initialCoefficients: initialCoefficients,
-          isMinimizingObjective: false,
-        );
+      this.linkFunction,
+      this.fitIntercept,
+      this.interceptScale,
+      this._positiveLabel,
+      this._negativeLabel,
+      this._dtype,
+  );
 
   @override
   final List<String> classNames;
@@ -41,12 +30,12 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   final bool fitIntercept;
 
   @override
-  final double interceptScale;
+  final num interceptScale;
 
   @override
   final Matrix coefficientsByClasses;
 
-  final DType dtype;
+  final DType _dtype;
 
   @override
   final LinkFunction linkFunction;
@@ -79,7 +68,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
       allZeroes[labelIdx] = _positiveLabel;
 
-      return Vector.fromList(allZeroes, dtype: dtype);
+      return Vector.fromList(allZeroes, dtype: _dtype);
     });
 
     return DataFrame.fromMatrix(

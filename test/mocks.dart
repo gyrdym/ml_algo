@@ -2,6 +2,8 @@ import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -122,6 +124,11 @@ class LogisticRegressorMock extends Mock implements LogisticRegressor {}
 class LogisticRegressorFactoryMock extends Mock implements
     LogisticRegressorFactory {}
 
+class SoftmaxRegressorMock extends Mock implements SoftmaxRegressor {}
+
+class SoftmaxRegressorFactoryMock extends Mock implements
+    SoftmaxRegressorFactory {}
+
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
@@ -232,5 +239,13 @@ LogisticRegressorFactory createLogisticRegressorFactoryMock(
   final factory = LogisticRegressorFactoryMock();
   when(factory.create(any, any, any, any, any, any, any, any, any))
       .thenReturn(logisticRegressor);
+  return factory;
+}
+
+SoftmaxRegressorFactory createSoftmaxRegressorFactoryMock(
+    SoftmaxRegressor softmaxRegressor) {
+  final factory = SoftmaxRegressorFactoryMock();
+  when(factory.create(any, any, any, any, any, any, any, any))
+      .thenReturn(softmaxRegressor);
   return factory;
 }
