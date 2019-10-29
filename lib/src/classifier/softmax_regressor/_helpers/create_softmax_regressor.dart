@@ -1,7 +1,8 @@
 import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -38,14 +39,7 @@ SoftmaxRegressor createSoftmaxRegressor(
         '(e.g., via one-hot encoder)');
   }
 
-  if (trainData.series
-      .where((series) => targetNames.contains(series.name))
-      .isEmpty
-  ) {
-    throw Exception('Target columns with names $targetNames do not '
-        'exist in the fitting data. All the existing columns: '
-        '${trainData.header}');
-  }
+  validateTrainData(trainData, targetNames);
 
   final linkFunctionFactory = dependencies
       .getDependency<LinkFunctionFactory>();
@@ -78,7 +72,10 @@ SoftmaxRegressor createSoftmaxRegressor(
     isMinimizingObjective: false,
   );
 
-  return SoftmaxRegressorImpl(
+  final regressorFactory = dependencies
+      .getDependency<SoftmaxRegressorFactory>();
+
+  return regressorFactory.create(
     coefficientsByClasses,
     targetNames,
     linkFunction,
