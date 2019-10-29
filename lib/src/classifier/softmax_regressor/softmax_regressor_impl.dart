@@ -2,6 +2,8 @@ import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/get_probabilities.dart';
+import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
+import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -45,30 +47,34 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   final num _negativeLabel;
 
   @override
-  DataFrame predict(DataFrame features) {
+  DataFrame predict(DataFrame testFeatures) {
+    validateTestFeatures(testFeatures, _dtype);
+
     final processedFeatures = addInterceptIf(
       fitIntercept,
-      features.toMatrix(),
+      testFeatures.toMatrix(_dtype),
       interceptScale,
     );
 
-    final classes = getProbabilities(
-        processedFeatures,
-        coefficientsByClasses,
-        linkFunction
-    ).mapRows((probabilities) {
-      final labelIdx = probabilities
+    validateCoefficientsMatrix(coefficientsByClasses,
+        processedFeatures.columnsNum);
+
+    final allProbabilities = linkFunction
+        .link(processedFeatures * coefficientsByClasses);
+
+    final classes = allProbabilities.mapRows((probabilities) {
+      final positiveLabelIdx = probabilities
           .toList()
           .indexOf(probabilities.max());
 
-      final allZeroes = List.filled(
+      final predictedRow = List.filled(
         coefficientsByClasses.columnsNum,
         _negativeLabel,
       );
 
-      allZeroes[labelIdx] = _positiveLabel;
+      predictedRow[positiveLabelIdx] = _positiveLabel;
 
-      return Vector.fromList(allZeroes, dtype: _dtype);
+      return Vector.fromList(predictedRow, dtype: _dtype);
     });
 
     return DataFrame.fromMatrix(
