@@ -99,6 +99,43 @@ void main() {
       reset(linkFunctionMock);
     });
 
+    group('constructor', () {
+      test('should throw an exception if no coefficients are provided', () {
+        final actual = () => SoftmaxRegressorImpl(
+          Matrix.empty(),
+          targetNames,
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          positiveLabel,
+          negativeLabel,
+          dtype,
+        );
+
+        expect(actual, throwsException);
+      });
+
+      test('should throw an exception if coefficients for too few number of '
+          'classes are provided', () {
+        final actual = () => SoftmaxRegressorImpl(
+          Matrix.fromList([
+            [1],
+            [2],
+            [3],
+          ]),
+          targetNames,
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          positiveLabel,
+          negativeLabel,
+          dtype,
+        );
+
+        expect(actual, throwsException);
+      });
+    });
+
     group('`predict` method', () {
       test('should throw an exception if no features provided', () {
         final testFeatureMatrix = Matrix.empty();
