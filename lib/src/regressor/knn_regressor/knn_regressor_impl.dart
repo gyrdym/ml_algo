@@ -13,25 +13,27 @@ class KnnRegressorImpl with AssessablePredictorMixin implements KnnRegressor {
       this._targetName,
       this._solver,
       this._kernel,
-      this._dtype,
+      this.dtype,
   );
+
+  @override
+  final DType dtype;
 
   final String _targetName;
   final KnnSolver _solver;
   final Kernel _kernel;
-  final DType _dtype;
 
-  Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(1, dtype: _dtype);
+  Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(1, dtype: dtype);
   Vector _cachedZeroVector;
 
   @override
   DataFrame predict(DataFrame testFeatures) {
-    validateTestFeatures(testFeatures, _dtype);
+    validateTestFeatures(testFeatures, dtype);
 
     final prediction = Matrix.fromRows(
-        _predictOutcomes(testFeatures.toMatrix(_dtype))
+        _predictOutcomes(testFeatures.toMatrix(dtype))
             .toList(growable: false),
-        dtype: _dtype,
+        dtype: dtype,
     );
 
     return DataFrame.fromMatrix(
