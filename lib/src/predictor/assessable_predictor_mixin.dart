@@ -15,8 +15,8 @@ mixin AssessablePredictorMixin implements Assessable, Predictor {
 
     final metric = MetricFactory.createByType(metricType);
     final prediction = predict(splits[0]);
-    final origLabels = splits[1].toMatrix();
+    final origLabels = splits[1].toMatrix(dtype);
 
-    return metric.getScore(prediction.toMatrix(), origLabels);
+    return metric.getScore(prediction.toMatrix(dtype), origLabels);
   }
 }

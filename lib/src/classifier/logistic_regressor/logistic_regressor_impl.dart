@@ -1,8 +1,6 @@
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
-import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -62,20 +60,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
 
   @override
   DataFrame predict(DataFrame testFeatures) {
-    validateTestFeatures(testFeatures, dtype);
-
-    final processedFeatures = addInterceptIf(
-      fitIntercept,
-      testFeatures.toMatrix(dtype),
-      interceptScale,
-    );
-
-    validateCoefficientsMatrix(coefficientsByClasses,
-        processedFeatures.columnsNum);
-
-    final probabilities = linkFunction
-        .link(processedFeatures * coefficientsByClasses)
-        .getColumn(0);
+    final probabilities = getProbabilitiesMatrix(testFeatures).getColumn(0);
 
     final classesList = probabilities
         // TODO: use SIMD
