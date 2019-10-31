@@ -9,10 +9,11 @@ import 'package:ml_linalg/vector.dart';
 class DecisionTreeClassifierImpl with AssessablePredictorMixin
     implements DecisionTreeClassifier {
 
-  DecisionTreeClassifierImpl(this._solver, String className, this._dtype)
+  DecisionTreeClassifierImpl(this._solver, String className, this.dtype)
       : classNames = [className];
 
-  final DType _dtype;
+  @override
+  final DType dtype;
 
   final DecisionTreeSolver _solver;
 
@@ -22,7 +23,7 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
   @override
   DataFrame predict(DataFrame features) {
     final predictedLabels = features
-        .toMatrix(_dtype)
+        .toMatrix(dtype)
         .rows
         .map(_solver.getLabelForSample);
 
@@ -33,10 +34,10 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
     final outcomeList = predictedLabels
         .map((label) => label.value)
         .toList(growable: false);
-    final outcomeVector = Vector.fromList(outcomeList, dtype: _dtype);
+    final outcomeVector = Vector.fromList(outcomeList, dtype: dtype);
 
     return DataFrame.fromMatrix(
-      Matrix.fromColumns([outcomeVector], dtype: _dtype),
+      Matrix.fromColumns([outcomeVector], dtype: dtype),
       header: classNames,
     );
   }
@@ -46,14 +47,14 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
     final probabilities = Matrix.fromColumns([
       Vector.fromList(
         features
-            .toMatrix(_dtype)
+            .toMatrix(dtype)
             .rows
             .map(_solver.getLabelForSample)
             .map((label) => label.probability)
             .toList(growable: false),
-        dtype: _dtype,
+        dtype: dtype,
       ),
-    ], dtype: _dtype);
+    ], dtype: dtype);
 
     return DataFrame.fromMatrix(
       probabilities,

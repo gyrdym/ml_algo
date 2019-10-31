@@ -143,10 +143,72 @@ void main() {
         expect(actual.toMatrix(dtype), equals(expectedOutcomeMatrix));
       });
 
-      test('should return a dataframe with proper header', () {
+      test('should predict the first class if outcome is equiprobable', () {
+        reset(linkFunctionMock);
+
+        when(linkFunctionMock.link(any)).thenReturn(Matrix.fromList([
+          [0.33, 0.33, 0.33],
+        ]));
+        
+        final actual = regressor.predict(testFeatures);
+        final expectedOutcome = Matrix.fromList([
+          [positiveLabel, negativeLabel, negativeLabel],
+        ]);
+
+        expect(actual.toMatrix(dtype), equals(expectedOutcome));
+      });
+
+      test('should return a dataframe with a proper header', () {
         final actual = regressor.predict(testFeatures);
 
         expect(actual.header, equals(targetNames));
+      });
+    });
+
+    group('`predictProbabilities` method', () {
+      test('should throw an exception if no features provided', () {
+        final testFeatures = DataFrame.fromMatrix(Matrix.empty());
+
+        expect(() => regressor.predictProbabilities(testFeatures),
+            throwsException);
+      });
+
+      test('should throw an exception if too few features provided', () {
+        final testFeatures = DataFrame.fromMatrix(Matrix.fromList([
+          [1, 2],
+        ]));
+
+        expect(() => regressor.predictProbabilities(testFeatures),
+            throwsException);
+      });
+
+      test('should throw an exception if too many features provided', () {
+        final testFeatures = DataFrame.fromMatrix(Matrix.fromList([
+          [1, 2, 4, 4, 5, 6],
+        ]));
+
+        expect(() => regressor.predictProbabilities(testFeatures),
+            throwsException);
+      });
+
+      test('should consider intercept term', () {
+        regressor.predictProbabilities(testFeatures);
+
+        verify(linkFunctionMock.link(
+            testFeaturesMatrixWithIntercept * coefficientsByClasses)
+        ).called(1);
+      });
+
+      test('should return probabilities as dataframe', () {
+        final probabilities = regressor.predictProbabilities(testFeatures);
+
+        expect(probabilities.rows, equals(mockedProbabilities));
+      });
+
+      test('should return a dataframe with a proper header', () {
+        final probabilities = regressor.predictProbabilities(testFeatures);
+
+        expect(probabilities.header, equals(targetNames));
       });
     });
   });

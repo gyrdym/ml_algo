@@ -1,7 +1,6 @@
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/helpers/get_probabilities.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -22,7 +21,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
       this.interceptScale,
       this._positiveLabel,
       this._negativeLabel,
-      this._dtype,
+      this.dtype,
   );
 
   @override
@@ -37,7 +36,8 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   @override
   final Matrix coefficientsByClasses;
 
-  final DType _dtype;
+  @override
+  final DType dtype;
 
   @override
   final LinkFunction linkFunction;
@@ -48,11 +48,11 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
   @override
   DataFrame predict(DataFrame testFeatures) {
-    validateTestFeatures(testFeatures, _dtype);
+    validateTestFeatures(testFeatures, dtype);
 
     final processedFeatures = addInterceptIf(
       fitIntercept,
-      testFeatures.toMatrix(_dtype),
+      testFeatures.toMatrix(dtype),
       interceptScale,
     );
 
@@ -74,7 +74,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
       predictedRow[positiveLabelIdx] = _positiveLabel;
 
-      return Vector.fromList(predictedRow, dtype: _dtype);
+      return Vector.fromList(predictedRow, dtype: dtype);
     });
 
     return DataFrame.fromMatrix(

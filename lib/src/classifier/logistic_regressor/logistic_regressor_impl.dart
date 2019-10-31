@@ -22,7 +22,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
       this._probabilityThreshold,
       this._negativeLabel,
       this._positiveLabel,
-      this._dtype,
+      this.dtype,
   ) : classNames = [className] {
     validateCoefficientsMatrix(coefficientsByClasses);
 
@@ -53,18 +53,20 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   @override
   final LinkFunction linkFunction;
 
-  final DType _dtype;
+  @override
+  final DType dtype;
+
   final num _probabilityThreshold;
   final num _positiveLabel;
   final num _negativeLabel;
 
   @override
   DataFrame predict(DataFrame testFeatures) {
-    validateTestFeatures(testFeatures, _dtype);
+    validateTestFeatures(testFeatures, dtype);
 
     final processedFeatures = addInterceptIf(
       fitIntercept,
-      testFeatures.toMatrix(_dtype),
+      testFeatures.toMatrix(dtype),
       interceptScale,
     );
 
