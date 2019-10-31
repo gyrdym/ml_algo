@@ -1,8 +1,6 @@
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
-import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -22,14 +20,14 @@ class LogisticRegressorImpl with LinearClassifierMixin,
       this._probabilityThreshold,
       this._negativeLabel,
       this._positiveLabel,
-      this._dtype,
+      this.dtype,
   ) : classNames = [className] {
     validateCoefficientsMatrix(coefficientsByClasses);
 
     // Logistic regression specific check, it cannot be placed in
     // `validateCoefficientsMatrix`
     if (coefficientsByClasses.columnsNum > 1) {
-      throw Exception('Expected to have coefficients just for a single class, '
+      throw Exception('Expected coefficients just for a single class, '
           'but coefficients for ${coefficientsByClasses.columnsNum} classes '
           'provided. Please, check your linear optimizer implementation '
           '(Logistic Regression deals only with single class problem)');
@@ -53,27 +51,16 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   @override
   final LinkFunction linkFunction;
 
-  final DType _dtype;
+  @override
+  final DType dtype;
+
   final num _probabilityThreshold;
   final num _positiveLabel;
   final num _negativeLabel;
 
   @override
   DataFrame predict(DataFrame testFeatures) {
-    validateTestFeatures(testFeatures, _dtype);
-
-    final processedFeatures = addInterceptIf(
-      fitIntercept,
-      testFeatures.toMatrix(_dtype),
-      interceptScale,
-    );
-
-    validateCoefficientsMatrix(coefficientsByClasses,
-        processedFeatures.columnsNum);
-
-    final probabilities = linkFunction
-        .link(processedFeatures * coefficientsByClasses)
-        .getColumn(0);
+    final probabilities = getProbabilitiesMatrix(testFeatures).getColumn(0);
 
     final classesList = probabilities
         // TODO: use SIMD

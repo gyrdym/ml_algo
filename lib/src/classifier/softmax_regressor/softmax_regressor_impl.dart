@@ -1,8 +1,6 @@
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
-import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/helpers/get_probabilities.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
+import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -14,25 +12,25 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
     AssessablePredictorMixin implements SoftmaxRegressor {
 
   SoftmaxRegressorImpl(
-      LinearOptimizer optimizer,
+      this.coefficientsByClasses,
       this.classNames,
-      this.linkFunction, {
-        int batchSize = 1,
-        bool fitIntercept = false,
-        double interceptScale = 1.0,
-        Matrix initialCoefficients,
-        num positiveLabel = 1,
-        num negativeLabel = 0,
-        this.dtype = DType.float32,
-      }) :
-        fitIntercept = fitIntercept,
-        interceptScale = interceptScale,
-        _positiveLabel = positiveLabel,
-        _negativeLabel = negativeLabel,
-        coefficientsByClasses = optimizer.findExtrema(
-          initialCoefficients: initialCoefficients,
-          isMinimizingObjective: false,
-        );
+      this.linkFunction,
+      this.fitIntercept,
+      this.interceptScale,
+      this._positiveLabel,
+      this._negativeLabel,
+      this.dtype,
+  ) {
+    validateCoefficientsMatrix(coefficientsByClasses);
+
+    // Softmax regression specific check, it cannot be placed in
+    // `validateCoefficientsMatrix`
+    if (coefficientsByClasses.columnsNum < 2) {
+      throw Exception('Expected coefficients at least for two classes. '
+          'Please, check your linear optimizer implementation or the way your '
+          'data was encoded');
+    }
+  }
 
   @override
   final List<String> classNames;
@@ -41,11 +39,12 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   final bool fitIntercept;
 
   @override
-  final double interceptScale;
+  final num interceptScale;
 
   @override
   final Matrix coefficientsByClasses;
 
+  @override
   final DType dtype;
 
   @override
@@ -56,30 +55,22 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   final num _negativeLabel;
 
   @override
-  DataFrame predict(DataFrame features) {
-    final processedFeatures = addInterceptIf(
-      fitIntercept,
-      features.toMatrix(),
-      interceptScale,
-    );
+  DataFrame predict(DataFrame testFeatures) {
+    final allProbabilities = getProbabilitiesMatrix(testFeatures);
 
-    final classes = getProbabilities(
-        processedFeatures,
-        coefficientsByClasses,
-        linkFunction
-    ).mapRows((probabilities) {
-      final labelIdx = probabilities
+    final classes = allProbabilities.mapRows((probabilities) {
+      final positiveLabelIdx = probabilities
           .toList()
           .indexOf(probabilities.max());
 
-      final allZeroes = List.filled(
+      final predictedRow = List.filled(
         coefficientsByClasses.columnsNum,
         _negativeLabel,
       );
 
-      allZeroes[labelIdx] = _positiveLabel;
+      predictedRow[positiveLabelIdx] = _positiveLabel;
 
-      return Vector.fromList(allZeroes, dtype: dtype);
+      return Vector.fromList(predictedRow, dtype: dtype);
     });
 
     return DataFrame.fromMatrix(
