@@ -1,8 +1,5 @@
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
-import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
-import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -48,19 +45,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
 
   @override
   DataFrame predict(DataFrame testFeatures) {
-    validateTestFeatures(testFeatures, dtype);
-
-    final processedFeatures = addInterceptIf(
-      fitIntercept,
-      testFeatures.toMatrix(dtype),
-      interceptScale,
-    );
-
-    validateCoefficientsMatrix(coefficientsByClasses,
-        processedFeatures.columnsNum);
-
-    final allProbabilities = linkFunction
-        .link(processedFeatures * coefficientsByClasses);
+    final allProbabilities = getProbabilitiesMatrix(testFeatures);
 
     final classes = allProbabilities.mapRows((probabilities) {
       final positiveLabelIdx = probabilities
