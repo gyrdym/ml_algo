@@ -1,6 +1,7 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -79,6 +80,9 @@ void main() {
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
 
+    SoftmaxRegressor softmaxRegressorMock;
+    SoftmaxRegressorFactory softmaxRegressorFactoryMock;
+
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
       linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctionMock);
@@ -89,10 +93,17 @@ void main() {
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
+      softmaxRegressorMock = SoftmaxRegressorMock();
+      softmaxRegressorFactoryMock = createSoftmaxRegressorFactoryMock(
+          softmaxRegressorMock);
+
       injector = Injector()
         ..registerSingleton<LinkFunctionFactory>((_) => linkFunctionFactoryMock)
-        ..registerDependency<CostFunctionFactory>((_) => costFunctionFactoryMock)
-        ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock);
+        ..registerDependency<CostFunctionFactory>(
+                (_) => costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock)
+        ..registerSingleton<SoftmaxRegressorFactory>(
+                (_) => softmaxRegressorFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -221,101 +232,6 @@ void main() {
         initialCoefficients: initialCoefficients,
         isMinimizingObjective: false,
       )).called(1);
-    });
-
-    test('should predict classes basing on learned coefficients', () {
-      final classifier = SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
-        fitIntercept: true,
-        interceptScale: 2.0,
-        initialCoefficients: initialCoefficients,
-        negativeLabel: negativeLabel,
-        positiveLabel: positiveLabel,
-      );
-
-      final probabilities = Matrix.fromList([
-        [0.2, 0.7, 0.1],
-        [0.3, 0.2, 0.5],
-        [0.6, 0.2, 0.2],
-      ]);
-
-      when(linkFunctionMock.link(any)).thenReturn(probabilities);
-      
-      final features = Matrix.fromList([
-        [55, 44, 33, 22],
-        [10, 88, 77, 11],
-        [12, 22, 39, 13],
-      ]);
-
-      final featuresWithIntercept = Matrix.fromColumns([
-        Vector.filled(3, 2),
-        ...features.columns,
-      ]);
-
-      final classes = classifier.predict(
-        DataFrame.fromMatrix(features),
-      );
-      
-      expect(classes.header, equals(['target_1', 'target_2', 'target_3']));
-
-      expect(classes.toMatrix(), equals([
-        [negativeLabel, positiveLabel, negativeLabel],
-        [negativeLabel, negativeLabel, positiveLabel],
-        [positiveLabel, negativeLabel, negativeLabel],
-      ]));
-
-      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
-          featuresWithIntercept * learnedCoefficients
-      )))).called(1);
-    });
-
-    test('should predict probabilities of classes basing on learned '
-        'coefficients', () {
-      final classifier = SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
-        fitIntercept: true,
-        interceptScale: 2.0,
-        initialCoefficients: initialCoefficients,
-        negativeLabel: negativeLabel,
-        positiveLabel: positiveLabel,
-      );
-
-      final probabilities = Matrix.fromList([
-        [0.2, 0.7, 0.1],
-        [0.3, 0.2, 0.5],
-        [0.6, 0.2, 0.2],
-      ]);
-
-      when(linkFunctionMock.link(any)).thenReturn(probabilities);
-
-      final features = Matrix.fromList([
-        [55, 44, 33, 22],
-        [10, 88, 77, 11],
-        [12, 22, 39, 13],
-      ]);
-
-      final featuresWithIntercept = Matrix.fromColumns([
-        Vector.filled(3, 2),
-        ...features.columns,
-      ]);
-
-      final prediction = classifier.predictProbabilities(
-        DataFrame.fromMatrix(features),
-      );
-
-      expect(prediction.header, equals(['target_1', 'target_2', 'target_3']));
-
-      expect(prediction.toMatrix(), iterable2dAlmostEqualTo([
-        [0.2, 0.7, 0.1],
-        [0.3, 0.2, 0.5],
-        [0.6, 0.2, 0.2],
-      ]));
-
-      verify(linkFunctionMock.link(argThat(iterable2dAlmostEqualTo(
-          featuresWithIntercept * learnedCoefficients
-      )))).called(1);
     });
   });
 }

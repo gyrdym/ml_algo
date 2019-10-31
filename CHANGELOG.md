@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.3.5
+- `SoftmaxRegressor`: classifier instantiating refactored
+
 ## 13.3.4
 - `LogisticRegressor`: classifier instantiating refactored
 

@@ -16,7 +16,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
       this._classLabels,
       this._kernel,
       this._solver,
-      this._dtype,
+      this.dtype,
   ) : classNames = [targetName] {
     validateClassLabelList(_classLabels);
   }
@@ -24,15 +24,17 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   @override
   final List<String> classNames;
 
+  @override
+  final DType dtype;
+
   final List<num> _classLabels;
   final Kernel _kernel;
   final KnnSolver _solver;
-  final DType _dtype;
-  final String _columPrefix = 'Class label';
+  final String _columnPrefix = 'Class label';
 
   @override
   DataFrame predict(DataFrame features) {
-    validateTestFeatures(features, _dtype);
+    validateTestFeatures(features, dtype);
 
     final labelsToProbabilities = _getLabelToProbabilityMapping(features);
     final labels = labelsToProbabilities.keys.toList();
@@ -41,10 +43,10 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
         .map((row) => labels[row.toList().indexOf(row.max())])
         .toList();
 
-    final outcomesAsVector = Vector.fromList(predictedOutcomes, dtype: _dtype);
+    final outcomesAsVector = Vector.fromList(predictedOutcomes, dtype: dtype);
 
     return DataFrame.fromMatrix(
-      Matrix.fromColumns([outcomesAsVector], dtype: _dtype),
+      Matrix.fromColumns([outcomesAsVector], dtype: dtype),
       header: classNames,
     );
   }
@@ -56,7 +58,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
 
     final header = labelsToProbabilities
         .keys
-        .map((label) => '${_columPrefix} ${label.toString()}');
+        .map((label) => '${_columnPrefix} ${label.toString()}');
 
     return DataFrame.fromMatrix(probabilityMatrix, header: header);
   }
@@ -84,7 +86,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   /// where each row is a classes probability distribution for the appropriate
   /// feature record from test feature matrix
   Map<num, List<num>> _getLabelToProbabilityMapping(DataFrame features) {
-    final kNeighbourGroups = _solver.findKNeighbours(features.toMatrix(_dtype));
+    final kNeighbourGroups = _solver.findKNeighbours(features.toMatrix(dtype));
     final classLabelsAsSet = Set<num>.from(_classLabels);
 
     return kNeighbourGroups.fold<Map<num, List<num>>>(
@@ -133,11 +135,11 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   Matrix _getProbabilityMatrix(Map<num, List<num>> allLabelsToProbabilities) {
     final probabilityVectors = allLabelsToProbabilities
         .values
-        .map((probabilities) => Vector.fromList(probabilities, dtype: _dtype))
+        .map((probabilities) => Vector.fromList(probabilities, dtype: dtype))
         .toList(growable: false);
 
     return Matrix
-        .fromColumns(probabilityVectors, dtype: _dtype);
+        .fromColumns(probabilityVectors, dtype: dtype);
   }
 
   Map<num, num> _updateLabelToWeightMapping(

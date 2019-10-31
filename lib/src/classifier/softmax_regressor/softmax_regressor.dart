@@ -1,13 +1,9 @@
-import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -30,7 +26,7 @@ import 'package:ml_linalg/matrix.dart';
 abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// Parameters:
   ///
-  /// [fittingData] A [DataFrame] with observations, that will be used by the
+  /// [trainData] A [DataFrame] with observations, that will be used by the
   /// classifier to learn coefficients. Must contain [targetNames] columns.
   ///
   /// [targetNames] A collection of strings, that serves as names for the
@@ -85,7 +81,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// [learningRateType] A value, defining a strategy for the learning rate
   /// behaviour throughout the whole fitting process.
   ///
-  /// [isFittingDataNormalized] Defines, whether the [fittingData] normalized
+  /// [isFittingDataNormalized] Defines, whether the [trainData] normalized
   /// or not. Normalization should be performed column-wise. Normalized data
   /// may be needed for some optimizers (e.g., for
   /// [LinearOptimizerType.coordinate])
@@ -99,7 +95,7 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// an optimization algorithm. [initialCoefficients] is a [Matrix], where the
   /// number of columns must be equal to the number of classes (or
   /// length of [targetNames]) and the number of rows must be equal to the
-  /// number of features in [fittingData]. In other words, every column of
+  /// number of features in [trainData]. In other words, every column of
   /// [initialCoefficients] matrix is a vector of coefficients of a certain
   /// class.
   ///
@@ -113,8 +109,9 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory SoftmaxRegressor(
-      DataFrame fittingData,
-      List<String> targetNames, {
+      DataFrame trainData,
+      List<String> targetNames,
+      {
         LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
         int iterationsLimit = 100,
         double initialLearningRate = 1e-3,
@@ -133,58 +130,26 @@ abstract class SoftmaxRegressor implements LinearClassifier, Assessable {
         num positiveLabel = 1,
         num negativeLabel = 0,
         DType dtype = DType.float32,
-      }) {
-        if (targetNames.isNotEmpty && targetNames.length < 2) {
-            throw Exception('The target column should be encoded properly '
-                '(e.g., via one-hot encoder)');
-        }
-
-        if (fittingData.series
-            .where((series) => targetNames.contains(series.name))
-            .isEmpty
-        ) {
-          throw Exception('Target columns with names $targetNames do not '
-              'exist in the fitting data. All the existing columns: '
-              '${fittingData.header}');
-        }
-
-        final linkFunctionFactory = dependencies
-            .getDependency<LinkFunctionFactory>();
-
-        final linkFunction = linkFunctionFactory
-            .createByType(LinkFunctionType.softmax, dtype: dtype);
-
-        final optimizer = createLogLikelihoodOptimizer(
-          fittingData,
-          targetNames,
-          LinkFunctionType.softmax,
-          optimizerType: optimizerType,
-          iterationsLimit: iterationsLimit,
-          initialLearningRate: initialLearningRate,
-          minCoefficientsUpdate: minCoefficientsUpdate,
-          lambda: lambda,
-          regularizationType: regularizationType,
-          randomSeed: randomSeed,
-          batchSize: batchSize,
-          learningRateType: learningRateType,
-          initialWeightsType: initialCoefficientsType,
-          fitIntercept: fitIntercept,
-          interceptScale: interceptScale,
-          isFittingDataNormalized: isFittingDataNormalized,
-          dtype: dtype,
-        );
-
-        return SoftmaxRegressorImpl(
-          optimizer,
-          targetNames,
-          linkFunction,
-          batchSize: batchSize,
-          fitIntercept: fitIntercept,
-          interceptScale: interceptScale,
-          initialCoefficients: initialCoefficients,
-          positiveLabel: positiveLabel,
-          negativeLabel: negativeLabel,
-          dtype: dtype,
-        );
-  }
+      }
+  ) => createSoftmaxRegressor(
+    trainData,
+    targetNames,
+    optimizerType,
+    iterationsLimit,
+    initialLearningRate,
+    minCoefficientsUpdate,
+    lambda,
+    regularizationType,
+    randomSeed,
+    batchSize,
+    fitIntercept,
+    interceptScale,
+    learningRateType,
+    isFittingDataNormalized,
+    initialCoefficientsType,
+    initialCoefficients,
+    positiveLabel,
+    negativeLabel,
+    dtype,
+  );
 }
