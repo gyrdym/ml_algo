@@ -35,7 +35,7 @@ void main() {
           observations.getColumn(3),
           distribution,
       );
-      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
+      final labelFactory = MajorityDecisionTreeLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, 3);
 
       expect(label.value, equals(0));
@@ -61,7 +61,7 @@ void main() {
         observations.getColumn(3),
         distribution,
       );
-      final labelFactory = MajorityLeafLabelFactory(distributionCalculator);
+      final labelFactory = MajorityDecisionTreeLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, 3,);
 
       expect(label.value, equals(classLabel));

@@ -3,8 +3,8 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nomin
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class NominalSplitterImpl implements NominalSplitter {
-  const NominalSplitterImpl();
+class NominalDecisionTreeSplitterImpl implements NominalDecisionTreeSplitter {
+  const NominalDecisionTreeSplitterImpl();
 
   @override
   Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,

@@ -7,13 +7,13 @@ import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/integers.dart';
 
-class GreedySplitter implements Splitter {
-  GreedySplitter(this._assessor, this._numericalSplitter,
+class GreedyDecisionTreeSplitter implements DecisionTreeSplitter {
+  GreedyDecisionTreeSplitter(this._assessor, this._numericalSplitter,
       this._nominalSplitter);
 
-  final SplitAssessor _assessor;
-  final NumericalSplitter _numericalSplitter;
-  final NominalSplitter _nominalSplitter;
+  final DecisionTreeSplitAssessor _assessor;
+  final NumericalDecisionTreeSplitter _numericalSplitter;
+  final NominalDecisionTreeSplitter _nominalSplitter;
 
   @override
   Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,

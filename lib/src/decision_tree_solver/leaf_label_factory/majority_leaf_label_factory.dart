@@ -6,8 +6,10 @@ import 'package:ml_algo/src/decision_tree_solver/leaf_label_factory/leaf_label_f
 import 'package:ml_linalg/matrix.dart';
 import 'package:quiver/iterables.dart' as quiver_iterables;
 
-class MajorityLeafLabelFactory implements DecisionTreeLeafLabelFactory {
-  MajorityLeafLabelFactory(this.distributionCalculator);
+class MajorityDecisionTreeLeafLabelFactory implements
+    DecisionTreeLeafLabelFactory {
+
+  MajorityDecisionTreeLeafLabelFactory(this.distributionCalculator);
 
   final SequenceElementsDistributionCalculator distributionCalculator;
 

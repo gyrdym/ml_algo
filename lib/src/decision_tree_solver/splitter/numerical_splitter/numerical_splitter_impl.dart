@@ -3,8 +3,10 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/num
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class NumericalSplitterImpl implements NumericalSplitter {
-  const NumericalSplitterImpl();
+class NumericalDecisionTreeSplitterImpl implements
+    NumericalDecisionTreeSplitter {
+
+  const NumericalDecisionTreeSplitterImpl();
 
   @override
   Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,

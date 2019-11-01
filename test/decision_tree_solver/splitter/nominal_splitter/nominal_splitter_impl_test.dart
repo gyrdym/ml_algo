@@ -6,8 +6,8 @@ import 'package:test/test.dart';
 import '../../test_utils.dart';
 
 void main() {
-  group('NominalSplitterImpl', () {
-    final splitter = const NominalSplitterImpl();
+  group('NominalDecisionTreeSplitterImpl', () {
+    final splitter = const NominalDecisionTreeSplitterImpl();
 
     test('should perform split, splitting column contains only splitting '
         'value', () {

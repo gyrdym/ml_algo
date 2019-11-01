@@ -15,7 +15,7 @@ import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.d
 import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
-import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart' as decision_tree_splitter;
+import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
@@ -80,24 +80,28 @@ class DataSplitterFactoryMock extends Mock implements DataSplitterFactory {}
 
 class AssessableMock extends Mock implements Assessable {}
 
-class SplitAssessorMock extends Mock implements SplitAssessor {}
+class DecisionTreeSplitAssessorMock extends Mock implements
+    DecisionTreeSplitAssessor {}
 
-class DecisionTreeSplitterMock extends Mock implements
-    decision_tree_splitter.Splitter {}
+class DecisionTreeSplitterMock extends Mock implements DecisionTreeSplitter {}
 
-class NumericalSplitterMock extends Mock implements NumericalSplitter {}
+class NumericalDecisionTreeSplitterMock extends Mock implements
+    NumericalDecisionTreeSplitter {}
 
-class NominalSplitterMock extends Mock implements NominalSplitter {}
+class NominalDecisionTreeSplitterMock extends Mock implements
+    NominalDecisionTreeSplitter {}
 
 class DistributionCalculatorMock extends Mock implements
     SequenceElementsDistributionCalculator {}
 
-class LeafDetectorMock extends Mock implements LeafDetector {}
+class DecisionTreeLeafDetectorMock extends Mock implements
+    DecisionTreeLeafDetector {}
 
-class LeafLabelFactoryMock extends Mock implements
+class DecisionTreeLeafLabelFactoryMock extends Mock implements
     DecisionTreeLeafLabelFactory {}
 
-class SplitSelectorMock extends Mock implements SplitSelector {}
+class DecisionTreeSplitSelectorMock extends Mock implements
+    DecisionTreeSplitSelector {}
 
 class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
 
