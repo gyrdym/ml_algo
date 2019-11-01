@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  group('LeafDetectorImpl', () {
+  group('DecisionTreeLeafDetectorImpl', () {
     final mockedNodeError = 0.4;
     final minError = 0.3;
     final minSamplesCount = 2;
@@ -15,10 +15,10 @@ void main() {
 
     test('should detect tree leaf if given depth is greater than the maximum '
         'allowed tree depth', () {
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(mockedNodeError);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(Matrix.fromList([
@@ -33,10 +33,10 @@ void main() {
 
     test('should detect tree leaf if given depth is equal to the maximum '
         'allowed tree depth value', () {
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(mockedNodeError);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(Matrix.fromList([
@@ -51,10 +51,10 @@ void main() {
 
     test('should detect tree leaf if given features column ranges collection '
         'is empty', () {
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(mockedNodeError);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(Matrix.fromList([
@@ -69,10 +69,10 @@ void main() {
 
     test('should detect tree leaf if given samples number is equal to minimum '
         'allowed samples number', () {
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(mockedNodeError);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(Matrix.fromList([
@@ -85,10 +85,10 @@ void main() {
 
     test('should detect tree leaf if given samples number is less than the '
         'minimum allowed number', () {
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(mockedNodeError);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(Matrix.fromList([
@@ -106,10 +106,10 @@ void main() {
         [10, 20, 1],
       ]);
 
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(mockedNodeError);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(observations, 2, count(0).take(2), 0);
@@ -124,10 +124,10 @@ void main() {
         [20, 3, 2],
         [20, 3, 1],
       ]);
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(0.3);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(observations, 2, count(0).take(2), 0);
@@ -144,10 +144,10 @@ void main() {
         [40, 50, 1],
       ]);
 
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(0.1);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(observations, 2, count(0).take(2), 0);
@@ -165,10 +165,10 @@ void main() {
         [20, 1],
       ]);
 
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       when(assessor.getError(any, any)).thenReturn(0.5);
 
-      final detector = LeafDetectorImpl(assessor, minError, minSamplesCount,
+      final detector = DecisionTreeLeafDetectorImpl(assessor, minError, minSamplesCount,
           maxDepth);
 
       final isLeaf = detector.isLeaf(observations, 1, count(0).take(1), 0);

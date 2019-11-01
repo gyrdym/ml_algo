@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  group('GreedySplitSelector', () {
+  group('GreedyDecisionTreeSplitSelector', () {
     test('should find the best split', () {
       final samples = Matrix.fromList([
         [10, 20, 30, 40, 1],
@@ -52,7 +52,7 @@ void main() {
       final featuresIdxs = [
         worstSplitIdx, bestSplitIdx, worseSplitIdx, goodSplitIdx,
       ];
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       final splitter = DecisionTreeSplitterMock();
 
       when(splitter.split(samples, worstSplitIdx, targetColIdx))
@@ -73,7 +73,7 @@ void main() {
       when(assessor.getAggregatedError(bestSplit.values,
           targetColIdx)).thenReturn(0.1);
 
-      final selector = GreedySplitSelector(assessor, splitter);
+      final selector = GreedyDecisionTreeSplitSelector(assessor, splitter);
       final actualSplit = selector
           .select(samples, targetColIdx, featuresIdxs);
 
@@ -115,7 +115,7 @@ void main() {
 
       final featuresIdxs = {goodFeatureColIdx, bestFeatureColIdx};
 
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
       final splitter = DecisionTreeSplitterMock();
       final categoricalValues = [1.0, 2.0, 3.0];
       final colIdxToUniqueValues = {ignoredFeatureColIdx: categoricalValues};
@@ -130,7 +130,7 @@ void main() {
       when(assessor.getAggregatedError(bestSplit.values,
           targetColIdx)).thenReturn(0.1);
 
-      final selector = GreedySplitSelector(assessor, splitter);
+      final selector = GreedyDecisionTreeSplitSelector(assessor, splitter);
       final stump = selector.select(observations, targetColIdx,
           featuresIdxs, colIdxToUniqueValues);
 

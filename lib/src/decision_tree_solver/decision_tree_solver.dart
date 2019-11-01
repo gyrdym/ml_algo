@@ -22,9 +22,9 @@ class DecisionTreeSolver {
   final Iterable<int> _featureIndices;
   final int _targetIdx;
   final Map<int, List<num>> _featureToUniqueValues;
-  final LeafDetector _leafDetector;
+  final DecisionTreeLeafDetector _leafDetector;
   final DecisionTreeLeafLabelFactory _leafLabelFactory;
-  final SplitSelector _splitSelector;
+  final DecisionTreeSplitSelector _splitSelector;
 
   DecisionTreeNode get root => _root;
   DecisionTreeNode _root;

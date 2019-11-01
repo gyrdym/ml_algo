@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  group('GreedySplitter', () {
+  group('DecisionTreeSplitAssessorMock', () {
     test('should sort observations (ASC-direction) by given column and '
         'create split with minimal error if split by continuous value is '
         'happening', () {
@@ -68,7 +68,7 @@ void main() {
         },
       ];
 
-      final assessor = SplitAssessorMock();
+      final assessor = DecisionTreeSplitAssessorMock();
 
       when(assessor.getAggregatedError(mockedWorstSplit.values,
           targetIdx)).thenReturn(0.99);
@@ -81,7 +81,7 @@ void main() {
 
       final numericalSplitter = createNumericalSplitter(
           mockedSplitDataToBeReturned);
-      final splitter = GreedySplitter(assessor, numericalSplitter, null);
+      final splitter = GreedyDecisionTreeSplitter(assessor, numericalSplitter, null);
       final actualSplit = splitter.split(inputObservations,
           splittingColumnIdx, targetIdx);
 
@@ -121,7 +121,7 @@ void main() {
       ]),
     };
     final splitter = createNominalSplitter(splittingValues, mockedSplit);
-    final selector = GreedySplitter(null, null, splitter);
+    final selector = GreedyDecisionTreeSplitter(null, null, splitter);
     final actualSplit = selector.split(
       samples,
       splittingColumnIdx,
@@ -148,10 +148,10 @@ void main() {
     final splittingColumnIdx = 2;
     final splittingValues = <double>[];
 
-    final nominalSplitter = NominalSplitterMock();
+    final nominalSplitter = NominalDecisionTreeSplitterMock();
     when(nominalSplitter.split(any, any, any)).thenReturn({});
 
-    final splitter = GreedySplitter(null, null, nominalSplitter);
+    final splitter = GreedyDecisionTreeSplitter(null, null, nominalSplitter);
 
     final split = splitter.split(
       samples,
@@ -175,14 +175,14 @@ void main() {
     final splittingColumnIdx = 0;
     final targetColumnIdx = 1;
 
-    final numericalSplitter = NumericalSplitterMock();
-    final assessor = SplitAssessorMock();
+    final numericalSplitter = NumericalDecisionTreeSplitterMock();
+    final assessor = DecisionTreeSplitAssessorMock();
 
     when(numericalSplitter.split(samples, splittingColumnIdx, any))
         .thenReturn({});
     when(assessor.getError(any, targetColumnIdx)).thenReturn(0.5);
 
-    final splitter = GreedySplitter(assessor, numericalSplitter, null);
+    final splitter = GreedyDecisionTreeSplitter(assessor, numericalSplitter, null);
 
     final split = splitter.split(
       samples,
@@ -215,7 +215,7 @@ void main() {
     ]);
     final splittingColumnIdx = -2;
     final splittingValues = [1.0, 3.0];
-    final splitter = GreedySplitter(null, null, null);
+    final splitter = GreedyDecisionTreeSplitter(null, null, null);
     final actual = () => splitter.split(
       samples,
       splittingColumnIdx,
@@ -236,7 +236,7 @@ void main() {
     ]);
     final splittingColumnIdx = 10;
     final splittingValues = [1.0, 3.0];
-    final selector = GreedySplitter(null, null, null);
+    final selector = GreedyDecisionTreeSplitter(null, null, null);
     final actual = () => selector.split(
       samples,
       splittingColumnIdx,
@@ -247,9 +247,9 @@ void main() {
   });
 }
 
-NumericalSplitter createNumericalSplitter(
+NumericalDecisionTreeSplitter createNumericalSplitter(
     List<Map<String, dynamic>> mockedData) {
-  final splitter = NumericalSplitterMock();
+  final splitter = NumericalDecisionTreeSplitterMock();
   for (final splitInfo in mockedData) {
     final splittingValue = splitInfo['splittingValue'] as double;
     when(splitter.split(any, any, splittingValue)).thenAnswer((_) =>
@@ -258,9 +258,9 @@ NumericalSplitter createNumericalSplitter(
   return splitter;
 }
 
-NominalSplitter createNominalSplitter(List<double> nominalValues,
+NominalDecisionTreeSplitter createNominalSplitter(List<double> nominalValues,
     Map<DecisionTreeNode, Matrix> split) {
-  final splitter = NominalSplitterMock();
+  final splitter = NominalDecisionTreeSplitterMock();
   when(splitter.split(any, any, nominalValues)).thenReturn(split);
   return splitter;
 }

@@ -17,11 +17,11 @@ DecisionTreeSolver createGreedySolver(
     int minSamplesCountOnNode,
     int maxDepth,
 ) {
-  final assessor = const MajoritySplitAssessor();
+  final assessor = const MajorityDecisionTreeSplitAssessor();
 
-  final numericalSplitter = const NumericalSplitterImpl();
-  final nominalSplitter = const NominalSplitterImpl();
-  final splitter = GreedySplitter(assessor, numericalSplitter, nominalSplitter);
+  final numericalSplitter = const NumericalDecisionTreeSplitterImpl();
+  final nominalSplitter = const NominalDecisionTreeSplitterImpl();
+  final splitter = GreedyDecisionTreeSplitter(assessor, numericalSplitter, nominalSplitter);
 
   final distributionCalculator =
     const SequenceElementsDistributionCalculatorImpl();
@@ -45,10 +45,10 @@ DecisionTreeSolver createGreedySolver(
       ),
   );
 
-  final leafDetector = LeafDetectorImpl(assessor, minErrorOnNode,
+  final leafDetector = DecisionTreeLeafDetectorImpl(assessor, minErrorOnNode,
     minSamplesCountOnNode, maxDepth);
-  final leafLabelFactory = MajorityLeafLabelFactory(distributionCalculator);
-  final splitSelector = GreedySplitSelector(assessor, splitter);
+  final leafLabelFactory = MajorityDecisionTreeLeafLabelFactory(distributionCalculator);
+  final splitSelector = GreedyDecisionTreeSplitSelector(assessor, splitter);
 
   return DecisionTreeSolver(
     samples.toMatrix(),

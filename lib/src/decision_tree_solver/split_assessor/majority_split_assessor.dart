@@ -5,8 +5,8 @@ import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.d
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class MajoritySplitAssessor implements SplitAssessor {
-  const MajoritySplitAssessor();
+class MajorityDecisionTreeSplitAssessor implements DecisionTreeSplitAssessor {
+  const MajorityDecisionTreeSplitAssessor();
 
   @override
   double getAggregatedError(Iterable<Matrix> splitObservations, int targetId) {

@@ -3,7 +3,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('MajorityStumpAssessor', () {
+  group('MajorityDecisionTreeSplitAssessor', () {
     test('should return majority-based error on node', () {
       final node = Matrix.fromList([
         [10, 30, 40, 0],
@@ -11,7 +11,7 @@ void main() {
         [30, 20, 30, 1],
         [40, 10, 20, 2],
       ]);
-      final assessor = const MajoritySplitAssessor();
+      final assessor = const MajorityDecisionTreeSplitAssessor();
       final error = assessor.getError(node, 3);
 
       expect(error, 0.5);
@@ -23,7 +23,7 @@ void main() {
         [10, 30, 0],
         [14, 20, 0],
       ]);
-      final assessor = const MajoritySplitAssessor();
+      final assessor = const MajorityDecisionTreeSplitAssessor();
       final error = assessor.getError(node, 2);
 
       expect(error, 0);
@@ -53,7 +53,7 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajoritySplitAssessor();
+      final assessor = const MajorityDecisionTreeSplitAssessor();
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 5 / 12);
@@ -80,7 +80,7 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajoritySplitAssessor();
+      final assessor = const MajorityDecisionTreeSplitAssessor();
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 4 / 10);
@@ -110,7 +110,7 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajoritySplitAssessor();
+      final assessor = const MajorityDecisionTreeSplitAssessor();
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 0);
@@ -131,7 +131,7 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajoritySplitAssessor();
+      final assessor = const MajorityDecisionTreeSplitAssessor();
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 0);
@@ -152,7 +152,7 @@ void main() {
       final stump = [node1, node2, node3];
 
       expect(
-          () => const MajoritySplitAssessor().getAggregatedError(stump, 2),
+          () => const MajorityDecisionTreeSplitAssessor().getAggregatedError(stump, 2),
           throwsException,
       );
     });
@@ -181,7 +181,7 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajoritySplitAssessor();
+      final assessor = const MajorityDecisionTreeSplitAssessor();
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 0.5);

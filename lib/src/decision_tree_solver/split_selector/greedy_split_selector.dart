@@ -4,11 +4,11 @@ import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.d
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 
-class GreedySplitSelector implements SplitSelector {
-  GreedySplitSelector(this._assessor, this._splitter);
+class GreedyDecisionTreeSplitSelector implements DecisionTreeSplitSelector {
+  GreedyDecisionTreeSplitSelector(this._assessor, this._splitter);
 
-  final SplitAssessor _assessor;
-  final Splitter _splitter;
+  final DecisionTreeSplitAssessor _assessor;
+  final DecisionTreeSplitter _splitter;
 
   @override
   Map<DecisionTreeNode, Matrix> select(
