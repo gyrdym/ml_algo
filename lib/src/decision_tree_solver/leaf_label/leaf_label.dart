@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 
-class DecisionTreeLeafLabel with SerializableMixin {
-  DecisionTreeLeafLabel(this.value, {this.probability});
+class TreeLeafLabel with SerializableMixin {
+  TreeLeafLabel(this.value, {this.probability});
 
   final double value;
   final double probability;

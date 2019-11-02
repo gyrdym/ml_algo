@@ -2,9 +2,9 @@ import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor_t
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter_type.dart';
 
-abstract class DecisionTreeSplitterFactory {
-  DecisionTreeSplitter createByType(
-    DecisionTreeSplitterType type,
-    DecisionTreeSplitAssessorType assessorType,
+abstract class TreeSplitterFactory {
+  TreeSplitter createByType(
+    TreeSplitterType type,
+    TreeSplitAssessorType assessorType,
   );
 }

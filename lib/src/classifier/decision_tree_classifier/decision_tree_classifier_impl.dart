@@ -15,7 +15,7 @@ class DecisionTreeClassifierImpl with AssessablePredictorMixin
   @override
   final DType dtype;
 
-  final DecisionTreeSolver _solver;
+  final TreeSolver _solver;
 
   @override
   final List<String> classNames;

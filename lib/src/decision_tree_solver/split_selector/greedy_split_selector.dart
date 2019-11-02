@@ -4,19 +4,19 @@ import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.d
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart';
 import 'package:ml_linalg/matrix.dart';
 
-class GreedyDecisionTreeSplitSelector implements DecisionTreeSplitSelector {
-  GreedyDecisionTreeSplitSelector(this._assessor, this._splitter);
+class GreedyTreeSplitSelector implements TreeSplitSelector {
+  GreedyTreeSplitSelector(this._assessor, this._splitter);
 
-  final DecisionTreeSplitAssessor _assessor;
-  final DecisionTreeSplitter _splitter;
+  final TreeSplitAssessor _assessor;
+  final TreeSplitter _splitter;
 
   @override
-  Map<DecisionTreeNode, Matrix> select(
+  Map<TreeNode, Matrix> select(
       Matrix samples,
       int targetId,
       Iterable<int> featuresColumnIdxs,
       [Map<int, List<num>> columnIdToUniqueValues]) {
-    final errors = <double, List<Map<DecisionTreeNode, Matrix>>>{};
+    final errors = <double, List<Map<TreeNode, Matrix>>>{};
     featuresColumnIdxs.forEach((colIdx) {
       final uniqueValues = columnIdToUniqueValues != null
           ? columnIdToUniqueValues[colIdx]

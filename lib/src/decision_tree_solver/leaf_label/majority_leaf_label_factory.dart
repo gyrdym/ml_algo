@@ -6,20 +6,19 @@ import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label_factory.d
 import 'package:ml_linalg/matrix.dart';
 import 'package:quiver/iterables.dart' as quiver_iterables;
 
-class MajorityDecisionTreeLeafLabelFactory implements
-    DecisionTreeLeafLabelFactory {
+class MajorityTreeLeafLabelFactory implements TreeLeafLabelFactory {
 
-  MajorityDecisionTreeLeafLabelFactory(this.distributionCalculator);
+  MajorityTreeLeafLabelFactory(this.distributionCalculator);
 
   final SequenceElementsDistributionCalculator distributionCalculator;
 
   @override
-  DecisionTreeLeafLabel create(Matrix samples, int targetIdx) {
+  TreeLeafLabel create(Matrix samples, int targetIdx) {
     final outcomes = samples.getColumn(targetIdx);
     final totalRecordsCount = outcomes.length;
 
     final labelData = _getLabelData<double>(outcomes, totalRecordsCount);
-    return DecisionTreeLeafLabel(labelData.value,
+    return TreeLeafLabel(labelData.value,
         probability: labelData.probability);
   }
 

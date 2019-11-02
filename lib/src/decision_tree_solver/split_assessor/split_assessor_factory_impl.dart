@@ -3,16 +3,15 @@ import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.d
 import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor_type.dart';
 
-class DecisionTreeSplitAssessorFactoryImpl implements
-    DecisionTreeSplitAssessorFactory {
+class TreeSplitAssessorFactoryImpl implements TreeSplitAssessorFactory {
 
-  const DecisionTreeSplitAssessorFactoryImpl();
+  const TreeSplitAssessorFactoryImpl();
 
   @override
-  DecisionTreeSplitAssessor createByType(DecisionTreeSplitAssessorType type) {
+  TreeSplitAssessor createByType(TreeSplitAssessorType type) {
     switch (type) {
-      case DecisionTreeSplitAssessorType.majority:
-        return const MajorityDecisionTreeSplitAssessor();
+      case TreeSplitAssessorType.majority:
+        return const MajorityTreeSplitAssessor();
 
       default:
         throw UnsupportedError('Decision tree split assessor type $type is not '

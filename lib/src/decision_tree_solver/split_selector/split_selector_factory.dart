@@ -3,10 +3,10 @@ import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.d
 import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector_type.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter_type.dart';
 
-abstract class DecisionTreeSplitSelectorFactory {
-  DecisionTreeSplitSelector createByType(
-      DecisionTreeSplitSelectorType type,
-      DecisionTreeSplitAssessorType assessorType,
-      DecisionTreeSplitterType splitterType,
+abstract class TreeSplitSelectorFactory {
+  TreeSplitSelector createByType(
+      TreeSplitSelectorType type,
+      TreeSplitAssessorType assessorType,
+      TreeSplitterType splitterType,
   );
 }

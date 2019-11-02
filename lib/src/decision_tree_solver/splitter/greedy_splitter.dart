@@ -7,22 +7,22 @@ import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/integers.dart';
 
-class GreedyDecisionTreeSplitter implements DecisionTreeSplitter {
-  GreedyDecisionTreeSplitter(this._assessor, this._numericalSplitter,
+class GreedyTreeSplitter implements TreeSplitter {
+  GreedyTreeSplitter(this._assessor, this._numericalSplitter,
       this._nominalSplitter);
 
-  final DecisionTreeSplitAssessor _assessor;
-  final NumericalDecisionTreeSplitter _numericalSplitter;
-  final NominalDecisionTreeSplitter _nominalSplitter;
+  final TreeSplitAssessor _assessor;
+  final NumericalTreeSplitter _numericalSplitter;
+  final NominalTreeSplitter _nominalSplitter;
 
   @override
-  Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
+  Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx,
       int targetId, [List<num> uniqueValues]) =>
       uniqueValues != null
           ? _createByNominalValues(samples, splittingIdx, uniqueValues)
           : _createByNumericalValue(samples, splittingIdx, targetId);
 
-  Map<DecisionTreeNode, Matrix> _createByNominalValues(Matrix samples,
+  Map<TreeNode, Matrix> _createByNominalValues(Matrix samples,
       int splittingIdx, List<num> values) {
     if (splittingIdx < 0 || splittingIdx > samples.columnsNum) {
       throw Exception('Unappropriate range given: $splittingIdx, '
@@ -32,9 +32,9 @@ class GreedyDecisionTreeSplitter implements DecisionTreeSplitter {
     return _nominalSplitter.split(samples, splittingIdx, values);
   }
 
-  Map<DecisionTreeNode, Matrix> _createByNumericalValue(Matrix samples,
+  Map<TreeNode, Matrix> _createByNumericalValue(Matrix samples,
       int splittingIdx, int targetId) {
-    final errors = <double, List<Map<DecisionTreeNode, Matrix>>>{};
+    final errors = <double, List<Map<TreeNode, Matrix>>>{};
     final sortedRows = samples.sort((row) => row[splittingIdx], Axis.rows).rows;
     var prevValue = sortedRows.first[splittingIdx];
 

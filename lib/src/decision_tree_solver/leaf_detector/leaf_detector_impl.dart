@@ -2,11 +2,11 @@ import 'package:ml_algo/src/decision_tree_solver/leaf_detector/leaf_detector.dar
 import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 
-class DecisionTreeLeafDetectorImpl implements DecisionTreeLeafDetector {
-  DecisionTreeLeafDetectorImpl(this._assessor, this._minErrorOnNode,
+class TreeLeafDetectorImpl implements TreeLeafDetector {
+  TreeLeafDetectorImpl(this._assessor, this._minErrorOnNode,
       this._minSamplesCount, this._maxDepth);
 
-  final DecisionTreeSplitAssessor _assessor;
+  final TreeSplitAssessor _assessor;
   final int _minSamplesCount;
   final double _minErrorOnNode;
   final int _maxDepth;

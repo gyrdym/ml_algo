@@ -7,28 +7,29 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/splitter.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter_type.dart';
 
-class DecisionTreeSplitterFactoryImpl implements DecisionTreeSplitterFactory {
-  DecisionTreeSplitterFactoryImpl(
+class TreeSplitterFactoryImpl implements TreeSplitterFactory {
+
+  TreeSplitterFactoryImpl(
       this._assessorFactory,
       this._nominalSplitterFactory,
       this._numericalSplitterFactory,
   );
 
-  final DecisionTreeSplitAssessorFactory _assessorFactory;
-  final NominalDecisionTreeSplitterFactory _nominalSplitterFactory;
-  final NumericalDecisionTreeSplitterFactory _numericalSplitterFactory;
+  final TreeSplitAssessorFactory _assessorFactory;
+  final NominalTreeSplitterFactory _nominalSplitterFactory;
+  final NumericalTreeSplitterFactory _numericalSplitterFactory;
 
   @override
-  DecisionTreeSplitter createByType(DecisionTreeSplitterType type,
-      DecisionTreeSplitAssessorType assessorType) {
+  TreeSplitter createByType(TreeSplitterType type,
+      TreeSplitAssessorType assessorType) {
 
     final assessor = _assessorFactory.createByType(assessorType);
     final numericalSplitter = _numericalSplitterFactory.create();
     final nominalSplitter = _nominalSplitterFactory.create();
 
     switch (type) {
-      case DecisionTreeSplitterType.greedy:
-        return GreedyDecisionTreeSplitter(assessor, numericalSplitter,
+      case TreeSplitterType.greedy:
+        return GreedyTreeSplitter(assessor, numericalSplitter,
             nominalSplitter);
 
       default:

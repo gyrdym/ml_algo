@@ -4,13 +4,13 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 void testTreeNode(
-    DecisionTreeNode node,
+    TreeNode node,
     {
       bool shouldBeLeaf,
       double expectedSplittingValue,
       int expectedSplittingColumnIdx,
       int expectedChildrenLength,
-      DecisionTreeLeafLabel expectedLabel,
+      TreeLeafLabel expectedLabel,
       Map<Vector, bool> samplesToCheck,
     }
 ) {
@@ -28,8 +28,8 @@ void testTreeNode(
   });
 }
 
-void testLeafLabel(DecisionTreeLeafLabel label,
-    DecisionTreeLeafLabel expectedLabel) {
+void testLeafLabel(TreeLeafLabel label,
+    TreeLeafLabel expectedLabel) {
   expect(label.value, equals(expectedLabel.value));
   expect(label.probability, equals(expectedLabel.probability));
 }

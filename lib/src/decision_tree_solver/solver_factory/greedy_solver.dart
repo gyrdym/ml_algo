@@ -10,18 +10,18 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/num
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:quiver/iterables.dart';
 
-DecisionTreeSolver createGreedySolver(
+TreeSolver createGreedySolver(
     DataFrame samples,
     String targetName,
     double minErrorOnNode,
     int minSamplesCountOnNode,
     int maxDepth,
 ) {
-  final assessor = const MajorityDecisionTreeSplitAssessor();
+  final assessor = const MajorityTreeSplitAssessor();
 
-  final numericalSplitter = const NumericalDecisionTreeSplitterImpl();
-  final nominalSplitter = const NominalDecisionTreeSplitterImpl();
-  final splitter = GreedyDecisionTreeSplitter(assessor, numericalSplitter, nominalSplitter);
+  final numericalSplitter = const NumericalTreeSplitterImpl();
+  final nominalSplitter = const NominalTreeSplitterImpl();
+  final splitter = GreedyTreeSplitter(assessor, numericalSplitter, nominalSplitter);
 
   final distributionCalculator =
     const SequenceElementsDistributionCalculatorImpl();
@@ -45,12 +45,12 @@ DecisionTreeSolver createGreedySolver(
       ),
   );
 
-  final leafDetector = DecisionTreeLeafDetectorImpl(assessor, minErrorOnNode,
+  final leafDetector = TreeLeafDetectorImpl(assessor, minErrorOnNode,
     minSamplesCountOnNode, maxDepth);
-  final leafLabelFactory = MajorityDecisionTreeLeafLabelFactory(distributionCalculator);
-  final splitSelector = GreedyDecisionTreeSplitSelector(assessor, splitter);
+  final leafLabelFactory = MajorityTreeLeafLabelFactory(distributionCalculator);
+  final splitSelector = GreedyTreeSplitSelector(assessor, splitter);
 
-  return DecisionTreeSolver(
+  return TreeSolver(
     samples.toMatrix(),
     featuresIndexedSeries.map((indexed) => indexed.index),
     targetIdx,

@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import '../../test_utils.dart';
 
 void main() {
-  group('NumericalDecisionTreeSplitterImpl', () {
+  group('NumericalTreeSplitterImpl', () {
     test('should split given matrix into two parts: first part should contain '
         'values less than the splitting value, right part should contain '
         'values greater than the splitting value', () {
@@ -19,7 +19,7 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 10.0;
-      final splitter = const NumericalDecisionTreeSplitterImpl();
+      final splitter = const NumericalTreeSplitterImpl();
       final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([
@@ -61,7 +61,7 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 10.0;
-      final splitter = const NumericalDecisionTreeSplitterImpl();
+      final splitter = const NumericalTreeSplitterImpl();
       final actual = splitter.split(samples, splittingIdx,
           splittingValue);
 
@@ -102,7 +102,7 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 0.0;
-      final splitter = const NumericalDecisionTreeSplitterImpl();
+      final splitter = const NumericalTreeSplitterImpl();
       final actual = splitter.split(samples, splittingIdx,
           splittingValue);
 
@@ -144,7 +144,7 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 1000.0;
-      final splitter = const NumericalDecisionTreeSplitterImpl();
+      final splitter = const NumericalTreeSplitterImpl();
       final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([
@@ -184,7 +184,7 @@ void main() {
       ]);
       final splittingIdx = 0;
       final splittingValue = 2.0;
-      final splitter = const NumericalDecisionTreeSplitterImpl();
+      final splitter = const NumericalTreeSplitterImpl();
       final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([
@@ -225,7 +225,7 @@ void main() {
       ]);
       final splittingIdx = 3;
       final splittingValue = 20.0;
-      final splitter = const NumericalDecisionTreeSplitterImpl();
+      final splitter = const NumericalTreeSplitterImpl();
       final actual = splitter.split(samples, splittingIdx, splittingValue);
 
       expect(actual.values, equals([

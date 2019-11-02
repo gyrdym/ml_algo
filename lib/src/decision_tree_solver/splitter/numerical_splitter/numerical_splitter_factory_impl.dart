@@ -2,12 +2,12 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/num
 import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/numerical_splitter_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/numerical_splitter_impl.dart';
 
-class NumericalDecisionTreeSplitterFactoryImpl implements
-    NumericalDecisionTreeSplitterFactory {
+class NumericalTreeSplitterFactoryImpl implements
+    NumericalTreeSplitterFactory {
 
-  const NumericalDecisionTreeSplitterFactoryImpl();
+  const NumericalTreeSplitterFactoryImpl();
 
   @override
-  NumericalDecisionTreeSplitter create() =>
-      const NumericalDecisionTreeSplitterImpl();
+  NumericalTreeSplitter create() =>
+      const NumericalTreeSplitterImpl();
 }

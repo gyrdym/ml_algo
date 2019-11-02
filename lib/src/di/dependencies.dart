@@ -95,34 +95,34 @@ Injector get dependencies =>
       ..registerSingleton<SequenceElementsDistributionCalculatorFactory>(
               (_) => const SequenceElementsDistributionCalculatorFactoryImpl())
 
-      ..registerSingleton<NominalDecisionTreeSplitterFactory>(
-              (_) => const NominalDecisionTreeSplitterFactoryImpl())
+      ..registerSingleton<NominalTreeSplitterFactory>(
+              (_) => const NominalTreeSplitterFactoryImpl())
 
-      ..registerSingleton<NumericalDecisionTreeSplitterFactory>(
-              (_) => const NumericalDecisionTreeSplitterFactoryImpl())
+      ..registerSingleton<NumericalTreeSplitterFactory>(
+              (_) => const NumericalTreeSplitterFactoryImpl())
 
-      ..registerSingleton<DecisionTreeSplitAssessorFactory>(
-              (_) => const DecisionTreeSplitAssessorFactoryImpl())
+      ..registerSingleton<TreeSplitAssessorFactory>(
+              (_) => const TreeSplitAssessorFactoryImpl())
 
-      ..registerSingleton<DecisionTreeSplitterFactory>(
-              (injector) => DecisionTreeSplitterFactoryImpl(
-                injector.getDependency<DecisionTreeSplitAssessorFactory>(),
-                injector.getDependency<NominalDecisionTreeSplitterFactory>(),
-                injector.getDependency<NumericalDecisionTreeSplitterFactory>(),
+      ..registerSingleton<TreeSplitterFactory>(
+              (injector) => TreeSplitterFactoryImpl(
+                injector.getDependency<TreeSplitAssessorFactory>(),
+                injector.getDependency<NominalTreeSplitterFactory>(),
+                injector.getDependency<NumericalTreeSplitterFactory>(),
               ))
 
-      ..registerSingleton<DecisionTreeSplitSelectorFactory>(
-              (injector) => DecisionTreeSplitSelectorFactoryImpl(
-                injector.getDependency<DecisionTreeSplitAssessorFactory>(),
-                injector.getDependency<DecisionTreeSplitterFactory>(),
+      ..registerSingleton<TreeSplitSelectorFactory>(
+              (injector) => TreeSplitSelectorFactoryImpl(
+                injector.getDependency<TreeSplitAssessorFactory>(),
+                injector.getDependency<TreeSplitterFactory>(),
               ))
       
-      ..registerSingleton<DecisionTreeLeafDetectorFactory>(
-              (injector) => DecisionTreeLeafDetectorFactoryImpl(
-                injector.getDependency<DecisionTreeSplitAssessorFactory>(),
+      ..registerSingleton<TreeLeafDetectorFactory>(
+              (injector) => TreeLeafDetectorFactoryImpl(
+                injector.getDependency<TreeSplitAssessorFactory>(),
               ))
 
-      ..registerSingleton<DecisionTreeLeafLabelFactoryFactory>(
-              (injector) => DecisionTreeLeafLabelFactoryFactoryImpl(
+      ..registerSingleton<TreeLeafLabelFactoryFactory>(
+              (injector) => TreeLeafLabelFactoryFactoryImpl(
                 injector.getDependency<SequenceElementsDistributionCalculatorFactory>(),
               ));

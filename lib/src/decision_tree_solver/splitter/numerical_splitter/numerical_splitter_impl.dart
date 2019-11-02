@@ -3,13 +3,12 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/numerical_splitter/num
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class NumericalDecisionTreeSplitterImpl implements
-    NumericalDecisionTreeSplitter {
+class NumericalTreeSplitterImpl implements NumericalTreeSplitter {
 
-  const NumericalDecisionTreeSplitterImpl();
+  const NumericalTreeSplitterImpl();
 
   @override
-  Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
+  Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx,
       double splittingValue) {
     final left = <Vector>[];
     final right = <Vector>[];
@@ -22,7 +21,7 @@ class NumericalDecisionTreeSplitterImpl implements
         : right.add(row));
 
     final createNode = (TestSamplePredicate splittingClause) =>
-        DecisionTreeNode(splittingClause, splittingValue, splittingIdx,
+        TreeNode(splittingClause, splittingValue, splittingIdx,
             null, null);
 
     final leftNode = createNode(splittingClause);
