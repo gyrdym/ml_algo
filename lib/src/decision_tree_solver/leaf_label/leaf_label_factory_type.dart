@@ -1,3 +1,3 @@
-enum DecisionTreeLeafLabelFactoryType {
+enum TreeLeafLabelFactoryType {
   majority,
 }

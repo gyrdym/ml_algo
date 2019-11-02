@@ -2,12 +2,12 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nomin
 import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nominal_splitter_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nominal_splitter_impl.dart';
 
-class NominalDecisionTreeSplitterFactoryImpl implements
-    NominalDecisionTreeSplitterFactory {
+class NominalTreeSplitterFactoryImpl implements
+    NominalTreeSplitterFactory {
 
-  const NominalDecisionTreeSplitterFactoryImpl();
+  const NominalTreeSplitterFactoryImpl();
 
   @override
-  NominalDecisionTreeSplitter create() =>
-      const NominalDecisionTreeSplitterImpl();
+  NominalTreeSplitter create() =>
+      const NominalTreeSplitterImpl();
 }

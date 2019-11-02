@@ -80,32 +80,26 @@ class DataSplitterFactoryMock extends Mock implements DataSplitterFactory {}
 
 class AssessableMock extends Mock implements Assessable {}
 
-class DecisionTreeSplitAssessorMock extends Mock implements
-    DecisionTreeSplitAssessor {}
+class TreeSplitAssessorMock extends Mock implements TreeSplitAssessor {}
 
-class DecisionTreeSplitterMock extends Mock implements DecisionTreeSplitter {}
+class TreeSplitterMock extends Mock implements TreeSplitter {}
 
-class NumericalDecisionTreeSplitterMock extends Mock implements
-    NumericalDecisionTreeSplitter {}
+class NumericalTreeSplitterMock extends Mock implements NumericalTreeSplitter {}
 
-class NominalDecisionTreeSplitterMock extends Mock implements
-    NominalDecisionTreeSplitter {}
+class NominalTreeSplitterMock extends Mock implements NominalTreeSplitter {}
 
 class DistributionCalculatorMock extends Mock implements
     SequenceElementsDistributionCalculator {}
 
-class DecisionTreeLeafDetectorMock extends Mock implements
-    DecisionTreeLeafDetector {}
+class TreeLeafDetectorMock extends Mock implements TreeLeafDetector {}
 
-class DecisionTreeLeafLabelFactoryMock extends Mock implements
-    DecisionTreeLeafLabelFactory {}
+class TreeLeafLabelFactoryMock extends Mock implements TreeLeafLabelFactory {}
 
-class DecisionTreeSplitSelectorMock extends Mock implements
-    DecisionTreeSplitSelector {}
+class TreeSplitSelectorMock extends Mock implements TreeSplitSelector {}
 
-class DecisionTreeNodeMock extends Mock implements DecisionTreeNode {}
+class TreeNodeMock extends Mock implements TreeNode {}
 
-class DecisionTreeSolverMock extends Mock implements DecisionTreeSolver {}
+class TreeSolverMock extends Mock implements TreeSolver {}
 
 class KernelFunctionFactoryMock extends Mock implements KernelFactory {}
 

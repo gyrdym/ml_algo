@@ -6,8 +6,8 @@ import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.d
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class DecisionTreeSolver {
-  DecisionTreeSolver(
+class TreeSolver {
+  TreeSolver(
       Matrix samples,
       this._featureIndices,
       this._targetIdx,
@@ -22,17 +22,17 @@ class DecisionTreeSolver {
   final Iterable<int> _featureIndices;
   final int _targetIdx;
   final Map<int, List<num>> _featureToUniqueValues;
-  final DecisionTreeLeafDetector _leafDetector;
-  final DecisionTreeLeafLabelFactory _leafLabelFactory;
-  final DecisionTreeSplitSelector _splitSelector;
+  final TreeLeafDetector _leafDetector;
+  final TreeLeafLabelFactory _leafLabelFactory;
+  final TreeSplitSelector _splitSelector;
 
-  DecisionTreeNode get root => _root;
-  DecisionTreeNode _root;
+  TreeNode get root => _root;
+  TreeNode _root;
 
-  DecisionTreeLeafLabel getLabelForSample(Vector sample) =>
+  TreeLeafLabel getLabelForSample(Vector sample) =>
       _getLabelForSample(sample, _root);
 
-  DecisionTreeNode _createNode(
+  TreeNode _createNode(
       Matrix samples,
       num splittingValue,
       int splittingIdx,
@@ -42,7 +42,7 @@ class DecisionTreeSolver {
   ) {
     if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, level)) {
       final label = _leafLabelFactory.create(samples, _targetIdx);
-      return DecisionTreeNode(
+      return TreeNode(
         splittingClause,
         splittingValue,
         splittingIdx,
@@ -82,7 +82,7 @@ class DecisionTreeSolver {
           newLevel);
     });
 
-    return DecisionTreeNode(
+    return TreeNode(
         splittingClause,
         splittingValue,
         splittingIdx,
@@ -91,8 +91,8 @@ class DecisionTreeSolver {
         level);
   }
 
-  DecisionTreeLeafLabel _getLabelForSample(Vector sample,
-      DecisionTreeNode node) {
+  TreeLeafLabel _getLabelForSample(Vector sample,
+      TreeNode node) {
     if (node.isLeaf) {
       return node.label;
     }

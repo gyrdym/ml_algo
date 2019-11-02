@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  group('GreedyDecisionTreeSplitSelector', () {
+  group('GreedyTreeSplitSelector', () {
     test('should find the best split', () {
       final samples = Matrix.fromList([
         [10, 20, 30, 40, 1],
@@ -22,29 +22,29 @@ void main() {
       final bestSplitIdx = 1;
 
       final worstSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
-        DecisionTreeNodeMock(): Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
+        TreeNodeMock(): Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
+        TreeNodeMock(): Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
       };
 
       final worseSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([[5, 6, 7, 8, -1, -1, 0]]),
-        DecisionTreeNodeMock(): Matrix.fromList([[50, 60, 70, 80, -1, -1, 0]]),
+        TreeNodeMock(): Matrix.fromList([[5, 6, 7, 8, -1, -1, 0]]),
+        TreeNodeMock(): Matrix.fromList([[50, 60, 70, 80, -1, -1, 0]]),
       };
 
       final goodSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [15, 16, 17, 18, -1, 0, 0],
         ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [150, 160, 170, 180, -1, 0, 0],
         ]),
       };
 
       final bestSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [125, 126, 127, 128, 0, 0, 0],
         ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [1500, 1600, 1700, 1800, 0, 0, 0],
         ]),
       };
@@ -52,8 +52,8 @@ void main() {
       final featuresIdxs = [
         worstSplitIdx, bestSplitIdx, worseSplitIdx, goodSplitIdx,
       ];
-      final assessor = DecisionTreeSplitAssessorMock();
-      final splitter = DecisionTreeSplitterMock();
+      final assessor = TreeSplitAssessorMock();
+      final splitter = TreeSplitterMock();
 
       when(splitter.split(samples, worstSplitIdx, targetColIdx))
           .thenReturn(worstSplit);
@@ -73,7 +73,7 @@ void main() {
       when(assessor.getAggregatedError(bestSplit.values,
           targetColIdx)).thenReturn(0.1);
 
-      final selector = GreedyDecisionTreeSplitSelector(assessor, splitter);
+      final selector = GreedyTreeSplitSelector(assessor, splitter);
       final actualSplit = selector
           .select(samples, targetColIdx, featuresIdxs);
 
@@ -96,27 +96,27 @@ void main() {
       final bestFeatureColIdx = 2;
 
       final goodSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [1, 2, 3, 4, -1, -1, -1],
         ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [10, 20, 30, 40, -1, -1, -1],
         ]),
       };
 
       final bestSplit = {
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [15, 16, 17, 18, -1, 0, 0],
         ]),
-        DecisionTreeNodeMock(): Matrix.fromList([
+        TreeNodeMock(): Matrix.fromList([
           [150, 160, 170, 180, -1, 0, 0],
         ]),
       };
 
       final featuresIdxs = {goodFeatureColIdx, bestFeatureColIdx};
 
-      final assessor = DecisionTreeSplitAssessorMock();
-      final splitter = DecisionTreeSplitterMock();
+      final assessor = TreeSplitAssessorMock();
+      final splitter = TreeSplitterMock();
       final categoricalValues = [1.0, 2.0, 3.0];
       final colIdxToUniqueValues = {ignoredFeatureColIdx: categoricalValues};
 
@@ -130,7 +130,7 @@ void main() {
       when(assessor.getAggregatedError(bestSplit.values,
           targetColIdx)).thenReturn(0.1);
 
-      final selector = GreedyDecisionTreeSplitSelector(assessor, splitter);
+      final selector = GreedyTreeSplitSelector(assessor, splitter);
       final stump = selector.select(observations, targetColIdx,
           featuresIdxs, colIdxToUniqueValues);
 

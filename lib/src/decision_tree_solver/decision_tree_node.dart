@@ -4,8 +4,8 @@ import 'package:ml_linalg/vector.dart';
 
 typedef TestSamplePredicate = bool Function(Vector sample);
 
-class DecisionTreeNode with SerializableMixin {
-  DecisionTreeNode(
+class TreeNode with SerializableMixin {
+  TreeNode(
       this.testSample,
       this.splittingValue,
       this.splittingIdx,
@@ -16,8 +16,8 @@ class DecisionTreeNode with SerializableMixin {
       ]
   );
 
-  final List<DecisionTreeNode> children;
-  final DecisionTreeLeafLabel label;
+  final List<TreeNode> children;
+  final TreeLeafLabel label;
   final TestSamplePredicate testSample;
   final num splittingValue;
   final int splittingIdx;

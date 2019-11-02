@@ -4,7 +4,7 @@ import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('DecisionTreeSolver', () {
+  group('TreeSolver', () {
     group('majorityBased', () {
       final dataFrame = DataFrame.fromSeries([
         Series('col_1', <int>[10, 90, 23, 55]),

@@ -1,3 +1,3 @@
-enum DecisionTreeSplitSelectorType {
+enum TreeSplitSelectorType {
   greedy,
 }

@@ -7,27 +7,27 @@ import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector_t
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/splitter_type.dart';
 
-class DecisionTreeSplitSelectorFactoryImpl implements DecisionTreeSplitSelectorFactory {
-  DecisionTreeSplitSelectorFactoryImpl(
+class TreeSplitSelectorFactoryImpl implements TreeSplitSelectorFactory {
+  TreeSplitSelectorFactoryImpl(
     this._assessorFactory,
     this._splitterFactory,
   );
 
-  final DecisionTreeSplitAssessorFactory _assessorFactory;
-  final DecisionTreeSplitterFactory _splitterFactory;
+  final TreeSplitAssessorFactory _assessorFactory;
+  final TreeSplitterFactory _splitterFactory;
 
   @override
-  DecisionTreeSplitSelector createByType(
-      DecisionTreeSplitSelectorType type,
-      DecisionTreeSplitAssessorType assessorType,
-      DecisionTreeSplitterType splitterType,
+  TreeSplitSelector createByType(
+      TreeSplitSelectorType type,
+      TreeSplitAssessorType assessorType,
+      TreeSplitterType splitterType,
   ) {
     final assessor = _assessorFactory.createByType(assessorType);
     final splitter = _splitterFactory.createByType(splitterType, assessorType);
 
     switch(type) {
-      case DecisionTreeSplitSelectorType.greedy:
-        return GreedyDecisionTreeSplitSelector(assessor, splitter);
+      case TreeSplitSelectorType.greedy:
+        return GreedyTreeSplitSelector(assessor, splitter);
 
       default:
         throw UnsupportedError('Decision tree splitter type $type is '

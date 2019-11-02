@@ -4,23 +4,23 @@ import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label_factory_f
 import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label_factory_type.dart';
 import 'package:ml_algo/src/decision_tree_solver/leaf_label/majority_leaf_label_factory.dart';
 
-class DecisionTreeLeafLabelFactoryFactoryImpl implements
-    DecisionTreeLeafLabelFactoryFactory {
+class TreeLeafLabelFactoryFactoryImpl implements
+    TreeLeafLabelFactoryFactory {
 
-  DecisionTreeLeafLabelFactoryFactoryImpl(this._distributionCalculatorFactory);
+  TreeLeafLabelFactoryFactoryImpl(this._distributionCalculatorFactory);
 
   final SequenceElementsDistributionCalculatorFactory
     _distributionCalculatorFactory;
 
   @override
-  DecisionTreeLeafLabelFactory createByType(
-      DecisionTreeLeafLabelFactoryType type) {
+  TreeLeafLabelFactory createByType(
+      TreeLeafLabelFactoryType type) {
 
     final distributionCalculator = _distributionCalculatorFactory.create();
 
     switch(type) {
-      case DecisionTreeLeafLabelFactoryType.majority:
-        return MajorityDecisionTreeLeafLabelFactory(distributionCalculator);
+      case TreeLeafLabelFactoryType.majority:
+        return MajorityTreeLeafLabelFactory(distributionCalculator);
 
       default:
         throw UnsupportedError('Decision tree leaf label factory type $type '

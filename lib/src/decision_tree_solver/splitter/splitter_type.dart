@@ -1,3 +1,3 @@
-enum DecisionTreeSplitterType {
-  greedy
+enum TreeSplitterType {
+  greedy,
 }

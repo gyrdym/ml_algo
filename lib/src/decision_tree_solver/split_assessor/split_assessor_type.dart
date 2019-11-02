@@ -1,3 +1,3 @@
-enum DecisionTreeSplitAssessorType {
+enum TreeSplitAssessorType {
   majority,
 }

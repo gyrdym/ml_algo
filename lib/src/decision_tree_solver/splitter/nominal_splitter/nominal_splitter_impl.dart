@@ -3,11 +3,11 @@ import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nomin
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class NominalDecisionTreeSplitterImpl implements NominalDecisionTreeSplitter {
-  const NominalDecisionTreeSplitterImpl();
+class NominalTreeSplitterImpl implements NominalTreeSplitter {
+  const NominalTreeSplitterImpl();
 
   @override
-  Map<DecisionTreeNode, Matrix> split(Matrix samples, int splittingIdx,
+  Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx,
       List<num> uniqueValues) =>
       Map.fromEntries(uniqueValues.map((value) {
         final splittingClause =
@@ -16,7 +16,7 @@ class NominalDecisionTreeSplitterImpl implements NominalDecisionTreeSplitter {
         final foundRows = samples.rows.where(splittingClause)
             .toList(growable: false);
 
-        final node = DecisionTreeNode(splittingClause, value,
+        final node = TreeNode(splittingClause, value,
             splittingIdx, null, null);
 
         return MapEntry(node, Matrix.fromRows(foundRows));

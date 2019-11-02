@@ -1,6 +1,6 @@
 import 'package:ml_linalg/matrix.dart';
 
-abstract class DecisionTreeSplitAssessor {
+abstract class TreeSplitAssessor {
   /// Returns error on the whole split subset
   double getAggregatedError(Iterable<Matrix> splitObservations,
       int targetId);
