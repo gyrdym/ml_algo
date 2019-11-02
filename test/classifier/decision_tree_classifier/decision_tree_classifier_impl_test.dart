@@ -93,9 +93,9 @@ void main() {
       expect(
           predictedLabels.toMatrix(),
           iterable2dAlmostEqualTo([
-            [label1.probability],
-            [label2.probability],
-            [label3.probability],
+            [label1.probability.toDouble()],
+            [label2.probability.toDouble()],
+            [label3.probability.toDouble()],
           ]),
       );
     });
