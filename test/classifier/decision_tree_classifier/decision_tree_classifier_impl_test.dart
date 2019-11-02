@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
-import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
-import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_solver/tree_solver.dart';
+import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
