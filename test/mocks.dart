@@ -8,7 +8,7 @@ import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/dis
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/tree_solver/tree_node.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver.dart';
+import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
 import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor.dart';
@@ -99,7 +99,7 @@ class TreeSplitSelectorMock extends Mock implements TreeSplitSelector {}
 
 class TreeNodeMock extends Mock implements TreeNode {}
 
-class TreeSolverMock extends Mock implements TreeSolver {}
+class TreeSolverMock extends Mock implements DecisionTreeSolver {}
 
 class KernelFunctionFactoryMock extends Mock implements KernelFactory {}
 

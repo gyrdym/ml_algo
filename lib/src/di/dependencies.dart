@@ -44,6 +44,8 @@ import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_impl.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/tree_solver_factory.dart';
+import 'package:ml_algo/src/tree_solver/tree_solver_factory_impl.dart';
 
 Injector get dependencies =>
     injector ??= Injector()
@@ -125,4 +127,11 @@ Injector get dependencies =>
       ..registerSingleton<TreeLeafLabelFactoryFactory>(
               (injector) => TreeLeafLabelFactoryFactoryImpl(
                 injector.getDependency<SequenceElementsDistributionCalculatorFactory>(),
+              ))
+
+      ..registerSingleton<TreeSolverFactory>(
+              (injector) => TreeSolverFactoryImpl(
+                  injector.getDependency<TreeLeafDetectorFactory>(),
+                  injector.getDependency<TreeLeafLabelFactoryFactory>(),
+                  injector.getDependency<TreeSplitSelectorFactory>(),
               ));

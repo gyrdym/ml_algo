@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_impl.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver.dart';
+import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
 import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector_impl.dart';
 import 'package:ml_algo/src/tree_solver/leaf_label/majority_leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_solver/split_assessor/majority_split_assessor.dart';
@@ -10,7 +10,7 @@ import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_sp
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:quiver/iterables.dart';
 
-TreeSolver createGreedySolver(
+DecisionTreeSolver createGreedySolver(
     DataFrame samples,
     String targetName,
     double minErrorOnNode,
@@ -50,7 +50,7 @@ TreeSolver createGreedySolver(
   final leafLabelFactory = MajorityTreeLeafLabelFactory(distributionCalculator);
   final splitSelector = GreedyTreeSplitSelector(assessor, splitter);
 
-  return TreeSolver(
+  return DecisionTreeSolver(
     samples.toMatrix(),
     featuresIndexedSeries.map((indexed) => indexed.index),
     targetIdx,
