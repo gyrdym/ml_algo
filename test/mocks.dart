@@ -5,6 +5,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_fac
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_factory.dart';
@@ -94,6 +95,9 @@ class NominalTreeSplitterMock extends Mock implements NominalTreeSplitter {}
 
 class DistributionCalculatorMock extends Mock implements
     SequenceElementsDistributionCalculator {}
+
+class DistributionCalculatorFactoryMock extends Mock implements
+    SequenceElementsDistributionCalculatorFactory {}
 
 class TreeLeafDetectorMock extends Mock implements TreeLeafDetector {}
 
@@ -252,9 +256,17 @@ SoftmaxRegressorFactory createSoftmaxRegressorFactoryMock(
   return factory;
 }
 
-TreeSplitAssessorFactory createTreeSplitAssessorFactory(
+TreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
     TreeSplitAssessor splitAssessor) {
   final factory = TreeSplitAssessorFactoryMock();
   when(factory.createByType(any)).thenReturn(splitAssessor);
+  return factory;
+}
+
+SequenceElementsDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
+  SequenceElementsDistributionCalculator calculator,
+) {
+  final factory = DistributionCalculatorFactoryMock();
+  when(factory.create()).thenReturn(calculator);
   return factory;
 }

@@ -9,7 +9,7 @@ import '../../mocks.dart';
 void main() {
   group('TreeLeafDetectorFactoryImpl', () {
     final splitAssessorMock = TreeSplitAssessorMock();
-    final splitAssessorFactoryMock = createTreeSplitAssessorFactory(
+    final splitAssessorFactoryMock = createTreeSplitAssessorFactoryMock(
         splitAssessorMock);
     final factory = TreeLeafDetectorFactoryImpl(splitAssessorFactoryMock);
 

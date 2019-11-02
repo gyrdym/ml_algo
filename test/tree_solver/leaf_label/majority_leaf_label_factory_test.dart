@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 import '../../mocks.dart';
 
 void main() {
-  group('MajorityLeafLabelFactory', () {
+  group('MajorityTreeLeafLabelFactory', () {
     test('should create decision tree leaf label - label should be a majority '
         'class label among the whole observation matrix', () {
 
