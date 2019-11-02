@@ -1,7 +1,7 @@
-import 'package:ml_algo/src/decision_tree_solver/decision_tree_leaf_label.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_node.dart';
 import 'package:ml_algo/src/decision_tree_solver/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/decision_tree_solver/leaf_label_factory/leaf_label_factory.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';

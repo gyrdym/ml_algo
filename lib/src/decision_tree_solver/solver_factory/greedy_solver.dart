@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_impl.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
 import 'package:ml_algo/src/decision_tree_solver/leaf_detector/leaf_detector_impl.dart';
-import 'package:ml_algo/src/decision_tree_solver/leaf_label_factory/majority_leaf_label_factory.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_label/majority_leaf_label_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/split_assessor/majority_split_assessor.dart';
 import 'package:ml_algo/src/decision_tree_solver/split_selector/greedy_split_selector.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/greedy_splitter.dart';

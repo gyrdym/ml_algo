@@ -1,8 +1,8 @@
 import 'dart:collection';
 
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
-import 'package:ml_algo/src/decision_tree_solver/decision_tree_leaf_label.dart';
-import 'package:ml_algo/src/decision_tree_solver/leaf_label_factory/leaf_label_factory.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:quiver/iterables.dart' as quiver_iterables;
 

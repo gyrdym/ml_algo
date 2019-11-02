@@ -10,7 +10,7 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_node.dart';
 import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
 import 'package:ml_algo/src/decision_tree_solver/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/decision_tree_solver/leaf_label_factory/leaf_label_factory.dart';
+import 'package:ml_algo/src/decision_tree_solver/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/decision_tree_solver/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/decision_tree_solver/split_selector/split_selector.dart';
 import 'package:ml_algo/src/decision_tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
