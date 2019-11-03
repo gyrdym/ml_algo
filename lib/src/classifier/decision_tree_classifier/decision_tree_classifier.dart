@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
-import 'package:ml_algo/src/tree_solver/solver_factory/greedy_solver.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/tree_solver/_helpers/create_decision_tree_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 
@@ -41,7 +41,7 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
     int maxDepth,
     DType dtype = DType.float32,
   }) {
-    final solver = createGreedySolver(
+    final solver = createDecisionTreeSolver(
       fittingData,
       targetName,
       minError,
