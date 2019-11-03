@@ -1,6 +1,5 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
-import 'package:ml_algo/src/decision_tree_solver/solver_factory/greedy_solver.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/_helpers/create_decision_tree_classifier.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -16,10 +15,10 @@ import 'package:ml_linalg/dtype.dart';
 abstract class DecisionTreeClassifier implements Classifier, Assessable {
   /// Parameters:
   ///
-  /// [fittingData] A [DataFrame] with observations, that will be used by the
+  /// [trainData] A [DataFrame] with observations, that will be used by the
   /// classifier to learn a decision tree. Must contain [targetName] column.
   ///
-  /// [targetName] A name of a column in [fittingData] that contains class
+  /// [targetName] A name of a column in [trainData] that contains class
   /// labels
   ///
   /// [minError] A value from range 0..1 (both inclusive). The value denotes a
@@ -34,21 +33,18 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
   ///
   /// [maxDepth] A maximum number of decision tree levels.
   factory DecisionTreeClassifier(
-      DataFrame fittingData,
+      DataFrame trainData,
       String targetName, {
-    double minError,
+    num minError,
     int minSamplesCount,
     int maxDepth,
     DType dtype = DType.float32,
-  }) {
-    final solver = createGreedySolver(
-      fittingData,
-      targetName,
-      minError,
-      minSamplesCount,
-      maxDepth,
-    );
-
-    return DecisionTreeClassifierImpl(solver, targetName, dtype);
-  }
+  }) => createDecisionTreeClassifier(
+    trainData,
+    targetName,
+    minError,
+    minSamplesCount,
+    maxDepth,
+    dtype,
+  );
 }
