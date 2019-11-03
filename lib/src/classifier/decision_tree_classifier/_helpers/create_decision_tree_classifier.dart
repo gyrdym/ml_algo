@@ -28,6 +28,7 @@ DecisionTreeClassifier createDecisionTreeClassifier(
     minError,
     minSamplesCount,
     maxDepth,
+    dtype,
   );
 
   return dependencies

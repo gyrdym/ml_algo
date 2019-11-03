@@ -7,6 +7,7 @@ import 'package:ml_algo/src/tree_solver/tree_solver.dart';
 import 'package:ml_algo/src/tree_solver/tree_solver_factory.dart';
 import 'package:ml_algo/src/tree_solver/tree_solver_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:quiver/iterables.dart';
 
 TreeSolver createDecisionTreeSolver(
@@ -15,6 +16,7 @@ TreeSolver createDecisionTreeSolver(
     num minErrorOnNode,
     int minSamplesCountOnNode,
     int maxDepth,
+    DType dtype,
 ) {
   final targetIdx = enumerate(samples.header)
       .firstWhere((indexedName) => indexedName.value == targetName)
@@ -39,7 +41,7 @@ TreeSolver createDecisionTreeSolver(
 
   return solverFactory.createByType(
     TreeSolverType.decision,
-    samples.toMatrix(),
+    samples.toMatrix(dtype),
     featuresIndexedSeries.map((indexed) => indexed.index),
     targetIdx,
     featureIdxToUniqueValues,
