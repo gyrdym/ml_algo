@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.3.7
+- `TreeLeafLabel`: probability validation improvements
+
 ## 13.3.6
 - `DecisionTreeClassifier`: classifier instantiating refactored
 - `TreeSolver`: DI support added
