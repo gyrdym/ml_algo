@@ -88,6 +88,9 @@ void main() {
     });
 
     tearDown(() {
+      reset(leafDetectorMock);
+      reset(leafLabelFactoryMock);
+      reset(splitSelectorFactoryMock);
       reset(leafDetectorFactoryMock);
       reset(leafLabelFactoryFactoryMock);
       reset(splitSelectorFactoryMock);
