@@ -36,7 +36,9 @@ import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/tree_solver/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter_factory.dart';
 import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
+import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter_factory.dart';
 import 'package:ml_algo/src/tree_solver/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_solver/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_solver/tree_node.dart';
@@ -94,7 +96,13 @@ class TreeSplitterFactoryMock extends Mock implements TreeSplitterFactory {}
 
 class NumericalTreeSplitterMock extends Mock implements NumericalTreeSplitter {}
 
+class NumericalTreeSplitterFactoryMock extends Mock implements
+    NumericalTreeSplitterFactory {}
+
 class NominalTreeSplitterMock extends Mock implements NominalTreeSplitter {}
+
+class NominalTreeSplitterFactoryMock extends Mock implements
+    NominalTreeSplitterFactory {}
 
 class DistributionCalculatorMock extends Mock implements
     SequenceElementsDistributionCalculator {}
@@ -269,6 +277,22 @@ TreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
 TreeSplitterFactory createTreeSplitterFactoryMock(TreeSplitter splitter) {
   final factory = TreeSplitterFactoryMock();
   when(factory.createByType(any, any)).thenReturn(splitter);
+  return factory;
+}
+
+NumericalTreeSplitterFactory createNumericalTreeSplitterFactoryMock(
+  NumericalTreeSplitter splitter,
+) {
+  final factory = NumericalTreeSplitterFactoryMock();
+  when(factory.create()).thenReturn(splitter);
+  return factory;
+}
+
+NominalTreeSplitterFactory createNominalTreeSplitterFactoryMock(
+  NominalTreeSplitter splitter,
+) {
+  final factory = NominalTreeSplitterFactoryMock();
+  when(factory.create()).thenReturn(splitter);
   return factory;
 }
 
