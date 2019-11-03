@@ -23,7 +23,7 @@ TreeSolver createDecisionTreeSolver(
   final featuresIndexedSeries = enumerate(samples.series)
       .where((indexed) => indexed.index != targetIdx);
 
-  final colIdxToUniqueValues = Map.fromEntries(
+  final featureIdxToUniqueValues = Map.fromEntries(
       featuresIndexedSeries
         .where((indexed) => indexed.value.isDiscrete)
         .map((indexed) => MapEntry(indexed.index, indexed
@@ -42,7 +42,7 @@ TreeSolver createDecisionTreeSolver(
     samples.toMatrix(),
     featuresIndexedSeries.map((indexed) => indexed.index),
     targetIdx,
-    colIdxToUniqueValues,
+    featureIdxToUniqueValues,
     minErrorOnNode,
     minSamplesCountOnNode,
     maxDepth,
