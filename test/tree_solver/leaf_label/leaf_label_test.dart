@@ -11,12 +11,28 @@ void main() {
           throwsRangeError);
     });
 
+    test('should allow probability to be negative with small penalty', () {
+      final labelValue = 5;
+      final probability = -1e-5;
+      final label = TreeLeafLabel(labelValue, probability: probability);
+
+      expect(label.probability, probability);
+    });
+
     test('should throw an exception if probability is greater than 1', () {
       final labelValue = -1e5;
       final probability = 1.001;
 
       expect(() => TreeLeafLabel(labelValue, probability: probability),
           throwsRangeError);
+    });
+
+    test('should allow probability to be greater than 1 with small penalty', () {
+      final labelValue = 5;
+      final probability = 1 + 1e-5;
+      final label = TreeLeafLabel(labelValue, probability: probability);
+
+      expect(label.probability, probability);
     });
 
     test('should allow probability to be 0', () {
