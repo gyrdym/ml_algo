@@ -34,7 +34,7 @@ void main() {
       expect(detector, isA<TreeLeafDetectorImpl>());
     });
 
-    test('should call split split_assessor factory while creating the instance', () {
+    test('should call split assessor factory while creating the instance', () {
       factory.create(
         assessorType,
         minErrorOnNode,
