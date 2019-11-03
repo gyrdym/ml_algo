@@ -31,10 +31,13 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
 import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector.dart';
+import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory.dart';
+import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/tree_solver/split_selector/split_selector.dart';
+import 'package:ml_algo/src/tree_solver/split_selector/split_selector_factory.dart';
 import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter_factory.dart';
 import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
@@ -112,9 +115,18 @@ class DistributionCalculatorFactoryMock extends Mock implements
 
 class TreeLeafDetectorMock extends Mock implements TreeLeafDetector {}
 
+class TreeLeafDetectorFactoryMock extends Mock implements
+    TreeLeafDetectorFactory {}
+
 class TreeLeafLabelFactoryMock extends Mock implements TreeLeafLabelFactory {}
 
+class TreeLeafLabelFactoryFactoryMock extends Mock implements
+    TreeLeafLabelFactoryFactory {}
+
 class TreeSplitSelectorMock extends Mock implements TreeSplitSelector {}
+
+class TreeSplitSelectorFactoryMock extends Mock implements
+    TreeSplitSelectorFactory {}
 
 class TreeNodeMock extends Mock implements TreeNode {}
 
@@ -293,6 +305,28 @@ NominalTreeSplitterFactory createNominalTreeSplitterFactoryMock(
 ) {
   final factory = NominalTreeSplitterFactoryMock();
   when(factory.create()).thenReturn(splitter);
+  return factory;
+}
+
+TreeLeafDetectorFactory createTreeLeafDetectorFactoryMock(
+    TreeLeafDetector leafDetector) {
+  final factory = TreeLeafDetectorFactoryMock();
+  when(factory.create(any, any, any, any)).thenReturn(leafDetector);
+  return factory;
+}
+
+TreeLeafLabelFactoryFactory createTreeLeafLabelFactoryFactoryMock(
+  TreeLeafLabelFactory leafLabelFactory,
+) {
+  final factory = TreeLeafLabelFactoryFactoryMock();
+  when(factory.createByType(any)).thenReturn(leafLabelFactory);
+  return factory;
+}
+
+TreeSplitSelectorFactory createTreeSplitSelectorFactoryMock(
+    TreeSplitSelector splitSelector) {
+  final factory = TreeSplitSelectorFactoryMock();
+  when(factory.createByType(any, any, any)).thenReturn(splitSelector);
   return factory;
 }
 
