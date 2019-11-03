@@ -33,7 +33,7 @@ class TreeSplitterFactoryImpl implements TreeSplitterFactory {
             nominalSplitter);
 
       default:
-        throw UnsupportedError('Decision tree splitter type $type is not '
+        throw UnsupportedError('Tree splitter type $type is not '
             'supported');
     }
   }
