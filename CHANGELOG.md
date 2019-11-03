@@ -1,5 +1,9 @@
 # Changelog
 
+## 13.3.6
+- `DecisionTreeClassifier`: classifier instantiating refactored
+- `TreeSolver`: DI support added
+
 ## 13.3.5
 - `SoftmaxRegressor`: classifier instantiating refactored
 
