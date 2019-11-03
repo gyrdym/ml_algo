@@ -1,12 +1,30 @@
 import 'package:injector/injector.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory_impl.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory_impl.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
+import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
+import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector_factory.dart';
+import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory_factory.dart';
+import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_factory.dart';
+import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/split_selector/split_selector_factory.dart';
+import 'package:ml_algo/src/tree_solver/split_selector/split_selector_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter_factory.dart';
+import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter_factory.dart';
+import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/splitter/splitter_factory.dart';
+import 'package:ml_algo/src/tree_solver/splitter/splitter_factory_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory_impl.dart';
@@ -28,6 +46,8 @@ import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_impl.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory_impl.dart';
+import 'package:ml_algo/src/tree_solver/tree_solver_factory.dart';
+import 'package:ml_algo/src/tree_solver/tree_solver_factory_impl.dart';
 
 Injector get dependencies =>
     injector ??= Injector()
@@ -74,4 +94,49 @@ Injector get dependencies =>
               (injector) => KnnRegressorFactoryImpl(
                 injector.getDependency<KernelFactory>(),
                 injector.getDependency<KnnSolverFactory>(),
-          ));
+          ))
+
+      ..registerSingleton<SequenceElementsDistributionCalculatorFactory>(
+              (_) => const SequenceElementsDistributionCalculatorFactoryImpl())
+
+      ..registerSingleton<NominalTreeSplitterFactory>(
+              (_) => const NominalTreeSplitterFactoryImpl())
+
+      ..registerSingleton<NumericalTreeSplitterFactory>(
+              (_) => const NumericalTreeSplitterFactoryImpl())
+
+      ..registerSingleton<TreeSplitAssessorFactory>(
+              (_) => const TreeSplitAssessorFactoryImpl())
+
+      ..registerSingleton<TreeSplitterFactory>(
+              (injector) => TreeSplitterFactoryImpl(
+                injector.getDependency<TreeSplitAssessorFactory>(),
+                injector.getDependency<NominalTreeSplitterFactory>(),
+                injector.getDependency<NumericalTreeSplitterFactory>(),
+              ))
+
+      ..registerSingleton<TreeSplitSelectorFactory>(
+              (injector) => TreeSplitSelectorFactoryImpl(
+                injector.getDependency<TreeSplitAssessorFactory>(),
+                injector.getDependency<TreeSplitterFactory>(),
+              ))
+      
+      ..registerSingleton<TreeLeafDetectorFactory>(
+              (injector) => TreeLeafDetectorFactoryImpl(
+                injector.getDependency<TreeSplitAssessorFactory>(),
+              ))
+
+      ..registerSingleton<TreeLeafLabelFactoryFactory>(
+              (injector) => TreeLeafLabelFactoryFactoryImpl(
+                injector.getDependency<SequenceElementsDistributionCalculatorFactory>(),
+              ))
+
+      ..registerSingleton<TreeSolverFactory>(
+              (injector) => TreeSolverFactoryImpl(
+                  injector.getDependency<TreeLeafDetectorFactory>(),
+                  injector.getDependency<TreeLeafLabelFactoryFactory>(),
+                  injector.getDependency<TreeSplitSelectorFactory>(),
+              ))
+
+      ..registerSingleton<DecisionTreeClassifierFactory>(
+              (_) => const DecisionTreeClassifierFactoryImpl());

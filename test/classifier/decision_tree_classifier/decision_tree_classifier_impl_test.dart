@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
-import 'package:ml_algo/src/decision_tree_solver/decision_tree_leaf_label.dart';
-import 'package:ml_algo/src/decision_tree_solver/decision_tree_solver.dart';
+import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
+import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -30,9 +30,9 @@ void main() {
       final label3 = 2.0;
 
       final solverMock = createSolver({
-        sample1: DecisionTreeLeafLabel(label1),
-        sample2: DecisionTreeLeafLabel(label2),
-        sample3: DecisionTreeLeafLabel(label3),
+        sample1: TreeLeafLabel(label1),
+        sample2: TreeLeafLabel(label2),
+        sample3: TreeLeafLabel(label3),
       });
 
       final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
@@ -52,7 +52,7 @@ void main() {
 
     test('should return an empty matrix if input features matrix is '
         'empty', () {
-      final solverMock = DecisionTreeSolverMock();
+      final solverMock = TreeSolverMock();
       final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
           DType.float32);
       final predictedClasses = classifier.predict(DataFrame([<num>[]]));
@@ -73,9 +73,9 @@ void main() {
         sample3,
       ]);
 
-      final label1 = DecisionTreeLeafLabel(0, probability: 0.7);
-      final label2 = DecisionTreeLeafLabel(1, probability: 0.55);
-      final label3 = DecisionTreeLeafLabel(2, probability: 0.5);
+      final label1 = TreeLeafLabel(0, probability: 0.7);
+      final label2 = TreeLeafLabel(1, probability: 0.55);
+      final label3 = TreeLeafLabel(2, probability: 0.5);
 
       final solverMock = createSolver({
         sample1: label1,
@@ -93,17 +93,17 @@ void main() {
       expect(
           predictedLabels.toMatrix(),
           iterable2dAlmostEqualTo([
-            [label1.probability],
-            [label2.probability],
-            [label3.probability],
+            [label1.probability.toDouble()],
+            [label2.probability.toDouble()],
+            [label3.probability.toDouble()],
           ]),
       );
     });
   });
 }
 
-DecisionTreeSolver createSolver(Map<Vector, DecisionTreeLeafLabel> samples) {
-  final solverMock = DecisionTreeSolverMock();
+DecisionTreeSolver createSolver(Map<Vector, TreeLeafLabel> samples) {
+  final solverMock = TreeSolverMock();
   samples.forEach((sample, leafLabel) =>
     when(solverMock.getLabelForSample(sample)).thenReturn(leafLabel));
   return solverMock;
