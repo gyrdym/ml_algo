@@ -15,10 +15,10 @@ import 'package:ml_linalg/dtype.dart';
 abstract class DecisionTreeClassifier implements Classifier, Assessable {
   /// Parameters:
   ///
-  /// [fittingData] A [DataFrame] with observations, that will be used by the
+  /// [trainData] A [DataFrame] with observations, that will be used by the
   /// classifier to learn a decision tree. Must contain [targetName] column.
   ///
-  /// [targetName] A name of a column in [fittingData] that contains class
+  /// [targetName] A name of a column in [trainData] that contains class
   /// labels
   ///
   /// [minError] A value from range 0..1 (both inclusive). The value denotes a
@@ -33,14 +33,14 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
   ///
   /// [maxDepth] A maximum number of decision tree levels.
   factory DecisionTreeClassifier(
-      DataFrame fittingData,
+      DataFrame trainData,
       String targetName, {
     num minError,
     int minSamplesCount,
     int maxDepth,
     DType dtype = DType.float32,
   }) => createDecisionTreeClassifier(
-    fittingData,
+    trainData,
     targetName,
     minError,
     minSamplesCount,
