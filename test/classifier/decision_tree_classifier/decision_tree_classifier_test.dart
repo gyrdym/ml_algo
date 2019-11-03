@@ -77,6 +77,14 @@ void main() {
       expect(actual, throwsException);
     });
 
+    test('should throw an exception if minimal samples count on node is equal '
+        'to zero', () {
+      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+          minError: 0.5, minSamplesCount: 0, maxDepth: 3);
+
+      expect(actual, throwsException);
+    });
+
     test('should throw an exception if maximal tree depth value is less '
         'than zero', () {
       final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
