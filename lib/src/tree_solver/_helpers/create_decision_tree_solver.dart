@@ -12,7 +12,7 @@ import 'package:quiver/iterables.dart';
 TreeSolver createDecisionTreeSolver(
     DataFrame samples,
     String targetName,
-    double minErrorOnNode,
+    num minErrorOnNode,
     int minSamplesCountOnNode,
     int maxDepth,
 ) {
