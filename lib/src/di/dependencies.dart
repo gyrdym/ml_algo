@@ -1,4 +1,6 @@
 import 'package:injector/injector.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory_impl.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory_impl.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
@@ -134,4 +136,7 @@ Injector get dependencies =>
                   injector.getDependency<TreeLeafDetectorFactory>(),
                   injector.getDependency<TreeLeafLabelFactoryFactory>(),
                   injector.getDependency<TreeSplitSelectorFactory>(),
-              ));
+              ))
+
+      ..registerSingleton<DecisionTreeClassifierFactory>(
+              (_) => const DecisionTreeClassifierFactoryImpl());

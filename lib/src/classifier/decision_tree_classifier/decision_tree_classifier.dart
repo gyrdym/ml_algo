@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
+import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/tree_solver/_helpers/create_decision_tree_solver.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -49,6 +50,8 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
       maxDepth,
     );
 
-    return DecisionTreeClassifierImpl(solver, targetName, dtype);
+    return dependencies
+        .getDependency<DecisionTreeClassifierFactory>()
+        .create(solver, targetName, dtype);
   }
 }
