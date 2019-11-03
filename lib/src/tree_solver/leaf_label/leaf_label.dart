@@ -1,10 +1,10 @@
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
+import 'package:ml_algo/src/helpers/validate_probability_value.dart';
 
 class TreeLeafLabel with SerializableMixin {
   TreeLeafLabel(this.value, {this.probability}) {
-    if (probability != null && (probability < 0 || probability > 1)) {
-      throw Exception('Probability value should be within the range 0..1 '
-          '(both inclusive)');
+    if (probability != null) {
+      validateProbabilityValue(probability);
     }
   }
 

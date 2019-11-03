@@ -8,7 +8,7 @@ void main() {
       final probability = -0.001;
 
       expect(() => TreeLeafLabel(labelValue, probability: probability),
-          throwsException);
+          throwsRangeError);
     });
 
     test('should throw an exception if probability is greater than 1', () {
@@ -16,7 +16,23 @@ void main() {
       final probability = 1.001;
 
       expect(() => TreeLeafLabel(labelValue, probability: probability),
-          throwsException);
+          throwsRangeError);
+    });
+
+    test('should allow probability to be 0', () {
+      final labelValue = 5;
+      final probability = 0;
+      final label = TreeLeafLabel(labelValue, probability: probability);
+
+      expect(label.probability, probability);
+    });
+
+    test('should allow probability to be 1', () {
+      final labelValue = 5;
+      final probability = 1;
+      final label = TreeLeafLabel(labelValue, probability: probability);
+
+      expect(label.probability, probability);
     });
 
     test('should store value', () {
