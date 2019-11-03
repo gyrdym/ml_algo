@@ -1,9 +1,8 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/tree_solver/tree_solver.dart';
 import 'package:ml_linalg/dtype.dart';
-
-import 'decision_tree_classifier_impl.dart';
 
 class DecisionTreeClassifierFactoryImpl implements
     DecisionTreeClassifierFactory {
