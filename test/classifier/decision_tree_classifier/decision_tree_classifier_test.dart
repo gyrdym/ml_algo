@@ -93,6 +93,14 @@ void main() {
       expect(actual, throwsException);
     });
 
+    test('should throw an exception if maximal tree depth value is equal '
+        'to zero', () {
+      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+          minError: 0.5, minSamplesCount: 1, maxDepth: 0);
+
+      expect(actual, throwsException);
+    });
+
     test('should predict class labels', () {
       final prediction = classifier.predict(
         DataFrame.fromMatrix(featuresForPrediction),
