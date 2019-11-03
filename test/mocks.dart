@@ -8,16 +8,6 @@ import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/dis
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
-import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_factory.dart';
-import 'package:ml_algo/src/tree_solver/tree_node.dart';
-import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
-import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory.dart';
-import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/tree_solver/split_selector/split_selector.dart';
-import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
-import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
-import 'package:ml_algo/src/tree_solver/splitter/splitter.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
@@ -39,6 +29,17 @@ import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
+import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
+import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector.dart';
+import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory.dart';
+import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_factory.dart';
+import 'package:ml_algo/src/tree_solver/split_selector/split_selector.dart';
+import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter.dart';
+import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter.dart';
+import 'package:ml_algo/src/tree_solver/splitter/splitter.dart';
+import 'package:ml_algo/src/tree_solver/splitter/splitter_factory.dart';
+import 'package:ml_algo/src/tree_solver/tree_node.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -88,6 +89,8 @@ class TreeSplitAssessorFactoryMock extends Mock implements
     TreeSplitAssessorFactory {}
 
 class TreeSplitterMock extends Mock implements TreeSplitter {}
+
+class TreeSplitterFactoryMock extends Mock implements TreeSplitterFactory {}
 
 class NumericalTreeSplitterMock extends Mock implements NumericalTreeSplitter {}
 
@@ -260,6 +263,12 @@ TreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
     TreeSplitAssessor splitAssessor) {
   final factory = TreeSplitAssessorFactoryMock();
   when(factory.createByType(any)).thenReturn(splitAssessor);
+  return factory;
+}
+
+TreeSplitterFactory createTreeSplitterFactoryMock(TreeSplitter splitter) {
+  final factory = TreeSplitterFactoryMock();
+  when(factory.createByType(any, any)).thenReturn(splitter);
   return factory;
 }
 
