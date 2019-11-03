@@ -13,7 +13,7 @@ abstract class TreeSolverFactory {
       Iterable<int> featureIndices,
       int targetIdx,
       Map<int, List<num>> featureToUniqueValues,
-      double minErrorOnNode,
+      num minErrorOnNode,
       int minSamplesCount,
       int maxDepth,
       TreeSplitAssessorType assessorType,

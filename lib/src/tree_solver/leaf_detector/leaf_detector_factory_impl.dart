@@ -13,7 +13,7 @@ class TreeLeafDetectorFactoryImpl implements TreeLeafDetectorFactory {
   @override
   TreeLeafDetector create(
       TreeSplitAssessorType assessorType,
-      double minErrorOnNode,
+      num minErrorOnNode,
       int minSamplesCount,
       int maxDepth,
   ) {

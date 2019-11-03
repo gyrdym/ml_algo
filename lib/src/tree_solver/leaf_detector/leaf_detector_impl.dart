@@ -8,7 +8,7 @@ class TreeLeafDetectorImpl implements TreeLeafDetector {
 
   final TreeSplitAssessor _assessor;
   final int _minSamplesCount;
-  final double _minErrorOnNode;
+  final num _minErrorOnNode;
   final int _maxDepth;
 
   @override
