@@ -12,7 +12,7 @@ abstract class TreeSolverFactory {
       Matrix samples,
       Iterable<int> featureIndices,
       int targetIdx,
-      Map<int, List<num>> featureToUniqueValues,
+      Map<int, List<num>> featureIdxToUniqueValues,
       num minErrorOnNode,
       int minSamplesCount,
       int maxDepth,
