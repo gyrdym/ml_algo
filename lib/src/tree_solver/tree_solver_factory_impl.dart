@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
 import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory_factory.dart';
@@ -63,5 +65,10 @@ class TreeSolverFactoryImpl implements TreeSolverFactory {
       default:
         throw UnsupportedError('Tree solver type $type is unsupported');
     }
+  }
+
+  @override
+  TreeSolver createFromMap(Map<String, dynamic> data) {
+    return null;
   }
 }

@@ -8,6 +8,7 @@ mixin SerializableMixin implements Serializable {
   Future<File> saveAsJSON(String fileName) async {
     final file = await File(fileName).create(recursive: true);
     final json = jsonEncode(serialize());
+
     return file.writeAsString(json);
   }
 }

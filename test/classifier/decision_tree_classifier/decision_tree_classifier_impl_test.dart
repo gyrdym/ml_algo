@@ -50,7 +50,7 @@ void main() {
       ]));
     });
 
-    test('should return an empty matrix if input features matrix is '
+    test('should return an empty matrix if input feature matrix is '
         'empty', () {
       final solverMock = TreeSolverMock();
       final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
@@ -61,8 +61,8 @@ void main() {
       expect(predictedClasses.toMatrix(), isEmpty);
     });
 
-    test('should call appropriate method from `solver` when making '
-        'classes prediction for nominal class probabilities', () {
+    test('should call an appropriate method from `solver` while predicting '
+        'class labels for nominal class label type', () {
       final sample1 = Vector.fromList([1, 2, 3]);
       final sample2 = Vector.fromList([10, 20, 30]);
       final sample3 = Vector.fromList([100, 200, 300]);
@@ -98,6 +98,39 @@ void main() {
             [label3.probability.toDouble()],
           ]),
       );
+    });
+
+    test('should serialize itself', () {
+      final sample1 = Vector.fromList([1, 2, 3]);
+      final sample2 = Vector.fromList([10, 20, 30]);
+      final sample3 = Vector.fromList([100, 200, 300]);
+
+      final features = Matrix.fromRows([
+        sample1,
+        sample2,
+        sample3,
+      ]);
+
+      final label1 = TreeLeafLabel(0, probability: 0.7);
+      final label2 = TreeLeafLabel(1, probability: 0.55);
+      final label3 = TreeLeafLabel(2, probability: 0.5);
+
+      final solverMock = createSolver({
+        sample1: label1,
+        sample2: label2,
+        sample3: label3,
+      });
+
+      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
+          DType.float32);
+
+      final data = classifier.serialize();
+
+      expect(data, equals({
+        'dtype': 'float32',
+        'classNames': ['class_name'],
+        '_solver': null,
+      }));
     });
   });
 }

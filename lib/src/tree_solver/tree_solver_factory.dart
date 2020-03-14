@@ -22,4 +22,6 @@ abstract class TreeSolverFactory {
       TreeSplitAssessorType splitAssessorType,
       TreeSplitterType splitterType,
   );
+
+  TreeSolver createFromMap(Map<String, dynamic> data);
 }

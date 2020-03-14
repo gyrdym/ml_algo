@@ -1,8 +1,11 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_helpers/create_decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/_helpers/create_decision_tree_classifier_from_json.dart';
+import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+
 
 /// A class that performs decision tree-based classification
 ///
@@ -12,7 +15,8 @@ import 'package:ml_linalg/dtype.dart';
 /// Process of forming such a recursive subsets structure is called
 /// decision tree learning. Once a decision tree learned, it may use to classify
 /// new samples with the same features, as were used to learn the tree.
-abstract class DecisionTreeClassifier implements Classifier, Assessable {
+abstract class DecisionTreeClassifier implements
+    Classifier, Assessable, Serializable {
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations, that will be used by the
@@ -47,4 +51,7 @@ abstract class DecisionTreeClassifier implements Classifier, Assessable {
     maxDepth,
     dtype,
   );
+
+  factory DecisionTreeClassifier.fromJson(String json) =>
+      createDecisionTreeClassifierFromJson(json);
 }

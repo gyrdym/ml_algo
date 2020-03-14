@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory.dart';
@@ -7,7 +8,7 @@ import 'package:ml_algo/src/tree_solver/tree_solver.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class DecisionTreeSolver implements TreeSolver {
+class DecisionTreeSolver with SerializableMixin implements TreeSolver {
   DecisionTreeSolver(
       Matrix samples,
       this._featureIndices,
@@ -109,4 +110,10 @@ class DecisionTreeSolver implements TreeSolver {
     throw Exception('The given sample does not conform any splitting '
         'condition');
   }
+
+  @override
+  Map<String, dynamic> serialize() => <String, dynamic>{
+    'tree': _root.serialize(),
+    'type': 'decision',
+  };
 }
