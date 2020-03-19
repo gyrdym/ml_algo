@@ -1,5 +1,7 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
+import 'package:ml_algo/src/common/serializing_rule/dtype_serializing_rule.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
@@ -128,6 +130,49 @@ void main() {
             [1],
             [1],
           ]));
+    });
+
+    test('should throw an error if empty json was passed', () {
+      final json = '';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should throw an error if invalid json was passed', () {
+      final json = 'unknown_data';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should throw an error if passed json has a wrong schema', () {
+      final json = '{"field_1": "data"}';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should throw an error if passed json does not contain a '
+        '$classNamesField field', () {
+      final json = '{'
+          '"field_1": "data",'
+          '"$dtypeField": "${dtypeSerializingRule[DType.float32]}",'
+          '"$solverField": null'
+          '}';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should throw an error if passed json does not contain a '
+        '$dtypeField field', () {
+      final json = '{'
+          '"$classNamesField": ["class_label_1"],'
+          '"$solverField": null'
+          '}';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should throw an error if passed json does not contain a '
+        '$solverField field', () {
+      final json = '{'
+          '"$classNamesField": ["class_label_1"],'
+          '"$dtypeField": "${dtypeSerializingRule[DType.float32]}"'
+          '}';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
     });
   });
 }
