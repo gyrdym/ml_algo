@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:test/test.dart';
 
 void main() {

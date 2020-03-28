@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/tree_solver/tree_node.dart';
-import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
@@ -16,7 +16,7 @@ void testTreeNode(
 ) {
   expect(node.isLeaf, equals(shouldBeLeaf));
   expect(node.splittingValue, equals(expectedSplittingValue));
-  expect(node.splittingIdx, equals(expectedSplittingColumnIdx));
+  expect(node.splittingIndex, equals(expectedSplittingColumnIdx));
   expectedChildrenLength == null
       ? expect(node.children, isNull)
       : expect(node.children, hasLength(expectedChildrenLength));

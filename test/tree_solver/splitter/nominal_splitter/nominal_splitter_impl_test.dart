@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/tree_solver/splitter/nominal_splitter/nominal_splitter_impl.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_impl.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';

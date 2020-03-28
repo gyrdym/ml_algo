@@ -1,18 +1,18 @@
-import 'package:ml_algo/src/tree_solver/decision_tree_solver.dart';
-import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/tree_solver/leaf_detector/leaf_detector_factory.dart';
-import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory.dart';
-import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory_factory.dart';
-import 'package:ml_algo/src/tree_solver/leaf_label/leaf_label_factory_type.dart';
-import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_type.dart';
-import 'package:ml_algo/src/tree_solver/split_selector/split_selector.dart';
-import 'package:ml_algo/src/tree_solver/split_selector/split_selector_factory.dart';
-import 'package:ml_algo/src/tree_solver/split_selector/split_selector_type.dart';
-import 'package:ml_algo/src/tree_solver/splitter/splitter_type.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver_factory.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver_factory_impl.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver_type.dart';
+import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -30,10 +30,10 @@ void main() {
     TreeSplitSelector splitSelectorMock;
     TreeSplitSelectorFactory splitSelectorFactoryMock;
 
-    TreeSolverFactory factory;
-    TreeSolver solver;
+    TreeTrainerFactory factory;
+    TreeTrainer solver;
 
-    final type = TreeSolverType.decision;
+    final type = TreeTrainerType.decision;
     final samples = Matrix.fromList([
       [ 10,  20,  30,  40,  50],
       [-10, -20, -30, -40, -50],
@@ -67,7 +67,7 @@ void main() {
       splitSelectorFactoryMock = createTreeSplitSelectorFactoryMock(
           splitSelectorMock);
 
-      factory = TreeSolverFactoryImpl(leafDetectorFactoryMock,
+      factory = TreeTrainerFactoryImpl(leafDetectorFactoryMock,
           leafLabelFactoryFactoryMock, splitSelectorFactoryMock);
 
       solver = factory.createByType(
@@ -97,7 +97,7 @@ void main() {
     });
 
     test('should create a DecisionTreeSolver instance', () {
-      expect(solver, isA<DecisionTreeSolver>());
+      expect(solver, isA<DecisionTreeTrainer>());
     });
 
     test('should call leaf detector factory while creating the instance', () {

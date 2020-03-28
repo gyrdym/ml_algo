@@ -1,3 +1,0 @@
-enum TreeSolverType {
-  decision,
-}

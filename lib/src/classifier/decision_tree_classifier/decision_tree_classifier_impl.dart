@@ -3,7 +3,9 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_se
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/common/serializing_rule/dtype_serializing_rule.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serialize.dart' as tree_node;
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -15,7 +17,7 @@ class DecisionTreeClassifierImpl
     implements
         DecisionTreeClassifier {
 
-  DecisionTreeClassifierImpl(this._solver, String className, this.dtype)
+  DecisionTreeClassifierImpl(this._root, String className, this.dtype)
       : classNames = [className];
 
   @override
@@ -24,14 +26,14 @@ class DecisionTreeClassifierImpl
   @override
   final List<String> classNames;
 
-  final TreeSolver _solver;
+  final TreeNode _root;
 
   @override
   DataFrame predict(DataFrame features) {
     final predictedLabels = features
         .toMatrix(dtype)
         .rows
-        .map(_solver.getLabelForSample);
+        .map((sample) => _getLabelForSample(sample, _root));
 
     if (predictedLabels.isEmpty) {
       return DataFrame([<num>[]]);
@@ -55,7 +57,7 @@ class DecisionTreeClassifierImpl
         features
             .toMatrix(dtype)
             .rows
-            .map(_solver.getLabelForSample)
+            .map((sample) => _getLabelForSample(sample, _root))
             .map((label) => label.probability)
             .toList(growable: false),
         dtype: dtype,
@@ -72,6 +74,20 @@ class DecisionTreeClassifierImpl
   Map<String, dynamic> serialize() => <String, dynamic>{
     dtypeField: dtypeSerializingRule[dtype],
     classNamesField: classNames,
-    solverField: _solver.serialize(),
+    rootNodeField: tree_node.serialize(_root),
   };
+
+  TreeLeafLabel _getLabelForSample(Vector sample, TreeNode node) {
+    if (node.isLeaf) {
+      return node.label;
+    }
+
+    for (final child in node.children) {
+      if (child.isSamplePassed(sample)) {
+        return _getLabelForSample(sample, child);
+      }
+    };
+
+    throw Exception('Given sample does not conform any splitting condition');
+  }
 }

@@ -4,8 +4,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
 import 'package:ml_algo/src/common/serializing_rule/dtype_serializing_rule.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
-import 'package:ml_algo/src/tree_solver/tree_solver_factory.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_deserialize.dart' as tree_node;
 
 DecisionTreeClassifier createDecisionTreeClassifierFromJson(String json) {
   if (json.isEmpty) {
@@ -25,18 +24,16 @@ DecisionTreeClassifier createDecisionTreeClassifierFromJson(String json) {
         'field');
   }
 
-  if (decoded[solverField] == null) {
-    throw Exception('Provided JSON object does not contain a `$solverField` '
+  if (decoded[rootNodeField] == null) {
+    throw Exception('Provided JSON object does not contain a `$rootNodeField` '
         'field');
   }
 
   final classNames = (decoded[classNamesField] as List<dynamic>)
       .map((dynamic className) => className.toString());
   final dtype = dtypeSerializingRule.inverse[decoded[dtypeField]];
-  final decodedSolverData = decoded[solverField] as Map<String, dynamic>;
+  final treeRootNodeData = decoded[rootNodeField] as Map<String, dynamic>;
+  final treeRootNode = tree_node.deserialize(treeRootNodeData);
 
-  final solverFactory = dependencies.getDependency<TreeSolverFactory>();
-  final solver = solverFactory.createFromMap(decodedSolverData);
-
-  return DecisionTreeClassifierImpl(solver, classNames.first, dtype);
+  return DecisionTreeClassifierImpl(treeRootNode, classNames.first, dtype);
 }

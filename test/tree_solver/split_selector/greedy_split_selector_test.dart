@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/tree_solver/split_selector/greedy_split_selector.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/greedy_split_selector.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

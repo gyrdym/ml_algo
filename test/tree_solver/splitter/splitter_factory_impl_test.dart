@@ -1,7 +1,7 @@
-import 'package:ml_algo/src/tree_solver/split_assessor/split_assessor_type.dart';
-import 'package:ml_algo/src/tree_solver/splitter/greedy_splitter.dart';
-import 'package:ml_algo/src/tree_solver/splitter/splitter_factory_impl.dart';
-import 'package:ml_algo/src/tree_solver/splitter/splitter_type.dart';
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/greedy_splitter.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

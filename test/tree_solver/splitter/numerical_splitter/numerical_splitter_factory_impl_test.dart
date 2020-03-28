@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter_factory_impl.dart';
-import 'package:ml_algo/src/tree_solver/splitter/numerical_splitter/numerical_splitter_impl.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_impl.dart';
 import 'package:test/test.dart';
 
 void main() {
