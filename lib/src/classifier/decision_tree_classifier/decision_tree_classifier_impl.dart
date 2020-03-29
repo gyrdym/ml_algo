@@ -1,11 +1,11 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
+import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/common/serializing_rule/dtype_serializing_rule.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serialize.dart' as tree_node;
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -17,14 +17,20 @@ class DecisionTreeClassifierImpl
     implements
         DecisionTreeClassifier {
 
-  DecisionTreeClassifierImpl(this._root, String className, this.dtype)
-      : classNames = [className];
+  DecisionTreeClassifierImpl(
+      this._root,
+      String className,
+      this.dtype,
+      this._treeNodeSerializer,
+  ) : classNames = [className];
 
   @override
   final DType dtype;
 
   @override
   final List<String> classNames;
+
+  final Serializer<TreeNode> _treeNodeSerializer;
 
   final TreeNode _root;
 
@@ -74,7 +80,7 @@ class DecisionTreeClassifierImpl
   Map<String, dynamic> serialize() => <String, dynamic>{
     dtypeField: dtypeSerializingRule[dtype],
     classNamesField: classNames,
-    rootNodeField: tree_node.serialize(_root),
+    rootNodeField: _treeNodeSerializer.serialize(_root),
   };
 
   TreeLeafLabel _getLabelForSample(Vector sample, TreeNode node) {
@@ -89,7 +95,7 @@ class DecisionTreeClassifierImpl
       if (childNode.isSamplePassed(sample)) {
         return _getLabelForSample(sample, childNode);
       }
-    };
+    }
 
     throw Exception('Given sample does not conform any splitting condition');
   }

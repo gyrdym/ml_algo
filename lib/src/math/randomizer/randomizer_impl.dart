@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 
 class RandomizerImpl implements Randomizer {
-  final Random _generator;
-
   RandomizerImpl({Random generator, int seed})
       : _generator = generator ?? Random(seed);
+
+  final Random _generator;
 
   ///returns random interval constrained by [lowerBound] (include) and [upperBound] (exclude)
   @override

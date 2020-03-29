@@ -13,7 +13,6 @@ import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
-import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

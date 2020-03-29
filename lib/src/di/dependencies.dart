@@ -9,22 +9,9 @@ import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_facto
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory_impl.dart';
+import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
-import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory.dart';
-import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
-import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
-import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory_impl.dart';
@@ -46,6 +33,22 @@ import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_impl.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serializer.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 
@@ -105,6 +108,9 @@ Injector get dependencies =>
       ..registerSingleton<NumericalTreeSplitterFactory>(
               (_) => const NumericalTreeSplitterFactoryImpl())
 
+      ..registerSingleton<Serializer<TreeNode>>(
+              (_) => const TreeNodeSerializer())
+
       ..registerSingleton<TreeSplitAssessorFactory>(
               (_) => const TreeSplitAssessorFactoryImpl())
 
@@ -139,4 +145,6 @@ Injector get dependencies =>
               ))
 
       ..registerSingleton<DecisionTreeClassifierFactory>(
-              (_) => const DecisionTreeClassifierFactoryImpl());
+              (injector) => DecisionTreeClassifierFactoryImpl(
+                  injector.getDependency<Serializer<TreeNode>>()
+              ));

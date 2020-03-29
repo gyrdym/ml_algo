@@ -6,6 +6,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart'
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
+import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
@@ -129,6 +130,8 @@ class TreeSplitSelectorFactoryMock extends Mock implements
     TreeSplitSelectorFactory {}
 
 class TreeNodeMock extends Mock implements TreeNode {}
+
+class TreeNodeSerializerMock extends Mock implements Serializer<TreeNode> {}
 
 class TreeSolverMock extends Mock implements DecisionTreeTrainer {}
 

@@ -18,12 +18,14 @@ class LeavePOutDataSplitter implements DataSplitter {
 
   int _count(int u) {
     int n;
+    // ignore: parameter_assignments
     for (n = 0; u > 0; ++n, u &= (u - 1)) {}
     ;
     return n;
   }
 
   Iterable<int> _generateCombination(int u) sync* {
+    // ignore: parameter_assignments
     for (int n = 0; u > 0; ++n, u >>= 1) {
       if ((u & 1) > 0) yield n;
     }

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
+import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/common/serializing_rule/dtype_serializing_rule.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_deserialize.dart' as tree_node;
+import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 
 DecisionTreeClassifier createDecisionTreeClassifierFromJson(String json) {
   if (json.isEmpty) {
@@ -31,9 +33,13 @@ DecisionTreeClassifier createDecisionTreeClassifierFromJson(String json) {
 
   final classNames = (decoded[classNamesField] as List<dynamic>)
       .map((dynamic className) => className.toString());
+  final targetClassName = classNames.first;
   final dtype = dtypeSerializingRule.inverse[decoded[dtypeField]];
+  final treeNodeSerializer = dependencies.getDependency<Serializer<TreeNode>>();
   final treeRootNodeData = decoded[rootNodeField] as Map<String, dynamic>;
-  final treeRootNode = tree_node.deserialize(treeRootNodeData);
+  final treeRootNode = treeNodeSerializer.deserialize(treeRootNodeData);
 
-  return DecisionTreeClassifierImpl(treeRootNode, classNames.first, dtype);
+  return dependencies
+      .getDependency<DecisionTreeClassifierFactory>()
+      .create(treeRootNode, targetClassName, dtype);
 }

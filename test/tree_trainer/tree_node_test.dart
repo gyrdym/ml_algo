@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serialize.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serializer.dart';
 import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
 
@@ -174,7 +174,8 @@ void main() {
       );
 
       final snapshotFileName = 'test/tree_trainer/tree_node_test.json';
-      final actual = serialize(root);
+      final serializer = const TreeNodeSerializer();
+      final actual = serializer.serialize(root);
       final expected = await readJSON(snapshotFileName);
 
       expect(actual, expected);

@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/majority_leaf_label_factory.dart';
