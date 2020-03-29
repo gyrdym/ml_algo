@@ -34,10 +34,6 @@ void main() {
     TreeTrainer solver;
 
     final type = TreeTrainerType.decision;
-    final samples = Matrix.fromList([
-      [ 10,  20,  30,  40,  50],
-      [-10, -20, -30, -40, -50],
-    ]);
     final featureIndices = [0, 1, 2, 3];
     final targetIdx = 4;
     final featureToUniqueValues = {
@@ -72,7 +68,6 @@ void main() {
 
       solver = factory.createByType(
         type,
-        samples,
         featureIndices,
         targetIdx,
         featureToUniqueValues,

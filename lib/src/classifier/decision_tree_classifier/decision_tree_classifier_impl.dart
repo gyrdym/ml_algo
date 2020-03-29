@@ -82,9 +82,9 @@ class DecisionTreeClassifierImpl
       return node.label;
     }
 
-    for (final child in node.children) {
-      if (child.isSamplePassed(sample)) {
-        return _getLabelForSample(sample, child);
+    for (final childNode in node.children) {
+      if (childNode.isSamplePassed(sample)) {
+        return _getLabelForSample(sample, childNode);
       }
     };
 

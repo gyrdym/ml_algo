@@ -152,7 +152,7 @@ void main() {
       final json = '{'
           '"field_1": "data",'
           '"$dtypeField": "${dtypeSerializingRule[DType.float32]}",'
-          '"$solverField": null'
+          '"$rootNodeField": null'
           '}';
       expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
     });
@@ -161,13 +161,13 @@ void main() {
         '$dtypeField field', () {
       final json = '{'
           '"$classNamesField": ["class_label_1"],'
-          '"$solverField": null'
+          '"$rootNodeField": null'
           '}';
       expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
     });
 
     test('should throw an error if passed json does not contain a '
-        '$solverField field', () {
+        '$rootNodeField field', () {
       final json = '{'
           '"$classNamesField": ["class_label_1"],'
           '"$dtypeField": "${dtypeSerializingRule[DType.float32]}"'
