@@ -1,10 +1,12 @@
 {
+  "predicateType":"",
   "splittingValue":null,
   "splittingIdx":null,
   "level":0,
   "label":null,
   "children":[
     {
+      "predicateType":"lessThan",
       "splittingValue":15.0,
       "splittingIdx":1,
       "level":1,
@@ -15,12 +17,14 @@
       "children":null
     },
     {
+      "predicateType":"greaterThanOrEqualTo",
       "splittingValue":15.0,
       "splittingIdx":1,
       "level":1,
       "label":null,
       "children":[
         {
+          "predicateType":"equalTo",
           "splittingValue":0,
           "splittingIdx":3,
           "level":2,
@@ -31,6 +35,7 @@
           "children":null
         },
         {
+          "predicateType":"equalTo",
           "splittingValue":1,
           "splittingIdx":3,
           "level":2,

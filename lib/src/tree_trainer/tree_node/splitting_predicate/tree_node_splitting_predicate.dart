@@ -41,4 +41,4 @@ bool _greaterThanClause(Vector sample, int splittingIdx, num value) =>
     sample[splittingIdx] > value;
 
 bool _greaterThanOrEqualToClause(Vector sample, int splittingIdx,
-    num value) => sample[splittingIdx] > value;
+    num value) => sample[splittingIdx] >= value;

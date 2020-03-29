@@ -1,6 +1,8 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -29,13 +31,13 @@ void main() {
       final label2 = 1.0;
       final label3 = 2.0;
 
-      final solverMock = createSolver({
+      final rootMock = createRootNodeMock({
         sample1: TreeLeafLabel(label1),
         sample2: TreeLeafLabel(label2),
         sample3: TreeLeafLabel(label3),
       });
 
-      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
+      final classifier = DecisionTreeClassifierImpl(rootMock, 'class_name',
           DType.float32);
       final predictedClasses = classifier.predict(
         DataFrame.fromMatrix(features),
@@ -52,8 +54,8 @@ void main() {
 
     test('should return an empty matrix if input feature matrix is '
         'empty', () {
-      final solverMock = TreeSolverMock();
-      final classifier = DecisionTreeClassifierImpl(solverMock, 'class_name',
+      final rootNode = TreeNodeMock();
+      final classifier = DecisionTreeClassifierImpl(rootNode, 'class_name',
           DType.float32);
       final predictedClasses = classifier.predict(DataFrame([<num>[]]));
 
@@ -77,7 +79,7 @@ void main() {
       final label2 = TreeLeafLabel(1, probability: 0.55);
       final label3 = TreeLeafLabel(2, probability: 0.5);
 
-      final solverMock = createSolver({
+      final solverMock = createRootNodeMock({
         sample1: label1,
         sample2: label2,
         sample3: label3,
@@ -115,7 +117,7 @@ void main() {
       final label2 = TreeLeafLabel(1, probability: 0.55);
       final label3 = TreeLeafLabel(2, probability: 0.5);
 
-      final solverMock = createSolver({
+      final solverMock = createRootNodeMock({
         sample1: label1,
         sample2: label2,
         sample3: label3,
@@ -127,17 +129,34 @@ void main() {
       final data = classifier.serialize();
 
       expect(data, equals({
-        'dtype': 'float32',
-        'classNames': ['class_name'],
-        '_solver': null,
+        dtypeField: 'float32',
+        classNamesField: ['class_name'],
+        rootNodeField: null,
       }));
-    });
+    }, skip: true);
   });
 }
 
-DecisionTreeTrainer createSolver(Map<Vector, TreeLeafLabel> samples) {
-  final solverMock = TreeSolverMock();
-  samples.forEach((sample, leafLabel) =>
-    when(solverMock.getLabelForSample(sample)).thenReturn(leafLabel));
-  return solverMock;
+TreeNode createRootNodeMock(Map<Vector, TreeLeafLabel> samples) {
+  final rootMock = TreeNodeMock();
+  final children = <TreeNode>[];
+
+  when(rootMock.isLeaf).thenReturn(false);
+
+  samples.forEach((sample, leafLabel) {
+    final node = TreeNodeMock();
+
+    when(node.label).thenReturn(leafLabel);
+    when(node.isLeaf).thenReturn(true);
+
+    samples.forEach((otherSample, _) {
+      when(node.isSamplePassed(otherSample)).thenReturn(sample == otherSample);
+    });
+
+    children.add(node);
+  });
+  
+  when(rootMock.children).thenReturn(children);
+
+  return rootMock;
 }

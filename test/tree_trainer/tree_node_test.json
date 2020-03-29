@@ -1,22 +1,26 @@
 {
+  "predicateType":"equalTo",
   "splittingValue":null,
   "splittingIdx":null,
   "level":0,
   "label":null,
   "children":[
     {
+      "predicateType":"equalTo",
       "splittingValue":10,
       "splittingIdx":null,
       "level":1,
       "label":null,
       "children":[
         {
+          "predicateType":"equalTo",
           "splittingValue":100,
           "splittingIdx":null,
           "level":2,
           "label":null,
           "children":[
             {
+              "predicateType":"equalTo",
               "splittingValue":600,
               "splittingIdx":null,
               "level":3,
@@ -24,6 +28,7 @@
               "children":[]
             },
             {
+              "predicateType":"equalTo",
               "splittingValue":700,
               "splittingIdx":null,
               "level":3,
@@ -33,12 +38,14 @@
           ]
         },
         {
+          "predicateType":"equalTo",
           "splittingValue":200,
           "splittingIdx":null,
           "level":2,
           "label":null,
           "children":[
             {
+              "predicateType":"equalTo",
               "splittingValue":800,
               "splittingIdx":null,
               "level":3,
@@ -46,6 +53,7 @@
               "children":[]
             },
             {
+              "predicateType":"equalTo",
               "splittingValue":900,
               "splittingIdx":null,
               "level":3,
@@ -57,18 +65,21 @@
       ]
     },
     {
+      "predicateType":"equalTo",
       "splittingValue":12,
       "splittingIdx":null,
       "level":1,
       "label":null,
       "children":[
         {
+          "predicateType":"equalTo",
           "splittingValue":300,
           "splittingIdx":null,
           "level":2,
           "label":null,
           "children":[
             {
+              "predicateType":"equalTo",
               "splittingValue":900,
               "splittingIdx":null,
               "level":3,
@@ -76,6 +87,7 @@
               "children":[]
             },
             {
+              "predicateType":"equalTo",
               "splittingValue":901,
               "splittingIdx":null,
               "level":3,
@@ -85,12 +97,14 @@
           ]
         },
         {
+          "predicateType":"equalTo",
           "splittingValue":400,
           "splittingIdx":null,
           "level":2,
           "label":null,
           "children":[
             {
+              "predicateType":"equalTo",
               "splittingValue":911,
               "splittingIdx":null,
               "level":3,
@@ -102,12 +116,14 @@
       ]
     },
     {
+      "predicateType":"equalTo",
       "splittingValue":13,
       "splittingIdx":null,
       "level":1,
       "label":null,
       "children":[
         {
+          "predicateType":"equalTo",
           "splittingValue":500,
           "splittingIdx":null,
           "level":2,

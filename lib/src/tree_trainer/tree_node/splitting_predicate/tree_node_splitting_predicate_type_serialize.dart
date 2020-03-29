@@ -1,7 +1,11 @@
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type_serializable_value.dart';
 
-String serialize(TreeNodeSplittingPredicateType type) {
+String serialize([TreeNodeSplittingPredicateType type]) {
+  if (type == null) {
+    return '';
+  }
+
   switch (type) {
     case TreeNodeSplittingPredicateType.lessThan:
       return treeNodeSplittingPredicateTypeLessThan;

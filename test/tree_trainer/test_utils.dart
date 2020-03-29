@@ -14,17 +14,24 @@ void testTreeNode(
       Map<Vector, bool> samplesToCheck,
     }
 ) {
-  expect(node.isLeaf, equals(shouldBeLeaf));
+  expect(node.isLeaf, equals(shouldBeLeaf),
+      reason: 'node.isLeaf should be $shouldBeLeaf');
+
   expect(node.splittingValue, equals(expectedSplittingValue));
   expect(node.splittingIndex, equals(expectedSplittingColumnIdx));
+
   expectedChildrenLength == null
       ? expect(node.children, isNull)
       : expect(node.children, hasLength(expectedChildrenLength));
+
   expectedLabel == null
       ? expect(node.label, isNull)
       : testLeafLabel(node.label, expectedLabel);
+
   samplesToCheck?.entries?.forEach((entry) {
-    expect(node.isSamplePassed(entry.key), entry.value);
+    expect(node.isSamplePassed(entry.key), entry.value,
+        reason: '`isSamplePassed` should return ${entry.value} for '
+            'sampe ${entry.key}');
   });
 }
 

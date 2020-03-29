@@ -83,6 +83,9 @@ class DecisionTreeClassifierImpl
     }
 
     for (final childNode in node.children) {
+      if (childNode.isSamplePassed(sample) == null) {
+        print(sample);
+      }
       if (childNode.isSamplePassed(sample)) {
         return _getLabelForSample(sample, childNode);
       }
