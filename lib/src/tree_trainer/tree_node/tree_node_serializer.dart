@@ -1,6 +1,5 @@
 import 'package:ml_algo/src/common/serializable/serializer.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_deserialize.dart' as leaf_label;
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_serialize.dart' as leaf_label;
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type_deserialize.dart' as predicate_type;
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type_serialize.dart' as predicate_type;
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
@@ -8,7 +7,9 @@ import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serializable_field.
 
 class TreeNodeSerializer implements Serializer<TreeNode> {
 
-  const TreeNodeSerializer();
+  TreeNodeSerializer(this._leafLabelSerializer);
+
+  final Serializer<TreeLeafLabel> _leafLabelSerializer;
 
   @override
   Map<String, dynamic> serialize(TreeNode node) => <String, dynamic>{
@@ -17,7 +18,7 @@ class TreeNodeSerializer implements Serializer<TreeNode> {
     splittingIndexField: node.splittingIndex,
     levelField: node.level,
     labelField: node.label != null
-        ? leaf_label.serialize(node.label)
+        ? _leafLabelSerializer.serialize(node.label)
         : null,
     childrenField: node.children?.map(serialize)?.toList(),
   };
@@ -29,7 +30,7 @@ class TreeNodeSerializer implements Serializer<TreeNode> {
     final splittingValue = serialized[splittingValueField] as num;
     final splittingIndex = serialized[splittingIndexField] as int;
     final level = serialized[levelField] as int;
-    final label = leaf_label
+    final label = _leafLabelSerializer
         .deserialize(serialized[labelField] as Map<String, dynamic>);
 
     final serializedChildren = (serialized[childrenField] ??

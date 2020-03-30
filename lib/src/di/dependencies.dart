@@ -35,8 +35,10 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory_impl.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_serializer.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
@@ -108,8 +110,13 @@ Injector get dependencies =>
       ..registerSingleton<NumericalTreeSplitterFactory>(
               (_) => const NumericalTreeSplitterFactoryImpl())
 
+      ..registerSingleton<Serializer<TreeLeafLabel>>(
+              (_) => const TreeLeafLabelSerializer())
+
       ..registerSingleton<Serializer<TreeNode>>(
-              (_) => const TreeNodeSerializer())
+              (injector) => TreeNodeSerializer(
+                  injector.getDependency<Serializer<TreeLeafLabel>>()
+              ))
 
       ..registerSingleton<TreeSplitAssessorFactory>(
               (_) => const TreeSplitAssessorFactoryImpl())

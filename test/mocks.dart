@@ -33,6 +33,7 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
@@ -130,6 +131,9 @@ class TreeSplitSelectorFactoryMock extends Mock implements
     TreeSplitSelectorFactory {}
 
 class TreeNodeMock extends Mock implements TreeNode {}
+
+class TreeLeafLabelSerializerMock extends Mock implements
+    Serializer<TreeLeafLabel> {}
 
 class TreeNodeSerializerMock extends Mock implements Serializer<TreeNode> {}
 

@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_serialize.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_serializer.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -71,7 +71,7 @@ void main() {
     test('should serialize itself (probability value is null)', () {
       final labelValue = 1000;
       final leafLabel = TreeLeafLabel(labelValue);
-      final serialized = serialize(leafLabel);
+      final serialized = const TreeLeafLabelSerializer().serialize(leafLabel);
 
       expect(serialized, equals({
         'value': labelValue,
@@ -83,7 +83,7 @@ void main() {
       final labelValue = -1000;
       final probability = 0.7;
       final leafLabel = TreeLeafLabel(labelValue, probability: probability);
-      final serialized = serialize(leafLabel);
+      final serialized = const TreeLeafLabelSerializer().serialize(leafLabel);
 
       expect(serialized, equals({
         'value': labelValue,
