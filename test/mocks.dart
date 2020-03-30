@@ -6,6 +6,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart'
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
+import 'package:ml_algo/src/common/serializable/primitive_serializer.dart';
 import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -47,6 +48,7 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -131,6 +133,8 @@ class TreeSplitSelectorFactoryMock extends Mock implements
     TreeSplitSelectorFactory {}
 
 class TreeNodeMock extends Mock implements TreeNode {}
+
+class DTypeSerializerMock extends Mock implements PrimitiveSerializer<DType> {}
 
 class TreeLeafLabelSerializerMock extends Mock implements
     Serializer<TreeLeafLabel> {}

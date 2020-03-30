@@ -7,8 +7,10 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_fac
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
+import 'package:ml_algo/src/common/dtype_serializer/dtype_serializer.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory_impl.dart';
+import 'package:ml_algo/src/common/serializable/primitive_serializer.dart';
 import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
@@ -53,6 +55,7 @@ import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serializer.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
+import 'package:ml_linalg/dtype.dart';
 
 Injector get dependencies =>
     injector ??= Injector()
@@ -109,6 +112,9 @@ Injector get dependencies =>
 
       ..registerSingleton<NumericalTreeSplitterFactory>(
               (_) => const NumericalTreeSplitterFactoryImpl())
+      
+      ..registerSingleton<PrimitiveSerializer<DType>>(
+              (_) => const DTypeSerializer())
 
       ..registerSingleton<Serializer<TreeLeafLabel>>(
               (_) => const TreeLeafLabelSerializer())
@@ -153,5 +159,6 @@ Injector get dependencies =>
 
       ..registerSingleton<DecisionTreeClassifierFactory>(
               (injector) => DecisionTreeClassifierFactoryImpl(
-                  injector.getDependency<Serializer<TreeNode>>()
+                  injector.getDependency<PrimitiveSerializer<DType>>(),
+                  injector.getDependency<Serializer<TreeNode>>(),
               ));

@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
+import 'package:ml_algo/src/common/serializable/primitive_serializer.dart';
 import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
@@ -17,6 +18,7 @@ void main() {
   group('DecisionTreeClassifierImpl', () {
     test('should call appropriate method from `solver` when making '
         'classes prediction for nominal class labels', () {
+      final dtypeSerializer = createDTypeSerializer();
       final treeNodeSerializer = createTreeNodeSerializer();
 
       final sample1 = Vector.fromList([1, 2, 3]);
@@ -40,10 +42,11 @@ void main() {
       });
 
       final classifier = DecisionTreeClassifierImpl(
-          rootMock,
-          'class_name',
-          DType.float32,
-          treeNodeSerializer,
+        rootMock,
+        'class_name',
+        DType.float32,
+        dtypeSerializer,
+        treeNodeSerializer,
       );
 
       final predictedClasses = classifier.predict(
@@ -61,12 +64,14 @@ void main() {
 
     test('should return an empty matrix if input feature matrix is '
         'empty', () {
+      final dtypeSerializer = createDTypeSerializer();
       final treeNodeSerializer = createTreeNodeSerializer();
       final rootNode = TreeNodeMock();
       final classifier = DecisionTreeClassifierImpl(
         rootNode,
         'class_name',
         DType.float32,
+        dtypeSerializer,
         treeNodeSerializer,
       );
       final predictedClasses = classifier.predict(DataFrame([<num>[]]));
@@ -77,6 +82,7 @@ void main() {
 
     test('should call an appropriate method from `solver` while predicting '
         'class labels for nominal class label type', () {
+      final dtypeSerializer = createDTypeSerializer();
       final treeNodeSerializer = createTreeNodeSerializer();
 
       final sample1 = Vector.fromList([1, 2, 3]);
@@ -103,6 +109,7 @@ void main() {
         solverMock,
         'class_name',
         DType.float32,
+        dtypeSerializer,
         treeNodeSerializer,
       );
 
@@ -122,6 +129,7 @@ void main() {
     });
 
     test('should serialize itself', () {
+      final dtypeSerializer = createDTypeSerializer();
       final treeNodeSerializer = createTreeNodeSerializer();
 
       final sample1 = Vector.fromList([1, 2, 3]);
@@ -142,13 +150,14 @@ void main() {
         solverMock,
         'class_name',
         DType.float32,
+        dtypeSerializer,
         treeNodeSerializer,
       );
 
       final data = classifier.serialize();
 
       expect(data, equals({
-        dtypeField: 'float32',
+        dtypeField: null,
         classNamesField: ['class_name'],
         rootNodeField: null,
       }));
@@ -178,6 +187,12 @@ TreeNode createRootNodeMock(Map<Vector, TreeLeafLabel> samples) {
   when(rootMock.children).thenReturn(children);
 
   return rootMock;
+}
+
+PrimitiveSerializer<DType> createDTypeSerializer() {
+  final serializer = DTypeSerializerMock();
+  when(serializer.serialize(any)).thenReturn(null);
+  return serializer;
 }
 
 Serializer<TreeNode> createTreeNodeSerializer() {

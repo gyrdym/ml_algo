@@ -1,8 +1,8 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
+import 'package:ml_algo/src/common/serializable/primitive_serializer.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/common/serializable/serializer.dart';
-import 'package:ml_algo/src/common/serializing_rule/dtype_serializing_rule.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
@@ -21,6 +21,7 @@ class DecisionTreeClassifierImpl
       this._root,
       String className,
       this.dtype,
+      this._dtypeSerializer,
       this._treeNodeSerializer,
   ) : classNames = [className];
 
@@ -29,6 +30,8 @@ class DecisionTreeClassifierImpl
 
   @override
   final List<String> classNames;
+
+  final PrimitiveSerializer<DType> _dtypeSerializer;
 
   final Serializer<TreeNode> _treeNodeSerializer;
 
@@ -78,7 +81,7 @@ class DecisionTreeClassifierImpl
 
   @override
   Map<String, dynamic> serialize() => <String, dynamic>{
-    dtypeField: dtypeSerializingRule[dtype],
+    dtypeField: _dtypeSerializer.serialize(dtype),
     classNamesField: classNames,
     rootNodeField: _treeNodeSerializer.serialize(_root),
   };
