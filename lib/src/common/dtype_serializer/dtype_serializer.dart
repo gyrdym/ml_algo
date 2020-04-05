@@ -26,7 +26,7 @@ class DTypeSerializer implements PrimitiveSerializer<DType> {
         return float32Serialized;
 
       case DType.float64:
-        return float32Serialized;
+        return float64Serialized;
     };
 
     throw UnsupportedError('Unsupported dtype value: $value');
