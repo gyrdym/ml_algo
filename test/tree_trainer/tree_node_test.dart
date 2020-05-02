@@ -1,11 +1,7 @@
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serializer.dart';
 import 'package:ml_tech/unit_testing/readers/json.dart';
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-
-import '../mocks.dart';
 
 void main() {
   group('TreeNodeSerializer', () {
@@ -176,13 +172,8 @@ void main() {
         null,
       );
 
-      final leafLabelSerializer = TreeLeafLabelSerializerMock();
-
-      when(leafLabelSerializer.serialize(any)).thenReturn(null);
-
       final snapshotFileName = 'test/tree_trainer/tree_node_test.json';
-      final serializer = TreeNodeSerializer(leafLabelSerializer);
-      final actual = serializer.serialize(root);
+      final actual = root.toJson();
       final expected = await readJSON(snapshotFileName);
 
       expect(actual, expected);

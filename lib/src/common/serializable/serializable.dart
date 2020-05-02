@@ -2,8 +2,8 @@ import 'dart:io';
 
 abstract class Serializable {
   /// Returns a serialized object
-  Map<String, dynamic> serialize();
+  Map<String, dynamic> toJson();
 
   /// Saves a json file in [fileName] file
-  Future<File> saveAsJSON(String fileName);
+  Future<File> saveAsJson(String fileName);
 }

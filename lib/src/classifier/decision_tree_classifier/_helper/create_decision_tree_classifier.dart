@@ -24,9 +24,9 @@ DecisionTreeClassifier createDecisionTreeClassifier(
 
   final trainer = createDecisionTreeTrainer(trainData, targetName, minError,
     minSamplesCount, maxDepth);
-  final root = trainer.train(trainData.toMatrix(dtype));
+  final treeRootNode = trainer.train(trainData.toMatrix(dtype));
 
   return dependencies
       .getDependency<DecisionTreeClassifierFactory>()
-      .create(root, targetName, dtype);
+      .create(treeRootNode, targetName, dtype);
 }

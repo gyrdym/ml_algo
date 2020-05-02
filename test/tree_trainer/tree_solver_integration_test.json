@@ -1,49 +1,49 @@
 {
-  "predicateType":"",
-  "splittingValue":null,
-  "splittingIdx":null,
-  "level":0,
-  "label":null,
-  "children":[
+  "PT":null,
+  "SV":null,
+  "SI":null,
+  "LV":0,
+  "LB":null,
+  "CN":[
     {
-      "predicateType":"lessThan",
-      "splittingValue":15.0,
-      "splittingIdx":1,
-      "level":1,
-      "label":{
-        "value":2.0,
-        "probability":1.0
+      "PT":"lessThan",
+      "SV":15.0,
+      "SI":1,
+      "LV":1,
+      "LB":{
+        "V":2.0,
+        "P":1.0
       },
-      "children":null
+      "CN":null
     },
     {
-      "predicateType":"greaterThanOrEqualTo",
-      "splittingValue":15.0,
-      "splittingIdx":1,
-      "level":1,
-      "label":null,
-      "children":[
+      "PT":"greaterThanOrEqualTo",
+      "SV":15.0,
+      "SI":1,
+      "LV":1,
+      "LB":null,
+      "CN":[
         {
-          "predicateType":"equalTo",
-          "splittingValue":0,
-          "splittingIdx":3,
-          "level":2,
-          "label":{
-            "value":0.0,
-            "probability":1.0
+          "PT":"equalTo",
+          "SV":0,
+          "SI":3,
+          "LV":2,
+          "LB":{
+            "V":0.0,
+            "P":1.0
           },
-          "children":null
+          "CN":null
         },
         {
-          "predicateType":"equalTo",
-          "splittingValue":1,
-          "splittingIdx":3,
-          "level":2,
-          "label":{
-            "value":1.0,
-            "probability":1.0
+          "PT":"equalTo",
+          "SV":1,
+          "SI":3,
+          "LV":2,
+          "LB":{
+            "V":1.0,
+            "P":1.0
           },
-          "children":null
+          "CN":null
         }
       ]
     }

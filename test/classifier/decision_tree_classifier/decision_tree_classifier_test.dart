@@ -1,7 +1,5 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_serializable_field.dart';
-import 'package:ml_algo/src/common/dtype_serializer/dtype_serialized_value.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
@@ -144,34 +142,6 @@ void main() {
 
     test('should throw an error if passed json has a wrong schema', () {
       final json = '{"field_1": "data"}';
-      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
-    });
-
-    test('should throw an error if passed json does not contain a '
-        '$classNamesField field', () {
-      final json = '{'
-          '"field_1": "data",'
-          '"$dtypeField": "${float32Serialized}",'
-          '"$rootNodeField": null'
-          '}';
-      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
-    });
-
-    test('should throw an error if passed json does not contain a '
-        '$dtypeField field', () {
-      final json = '{'
-          '"$classNamesField": ["class_label_1"],'
-          '"$rootNodeField": null'
-          '}';
-      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
-    });
-
-    test('should throw an error if passed json does not contain a '
-        '$rootNodeField field', () {
-      final json = '{'
-          '"$classNamesField": ["class_label_1"],'
-          '"$dtypeField": "${float32Serialized}"'
-          '}';
       expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
     });
   });

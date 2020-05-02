@@ -6,8 +6,6 @@ import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart'
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
-import 'package:ml_algo/src/common/serializable/primitive_serializer.dart';
-import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
@@ -34,7 +32,6 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
@@ -48,7 +45,6 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -133,13 +129,6 @@ class TreeSplitSelectorFactoryMock extends Mock implements
     TreeSplitSelectorFactory {}
 
 class TreeNodeMock extends Mock implements TreeNode {}
-
-class DTypeSerializerMock extends Mock implements PrimitiveSerializer<DType> {}
-
-class TreeLeafLabelSerializerMock extends Mock implements
-    Serializer<TreeLeafLabel> {}
-
-class TreeNodeSerializerMock extends Mock implements Serializer<TreeNode> {}
 
 class TreeSolverMock extends Mock implements DecisionTreeTrainer {}
 

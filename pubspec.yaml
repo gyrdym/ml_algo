@@ -5,10 +5,11 @@ author: Ilia Gyrdymov <ilgyrd@gmail.com>
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:
-  sdk: '>=2.4.1 <3.0.0'
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
   injector: ^1.0.8
+  json_serializable: ^3.3.0
   ml_dataframe: 0.0.11
   ml_linalg: ^12.3.0
   quiver: ^2.0.2

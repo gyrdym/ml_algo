@@ -1,134 +1,134 @@
 {
-  "predicateType":"equalTo",
-  "splittingValue":null,
-  "splittingIdx":null,
-  "level":0,
-  "label":null,
-  "children":[
+  "PT":"equalTo",
+  "SV":null,
+  "SI":null,
+  "LV":0,
+  "LB":null,
+  "CN":[
     {
-      "predicateType":"equalTo",
-      "splittingValue":10,
-      "splittingIdx":null,
-      "level":1,
-      "label":null,
-      "children":[
+      "PT":"equalTo",
+      "SV":10,
+      "SI":null,
+      "LV":1,
+      "LB":null,
+      "CN":[
         {
-          "predicateType":"equalTo",
-          "splittingValue":100,
-          "splittingIdx":null,
-          "level":2,
-          "label":null,
-          "children":[
+          "PT":"equalTo",
+          "SV":100,
+          "SI":null,
+          "LV":2,
+          "LB":null,
+          "CN":[
             {
-              "predicateType":"equalTo",
-              "splittingValue":600,
-              "splittingIdx":null,
-              "level":3,
-              "label":null,
-              "children":[]
+              "PT":"equalTo",
+              "SV":600,
+              "SI":null,
+              "LV":3,
+              "LB":null,
+              "CN":[]
             },
             {
-              "predicateType":"equalTo",
-              "splittingValue":700,
-              "splittingIdx":null,
-              "level":3,
-              "label":null,
-              "children":[]
+              "PT":"equalTo",
+              "SV":700,
+              "SI":null,
+              "LV":3,
+              "LB":null,
+              "CN":[]
             }
           ]
         },
         {
-          "predicateType":"equalTo",
-          "splittingValue":200,
-          "splittingIdx":null,
-          "level":2,
-          "label":null,
-          "children":[
+          "PT":"equalTo",
+          "SV":200,
+          "SI":null,
+          "LV":2,
+          "LB":null,
+          "CN":[
             {
-              "predicateType":"equalTo",
-              "splittingValue":800,
-              "splittingIdx":null,
-              "level":3,
-              "label":null,
-              "children":[]
+              "PT":"equalTo",
+              "SV":800,
+              "SI":null,
+              "LV":3,
+              "LB":null,
+              "CN":[]
             },
             {
-              "predicateType":"equalTo",
-              "splittingValue":900,
-              "splittingIdx":null,
-              "level":3,
-              "label":null,
-              "children":[]
+              "PT":"equalTo",
+              "SV":900,
+              "SI":null,
+              "LV":3,
+              "LB":null,
+              "CN":[]
             }
           ]
         }
       ]
     },
     {
-      "predicateType":"equalTo",
-      "splittingValue":12,
-      "splittingIdx":null,
-      "level":1,
-      "label":null,
-      "children":[
+      "PT":"equalTo",
+      "SV":12,
+      "SI":null,
+      "LV":1,
+      "LB":null,
+      "CN":[
         {
-          "predicateType":"equalTo",
-          "splittingValue":300,
-          "splittingIdx":null,
-          "level":2,
-          "label":null,
-          "children":[
+          "PT":"equalTo",
+          "SV":300,
+          "SI":null,
+          "LV":2,
+          "LB":null,
+          "CN":[
             {
-              "predicateType":"equalTo",
-              "splittingValue":900,
-              "splittingIdx":null,
-              "level":3,
-              "label":null,
-              "children":[]
+              "PT":"equalTo",
+              "SV":900,
+              "SI":null,
+              "LV":3,
+              "LB":null,
+              "CN":[]
             },
             {
-              "predicateType":"equalTo",
-              "splittingValue":901,
-              "splittingIdx":null,
-              "level":3,
-              "label":null,
-              "children":[]
+              "PT":"equalTo",
+              "SV":901,
+              "SI":null,
+              "LV":3,
+              "LB":null,
+              "CN":[]
             }
           ]
         },
         {
-          "predicateType":"equalTo",
-          "splittingValue":400,
-          "splittingIdx":null,
-          "level":2,
-          "label":null,
-          "children":[
+          "PT":"equalTo",
+          "SV":400,
+          "SI":null,
+          "LV":2,
+          "LB":null,
+          "CN":[
             {
-              "predicateType":"equalTo",
-              "splittingValue":911,
-              "splittingIdx":null,
-              "level":3,
-              "label":null,
-              "children":[]
+              "PT":"equalTo",
+              "SV":911,
+              "SI":null,
+              "LV":3,
+              "LB":null,
+              "CN":[]
             }
           ]
         }
       ]
     },
     {
-      "predicateType":"equalTo",
-      "splittingValue":13,
-      "splittingIdx":null,
-      "level":1,
-      "label":null,
-      "children":[
+      "PT":"equalTo",
+      "SV":13,
+      "SI":null,
+      "LV":1,
+      "LB":null,
+      "CN":[
         {
-          "predicateType":"equalTo",
-          "splittingValue":500,
-          "splittingIdx":null,
-          "level":2,
-          "label":null,
-          "children":[]
+          "PT":"equalTo",
+          "SV":500,
+          "SI":null,
+          "LV":2,
+          "LB":null,
+          "CN":[]
         }
       ]
     }

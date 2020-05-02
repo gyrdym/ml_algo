@@ -7,11 +7,8 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_fac
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
-import 'package:ml_algo/src/common/dtype_serializer/dtype_serializer.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory_impl.dart';
-import 'package:ml_algo/src/common/serializable/primitive_serializer.dart';
-import 'package:ml_algo/src/common/serializable/serializer.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
@@ -37,10 +34,8 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_serializer.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
@@ -51,11 +46,8 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serializer.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
-import 'package:ml_linalg/dtype.dart';
 
 Injector get dependencies =>
     injector ??= Injector()
@@ -113,17 +105,6 @@ Injector get dependencies =>
       ..registerSingleton<NumericalTreeSplitterFactory>(
               (_) => const NumericalTreeSplitterFactoryImpl())
       
-      ..registerSingleton<PrimitiveSerializer<DType>>(
-              (_) => const DTypeSerializer())
-
-      ..registerSingleton<Serializer<TreeLeafLabel>>(
-              (_) => const TreeLeafLabelSerializer())
-
-      ..registerSingleton<Serializer<TreeNode>>(
-              (injector) => TreeNodeSerializer(
-                  injector.getDependency<Serializer<TreeLeafLabel>>()
-              ))
-
       ..registerSingleton<TreeSplitAssessorFactory>(
               (_) => const TreeSplitAssessorFactoryImpl())
 
@@ -158,7 +139,4 @@ Injector get dependencies =>
               ))
 
       ..registerSingleton<DecisionTreeClassifierFactory>(
-              (injector) => DecisionTreeClassifierFactoryImpl(
-                  injector.getDependency<PrimitiveSerializer<DType>>(),
-                  injector.getDependency<Serializer<TreeNode>>(),
-              ));
+              (injector) => const DecisionTreeClassifierFactoryImpl());

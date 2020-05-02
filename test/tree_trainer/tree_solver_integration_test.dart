@@ -1,6 +1,4 @@
 import 'package:ml_algo/src/tree_trainer/_helpers/create_decision_tree_trainer.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_serializer.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_serializer.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_tech/unit_testing/readers/json.dart';
@@ -25,9 +23,7 @@ void main() {
             'tree_solver_integration_test.json';
         final trainer = createDecisionTreeTrainer(dataFrame, 'col_8', 0.3, 1, 3);
         final rootNode = trainer.train(dataFrame.toMatrix(DType.float32));
-        final leafLabelSerializer = const TreeLeafLabelSerializer();
-        final treeNodeSerializer = TreeNodeSerializer(leafLabelSerializer);
-        final actual = treeNodeSerializer.serialize(rootNode);
+        final actual = rootNode.toJson();
         final expected = await readJSON(snapshotFileName);
 
         expect(actual, equals(expected));

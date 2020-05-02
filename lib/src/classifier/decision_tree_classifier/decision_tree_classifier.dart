@@ -1,11 +1,10 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/_helpers/create_decision_tree_classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/_helpers/create_decision_tree_classifier_from_json.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/_helper/create_decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/_helper/create_decision_tree_classifier_from_json.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-
 
 /// A class that performs decision tree-based classification
 ///
