@@ -10,8 +10,8 @@ class MajorityTreeSplitAssessor implements TreeSplitAssessor {
 
   @override
   double getAggregatedError(Iterable<Matrix> splitObservations, int targetId) {
-    int errorCount = 0;
-    int totalCount = 0;
+    var errorCount = 0;
+    var totalCount = 0;
     for (final nodeObservations in splitObservations) {
       if (nodeObservations.columnsNum == 0) {
         throw Exception('Observations on the node are empty');

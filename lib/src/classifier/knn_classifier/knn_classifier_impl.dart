@@ -21,7 +21,6 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
     validateClassLabelList(_classLabels);
   }
 
-  @override
   final List<String> classNames;
 
   @override
