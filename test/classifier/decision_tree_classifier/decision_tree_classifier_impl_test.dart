@@ -36,8 +36,14 @@ void main() {
       childrenJsonKey: <Map<String, dynamic>>[],
     };
 
-    final classifierJson = {
+    final classifier32Json = {
       dTypeJsonKey: dTypeFloat32EncodedValue,
+      targetColumnNameJsonKey: targetColumnName,
+      treeRootNodeJsonKey: rootNodeJson,
+    };
+
+    final classifier64Json = {
+      dTypeJsonKey: dTypeFloat64EncodedValue,
       targetColumnNameJsonKey: targetColumnName,
       treeRootNodeJsonKey: rootNodeJson,
     };
@@ -48,40 +54,46 @@ void main() {
       sample3: label3,
     }, rootNodeJson);
 
-    DecisionTreeClassifierImpl classifier;
+    DecisionTreeClassifierImpl classifier32;
+    DecisionTreeClassifierImpl classifier64;
 
     setUp(() {
-      classifier = DecisionTreeClassifierImpl(
+      classifier32 = DecisionTreeClassifierImpl(
         treeRootMock,
         targetColumnName,
         DType.float32,
       );
+
+      classifier64 = DecisionTreeClassifierImpl(
+        treeRootMock,
+        targetColumnName,
+        DType.float64,
+      );
     });
 
     test('should return data frame with a correct header', () {
-      final predictedLabels = classifier.predictProbabilities(
+      final predictedLabels = classifier32.predictProbabilities(
         DataFrame.fromMatrix(features),
       );
-      expect(predictedLabels.header, equals(['class_name']));
+      expect(predictedLabels.header, equals([targetColumnName]));
     });
 
-    test('should return a data frame with empty header if input matrix is '
+    test('should return data frame with empty header if input matrix is '
         'empty', () {
-      final predictedClasses = classifier.predict(DataFrame([<num>[]]));
+      final predictedClasses = classifier32.predict(DataFrame([<num>[]]));
       expect(predictedClasses.header, isEmpty);
     });
 
     test('should return data frame with empty matrix if input feature matrix is '
         'empty', () {
-      final predictedClasses = classifier.predict(DataFrame([<num>[]]));
+      final predictedClasses = classifier32.predict(DataFrame([<num>[]]));
       expect(predictedClasses.toMatrix(), isEmpty);
     });
 
     test('should return data frame with probabilities for each class label', () {
-      final predictedLabels = classifier.predictProbabilities(
+      final predictedLabels = classifier32.predictProbabilities(
         DataFrame.fromMatrix(features),
       );
-
       expect(
           predictedLabels.toMatrix(),
           iterable2dAlmostEqualTo([
@@ -92,17 +104,30 @@ void main() {
       );
     });
 
-    test('should serialize', () {
-      final data = classifier.toJson();
-
-      expect(data, equals(classifierJson));
+    test('should serialize (dtype is float32)', () {
+      final data = classifier32.toJson();
+      expect(data, equals(classifier32Json));
       verify(treeRootMock.toJson()).called(1);
     });
 
-    test('should be restored from json', () {
-      final classifier = DecisionTreeClassifierImpl.fromJson(classifierJson);
+    test('should serialize (dtype is float64)', () {
+      final data = classifier64.toJson();
+      expect(data, equals(classifier64Json));
+      verify(treeRootMock.toJson()).called(1);
+    });
 
+    test('should restore dtype field from json (dtype is float32)', () {
+      final classifier = DecisionTreeClassifierImpl.fromJson(classifier32Json);
       expect(classifier.dtype, equals(DType.float32));
+    });
+
+    test('should restore dtype field from json (dtype is float64)', () {
+      final classifier = DecisionTreeClassifierImpl.fromJson(classifier64Json);
+      expect(classifier.dtype, equals(DType.float64));
+    });
+
+    test('should be restored from json', () {
+      final classifier = DecisionTreeClassifierImpl.fromJson(classifier32Json);
       expect(classifier.targetColumnName, equals(targetColumnName));
       expect(classifier.treeRootNode, isNotNull);
     });
