@@ -1,4 +1,6 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
+import 'package:ml_algo/src/common/dtype_serializer/dtype_encoded_values.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
@@ -31,13 +33,13 @@ void main() {
     ]);
 
     final rootNodeJson = {
-      childrenKey: <Map<String, dynamic>>[],
+      childrenJsonKey: <Map<String, dynamic>>[],
     };
 
     final classifierJson = {
-      'DT': 'float32',
-      'T': targetColumnName,
-      'R': rootNodeJson,
+      dTypeJsonKey: dTypeFloat32EncodedValue,
+      targetColumnNameJsonKey: targetColumnName,
+      treeRootNodeJsonKey: rootNodeJson,
     };
 
     final treeRootMock = createRootNodeMock({

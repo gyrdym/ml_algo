@@ -32,33 +32,33 @@ class TreeNode {
   Map<String, dynamic> toJson() => _$TreeNodeToJson(this);
 
   @JsonKey(
-    name: childrenKey,
+    name: childrenJsonKey,
     toJson: treeNodesToJson,
     fromJson: fromTreeNodesJson,
   )
   final List<TreeNode> children;
 
   @JsonKey(
-    name: labelKey,
+    name: labelJsonKey,
     toJson: leafLabelToJson,
     fromJson: fromLeafLabelJson,
   )
   final TreeLeafLabel label;
 
   @JsonKey(
-    name: predicateTypeKey,
+    name: predicateTypeJsonKey,
     toJson: splittingPredicateTypeToJson,
     fromJson: fromSplittingPredicateTypeJson,
   )
   final TreeNodeSplittingPredicateType predicateType;
 
-  @JsonKey(name: splittingValueKey)
+  @JsonKey(name: splittingValueJsonKey)
   final num splittingValue;
 
-  @JsonKey(name: splittingIndexKey)
+  @JsonKey(name: splittingIndexJsonKey)
   final int splittingIndex;
 
-  @JsonKey(name: levelKey)
+  @JsonKey(name: levelJsonKey)
   final int level;
 
   bool get isLeaf => children == null || children.isEmpty;

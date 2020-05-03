@@ -1,5 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
+import 'package:ml_algo/src/common/dtype_serializer/dtype_to_json.dart';
+import 'package:ml_algo/src/common/dtype_serializer/from_dtype_json.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
@@ -34,16 +37,20 @@ class DecisionTreeClassifierImpl
   Map<String, dynamic> toJson() => _$DecisionTreeClassifierImplToJson(this);
 
   @override
-  @JsonKey(name: 'DT')
+  @JsonKey(
+    name: dTypeJsonKey,
+    toJson: dTypeToJson,
+    fromJson: fromDTypeJson,
+  )
   final DType dtype;
 
-  @JsonKey(name: 'T')
+  @JsonKey(name: targetColumnNameJsonKey)
   final String targetColumnName;
 
   @JsonKey(
-      name: 'R',
-      toJson: treeNodeToJson,
-      fromJson: fromTreeNodeJson,
+    name: treeRootNodeJsonKey,
+    toJson: treeNodeToJson,
+    fromJson: fromTreeNodeJson,
   )
   final TreeNode treeRootNode;
 
