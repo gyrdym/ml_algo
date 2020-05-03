@@ -4,7 +4,7 @@ import 'package:ml_linalg/vector.dart';
 typedef SplittingPredicate = bool Function(Vector sample, int splittingIdx,
     num value);
 
-SplittingPredicate getSplittingPredicateByType(
+SplittingPredicate getTreeNodeSplittingPredicateByType(
     TreeNodeSplittingPredicateType type) {
 
   switch (type) {
@@ -37,8 +37,8 @@ bool _lessThanOrEqualToClause(Vector sample, int splittingIdx, num value) =>
 bool _equalToClause(Vector sample, int splittingIdx, num value) =>
     sample[splittingIdx] == value;
 
-bool _greaterThanClause(Vector sample, int splittingIdx, num value) =>
-    sample[splittingIdx] > value;
-
 bool _greaterThanOrEqualToClause(Vector sample, int splittingIdx,
     num value) => sample[splittingIdx] >= value;
+
+bool _greaterThanClause(Vector sample, int splittingIdx, num value) =>
+    sample[splittingIdx] > value;

@@ -4,8 +4,8 @@ import 'package:ml_algo/src/tree_trainer/leaf_label/_helper/leaf_label_to_json.d
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_nodes_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_nodes_to_json.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/_helper/get_tree_node_splitting_predicate_by_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/from_tree_node_splitting_predicate_type_json.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
@@ -64,7 +64,7 @@ class TreeNode {
   bool get isLeaf => children == null || children.isEmpty;
 
   bool isSamplePassed(Vector sample) =>
-      getSplittingPredicateByType(predicateType)(
+      getTreeNodeSplittingPredicateByType(predicateType)(
         sample,
         splittingIndex,
         splittingValue,
