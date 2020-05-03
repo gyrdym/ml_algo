@@ -1,26 +1,26 @@
 {
-  "PT":"equalTo",
+  "PT":"ET",
   "SV":null,
   "SI":null,
   "LV":0,
   "LB":null,
   "CN":[
     {
-      "PT":"equalTo",
+      "PT":"ET",
       "SV":10,
       "SI":null,
       "LV":1,
       "LB":null,
       "CN":[
         {
-          "PT":"equalTo",
+          "PT":"ET",
           "SV":100,
           "SI":null,
           "LV":2,
           "LB":null,
           "CN":[
             {
-              "PT":"equalTo",
+              "PT":"ET",
               "SV":600,
               "SI":null,
               "LV":3,
@@ -28,7 +28,7 @@
               "CN":[]
             },
             {
-              "PT":"equalTo",
+              "PT":"ET",
               "SV":700,
               "SI":null,
               "LV":3,
@@ -38,14 +38,14 @@
           ]
         },
         {
-          "PT":"equalTo",
+          "PT":"ET",
           "SV":200,
           "SI":null,
           "LV":2,
           "LB":null,
           "CN":[
             {
-              "PT":"equalTo",
+              "PT":"ET",
               "SV":800,
               "SI":null,
               "LV":3,
@@ -53,7 +53,7 @@
               "CN":[]
             },
             {
-              "PT":"equalTo",
+              "PT":"ET",
               "SV":900,
               "SI":null,
               "LV":3,
@@ -65,21 +65,21 @@
       ]
     },
     {
-      "PT":"equalTo",
+      "PT":"ET",
       "SV":12,
       "SI":null,
       "LV":1,
       "LB":null,
       "CN":[
         {
-          "PT":"equalTo",
+          "PT":"ET",
           "SV":300,
           "SI":null,
           "LV":2,
           "LB":null,
           "CN":[
             {
-              "PT":"equalTo",
+              "PT":"ET",
               "SV":900,
               "SI":null,
               "LV":3,
@@ -87,7 +87,7 @@
               "CN":[]
             },
             {
-              "PT":"equalTo",
+              "PT":"ET",
               "SV":901,
               "SI":null,
               "LV":3,
@@ -97,14 +97,14 @@
           ]
         },
         {
-          "PT":"equalTo",
+          "PT":"ET",
           "SV":400,
           "SI":null,
           "LV":2,
           "LB":null,
           "CN":[
             {
-              "PT":"equalTo",
+              "PT":"ET",
               "SV":911,
               "SI":null,
               "LV":3,
@@ -116,14 +116,14 @@
       ]
     },
     {
-      "PT":"equalTo",
+      "PT":"ET",
       "SV":13,
       "SI":null,
       "LV":1,
       "LB":null,
       "CN":[
         {
-          "PT":"equalTo",
+          "PT":"ET",
           "SV":500,
           "SI":null,
           "LV":2,

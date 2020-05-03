@@ -6,7 +6,7 @@
   "LB":null,
   "CN":[
     {
-      "PT":"lessThan",
+      "PT":"LT",
       "SV":15.0,
       "SI":1,
       "LV":1,
@@ -17,14 +17,14 @@
       "CN":null
     },
     {
-      "PT":"greaterThanOrEqualTo",
+      "PT":"GET",
       "SV":15.0,
       "SI":1,
       "LV":1,
       "LB":null,
       "CN":[
         {
-          "PT":"equalTo",
+          "PT":"ET",
           "SV":0,
           "SI":3,
           "LV":2,
@@ -35,7 +35,7 @@
           "CN":null
         },
         {
-          "PT":"equalTo",
+          "PT":"ET",
           "SV":1,
           "SI":3,
           "LV":2,
