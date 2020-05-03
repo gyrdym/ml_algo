@@ -6,6 +6,7 @@ import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_nodes_json.
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_nodes_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
 import 'package:ml_linalg/vector.dart';
 
 part 'tree_node.g.dart';
@@ -29,29 +30,29 @@ class TreeNode {
   Map<String, dynamic> toJson() => _$TreeNodeToJson(this);
 
   @JsonKey(
-    name: 'CN',
+    name: childrenKey,
     toJson: treeNodesToJson,
     fromJson: fromTreeNodesJson,
   )
   final List<TreeNode> children;
 
   @JsonKey(
-    name: 'LB',
+    name: labelKey,
     toJson: leafLabelToJson,
     fromJson: fromLeafLabelJson,
   )
   final TreeLeafLabel label;
 
-  @JsonKey(name: 'PT')
+  @JsonKey(name: predicateTypeKey)
   final TreeNodeSplittingPredicateType predicateType;
 
-  @JsonKey(name: 'SV')
+  @JsonKey(name: splittingValueKey)
   final num splittingValue;
 
-  @JsonKey(name: 'SI')
+  @JsonKey(name: splittingIndexKey)
   final int splittingIndex;
 
-  @JsonKey(name: 'LV')
+  @JsonKey(name: levelKey)
   final int level;
 
   bool get isLeaf => children == null || children.isEmpty;

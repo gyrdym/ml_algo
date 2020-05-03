@@ -136,7 +136,7 @@ void main() {
     });
 
     test('should throw an error if invalid json was passed', () {
-      final json = 'unknown_data';
+      final json = 'invalid_json';
       expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
     });
 
