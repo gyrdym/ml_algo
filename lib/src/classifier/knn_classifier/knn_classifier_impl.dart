@@ -12,16 +12,16 @@ import 'package:ml_linalg/vector.dart';
 
 class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   KnnClassifierImpl(
-      String targetName,
+      this._targetColumnName,
       this._classLabels,
       this._kernel,
       this._solver,
       this.dtype,
-  ) : classNames = [targetName] {
+  ) {
     validateClassLabelList(_classLabels);
   }
 
-  final List<String> classNames;
+  final String _targetColumnName;
 
   @override
   final DType dtype;
@@ -46,7 +46,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
 
     return DataFrame.fromMatrix(
       Matrix.fromColumns([outcomesAsVector], dtype: dtype),
-      header: classNames,
+      header: [_targetColumnName],
     );
   }
 

@@ -13,94 +13,77 @@ import '../../mocks.dart';
 
 void main() {
   group('DecisionTreeClassifierImpl', () {
-    test('should call appropriate method from `solver` when making '
-        'classes prediction for nominal class labels', () {
-      final sample1 = Vector.fromList([1, 2, 3]);
-      final sample2 = Vector.fromList([10, 20, 30]);
-      final sample3 = Vector.fromList([100, 200, 300]);
+    final sample1 = Vector.fromList([1, 2, 3]);
+    final sample2 = Vector.fromList([10, 20, 30]);
+    final sample3 = Vector.fromList([100, 200, 300]);
 
-      final features = Matrix.fromRows([
-        sample1,
-        sample2,
-        sample3,
-      ]);
+    final label1 = TreeLeafLabel(0, probability: 0.7);
+    final label2 = TreeLeafLabel(1, probability: 0.55);
+    final label3 = TreeLeafLabel(2, probability: 0.5);
 
-      final classLabel1 = 0.0;
-      final classLabel2 = 1.0;
-      final classLabel3 = 2.0;
+    final targetColumnName = 'class_name';
 
-      final rootMock = createRootNodeMock({
-        sample1: TreeLeafLabel(classLabel1),
-        sample2: TreeLeafLabel(classLabel2),
-        sample3: TreeLeafLabel(classLabel3),
-      });
+    final features = Matrix.fromRows([
+      sample1,
+      sample2,
+      sample3,
+    ]);
 
-      final classifier = DecisionTreeClassifierImpl(
-        rootMock,
-        'class_name',
+    final rootNodeJson = {
+      'CN': <Map<String, dynamic>>[],
+      'SV': null,
+      'SI': null,
+      'PT': 'equalTo',
+      'LB': null,
+      'LV': null,
+    };
+
+    final classifierJson = {
+      'DT': 'float32',
+      'T': targetColumnName,
+      'R': rootNodeJson,
+    };
+
+    final treeRootMock = createRootNodeMock({
+      sample1: label1,
+      sample2: label2,
+      sample3: label3,
+    }, rootNodeJson);
+
+    DecisionTreeClassifierImpl classifier;
+
+    setUp(() {
+      classifier = DecisionTreeClassifierImpl(
+        treeRootMock,
+        targetColumnName,
         DType.float32,
       );
-
-      final predictedClasses = classifier.predict(
-        DataFrame.fromMatrix(features),
-      );
-
-      expect(predictedClasses.header, equals(['class_name']));
-
-      expect(predictedClasses.toMatrix(), equals([
-        [classLabel1],
-        [classLabel2],
-        [classLabel3],
-      ]));
     });
 
-    test('should return an empty matrix if input feature matrix is '
-        'empty', () {
-      final rootNode = TreeNodeMock();
-      final classifier = DecisionTreeClassifierImpl(
-        rootNode,
-        'class_name',
-        DType.float32,
+    test('should return data frame with a correct header', () {
+      final predictedLabels = classifier.predictProbabilities(
+        DataFrame.fromMatrix(features),
       );
-      final predictedClasses = classifier.predict(DataFrame([<num>[]]));
+      expect(predictedLabels.header, equals(['class_name']));
+    });
 
+    test('should return a data frame with empty header if input matrix is '
+        'empty', () {
+      final predictedClasses = classifier.predict(DataFrame([<num>[]]));
       expect(predictedClasses.header, isEmpty);
+    });
+
+    test('should return data frame with empty matrix if input feature matrix is '
+        'empty', () {
+      final predictedClasses = classifier.predict(DataFrame([<num>[]]));
       expect(predictedClasses.toMatrix(), isEmpty);
     });
 
-    test('should call an appropriate method from `solver` while predicting '
-        'class labels for nominal class label type', () {
-      final sample1 = Vector.fromList([1, 2, 3]);
-      final sample2 = Vector.fromList([10, 20, 30]);
-      final sample3 = Vector.fromList([100, 200, 300]);
-
-      final features = Matrix.fromRows([
-        sample1,
-        sample2,
-        sample3,
-      ]);
-
-      final label1 = TreeLeafLabel(0, probability: 0.7);
-      final label2 = TreeLeafLabel(1, probability: 0.55);
-      final label3 = TreeLeafLabel(2, probability: 0.5);
-
-      final solverMock = createRootNodeMock({
-        sample1: label1,
-        sample2: label2,
-        sample3: label3,
-      });
-
-      final classifier = DecisionTreeClassifierImpl(
-        solverMock,
-        'class_name',
-        DType.float32,
-      );
-
+    test('should return data frame with probabilities for each class label', () {
       final predictedLabels = classifier.predictProbabilities(
         DataFrame.fromMatrix(features),
       );
 
-      expect(predictedLabels.header, equals(['class_name']));
       expect(
           predictedLabels.toMatrix(),
           iterable2dAlmostEqualTo([
@@ -111,37 +94,19 @@ void main() {
       );
     });
 
-    test('should serialize itself', () {
-      final sample1 = Vector.fromList([1, 2, 3]);
-      final sample2 = Vector.fromList([10, 20, 30]);
-      final sample3 = Vector.fromList([100, 200, 300]);
-
-      final label1 = TreeLeafLabel(0, probability: 0.7);
-      final label2 = TreeLeafLabel(1, probability: 0.55);
-      final label3 = TreeLeafLabel(2, probability: 0.5);
-
-      final rootNodeJson = {'C': [1, 2, 3]};
-      final treeRootMock = createRootNodeMock({
-        sample1: label1,
-        sample2: label2,
-        sample3: label3,
-      }, rootNodeJson);
-
-      final classifier = DecisionTreeClassifierImpl(
-        treeRootMock,
-        'class_name',
-        DType.float32,
-      );
-
+    test('should serialize', () {
       final data = classifier.toJson();
 
-      expect(data, equals({
-        'DT': 'float32',
-        'T': 'class_name',
-        'R': rootNodeJson,
-      }));
-
+      expect(data, equals(classifierJson));
       verify(treeRootMock.toJson()).called(1);
+    });
+
+    test('should be restored from json', () {
+      final classifier = DecisionTreeClassifierImpl.fromJson(classifierJson);
+
+      expect(classifier.dtype, equals(DType.float32));
+      expect(classifier.targetColumnName, equals(targetColumnName));
+      expect(classifier.treeRootNode, isNotNull);
     });
   });
 }
