@@ -172,7 +172,7 @@ void main() {
         null,
       );
 
-      final snapshotFileName = 'test/tree_trainer/tree_node_test.json';
+      final snapshotFileName = 'test/tree_trainer/tree_node/tree_node_test.json';
       final actual = root.toJson();
       final expected = await readJSON(snapshotFileName);
 

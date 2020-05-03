@@ -20,7 +20,7 @@ void main() {
 
       test('should build a decision tree structure', () async {
         final snapshotFileName = 'test/tree_trainer/'
-            'tree_solver_integration_test.json';
+            'tree_trainer_integration_test.json';
         final trainer = createDecisionTreeTrainer(dataFrame, 'col_8', 0.3, 1, 3);
         final rootNode = trainer.train(dataFrame.toMatrix(DType.float32));
         final actual = rootNode.toJson();
