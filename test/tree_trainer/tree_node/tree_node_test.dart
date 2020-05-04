@@ -1,179 +1,56 @@
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
 
+import 'tree.dart';
+
 void main() {
-  group('TreeNodeSerializer', () {
-    test('should serialize tree structure', () async {
-      final child31 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        600,
-        null,
-        [],
-        null,
-        3,
-      );
+  group('TreeNode', () {
+    final predicateType = TreeNodeSplittingPredicateType.equalTo;
+    final splittingValue = 600;
+    final splittingIndex = 2;
+    final children = <TreeNode>[];
+    final treeLabel = TreeLeafLabel(1000, probability: 0.75);
+    final level = 3;
 
-      final child32 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        700,
-        null,
-        [],
-        null,
-        3,
-      );
+    final node = TreeNode(
+      predicateType,
+      splittingValue,
+      splittingIndex,
+      children,
+      treeLabel,
+      level,
+    );
 
-      final child33 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        800,
-        null,
-        [],
-        null,
-        3,
-      );
+    test('should hold splitting predicate type', () {
+      expect(node.predicateType, predicateType);
+    });
 
-      final child34 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        900,
-        null,
-        [],
-        null,
-        3,
-      );
+    test('should hold splitting value', () {
+      expect(node.splittingValue, splittingValue);
+    });
 
-      final child35 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        900,
-        null,
-        [],
-        null,
-        3,
-      );
+    test('should hold splitting index', () {
+      expect(node.splittingIndex, splittingIndex);
+    });
 
-      final child36 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        901,
-        null,
-        [],
-        null,
-        3,
-      );
+    test('should hold child node list', () {
+      expect(node.children, children);
+    });
 
-      final child37 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        911,
-        null,
-        [],
-        null,
-        3,
-      );
+    test('should hold tree leaf label', () {
+      expect(node.label, treeLabel);
+    });
 
-      final child21 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        100,
-        null,
-        [
-          child31,
-          child32,
-        ],
-        null,
-        2,
-      );
+    test('should hold tree level', () {
+      expect(node.level, level);
+    });
 
-      final child22 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        200,
-        null,
-        [
-          child33,
-          child34,
-        ],
-        null,
-        2,
-      );
-
-      final child23 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        300,
-        null,
-        [
-          child35,
-          child36,
-        ],
-        null,
-        2,
-      );
-
-      final child24 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        400,
-        null,
-        [
-          child37,
-        ],
-        null,
-        2,
-      );
-
-      final child25 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        500,
-        null,
-        [],
-        null,
-        2,
-      );
-
-      final child11 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        10,
-        null,
-        [
-          child21,
-          child22
-        ],
-        null,
-        1,
-      );
-
-      final child12 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        12,
-        null,
-        [
-          child23,
-          child24,
-        ],
-        null,
-        1,
-      );
-
-      final child13 = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        13,
-        null,
-        [
-          child25,
-        ],
-        null,
-        1,
-      );
-
-      final root = TreeNode(
-        TreeNodeSplittingPredicateType.equalTo,
-        null,
-        null,
-        [
-          child11,
-          child12,
-          child13,
-        ],
-        null,
-      );
-
+    test('should serialize', () async {
       final snapshotFileName = 'test/tree_trainer/tree_node/tree_node_test.json';
-      final actual = root.toJson();
+      final actual = tree.toJson();
       final expected = await readJSON(snapshotFileName);
 
       expect(actual, expected);
