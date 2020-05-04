@@ -5,8 +5,8 @@ import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('TreeSolver', () {
-    group('DecisionTreeSolver', () {
+  group('TreeTrainer', () {
+    group('DecisionTreeTrainer', () {
       final dataFrame = DataFrame.fromSeries([
         Series('col_1', <int>[10, 90, 23, 55]),
         Series('col_2', <int>[20, 51, 40, 10]),
@@ -21,8 +21,15 @@ void main() {
       test('should build a decision tree structure', () async {
         final snapshotFileName = 'test/tree_trainer/'
             'tree_trainer_integration_test.json';
-        final trainer = createDecisionTreeTrainer(dataFrame, 'col_8', 0.3, 1, 3);
+        final targetName = 'col_8';
+        final minErrorOnNode = 0.3;
+        final minSamplesCountOnNode = 1;
+        final maxDepth = 3;
+
+        final trainer = createDecisionTreeTrainer(dataFrame,
+            targetName, minErrorOnNode, minSamplesCountOnNode, maxDepth);
         final rootNode = trainer.train(dataFrame.toMatrix(DType.float32));
+
         final actual = rootNode.toJson();
         final expected = await readJSON(snapshotFileName);
 

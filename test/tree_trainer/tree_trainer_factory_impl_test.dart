@@ -19,7 +19,7 @@ import 'package:test/test.dart';
 import '../mocks.dart';
 
 void main() {
-  group('TreeSolverFactoryImpl', () {
+  group('TreeTrainerFactoryImpl', () {
     TreeLeafDetector leafDetectorMock;
     TreeLeafDetectorFactory leafDetectorFactoryMock;
 
@@ -30,7 +30,7 @@ void main() {
     TreeSplitSelectorFactory splitSelectorFactoryMock;
 
     TreeTrainerFactory factory;
-    TreeTrainer solver;
+    TreeTrainer trainer;
 
     final type = TreeTrainerType.decision;
     final featureIndices = [0, 1, 2, 3];
@@ -65,7 +65,7 @@ void main() {
       factory = TreeTrainerFactoryImpl(leafDetectorFactoryMock,
           leafLabelFactoryFactoryMock, splitSelectorFactoryMock);
 
-      solver = factory.createByType(
+      trainer = factory.createByType(
         type,
         featureIndices,
         targetIdx,
@@ -91,7 +91,7 @@ void main() {
     });
 
     test('should create a DecisionTreeSolver instance', () {
-      expect(solver, isA<DecisionTreeTrainer>());
+      expect(trainer, isA<DecisionTreeTrainer>());
     });
 
     test('should call leaf detector factory while creating the instance', () {

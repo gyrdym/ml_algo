@@ -13,7 +13,7 @@ import 'package:ml_linalg/vector.dart';
 
 part 'tree_node.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class TreeNode {
   TreeNode(
       this.predicateType,

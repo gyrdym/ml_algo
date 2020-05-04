@@ -8,6 +8,7 @@ import 'tree.dart';
 
 void main() {
   group('TreeNode', () {
+    final snapshotFileName = 'test/tree_trainer/tree_node/tree_node_test.json';
     final predicateType = TreeNodeSplittingPredicateType.equalTo;
     final splittingValue = 600;
     final splittingIndex = 2;
@@ -49,11 +50,17 @@ void main() {
     });
 
     test('should serialize', () async {
-      final snapshotFileName = 'test/tree_trainer/tree_node/tree_node_test.json';
       final actual = tree.toJson();
       final expected = await readJSON(snapshotFileName);
 
       expect(actual, expected);
+    });
+
+    test('should restore from json', () async {
+      final json = await readJSON(snapshotFileName);
+      final actual = TreeNode.fromJson(json);
+
+      expect(actual.toJson(), tree.toJson());
     });
   });
 }
