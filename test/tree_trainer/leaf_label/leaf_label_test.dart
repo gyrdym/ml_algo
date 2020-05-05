@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_json_keys.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -67,27 +68,48 @@ void main() {
       expect(leafLabel.probability, probability);
     });
 
-    test('should serialize itself (probability value is null)', () {
+    test('should serialize (probability value is null)', () {
       final labelValue = 1000;
       final leafLabel = TreeLeafLabel(labelValue);
       final serialized = leafLabel.toJson();
 
       expect(serialized, equals({
-        'V': labelValue,
-        'P': null,
+        valueJsonKey: labelValue,
       }));
     });
 
-    test('should serialize itself (probability value is not null)', () {
+    test('should serialize (probability value is not null)', () {
       final labelValue = -1000;
       final probability = 0.7;
       final leafLabel = TreeLeafLabel(labelValue, probability: probability);
       final serialized = leafLabel.toJson();
 
       expect(serialized, equals({
-        'V': labelValue,
-        'P': probability,
+        valueJsonKey: labelValue,
+        probabilityJsonKey: probability,
       }));
+    });
+
+    test('should restore from json (probability value is null)', () {
+      final labelValue = 12345;
+      final json = {valueJsonKey: labelValue};
+      final restored = TreeLeafLabel.fromJson(json);
+
+      expect(restored.value, labelValue);
+      expect(restored.probability, isNull);
+    });
+
+    test('should restore from json (probability value is not null)', () {
+      final labelValue = 12345;
+      final probability = 0.75;
+      final json = {
+        valueJsonKey: labelValue,
+        probabilityJsonKey: probability,
+      };
+      final restored = TreeLeafLabel.fromJson(json);
+
+      expect(restored.value, labelValue);
+      expect(restored.probability, probability);
     });
   });
 }

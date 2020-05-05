@@ -17,8 +17,16 @@ TreeLeafLabel _$TreeLeafLabelFromJson(Map<String, dynamic> json) {
   }, fieldKeyMap: const {'value': 'V', 'probability': 'P'});
 }
 
-Map<String, dynamic> _$TreeLeafLabelToJson(TreeLeafLabel instance) =>
-    <String, dynamic>{
-      'V': instance.value,
-      'P': instance.probability,
-    };
+Map<String, dynamic> _$TreeLeafLabelToJson(TreeLeafLabel instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('V', instance.value);
+  writeNotNull('P', instance.probability);
+  return val;
+}
