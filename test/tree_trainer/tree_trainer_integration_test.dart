@@ -1,39 +1,26 @@
 import 'package:ml_algo/src/tree_trainer/_helpers/create_decision_tree_trainer.dart';
-import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
+
+import '../fake_data_set.dart';
+import '../majority_tree_data_mock.dart';
 
 void main() {
   group('TreeTrainer', () {
     group('DecisionTreeTrainer', () {
-      final dataFrame = DataFrame.fromSeries([
-        Series('col_1', <int>[10, 90, 23, 55]),
-        Series('col_2', <int>[20, 51, 40, 10]),
-        Series('col_3', <int>[1, 0, 0, 1], isDiscrete: true),
-        Series('col_4', <int>[0, 0, 1, 0], isDiscrete: true),
-        Series('col_5', <int>[0, 1, 0, 0], isDiscrete: true),
-        Series('col_6', <int>[30, 34, 90, 22]),
-        Series('col_7', <int>[40, 31, 50, 80]),
-        Series('col_8', <int>[0, 0, 1, 2], isDiscrete: true),
-      ]);
-
-      test('should build a decision tree structure', () async {
-        final snapshotFileName = 'test/tree_trainer/'
-            'tree_trainer_integration_test.json';
+      test('should build a decision tree', () {
         final targetName = 'col_8';
         final minErrorOnNode = 0.3;
         final minSamplesCountOnNode = 1;
         final maxDepth = 3;
 
-        final trainer = createDecisionTreeTrainer(dataFrame,
+        final trainer = createDecisionTreeTrainer(fakeDataSet,
             targetName, minErrorOnNode, minSamplesCountOnNode, maxDepth);
-        final rootNode = trainer.train(dataFrame.toMatrix(DType.float32));
+        final rootNode = trainer.train(fakeDataSet.toMatrix(DType.float32));
 
         final actual = rootNode.toJson();
-        final expected = await readJSON(snapshotFileName);
 
-        expect(actual, equals(expected));
+        expect(actual, equals(majorityTreeDataMock));
       });
     });
   });
