@@ -1,7 +1,6 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';

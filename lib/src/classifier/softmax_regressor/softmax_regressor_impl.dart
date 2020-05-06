@@ -33,7 +33,7 @@ class SoftmaxRegressorImpl with LinearClassifierMixin,
   }
 
   @override
-  final List<String> classNames;
+  final Iterable<String> classNames;
 
   @override
   final bool fitIntercept;

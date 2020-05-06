@@ -51,16 +51,16 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
     Matrix initialCoefficients,
     bool isMinimizingObjective = true,
   }) {
-    Matrix coefficients = initialCoefficients ??
+    var coefficients = initialCoefficients ??
         Matrix.fromRows(List<Vector>.generate(_labels.columnsNum,
                 (int i) => _initialCoefficientsGenerator
                     .generate(_points.columnsNum)), dtype: _dtype);
 
-    int iteration = 0;
+    var iteration = 0;
     var diff = double.infinity;
     while (!_convergenceDetector.isConverged(diff, iteration)) {
       final newCoefsSource = List<Vector>(_points.columnsNum);
-      for (int j = 0; j < _points.columnsNum; j++) {
+      for (var j = 0; j < _points.columnsNum; j++) {
         final jCoeffs = coefficients.getColumn(j);
         final newJCoeffs = _optimizeCoordinate(j, _points, _labels,
             coefficients);

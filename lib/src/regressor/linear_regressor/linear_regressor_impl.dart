@@ -29,6 +29,7 @@ class LinearRegressorImpl with AssessablePredictorMixin
   @override
   final Vector coefficients;
 
+  @override
   final DType dtype;
 
   @override

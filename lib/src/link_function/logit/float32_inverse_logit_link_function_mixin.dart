@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'package:ml_linalg/matrix.dart';
 
 mixin Float32InverseLogitLinkFunction {
-  static Float32x4 _ones = Float32x4.splat(1.0);
-  static Float32x4 _upperBound = Float32x4.splat(10);
-  static Float32x4 _lowerBound = Float32x4.splat(-10);
+  static final Float32x4 _ones = Float32x4.splat(1.0);
+  static final Float32x4 _upperBound = Float32x4.splat(10);
+  static final Float32x4 _lowerBound = Float32x4.splat(-10);
 
   Matrix getFloat32x4Probabilities(Matrix scores) {
     // binary classification case

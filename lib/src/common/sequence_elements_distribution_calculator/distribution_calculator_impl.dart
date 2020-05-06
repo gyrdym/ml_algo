@@ -10,7 +10,7 @@ class SequenceElementsDistributionCalculatorImpl implements
   HashMap<T, double> calculate<T>(Iterable<T> sequence,
       [int classLabelsLength]) {
     if (sequence.isEmpty || classLabelsLength == 0) {
-      throw Exception('Empty value collection is given');
+      throw Exception('Empty value collection was provided');
     }
     final length = classLabelsLength ?? sequence.length;
     final bins = HashMap<T, double>();

@@ -7,40 +7,40 @@
 
 ## What is the ml_algo for?
 
-The main purpose of the library - to give developers, interested both in Dart language and data science, native Dart 
-implementation of machine learning algorithms. This library targeted to dart vm, so, to get smoothest experience with 
-the lib, please, do not use it in a browser.
+The main purpose of the library is to give native Dart implementation of machine learning algorithms to those who are 
+interested both in Dart language and data science. This library targeted to dart vm, so to get smoothest experience with 
+the lib, please do not use it in a browser.
 
 ## The library's content
 
 - #### Model selection
     - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
-    Factory, that creates instances of cross validators. Cross validation allows researchers to fit different 
+    Factory that creates instances of cross validators. Cross validation allows researchers to fit different 
     [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms, 
     assessing prediction quality on different parts of a dataset. 
 
 - #### Classification algorithms
     - [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
-    A class, that performs linear binary classification of data. To use this kind of classifier your data have to be 
+    A class that performs linear binary classification of data. To use this kind of classifier your data have to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
     - [SoftmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/softmax_regressor.dart). 
-    A class, that performs linear multiclass classification of data. To use this kind of classifier your data have to be 
+    A class that performs linear multiclass classification of data. To use this kind of classifier your data have to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
         
     - [DecisionTreeClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/decision_tree_classifier/decision_tree_classifier.dart)
-    A class, that performs classification, using decision trees. May work with data with non-linear patterns.
+    A class that performs classification using decision trees. May work with data with non-linear patterns.
     
     - [KnnClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/knn_classifier/knn_classifier.dart)
-    A class, that performs classification, using `k nearest neighbours algorithm` - it makes prediction basing on 
+    A class that performs classification using `k nearest neighbours algorithm` - it makes prediction basing on 
     first `k` closest observations to the given one.
 
 - #### Regression algorithms
-    - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). A 
-    class, that finds a linear pattern in training data and predicts a real numbers depending on the pattern. 
+    - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). 
+    A class that finds a linear pattern in training data and predicts outcome as real numbers depending on the pattern. 
 
     - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
-    A class, that makes prediction for each new observation basing on first `k` closest observations from 
+    A class that makes prediction for each new observation basing on first `k` closest observations from 
     training data. It may catch non-linear pattern of the data. 
 
 ## Examples
@@ -59,7 +59,7 @@ dependencies:
   ml_preprocessing: ^5.0.1
 ````
 
-We need these repos to parse raw data in order to use it farther. For more details, please,
+We need these repos to parse raw data in order to use it farther. For more details, please
 visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page.
 
 ````dart  
@@ -85,15 +85,15 @@ on each row. This column is our target - we should predict a class label for eac
 final targetColumnName = 'class variable (0 or 1)';
 ````
  
-Then, we should create an instance of `CrossValidator` class for fitting [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
-of our model. We should pass training data (our `samples` variable), a list of target column names (in our case it's 
+Then we should create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
+our model. We should pass training data (our `samples` variable), a list of target column names (in our case it's 
 just a name stored in `targetColumnName` variable) and a number of folds into CrossValidator constructor.
  
 ````dart
 final validator = CrossValidator.KFold(samples, [targetColumnName], numberOfFolds: 5);
 ````
 
-All are set, so, we can do our classification.
+All are set, so we can do our classification.
 
 Evaluate our model via accuracy metric:
 
@@ -173,8 +173,8 @@ final samples = await fromCsv('lib/_datasets/housing.csv',
 );
 ````
 
-As you can see, the dataset is headless, that means, that there is no a descriptive line in the beginning of the file.
-So, we may use an autogenerated header in order to point, from what column we should take our target labels:
+As you can see, the dataset is headless, and that means that there is no a descriptive line in the beginning of the file,
+so we may use an autogenerated header in order to point the target column:
 
 ```dart
 print(samples.header);

@@ -4,6 +4,8 @@ import 'package:ml_linalg/matrix.dart';
 
 /// An interface for all types of linear classifiers
 abstract class LinearClassifier implements Classifier {
+  Iterable<String> get classNames;
+
   /// A function that is used for converting learned coefficients into
   /// probabilities
   LinkFunction get linkFunction;

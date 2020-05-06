@@ -79,8 +79,8 @@ class CrossValidatorImpl implements CrossValidator {
       List<Vector>(samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length);
     final testSamples = List<Vector>(testRowsIndicesAsSet.length);
 
-    int trainSamplesCounter = 0;
-    int testSamplesCounter = 0;
+    var trainSamplesCounter = 0;
+    var testSamplesCounter = 0;
 
     samplesAsMatrix.rowIndices.forEach((i) {
       if (testRowsIndicesAsSet.contains(i)) {
