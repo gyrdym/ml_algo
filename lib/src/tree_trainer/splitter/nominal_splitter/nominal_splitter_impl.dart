@@ -13,12 +13,12 @@ class NominalTreeSplitterImpl implements NominalTreeSplitter {
 
       Map.fromEntries(uniqueValues.map((value) {
         final splittingClauseType = TreeNodeSplittingPredicateType.equalTo;
-        final splittingClause = getTreeNodeSplittingPredicateByType(
+        final splittingPredicate = getTreeNodeSplittingPredicateByType(
             splittingClauseType);
 
         final foundRows = samples
             .rows
-            .where((row) => splittingClause(row, splittingIdx, value))
+            .where((row) => splittingPredicate(row, splittingIdx, value))
             .toList(growable: false);
 
         final node = TreeNode(

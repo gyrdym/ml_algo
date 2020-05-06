@@ -31,14 +31,14 @@ class DecisionTreeTrainer implements TreeTrainer {
       Matrix samples,
       num splittingValue,
       int splittingIdx,
-      TreeNodeSplittingPredicateType splittingClauseType,
+      TreeNodeSplittingPredicateType splittingPredicateType,
       Iterable<int> featuresColumnIdxs,
       int level,
   ) {
     if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, level)) {
       final label = _leafLabelFactory.create(samples, _targetIdx);
       return TreeNode(
-        splittingClauseType,
+        splittingPredicateType,
         splittingValue,
         splittingIdx,
         null,
@@ -78,7 +78,7 @@ class DecisionTreeTrainer implements TreeTrainer {
     });
 
     return TreeNode(
-        splittingClauseType,
+        splittingPredicateType,
         splittingValue,
         splittingIdx,
         childNodes.toList(growable: false),
