@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
@@ -28,14 +27,6 @@ void main() {
 
     final testFileName = 'test/classifier/decision_tree_classifier/serialized_classifier.json';
     
-    tearDownAll(() async {
-      final file = await File(testFileName);
-      if (!await file.exists()) {
-        return;
-      }
-      await file.delete();
-    });
-
     test('should create classifier', () {
       expect(classifier, isA<DecisionTreeClassifierImpl>());
     });
@@ -169,23 +160,33 @@ void main() {
       expect(json[treeRootNodeJsonKey], majorityTreeDataMock);
     });
 
-    test('should save to file as json', () async {
-      await classifier.saveAsJson(testFileName);
+    group('saveAsJson', () {
+      tearDown(() async {
+        final file = await File(testFileName);
+        if (!await file.exists()) {
+          return;
+        }
+        await file.delete();
+      });
 
-      final file = await File(testFileName);
-      final fileExists = await file.exists();
+      test('should save to file as json', () async {
+        await classifier.saveAsJson(testFileName);
 
-      expect(fileExists, isTrue);
-    });
+        final file = await File(testFileName);
+        final fileExists = await file.exists();
 
-    test('should save to a restorable json', () async {
-      await classifier.saveAsJson(testFileName);
+        expect(fileExists, isTrue);
+      });
 
-      final file = await File(testFileName);
-      final json = await file.readAsString();
-      final restoredClassifier = DecisionTreeClassifier.fromJson(json);
+      test('should save to a restorable json', () async {
+        await classifier.saveAsJson(testFileName);
 
-      expect(restoredClassifier.toJson(), classifier.toJson());
+        final file = await File(testFileName);
+        final json = await file.readAsString();
+        final restoredClassifier = DecisionTreeClassifier.fromJson(json);
+
+        expect(restoredClassifier.toJson(), classifier.toJson());
+      });
     });
   });
 }
