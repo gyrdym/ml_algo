@@ -73,7 +73,7 @@ class GradientOptimizer implements LinearOptimizer {
     final batchSize =
         _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
 
-    Matrix coefficients = initialCoefficients ??
+    var coefficients = initialCoefficients ??
         Matrix.fromColumns(List.generate(_labels.columnsNum,
             (i) => _initialWeightsGenerator.generate(_points.columnsNum)));
 

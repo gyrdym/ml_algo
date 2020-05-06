@@ -1,8 +1,15 @@
+import 'dart:io';
+
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
+import 'package:ml_algo/src/common/dtype_serializer/dtype_encoded_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
+
+import '../../fake_data_set.dart';
+import '../../majority_tree_data_mock.dart';
 
 void main() {
   group('DecisionTreeClassifier', () {
@@ -13,27 +20,20 @@ void main() {
       [5598, 14,  0, 1, 0, 99, 100],
     ]);
 
-    final dataFrame = DataFrame.fromSeries([
-      Series('col_1', <int>[10, 90, 23, 55]),
-      Series('col_2', <int>[20, 51, 40, 10]),
-      Series('col_3', <int>[1, 0, 0, 1], isDiscrete: true),
-      Series('col_4', <int>[0, 0, 1, 0], isDiscrete: true),
-      Series('col_5', <int>[0, 1, 0, 0], isDiscrete: true),
-      Series('col_6', <int>[30, 34, 90, 22]),
-      Series('col_7', <int>[40, 31, 50, 80]),
-      Series('col_8', <int>[0, 0, 1, 2], isDiscrete: true),
-    ]);
+    final targetName = 'col_8';
 
-    final classifier = DecisionTreeClassifier(dataFrame, 'col_8',
+    final classifier = DecisionTreeClassifier(fakeDataSet, targetName,
         minError: 0.3, minSamplesCount: 1, maxDepth: 3);
 
+    final testFileName = 'test/classifier/decision_tree_classifier/serialized_classifier.json';
+    
     test('should create classifier', () {
       expect(classifier, isA<DecisionTreeClassifierImpl>());
     });
 
     test('should throw an exception if target column does not exist in train '
         'data', () {
-      final actual = () => DecisionTreeClassifier(dataFrame, 'unknown_col',
+      final actual = () => DecisionTreeClassifier(fakeDataSet, 'unknown_col',
           minError: 0.3, minSamplesCount: 1, maxDepth: 3);
 
       expect(actual, throwsException);
@@ -41,7 +41,7 @@ void main() {
 
     test('should throw a range error if minimal error on node is less than 0',
             () {
-      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: -0.001, minSamplesCount: 1, maxDepth: 3);
 
       expect(actual, throwsRangeError);
@@ -49,21 +49,21 @@ void main() {
 
     test('should throw a range error if minimal error on node is greater '
         'than 1', () {
-      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 1.001, minSamplesCount: 1, maxDepth: 3);
 
       expect(actual, throwsRangeError);
     });
 
     test('should allow minimal error to be 0', () {
-      final actual = DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0, minSamplesCount: 1, maxDepth: 3);
 
       expect(actual, isA<DecisionTreeClassifierImpl>());
     });
 
     test('should allow minimal error to be 1', () {
-      final actual = DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 1, minSamplesCount: 1, maxDepth: 3);
 
       expect(actual, isA<DecisionTreeClassifierImpl>());
@@ -71,7 +71,7 @@ void main() {
 
     test('should throw an exception if minimal samples count on node is less '
         'than zero', () {
-      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: -1, maxDepth: 3);
 
       expect(actual, throwsException);
@@ -79,7 +79,7 @@ void main() {
 
     test('should throw an exception if minimal samples count on node is equal '
         'to zero', () {
-      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: 0, maxDepth: 3);
 
       expect(actual, throwsException);
@@ -87,7 +87,7 @@ void main() {
 
     test('should throw an exception if maximal tree depth value is less '
         'than zero', () {
-      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: 1, maxDepth: -13);
 
       expect(actual, throwsException);
@@ -95,7 +95,7 @@ void main() {
 
     test('should throw an exception if maximal tree depth value is equal '
         'to zero', () {
-      final actual = () => DecisionTreeClassifier(dataFrame, 'col_8',
+      final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: 1, maxDepth: 0);
 
       expect(actual, throwsException);
@@ -128,6 +128,65 @@ void main() {
             [1],
             [1],
           ]));
+    });
+
+    test('should throw an error if empty json was passed', () {
+      final json = '';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should throw an error if invalid json was passed', () {
+      final json = 'invalid_json';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should throw an error if passed json has a wrong schema', () {
+      final json = '{"field_1": "data"}';
+      expect(() => DecisionTreeClassifier.fromJson(json), throwsException);
+    });
+
+    test('should serialize dtype field', () {
+      final json = classifier.toJson();
+      expect(json[dTypeJsonKey], dTypeFloat32EncodedValue);
+    });
+
+    test('should serialize target column name field', () {
+      final json = classifier.toJson();
+      expect(json[targetColumnNameJsonKey], targetName);
+    });
+
+    test('should serialize root node', () {
+      final json = classifier.toJson();
+      expect(json[treeRootNodeJsonKey], majorityTreeDataMock);
+    });
+
+    group('saveAsJson', () {
+      tearDown(() async {
+        final file = await File(testFileName);
+        if (!await file.exists()) {
+          return;
+        }
+        await file.delete();
+      });
+
+      test('should save to file as json', () async {
+        await classifier.saveAsJson(testFileName);
+
+        final file = await File(testFileName);
+        final fileExists = await file.exists();
+
+        expect(fileExists, isTrue);
+      });
+
+      test('should save to a restorable json', () async {
+        await classifier.saveAsJson(testFileName);
+
+        final file = await File(testFileName);
+        final json = await file.readAsString();
+        final restoredClassifier = DecisionTreeClassifier.fromJson(json);
+
+        expect(restoredClassifier.toJson(), classifier.toJson());
+      });
     });
   });
 }

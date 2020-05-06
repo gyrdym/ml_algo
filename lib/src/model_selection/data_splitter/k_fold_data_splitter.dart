@@ -20,9 +20,9 @@ class KFoldDataSplitter implements DataSplitter {
     }
     final remainder = numOfObservations % _numberOfFolds;
     final foldSize = numOfObservations ~/ _numberOfFolds;
-    for (int i = 0, startIdx = 0, endIdx = 0; i < _numberOfFolds; i++) {
-      // if we reached the last fold of size [foldSize], all the next folds up
-      // to the last fold will have size that is equal to [foldSize] + 1
+    for (var i = 0, startIdx = 0, endIdx = 0; i < _numberOfFolds; i++) {
+      // if we reached the last fold of size [foldSize] then all the next folds
+      // up to the last one have size of [foldSize] + 1
       endIdx = startIdx + foldSize + (i >= _numberOfFolds - remainder ? 1 : 0);
       yield integers(startIdx, endIdx, upperClosed: false);
       startIdx = endIdx;

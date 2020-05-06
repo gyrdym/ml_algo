@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.4.0
+- `DecisionTreeClassifier`: serialization/deserialization added with possibility to save the model into a file as json
+
 ## 13.3.7
 - `TreeLeafLabel`: probability validation improvements
 

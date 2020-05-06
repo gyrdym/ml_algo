@@ -1,0 +1,64 @@
+import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
+
+class TreeTrainerFactoryImpl implements TreeTrainerFactory {
+
+  TreeTrainerFactoryImpl(
+      this._leafDetectorFactory,
+      this._leafLabelFactoryFactory,
+      this._splitSelectorFactory,
+  );
+
+  final TreeLeafDetectorFactory _leafDetectorFactory;
+  final TreeLeafLabelFactoryFactory _leafLabelFactoryFactory;
+  final TreeSplitSelectorFactory _splitSelectorFactory;
+
+  @override
+  TreeTrainer createByType(
+      TreeTrainerType type,
+      Iterable<int> featureIndices,
+      int targetIdx,
+      Map<int, List<num>> featureIdxToUniqueValues,
+      num minErrorOnNode,
+      int minSamplesCount,
+      int maxDepth,
+      TreeSplitAssessorType assessorType,
+      TreeLeafLabelFactoryType leafLabelFactoryType,
+      TreeSplitSelectorType splitSelectorType,
+      TreeSplitAssessorType splitAssessorType,
+      TreeSplitterType splitterType,
+  ) {
+    final leafDetector = _leafDetectorFactory
+        .create(assessorType, minErrorOnNode, minSamplesCount, maxDepth);
+
+    final leafLabelFactory = _leafLabelFactoryFactory
+        .createByType(leafLabelFactoryType);
+
+    final splitSelector = _splitSelectorFactory
+        .createByType(splitSelectorType, splitAssessorType, splitterType);
+
+    switch (type) {
+      case TreeTrainerType.decision:
+        return DecisionTreeTrainer(
+          featureIndices,
+          targetIdx,
+          featureIdxToUniqueValues,
+          leafDetector,
+          leafLabelFactory,
+          splitSelector,
+        );
+
+      default:
+        throw UnsupportedError('Tree solver type $type is unsupported');
+    }
+  }
+}
