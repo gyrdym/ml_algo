@@ -10,6 +10,6 @@ String linkFunctionTypeToJson(LinkFunctionType type) {
       return inverseLogitLinkFunctionEncodedType;
 
     default:
-      throw UnsupportedError('Unsupported link function type $type');
+      throw UnsupportedError('Unsupported link function type `$type`');
   }
 }
