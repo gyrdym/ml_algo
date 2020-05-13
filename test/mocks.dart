@@ -21,7 +21,6 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
@@ -69,8 +68,6 @@ class InitialWeightsGeneratorMock extends Mock
     implements InitialCoefficientsGenerator {}
 
 class LinkFunctionMock extends Mock implements LinkFunction {}
-
-class LinkFunctionFactoryMock extends Mock implements LinkFunctionFactory {}
 
 class LinearOptimizerFactoryMock extends Mock
     implements LinearOptimizerFactory {}
@@ -175,16 +172,6 @@ InitialCoefficientsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
     InitialCoefficientsGenerator generator) {
   final factory = InitialWeightsGeneratorFactoryMock();
   when(factory.fromType(any, any)).thenReturn(generator);
-  return factory;
-}
-
-LinkFunctionFactory createLinkFunctionFactoryMock(
-    LinkFunction linkFunctionMock) {
-  final factory = LinkFunctionFactoryMock();
-
-  when(factory.createByType(argThat(isNotNull), dtype: anyNamed('dtype')))
-      .thenReturn(linkFunctionMock);
-
   return factory;
 }
 

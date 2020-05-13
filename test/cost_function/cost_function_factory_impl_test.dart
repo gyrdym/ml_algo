@@ -2,8 +2,7 @@ import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood.dart';
 import 'package:ml_algo/src/cost_function/squared.dart';
-import 'package:ml_algo/src/link_function/link_function_factory_impl.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,8 +16,7 @@ void main() {
 
     test('should create a loglikelihood cost function considering passed '
         'link function', () {
-      final linkFn = const LinkFunctionFactoryImpl()
-          .createByType(LinkFunctionType.softmax);
+      final linkFn = const Float32InverseLogitLinkFunction();
 
       final costFn = factory.createByType(
         CostFunctionType.logLikelihood,

@@ -9,8 +9,7 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -18,7 +17,7 @@ import 'package:ml_linalg/matrix.dart';
 LinearOptimizer createLogLikelihoodOptimizer(
     DataFrame fittingData,
     Iterable<String> targetNames,
-    LinkFunctionType linkFunctionType, {
+    LinkFunction linkFunction, {
   LinearOptimizerType optimizerType,
   int iterationsLimit,
   double initialLearningRate,
@@ -45,12 +44,6 @@ LinearOptimizer createLogLikelihoodOptimizer(
 
   final optimizerFactory = dependencies
       .getDependency<LinearOptimizerFactory>();
-
-  final linkFunctionFactory = dependencies
-      .getDependency<LinkFunctionFactory>();
-
-  final linkFunction = linkFunctionFactory
-      .createByType(linkFunctionType, dtype: dtype);
 
   final costFunctionFactory = dependencies
       .getDependency<CostFunctionFactory>();

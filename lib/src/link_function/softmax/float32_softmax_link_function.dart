@@ -1,17 +1,21 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
-mixin Float32SoftmaxLinkFunction {
-  Matrix float32x4ScoresToProbs(Matrix scores) {
+@JsonSerializable()
+class Float32SoftmaxLinkFunction implements LinkFunction {
+  const Float32SoftmaxLinkFunction();
+
+  @override
+  Matrix link(Matrix scores) {
     final maxValue = scores.max();
     final stableScores = scores - maxValue;
     final allProba = _toFloat32x4Probs(stableScores);
     final summedProba = allProba
-        .reduceColumns(
-            (Vector resultColumn, Vector scores) => resultColumn + scores);
+        .reduceColumns((resultColumn, scores) => resultColumn + scores);
     return allProba / summedProba;
   }
 
