@@ -3,6 +3,7 @@ import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
+import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
@@ -11,12 +12,14 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
+part 'logistic_regressor.g.dart';
+
 @JsonSerializable()
 class LogisticRegressorImpl with LinearClassifierMixin,
     AssessablePredictorMixin implements LogisticRegressor {
 
   LogisticRegressorImpl(
-      String className,
+      this.classNames,
       this.linkFunction,
       this.fitIntercept,
       this.interceptScale,
@@ -25,7 +28,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
       this.negativeLabel,
       this.positiveLabel,
       this.dtype,
-  ) : classNames = [className] {
+  ) {
     validateCoefficientsMatrix(coefficientsByClasses);
 
     // Logistic regression specific check, it cannot be placed in
@@ -73,6 +76,7 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   @JsonKey(
     name: linkFunctionJsonKey,
     toJson: linkFunctionToJson,
+    fromJson: fromLinkFunctionJson,
   )
   final LinkFunction linkFunction;
 
