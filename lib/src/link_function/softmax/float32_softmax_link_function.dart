@@ -1,11 +1,9 @@
 import 'dart:math' as math;
 import 'dart:typed_data';
 
-import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/matrix.dart';
 
-@JsonSerializable()
 class Float32SoftmaxLinkFunction implements LinkFunction {
   const Float32SoftmaxLinkFunction();
 

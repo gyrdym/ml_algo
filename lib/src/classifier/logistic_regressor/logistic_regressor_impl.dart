@@ -9,10 +9,14 @@ import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/dtype_to_json.dart';
+import 'package:ml_linalg/from_dtype_json.dart';
+import 'package:ml_linalg/from_matrix_json.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/matrix_to_json.dart';
 import 'package:ml_linalg/vector.dart';
 
-part 'logistic_regressor.g.dart';
+part 'logistic_regressor_impl.g.dart';
 
 @JsonSerializable()
 class LogisticRegressorImpl with LinearClassifierMixin,
@@ -44,37 +48,45 @@ class LogisticRegressorImpl with LinearClassifierMixin,
   /// N x 1 matrix, where N - number of features. It has only one column since
   /// in case of Logistic Regression only one class is used
   @override
-  @JsonKey(name: coefficientsByClassesJsonKey)
+  @JsonKey(
+    name: logisticRegressorCoefficientsByClassesJsonKey,
+    toJson: matrixToJson,
+    fromJson: fromMatrixJson,
+  )
   final Matrix coefficientsByClasses;
 
   @override
-  @JsonKey(name: classNamesJsonKey)
+  @JsonKey(name: logisticRegressorClassNamesJsonKey)
   final Iterable<String> classNames;
 
   @override
-  @JsonKey(name: fitInterceptJsonKey)
+  @JsonKey(name: logisticRegressorFitInterceptJsonKey)
   final bool fitIntercept;
 
   @override
-  @JsonKey(name: interceptScaleJsonKey)
+  @JsonKey(name: logisticRegressorInterceptScaleJsonKey)
   final num interceptScale;
 
   @override
-  @JsonKey(name: dTypeJsonKey)
+  @JsonKey(
+    name: logisticRegressorDTypeJsonKey,
+    toJson: dTypeToJson,
+    fromJson: fromDTypeJson,
+  )
   final DType dtype;
 
-  @JsonKey(name: probabilityThresholdJsonKey)
+  @JsonKey(name: logisticRegressorProbabilityThresholdJsonKey)
   final num probabilityThreshold;
 
-  @JsonKey(name: positiveLabelJsonKey)
+  @JsonKey(name: logisticRegressorPositiveLabelJsonKey)
   final num positiveLabel;
 
-  @JsonKey(name: negativeLabelJsonKey)
+  @JsonKey(name: logisticRegressorNegativeLabelJsonKey)
   final num negativeLabel;
 
   @override
   @JsonKey(
-    name: linkFunctionJsonKey,
+    name: logisticRegressorLinkFunctionJsonKey,
     toJson: linkFunctionToJson,
     fromJson: fromLinkFunctionJson,
   )

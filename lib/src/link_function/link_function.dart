@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_linalg/matrix.dart';
 
 abstract class LinkFunction {
