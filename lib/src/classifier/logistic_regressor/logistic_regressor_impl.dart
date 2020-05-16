@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
@@ -19,8 +20,13 @@ import 'package:ml_linalg/vector.dart';
 part 'logistic_regressor_impl.g.dart';
 
 @JsonSerializable()
-class LogisticRegressorImpl with LinearClassifierMixin,
-    AssessablePredictorMixin implements LogisticRegressor {
+class LogisticRegressorImpl
+    with
+        LinearClassifierMixin,
+        AssessablePredictorMixin,
+        SerializableMixin
+    implements
+        LogisticRegressor {
 
   LogisticRegressorImpl(
       this.classNames,
@@ -44,6 +50,12 @@ class LogisticRegressorImpl with LinearClassifierMixin,
           '(Logistic Regression deals only with single class problem)');
     }
   }
+
+  factory LogisticRegressorImpl.fromJson(Map<String, dynamic> json) =>
+      _$LogisticRegressorImplFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$LogisticRegressorImplToJson(this);
 
   /// N x 1 matrix, where N - number of features. It has only one column since
   /// in case of Logistic Regression only one class is used

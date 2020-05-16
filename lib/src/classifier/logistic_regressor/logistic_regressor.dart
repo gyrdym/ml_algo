@@ -1,5 +1,7 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor_from_json.dart';
+import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -16,7 +18,9 @@ import 'package:ml_linalg/vector.dart';
 /// In other words, the regressor iteratively tries to select coefficients,
 /// that makes combination of passed features and their coefficients most
 /// likely.
-abstract class LogisticRegressor implements LinearClassifier, Assessable {
+abstract class LogisticRegressor implements
+    LinearClassifier, Assessable, Serializable {
+
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations, that will be used by the
@@ -155,4 +159,7 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     negativeLabel,
     dtype,
   );
+
+  factory LogisticRegressor.fromJson(String json) =>
+      createLogisticRegressorFromJson(json);
 }
