@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
@@ -360,7 +361,7 @@ void main() {
         expect(restoredClassifier.linkFunction,
             isA<Float32InverseLogitLinkFunction>());
         expect(restoredClassifier.classNames, [targetName]);
-      }, skip: true);
+      });
     });
   });
 }
