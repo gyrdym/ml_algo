@@ -1,28 +1,37 @@
+import 'dart:io';
+
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
+import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Logistic regressor', () {
+    final data = <Iterable<num>>[
+      [5.0, 7.0, 6.0, 1.0],
+      [1.0, 2.0, 3.0, 0.0],
+      [10.0, 12.0, 31.0, 0.0],
+      [9.0, 8.0, 5.0, 0.0],
+      [4.0, 0.0, 1.0, 1.0],
+    ];
+    final targetName = 'col_3';
+    final samples = DataFrame(data, headerExists: false);
+
     tearDownAll(() => injector = null);
 
     test('should fit given data', () {
-      final samples = DataFrame(<Iterable<num>>[
-        [5.0, 7.0, 6.0, 1.0],
-        [1.0, 2.0, 3.0, 0.0],
-        [10.0, 12.0, 31.0, 0.0],
-        [9.0, 8.0, 5.0, 0.0],
-        [4.0, 0.0, 1.0, 1.0],
-      ], headerExists: false);
-
       final classifier = LogisticRegressor(
         samples,
-        'col_3',
+        targetName,
         iterationsLimit: 2,
         learningRateType: LearningRateType.constant,
         initialLearningRate: 1.0,
@@ -38,17 +47,9 @@ void main() {
     });
 
     test('should make prediction', () {
-      final samples = DataFrame(<Iterable<num>>[
-        [5.0, 7.0, 6.0, 1.0],
-        [1.0, 2.0, 3.0, 0.0],
-        [10.0, 12.0, 31.0, 0.0],
-        [9.0, 8.0, 5.0, 0.0],
-        [4.0, 0.0, 1.0, 1.0],
-      ], headerExists: false);
-
       final classifier = LogisticRegressor(
         samples,
-        'col_3',
+        targetName,
         iterationsLimit: 2,
         learningRateType: LearningRateType.constant,
         initialLearningRate: 1.0,
@@ -75,16 +76,9 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 0', () {
-      final samples = DataFrame(<Iterable<num>>[
-        [5.0, 7.0, 6.0, 1.0],
-        [1.0, 2.0, 3.0, 0.0],
-        [10.0, 12.0, 31.0, 0.0],
-        [9.0, 8.0, 5.0, 0.0],
-        [4.0, 0.0, 1.0, 1.0],
-      ], headerExists: false);
-
       final classifier = LogisticRegressor(
-          samples, 'col_3',
+          samples,
+          targetName,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -103,16 +97,9 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 1', () {
-      final samples = DataFrame(<Iterable<num>>[
-        [5.0, 7.0, 6.0, 1.0],
-        [1.0, 2.0, 3.0, 0.0],
-        [10.0, 12.0, 31.0, 0.0],
-        [9.0, 8.0, 5.0, 0.0],
-        [4.0, 0.0, 1.0, 1.0],
-      ], headerExists: false);
-
       final classifier = LogisticRegressor(
-          samples, 'col_3',
+          samples,
+          targetName,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -137,7 +124,8 @@ void main() {
       ], headerExists: false);
 
       final classifier = LogisticRegressor(
-        features, 'col_3',
+        features,
+        targetName,
         iterationsLimit: 1,
         learningRateType: LearningRateType.constant,
         initialLearningRate: 1.0,
@@ -215,7 +203,7 @@ void main() {
 
       final classifier = LogisticRegressor(
         samples,
-        'col_3',
+        targetName,
         iterationsLimit: 1,
         learningRateType: LearningRateType.constant,
         initialLearningRate: 1.0,
@@ -231,7 +219,7 @@ void main() {
       // [3.0, 4.0, 5.0] => [2.0, 3.0, 4.0, 5.0]
       //
       // we add a new column to the test_data, the column is consisted of just ones, so we considered that our fitted line will
-      // start not right at the origin, but at the origin + intercept equal to 2.0. What is the value of the intercept? To answer
+      // start not right from the origin, but from the origin + intercept equal to 2.0. What is the value of the intercept? To answer
       // this question, we have to find out the intercept's weight
       //
       // given test_data
@@ -295,6 +283,84 @@ void main() {
         [4.5],
         [4.0],
       ]));
+    });
+
+    group('serialization', () {
+      final fitIntercept = false;
+      final interceptScale = 3.0;
+      final dType = DType.float32;
+      final probabilityThreshold = .9;
+      final positiveLabel = 1;
+      final negativeLabel = 0;
+
+      final fileName = 'test/classifier/logistic_regressor/logistic_regressor.json';
+
+      LogisticRegressor classifier;
+
+      setUp(() {
+        classifier = LogisticRegressor(
+          samples,
+          targetName,
+          iterationsLimit: 2,
+          learningRateType: LearningRateType.constant,
+          initialLearningRate: 1.0,
+          batchSize: 5,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale,
+          dtype: dType,
+          probabilityThreshold: probabilityThreshold,
+          positiveLabel: positiveLabel,
+        );
+      });
+
+      tearDown(() async {
+        final file = File(fileName);
+
+        if (await file.exists()) {
+          await file.delete();
+        }
+      });
+
+      test('should serialize', () {
+        final serialized = classifier.toJson();
+
+        expect(serialized, {
+          logisticRegressorCoefficientsByClassesJsonKey: matrixToJson(
+              classifier.coefficientsByClasses),
+          logisticRegressorClassNamesJsonKey: [targetName],
+          logisticRegressorFitInterceptJsonKey: fitIntercept,
+          logisticRegressorInterceptScaleJsonKey: interceptScale,
+          logisticRegressorDTypeJsonKey: dTypeToJson(dType),
+          logisticRegressorProbabilityThresholdJsonKey: probabilityThreshold,
+          logisticRegressorPositiveLabelJsonKey: positiveLabel,
+          logisticRegressorNegativeLabelJsonKey: negativeLabel,
+          logisticRegressorLinkFunctionJsonKey: float32InverseLogitLinkFunctionEncoded,
+        });
+      });
+
+      test('should return a pointer to a json file while saving serialized '
+          'data', () async {
+        final file = await classifier.saveAsJson(fileName);
+
+        expect(await file.exists(), isTrue);
+      });
+
+      test('should restore a classifier instance from json file', () async {
+        await classifier.saveAsJson(fileName);
+
+        final file = File(fileName);
+        final encodedData = await file.readAsString();
+        final restoredClassifier = LogisticRegressor.fromJson(encodedData);
+
+        expect(restoredClassifier.coefficientsByClasses,
+            classifier.coefficientsByClasses);
+        expect(restoredClassifier.interceptScale, classifier.interceptScale);
+        expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
+        expect(restoredClassifier.dtype, classifier.dtype);
+        expect(restoredClassifier.linkFunction,
+            isA<Float32InverseLogitLinkFunction>());
+        expect(restoredClassifier.classNames, [targetName]);
+      }, skip: true);
     });
   });
 }
