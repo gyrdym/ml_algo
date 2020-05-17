@@ -24,7 +24,7 @@ void main() {
     final dtype = DType.float32;
 
     final regressor = LogisticRegressorImpl(
-      className,
+      [className],
       linkFunctionMock,
       fitIntercept,
       interceptScale,
@@ -76,7 +76,7 @@ void main() {
       test('should throw an exception if no coefficients are provided', () {
         final coefficients = Matrix.empty();
         final actual = () => LogisticRegressorImpl(
-          className,
+          [className],
           linkFunctionMock,
           fitIntercept,
           interceptScale,
@@ -99,7 +99,7 @@ void main() {
           [1, 3, 3],
         ]);
         final actual = () => LogisticRegressorImpl(
-          className,
+          [className],
           linkFunctionMock,
           fitIntercept,
           interceptScale,

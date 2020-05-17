@@ -1,62 +1,108 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
+import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
+import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/dtype_to_json.dart';
+import 'package:ml_linalg/from_dtype_json.dart';
+import 'package:ml_linalg/from_matrix_json.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/matrix_to_json.dart';
 import 'package:ml_linalg/vector.dart';
 
-class LogisticRegressorImpl with LinearClassifierMixin,
-    AssessablePredictorMixin implements LogisticRegressor {
+part 'logistic_regressor_impl.g.dart';
+
+@JsonSerializable()
+class LogisticRegressorImpl
+    with
+        LinearClassifierMixin,
+        AssessablePredictorMixin,
+        SerializableMixin
+    implements
+        LogisticRegressor {
 
   LogisticRegressorImpl(
-      String className,
+      this.classNames,
       this.linkFunction,
       this.fitIntercept,
       this.interceptScale,
       this.coefficientsByClasses,
-      this._probabilityThreshold,
-      this._negativeLabel,
-      this._positiveLabel,
+      this.probabilityThreshold,
+      this.negativeLabel,
+      this.positiveLabel,
       this.dtype,
-  ) : classNames = [className] {
+  ) {
     validateCoefficientsMatrix(coefficientsByClasses);
 
     // Logistic regression specific check, it cannot be placed in
     // `validateCoefficientsMatrix`
     if (coefficientsByClasses.columnsNum > 1) {
-      throw Exception('Expected coefficients just for a single class, '
-          'but coefficients for ${coefficientsByClasses.columnsNum} classes '
+      throw Exception('Expected coefficients for a single class, but '
+          'coefficients for ${coefficientsByClasses.columnsNum} classes '
           'provided. Please, check your linear optimizer implementation '
           '(Logistic Regression deals only with single class problem)');
     }
   }
 
+  factory LogisticRegressorImpl.fromJson(Map<String, dynamic> json) =>
+      _$LogisticRegressorImplFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$LogisticRegressorImplToJson(this);
+
   /// N x 1 matrix, where N - number of features. It has only one column since
   /// in case of Logistic Regression only one class is used
   @override
+  @JsonKey(
+    name: logisticRegressorCoefficientsByClassesJsonKey,
+    toJson: matrixToJson,
+    fromJson: fromMatrixJson,
+  )
   final Matrix coefficientsByClasses;
 
   @override
-  final List<String> classNames;
+  @JsonKey(name: logisticRegressorClassNamesJsonKey)
+  final Iterable<String> classNames;
 
   @override
+  @JsonKey(name: logisticRegressorFitInterceptJsonKey)
   final bool fitIntercept;
 
   @override
+  @JsonKey(name: logisticRegressorInterceptScaleJsonKey)
   final num interceptScale;
 
   @override
-  final LinkFunction linkFunction;
-
-  @override
+  @JsonKey(
+    name: logisticRegressorDTypeJsonKey,
+    toJson: dTypeToJson,
+    fromJson: fromDTypeJson,
+  )
   final DType dtype;
 
-  final num _probabilityThreshold;
-  final num _positiveLabel;
-  final num _negativeLabel;
+  @JsonKey(name: logisticRegressorProbabilityThresholdJsonKey)
+  final num probabilityThreshold;
+
+  @JsonKey(name: logisticRegressorPositiveLabelJsonKey)
+  final num positiveLabel;
+
+  @JsonKey(name: logisticRegressorNegativeLabelJsonKey)
+  final num negativeLabel;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorLinkFunctionJsonKey,
+    toJson: linkFunctionToJson,
+    fromJson: fromLinkFunctionJson,
+  )
+  final LinkFunction linkFunction;
 
   @override
   DataFrame predict(DataFrame testFeatures) {
@@ -64,9 +110,9 @@ class LogisticRegressorImpl with LinearClassifierMixin,
 
     final classesList = probabilities
         // TODO: use SIMD
-        .map((value) => value >= _probabilityThreshold
-          ? _positiveLabel
-          : _negativeLabel,
+        .map((value) => value >= probabilityThreshold
+          ? positiveLabel
+          : negativeLabel,
         )
         .toList(growable: false);
 
