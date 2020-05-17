@@ -53,6 +53,41 @@ abstract class DecisionTreeClassifier implements
     dtype,
   );
 
+  /// Restores previously fitted classifier instance from the given [json]
+  ///
+  /// ````dart
+  /// import 'dart:io';
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
+  ///
+  /// final data = <Iterable>[
+  ///   ['feature 1', 'feature 2', 'feature 3', 'outcome']
+  ///   [        5.0,         7.0,         6.0,       1.0],
+  ///   [        1.0,         2.0,         3.0,       0.0],
+  ///   [       10.0,        12.0,        31.0,       0.0],
+  ///   [        9.0,         8.0,         5.0,       0.0],
+  ///   [        4.0,         0.0,         1.0,       1.0],
+  /// ];
+  /// final targetName = 'outcome';
+  /// final samples = DataFrame(data, headerExists: true);
+  /// final classifier = DecisionTreeClassifier(
+  ///   samples,
+  ///   targetName,
+  ///   minError: 0.3,
+  ///   minSamplesCount: 1,
+  ///   maxDepth: 3,
+  /// );
+  ///
+  /// final pathToFile = './classifier.json';
+  ///
+  /// await classifier.saveAsJson(pathToFile);
+  ///
+  /// final file = File(pathToFile);
+  /// final json = await file.readAsString();
+  /// final restoredClassifier = DecisionTreeClassifier.fromJson(json);
+  ///
+  /// // here you can use previously fitted restored classifier to make
+  /// // some prediction, e.g. via `DecisionTreeClassifier.predict(...)`;
+  /// ````
   factory DecisionTreeClassifier.fromJson(String json) =>
       createDecisionTreeClassifierFromJson(json);
 }
