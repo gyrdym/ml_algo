@@ -166,7 +166,7 @@ abstract class LogisticRegressor implements
   /// import 'dart:io';
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   ///
-  /// final data = <Iterable<num>>[
+  /// final data = <Iterable>[
   ///   ['feature 1', 'feature 2', 'feature 3', 'outcome']
   ///   [        5.0,         7.0,         6.0,       1.0],
   ///   [        1.0,         2.0,         3.0,       0.0],
