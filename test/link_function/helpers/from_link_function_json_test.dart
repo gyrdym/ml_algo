@@ -14,9 +14,9 @@ void main() {
     });
 
     test('should decode Float32 based softmax link function', () {
-      final logitFunction = const Float32SoftmaxLinkFunction();
+      final softmaxFunction = const Float32SoftmaxLinkFunction();
       final decoded = fromLinkFunctionJson(float32SoftmaxLinkFunctionEncoded);
-      expect(decoded, same(logitFunction));
+      expect(decoded, same(softmaxFunction));
     });
 
     test('should throw an error if unknow string is passed', () {
