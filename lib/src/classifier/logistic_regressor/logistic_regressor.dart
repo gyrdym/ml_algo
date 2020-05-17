@@ -1,5 +1,7 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor_from_json.dart';
+import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -9,14 +11,16 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
 
-/// A class, performing logistic regression-based classification.
+/// Logistic regression-based classification.
 ///
 /// Logistic regression is an algorithm that solves a binary classification
 /// problem. The algorithm uses maximization of the passed data likelihood.
-/// In other words, the regressor iteratively tries to select coefficients,
+/// In other words, the regressor iteratively tries to select coefficients
 /// that makes combination of passed features and their coefficients most
 /// likely.
-abstract class LogisticRegressor implements LinearClassifier, Assessable {
+abstract class LogisticRegressor implements
+    LinearClassifier, Assessable, Serializable {
+
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations, that will be used by the
@@ -155,4 +159,45 @@ abstract class LogisticRegressor implements LinearClassifier, Assessable {
     negativeLabel,
     dtype,
   );
+
+  /// Restores previously fitted classifier instance from the [json]
+  ///
+  /// ````dart
+  /// import 'dart:io';
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
+  ///
+  /// final data = <Iterable>[
+  ///   ['feature 1', 'feature 2', 'feature 3', 'outcome']
+  ///   [        5.0,         7.0,         6.0,       1.0],
+  ///   [        1.0,         2.0,         3.0,       0.0],
+  ///   [       10.0,        12.0,        31.0,       0.0],
+  ///   [        9.0,         8.0,         5.0,       0.0],
+  ///   [        4.0,         0.0,         1.0,       1.0],
+  /// ];
+  /// final targetName = 'outcome';
+  /// final samples = DataFrame(data, headerExists: true);
+  /// final classifier = LogisticRegressor(
+  ///   samples,
+  ///   targetName,
+  ///   iterationsLimit: 2,
+  ///   learningRateType: LearningRateType.constant,
+  ///   initialLearningRate: 1.0,
+  ///   batchSize: 5,
+  ///   fitIntercept: true,
+  ///   interceptScale: 3.0,
+  /// );
+  ///
+  /// final pathToFile = './classifier.json';
+  ///
+  /// await classifier.saveAsJson(pathToFile);
+  ///
+  /// final file = File(pathToFile);
+  /// final json = await file.readAsString();
+  /// final restoredClassifier = LogisticRegressor.fromJson(json);
+  ///
+  /// // here you can use previously fitted restored classifier to make
+  /// // some prediction, e.g. via `restoredClassifier.predict(...)`;
+  /// ````
+  factory LogisticRegressor.fromJson(String json) =>
+      createLogisticRegressorFromJson(json);
 }

@@ -8,8 +8,8 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_ge
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -44,16 +44,13 @@ LogisticRegressor createLogisticRegressor(
         trainData.toMatrix(dtype).columnsNum - 1);
   }
 
-  final linkFunctionFactory = dependencies
-      .getDependency<LinkFunctionFactory>();
-
-  final linkFunction = linkFunctionFactory
-      .createByType(LinkFunctionType.inverseLogit, dtype: dtype);
+  final linkFunction = dependencies.getDependency<LinkFunction>(
+      dependencyName: dTypeToInverseLogitLinkFunctionToken[dtype]);
 
   final optimizer = createLogLikelihoodOptimizer(
     trainData,
     [targetName],
-    LinkFunctionType.inverseLogit,
+    linkFunction,
     optimizerType: optimizerType,
     iterationsLimit: iterationsLimit,
     initialLearningRate: initialLearningRate,

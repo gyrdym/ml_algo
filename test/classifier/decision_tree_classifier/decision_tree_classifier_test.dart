@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
-import 'package:ml_algo/src/common/dtype_serializer/dtype_encoded_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
@@ -147,7 +147,7 @@ void main() {
 
     test('should serialize dtype field', () {
       final json = classifier.toJson();
-      expect(json[dTypeJsonKey], dTypeFloat32EncodedValue);
+      expect(json[dTypeJsonKey], dTypeToJson(DType.float32));
     });
 
     test('should serialize target column name field', () {

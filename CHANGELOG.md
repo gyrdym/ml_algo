@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.5.0
+- `LogisticRegressor`: serialization/deserialization added with possibility to save the model into a file as json
+
 ## 13.4.0
 - `DecisionTreeClassifier`: serialization/deserialization added with possibility to save the model into a file as json
 

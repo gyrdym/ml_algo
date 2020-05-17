@@ -20,7 +20,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       num positiveLabel,
       DType dtype,
   ) => LogisticRegressorImpl(
-    targetName,
+    [targetName],
     linkFunction,
     fitIntercept,
     interceptScale,

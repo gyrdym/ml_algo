@@ -12,8 +12,7 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
+import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -51,7 +50,6 @@ void main() {
     final positiveLabel = 200;
 
     LinkFunction linkFunctionMock;
-    LinkFunctionFactory linkFunctionFactoryMock;
 
     CostFunction costFunctionMock;
     CostFunctionFactory costFunctionFactoryMock;
@@ -64,7 +62,6 @@ void main() {
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
-      linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctionMock);
 
       costFunctionMock = CostFunctionMock();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
@@ -77,8 +74,9 @@ void main() {
           logisticRegressorMock);
 
       injector = Injector()
-        ..registerSingleton<LinkFunctionFactory>(
-                (_) => linkFunctionFactoryMock)
+        ..registerSingleton<LinkFunction>(
+                (_) => linkFunctionMock,
+            dependencyName: inverseLogitLinkFunctionFloat32Token)
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(
@@ -131,18 +129,6 @@ void main() {
       );
 
       expect(actual, throwsException);
-    });
-
-    test('should call link function factory twice', () {
-      LogisticRegressor(
-        observations,
-        'col_4',
-      );
-
-      verify(linkFunctionFactoryMock.createByType(
-        LinkFunctionType.inverseLogit,
-        dtype: DType.float32,
-      )).called(2);
     });
 
     test('should call cost function factory in order to create '

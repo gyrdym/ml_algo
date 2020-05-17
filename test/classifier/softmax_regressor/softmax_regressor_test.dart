@@ -12,7 +12,7 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_factory.dart';
+import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
 import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -72,7 +72,6 @@ void main() {
     final positiveLabel = 20;
 
     LinkFunction linkFunctionMock;
-    LinkFunctionFactory linkFunctionFactoryMock;
 
     CostFunction costFunctionMock;
     CostFunctionFactory costFunctionFactoryMock;
@@ -85,7 +84,6 @@ void main() {
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
-      linkFunctionFactoryMock = createLinkFunctionFactoryMock(linkFunctionMock);
 
       costFunctionMock = CostFunctionMock();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
@@ -98,7 +96,8 @@ void main() {
           softmaxRegressorMock);
 
       injector = Injector()
-        ..registerSingleton<LinkFunctionFactory>((_) => linkFunctionFactoryMock)
+        ..registerSingleton<LinkFunction>((_) => linkFunctionMock,
+            dependencyName: softmaxLinkFunctionFloat32Token)
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock)
@@ -138,19 +137,6 @@ void main() {
       );
 
       expect(actual, throwsException);
-    });
-
-    test('should call link function factory twice in order to create softmax '
-        'link function', () {
-      SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
-      );
-
-      verify(linkFunctionFactoryMock.createByType(
-        LinkFunctionType.softmax,
-        dtype: DType.float32,
-      )).called(2);
     });
 
     test('should call cost function factory in order to create '

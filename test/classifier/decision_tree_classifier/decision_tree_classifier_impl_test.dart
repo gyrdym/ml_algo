@@ -1,11 +1,11 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
-import 'package:ml_algo/src/common/dtype_serializer/dtype_encoded_values.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/dtype_to_json.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
@@ -37,13 +37,13 @@ void main() {
     };
 
     final classifier32Json = {
-      dTypeJsonKey: dTypeFloat32EncodedValue,
+      dTypeJsonKey: dTypeToJson(DType.float32),
       targetColumnNameJsonKey: targetColumnName,
       treeRootNodeJsonKey: rootNodeJson,
     };
 
     final classifier64Json = {
-      dTypeJsonKey: dTypeFloat64EncodedValue,
+      dTypeJsonKey: dTypeToJson(DType.float64),
       targetColumnNameJsonKey: targetColumnName,
       treeRootNodeJsonKey: rootNodeJson,
     };

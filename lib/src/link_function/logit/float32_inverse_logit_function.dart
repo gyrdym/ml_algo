@@ -1,14 +1,18 @@
-import 'dart:math' as math;
 import 'dart:typed_data';
+import 'dart:math' as math;
 
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/matrix.dart';
 
-mixin Float32InverseLogitLinkFunction {
+class Float32InverseLogitLinkFunction implements LinkFunction {
+  const Float32InverseLogitLinkFunction();
+
   static final Float32x4 _ones = Float32x4.splat(1.0);
   static final Float32x4 _upperBound = Float32x4.splat(10);
   static final Float32x4 _lowerBound = Float32x4.splat(-10);
 
-  Matrix getFloat32x4Probabilities(Matrix scores) {
+  @override
+  Matrix link(Matrix scores) {
     // binary classification case
     if (scores.columnsNum == 1) {
       final scoresVector = scores.getColumn(0);
@@ -30,11 +34,11 @@ mixin Float32InverseLogitLinkFunction {
   }
 
   Float32x4 _exp(Float32x4 value) =>
-    Float32x4(
-      // TODO find a more efficient way to raise exponent to the float power in SIMD way
-      math.exp(value.x),
-      math.exp(value.y),
-      math.exp(value.z),
-      math.exp(value.w),
-    );
+      Float32x4(
+        // TODO find a more efficient way to raise exponent to the float power in SIMD way
+        math.exp(value.x),
+        math.exp(value.y),
+        math.exp(value.z),
+        math.exp(value.w),
+      );
 }
