@@ -14,7 +14,7 @@ import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Logistic regressor', () {
+  group('LogisticRegressor', () {
     final data = <Iterable<num>>[
       [5.0, 7.0, 6.0, 1.0],
       [1.0, 2.0, 3.0, 0.0],
