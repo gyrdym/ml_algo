@@ -122,7 +122,7 @@ abstract class SoftmaxRegressor implements
         int batchSize = 1,
         bool fitIntercept = false,
         double interceptScale = 1.0,
-        LearningRateType learningRateType = LearningRateType.decreasingAdaptive,
+        LearningRateType learningRateType = LearningRateType.constant,
         bool isFittingDataNormalized,
         InitialCoefficientsType initialCoefficientsType =
             InitialCoefficientsType.zeroes,
@@ -173,7 +173,6 @@ abstract class SoftmaxRegressor implements
   ///   samples,
   ///   targetNames,
   ///   iterationsLimit: 2,
-  ///   learningRateType: LearningRateType.constant,
   ///   initialLearningRate: 1.0,
   ///   batchSize: 5,
   ///   fitIntercept: true,
