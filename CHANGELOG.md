@@ -1,5 +1,8 @@
 # Changelog
 
+## 13.6.0
+- `SoftmaxRegressor`: serialization/deserialization added with possibility to save the model into a file as json
+
 ## 13.5.1
 - `DecisionTreeClassifier`: documentation added for `fromJson` constructor
 
