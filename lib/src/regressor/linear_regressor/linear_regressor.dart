@@ -13,35 +13,35 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-/// A class that performs linear regression
+/// Linear regression
 ///
 /// A typical linear regressor uses the equation of a line for multidimensional
-/// space to make a prediction. Each `x` in the equation has its own coefficient
-/// (weight) and the combination of these `x`-es and its coefficients gives the
-/// `y` term. The latter is a value that the regressor should predict, and
-/// as all the `x` values are known (since it is the input for the algorithm),
-/// the regressor should find the best coefficients (weights) (they are unknown)
-/// to make a best prediction of `y` term.
+/// space to make a prediction. Each `x` in the equation has its own dedicated
+/// coefficient (weight) and the combination of these `x`-es and its dedicated
+/// coefficients gives the `y` term (outcome). The latter is a value that the
+/// regressor should predict, and since all the `x` values are known (since they
+/// are the input for the algorithm), the regressor should find the best
+/// coefficients (weights) for each `x`-es to make a best prediction of `y` term.
 abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   /// Parameters:
   ///
-  /// [fittingData] A [DataFrame] with observations, that will be used by the
+  /// [fittingData] A [DataFrame] with observations that is used by the
   /// regressor to learn coefficients of the predicting hyperplane. Must contain
   /// [targetName] column.
   ///
-  /// [targetName] A string, that serves as a name of the target column, that
-  /// contains labels or outcomes.
+  /// [targetName] A string that serves as a name of the target column
+  /// containing observation labels.
   ///
-  /// [optimizerType] Defines an algorithm of optimization, that will be used
-  /// to find the best coefficients of a cost function. Also defines, which
-  /// regularization type (L1 or L2) one may use to learn a linear regressor.
-  /// By default - [LinearOptimizerType.gradient].
+  /// [optimizerType] Defines an algorithm of optimization that will be used
+  /// to find the best coefficients. Also defines which regularization type
+  /// (L1 or L2) one may use to learn a linear regressor. By default -
+  /// [LinearOptimizerType.gradient].
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the optimization algorithm. Default value is `100`.
   ///
-  /// [initialLearningRate] A value, defining velocity of the convergence of the
-  /// gradient descent optimizer. Default value is `1e-3`.
+  /// [initialLearningRate] A value defining velocity of the convergence of the
+  /// gradient descent-based optimizers. Default value is `1e-3`.
   ///
   /// [minCoefficientsUpdate] A minimum distance between coefficient vectors in
   /// two contiguous iterations. Uses as a condition of convergence in the
@@ -53,20 +53,20 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   /// coefficients of the equation of the predicting hyperplane are. Extremely
   /// large [lambda] may decrease the coefficients to nothing, otherwise too
   /// small [lambda] may be a cause of too large absolute values of the
-  /// coefficients, that is also bad.
+  /// coefficients.
   ///
   /// [regularizationType] A way the coefficients of the regressor will be
-  /// regularized to prevent a model overfitting.
+  /// regularized to prevent the model's overfitting.
   ///
-  /// [randomSeed] A seed, that will be passed to a random value generator,
-  /// used by stochastic optimizers. Will be ignored, if the solver cannot be
+  /// [randomSeed] A seed value that will be passed to a random value generator,
+  /// used by stochastic optimizers. Will be ignored, if the solver is not
   /// stochastic. Remember, each time you run the stochastic regressor with the
   /// same parameters but with unspecified [randomSeed], you will receive
   /// different results. To avoid it, define [randomSeed].
   ///
-  /// [batchSize] A size of data (in rows), that will be used for fitting per
-  /// one iteration. Applicable not for all optimizers. If gradient-based
-  /// optimizer is used and If [batchSize] == `1`, stochastic mode will be
+  /// [batchSize] A size of data (in rows) that will be used for fitting per
+  /// one iteration. Applicable not to all optimizers. If gradient-based
+  /// optimizer is used and if [batchSize] == `1`, stochastic mode will be
   /// activated; if `1` < [batchSize] < `total number of rows`, mini-batch mode
   /// will be activated; if [batchSize] == `total number of rows`, full-batch
   /// mode will be activated.
@@ -75,26 +75,24 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   /// `false`. Intercept in 2-dimensional space is a bias of the line (relative
   /// to X-axis).
   ///
-  /// [interceptScale] A value, defining a size of the intercept.
+  /// [interceptScale] A value defining a size of the intercept.
   ///
-  /// [isFittingDataNormalized] Defines, whether the [fittingData] normalized
+  /// [isFittingDataNormalized] Defines whether the [fittingData] is normalized
   /// or not. Normalization should be performed column-wise. Normalized data
-  /// may be needed for some optimizers (e.g., for
+  /// may be required by some optimizers (e.g., for
   /// [LinearOptimizerType.coordinate]).
   ///
-  /// [learningRateType] A value, defining a strategy for the learning rate
+  /// [learningRateType] A value defining a strategy for the learning rate
   /// behaviour throughout the whole fitting process.
   ///
-  /// [initialCoefficientsType] Defines the coefficients, that will be
+  /// [initialCoefficientsType] Defines the coefficients that will be
   /// autogenerated at the first iteration of optimization. By default,
   /// all the autogenerated coefficients are equal to zeroes at the start.
   /// If [initialCoefficients] are provided, the parameter will be ignored.
   ///
-  /// [initialCoefficients] Coefficients to be used in the first iteration of
-  /// optimization algorithm. [initialCoefficients] is a vector, length of which
-  /// must be equal to the number of features in [fittingData]: the number of
-  /// features is equal to the number of columns in [fittingData] minus 1
-  /// (target column).
+  /// [initialCoefficients] Coefficients to be used during the first iteration of
+  /// optimization algorithm. [initialCoefficients] should have length that is
+  /// equal to the number of features in the [fittingData].
   ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
@@ -151,15 +149,60 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   }
 
   /// Restores previously fitted [LinearRegressor] instance from the [json]
+  ///
+  ///
+  /// ````dart
+  /// import 'dart:io';
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
+  ///
+  /// final data = <Iterable>[
+  ///   ['feature 1', 'feature 2', 'feature 3', 'outcome']
+  ///   [        5.0,         7.0,         6.0,      98.0],
+  ///   [        1.0,         2.0,         3.0,      10.0],
+  ///   [       10.0,        12.0,        31.0,    -977.0],
+  ///   [        9.0,         8.0,         5.0,       0.0],
+  ///   [        4.0,         0.0,         1.0,       6.0],
+  /// ];
+  /// final targetName = 'outcome';
+  /// final samples = DataFrame(data, headerExists: true);
+  /// final regressor = LinearRegressor(
+  ///   samples,
+  ///   targetName,
+  ///   iterationsLimit: 2,
+  ///   learningRateType: LearningRateType.constant,
+  ///   initialLearningRate: 1.0,
+  ///   batchSize: 5,
+  ///   fitIntercept: true,
+  ///   interceptScale: 3.0,
+  /// );
+  ///
+  /// final pathToFile = './classifier.json';
+  ///
+  /// await regressor.saveAsJson(pathToFile);
+  ///
+  /// final file = File(pathToFile);
+  /// final json = await file.readAsString();
+  /// final restoredRegressor = LinearRegressor.fromJson(json);
+  ///
+  /// // here you can use previously fitted restored regressor to make
+  /// // some prediction, e.g. via `restoredRegressor.predict(...)`;
+  /// ````
   factory LinearRegressor.fromJson(String json) =>
       createLinearRegressorFromJson(json);
 
   /// Learned coefficients (or weights) for given features
   Vector get coefficients;
 
+  /// A string that serves as a name of the target column containing
+  /// observation labels. Uses in a predicted dataframe returning from [predict]
+  /// method
   String get targetName;
 
+  /// A flag denoting whether the intercept term is considered during
+  /// learning of the regressor or not
   bool get fitIntercept;
 
-  double get interceptScale;
+  /// A value defining a size of the intercept if [fitIntercept] is
+  /// `true`
+  num get interceptScale;
 }
