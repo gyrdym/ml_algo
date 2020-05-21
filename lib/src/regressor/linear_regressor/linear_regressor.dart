@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -5,6 +6,7 @@ import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/_helpers/squared_cost_optimizer_factory.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/_helpers/create_linear_regressor_from_json.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -16,11 +18,11 @@ import 'package:ml_linalg/vector.dart';
 /// A typical linear regressor uses the equation of a line for multidimensional
 /// space to make a prediction. Each `x` in the equation has its own coefficient
 /// (weight) and the combination of these `x`-es and its coefficients gives the
-/// `y` term. The latter is a value, that the regressor should predict, and
+/// `y` term. The latter is a value that the regressor should predict, and
 /// as all the `x` values are known (since it is the input for the algorithm),
 /// the regressor should find the best coefficients (weights) (they are unknown)
 /// to make a best prediction of `y` term.
-abstract class LinearRegressor implements Assessable, Predictor {
+abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   /// Parameters:
   ///
   /// [fittingData] A [DataFrame] with observations, that will be used by the
@@ -148,8 +150,14 @@ abstract class LinearRegressor implements Assessable, Predictor {
     );
   }
 
+  /// Restores previously fitted [LinearRegressor] instance from the [json]
+  factory LinearRegressor.fromJson(String json) =>
+      createLinearRegressorFromJson(json);
+
   /// Learned coefficients (or weights) for given features
   Vector get coefficients;
+
+  String get targetName;
 
   bool get fitIntercept;
 
