@@ -1,16 +1,19 @@
 # Changelog
 
+## 13.7.0
+- `LinearRegressor`: serialization/deserialization functionality added with possibility to save the model into a file as json
+
 ## 13.6.0
-- `SoftmaxRegressor`: serialization/deserialization added with possibility to save the model into a file as json
+- `SoftmaxRegressor`: serialization/deserialization functionality added with possibility to save the model into a file as json
 
 ## 13.5.1
 - `DecisionTreeClassifier`: documentation added for `fromJson` constructor
 
 ## 13.5.0
-- `LogisticRegressor`: serialization/deserialization added with possibility to save the model into a file as json
+- `LogisticRegressor`: serialization/deserialization functionality added with possibility to save the model into a file as json
 
 ## 13.4.0
-- `DecisionTreeClassifier`: serialization/deserialization added with possibility to save the model into a file as json
+- `DecisionTreeClassifier`: serialization/deserialization functionality added with possibility to save the model into a file as json
 
 ## 13.3.7
 - `TreeLeafLabel`: probability validation improvements

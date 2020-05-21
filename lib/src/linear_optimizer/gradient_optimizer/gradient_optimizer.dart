@@ -33,6 +33,7 @@ class GradientOptimizer implements LinearOptimizer {
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
         _costFunction = costFunction,
+        _dtype = dtype,
 
         _initialWeightsGenerator = dependencies
             .getDependency<InitialCoefficientsGeneratorFactory>()
@@ -63,6 +64,7 @@ class GradientOptimizer implements LinearOptimizer {
   final LearningRateGenerator _learningRateGenerator;
   final InitialCoefficientsGenerator _initialWeightsGenerator;
   final ConvergenceDetector _convergenceDetector;
+  final DType _dtype;
 
   final double _lambda;
   final int _batchSize;
@@ -75,7 +77,8 @@ class GradientOptimizer implements LinearOptimizer {
 
     var coefficients = initialCoefficients ??
         Matrix.fromColumns(List.generate(_labels.columnsNum,
-            (i) => _initialWeightsGenerator.generate(_points.columnsNum)));
+            (i) => _initialWeightsGenerator.generate(_points.columnsNum)),
+            dtype: _dtype);
 
     var iteration = 0;
     var coefficientsDiff = double.maxFinite;

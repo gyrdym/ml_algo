@@ -10,11 +10,11 @@ abstract class LinearClassifier implements Classifier {
   /// probabilities
   LinkFunction get linkFunction;
 
-  /// A flag, that denotes, whether the intercept term considered during
+  /// A flag denoting whether the intercept term is considered during
   /// learning of the classifier or not
   bool get fitIntercept;
 
-  /// A value, that defines a size of the intercept, if [fitIntercept] is
+  /// A value defining a size of the intercept if [fitIntercept] is
   /// `true`
   num get interceptScale;
 

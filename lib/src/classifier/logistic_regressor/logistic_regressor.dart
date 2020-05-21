@@ -71,7 +71,7 @@ abstract class LogisticRegressor implements
   /// different results. To avoid it, define [randomSeed]
   ///
   /// [batchSize] A size of data (in rows), that will be used for fitting per
-  /// one iteration. Applicable not for all optimizers. If gradient-based
+  /// one iteration. Applicable not to all optimizers. If gradient-based
   /// optimizer uses and If [batchSize] == `1`, stochastic mode will be
   /// activated; if `1` < [batchSize] < `total number of rows`, mini-batch mode
   /// will be activated; if [batchSize] == `total number of rows`, full-batch

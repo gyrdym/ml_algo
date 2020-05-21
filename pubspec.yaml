@@ -1,6 +1,6 @@
 name: ml_algo
 description: Machine learning algorithms written in native dart
-version: 13.6.0
+version: 13.7.0
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:
@@ -11,7 +11,7 @@ dependencies:
   json_annotation: ^3.0.1
   json_serializable: ^3.3.0
   ml_dataframe: 0.0.11
-  ml_linalg: ^12.8.2
+  ml_linalg: ^12.9.0
   quiver: ^2.0.2
   xrange: 0.0.8
 
