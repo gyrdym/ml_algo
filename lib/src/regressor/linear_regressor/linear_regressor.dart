@@ -18,7 +18,7 @@ import 'package:ml_linalg/vector.dart';
 /// A typical linear regressor uses the equation of a line for multidimensional
 /// space to make a prediction. Each `x` in the equation has its own dedicated
 /// coefficient (weight) and the combination of these `x`-es and its dedicated
-/// coefficients gives the `y` term (outcome). The latter is a value that the
+/// coefficients gives the `y` term (outcome). The latter is the value that the
 /// regressor should predict, and since all the `x` values are known (since they
 /// are the input for the algorithm), the regressor should find the best
 /// coefficients (weights) for each `x`-es to make a best prediction of `y` term.
@@ -40,7 +40,7 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the optimization algorithm. Default value is `100`.
   ///
-  /// [initialLearningRate] A value defining velocity of the convergence of the
+  /// [initialLearningRate] A value defining velocity of the convergence of
   /// gradient descent-based optimizers. Default value is `1e-3`.
   ///
   /// [minCoefficientsUpdate] A minimum distance between coefficient vectors in
