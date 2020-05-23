@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:ml_algo/src/link_function/softmax/softmax_link_function.dart';
 import 'package:ml_algo/src/link_function/softmax/softmax_link_function_mixin.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class Float32SoftmaxLinkFunction
@@ -12,6 +13,9 @@ class Float32SoftmaxLinkFunction
         SoftmaxLinkFunction {
 
   const Float32SoftmaxLinkFunction();
+
+  @override
+  final DType dtype = DType.float32;
 
   @override
   Matrix getNumerator(Matrix scores) =>
