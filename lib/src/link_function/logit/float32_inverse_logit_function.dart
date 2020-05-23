@@ -19,10 +19,8 @@ class Float32InverseLogitLinkFunction implements LinkFunction {
       throw LogitScoresMatrixDimensionException(scores.columnsNum);
     }
 
-    final scoresVector = scores.getColumn(0);
-
-    return Matrix
-        .fromColumns([scoresVector.fastMap<Float32x4>(scoresToProbabilities)]);
+    return scores
+        .mapColumns((column) => column.fastMap<Float32x4>(scoresToProbabilities));
   }
 
   Float32x4 scoresToProbabilities(Float32x4 scores) {

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/logit/logit_scores_matrix_dimension_exception.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -17,14 +18,13 @@ class Float64InverseLogitLinkFunction implements LinkFunction {
       throw LogitScoresMatrixDimensionException(scores.columnsNum);
     }
 
-    final scoresVector = scores.getColumn(0);
-    final probabilities = Vector.fromList(
-        scoresVector
-            .map(scoreToProbability)
-            .toList(),
+    return scores
+        .mapColumns(
+            (column) => Vector.fromList(
+                column.map(scoreToProbability).toList(),
+                dtype: DType.float64,
+            ),
     );
-
-    return Matrix.fromColumns([probabilities]);
   }
 
   double scoreToProbability(double score) {

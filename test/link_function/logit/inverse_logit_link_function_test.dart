@@ -2,12 +2,13 @@ import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
 import 'package:ml_algo/src/link_function/logit/logit_scores_matrix_dimension_exception.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
 
 void main() {
-  void testInverseLogitLinkFunction(LinkFunction inverseLogitLink) {
+  void testInverseLogitLinkFunction(LinkFunction inverseLogitLink, DType dtype) {
     group(inverseLogitLink.runtimeType, () {
       test('should translate positive scores to probabilities', () {
         final scores = Matrix.fromList([
@@ -15,7 +16,7 @@ void main() {
           [2.0],
           [3.0],
           [4.0],
-        ]);
+        ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
         expect(probabilities, iterable2dAlmostEqualTo([
@@ -32,7 +33,7 @@ void main() {
           [-2.0],
           [-3.0],
           [-4.0],
-        ]);
+        ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
         final a = 2.3;
 
@@ -51,7 +52,7 @@ void main() {
           [200.0],
           [1000.0],
           [10.0],
-        ]);
+        ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
         expect(probabilities, equals([
@@ -69,7 +70,7 @@ void main() {
           [-11.0],
           [-12.0],
           [-13.0],
-        ]);
+        ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
         expect(probabilities, equals([
@@ -87,7 +88,7 @@ void main() {
           [-2.0],
           [3.0],
           [-4.0],
-        ]);
+        ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
         expect(probabilities, iterable2dAlmostEqualTo([
@@ -104,7 +105,7 @@ void main() {
           [0.0],
           [0.0],
           [0.0],
-        ]);
+        ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
         expect(probabilities, equals([
@@ -122,7 +123,7 @@ void main() {
           [0.0,  200],
           [0.0, -100],
           [9.0,  1e7],
-        ]);
+        ], dtype: dtype);
         final actual = () => inverseLogitLink.link(scores);
 
         expect(actual, throwsA(isA<LogitScoresMatrixDimensionException>()));
@@ -130,6 +131,8 @@ void main() {
     });
   }
 
-  testInverseLogitLinkFunction(const Float32InverseLogitLinkFunction());
-  testInverseLogitLinkFunction(const Float64InverseLogitLinkFunction());
+  testInverseLogitLinkFunction(const Float32InverseLogitLinkFunction(),
+      DType.float32);
+  testInverseLogitLinkFunction(const Float64InverseLogitLinkFunction(),
+      DType.float64);
 }
