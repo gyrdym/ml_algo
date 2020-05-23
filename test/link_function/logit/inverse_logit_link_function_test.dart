@@ -25,6 +25,7 @@ void main() {
           [0.9525],
           [0.98201]
         ], 1e-4));
+        expect(probabilities.dtype, dtype);
       });
 
       test('should translate negative scores to probabilities', () {
@@ -43,6 +44,7 @@ void main() {
           [0.047],
           [0.017]
         ], 1e-2));
+        expect(probabilities.dtype, dtype);
       });
 
       test('should return 1 for positive scores which are out if range', () {
@@ -62,6 +64,7 @@ void main() {
           [1.0],
           [1.0],
         ]));
+        expect(probabilities.dtype, dtype);
       });
 
       test('should return 0 for negative scores which are out of range', () {
@@ -79,6 +82,7 @@ void main() {
           [0.0],
           [0.0]
         ]));
+        expect(probabilities.dtype, dtype);
       });
 
       test('should translate mixed collection of positive and negative scores '
@@ -97,6 +101,7 @@ void main() {
           [0.952],
           [0.017]
         ], 1e-3));
+        expect(probabilities.dtype, dtype);
       });
 
       test('should translate zero scores to probabilities', () {
@@ -114,6 +119,7 @@ void main() {
           [0.5],
           [0.5]
         ]));
+        expect(probabilities.dtype, dtype);
       });
 
       test('should throw the exception if scores matrix has more than 1 '

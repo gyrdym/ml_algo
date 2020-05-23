@@ -27,6 +27,7 @@ void main() {
         ];
 
         expect(probabilities, iterable2dAlmostEqualTo(expected, 1e-3));
+        expect(probabilities.dtype, dtype);
       });
     });
   }
