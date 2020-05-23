@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:ml_algo/src/link_function/link_function.dart';
+import 'package:ml_algo/src/link_function/logit/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -13,9 +14,7 @@ class Float64InverseLogitLinkFunction implements LinkFunction {
   @override
   Matrix link(Matrix scores) {
     if (scores.columnsNum != 1) {
-      throw Exception('Logit link function applicable only to a binary '
-          'classification case, but scores for ${scores.columnsNum} classes are '
-          'provided');
+      throw LogitScoresMatrixDimensionException(scores.columnsNum);
     }
 
     final scoresVector = scores.getColumn(0);

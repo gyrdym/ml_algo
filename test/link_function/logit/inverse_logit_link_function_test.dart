@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
+import 'package:ml_algo/src/link_function/logit/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
@@ -112,6 +113,19 @@ void main() {
           [0.5],
           [0.5]
         ]));
+      });
+
+      test('should throw the exception if scores matrix has more than 1 '
+          'column', () {
+        final scores = Matrix.fromList([
+          [1.0,   10],
+          [0.0,  200],
+          [0.0, -100],
+          [9.0,  1e7],
+        ]);
+        final actual = () => inverseLogitLink.link(scores);
+
+        expect(actual, throwsA(isA<LogitScoresMatrixDimensionException>()));
       });
     });
   }
