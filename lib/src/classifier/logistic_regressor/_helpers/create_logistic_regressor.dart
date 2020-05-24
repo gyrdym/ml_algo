@@ -37,6 +37,8 @@ LogisticRegressor createLogisticRegressor(
     num negativeLabel,
     DType dtype,
 ) {
+  // TODO: implement the helper below
+  // validateProbabilityThreshold(probabilityThreshold);
   validateTrainData(trainData, [targetName]);
 
   if (initialCoefficients.isNotEmpty) {

@@ -1,11 +1,6 @@
-import 'dart:io';
-
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
-import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -114,84 +109,6 @@ void main() {
           MetricType.accuracy);
 
       expect(score, equals(1.0));
-    });
-
-    group('serialization', () {
-      final fitIntercept = false;
-      final interceptScale = 3.0;
-      final dType = DType.float32;
-      final probabilityThreshold = .9;
-      final positiveLabel = 1;
-      final negativeLabel = 0;
-
-      final fileName = 'test/classifier/logistic_regressor/logistic_regressor.json';
-
-      LogisticRegressor classifier;
-
-      setUp(() {
-        classifier = LogisticRegressor(
-          samples,
-          targetName,
-          iterationsLimit: 2,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          batchSize: 5,
-          fitIntercept: fitIntercept,
-          interceptScale: interceptScale,
-          dtype: dType,
-          probabilityThreshold: probabilityThreshold,
-          positiveLabel: positiveLabel,
-        );
-      });
-
-      tearDown(() async {
-        final file = File(fileName);
-
-        if (await file.exists()) {
-          await file.delete();
-        }
-      });
-
-      test('should serialize', () {
-        final serialized = classifier.toJson();
-
-        expect(serialized, {
-          logisticRegressorCoefficientsByClassesJsonKey: matrixToJson(
-              classifier.coefficientsByClasses),
-          logisticRegressorClassNamesJsonKey: [targetName],
-          logisticRegressorFitInterceptJsonKey: fitIntercept,
-          logisticRegressorInterceptScaleJsonKey: interceptScale,
-          logisticRegressorDTypeJsonKey: dTypeToJson(dType),
-          logisticRegressorProbabilityThresholdJsonKey: probabilityThreshold,
-          logisticRegressorPositiveLabelJsonKey: positiveLabel,
-          logisticRegressorNegativeLabelJsonKey: negativeLabel,
-          logisticRegressorLinkFunctionJsonKey: float32InverseLogitLinkFunctionEncoded,
-        });
-      });
-
-      test('should return a pointer to a json file while saving serialized '
-          'data', () async {
-        final file = await classifier.saveAsJson(fileName);
-
-        expect(await file.exists(), isTrue);
-      });
-
-      test('should restore a classifier instance from json file', () async {
-        await classifier.saveAsJson(fileName);
-
-        final file = File(fileName);
-        final encodedData = await file.readAsString();
-        final restoredClassifier = LogisticRegressor.fromJson(encodedData);
-
-        expect(restoredClassifier.coefficientsByClasses,
-            classifier.coefficientsByClasses);
-        expect(restoredClassifier.interceptScale, classifier.interceptScale);
-        expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
-        expect(restoredClassifier.dtype, classifier.dtype);
-        expect(restoredClassifier.linkFunction,
-            isA<Float32InverseLogitLinkFunction>());
-        expect(restoredClassifier.classNames, [targetName]);
-      });
     });
 
     group('fitIntercept', () {
@@ -384,7 +301,7 @@ void main() {
       });
 
       test('should consider intercept scale if intercept term is going to be '
-          'fitted for float32 case', () {
+          'fitted for float64 case', () {
         final classifier = createClassifier(DType.float64);
 
         expect(classifier.coefficientsByClasses, equals([
