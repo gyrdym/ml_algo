@@ -1,7 +1,7 @@
 # Changelog
 
 ## 13.8.0
-- `LikFunction`:
+- `LinkFunction`:
     - `Float64InverseLogitLinkFunction` added
     - `Float64SoftmaxLinkFunction` added
 
