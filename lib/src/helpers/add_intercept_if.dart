@@ -6,5 +6,6 @@ Matrix addInterceptIf(bool fitIntercept, Matrix observations,
     num interceptScale, [DType dtype = DType.float32]) =>
   fitIntercept
       ? observations.insertColumns(0, [
-        Vector.filled(observations.rowsNum, interceptScale, dtype: dtype)])
+              Vector
+                  .filled(observations.rowsNum, interceptScale, dtype: dtype)])
       : observations;

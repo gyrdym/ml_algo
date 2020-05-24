@@ -13,7 +13,6 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
-import 'package:ml_algo/src/link_function/link_function_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -22,7 +21,7 @@ import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
   group('SoftmaxRegressor', () {
@@ -97,7 +96,7 @@ void main() {
 
       injector = Injector()
         ..registerSingleton<LinkFunction>((_) => linkFunctionMock,
-            dependencyName: softmaxLinkFunctionFloat32Token)
+            dependencyName: float32SoftmaxLinkFunctionToken)
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock)

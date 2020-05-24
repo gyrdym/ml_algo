@@ -6,24 +6,24 @@ void main() {
   group('Link function dependency tokens', () {
     test('should look up a correct token by DType for float32 inverse logit', () {
       expect(dTypeToInverseLogitLinkFunctionToken[DType.float32],
-          inverseLogitLinkFunctionFloat32Token);
+          float32InverseLogitLinkFunctionToken);
     });
 
     test('should look up a correct token by DType for float64 inverse logit', () {
       expect(dTypeToInverseLogitLinkFunctionToken[DType.float64],
-          inverseLogitLinkFunctionFloat64Token);
+          float64InverseLogitLinkFunctionToken);
     });
 
     test('should look up a correct token by DType for float32 softmax link '
         'function', () {
       expect(dTypeToSoftmaxLinkFunctionToken[DType.float32],
-          softmaxLinkFunctionFloat32Token);
+          float32SoftmaxLinkFunctionToken);
     });
 
     test('should look up a correct token by DType for float64 softmax link '
         'function', () {
       expect(dTypeToSoftmaxLinkFunctionToken[DType.float64],
-          softmaxLinkFunctionFloat64Token);
+          float64SoftmaxLinkFunctionToken);
     });
   });
 }
