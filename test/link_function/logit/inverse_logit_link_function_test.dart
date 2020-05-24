@@ -1,7 +1,7 @@
+import 'package:ml_algo/src/exception/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
-import 'package:ml_algo/src/link_function/logit/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
@@ -47,7 +47,7 @@ void main() {
         expect(probabilities.dtype, dtype);
       });
 
-      test('should return 1 for positive scores which are out if range', () {
+      test('should return 1 for positive scores which are out of range', () {
         final scores = Matrix.fromList([
           [50000.0],
           [100000.0],
@@ -122,7 +122,7 @@ void main() {
         expect(probabilities.dtype, dtype);
       });
 
-      test('should throw the exception if scores matrix has more than 1 '
+      test('should throw an exception if scores matrix has more than 1 '
           'column', () {
         final scores = Matrix.fromList([
           [1.0,   10],

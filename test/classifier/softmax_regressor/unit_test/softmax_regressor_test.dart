@@ -96,7 +96,7 @@ void main() {
 
       injector = Injector()
         ..registerSingleton<LinkFunction>((_) => linkFunctionMock,
-            dependencyName: softmaxLinkFunctionFloat32Token)
+            dependencyName: float32SoftmaxLinkFunctionToken)
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock)

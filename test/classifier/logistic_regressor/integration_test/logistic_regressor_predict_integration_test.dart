@@ -18,20 +18,19 @@ void main() {
     ];
     final targetName = 'col_3';
     final samples = DataFrame(data, headerExists: false);
+    final classifier = LogisticRegressor(
+      samples,
+      targetName,
+      iterationsLimit: 2,
+      learningRateType: LearningRateType.constant,
+      initialLearningRate: 1.0,
+      batchSize: 5,
+      fitIntercept: false,
+    );
 
     tearDownAll(() => injector = null);
 
     test('should make prediction', () {
-      final classifier = LogisticRegressor(
-        samples,
-        targetName,
-        iterationsLimit: 2,
-        learningRateType: LearningRateType.constant,
-        initialLearningRate: 1.0,
-        batchSize: 5,
-        fitIntercept: false,
-      );
-
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
       ]);
@@ -51,16 +50,6 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 0', () {
-      final classifier = LogisticRegressor(
-          samples,
-          targetName,
-          iterationsLimit: 2,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          batchSize: 5,
-          fitIntercept: false
-      );
-
       final newSamples = DataFrame([
         <num>[2.0, 4.0, 1.0, 1.0],
       ], header: ['first', 'second', 'third', 'target'], headerExists: false);
@@ -72,16 +61,6 @@ void main() {
     });
 
     test('should evaluate prediction quality, accuracy = 1', () {
-      final classifier = LogisticRegressor(
-          samples,
-          targetName,
-          iterationsLimit: 2,
-          learningRateType: LearningRateType.constant,
-          initialLearningRate: 1.0,
-          batchSize: 5,
-          fitIntercept: false
-      );
-
       final newFeatures = DataFrame([
         <num>[2, 4, 1, 0],
       ], header: ['first', 'second', 'third', 'target'], headerExists: false);

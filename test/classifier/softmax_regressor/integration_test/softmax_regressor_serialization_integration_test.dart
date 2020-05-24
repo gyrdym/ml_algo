@@ -30,7 +30,7 @@ void main() {
     double interceptScale = 10,
     DType dtype = DType.float32,
     num positiveLabel = 1,
-    num negativeLabel = 1,
+    num negativeLabel = -1,
   }) {
     final sourceData = <Iterable<dynamic>>[
       <String>[...featureNames, ...targetNames],
@@ -54,7 +54,7 @@ void main() {
   };
 
   group('SoftmaxRegressor.toJson', () {
-    test('should serialize targetNames field', () {
+    test('should serialize classNames field', () {
       final classifier = createClassifier();
       final serialized = classifier.toJson();
 

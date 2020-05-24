@@ -75,19 +75,19 @@ Injector get dependencies =>
 
       ..registerSingleton<LinkFunction>(
               (_) => const Float32InverseLogitLinkFunction(),
-          dependencyName: inverseLogitLinkFunctionFloat32Token)
+          dependencyName: float32InverseLogitLinkFunctionToken)
 
       ..registerSingleton<LinkFunction>(
               (_) => const Float64InverseLogitLinkFunction(),
-          dependencyName: inverseLogitLinkFunctionFloat64Token)
+          dependencyName: float64InverseLogitLinkFunctionToken)
 
       ..registerSingleton<LinkFunction>(
               (_) => const Float32SoftmaxLinkFunction(),
-          dependencyName: softmaxLinkFunctionFloat32Token)
+          dependencyName: float32SoftmaxLinkFunctionToken)
 
       ..registerSingleton<LinkFunction>(
               (_) => const Float64SoftmaxLinkFunction(),
-          dependencyName: softmaxLinkFunctionFloat64Token)
+          dependencyName: float64SoftmaxLinkFunctionToken)
 
       ..registerSingleton<DataSplitterFactory>(
               (_) => const DataSplitterFactoryImpl())

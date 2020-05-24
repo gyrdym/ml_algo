@@ -78,7 +78,7 @@ void main() {
         dtype: dtype,
       );
 
-      test('should consider intercept term for float32 dtype case', () {
+      test('should consider intercept term, dtype=DType.float32', () {
         final classifier = createClassifier(DType.float32);
 
         // as the intercept is required to be fitted, our test_data should look as follows:
@@ -142,7 +142,7 @@ void main() {
         ]));
       });
 
-      test('should consider intercept term for float64 dtype case', () {
+      test('should consider intercept term, dtype=DType.float64', () {
         final classifier = createClassifier(DType.float64);
 
         expect(classifier.coefficientsByClasses, equals([
@@ -175,7 +175,7 @@ void main() {
       );
 
       test('should consider intercept scale if intercept term is going to be '
-          'fitted for float32 case', () {
+          'fitted, dtype=DType.float32', () {
         final classifier = createClassifier(DType.float32);
 
         // as the intercept is required to be fitted, our test_data should look as follows:
@@ -252,7 +252,7 @@ void main() {
       });
 
       test('should consider intercept scale if intercept term is going to be '
-          'fitted for float64 case', () {
+          'fitted, dtype=DType.float64', () {
         final classifier = createClassifier(DType.float64);
 
         expect(classifier.coefficientsByClasses, equals([

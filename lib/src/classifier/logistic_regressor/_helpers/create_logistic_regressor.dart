@@ -3,6 +3,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dar
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
+import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
 import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -37,8 +38,7 @@ LogisticRegressor createLogisticRegressor(
     num negativeLabel,
     DType dtype,
 ) {
-  // TODO: implement the helper below
-  // validateProbabilityThreshold(probabilityThreshold);
+  validateProbabilityThreshold(probabilityThreshold);
   validateTrainData(trainData, [targetName]);
 
   if (initialCoefficients.isNotEmpty) {

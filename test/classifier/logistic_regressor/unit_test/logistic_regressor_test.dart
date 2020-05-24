@@ -5,6 +5,7 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
@@ -46,6 +47,8 @@ void main() {
       [500],
     ]);
 
+    final targetColumnName = 'col_4';
+
     final negativeLabel = 100;
     final positiveLabel = 200;
 
@@ -76,7 +79,7 @@ void main() {
       injector = Injector()
         ..registerSingleton<LinkFunction>(
                 (_) => linkFunctionMock,
-            dependencyName: inverseLogitLinkFunctionFloat32Token)
+            dependencyName: float32InverseLogitLinkFunctionToken)
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(
@@ -92,6 +95,54 @@ void main() {
 
     tearDownAll(() => injector = null);
 
+    test('should throw an exception if a probability threshold is less than '
+        '0.0', () {
+      final probabilityThreshold = -0.01;
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        probabilityThreshold: probabilityThreshold,
+      );
+
+      expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+    });
+
+    test('should throw an exception if a probability threshold is equal to '
+        '0.0', () {
+      final probabilityThreshold = 0.0;
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        probabilityThreshold: probabilityThreshold,
+      );
+
+      expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+    });
+
+    test('should throw an exception if a probability threshold is equal to '
+        '1.0', () {
+      final probabilityThreshold = 1.0;
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        probabilityThreshold: probabilityThreshold,
+      );
+
+      expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+    });
+
+    test('should throw an exception if a probability threshold is greater than '
+        '1.0', () {
+      final probabilityThreshold = 1.01;
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
+        probabilityThreshold: probabilityThreshold,
+      );
+
+      expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+    });
+
     test('should throw an exception if a target column does not exist', () {
       final targetColumnName = 'col_10';
 
@@ -105,9 +156,6 @@ void main() {
 
     test('should throw an exception if too few initial coefficients '
         'provided', () {
-
-      final targetColumnName = 'col_4';
-
       final actual = () => LogisticRegressor(
         observations,
         targetColumnName,
