@@ -5,6 +5,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_jso
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
+import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/dtype_to_json.dart';
@@ -283,8 +284,10 @@ void main() {
       expect(file.path, fileName);
     });
 
-    test('should restore a classifier instance from json file', () async {
-      final classifier = createClassifier();
+    test('should restore a classifier instance from json file, '
+        'dtype=DType.float32', () async {
+
+      final classifier = createClassifier(dtype: DType.float32);
       await classifier.saveAsJson(fileName);
 
       final file = File(fileName);
@@ -298,6 +301,26 @@ void main() {
       expect(restoredClassifier.dtype, classifier.dtype);
       expect(restoredClassifier.linkFunction,
           isA<Float32InverseLogitLinkFunction>());
+      expect(restoredClassifier.classNames, [targetName]);
+    });
+
+    test('should restore a classifier instance from json file, '
+        'dtype=DType.float64', () async {
+
+      final classifier = createClassifier(dtype: DType.float64);
+      await classifier.saveAsJson(fileName);
+
+      final file = File(fileName);
+      final encodedData = await file.readAsString();
+      final restoredClassifier = LogisticRegressor.fromJson(encodedData);
+
+      expect(restoredClassifier.coefficientsByClasses,
+          classifier.coefficientsByClasses);
+      expect(restoredClassifier.interceptScale, classifier.interceptScale);
+      expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
+      expect(restoredClassifier.dtype, classifier.dtype);
+      expect(restoredClassifier.linkFunction,
+          isA<Float64InverseLogitLinkFunction>());
       expect(restoredClassifier.classNames, [targetName]);
     });
   });
