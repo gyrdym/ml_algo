@@ -1,5 +1,10 @@
 # Changelog
 
+## 13.8.0
+- `LikFunction`:
+    - `Float64InverseLogitLinkFunction` added
+    - `Float64SoftmaxLinkFunction` added
+
 ## 13.7.0
 - `LinearRegressor`: serialization/deserialization functionality added with possibility to save the model into a file as json
 
