@@ -4,7 +4,7 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
   group('SoftmaxRegressorFactoryImpl', () {

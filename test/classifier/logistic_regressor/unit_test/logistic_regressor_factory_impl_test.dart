@@ -3,7 +3,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_imp
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
+import '../../../mocks.dart';
 
 void main() {
   group('LogisticRegressorFactoryImpl', () {

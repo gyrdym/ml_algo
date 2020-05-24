@@ -39,8 +39,8 @@ LinearOptimizer createLogLikelihoodOptimizer(
     targetNames: targetNames,
   ).toList();
 
-  final points = splits[0].toMatrix();
-  final labels = splits[1].toMatrix();
+  final points = splits[0].toMatrix(dtype);
+  final labels = splits[1].toMatrix(dtype);
 
   final optimizerFactory = dependencies
       .getDependency<LinearOptimizerFactory>();
@@ -55,7 +55,7 @@ LinearOptimizer createLogLikelihoodOptimizer(
 
   return optimizerFactory.createByType(
     optimizerType,
-    addInterceptIf(fitIntercept, points, interceptScale),
+    addInterceptIf(fitIntercept, points, interceptScale, dtype),
     labels,
     costFunction: costFunction,
     iterationLimit: iterationsLimit,

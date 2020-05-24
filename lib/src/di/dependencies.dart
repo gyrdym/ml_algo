@@ -27,7 +27,9 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory_impl.dart'
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
+import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
 import 'package:ml_algo/src/link_function/softmax/float32_softmax_link_function.dart';
+import 'package:ml_algo/src/link_function/softmax/float64_softmax_link_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
@@ -73,11 +75,19 @@ Injector get dependencies =>
 
       ..registerSingleton<LinkFunction>(
               (_) => const Float32InverseLogitLinkFunction(),
-          dependencyName: inverseLogitLinkFunctionFloat32Token)
+          dependencyName: float32InverseLogitLinkFunctionToken)
+
+      ..registerSingleton<LinkFunction>(
+              (_) => const Float64InverseLogitLinkFunction(),
+          dependencyName: float64InverseLogitLinkFunctionToken)
 
       ..registerSingleton<LinkFunction>(
               (_) => const Float32SoftmaxLinkFunction(),
-          dependencyName: softmaxLinkFunctionFloat32Token)
+          dependencyName: float32SoftmaxLinkFunctionToken)
+
+      ..registerSingleton<LinkFunction>(
+              (_) => const Float64SoftmaxLinkFunction(),
+          dependencyName: float64SoftmaxLinkFunctionToken)
 
       ..registerSingleton<DataSplitterFactory>(
               (_) => const DataSplitterFactoryImpl())
