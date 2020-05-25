@@ -68,6 +68,7 @@ class GradientOptimizer implements LinearOptimizer {
 
   final double _lambda;
   final int _batchSize;
+  final List<num> _errors = [];
 
   @override
   Matrix findExtrema({Matrix initialCoefficients,
@@ -121,6 +122,7 @@ class GradientOptimizer implements LinearOptimizer {
       {bool isMinimization = true}) {
     final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
+
     return isMinimization
         ? regularizedCoefficients - gradient * eta
         : regularizedCoefficients + gradient * eta;
@@ -129,8 +131,8 @@ class GradientOptimizer implements LinearOptimizer {
   Matrix _regularize(double eta, double lambda, Matrix coefficients) {
     if (lambda == 0) {
       return coefficients;
-    } else {
-      return coefficients * (1 - 2 * eta * lambda);
     }
+
+    return coefficients * (1 - 2 * eta * lambda);
   }
 }

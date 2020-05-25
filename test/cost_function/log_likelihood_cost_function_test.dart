@@ -1,5 +1,4 @@
-import 'package:ml_algo/src/cost_function/log_likelihood.dart';
-import 'package:ml_algo/src/cost_function/squared.dart';
+import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -7,44 +6,9 @@ import 'package:test/test.dart';
 import '../mocks.dart';
 
 void main() {
-  group('SquaredCost', () {
-    final squaredCost = const SquaredCost();
-
-    test('should return a gradient vector of quadratic  error function', () {
-      // The formula in matrix notation:
-      // -2 * X^t * (y - X*w)
-      // where X^t - transposed X matrix
-      // y - labels matrix (vector-column)
-      // w - coefficients matrix (vector-column)
-      final x = Matrix.fromList([
-        [1.0, 2.0, 3.0],
-        [4.0, 5.0, 6.0],
-        [7.0, 8.0, 9.0],
-      ]);
-      final w = Matrix.fromList([
-        [-1.0],
-        [2.0],
-        [-3.0],
-      ]);
-      final y = Matrix.fromList([
-        [10.0],
-        [20.0],
-        [30.0]
-      ]);
-      final expected = [
-        [-2.0 * (16 + 128 + 7 * 48)],
-        [-2.0 * (32 + 160 + 8 * 48)],
-        [-2.0 * (48 + 192 + 9 * 48)],
-      ];
-      final actual = squaredCost.getGradient(x, w, y);
-
-      expect(actual, equals(expected));
-    });
-  });
-
-  group('LogLikelihoodCost', () {
+  group('LogLikelihoodCostFunction', () {
     final mockedLinkFn = LinkFunctionMock();
-    final logLikelihoodCost = LogLikelihoodCost(mockedLinkFn);
+    final logLikelihoodCost = LogLikelihoodCostFunction(mockedLinkFn);
 
     when(mockedLinkFn.link(any)).thenReturn(Matrix.fromList([
       [1.0],
@@ -89,7 +53,7 @@ void main() {
       expect(actual, equals(expected));
     });
 
-    test('should return error cost value', () {
+    test('should return log likelihood cost', () {
       expect(
         () => logLikelihoodCost.getCost(null, null),
         throwsUnimplementedError,

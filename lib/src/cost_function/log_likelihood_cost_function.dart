@@ -2,13 +2,13 @@ import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class LogLikelihoodCost implements CostFunction {
-  LogLikelihoodCost(this._linkFunction);
+class LogLikelihoodCostFunction implements CostFunction {
+  LogLikelihoodCostFunction(this._linkFunction);
 
   final LinkFunction _linkFunction;
 
   @override
-  double getCost(double score, double yOrig) {
+  double getCost(Matrix predictedLabels, Matrix originalLabels) {
     throw UnimplementedError();
   }
 

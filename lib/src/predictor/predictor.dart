@@ -6,5 +6,6 @@ abstract class Predictor {
   /// Returns prediction, based on the model learned parameters
   DataFrame predict(DataFrame testFeatures);
 
+  /// A type for all the numeric values using by the [Predictor]
   DType get dtype;
 }

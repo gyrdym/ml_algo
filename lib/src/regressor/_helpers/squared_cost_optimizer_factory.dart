@@ -46,7 +46,7 @@ LinearOptimizer createSquaredCostOptimizer(
       .getDependency<CostFunctionFactory>();
 
   final costFunction = costFunctionFactory.createByType(
-    CostFunctionType.squared,
+    CostFunctionType.leastSquare,
   );
 
   return optimizerFactory.createByType(

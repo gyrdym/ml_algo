@@ -1,8 +1,8 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/cost_function/log_likelihood.dart';
-import 'package:ml_algo/src/cost_function/squared.dart';
+import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
+import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 
 class CostFunctionFactoryImpl implements CostFunctionFactory {
@@ -18,10 +18,10 @@ class CostFunctionFactoryImpl implements CostFunctionFactory {
           throw Exception('Link function must be specified if log likelihood '
               'cost function is going to be used');
         }
-        return LogLikelihoodCost(linkFunction);
+        return LogLikelihoodCostFunction(linkFunction);
 
-      case CostFunctionType.squared:
-        return const SquaredCost();
+      case CostFunctionType.leastSquare:
+        return const LeastSquareCostFunction();
 
       default:
         throw UnsupportedError('Unsupported cost function type - $type');
