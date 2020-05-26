@@ -56,4 +56,7 @@ abstract class LinearOptimizer {
       Matrix initialCoefficients,
       bool isMinimizingObjective,
     });
+
+  /// Returns a list of errors for every learning iteration
+  List<num> get errors;
 }

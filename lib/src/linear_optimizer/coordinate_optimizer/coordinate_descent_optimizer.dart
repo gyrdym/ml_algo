@@ -45,6 +45,10 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
   final DType _dtype;
   final double _lambda;
   final Vector _normalizer;
+  final List<num> _errors = [];
+
+  @override
+  List<num> get errors => _errors;
 
   @override
   Matrix findExtrema({

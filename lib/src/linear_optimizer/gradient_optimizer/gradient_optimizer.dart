@@ -24,6 +24,7 @@ class GradientOptimizer implements LinearOptimizer {
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     int iterationLimit = 100,
+    bool collectLearningData = false,
     double lambda,
     int batchSize,
     int randomSeed,
@@ -34,8 +35,9 @@ class GradientOptimizer implements LinearOptimizer {
         _batchSize = batchSize,
         _costFunction = costFunction,
         _dtype = dtype,
+        _collectLearningData = collectLearningData,
 
-        _initialWeightsGenerator = dependencies
+        _initialCoefficientsGenerator = dependencies
             .getDependency<InitialCoefficientsGeneratorFactory>()
             .fromType(initialCoefficientsType, dtype),
 
@@ -62,23 +64,25 @@ class GradientOptimizer implements LinearOptimizer {
   final Randomizer _randomizer;
   final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
-  final InitialCoefficientsGenerator _initialWeightsGenerator;
+  final InitialCoefficientsGenerator _initialCoefficientsGenerator;
   final ConvergenceDetector _convergenceDetector;
   final DType _dtype;
-
+  final bool _collectLearningData;
   final double _lambda;
   final int _batchSize;
   final List<num> _errors = [];
 
   @override
+  List<num> get errors => _errors;
+
+  @override
   Matrix findExtrema({Matrix initialCoefficients,
     bool isMinimizingObjective = true}) {
-    final batchSize =
-        _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
+    _errors.clear();
 
     var coefficients = initialCoefficients ??
         Matrix.fromColumns(List.generate(_labels.columnsNum,
-            (i) => _initialWeightsGenerator.generate(_points.columnsNum)),
+            (i) => _initialCoefficientsGenerator.generate(_points.columnsNum)),
             dtype: _dtype);
 
     var iteration = 0;
@@ -86,9 +90,8 @@ class GradientOptimizer implements LinearOptimizer {
 
     while (!_convergenceDetector.isConverged(coefficientsDiff, iteration)) {
       final learningRate = _learningRateGenerator.getNextValue();
-      final newCoefficients = _generateCoefficients(
-          coefficients, _labels, learningRate, batchSize,
-          isMinimization: isMinimizingObjective);
+      final newCoefficients = _generateCoefficients(coefficients, _labels,
+          learningRate, isMinimization: isMinimizingObjective);
       coefficientsDiff = (newCoefficients - coefficients).norm();
       iteration++;
       coefficients = newCoefficients;
@@ -99,10 +102,9 @@ class GradientOptimizer implements LinearOptimizer {
     return coefficients;
   }
 
-  Matrix _generateCoefficients(
-      Matrix coefficients, Matrix labels, double eta, int batchSize,
+  Matrix _generateCoefficients(Matrix coefficients, Matrix labels, double eta,
       {bool isMinimization = true}) {
-    final range = _getBatchRange(batchSize);
+    final range = _getBatchRange();
     final start = range.first;
     final end = range.last;
     final pointsBatch = _points
@@ -114,12 +116,17 @@ class GradientOptimizer implements LinearOptimizer {
         isMinimization: isMinimization);
   }
 
-  Iterable<int> _getBatchRange(int batchSize) => _randomizer
-      .getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
+  Iterable<int> _getBatchRange() => _randomizer
+      .getIntegerInterval(0, _points.rowsNum, intervalLength: _batchSize);
 
   Matrix _makeGradientStep(
       Matrix coefficients, Matrix points, Matrix labels, double eta,
       {bool isMinimization = true}) {
+    if (_collectLearningData) {
+      final error = _costFunction.getCost(points * coefficients, labels);
+      _errors.add(error);
+    }
+
     final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
 
@@ -128,11 +135,11 @@ class GradientOptimizer implements LinearOptimizer {
         : regularizedCoefficients + gradient * eta;
   }
 
-  Matrix _regularize(double eta, double lambda, Matrix coefficients) {
+  Matrix _regularize(double learningRate, double lambda, Matrix coefficients) {
     if (lambda == 0) {
       return coefficients;
     }
 
-    return coefficients * (1 - 2 * eta * lambda);
+    return coefficients * (1 - 2 * learningRate * lambda);
   }
 }
