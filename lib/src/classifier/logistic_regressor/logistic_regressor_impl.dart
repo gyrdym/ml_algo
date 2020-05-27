@@ -37,6 +37,7 @@ class LogisticRegressorImpl
       this.probabilityThreshold,
       this.negativeLabel,
       this.positiveLabel,
+      this.costPerIteration,
       this.dtype,
   ) {
     validateCoefficientsMatrix(coefficientsByClasses);
@@ -103,6 +104,13 @@ class LogisticRegressorImpl
     fromJson: fromLinkFunctionJson,
   )
   final LinkFunction linkFunction;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorCostPerIterationJsonKey,
+    includeIfNull: false,
+  )
+  final List<num> costPerIteration;
 
   @override
   DataFrame predict(DataFrame testFeatures) {

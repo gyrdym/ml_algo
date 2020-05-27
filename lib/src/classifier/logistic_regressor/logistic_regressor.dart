@@ -136,6 +136,7 @@ abstract class LogisticRegressor implements
     Vector initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
+    bool collectLearningData = false,
     DType dtype = DType.float32,
   }) => createLogisticRegressor(
     trainData,
@@ -157,6 +158,7 @@ abstract class LogisticRegressor implements
     initialCoefficients ?? Vector.empty(dtype: dtype),
     positiveLabel,
     negativeLabel,
+    collectLearningData,
     dtype,
   );
 
@@ -200,4 +202,6 @@ abstract class LogisticRegressor implements
   /// ````
   factory LogisticRegressor.fromJson(String json) =>
       createLogisticRegressorFromJson(json);
+
+  List<num> get costPerIteration;
 }

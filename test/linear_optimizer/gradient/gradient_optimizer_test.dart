@@ -425,17 +425,16 @@ void main() {
         minCoefficientsUpdate: null,
         iterationLimit: iterationsCount,
         batchSize: batchSize1,
-        collectLearningData: true,
       );
 
-      optimizer.findExtrema();
+      optimizer.findExtrema(collectLearningData: true);
 
       verify(costFunctionMock.getCost(predictionIteration1, labels)).called(1);
       verify(costFunctionMock.getCost(predictionIteration2, labels)).called(1);
       verify(costFunctionMock.getCost(predictionIteration3, labels)).called(1);
     });
 
-    test('should collect errors if collectLearningData is true', () {
+    test('should collect cost per iteration if collectLearningData is true', () {
       final optimizer = GradientOptimizer(
         points,
         labels,
@@ -444,15 +443,14 @@ void main() {
         minCoefficientsUpdate: null,
         iterationLimit: iterationsCount,
         batchSize: batchSize1,
-        collectLearningData: true,
       );
 
-      optimizer.findExtrema();
+      optimizer.findExtrema(collectLearningData: true);
 
-      expect(optimizer.errors, [cost, cost, cost]);
+      expect(optimizer.costPerIteration, [cost, cost, cost]);
     });
 
-    test('should clear error list if optimization starts over', () {
+    test('should clear cost per iteration list if optimization starts over', () {
       final optimizer = GradientOptimizer(
         points,
         labels,
@@ -461,14 +459,13 @@ void main() {
         minCoefficientsUpdate: null,
         iterationLimit: iterationsCount,
         batchSize: batchSize1,
-        collectLearningData: true,
       );
 
-      optimizer.findExtrema();
-      expect(optimizer.errors, [cost, cost, cost]);
+      optimizer.findExtrema(collectLearningData: true);
+      expect(optimizer.costPerIteration, [cost, cost, cost]);
 
       optimizer.findExtrema();
-      expect(optimizer.errors, [cost, cost, cost]);
+      expect(optimizer.costPerIteration, <num>[]);
     });
   });
 }

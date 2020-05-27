@@ -48,12 +48,13 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
   final List<num> _errors = [];
 
   @override
-  List<num> get errors => _errors;
+  List<num> get costPerIteration => _errors;
 
   @override
   Matrix findExtrema({
     Matrix initialCoefficients,
     bool isMinimizingObjective = true,
+    bool collectLearningData = false,
   }) {
     var coefficients = initialCoefficients ??
         Matrix.fromRows(List<Vector>.generate(_labels.columnsNum,

@@ -50,6 +50,7 @@ void main() {
     num positiveLabel = 1,
     num negativeLabel = 0,
     DType dtype = DType.float32,
+    bool collectLearningData = false,
   }) => LogisticRegressor(
     samples,
     targetName,
@@ -63,6 +64,7 @@ void main() {
     probabilityThreshold: probabilityThreshold,
     positiveLabel: positiveLabel,
     negativeLabel: negativeLabel,
+    collectLearningData: collectLearningData,
   );
 
   group('LogistiRegressor.toJson', () {
@@ -263,6 +265,14 @@ void main() {
         serialized[logisticRegressorLinkFunctionJsonKey],
         float64InverseLogitLinkFunctionEncoded,
       );
+    });
+
+    test('should serialize cost per iteration list', () {
+      final classifier = createClassifier(collectLearningData: true);
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorCostPerIterationJsonKey],
+          classifier.costPerIteration);
     });
   });
 

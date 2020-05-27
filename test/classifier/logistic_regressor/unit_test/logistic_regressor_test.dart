@@ -1,6 +1,5 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -14,6 +13,7 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
+import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -31,50 +31,27 @@ void main() {
       <num>[ 3.1,  5.2,  6.0, 77.4, 0],
     ], headerExists: false);
 
-    final initialCoefficients = Vector.fromList([
-      10,
-      20,
-      30,
-      40,
-      50,
-    ]);
-
-    final learnedCoefficients = Matrix.fromList([
-      [100],
-      [200],
-      [300],
-      [400],
-      [500],
-    ]);
-
+    final initialCoefficients = Vector.fromList([10, 20, 30, 40, 50]);
+    final learnedCoefficients = Matrix.column([100, 200, 300, 400, 500]);
     final targetColumnName = 'col_4';
-
     final negativeLabel = 100;
     final positiveLabel = 200;
+    final errors = <num>[];
 
     LinkFunction linkFunctionMock;
-
     CostFunction costFunctionMock;
     CostFunctionFactory costFunctionFactoryMock;
-
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
-
     LogisticRegressor logisticRegressorMock;
-    LogisticRegressorFactory logisticRegressorFactoryMock;
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
-
       costFunctionMock = CostFunctionMock();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
-
       logisticRegressorMock = LogisticRegressorMock();
-      logisticRegressorFactoryMock = createLogisticRegressorFactoryMock(
-          logisticRegressorMock);
 
       injector = Injector()
         ..registerSingleton<LinkFunction>(
@@ -83,14 +60,14 @@ void main() {
         ..registerDependency<CostFunctionFactory>(
                 (_) => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(
-                (_) => optimizerFactoryMock)
-        ..registerSingleton<LogisticRegressorFactory>(
-                (_) => logisticRegressorFactoryMock);
+                (_) => optimizerFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
         isMinimizingObjective: anyNamed('isMinimizingObjective'),
       )).thenReturn(learnedCoefficients);
+
+      when(optimizerMock.costPerIteration).thenReturn(errors);
     });
 
     tearDownAll(() => injector = null);
@@ -238,7 +215,7 @@ void main() {
       )).called(1);
     });
 
-    test('should find the extrema for fitting observations while '
+    test('should find the extrema for provided observations while '
         'instantiating', () {
       LogisticRegressor(
         observations,
@@ -256,8 +233,7 @@ void main() {
       )).called(1);
     });
 
-    test('should call logistic regressor factory in order to create the '
-        'classifier instance', () {
+    test('should create a proper instance', () {
       final targetName = 'col_4';
       final probabilityThreshold = 0.7;
       final fitIntercept = true;
@@ -276,19 +252,12 @@ void main() {
         dtype: dtype,
       );
 
-      verify(logisticRegressorFactoryMock.create(
-        targetName,
-        linkFunctionMock,
-        probabilityThreshold,
-        fitIntercept,
-        interceptScale,
-        learnedCoefficients,
-        negativeLabel,
-        positiveLabel,
-        dtype,
-      )).called(1);
-
-      expect(classifier, same(logisticRegressorMock));
+      expect(classifier.linkFunction, linkFunctionMock);
+      expect(classifier.interceptScale, interceptScale);
+      expect(classifier.fitIntercept, fitIntercept);
+      expect(classifier.dtype, dtype);
+      expect(classifier.coefficientsByClasses, learnedCoefficients);
+      expect(classifier.classNames, [targetName]);
     });
   });
 }

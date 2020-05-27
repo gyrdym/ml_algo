@@ -22,6 +22,7 @@ void main() {
     final negativeLabel = -1;
     final positiveLabel = 1;
     final dtype = DType.float32;
+    final costPerIteration = [1.2, 233.01, 23, -10001];
 
     final regressor = LogisticRegressorImpl(
       [className],
@@ -32,6 +33,7 @@ void main() {
       probabilityThreshold,
       negativeLabel,
       positiveLabel,
+      costPerIteration,
       dtype,
     );
 
@@ -51,13 +53,7 @@ void main() {
       [interceptScale, 33, 44, 55],
     ]);
 
-    final mockedProbabilities = Matrix.fromList([
-      [0.8],
-      [0.5],
-      [0.6],
-      [0.7],
-      [0.3],
-    ]);
+    final mockedProbabilities = Matrix.column([0.8, 0.5, 0.6, 0.7, 0.3]);
 
     setUp(() {
       when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
@@ -84,6 +80,7 @@ void main() {
           probabilityThreshold,
           negativeLabel,
           positiveLabel,
+          costPerIteration,
           dtype,
         );
 
@@ -107,14 +104,19 @@ void main() {
           probabilityThreshold,
           negativeLabel,
           positiveLabel,
+          costPerIteration,
           dtype,
         );
 
         expect(actual, throwsException);
       });
+
+      test('should persist cost per iteration', () {
+        expect(regressor.costPerIteration, costPerIteration);
+      });
     });
 
-    group('predict method', () {
+    group('LogisticRegressorImpl.predict', () {
       test('should throw an exception if no test features provided', () {
         final testFeatures = DataFrame.fromMatrix(Matrix.empty());
 

@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
 import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
@@ -36,6 +36,7 @@ LogisticRegressor createLogisticRegressor(
     Vector initialCoefficients,
     num positiveLabel,
     num negativeLabel,
+    bool collectLearningData,
     DType dtype,
 ) {
   validateProbabilityThreshold(probabilityThreshold);
@@ -74,20 +75,22 @@ LogisticRegressor createLogisticRegressor(
         ? Matrix.fromColumns([initialCoefficients], dtype: dtype)
         : null,
     isMinimizingObjective: false,
+    collectLearningData: collectLearningData,
   );
+  final costPerIteration = optimizer.costPerIteration.isNotEmpty
+      ? optimizer.costPerIteration
+      : null;
 
-  final regressorFactory = dependencies
-      .getDependency<LogisticRegressorFactory>();
-
-  return regressorFactory.create(
-    targetName,
+  return LogisticRegressorImpl(
+    [targetName],
     linkFunction,
-    probabilityThreshold,
     fitIntercept,
     interceptScale,
     coefficientsByClasses,
+    probabilityThreshold,
     negativeLabel,
     positiveLabel,
+    costPerIteration,
     dtype,
   );
 }
