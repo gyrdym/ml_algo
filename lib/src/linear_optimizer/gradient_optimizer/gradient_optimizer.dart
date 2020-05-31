@@ -67,10 +67,10 @@ class GradientOptimizer implements LinearOptimizer {
   final DType _dtype;
   final double _lambda;
   final int _batchSize;
-  final List<num> _errors = [];
+  final List<num> _costPerIteration = [];
 
   @override
-  List<num> get costPerIteration => _errors;
+  List<num> get costPerIteration => _costPerIteration;
 
   @override
   Matrix findExtrema({
@@ -78,7 +78,7 @@ class GradientOptimizer implements LinearOptimizer {
     bool isMinimizingObjective = true,
     bool collectLearningData = false,
   }) {
-    _errors.clear();
+    _costPerIteration.clear();
 
     var coefficients = initialCoefficients ??
         Matrix.fromColumns(List.generate(_labels.columnsNum,
@@ -106,6 +106,8 @@ class GradientOptimizer implements LinearOptimizer {
     return coefficients;
   }
 
+  /// [coefficients] columns of coefficients (each label columns has its own
+  /// dedicated column of coefficients)
   Matrix _generateCoefficients(
     Matrix coefficients,
     double learningRate, {
@@ -134,6 +136,10 @@ class GradientOptimizer implements LinearOptimizer {
   Iterable<int> _getBatchRange() => _randomizer
       .getIntegerInterval(0, _points.rowsNum, intervalLength: _batchSize);
 
+  /// [coefficients] columns of coefficients (each label column from [labels]
+  /// has its own dedicated column of coefficients)
+  ///
+  /// [labels] columns of labels
   Matrix _makeGradientStep(
       Matrix coefficients,
       Matrix points,
@@ -145,8 +151,9 @@ class GradientOptimizer implements LinearOptimizer {
       }) {
 
     if (collectLearningData) {
-      final error = _costFunction.getCost(points * coefficients, labels);
-      _errors.add(error);
+      final error = _costFunction.getCost(points, coefficients, labels);
+
+      _costPerIteration.add(error);
     }
 
     final gradient = _costFunction.getGradient(points, coefficients, labels);

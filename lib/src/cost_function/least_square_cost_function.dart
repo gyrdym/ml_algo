@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/common/exception/matrix_column_exception.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:xrange/integers.dart';
@@ -7,21 +6,9 @@ class LeastSquareCostFunction implements CostFunction {
   const LeastSquareCostFunction();
 
   @override
-  double getCost(Matrix predictedLabels, Matrix originalLabels) {
-    if (predictedLabels.columnsNum != 1) {
-      throw MatrixColumnException(predictedLabels.rowsNum,
-          predictedLabels.columnsNum);
-    }
-
-    if (originalLabels.columnsNum != 1) {
-      throw MatrixColumnException(originalLabels.rowsNum,
-          originalLabels.columnsNum);
-    }
-
-    return (predictedLabels - originalLabels)
-        .pow(2)
-        .sum();
-  }
+  double getCost(Matrix x, Matrix w, Matrix y) => (x * w - y)
+      .pow(2)
+      .sum();
 
   @override
   Matrix getGradient(Matrix x, Matrix w, Matrix y) =>

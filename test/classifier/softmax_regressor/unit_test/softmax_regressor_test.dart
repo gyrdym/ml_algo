@@ -143,11 +143,15 @@ void main() {
       SoftmaxRegressor(
         observations,
         ['target_1', 'target_2', 'target_3'],
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
       );
 
       verify(costFunctionFactoryMock.createByType(
         CostFunctionType.logLikelihood,
         linkFunction: linkFunctionMock,
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
       )).called(1);
     });
 

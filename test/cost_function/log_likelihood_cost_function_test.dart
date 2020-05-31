@@ -9,7 +9,10 @@ import '../mocks.dart';
 void main() {
   group('LogLikelihoodCostFunction', () {
     final mockedLinkFn = LinkFunctionMock();
-    final logLikelihoodCost = LogLikelihoodCostFunction(mockedLinkFn);
+    final positiveLabel = 10;
+    final negativeLabel = -10;
+    final logLikelihoodCost = LogLikelihoodCostFunction(
+        mockedLinkFn, positiveLabel, negativeLabel);
 
     when(mockedLinkFn.link(any)).thenReturn(Matrix.column([1, 1, 1]));
 
@@ -58,30 +61,8 @@ void main() {
     });
 
     group('LogLikelihoodCostFunction.getCost', () {
-      test('should throw an exception if predictedLabels are not a matrix '
-          'column', () {
-        final predictedLabels = Matrix.fromList([
-          [ 1,   2],
-          [-1, 200],
-          [-1, 400],
-        ]);
-        final originalLabels = Matrix.column([11, 17, -30, 10, 9, 0]);
-        final actual = () => logLikelihoodCost.getCost(predictedLabels, originalLabels);
-
-        expect(actual, throwsA(isA<MatrixColumnException>()));
-      });
-
-      test('should throw an exception if originalLabels are not a matrix '
-          'column', () {
-        final predictedLabels = Matrix.column([10, 20, 30, 40, 50, 6]);
-        final originalLabels = Matrix.fromList([
-          [1,  -1],
-          [3, 100],
-          [2,   5],
-        ]);
-        final actual = () => logLikelihoodCost.getCost(predictedLabels, originalLabels);
-
-        expect(actual, throwsA(isA<MatrixColumnException>()));
+      test('should return log likelihood', () {
+        final predictedProbabilities = Matrix.column([]);
       });
     });
   });

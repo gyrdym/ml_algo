@@ -67,6 +67,8 @@ LogisticRegressor createLogisticRegressor(
     fitIntercept: fitIntercept,
     interceptScale: interceptScale,
     isFittingDataNormalized: isFittingDataNormalized,
+    positiveLabel: positiveLabel,
+    negativeLabel: negativeLabel,
     dtype: dtype,
   );
 

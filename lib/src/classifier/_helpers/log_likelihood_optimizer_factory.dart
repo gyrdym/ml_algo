@@ -33,6 +33,8 @@ LinearOptimizer createLogLikelihoodOptimizer(
   LearningRateType learningRateType,
   InitialCoefficientsType initialWeightsType,
   Matrix initialWeights,
+  num positiveLabel,
+  num negativeLabel,
   DType dtype,
 }) {
   final splits = featuresTargetSplit(fittingData,
@@ -51,6 +53,8 @@ LinearOptimizer createLogLikelihoodOptimizer(
   final costFunction = costFunctionFactory.createByType(
     CostFunctionType.logLikelihood,
     linkFunction: linkFunction,
+    positiveLabel: positiveLabel,
+    negativeLabel: negativeLabel,
   );
 
   return optimizerFactory.createByType(

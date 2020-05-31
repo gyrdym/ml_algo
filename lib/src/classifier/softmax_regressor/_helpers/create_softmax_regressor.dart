@@ -61,6 +61,8 @@ SoftmaxRegressor createSoftmaxRegressor(
     fitIntercept: fitIntercept,
     interceptScale: interceptScale,
     isFittingDataNormalized: isFittingDataNormalized,
+    positiveLabel: positiveLabel,
+    negativeLabel: negativeLabel,
     dtype: dtype,
   );
 

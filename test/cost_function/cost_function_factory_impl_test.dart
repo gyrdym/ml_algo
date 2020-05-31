@@ -8,6 +8,9 @@ import 'package:test/test.dart';
 void main() {
   group('CostFunctionFactoryImpl', () {
     final factory = const CostFunctionFactoryImpl();
+    final linkFn = const Float32InverseLogitLinkFunction();
+    final positiveLabel = 100;
+    final negativeLabel = 0;
 
     test('should create a squared cost function', () {
       final costFn = factory.createByType(CostFunctionType.leastSquare);
@@ -15,12 +18,12 @@ void main() {
     });
 
     test('should create a loglikelihood cost function considering passed '
-        'link function', () {
-      final linkFn = const Float32InverseLogitLinkFunction();
-
+        'link function, positive and negative labels', () {
       final costFn = factory.createByType(
         CostFunctionType.logLikelihood,
         linkFunction: linkFn,
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
       );
 
       expect(costFn, isA<LogLikelihoodCostFunction>());
@@ -29,7 +32,35 @@ void main() {
     test('should throw an exception if no link function provided for '
         'loglikelihood function', () {
       expect(
-        () => factory.createByType(CostFunctionType.logLikelihood),
+        () => factory.createByType(
+          CostFunctionType.logLikelihood,
+          positiveLabel: positiveLabel,
+          negativeLabel: negativeLabel,
+        ),
+        throwsException,
+      );
+    });
+
+    test('should throw an exception if no positive label provided for '
+        'loglikelihood function', () {
+      expect(
+            () => factory.createByType(
+          CostFunctionType.logLikelihood,
+          linkFunction: linkFn,
+          negativeLabel: negativeLabel,
+        ),
+        throwsException,
+      );
+    });
+
+    test('should throw an exception if no negative label provided for '
+        'loglikelihood function', () {
+      expect(
+            () => factory.createByType(
+          CostFunctionType.logLikelihood,
+          linkFunction: linkFn,
+          positiveLabel: positiveLabel,
+        ),
         throwsException,
       );
     });

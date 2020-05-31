@@ -176,7 +176,10 @@ CostFunctionFactory createCostFunctionFactoryMock(
   final costFunctionFactory = CostFunctionFactoryMock();
 
   when(costFunctionFactory.createByType(argThat(isNotNull),
-      linkFunction: anyNamed('linkFunction'))).thenReturn(costFunctionMock);
+      linkFunction: anyNamed('linkFunction'),
+      positiveLabel: anyNamed('positiveLabel'),
+      negativeLabel: anyNamed('negativeLabel')
+  )).thenReturn(costFunctionMock);
 
   return costFunctionFactory;
 }
