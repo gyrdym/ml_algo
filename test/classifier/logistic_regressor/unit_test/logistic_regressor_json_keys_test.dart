@@ -41,7 +41,7 @@ void main() {
     });
 
     test('should have a proper json key for errors json field', () {
-      expect(logisticRegressorCostPerIterationJsonKey, 'E');
+      expect(logisticRegressorCostPerIterationJsonKey, 'CPI');
     });
   });
 }

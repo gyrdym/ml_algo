@@ -19,8 +19,7 @@ class LeastSquareCostFunction implements CostFunction {
     }
 
     return (predictedLabels - originalLabels)
-        .toVector()
-        .toIntegerPower(2)
+        .pow(2)
         .sum();
   }
 
