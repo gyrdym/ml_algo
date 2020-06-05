@@ -1,5 +1,9 @@
 # Changelog
 
+## 13.8.1
+- `ml_dataframe` dependency updated
+- `xrange` dependency constrain removed
+
 ## 13.8.0
 - `LinkFunction`:
     - `Float64InverseLogitLinkFunction` added
