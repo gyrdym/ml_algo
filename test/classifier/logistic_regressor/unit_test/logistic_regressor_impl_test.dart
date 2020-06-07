@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
@@ -12,12 +13,7 @@ void main() {
     final className = 'class 1';
     final fitIntercept = true;
     final interceptScale = 10.0;
-    final coefficients = Matrix.fromList([
-      [1],
-      [2],
-      [3],
-      [4],
-    ]);
+    final coefficients = Matrix.column([1, 2, 3, 4]);
     final probabilityThreshold = 0.6;
     final negativeLabel = -1;
     final positiveLabel = 1;
@@ -67,6 +63,24 @@ void main() {
       test('should create the instance with `classNames` list of just one '
           'element', () {
         expect(regressor.classNames, equals([className]));
+      });
+
+      test('should throw an exception if probability threshold is less '
+          'than 0', () {
+        final actual = () => LogisticRegressorImpl(
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          -0.1,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
       });
 
       test('should throw an exception if no coefficients are provided', () {

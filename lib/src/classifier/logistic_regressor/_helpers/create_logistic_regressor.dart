@@ -3,7 +3,6 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dar
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
-import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
 import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -39,7 +38,6 @@ LogisticRegressor createLogisticRegressor(
     bool collectLearningData,
     DType dtype,
 ) {
-  validateProbabilityThreshold(probabilityThreshold);
   validateTrainData(trainData, [targetName]);
 
   if (initialCoefficients.isNotEmpty) {
@@ -49,7 +47,6 @@ LogisticRegressor createLogisticRegressor(
 
   final linkFunction = dependencies.getDependency<LinkFunction>(
       dependencyName: dTypeToInverseLogitLinkFunctionToken[dtype]);
-
   final optimizer = createLogLikelihoodOptimizer(
     trainData,
     [targetName],
@@ -71,7 +68,6 @@ LogisticRegressor createLogisticRegressor(
     negativeLabel: negativeLabel,
     dtype: dtype,
   );
-
   final coefficientsByClasses = optimizer.findExtrema(
     initialCoefficients: initialCoefficients.isNotEmpty
         ? Matrix.fromColumns([initialCoefficients], dtype: dtype)

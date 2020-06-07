@@ -16,8 +16,7 @@ class Float64InverseLogitLinkFunction implements LinkFunction {
       throw LogitScoresMatrixDimensionException(scores.columnsNum);
     }
 
-    return scores
-        .mapColumns((column) => column.mapToVector(scoreToProbability));
+    return scores.mapElements(scoreToProbability);
   }
 
   double scoreToProbability(double score) {
@@ -27,6 +26,10 @@ class Float64InverseLogitLinkFunction implements LinkFunction {
 
     if (score <= lowerBound) {
       return 0;
+    }
+
+    if (score >= 0) {
+      return 1 / (1 + math.exp(-score));
     }
 
     final exponentToScore = math.exp(score);

@@ -5,6 +5,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_jso
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
+import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -40,6 +41,7 @@ class LogisticRegressorImpl
       this.costPerIteration,
       this.dtype,
   ) {
+    validateProbabilityThreshold(probabilityThreshold);
     validateClassLabels(positiveLabel, negativeLabel);
     validateCoefficientsMatrix(coefficientsByClasses);
 
@@ -115,16 +117,17 @@ class LogisticRegressorImpl
 
   @override
   DataFrame predict(DataFrame testFeatures) {
-    final probabilities = getProbabilitiesMatrix(testFeatures)
-        .getColumn(0);
-    final labels = probabilities
-        .mapToVector((probability) => probability >= probabilityThreshold
-          ? positiveLabel.toDouble()
-          : negativeLabel.toDouble());
-    final labelsMatrix = Matrix.fromColumns([labels]);
+    final predictedLabels = getProbabilitiesMatrix(testFeatures)
+        .mapColumns(
+            (column) => column.mapToVector(
+                    (probability) => probability >= probabilityThreshold
+                        ? positiveLabel.toDouble()
+                        : negativeLabel.toDouble()
+            ),
+    );
 
     return DataFrame.fromMatrix(
-      labelsMatrix,
+      predictedLabels,
       header: classNames,
     );
   }

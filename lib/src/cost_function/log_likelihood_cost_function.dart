@@ -23,6 +23,7 @@ class LogLikelihoodCostFunction implements CostFunction {
     return _linkFunction
         .link(x * w)
         .multiply(normalizedY)
+        .log()
         .sum();
   }
 

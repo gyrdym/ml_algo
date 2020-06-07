@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('LogisticRegressor', () {
-    group('fit', () {
+    group('default constructor (fitIntercept=false)', () {
       final data = <Iterable<num>>[
         [5.0, 7.0, 6.0, 1.0],
         [1.0, 2.0, 3.0, 0.0],
@@ -60,7 +60,7 @@ void main() {
       });
     });
 
-    group('fitIntercept', () {
+    group('default constructor (fitIntercept=true)', () {
       final features = DataFrame(<Iterable<num>>[
         [5.0, 7.0, 6.0, 1.0],
         [1.0, 2.0, 3.0, 0.0],
@@ -154,7 +154,7 @@ void main() {
       });
     });
 
-    group('interceptScale', () {
+    group('default constructor (interceptScale=2.0)', () {
       final samples = DataFrame(<Iterable<num>>[
         [5.0, 7.0, 6.0, 1.0],
         [1.0, 2.0, 3.0, 0.0],

@@ -41,15 +41,12 @@ LinearOptimizer createLogLikelihoodOptimizer(
 }) {
   validateClassLabels(positiveLabel, negativeLabel);
 
-  final splits = featuresTargetSplit(fittingData,
-    targetNames: targetNames,
-  ).toList();
+  final splits = featuresTargetSplit(fittingData, targetNames: targetNames)
+      .toList();
   final points = splits[0].toMatrix(dtype);
   final labels = splits[1].toMatrix(dtype);
-  final optimizerFactory = dependencies
-      .getDependency<LinearOptimizerFactory>();
-  final costFunctionFactory = dependencies
-      .getDependency<CostFunctionFactory>();
+  final optimizerFactory = dependencies.getDependency<LinearOptimizerFactory>();
+  final costFunctionFactory = dependencies.getDependency<CostFunctionFactory>();
   final costFunction = costFunctionFactory.createByType(
     CostFunctionType.logLikelihood,
     linkFunction: linkFunction,
