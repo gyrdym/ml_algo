@@ -44,7 +44,7 @@ void main() {
     test('should throw an exception if no positive label provided for '
         'loglikelihood function', () {
       expect(
-            () => factory.createByType(
+        () => factory.createByType(
           CostFunctionType.logLikelihood,
           linkFunction: linkFn,
           negativeLabel: negativeLabel,
@@ -56,7 +56,7 @@ void main() {
     test('should throw an exception if no negative label provided for '
         'loglikelihood function', () {
       expect(
-            () => factory.createByType(
+        () => factory.createByType(
           CostFunctionType.logLikelihood,
           linkFunction: linkFn,
           positiveLabel: positiveLabel,

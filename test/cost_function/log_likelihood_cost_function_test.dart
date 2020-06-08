@@ -1,48 +1,42 @@
-import 'package:ml_algo/src/common/exception/matrix_column_exception.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'dart:math' as math;
 
 import '../mocks.dart';
 
 void main() {
   group('LogLikelihoodCostFunction', () {
     final mockedLinkFn = LinkFunctionMock();
-    final positiveLabel = 10;
-    final negativeLabel = -10;
+    final positiveLabel = 10.0;
+    final negativeLabel = -10.0;
     final logLikelihoodCost = LogLikelihoodCostFunction(
         mockedLinkFn, positiveLabel, negativeLabel);
+    final x = Matrix.fromList([
+      [1.0, 2.0, 3.0],
+      [4.0, 5.0, 6.0],
+      [7.0, 8.0, 9.0],
+    ]);
+    final w = Matrix.column([
+      -1.0,
+       2.0,
+      -3.0,
+    ]);
+    final y = Matrix.column([
+      positiveLabel,
+      positiveLabel,
+      negativeLabel,
+    ]);
 
-    when(mockedLinkFn.link(any)).thenReturn(Matrix.column([1, 1, 1]));
+    setUp(() {
+      when(mockedLinkFn.link(any)).thenReturn(Matrix.column([1, 1, 1]));
+    });
+
+    tearDown(resetMockitoState);
 
     test('should return a gradient vector of log likelihood error '
         'function', () {
-      // The formula in matrix notation:
-      // X^t * (indicator(Y, 1) - P(y=+1|X,W))
-      // where X^t - transposed X matrix
-      // Y - labels matrix (vector-column)
-      // W - coefficients matrix (vector-column)
-      // indicator - function, that returns 1 if y == 1, otherwise returns 0
-      // P(y=+1|X,W) - score to link function
-      final x = Matrix.fromList([
-        [1.0, 2.0, 3.0],
-        [4.0, 5.0, 6.0],
-        [7.0, 8.0, 9.0],
-      ]);
-      // 1 4 7
-      // 2 5 8
-      // 3 6 9
-      final w = Matrix.fromList([
-        [-1.0],
-        [2.0],
-        [-3.0],
-      ]);
-      final y = Matrix.fromList([
-        [1.0],
-        [1.0],
-        [0.0],
-      ]);
       final expected = [
         [-7.0],
         [-8.0],
@@ -60,10 +54,26 @@ void main() {
       );
     });
 
-    group('LogLikelihoodCostFunction.getCost', () {
-      test('should return log likelihood', () {
-        final predictedProbabilities = Matrix.column([]);
-      });
+    test('should return log likelihood cost', () {
+      reset(mockedLinkFn);
+      when(mockedLinkFn.link(any)).thenReturn(Matrix.column([0.3, 0.7, 0.2]));
+
+      final cost = logLikelihoodCost.getCost(x, w, y);
+
+      verify(
+          mockedLinkFn.link(
+              argThat(
+                  equals(
+                      [
+                        [-6],
+                        [-12],
+                        [-18],
+                      ],
+                  ),
+              ),
+          ),
+      );
+      expect(cost, closeTo(math.log(0.3) + math.log(0.7) + math.log(0.8), 1e-4));
     });
   });
 }

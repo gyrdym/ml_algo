@@ -25,6 +25,9 @@ import '../../../mocks.dart';
 
 void main() {
   group('SoftmaxRegressor', () {
+    final negativeLabel = 10.0;
+    final positiveLabel = 20.0;
+
     final features = Matrix.fromList([
       [10.1, 10.2, 12.0, 13.4],
       [13.1, 15.2, 61.0, 27.2],
@@ -35,12 +38,12 @@ void main() {
     ]);
 
     final outcomes = Matrix.fromList([
-      [1.0, 0.0, 0.0],
-      [0.0, 0.0, 1.0],
-      [0.0, 1.0, 0.0],
-      [1.0, 0.0, 0.0],
-      [0.0, 0.0, 1.0],
-      [1.0, 0.0, 0.0],
+      [positiveLabel, negativeLabel, negativeLabel],
+      [negativeLabel, negativeLabel, positiveLabel],
+      [negativeLabel, positiveLabel, negativeLabel],
+      [positiveLabel, negativeLabel, negativeLabel],
+      [negativeLabel, negativeLabel, positiveLabel],
+      [positiveLabel, negativeLabel, negativeLabel],
     ]);
 
     final observations = DataFrame.fromMatrix(
@@ -66,9 +69,6 @@ void main() {
       [1, 2, 3],
       [1, 2, 3],
     ]);
-
-    final negativeLabel = 10;
-    final positiveLabel = 20;
 
     LinkFunction linkFunctionMock;
 

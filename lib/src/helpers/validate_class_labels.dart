@@ -1,6 +1,7 @@
+import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
+
 void validateClassLabels(num positiveLabel, num negativeLabel) {
   if (positiveLabel == negativeLabel) {
-    throw Exception('Positive and negatve labels must be different, both '
-        'labels are equal to $positiveLabel instead');
+    throw InvalidClassLabelsException(positiveLabel, negativeLabel);
   }
 }

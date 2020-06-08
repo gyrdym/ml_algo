@@ -18,23 +18,30 @@ class LogLikelihoodCostFunction implements CostFunction {
 
   @override
   double getCost(Matrix x, Matrix w, Matrix y) {
-    final normalizedY = normalizeClassLabels(y, _positiveLabel, _negativeLabel);
+    final positiveY = normalizeClassLabels(y, _positiveLabel, _negativeLabel);
+    final negativeY = y.mapElements((label) => label == _negativeLabel
+        ? 1.0 : 0.0);
 
-    return _linkFunction
-        .link(x * w)
-        .multiply(normalizedY)
+    final positiveProbabilities = _linkFunction.link(x * w);
+    final negativeProbabilities = positiveProbabilities
+        .mapElements((probability) => 1 - probability);
+
+    final onlyPositive = positiveProbabilities.multiply(positiveY);
+    final onlyNegative = negativeProbabilities.multiply(negativeY);
+
+    return (onlyNegative + onlyPositive)
         .log()
         .sum();
   }
 
   @override
-  Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
-    x.transpose() * (y.mapRows((labels) =>
-        labels.mapToVector(_positiveIndicator)) - _linkFunction.link(x * w));
+  Matrix getGradient(Matrix x, Matrix w, Matrix y) {
+    final yNormalized = normalizeClassLabels(y, _positiveLabel, _negativeLabel);
+
+    return x.transpose() * (yNormalized - _linkFunction.link(x * w));
+  }
 
   @override
   Vector getSubGradient(int wIdx, Matrix x, Matrix w, Matrix y) =>
       throw UnimplementedError();
-
-  double _positiveIndicator(num label) => label == _positiveLabel ? 1 : 0;
 }

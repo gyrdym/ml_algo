@@ -26,16 +26,16 @@ import '../../../mocks.dart';
 
 void main() {
   group('LogisticRegressor', () {
+    final negativeLabel = 100;
+    final positiveLabel = 200;
     final observations = DataFrame([
-      <num>[10.1, 10.2, 12.0, 13.4, 1],
-      <num>[ 3.1,  5.2,  6.0, 77.4, 0],
+      <num>[10.1, 10.2, 12.0, 13.4, positiveLabel],
+      <num>[ 3.1,  5.2,  6.0, 77.4, negativeLabel],
     ], headerExists: false);
 
     final initialCoefficients = Vector.fromList([10, 20, 30, 40, 50]);
     final learnedCoefficients = Matrix.column([100, 200, 300, 400, 500]);
     final targetColumnName = 'col_4';
-    final negativeLabel = 100;
-    final positiveLabel = 200;
     final errors = <num>[];
 
     LinkFunction linkFunctionMock;
@@ -161,11 +161,15 @@ void main() {
       LogisticRegressor(
         observations,
         'col_4',
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
       );
 
       verify(costFunctionFactoryMock.createByType(
         CostFunctionType.logLikelihood,
         linkFunction: linkFunctionMock,
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
       )).called(1);
     });
 

@@ -9,6 +9,30 @@ import 'package:test/test.dart';
 
 void main() {
   group('LogisticRegressor', () {
+    final createClassifier = ({
+      DataFrame samples,
+      String targetName,
+      int iterationsLimit = 1,
+      LearningRateType learningRateType = LearningRateType.constant,
+      double initialLearningRate = 1.0,
+      int batchSize = 3,
+      bool fitIntercept = true,
+      double interceptScale = 2.0,
+      bool collectLearningData = false,
+      DType dtype,
+    }) => LogisticRegressor(
+      samples,
+      targetName,
+      iterationsLimit: iterationsLimit,
+      learningRateType: learningRateType,
+      initialLearningRate: initialLearningRate,
+      batchSize: batchSize,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      collectLearningData: collectLearningData,
+      dtype: dtype,
+    );
+
     group('default constructor (fitIntercept=false)', () {
       final data = <Iterable<num>>[
         [5.0, 7.0, 6.0, 1.0],
@@ -67,19 +91,9 @@ void main() {
       ], headerExists: false);
       final targetName = 'col_3';
 
-      final createClassifier = (DType dtype) => LogisticRegressor(
-        features,
-        targetName,
-        iterationsLimit: 1,
-        learningRateType: LearningRateType.constant,
-        initialLearningRate: 1.0,
-        batchSize: 2,
-        fitIntercept: true,
-        dtype: dtype,
-      );
-
       test('should consider intercept term, dtype=DType.float32', () {
-        final classifier = createClassifier(DType.float32);
+        final classifier = createClassifier(samples: features,
+            targetName: targetName, dtype: DType.float32, batchSize: 2);
 
         // as the intercept is required to be fitted, our test_data should look as follows:
         //
@@ -143,7 +157,8 @@ void main() {
       });
 
       test('should consider intercept term, dtype=DType.float64', () {
-        final classifier = createClassifier(DType.float64);
+        final classifier = createClassifier(samples: features,
+            targetName: targetName, batchSize: 2, dtype: DType.float64);
 
         expect(classifier.coefficientsByClasses, equals([
           [0.0],
@@ -162,21 +177,10 @@ void main() {
       ], headerExists: false);
       final targetName = 'col_3';
 
-      final createClassifier = (DType dtype) => LogisticRegressor(
-        samples,
-        targetName,
-        iterationsLimit: 1,
-        learningRateType: LearningRateType.constant,
-        initialLearningRate: 1.0,
-        batchSize: 3,
-        fitIntercept: true,
-        interceptScale: 2.0,
-        dtype: dtype,
-      );
-
       test('should consider intercept scale if intercept term is going to be '
           'fitted, dtype=DType.float32', () {
-        final classifier = createClassifier(DType.float32);
+        final classifier = createClassifier(samples: samples,
+            targetName: targetName, dtype: DType.float32);
 
         // as the intercept is required to be fitted, our test_data should look as follows:
         //
@@ -253,7 +257,8 @@ void main() {
 
       test('should consider intercept scale if intercept term is going to be '
           'fitted, dtype=DType.float64', () {
-        final classifier = createClassifier(DType.float64);
+        final classifier = createClassifier(samples: samples,
+            targetName: targetName, dtype: DType.float64);
 
         expect(classifier.coefficientsByClasses, equals([
           [1.0],
@@ -261,6 +266,26 @@ void main() {
           [4.5],
           [4.0],
         ]));
+      });
+    });
+
+    group('default constructor (collectLearningData=true)', () {
+      final samples = DataFrame(<Iterable<num>>[
+        [5.0, 7.0, 6.0, 1.0],
+        [1.0, 2.0, 3.0, 0.0],
+        [3.0, 4.0, 5.0, 1.0],
+      ], headerExists: false);
+      final targetName = 'col_3';
+
+      test('should return cost per iteration list', () {
+        final classifier = LogisticRegressor(samples, targetName, batchSize: 3,
+            dtype: DType.float32, collectLearningData: true, iterationsLimit: 3);
+
+        expect(classifier.costPerIteration, [
+          closeTo(-2.0794, 1e-4),
+          closeTo(-2.0319, 1e-4),
+          closeTo(-1.9884, 1e-4),
+        ]);
       });
     });
   });
