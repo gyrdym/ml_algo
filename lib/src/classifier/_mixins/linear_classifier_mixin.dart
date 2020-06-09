@@ -23,6 +23,7 @@ mixin LinearClassifierMixin implements LinearClassifier {
       fitIntercept,
       testFeatures.toMatrix(dtype),
       interceptScale,
+      dtype,
     );
 
     validateCoefficientsMatrix(coefficientsByClasses,

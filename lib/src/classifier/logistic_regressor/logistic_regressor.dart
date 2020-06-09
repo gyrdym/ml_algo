@@ -13,10 +13,10 @@ import 'package:ml_linalg/vector.dart';
 
 /// Logistic regression-based classification.
 ///
-/// Logistic regression is an algorithm that solves a binary classification
+/// Logistic regression is an algorithm that solves the binary classification
 /// problem. The algorithm uses maximization of the passed data likelihood.
 /// In other words, the regressor iteratively tries to select coefficients
-/// that makes combination of passed features and their coefficients most
+/// that makes combination of passed features and these coefficients most
 /// likely.
 abstract class LogisticRegressor implements
     LinearClassifier, Assessable, Serializable {
@@ -203,5 +203,7 @@ abstract class LogisticRegressor implements
   factory LogisticRegressor.fromJson(String json) =>
       createLogisticRegressorFromJson(json);
 
+  /// Returns a list of cost values per each learning iteration. Returns null
+  /// if the parameter `collectLearningData` of the default constructor is false
   List<num> get costPerIteration;
 }

@@ -18,14 +18,13 @@ class LogLikelihoodCostFunction implements CostFunction {
 
   @override
   double getCost(Matrix x, Matrix w, Matrix y) {
-    final positiveY = normalizeClassLabels(y, _positiveLabel, _negativeLabel);
+    final positiveY = y.mapElements((label) => label == _positiveLabel
+        ? 1.0 : 1e-10);
     final negativeY = y.mapElements((label) => label == _negativeLabel
-        ? 1.0 : 0.0);
-
+        ? 1.0 : 1e-10);
     final positiveProbabilities = _linkFunction.link(x * w);
     final negativeProbabilities = positiveProbabilities
         .mapElements((probability) => 1 - probability);
-
     final onlyPositive = positiveProbabilities.multiply(positiveY);
     final onlyNegative = negativeProbabilities.multiply(negativeY);
 
