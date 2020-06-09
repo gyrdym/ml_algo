@@ -10,8 +10,8 @@ class Float32InverseLogitLinkFunction implements LinkFunction {
 
   static final Float32x4 _simdOnes = Float32x4.splat(1.0);
   static final Float32x4 _simdZeroes = Float32x4.zero();
-  static final Float32x4 _upperBound = Float32x4.splat(1000);
-  static final Float32x4 _lowerBound = Float32x4.splat(-1000);
+  static final Float32x4 _upperBound = Float32x4.splat(10);
+  static final Float32x4 _lowerBound = Float32x4.splat(-10);
 
   @override
   Matrix link(Matrix scores) {
