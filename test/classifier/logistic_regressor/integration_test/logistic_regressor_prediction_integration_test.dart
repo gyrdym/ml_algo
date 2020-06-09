@@ -8,7 +8,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('LogisticRegressor.predict', () {
+  final testPredictMethod = (DType dtype) {
     final data = <Iterable<num>>[
       [5.0, 7.0, 6.0, 1.0],
       [1.0, 2.0, 3.0, 0.0],
@@ -26,6 +26,7 @@ void main() {
       initialLearningRate: 1.0,
       batchSize: 5,
       fitIntercept: false,
+      dtype: dtype,
     );
 
     tearDownAll(() => injector = null);
@@ -33,7 +34,7 @@ void main() {
     test('should make prediction', () {
       final newFeatures = Matrix.fromList([
         [2.0, 4.0, 1.0],
-      ]);
+      ], dtype: dtype);
 
       final probabilities = classifier.predictProbabilities(
         DataFrame.fromMatrix(newFeatures),
@@ -70,5 +71,13 @@ void main() {
 
       expect(score, equals(1.0));
     });
+  };
+
+  group('LogisticRegressor.predict (dtype=DType.float32)', () {
+    testPredictMethod(DType.float32);
+  });
+
+  group('LogisticRegressor.predict (dtype=DType.float64)', () {
+    testPredictMethod(DType.float64);
   });
 }

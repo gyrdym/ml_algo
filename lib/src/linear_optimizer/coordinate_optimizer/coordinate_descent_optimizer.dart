@@ -45,11 +45,16 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
   final DType _dtype;
   final double _lambda;
   final Vector _normalizer;
+  final List<num> _errors = [];
+
+  @override
+  List<num> get costPerIteration => _errors;
 
   @override
   Matrix findExtrema({
     Matrix initialCoefficients,
     bool isMinimizingObjective = true,
+    bool collectLearningData = false,
   }) {
     var coefficients = initialCoefficients ??
         Matrix.fromRows(List<Vector>.generate(_labels.columnsNum,

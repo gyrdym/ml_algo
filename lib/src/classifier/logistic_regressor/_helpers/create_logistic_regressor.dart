@@ -1,9 +1,9 @@
-import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
+import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
-import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
 import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -36,10 +36,11 @@ LogisticRegressor createLogisticRegressor(
     Vector initialCoefficients,
     num positiveLabel,
     num negativeLabel,
+    bool collectLearningData,
     DType dtype,
 ) {
-  validateProbabilityThreshold(probabilityThreshold);
   validateTrainData(trainData, [targetName]);
+  validateClassLabels(positiveLabel, negativeLabel);
 
   if (initialCoefficients.isNotEmpty) {
     validateInitialCoefficients(initialCoefficients, fitIntercept,
@@ -48,7 +49,6 @@ LogisticRegressor createLogisticRegressor(
 
   final linkFunction = dependencies.getDependency<LinkFunction>(
       dependencyName: dTypeToInverseLogitLinkFunctionToken[dtype]);
-
   final optimizer = createLogLikelihoodOptimizer(
     trainData,
     [targetName],
@@ -66,28 +66,31 @@ LogisticRegressor createLogisticRegressor(
     fitIntercept: fitIntercept,
     interceptScale: interceptScale,
     isFittingDataNormalized: isFittingDataNormalized,
+    positiveLabel: positiveLabel,
+    negativeLabel: negativeLabel,
     dtype: dtype,
   );
-
   final coefficientsByClasses = optimizer.findExtrema(
     initialCoefficients: initialCoefficients.isNotEmpty
         ? Matrix.fromColumns([initialCoefficients], dtype: dtype)
         : null,
     isMinimizingObjective: false,
+    collectLearningData: collectLearningData,
   );
+  final costPerIteration = optimizer.costPerIteration.isNotEmpty
+      ? optimizer.costPerIteration
+      : null;
 
-  final regressorFactory = dependencies
-      .getDependency<LogisticRegressorFactory>();
-
-  return regressorFactory.create(
-    targetName,
+  return LogisticRegressorImpl(
+    [targetName],
     linkFunction,
-    probabilityThreshold,
     fitIntercept,
     interceptScale,
     coefficientsByClasses,
+    probabilityThreshold,
     negativeLabel,
     positiveLabel,
+    costPerIteration,
     dtype,
   );
 }

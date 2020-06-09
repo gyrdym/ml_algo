@@ -35,7 +35,7 @@ class GradientOptimizer implements LinearOptimizer {
         _costFunction = costFunction,
         _dtype = dtype,
 
-        _initialWeightsGenerator = dependencies
+        _initialCoefficientsGenerator = dependencies
             .getDependency<InitialCoefficientsGeneratorFactory>()
             .fromType(initialCoefficientsType, dtype),
 
@@ -62,22 +62,27 @@ class GradientOptimizer implements LinearOptimizer {
   final Randomizer _randomizer;
   final CostFunction _costFunction;
   final LearningRateGenerator _learningRateGenerator;
-  final InitialCoefficientsGenerator _initialWeightsGenerator;
+  final InitialCoefficientsGenerator _initialCoefficientsGenerator;
   final ConvergenceDetector _convergenceDetector;
   final DType _dtype;
-
   final double _lambda;
   final int _batchSize;
+  final List<num> _costPerIteration = [];
 
   @override
-  Matrix findExtrema({Matrix initialCoefficients,
-    bool isMinimizingObjective = true}) {
-    final batchSize =
-        _batchSize >= _points.rowsNum ? _points.rowsNum : _batchSize;
+  List<num> get costPerIteration => _costPerIteration;
+
+  @override
+  Matrix findExtrema({
+    Matrix initialCoefficients,
+    bool isMinimizingObjective = true,
+    bool collectLearningData = false,
+  }) {
+    _costPerIteration.clear();
 
     var coefficients = initialCoefficients ??
         Matrix.fromColumns(List.generate(_labels.columnsNum,
-            (i) => _initialWeightsGenerator.generate(_points.columnsNum)),
+            (i) => _initialCoefficientsGenerator.generate(_points.columnsNum)),
             dtype: _dtype);
 
     var iteration = 0;
@@ -86,8 +91,11 @@ class GradientOptimizer implements LinearOptimizer {
     while (!_convergenceDetector.isConverged(coefficientsDiff, iteration)) {
       final learningRate = _learningRateGenerator.getNextValue();
       final newCoefficients = _generateCoefficients(
-          coefficients, _labels, learningRate, batchSize,
-          isMinimization: isMinimizingObjective);
+        coefficients,
+        learningRate,
+        isMinimization: isMinimizingObjective,
+        collectLearningData: collectLearningData,
+      );
       coefficientsDiff = (newCoefficients - coefficients).norm();
       iteration++;
       coefficients = newCoefficients;
@@ -98,39 +106,69 @@ class GradientOptimizer implements LinearOptimizer {
     return coefficients;
   }
 
+  /// [coefficients] columns of coefficients (each label columns has its own
+  /// dedicated column of coefficients)
   Matrix _generateCoefficients(
-      Matrix coefficients, Matrix labels, double eta, int batchSize,
-      {bool isMinimization = true}) {
-    final range = _getBatchRange(batchSize);
+    Matrix coefficients,
+    double learningRate, {
+      bool isMinimization = true,
+      bool collectLearningData = false,
+    }) {
+
+    final range = _getBatchRange();
     final start = range.first;
     final end = range.last;
     final pointsBatch = _points
         .sample(rowIndices: integers(start, end, upperClosed: false));
-    final labelsBatch = labels
+    final labelsBatch = _labels
         .sample(rowIndices: integers(start, end, upperClosed: false));
 
-    return _makeGradientStep(coefficients, pointsBatch, labelsBatch, eta,
-        isMinimization: isMinimization);
+    return _makeGradientStep(
+      coefficients,
+      pointsBatch,
+      labelsBatch,
+      learningRate,
+      isMinimization: isMinimization,
+      collectLearningData: collectLearningData,
+    );
   }
 
-  Iterable<int> _getBatchRange(int batchSize) => _randomizer
-      .getIntegerInterval(0, _points.rowsNum, intervalLength: batchSize);
+  Iterable<int> _getBatchRange() => _randomizer
+      .getIntegerInterval(0, _points.rowsNum, intervalLength: _batchSize);
 
+  /// [coefficients] columns of coefficients (each label column from [labels]
+  /// has its own dedicated column of coefficients)
+  ///
+  /// [labels] columns of labels
   Matrix _makeGradientStep(
-      Matrix coefficients, Matrix points, Matrix labels, double eta,
-      {bool isMinimization = true}) {
+      Matrix coefficients,
+      Matrix points,
+      Matrix labels,
+      double eta,
+      {
+        bool isMinimization = true,
+        bool collectLearningData = false,
+      }) {
+
+    if (collectLearningData) {
+      final error = _costFunction.getCost(points, coefficients, labels);
+
+      _costPerIteration.add(error);
+    }
+
     final gradient = _costFunction.getGradient(points, coefficients, labels);
     final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
+
     return isMinimization
         ? regularizedCoefficients - gradient * eta
         : regularizedCoefficients + gradient * eta;
   }
 
-  Matrix _regularize(double eta, double lambda, Matrix coefficients) {
+  Matrix _regularize(double learningRate, double lambda, Matrix coefficients) {
     if (lambda == 0) {
       return coefficients;
-    } else {
-      return coefficients * (1 - 2 * eta * lambda);
     }
+
+    return coefficients * (1 - 2 * learningRate * lambda);
   }
 }

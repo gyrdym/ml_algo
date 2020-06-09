@@ -9,10 +9,10 @@ abstract class LinearOptimizer {
   /// number_of_features x number_of_target_columns
   /// ````
   ///
-  /// In other words, one column in the coefficients matrix describes its own
+  /// In other words, one column in the coefficient matrix describes its own
   /// dedicated target.
   ///
-  /// Let's say, one has a dataset, consisting of the features:
+  /// Let's say, one has a dataset consisting of the features:
   ///
   /// ````dart
   /// final x = [
@@ -52,8 +52,17 @@ abstract class LinearOptimizer {
   /// optimization iteration
   ///
   /// [isMinimizingObjective] should the solver find a maxima or minima
+  ///
+  /// [collectLearningData] whether or not to collect learning-related data,
+  /// such as errors from cost function, after every iteration. May affect
+  /// performance.
   Matrix findExtrema({
-      Matrix initialCoefficients,
-      bool isMinimizingObjective,
-    });
+    Matrix initialCoefficients,
+    bool isMinimizingObjective = true,
+    bool collectLearningData = false,
+  });
+
+  /// Returns a list of errors from a cost function after every learning
+  /// iteration
+  List<num> get costPerIteration;
 }

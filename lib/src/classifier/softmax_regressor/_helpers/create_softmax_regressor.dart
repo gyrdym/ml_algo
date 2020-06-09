@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/_helpers/log_likelihood_optimizer_factory.dart';
+import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/di/dependencies.dart';
@@ -61,6 +61,8 @@ SoftmaxRegressor createSoftmaxRegressor(
     fitIntercept: fitIntercept,
     interceptScale: interceptScale,
     isFittingDataNormalized: isFittingDataNormalized,
+    positiveLabel: positiveLabel,
+    negativeLabel: negativeLabel,
     dtype: dtype,
   );
 
