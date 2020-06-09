@@ -112,6 +112,11 @@ abstract class LogisticRegressor implements
   /// [negativeLabel] Defines the value, that will be used for `negative` class.
   /// By default, `0`.
   ///
+  /// [collectLearningData] Whether or not to collect learning data, for
+  /// instance cost function value per each iteration. Affects performance much.
+  /// If [collectLearningData] is true, one may accesses [costPerIteration]
+  /// getter in order to evaluate learning process more thoroughly.
+  ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
