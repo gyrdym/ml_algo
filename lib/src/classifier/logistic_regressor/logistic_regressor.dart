@@ -114,7 +114,7 @@ abstract class LogisticRegressor implements
   ///
   /// [collectLearningData] Whether or not to collect learning data, for
   /// instance cost function value per each iteration. Affects performance much.
-  /// If [collectLearningData] is true, one may accesses [costPerIteration]
+  /// If [collectLearningData] is true, one may access [costPerIteration]
   /// getter in order to evaluate learning process more thoroughly.
   ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can

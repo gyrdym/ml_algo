@@ -1,5 +1,9 @@
 # Changelog
 
+# 13.9.0
+- `LinearRegressor`:
+    - `Default constructor`: `collectLearningData` parameter added
+
 ## 13.8.1
 - `ml_dataframe` dependency updated
 - `xrange` dependency constrain removed
