@@ -13,10 +13,10 @@ import 'package:ml_linalg/vector.dart';
 
 /// Logistic regression-based classification.
 ///
-/// Logistic regression is an algorithm that solves a binary classification
+/// Logistic regression is an algorithm that solves the binary classification
 /// problem. The algorithm uses maximization of the passed data likelihood.
 /// In other words, the regressor iteratively tries to select coefficients
-/// that makes combination of passed features and their coefficients most
+/// that makes combination of passed features and these coefficients most
 /// likely.
 abstract class LogisticRegressor implements
     LinearClassifier, Assessable, Serializable {
@@ -112,6 +112,11 @@ abstract class LogisticRegressor implements
   /// [negativeLabel] Defines the value, that will be used for `negative` class.
   /// By default, `0`.
   ///
+  /// [collectLearningData] Whether or not to collect learning data, for
+  /// instance cost function value per each iteration. Affects performance much.
+  /// If [collectLearningData] is true, one may access [costPerIteration]
+  /// getter in order to evaluate learning process more thoroughly.
+  ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
@@ -136,6 +141,7 @@ abstract class LogisticRegressor implements
     Vector initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
+    bool collectLearningData = false,
     DType dtype = DType.float32,
   }) => createLogisticRegressor(
     trainData,
@@ -157,6 +163,7 @@ abstract class LogisticRegressor implements
     initialCoefficients ?? Vector.empty(dtype: dtype),
     positiveLabel,
     negativeLabel,
+    collectLearningData,
     dtype,
   );
 
@@ -200,4 +207,8 @@ abstract class LogisticRegressor implements
   /// ````
   factory LogisticRegressor.fromJson(String json) =>
       createLogisticRegressorFromJson(json);
+
+  /// Returns a list of cost values per each learning iteration. Returns null
+  /// if the parameter `collectLearningData` of the default constructor is false
+  List<num> get costPerIteration;
 }

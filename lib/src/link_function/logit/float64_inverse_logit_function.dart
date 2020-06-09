@@ -1,10 +1,8 @@
 import 'dart:math' as math;
 
-import 'package:ml_algo/src/exception/logit_scores_matrix_dimension_exception.dart';
+import 'package:ml_algo/src/common/exception/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/vector.dart';
 
 class Float64InverseLogitLinkFunction implements LinkFunction {
   const Float64InverseLogitLinkFunction();
@@ -18,13 +16,7 @@ class Float64InverseLogitLinkFunction implements LinkFunction {
       throw LogitScoresMatrixDimensionException(scores.columnsNum);
     }
 
-    return scores
-        .mapColumns(
-            (column) => Vector.fromList(
-                column.map(scoreToProbability).toList(),
-                dtype: DType.float64,
-            ),
-    );
+    return scores.mapElements(scoreToProbability);
   }
 
   double scoreToProbability(double score) {
@@ -34,6 +26,10 @@ class Float64InverseLogitLinkFunction implements LinkFunction {
 
     if (score <= lowerBound) {
       return 0;
+    }
+
+    if (score >= 0) {
+      return 1 / (1 + math.exp(-score));
     }
 
     final exponentToScore = math.exp(score);

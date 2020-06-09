@@ -82,7 +82,7 @@ void main() {
       LinearRegressor(observations, 'target');
 
       verify(costFunctionFactoryMock.createByType(
-        CostFunctionType.squared,
+        CostFunctionType.leastSquare,
       )).called(1);
     });
 

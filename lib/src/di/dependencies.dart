@@ -3,8 +3,6 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory_impl.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory_impl.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
@@ -92,9 +90,6 @@ Injector get dependencies =>
       ..registerSingleton<DataSplitterFactory>(
               (_) => const DataSplitterFactoryImpl())
 
-      ..registerSingleton<LogisticRegressorFactory>(
-              (_) => const LogisticRegressorFactoryImpl())
-          
       ..registerSingleton<SoftmaxRegressorFactory>(
               (_) => const SoftmaxRegressorFactoryImpl())
 

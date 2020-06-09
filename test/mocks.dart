@@ -1,7 +1,6 @@
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
@@ -147,9 +146,6 @@ class KernelMock extends Mock implements Kernel {}
 
 class LogisticRegressorMock extends Mock implements LogisticRegressor {}
 
-class LogisticRegressorFactoryMock extends Mock implements
-    LogisticRegressorFactory {}
-
 class SoftmaxRegressorMock extends Mock implements SoftmaxRegressor {}
 
 class SoftmaxRegressorFactoryMock extends Mock implements
@@ -180,7 +176,10 @@ CostFunctionFactory createCostFunctionFactoryMock(
   final costFunctionFactory = CostFunctionFactoryMock();
 
   when(costFunctionFactory.createByType(argThat(isNotNull),
-      linkFunction: anyNamed('linkFunction'))).thenReturn(costFunctionMock);
+      linkFunction: anyNamed('linkFunction'),
+      positiveLabel: anyNamed('positiveLabel'),
+      negativeLabel: anyNamed('negativeLabel')
+  )).thenReturn(costFunctionMock);
 
   return costFunctionFactory;
 }
@@ -247,14 +246,6 @@ KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
 KnnRegressorFactory createKnnRegressorFactoryMock(KnnRegressor regressor) {
   final factory = KnnRegressorFactoryMock();
   when(factory.create(any, any, any, any, any, any)).thenReturn(regressor);
-  return factory;
-}
-
-LogisticRegressorFactory createLogisticRegressorFactoryMock(
-    LogisticRegressor logisticRegressor) {
-  final factory = LogisticRegressorFactoryMock();
-  when(factory.create(any, any, any, any, any, any, any, any, any))
-      .thenReturn(logisticRegressor);
   return factory;
 }
 

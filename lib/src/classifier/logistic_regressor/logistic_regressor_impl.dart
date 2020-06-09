@@ -3,7 +3,9 @@ import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
+import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
+import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -15,7 +17,6 @@ import 'package:ml_linalg/from_dtype_json.dart';
 import 'package:ml_linalg/from_matrix_json.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/matrix_to_json.dart';
-import 'package:ml_linalg/vector.dart';
 
 part 'logistic_regressor_impl.g.dart';
 
@@ -37,8 +38,11 @@ class LogisticRegressorImpl
       this.probabilityThreshold,
       this.negativeLabel,
       this.positiveLabel,
+      this.costPerIteration,
       this.dtype,
   ) {
+    validateProbabilityThreshold(probabilityThreshold);
+    validateClassLabels(positiveLabel, negativeLabel);
     validateCoefficientsMatrix(coefficientsByClasses);
 
     // Logistic regression specific check, it cannot be placed in
@@ -105,23 +109,25 @@ class LogisticRegressorImpl
   final LinkFunction linkFunction;
 
   @override
+  @JsonKey(
+    name: logisticRegressorCostPerIterationJsonKey,
+    includeIfNull: false,
+  )
+  final List<num> costPerIteration;
+
+  @override
   DataFrame predict(DataFrame testFeatures) {
-    final probabilities = getProbabilitiesMatrix(testFeatures).getColumn(0);
-
-    final classesList = probabilities
-        // TODO: use SIMD
-        .map((value) => value >= probabilityThreshold
-          ? positiveLabel
-          : negativeLabel,
-        )
-        .toList(growable: false);
-
-    final classesMatrix = Matrix.fromColumns([
-      Vector.fromList(classesList),
-    ]);
+    final predictedLabels = getProbabilitiesMatrix(testFeatures)
+        .mapColumns(
+            (column) => column.mapToVector(
+                    (probability) => probability >= probabilityThreshold
+                        ? positiveLabel.toDouble()
+                        : negativeLabel.toDouble()
+            ),
+    );
 
     return DataFrame.fromMatrix(
-      classesMatrix,
+      predictedLabels,
       header: classNames,
     );
   }

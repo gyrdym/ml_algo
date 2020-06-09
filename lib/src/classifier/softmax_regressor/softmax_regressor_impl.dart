@@ -3,6 +3,7 @@ import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
+import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
@@ -34,6 +35,7 @@ class SoftmaxRegressorImpl
       this.negativeLabel,
       this.dtype,
   ) {
+    validateClassLabels(positiveLabel, negativeLabel);
     validateCoefficientsMatrix(coefficientsByClasses);
 
     // Softmax regression specific check, it cannot be placed in
@@ -95,12 +97,10 @@ class SoftmaxRegressorImpl
   @override
   DataFrame predict(DataFrame testFeatures) {
     final allProbabilities = getProbabilitiesMatrix(testFeatures);
-
-    final classes = allProbabilities.mapRows((probabilities) {
+    final labels = allProbabilities.mapRows((probabilities) {
       final positiveLabelIdx = probabilities
           .toList()
           .indexOf(probabilities.max());
-
       final predictedRow = List.filled(
         coefficientsByClasses.columnsNum,
         negativeLabel,
@@ -112,7 +112,7 @@ class SoftmaxRegressorImpl
     });
 
     return DataFrame.fromMatrix(
-      classes,
+      labels,
       header: classNames,
     );
   }

@@ -36,11 +36,11 @@ void main() {
 
   final positiveLabel1 = 100;
   final positiveLabel2 = -100;
-  final positiveLabel3 = 0;
+  final positiveLabel3 = 10;
 
-  final negativeLabel1 = 100;
-  final negativeLabel2 = -100;
-  final negativeLabel3 = 0;
+  final negativeLabel1 = 101;
+  final negativeLabel2 = -101;
+  final negativeLabel3 = 11;
 
   final createClassifier = ({
     String targetName = 'col_3',
@@ -50,6 +50,7 @@ void main() {
     num positiveLabel = 1,
     num negativeLabel = 0,
     DType dtype = DType.float32,
+    bool collectLearningData = false,
   }) => LogisticRegressor(
     samples,
     targetName,
@@ -63,6 +64,7 @@ void main() {
     probabilityThreshold: probabilityThreshold,
     positiveLabel: positiveLabel,
     negativeLabel: negativeLabel,
+    collectLearningData: collectLearningData,
   );
 
   group('LogistiRegressor.toJson', () {
@@ -264,6 +266,14 @@ void main() {
         float64InverseLogitLinkFunctionEncoded,
       );
     });
+
+    test('should serialize cost per iteration list', () {
+      final classifier = createClassifier(collectLearningData: true);
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorCostPerIterationJsonKey],
+          classifier.costPerIteration);
+    });
   });
 
   group('LogisticRegressor.saveAsJson', () {
@@ -306,7 +316,6 @@ void main() {
 
     test('should restore a classifier instance from json file, '
         'dtype=DType.float64', () async {
-
       final classifier = createClassifier(dtype: DType.float64);
       await classifier.saveAsJson(fileName);
 

@@ -7,3 +7,4 @@ const logisticRegressorProbabilityThresholdJsonKey = 'PT';
 const logisticRegressorPositiveLabelJsonKey = 'PL';
 const logisticRegressorNegativeLabelJsonKey = 'NL';
 const logisticRegressorLinkFunctionJsonKey = 'LF';
+const logisticRegressorCostPerIterationJsonKey = 'CPI';

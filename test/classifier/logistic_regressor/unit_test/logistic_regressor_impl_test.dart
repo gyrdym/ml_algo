@@ -1,4 +1,6 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
+import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
@@ -12,16 +14,12 @@ void main() {
     final className = 'class 1';
     final fitIntercept = true;
     final interceptScale = 10.0;
-    final coefficients = Matrix.fromList([
-      [1],
-      [2],
-      [3],
-      [4],
-    ]);
+    final coefficients = Matrix.column([1, 2, 3, 4]);
     final probabilityThreshold = 0.6;
     final negativeLabel = -1;
     final positiveLabel = 1;
     final dtype = DType.float32;
+    final costPerIteration = [1.2, 233.01, 23, -10001];
 
     final regressor = LogisticRegressorImpl(
       [className],
@@ -32,6 +30,7 @@ void main() {
       probabilityThreshold,
       negativeLabel,
       positiveLabel,
+      costPerIteration,
       dtype,
     );
 
@@ -51,13 +50,7 @@ void main() {
       [interceptScale, 33, 44, 55],
     ]);
 
-    final mockedProbabilities = Matrix.fromList([
-      [0.8],
-      [0.5],
-      [0.6],
-      [0.7],
-      [0.3],
-    ]);
+    final mockedProbabilities = Matrix.column([0.8, 0.5, 0.6, 0.7, 0.3]);
 
     setUp(() {
       when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
@@ -67,10 +60,106 @@ void main() {
       reset(linkFunctionMock);
     });
 
-    group('constructor', () {
+    group('default constructor', () {
       test('should create the instance with `classNames` list of just one '
           'element', () {
         expect(regressor.classNames, equals([className]));
+      });
+
+      test('should throw an exception if probability threshold is less '
+          'than 0', () {
+        final probabilityThreshold = -0.1;
+        final actual = () => LogisticRegressorImpl(
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          probabilityThreshold,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+      });
+
+      test('should throw an exception if probability threshold is less '
+          'equal to 0', () {
+        final probabilityThreshold = 0;
+        final actual = () => LogisticRegressorImpl(
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          probabilityThreshold,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+      });
+
+      test('should throw an exception if probability threshold is equal '
+          'to 1', () {
+        final probabilityThreshold = 1;
+        final actual = () => LogisticRegressorImpl(
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          probabilityThreshold,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+      });
+
+      test('should throw an exception if probability threshold is greater '
+          'than 1', () {
+        final probabilityThreshold = 1.2;
+        final actual = () => LogisticRegressorImpl(
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          probabilityThreshold,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
+      });
+
+      test('should throw an exception if positive class label equals to '
+          'negative class label', () {
+        final negativeLabel = 1000;
+        final positiveLabel = 1000;
+        final actual = () => LogisticRegressorImpl(
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          probabilityThreshold,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(actual, throwsA(isA<InvalidClassLabelsException>()));
       });
 
       test('should throw an exception if no coefficients are provided', () {
@@ -84,6 +173,7 @@ void main() {
           probabilityThreshold,
           negativeLabel,
           positiveLabel,
+          costPerIteration,
           dtype,
         );
 
@@ -107,15 +197,20 @@ void main() {
           probabilityThreshold,
           negativeLabel,
           positiveLabel,
+          costPerIteration,
           dtype,
         );
 
         expect(actual, throwsException);
       });
+
+      test('should persist cost per iteration', () {
+        expect(regressor.costPerIteration, costPerIteration);
+      });
     });
 
-    group('predict method', () {
-      test('should throw an exception if no test features provided', () {
+    group('LogisticRegressorImpl.predict', () {
+      test('should throw an exception if no test features are provided', () {
         final testFeatures = DataFrame.fromMatrix(Matrix.empty());
 
         expect(() => regressor.predict(testFeatures), throwsException);
@@ -130,7 +225,7 @@ void main() {
             .called(1);
       });
 
-      test('should throw an error if too many features provided', () {
+      test('should throw an error if too many features are provided', () {
         final testFeatureMatrix = Matrix.fromList([
           [10, 20, 30, 40],
         ]);
@@ -139,7 +234,7 @@ void main() {
         expect(() => regressor.predict(testFeatures), throwsException);
       });
 
-      test('should throw an error if too few features provided', () {
+      test('should throw an error if too few features are provided', () {
         final testFeatureMatrix = Matrix.fromList([
           [10, 20],
         ]);

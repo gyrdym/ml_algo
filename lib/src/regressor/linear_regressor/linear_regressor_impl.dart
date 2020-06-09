@@ -68,8 +68,9 @@ class LinearRegressorImpl
   DataFrame predict(DataFrame features) {
     final prediction = addInterceptIf(
       fitIntercept,
-      features.toMatrix(),
+      features.toMatrix(dtype),
       interceptScale,
+      dtype,
     ) * coefficients;
 
     return DataFrame.fromMatrix(

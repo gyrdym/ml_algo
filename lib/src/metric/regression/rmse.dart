@@ -12,8 +12,10 @@ class RmseMetric implements Metric {
       throw Exception('Both predicted labels and original labels have to be '
           'a matrix-column');
     }
+
     final predicted = predictedLabels.getColumn(0);
     final original = origLabels.getColumn(0);
-    return math.sqrt(((predicted - original).toIntegerPower(2)).mean());
+
+    return math.sqrt(((predicted - original).pow(2)).mean());
   }
 }

@@ -39,5 +39,9 @@ void main() {
     test('should have a proper json key for link function json field', () {
       expect(logisticRegressorLinkFunctionJsonKey, 'LF');
     });
+
+    test('should have a proper json key for errors json field', () {
+      expect(logisticRegressorCostPerIterationJsonKey, 'CPI');
+    });
   });
 }

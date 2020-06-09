@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/cost_function/squared.dart';
+import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -36,7 +36,7 @@ void main() {
       optimizer = CoordinateDescentOptimizer(
           data, labels,
           initialWeightsType: InitialCoefficientsType.zeroes,
-          costFunction: const SquaredCost(),
+          costFunction: const LeastSquareCostFunction(),
           minCoefficientsUpdate: 1e-5,
           iterationsLimit: iterationsNumber,
           lambda: lambda);
@@ -76,7 +76,7 @@ void main() {
       optimizer = CoordinateDescentOptimizer(
         data,
         labels,
-        costFunction: const SquaredCost(),
+        costFunction: const LeastSquareCostFunction(),
         isFittingDataNormalized: true,
         minCoefficientsUpdate: 1e-5,
         iterationsLimit: iterationsNumber,

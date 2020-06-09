@@ -1,35 +1,66 @@
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/cost_function/log_likelihood.dart';
-import 'package:ml_algo/src/cost_function/squared.dart';
+import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
+import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('CostFunctionFactoryImpl', () {
     final factory = const CostFunctionFactoryImpl();
+    final linkFn = const Float32InverseLogitLinkFunction();
+    final positiveLabel = 100;
+    final negativeLabel = 0;
 
     test('should create a squared cost function', () {
-      final costFn = factory.createByType(CostFunctionType.squared);
-      expect(costFn, isA<SquaredCost>());
+      final costFn = factory.createByType(CostFunctionType.leastSquare);
+      expect(costFn, isA<LeastSquareCostFunction>());
     });
 
     test('should create a loglikelihood cost function considering passed '
-        'link function', () {
-      final linkFn = const Float32InverseLogitLinkFunction();
-
+        'link function, positive and negative labels', () {
       final costFn = factory.createByType(
         CostFunctionType.logLikelihood,
         linkFunction: linkFn,
+        positiveLabel: positiveLabel,
+        negativeLabel: negativeLabel,
       );
 
-      expect(costFn, isA<LogLikelihoodCost>());
+      expect(costFn, isA<LogLikelihoodCostFunction>());
     });
 
     test('should throw an exception if no link function provided for '
         'loglikelihood function', () {
       expect(
-        () => factory.createByType(CostFunctionType.logLikelihood),
+        () => factory.createByType(
+          CostFunctionType.logLikelihood,
+          positiveLabel: positiveLabel,
+          negativeLabel: negativeLabel,
+        ),
+        throwsException,
+      );
+    });
+
+    test('should throw an exception if no positive label provided for '
+        'loglikelihood function', () {
+      expect(
+        () => factory.createByType(
+          CostFunctionType.logLikelihood,
+          linkFunction: linkFn,
+          negativeLabel: negativeLabel,
+        ),
+        throwsException,
+      );
+    });
+
+    test('should throw an exception if no negative label provided for '
+        'loglikelihood function', () {
+      expect(
+        () => factory.createByType(
+          CostFunctionType.logLikelihood,
+          linkFunction: linkFn,
+          positiveLabel: positiveLabel,
+        ),
         throwsException,
       );
     });

@@ -1,5 +1,5 @@
 class InvalidProbabilityThresholdException implements Exception {
-  InvalidProbabilityThresholdException(double value) :
+  InvalidProbabilityThresholdException(num value) :
         message = 'Probability threshold should be greater than 0.0 and less '
             'than 1, $value given';
 

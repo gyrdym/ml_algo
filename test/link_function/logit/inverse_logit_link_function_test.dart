@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/exception/logit_scores_matrix_dimension_exception.dart';
+import 'package:ml_algo/src/common/exception/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
