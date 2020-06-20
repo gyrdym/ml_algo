@@ -25,6 +25,7 @@ class LinearRegressorImpl
   LinearRegressorImpl(this.coefficients, this.targetName, {
     bool fitIntercept = false,
     double interceptScale = 1.0,
+    this.costPerIteration,
     this.dtype = DType.float32,
   }) :
     fitIntercept = fitIntercept,
@@ -55,6 +56,13 @@ class LinearRegressorImpl
     fromJson: fromVectorJson,
   )
   final Vector coefficients;
+
+  @override
+  @JsonKey(
+    name: linearRegressorCostPerIterationJsonKey,
+    includeIfNull: false,
+  )
+  final List<num> costPerIteration;
 
   @override
   @JsonKey(

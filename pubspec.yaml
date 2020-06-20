@@ -1,6 +1,6 @@
 name: ml_algo
 description: Machine learning algorithms written in native dart
-version: 13.9.0
+version: 13.10.0
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:

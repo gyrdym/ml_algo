@@ -1,7 +1,11 @@
 # Changelog
 
-# 13.9.0
+## 13.10.0
 - `LinearRegressor`:
+    - `Default constructor`: `collectLearningData` parameter added
+
+## 13.9.0
+- `LogisticRegressor`:
     - `Default constructor`: `collectLearningData` parameter added
 
 ## 13.8.1
