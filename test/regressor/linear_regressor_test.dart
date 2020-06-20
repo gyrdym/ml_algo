@@ -20,18 +20,10 @@ import '../mocks.dart';
 
 void main() {
   group('LinearRegressor', () {
-    final initialCoefficients = Matrix.fromList([
-      [1],
-      [2],
-      [3],
-      [4],
-      [5],
-    ]);
-
+    final initialCoefficients = Matrix.column([1, 2, 3, 4, 5]);
     final learnedCoefficients = Matrix.fromColumns([
       Vector.fromList([55, 66, 77, 88, 99]),
     ]);
-
     final observations = DataFrame(
       [
         <num>[10, 20, 30, 40, 200],
@@ -40,17 +32,16 @@ void main() {
       header: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'target'],
       headerExists: false,
     );
+    final costPerIteration = [1, 2, 3, 100];
 
     CostFunction costFunctionMock;
     CostFunctionFactory costFunctionFactoryMock;
-
     LinearOptimizer linearOptimizerMock;
     LinearOptimizerFactory linearOptimizerFactoryMock;
 
     setUp(() {
       costFunctionMock = CostFunctionMock();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-
       linearOptimizerMock = LinearOptimizerMock();
       linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
           linearOptimizerMock);
@@ -64,7 +55,9 @@ void main() {
       when(linearOptimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
         isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: anyNamed('collectLearningData'),
       )).thenReturn(learnedCoefficients);
+      when(linearOptimizerMock.costPerIteration).thenReturn(costPerIteration);
     });
 
     tearDownAll(() => injector = null);
@@ -150,27 +143,56 @@ void main() {
         fitIntercept: true,
         interceptScale: 2.0,
       );
-
       final features = Matrix.fromList([
         [55, 44, 33, 22],
         [10, 88, 77, 11],
         [12, 22, 39, 13],
       ]);
-
       final featuresWithIntercept = Matrix.fromColumns([
         Vector.filled(3, 2),
         ...features.columns,
       ]);
-
       final prediction = predictor.predict(
         DataFrame.fromMatrix(features),
       );
 
       expect(prediction.header, equals(['target']));
-
       expect(prediction.toMatrix(), equals(
         featuresWithIntercept * learnedCoefficients,
       ));
+    });
+
+    test('should collect cost values per iteration if collectLearningData is '
+        'true', () {
+      final regressor = LinearRegressor(
+        observations,
+        'target',
+        initialCoefficients: initialCoefficients,
+        collectLearningData: true,
+      );
+
+      expect(regressor.costPerIteration, same(costPerIteration));
+      verify(linearOptimizerMock.findExtrema(
+        initialCoefficients: anyNamed('initialCoefficients'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: true,
+      )).called(1);
+    });
+
+    test('should not collect cost values per iteration if collectLearningData is '
+        'false', () {
+      LinearRegressor(
+        observations,
+        'target',
+        initialCoefficients: initialCoefficients,
+        collectLearningData: false,
+      );
+
+      verify(linearOptimizerMock.findExtrema(
+        initialCoefficients: anyNamed('initialCoefficients'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: false,
+      )).called(1);
     });
   });
 }
