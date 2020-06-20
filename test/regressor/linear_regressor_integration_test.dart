@@ -32,6 +32,7 @@ void main() {
         fitIntercept: fitIntercept,
         interceptScale: interceptScale,
         iterationsLimit: iterationsLimit,
+        collectLearningData: true,
         dtype: dtype,
       );
     });
@@ -53,6 +54,7 @@ void main() {
         linearRegressorInterceptScaleJsonKey: interceptScale,
         linearRegressorCoefficientsJsonKey: regressor.coefficients.toJson(),
         linearRegressorDTypeJsonKey: dTypeToJson(dtype),
+        linearRegressorCostPerIterationJsonKey: regressor.costPerIteration,
       });
     });
 
@@ -75,6 +77,8 @@ void main() {
     test('should restore from json file', () async {
       await regressor.saveAsJson(filePath);
 
+      print(regressor.costPerIteration);
+
       final file = File(filePath);
       final json = await file.readAsString();
       final restoredModel = LinearRegressor.fromJson(json);
@@ -84,6 +88,7 @@ void main() {
       expect(restoredModel.fitIntercept, regressor.fitIntercept);
       expect(restoredModel.coefficients, regressor.coefficients);
       expect(restoredModel.targetName, regressor.targetName);
+      expect(restoredModel.costPerIteration, regressor.costPerIteration);
     });
   });
 }
