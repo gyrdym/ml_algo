@@ -77,8 +77,6 @@ void main() {
     test('should restore from json file', () async {
       await regressor.saveAsJson(filePath);
 
-      print(regressor.costPerIteration);
-
       final file = File(filePath);
       final json = await file.readAsString();
       final restoredModel = LinearRegressor.fromJson(json);
