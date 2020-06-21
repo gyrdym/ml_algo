@@ -134,7 +134,11 @@ abstract class CrossValidator {
   ///   onDataSplit: onDataSplit,
   /// );
   /// ````
-  double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
-    DataPreprocessFn onDataSplit,
-  });
+  Future<Vector> evaluate(
+      PredictorFactory predictorFactory,
+      MetricType metricType,
+      {
+        DataPreprocessFn onDataSplit,
+      }
+  );
 }
