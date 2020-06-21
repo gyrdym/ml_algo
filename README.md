@@ -86,7 +86,7 @@ final targetColumnName = 'class variable (0 or 1)';
 ````
  
 Then we should create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
-our model. We should pass training data (our `samples` variable), a list of target column names (in our case it's 
+of our model. We should pass training data (our `samples` variable), a list of target column names (in our case it's 
 just a name stored in `targetColumnName` variable) and a number of folds into CrossValidator constructor.
  
 ````dart
