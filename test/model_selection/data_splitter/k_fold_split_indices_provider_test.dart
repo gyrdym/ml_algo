@@ -2,24 +2,24 @@ import 'package:ml_algo/src/model_selection/split_indices_provider/k_fold_data_s
 import 'package:test/test.dart';
 
 void main() {
-  group('KFoldDataSplitter', () {
+  group('KFoldIndicesProvider', () {
     void testKFoldSplitter(int numOfFold, int numOfObservations,
         Iterable<Iterable<int>> expected) {
       test('should return proper groups of indices if number of folds is '
           '$numOfFold and number of observations is $numOfObservations', () {
-        final splitter = KFoldDataSplitter(numOfFold);
-        expect(splitter.split(numOfObservations), equals(expected));
+        final splitter = KFoldIndicesProvider(numOfFold);
+        expect(splitter.getIndices(numOfObservations), equals(expected));
       });
     }
 
     test('should throw an exception if passed number of folds is equal to '
         '0', () {
-      expect(() => KFoldDataSplitter(0), throwsRangeError);
+      expect(() => KFoldIndicesProvider(0), throwsRangeError);
     });
 
     test('should throw an exception if passed number of folds is equal to '
         '1', () {
-      expect(() => KFoldDataSplitter(1), throwsRangeError);
+      expect(() => KFoldIndicesProvider(1), throwsRangeError);
     });
 
     testKFoldSplitter(5, 12, [
@@ -56,14 +56,14 @@ void main() {
     ]);
 
     test('should throws a range error if number of observations is 0', () {
-      final splitter = KFoldDataSplitter(3);
-      expect(() => splitter.split(0), throwsRangeError);
+      final splitter = KFoldIndicesProvider(3);
+      expect(() => splitter.getIndices(0), throwsRangeError);
     });
 
     test('should throws a range error if number of observations is less than'
         'number of folds', () {
-      final splitter = KFoldDataSplitter(9);
-      expect(() => splitter.split(8), throwsRangeError);
+      final splitter = KFoldIndicesProvider(9);
+      expect(() => splitter.getIndices(8), throwsRangeError);
     });
   });
 }

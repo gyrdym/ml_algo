@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/model_selection/split_indices_provider/data_splitter.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:xrange/integers.dart';
 
-class KFoldDataSplitter implements DataSplitter {
-  KFoldDataSplitter(this._numberOfFolds) {
+class KFoldIndicesProvider implements SplitIndicesProvider {
+  KFoldIndicesProvider(this._numberOfFolds) {
     if (_numberOfFolds == 0 || _numberOfFolds == 1) {
       throw RangeError(
           'Number of folds must be greater than 1 and less than the number of '
@@ -13,7 +13,7 @@ class KFoldDataSplitter implements DataSplitter {
   final int _numberOfFolds;
 
   @override
-  Iterable<Iterable<int>> split(int numOfObservations) sync* {
+  Iterable<Iterable<int>> getIndices(int numOfObservations) sync* {
     if (_numberOfFolds > numOfObservations) {
       throw RangeError.range(_numberOfFolds, 0, numOfObservations, null,
           'Number of folds must be less than the number of samples');

@@ -2,7 +2,7 @@ import 'package:ml_algo/src/common/exception/invalid_test_data_columns_number_ex
 import 'package:ml_algo/src/common/exception/invalid_train_data_columns_number_exception.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
-import 'package:ml_algo/src/model_selection/split_indices_provider/data_splitter.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -20,7 +20,7 @@ class CrossValidatorImpl implements CrossValidator {
   final DataFrame samples;
   final DType dtype;
   final Iterable<String> targetNames;
-  final DataSplitter _splitter;
+  final SplitIndicesProvider _splitter;
 
   @override
   Future<Vector> evaluate(
@@ -35,7 +35,7 @@ class CrossValidatorImpl implements CrossValidator {
     final discreteColumns = enumerate(samples.series)
         .where((indexedSeries) => indexedSeries.value.isDiscrete)
         .map((indexedSeries) => indexedSeries.index);
-    final allIndicesGroups = _splitter.split(samplesAsMatrix.rowsNum);
+    final allIndicesGroups = _splitter.getIndices(samplesAsMatrix.rowsNum);
     final scores = allIndicesGroups
         .map((testRowsIndices) {
           final split = _makeSplit(testRowsIndices, discreteColumns);
