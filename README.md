@@ -102,13 +102,10 @@ final scores = await validator.evaluate((samples, targetNames) =>
     LogisticRegressor(
         samples,
         targetNames[0], // remember, we provided a list of just a single name
-        optimizerType: LinearOptimizerType.gradient,  
-        initialLearningRate: .8,
-        iterationsLimit: 500,
-        batchSize: samples.rows.length,
-        fitIntercept: true,
-        interceptScale: .1,
-        learningRateType: LearningRateType.constant
+        optimizerType: LinearOptimizerType.gradient,
+        learningRateType: LearningRateType.decreasingAdaptive,
+        probabilityThreshold: 0.7,
+        randomSeed: 3,
     ), MetricType.accuracy);
 ````
 
@@ -127,7 +124,7 @@ print('accuracy on classification: ${accuracy.toStringAsFixed(2)}');
 We will see something like this:
 
 ````
-acuracy on classification: 0.77
+acuracy on classification: 0.65
 ````
 
 All the code above all together:
@@ -145,13 +142,10 @@ Future main() async {
       LogisticRegressor(
           samples,
           targetNames[0], // remember, we provide a list of just a single name
-          optimizerType: LinearOptimizerType.gradient,  
-          initialLearningRate: .8,
-          iterationsLimit: 500,
-          batchSize: 768,
-          fitIntercept: true,
-          interceptScale: .1,
-          learningRateType: LearningRateType.constant
+          optimizerType: LinearOptimizerType.gradient,
+          learningRateType: LearningRateType.decreasingAdaptive,
+          probabilityThreshold: 0.7,
+          randomSeed: 3,
       ), MetricType.accuracy);
   final accuracy = scores.mean();
 
