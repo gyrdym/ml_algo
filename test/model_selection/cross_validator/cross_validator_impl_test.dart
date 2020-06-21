@@ -1,3 +1,5 @@
+import 'package:ml_algo/src/common/exception/invalid_test_data_columns_number_exception.dart';
+import 'package:ml_algo/src/common/exception/invalid_train_data_columns_number_exception.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
@@ -16,7 +18,8 @@ DataSplitter createSplitter(Iterable<Iterable<int>> indices) {
 
 void main() {
   group('CrossValidatorImpl', () {
-    test('should perform validation of a predictor on given test splits', () {
+    test('should evaluate performance of a predictor on given test '
+        'splits', () async {
       final allObservations = DataFrame(<Iterable<num>>[
         [330, 930, 130, 100],
         [630, 830, 230, 200],
@@ -28,21 +31,18 @@ void main() {
         [430, 230, 830, 800],
         [530, 130, 930, 900],
       ], header: ['first', 'second', 'third', 'target'], headerExists: false);
-
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
       final predictor = AssessableMock();
       final validator = CrossValidatorImpl(allObservations,
           ['target'], splitter, DType.float32);
+      final score = 20.0;
+      when(predictor.assess(any, any, any)).thenReturn(score);
 
-      var score = 20.0;
-      when(predictor.assess(any, any, any))
-          .thenAnswer((Invocation inv) => score = score + 10);
-
-      final actual = validator
+      final actual = await validator
           .evaluate((observations, outcomes) => predictor, metric);
 
-      expect(actual, 35);
+      expect(actual, [20, 20]);
 
       final verificationResult = verify(
         predictor.assess(
@@ -66,8 +66,10 @@ void main() {
       verificationResult.called(2);
     });
 
-    test('should take the first element as train samples from data '
-        'preprocessing callback response while evaluating a predictor', () {
+    test('should treat the first element of the returning array from data '
+        'preprocessing callback response as train samples while evaluating a '
+        'predictor', () async {
+
       // we don't care about data here cause it will be mocked farther
       final allObservations = DataFrame(
         [<num>[1, 1, 1, 1]],
@@ -110,7 +112,7 @@ void main() {
         ],
       };
 
-      validator.evaluate(
+      await validator.evaluate(
         (observations, outcomes) {
           expect(
             observations.toMatrix(),
@@ -124,8 +126,10 @@ void main() {
       );
     });
 
-    test('should take the second element as test samples from data '
-        'preprocessing callback response while evaluating a predictor', () {
+    test('should treat the second element of the returning array from data '
+        'preprocessing callback response as test samples while evaluating a '
+        'predictor', () async {
+
       // we don't care about data here cause it will be mocked farther
       final allObservations = DataFrame(
         [<num>[1, 1, 1, 1]],
@@ -167,7 +171,7 @@ void main() {
         ],
       };
 
-      validator.evaluate(
+      await validator.evaluate(
         (observations, outcomes) => predictor,
         metric,
         onDataSplit: (trainData, testData) =>
@@ -200,7 +204,7 @@ void main() {
       verificationResult.called(3);
     });
 
-    test('should pass splits into data preprocessing callback', () {
+    test('should pass splits into data preprocessing callback', () async {
       final header = ['first', 'second', 'third', 'target'];
 
       // we don't care about data here cause it will be mocked farther
@@ -280,7 +284,7 @@ void main() {
         },
       };
 
-      validator.evaluate(
+      await validator.evaluate(
         (observations, outcomes) => predictor,
         metric,
         onDataSplit: (trainData, testData) {
@@ -300,9 +304,9 @@ void main() {
       );
     });
 
-    test('should throw an exception if one tries to return a training data '
-        'from data perprocessing callback with number of columns less than '
-        'the number of columns of original data', () {
+    test('should throw an exception if one tries to return the train data '
+        'from the data perprocessing callback with the number of columns less '
+        'than the number of columns of the original data', () async {
       final header = ['first', 'second', 'third', 'target'];
 
       // we don't care about data here cause it will be mocked farther
@@ -341,12 +345,12 @@ void main() {
             ],
       );
 
-      expect(actual, throwsException);
+      expect(actual, throwsA(isA<InvalidTrainDataColumnsNumberException>()));
     });
 
-    test('should throw an exception if one tries to return a training data '
-        'from data perprocessing callback with number of columns greater than '
-        'the number of columns of original data', () {
+    test('should throw an exception if one tries to return the train data '
+        'from the data perprocessing callback with the number of columns '
+        'greater than the number of columns of the original data', () {
       final header = ['first', 'second', 'third', 'target'];
 
       // we don't care about data here cause it will be mocked farther
@@ -384,12 +388,12 @@ void main() {
         ],
       );
 
-      expect(actual, throwsException);
+      expect(actual, throwsA(isA<InvalidTrainDataColumnsNumberException>()));
     });
 
-    test('should throw an exception if one tries to return a testing data '
-        'from data perprocessing callback with number of columns less than '
-        'the number of columns of original data', () {
+    test('should throw an exception if one tries to return the test data '
+        'from the data perprocessing callback with the number of columns less '
+        'than the number of columns of the original data', () {
       final header = ['first', 'second', 'third', 'target'];
 
       // we don't care about data here cause it will be mocked farther
@@ -427,12 +431,12 @@ void main() {
         ],
       );
 
-      expect(actual, throwsException);
+      expect(actual, throwsA(isA<InvalidTestDataColumnsNumberException>()));
     });
 
-    test('should throw an exception if one tries to return a testing data '
-        'from data perprocessing callback with number of columns greater than '
-        'the number of columns of original data', () {
+    test('should throw an exception if one tries to return the test data '
+        'from the data perprocessing callback with the number of columns '
+        'greater than the number of columns of the original data', () {
       final header = ['first', 'second', 'third', 'target'];
 
       // we don't care about data here cause it will be mocked farther
@@ -470,7 +474,7 @@ void main() {
         ],
       );
 
-      expect(actual, throwsException);
+      expect(actual, throwsA(isA<InvalidTestDataColumnsNumberException>()));
     });
   });
 }

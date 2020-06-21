@@ -1,3 +1,5 @@
+import 'package:ml_algo/src/common/exception/invalid_test_data_columns_number_exception.dart';
+import 'package:ml_algo/src/common/exception/invalid_train_data_columns_number_exception.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
@@ -21,54 +23,48 @@ class CrossValidatorImpl implements CrossValidator {
   final DataSplitter _splitter;
 
   @override
-  double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
-    DataPreprocessFn onDataSplit,
-  }) {
+  Future<Vector> evaluate(
+      PredictorFactory predictorFactory,
+      MetricType metricType,
+      {
+        DataPreprocessFn onDataSplit,
+      }
+  ) {
     final samplesAsMatrix = samples.toMatrix(dtype);
     final sourceColumnsNum = samplesAsMatrix.columnsNum;
-
     final discreteColumns = enumerate(samples.series)
         .where((indexedSeries) => indexedSeries.value.isDiscrete)
         .map((indexedSeries) => indexedSeries.index);
-
     final allIndicesGroups = _splitter.split(samplesAsMatrix.rowsNum);
-    var score = 0.0;
-    var folds = 0;
+    final scores = allIndicesGroups
+        .map((testRowsIndices) {
+          final split = _makeSplit(testRowsIndices, discreteColumns);
+          final trainDataFrame = split[0];
+          final testDataFrame = split[1];
+          final splits = onDataSplit != null
+              ? onDataSplit(trainDataFrame, testDataFrame)
+              : [trainDataFrame, testDataFrame];
+          final transformedTrainData = splits[0];
+          final transformedTestData = splits[1];
+          final transformedTrainDataColumnsNum = transformedTrainData.header.length;
+          final transformedTestDataColumnsNum = transformedTestData.header.length;
 
-    for (final testRowsIndices in allIndicesGroups) {
-      final split = _makeSplit(testRowsIndices, discreteColumns);
-      final trainDataFrame = split[0];
-      final testDataFrame = split[1];
+          if (transformedTrainDataColumnsNum != sourceColumnsNum) {
+            throw InvalidTrainDataColumnsNumberException(sourceColumnsNum,
+                transformedTrainDataColumnsNum);
+          }
 
-      final splits = onDataSplit != null
-          ? onDataSplit(trainDataFrame, testDataFrame)
-          : [trainDataFrame, testDataFrame];
+          if (transformedTestDataColumnsNum != sourceColumnsNum) {
+            throw InvalidTestDataColumnsNumberException(sourceColumnsNum,
+                transformedTestDataColumnsNum);
+          }
 
-      final transformedTrainData = splits[0];
-      final transformedTestData = splits[1];
+          return predictorFactory(transformedTrainData, targetNames)
+              .assess(transformedTestData, targetNames, metricType);
+        })
+        .toList();
 
-      final transformedTrainDataColumnsNum = transformedTrainData.header.length;
-      final transformedTestDataColumnsNum = transformedTestData.header.length;
-
-      if (transformedTrainDataColumnsNum != sourceColumnsNum) {
-        throw Exception('Unexpected columns number in training data: '
-            'expected $sourceColumnsNum, received '
-            '${transformedTrainDataColumnsNum}');
-      }
-
-      if (transformedTestDataColumnsNum != sourceColumnsNum) {
-        throw Exception('Unexpected columns number in testing data: '
-            'expected $sourceColumnsNum, received '
-            '${transformedTestDataColumnsNum}');
-      }
-
-      score += predictorFactory(transformedTrainData, targetNames)
-          .assess(transformedTestData, targetNames, metricType);
-
-      folds++;
-    }
-
-    return score / folds;
+    return Future.value(Vector.fromList(scores, dtype: dtype));
   }
 
   List<DataFrame> _makeSplit(Iterable<int> testRowsIndices,

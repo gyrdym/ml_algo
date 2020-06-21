@@ -1,5 +1,10 @@
 # Changelog
 
+## 14.0.0
+- Breaking change:
+    - `CrossValidator`: `evalute` method's api changed, it returns a Future resolving with scores Vector now instead 
+    of a double value
+
 ## 13.10.0
 - `LinearRegressor`:
     - `Default constructor`: `collectLearningData` parameter added
