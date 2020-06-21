@@ -23,8 +23,8 @@ import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
@@ -78,9 +78,9 @@ class ConvergenceDetectorFactoryMock extends Mock
 
 class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
 
-class DataSplitterMock extends Mock implements DataSplitter {}
+class DataSplitterMock extends Mock implements SplitIndicesProvider {}
 
-class DataSplitterFactoryMock extends Mock implements DataSplitterFactory {}
+class DataSplitterFactoryMock extends Mock implements SplitIndicesProviderFactory {}
 
 class AssessableMock extends Mock implements Assessable {}
 
@@ -216,7 +216,7 @@ LinearOptimizerFactory createLinearOptimizerFactoryMock(
   return factory;
 }
 
-DataSplitterFactory createDataSplitterFactoryMock(DataSplitter dataSplitter) {
+SplitIndicesProviderFactory createDataSplitterFactoryMock(SplitIndicesProvider dataSplitter) {
   final factory = DataSplitterFactoryMock();
   when(factory.createByType(any,
       numberOfFolds: anyNamed('numberOfFolds'),

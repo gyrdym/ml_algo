@@ -1,9 +1,9 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_type.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -18,15 +18,15 @@ void main() {
       header: ['1', '2', '3', '4'],
     );
 
-    DataSplitter dataSplitter;
-    DataSplitterFactory dataSplitterFactory;
+    SplitIndicesProvider dataSplitter;
+    SplitIndicesProviderFactory dataSplitterFactory;
 
     setUp(() {
       dataSplitter = DataSplitterMock();
       dataSplitterFactory = createDataSplitterFactoryMock(dataSplitter);
 
       injector = Injector()
-        ..registerDependency<DataSplitterFactory>((_) => dataSplitterFactory);
+        ..registerDependency<SplitIndicesProviderFactory>((_) => dataSplitterFactory);
     });
 
     tearDown(() => injector = null);
@@ -36,7 +36,7 @@ void main() {
       CrossValidator.kFold(data, ['4'], numberOfFolds: 10);
 
       verify(dataSplitterFactory
-          .createByType(DataSplitterType.kFold, numberOfFolds: 10),
+          .createByType(SplitIndicesProviderType.kFold, numberOfFolds: 10),
       ).called(1);
     });
 
@@ -45,7 +45,7 @@ void main() {
       CrossValidator.kFold(data, ['4']);
 
       verify(dataSplitterFactory
-          .createByType(DataSplitterType.kFold, numberOfFolds: 5),
+          .createByType(SplitIndicesProviderType.kFold, numberOfFolds: 5),
       ).called(1);
     });
 
@@ -54,7 +54,7 @@ void main() {
       CrossValidator.lpo(data, ['4'], 30);
 
       verify(dataSplitterFactory
-          .createByType(DataSplitterType.lpo, p: 30),
+          .createByType(SplitIndicesProviderType.lpo, p: 30),
       ).called(1);
     });
   });

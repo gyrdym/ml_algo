@@ -1,5 +1,8 @@
 # Changelog
 
+## 14.0.1
+- data splitters renamed and reorganized
+
 ## 14.0.0
 - Breaking change:
     - `CrossValidator`: `evalute` method's api changed, it returns a Future resolving with scores Vector now instead 

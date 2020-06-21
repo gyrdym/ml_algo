@@ -1,3 +1,0 @@
-enum DataSplitterType {
-  lpo, kFold,
-}

@@ -2,8 +2,8 @@ import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_type.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -38,9 +38,9 @@ abstract class CrossValidator {
         DType dtype = DType.float32,
       }) {
     final dataSplitterFactory = dependencies
-        .getDependency<DataSplitterFactory>();
+        .getDependency<SplitIndicesProviderFactory>();
     final dataSplitter = dataSplitterFactory
-        .createByType(DataSplitterType.kFold, numberOfFolds: numberOfFolds);
+        .createByType(SplitIndicesProviderType.kFold, numberOfFolds: numberOfFolds);
 
     return CrossValidatorImpl(
       samples,
@@ -50,7 +50,7 @@ abstract class CrossValidator {
     );
   }
 
-  /// Creates LPO validator to evaluate quality of a predictor.
+  /// Creates LPO validator to evaluate performance of a predictor.
   ///
   /// It splits a dataset into all possible test sets of size [p] and
   /// subsequently evaluates quality of the predictor on each produced test set.
@@ -71,9 +71,10 @@ abstract class CrossValidator {
       int p, {
         DType dtype = DType.float32,
       }) {
-    final dataSplitterFactory = dependencies.getDependency<DataSplitterFactory>();
+    final dataSplitterFactory = dependencies
+        .getDependency<SplitIndicesProviderFactory>();
     final dataSplitter = dataSplitterFactory
-        .createByType(DataSplitterType.lpo, p: p);
+        .createByType(SplitIndicesProviderType.lpo, p: p);
 
     return CrossValidatorImpl(
       samples,
