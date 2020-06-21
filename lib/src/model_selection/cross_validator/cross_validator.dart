@@ -23,8 +23,8 @@ abstract class CrossValidator {
   ///
   /// Parameters:
   ///
-  /// [samples] The whole training dataset to be split into parts to iteratively
-  /// evaluate given predictor on the each particular part
+  /// [samples] A dataset to be split into parts to iteratively evaluate given
+  /// predictor's performance
   ///
   /// [targetColumnNames] Names of columns from [samples] that contain outcomes
   ///
@@ -57,8 +57,8 @@ abstract class CrossValidator {
   ///
   /// Parameters:
   ///
-  /// [samples] The whole training dataset to be split into parts to iteratively
-  /// evaluate given model on the each particular part.
+  /// [samples] A dataset to be split into parts to iteratively
+  /// evaluate given predictor's performance
   ///
   /// [targetColumnNames] Names of columns from [samples] that contain outcomes.
   ///
@@ -83,21 +83,21 @@ abstract class CrossValidator {
     );
   }
 
-  /// Returns a score of quality of passed predictor depending on given
-  /// [metricType]
+  /// Returns a future resolving with a vector of scores of quality of passed
+  /// predictor depending on given [metricType]
   ///
   /// Parameters:
   ///
-  /// [predictorFactory] A factory function that returns a testing predictor
+  /// [predictorFactory] A factory function that returns an evaluating predictor
   ///
-  /// [metricType] Metric to assess a predictor, that is being created by
+  /// [metricType] Metric using to assess a predictor creating by
   /// [predictorFactory]
   ///
   /// [onDataSplit] A callback that is called when a new train-test split is
   /// ready to be passed into evaluating predictor. One may place some
   /// additional data-dependent logic here, e.g., data preprocessing. The
   /// callback accepts train and test data from a new split and returns
-  /// transformed split as list, where the first element is training data and
+  /// transformed split as list, where the first element is train data and
   /// the second one - test data, both of [DataFrame] type. This new transformed
   /// split will be passed into the predictor.
   ///
@@ -115,10 +115,8 @@ abstract class CrossValidator {
   ///   header: header,
   ///   headerExists: false,
   /// );
-  ///
   /// final predictorFactory = (trainData, _) =>
   ///   KnnRegressor(trainData, 'col_3', k: 4);
-  ///
   /// final onDataSplit = (trainData, testData) {
   ///   final standardizer = Standardizer(trainData);
   ///   return [
@@ -126,15 +124,21 @@ abstract class CrossValidator {
   ///     standardizer.process(testData),
   ///   ];
   /// }
-  ///
   /// final validator = CrossValidator.kFold(data, ['col_3']);
-  /// final score = validator.evaluate(
+  /// final scores = await validator.evaluate(
   ///   predictorFactory,
   ///   MetricType.mape,
   ///   onDataSplit: onDataSplit,
   /// );
+  /// final averageScore = scores.mean();
+  ///
+  /// print(averageScore);
   /// ````
-  double evaluate(PredictorFactory predictorFactory, MetricType metricType, {
-    DataPreprocessFn onDataSplit,
-  });
+  Future<Vector> evaluate(
+      PredictorFactory predictorFactory,
+      MetricType metricType,
+      {
+        DataPreprocessFn onDataSplit,
+      }
+  );
 }

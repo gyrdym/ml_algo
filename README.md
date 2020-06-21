@@ -86,7 +86,7 @@ final targetColumnName = 'class variable (0 or 1)';
 ````
  
 Then we should create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
-our model. We should pass training data (our `samples` variable), a list of target column names (in our case it's 
+of our model. We should pass training data (our `samples` variable), a list of target column names (in our case it's 
 just a name stored in `targetColumnName` variable) and a number of folds into CrossValidator constructor.
  
 ````dart
@@ -98,19 +98,23 @@ All are set, so we can do our classification.
 Evaluate our model via accuracy metric:
 
 ````dart
-final accuracy = validator.evaluate((samples, targetNames) => 
+final scores = await validator.evaluate((samples, targetNames) => 
     LogisticRegressor(
         samples,
         targetNames[0], // remember, we provided a list of just a single name
-        optimizerType: LinearOptimizerType.gradient,  
-        initialLearningRate: .8,
-        iterationsLimit: 500,
-        batchSize: samples.rows.length,
-        fitIntercept: true,
-        interceptScale: .1,
-        learningRateType: LearningRateType.constant
+        optimizerType: LinearOptimizerType.gradient,
+        learningRateType: LearningRateType.decreasingAdaptive,
+        probabilityThreshold: 0.7,
+        randomSeed: 3,
     ), MetricType.accuracy);
 ````
+
+Since the CrossValidator's instance returns a Vector of scores as a result of our predictor evaluation, we may choose
+any way to reduce all the collected scores to a single number, for instance we may use Vector's `mean` method:
+
+```dart
+final accuracy = scores.mean();
+```  
 
 Let's print the score:
 ````dart
@@ -120,7 +124,7 @@ print('accuracy on classification: ${accuracy.toStringAsFixed(2)}');
 We will see something like this:
 
 ````
-acuracy on classification: 0.77
+acuracy on classification: 0.65
 ````
 
 All the code above all together:
@@ -134,18 +138,16 @@ Future main() async {
   final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
   final targetColumnName = 'class variable (0 or 1)';
   final validator = CrossValidator.KFold(samples, [targetColumnName], numberOfFolds: 5);
-  final accuracy = validator.evaluate((samples, targetNames) => 
+  final scores = await validator.evaluate((samples, targetNames) => 
       LogisticRegressor(
           samples,
           targetNames[0], // remember, we provide a list of just a single name
-          optimizerType: LinearOptimizerType.gradient,  
-          initialLearningRate: .8,
-          iterationsLimit: 500,
-          batchSize: 768,
-          fitIntercept: true,
-          interceptScale: .1,
-          learningRateType: LearningRateType.constant
+          optimizerType: LinearOptimizerType.gradient,
+          learningRateType: LearningRateType.decreasingAdaptive,
+          probabilityThreshold: 0.7,
+          randomSeed: 3,
       ), MetricType.accuracy);
+  final accuracy = scores.mean();
 
   print('accuracy on classification: ${accuracy.toStringFixed(2)}');
 }
@@ -202,14 +204,15 @@ Let the `k` parameter be equal to `4`.
 Assess a knn regressor with the chosen `k` value using MAPE metric
 
 ````dart
-final error = validator.evaluate((samples, targetNames) => 
+final scores = await validator.evaluate((samples, targetNames) => 
   KnnRegressor(samples, targetNames[0], 4), MetricType.mape);
+final averageError = scores.mean();
 ````
 
 Let's print our error
 
 ````dart
-print('MAPE error on k-fold validation: ${error.toStringAsFixed(2)}%'); // it yields approx. 6.18
+print('MAPE error on k-fold validation: ${averageError.toStringAsFixed(2)}%'); // it yields approx. 6.18
 ````
 
 ### Contacts
