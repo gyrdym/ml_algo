@@ -1,7 +1,7 @@
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_impl.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_type.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/k_fold_data_splitter.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/leave_p_out_data_splitter.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/data_splitter_factory_impl.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/data_splitter_type.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/k_fold_data_splitter.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/leave_p_out_data_splitter.dart';
 import 'package:test/test.dart';
 
 void main() {

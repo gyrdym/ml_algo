@@ -1,9 +1,9 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_type.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/data_splitter.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/data_splitter_factory.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/data_splitter_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
