@@ -1,7 +1,7 @@
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 
-class LeavePOutDataSplitter implements DataSplitter {
-  LeavePOutDataSplitter([this._p = 2]) {
+class LpoIndicesProvider implements SplitIndicesProvider {
+  LpoIndicesProvider([this._p = 2]) {
     if (_p == 0) {
       throw UnsupportedError('Value `$_p` for parameter `p` is unsupported');
     }
@@ -10,7 +10,7 @@ class LeavePOutDataSplitter implements DataSplitter {
   final int _p;
 
   @override
-  Iterable<Iterable<int>> split(int numberOfSamples) sync* {
+  Iterable<Iterable<int>> getIndices(int numberOfSamples) sync* {
     for (var u = 0; u < 1 << numberOfSamples; u++) {
       if (_count(u) == _p) yield _generateCombination(u);
     }

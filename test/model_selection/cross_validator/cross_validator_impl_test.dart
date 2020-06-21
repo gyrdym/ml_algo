@@ -2,7 +2,7 @@ import 'package:ml_algo/src/common/exception/invalid_test_data_columns_number_ex
 import 'package:ml_algo/src/common/exception/invalid_train_data_columns_number_exception.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
@@ -10,9 +10,9 @@ import 'package:test/test.dart';
 
 import '../../mocks.dart';
 
-DataSplitter createSplitter(Iterable<Iterable<int>> indices) {
+SplitIndicesProvider createSplitter(Iterable<Iterable<int>> indices) {
   final splitter = DataSplitterMock();
-  when(splitter.split(any)).thenReturn(indices);
+  when(splitter.getIndices(any)).thenReturn(indices);
   return splitter;
 }
 

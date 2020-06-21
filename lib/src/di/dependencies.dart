@@ -30,8 +30,8 @@ import 'package:ml_algo/src/link_function/softmax/float32_softmax_link_function.
 import 'package:ml_algo/src/link_function/softmax/float64_softmax_link_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory_impl.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory.dart';
-import 'package:ml_algo/src/model_selection/data_splitter/data_splitter_factory_impl.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory_impl.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
@@ -87,8 +87,8 @@ Injector get dependencies =>
               (_) => const Float64SoftmaxLinkFunction(),
           dependencyName: float64SoftmaxLinkFunctionToken)
 
-      ..registerSingleton<DataSplitterFactory>(
-              (_) => const DataSplitterFactoryImpl())
+      ..registerSingleton<SplitIndicesProviderFactory>(
+              (_) => const SplitIndicesProviderFactoryImpl())
 
       ..registerSingleton<SoftmaxRegressorFactory>(
               (_) => const SoftmaxRegressorFactoryImpl())

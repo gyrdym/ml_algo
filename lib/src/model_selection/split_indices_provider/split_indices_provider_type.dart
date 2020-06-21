@@ -1,0 +1,3 @@
+enum SplitIndicesProviderType {
+  lpo, kFold,
+}
