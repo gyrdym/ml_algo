@@ -1,3 +1,7 @@
+import 'package:ml_algo/src/model_selection/exception/empty_ratio_collection_exception.dart';
+import 'package:ml_algo/src/model_selection/exception/invalid_ratio_sum_exception.dart';
+import 'package:ml_algo/src/model_selection/exception/outranged_ratio_exception.dart';
+import 'package:ml_algo/src/model_selection/exception/too_small_ratio_exception.dart';
 import 'package:ml_algo/src/model_selection/split_data.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:test/test.dart';
@@ -15,26 +19,31 @@ void main() {
     ];
     final data = DataFrame(source);
 
-    test('should throw an exception if ratio list is empty', () {
-      expect(() => splitData(data, []), throwsException);
+    test('should throw an exception if ratio collection is empty', () {
+      expect(() => splitData(data, []),
+          throwsA(isA<EmptyRatioCollectionException>()));
     });
 
     test('should throw an exception if at least one ratio value is negative', () {
-      expect(() => splitData(data, [0.2, -0.3]), throwsException);
+      expect(() => splitData(data, [0.2, -0.3]),
+          throwsA(isA<OutRangedRatioException>()));
     });
 
     test('should throw an exception if at least one ratio value is zero', () {
-      expect(() => splitData(data, [0.2, 0]), throwsException);
+      expect(() => splitData(data, [0.2, 0]),
+          throwsA(isA<OutRangedRatioException>()));
     });
 
     test('should throw an exception if at least one ratio value is equal '
         'to 1', () {
-      expect(() => splitData(data, [1, 0.3]), throwsException);
+      expect(() => splitData(data, [1, 0.3]),
+          throwsA(isA<OutRangedRatioException>()));
     });
 
     test('should throw an exception if at least one ratio value is greater '
         'than 1', () {
-      expect(() => splitData(data, [100, 0.3]), throwsException);
+      expect(() => splitData(data, [100, 0.3]),
+          throwsA(isA<OutRangedRatioException>()));
     });
 
     test('should split data', () {
@@ -86,11 +95,13 @@ void main() {
     });
 
     test('should throw exception if there is a too small ratio, case 1', () {
-      expect(() => splitData(data, [0.2, 0.3, 0.01]), throwsException);
+      expect(() => splitData(data, [0.2, 0.3, 0.01]),
+          throwsA(isA<TooSmallRatioException>()));
     });
 
     test('should throw exception if there is a too small ratio, case 2', () {
-      expect(() => splitData(data, [0.2, 0.3, 0.1]), throwsException);
+      expect(() => splitData(data, [0.2, 0.3, 0.1]),
+          throwsA(isA<TooSmallRatioException>()));
     });
 
     test('should split data into two parts, first part is less than the '
@@ -171,22 +182,26 @@ void main() {
 
     test('should throw exception if ratios sum is equal to 1, '
         '2 elements', () {
-      expect(() => splitData(data, [0.5, 0.5]), throwsException);
+      expect(() => splitData(data, [0.5, 0.5]),
+          throwsA(isA<InvalidRatioSumException>()));
     });
 
     test('should throw exception if ratios sum is equal to 1, '
         '3 elements', () {
-      expect(() => splitData(data, [0.3, 0.3, 0.4]), throwsException);
+      expect(() => splitData(data, [0.3, 0.3, 0.4]),
+          throwsA(isA<InvalidRatioSumException>()));
     });
 
     test('should throw exception if ratios sum is greater than 1, '
         '2 elements', () {
-      expect(() => splitData(data, [0.5, 0.6]), throwsException);
+      expect(() => splitData(data, [0.5, 0.6]),
+          throwsA(isA<InvalidRatioSumException>()));
     });
 
     test('should throw exception if ratios sum is greater than 1, '
         '3 elements', () {
-      expect(() => splitData(data, [0.3, 0.5, 0.4]), throwsException);
+      expect(() => splitData(data, [0.3, 0.5, 0.4]),
+          throwsA(isA<InvalidRatioSumException>()));
     });
   });
 }

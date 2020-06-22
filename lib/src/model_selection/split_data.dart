@@ -1,8 +1,12 @@
+import 'package:ml_algo/src/model_selection/exception/empty_ratio_collection_exception.dart';
+import 'package:ml_algo/src/model_selection/exception/invalid_ratio_sum_exception.dart';
+import 'package:ml_algo/src/model_selection/exception/outranged_ratio_exception.dart';
+import 'package:ml_algo/src/model_selection/exception/too_small_ratio_exception.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-List<DataFrame> splitData(DataFrame data, Iterable<num> ratios) {
+List<DataFrame> splitData(DataFrame data, Iterable<double> ratios) {
   if (ratios.isEmpty) {
-    throw Exception('Ratio collection must contain at least one element');
+    throw EmptyRatioCollectionException();
   }
 
   final inputRows = data
@@ -14,22 +18,19 @@ List<DataFrame> splitData(DataFrame data, Iterable<num> ratios) {
   return ratios
       .map((ratio) {
         if (ratio <= 0 || ratio >= 1) {
-          throw Exception('Ratio value must be within the range 0..1 (both '
-              'exclusive), $ratio given');
+          throw OutRangedRatioException(ratio);
         }
 
         ratioSum += ratio;
 
         if (ratioSum >= 1) {
-          throw Exception('Ratios sum is more than or equal to 1');
+          throw InvalidRatioSumException();
         }
 
         final rawSplitSize = inputRows.length * ratio;
 
         if (rawSplitSize < 1) {
-          throw Exception('Ratio is too small comparing to the input data size: '
-              'ratio $ratio, min ratio value '
-              '${(1 / inputRows.length).toStringAsFixed(2)}');
+          throw TooSmallRatioException(ratio, inputRows.length);
         }
 
         final end = start + (rawSplitSize.ceil() == inputRows.length
