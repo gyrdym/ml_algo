@@ -10,7 +10,7 @@ void main() {
   group('splitData', () {
     final header = ['feature_1', 'feature_3', 'feature_3'];
     final source = [
-      ['feature_1', 'feature_3', 'feature_3'],
+      header,
       [     100.00,        null,      200.33],
       [      -2221,        1002,       70009],
       [       9008,       10006,        null],
@@ -47,8 +47,7 @@ void main() {
     });
 
     test('should split data', () {
-      final splits = splitData(data, [0.2, 0.3])
-          .toList();
+      final splits = splitData(data, [0.2, 0.3]);
       
       expect(splits, hasLength(3));
       expect(splits[0].header, header);
@@ -68,8 +67,7 @@ void main() {
     });
 
     test('should split data, case 2', () {
-      final splits = splitData(data, [0.2, 0.2, 0.2, 0.2])
-          .toList();
+      final splits = splitData(data, [0.2, 0.2, 0.2, 0.2]);
 
       expect(splits, hasLength(5));
       expect(splits[0].header, header);
@@ -106,8 +104,7 @@ void main() {
 
     test('should split data into two parts, first part is less than the '
         'second one', () {
-      final splits = splitData(data, [0.2])
-          .toList();
+      final splits = splitData(data, [0.2]);
 
       expect(splits, hasLength(2));
       expect(splits[0].header, header);
@@ -125,8 +122,7 @@ void main() {
 
     test('should split data into two parts, first part is less than the '
         'second one, case 2', () {
-      final splits = splitData(data, [0.25])
-          .toList();
+      final splits = splitData(data, [0.25]);
 
       expect(splits, hasLength(2));
       expect(splits[0].header, header);
@@ -144,8 +140,7 @@ void main() {
 
     test('should split data into two parts, first part is greater than the '
         'second one', () {
-      final splits = splitData(data, [0.9])
-          .toList();
+      final splits = splitData(data, [0.9]);
 
       expect(splits, hasLength(2));
       expect(splits[0].header, header);
@@ -163,8 +158,7 @@ void main() {
 
     test('should split data into two parts, first part is greater than the '
         'second one, case 2', () {
-      final splits = splitData(data, [0.95])
-          .toList();
+      final splits = splitData(data, [0.95]);
 
       expect(splits, hasLength(2));
       expect(splits[0].header, header);
