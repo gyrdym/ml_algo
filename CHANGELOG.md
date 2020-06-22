@@ -1,5 +1,8 @@
 # Changelog
 
+## 14.1.0
+- `Model selection`: `splitData` helper added
+
 ## 14.0.1
 - data splitters renamed and reorganized
 
