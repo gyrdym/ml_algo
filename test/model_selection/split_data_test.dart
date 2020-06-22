@@ -57,5 +57,136 @@ void main() {
         [500981, 29918, 5008.55],
       ]);
     });
+
+    test('should split data, case 2', () {
+      final splits = splitData(data, [0.2, 0.2, 0.2, 0.2])
+          .toList();
+
+      expect(splits, hasLength(5));
+      expect(splits[0].header, header);
+      expect(splits[0].rows, [
+        [100.00, null, 200.33],
+      ]);
+      expect(splits[1].header, header);
+      expect(splits[1].rows, [
+        [-2221,  1002, 70009],
+      ]);
+      expect(splits[2].header, header);
+      expect(splits[2].rows, [
+        [ 9008, 10006,  null],
+      ]);
+      expect(splits[3].header, header);
+      expect(splits[3].rows, [
+        [  7888, 10002,  300918],
+      ]);
+      expect(splits[4].header, header);
+      expect(splits[4].rows, [
+        [500981, 29918, 5008.55],
+      ]);
+    });
+
+    test('should throw exception if there is a too small ratio, case 1', () {
+      expect(() => splitData(data, [0.2, 0.3, 0.01]), throwsException);
+    });
+
+    test('should throw exception if there is a too small ratio, case 2', () {
+      expect(() => splitData(data, [0.2, 0.3, 0.1]), throwsException);
+    });
+
+    test('should split data into two parts, first part is less than the '
+        'second one', () {
+      final splits = splitData(data, [0.2])
+          .toList();
+
+      expect(splits, hasLength(2));
+      expect(splits[0].header, header);
+      expect(splits[0].rows, [
+        [100.00, null, 200.33],
+      ]);
+      expect(splits[1].header, header);
+      expect(splits[1].rows, [
+        [ -2221,  1002,   70009],
+        [  9008, 10006,    null],
+        [  7888, 10002,  300918],
+        [500981, 29918, 5008.55],
+      ]);
+    });
+
+    test('should split data into two parts, first part is less than the '
+        'second one, case 2', () {
+      final splits = splitData(data, [0.25])
+          .toList();
+
+      expect(splits, hasLength(2));
+      expect(splits[0].header, header);
+      expect(splits[0].rows, [
+        [100.00, null, 200.33],
+        [-2221,  1002,  70009],
+      ]);
+      expect(splits[1].header, header);
+      expect(splits[1].rows, [
+        [  9008, 10006,    null],
+        [  7888, 10002,  300918],
+        [500981, 29918, 5008.55],
+      ]);
+    });
+
+    test('should split data into two parts, first part is greater than the '
+        'second one', () {
+      final splits = splitData(data, [0.9])
+          .toList();
+
+      expect(splits, hasLength(2));
+      expect(splits[0].header, header);
+      expect(splits[0].rows, [
+        [100.00,  null, 200.33],
+        [ -2221,  1002,  70009],
+        [  9008, 10006,   null],
+        [  7888, 10002, 300918],
+      ]);
+      expect(splits[1].header, header);
+      expect(splits[1].rows, [
+        [500981, 29918, 5008.55],
+      ]);
+    });
+
+    test('should split data into two parts, first part is greater than the '
+        'second one, case 2', () {
+      final splits = splitData(data, [0.95])
+          .toList();
+
+      expect(splits, hasLength(2));
+      expect(splits[0].header, header);
+      expect(splits[0].rows, [
+        [100.00,  null, 200.33],
+        [ -2221,  1002,  70009],
+        [  9008, 10006,   null],
+        [  7888, 10002, 300918],
+      ]);
+      expect(splits[1].header, header);
+      expect(splits[1].rows, [
+        [500981, 29918, 5008.55],
+      ]);
+    });
+
+    test('should throw exception if ratios sum is equal to 1, '
+        '2 elements', () {
+      expect(() => splitData(data, [0.5, 0.5]), throwsException);
+    });
+
+    test('should throw exception if ratios sum is equal to 1, '
+        '3 elements', () {
+      expect(() => splitData(data, [0.3, 0.3, 0.4]), throwsException);
+    });
+
+    test('should throw exception if ratios sum is greater than 1, '
+        '2 elements', () {
+      expect(() => splitData(data, [0.5, 0.6]), throwsException);
+    });
+
+    test('should throw exception if ratios sum is greater than 1, '
+        '3 elements', () {
+      expect(() => splitData(data, [0.3, 0.5, 0.4]), throwsException);
+    });
   });
 }
