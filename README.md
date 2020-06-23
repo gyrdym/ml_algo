@@ -16,7 +16,7 @@ the lib, please do not use it in a browser.
 - #### Model selection
     - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
     Factory that creates instances of cross validators. Cross validation allows researchers to fit different 
-    [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms, 
+    [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms 
     assessing prediction quality on different parts of a dataset. 
 
 - #### Classification algorithms
@@ -33,7 +33,7 @@ the lib, please do not use it in a browser.
     
     - [KnnClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/knn_classifier/knn_classifier.dart)
     A class that performs classification using `k nearest neighbours algorithm` - it makes prediction basing on 
-    first `k` closest observations to the given one.
+    the first `k` closest observations to the given one.
 
 - #### Regression algorithms
     - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). 
@@ -139,7 +139,7 @@ use CrossValidator instance created before:
 final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
 ````
 
-Since the CrossValidator's instance returns a Vector of scores as a result of our predictor evaluation, we may choose
+Since the CrossValidator's instance returns a [Vector](https://github.com/gyrdym/ml_linalg/blob/master/lib/vector.dart) of scores as a result of our predictor evaluation, we may choose
 any way to reduce all the collected scores to a single number, for instance we may use Vector's `mean` method:
 
 ```dart
