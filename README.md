@@ -55,16 +55,14 @@ in your dependencies:
 
 ````
 dependencies:
-  ml_dataframe: ^0.0.11
-  ml_preprocessing: ^5.0.1
+  ml_dataframe: ^0.1.1
+  ml_preprocessing: ^5.1.0
 ````
 
 We need these repos to parse raw data in order to use it farther. For more details, please
 visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page.
 
 ````dart  
-import 'dart:async';
-
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
@@ -114,7 +112,7 @@ if the selected hyperparametrs are good enough or not:
 final createClassifier = (DataFrame samples, _) =>
   LogisticRegressor(
     samples
-    ['class variable (0 or 1)'],
+    [targetColumnName],
     optimizerType: LinearOptimizerType.gradient,
     iterationsLimit: 90,
     learningRateType: LearningRateType.decreasingAdaptive,
@@ -124,7 +122,8 @@ final createClassifier = (DataFrame samples, _) =>
 ```
 
 Let's describe our hyperparameters:
-- `optimizerType` - type of optimization algorithm that will be used to learn coefficients of our model
+- `optimizerType` - type of optimization algorithm that will be used to learn coefficients of our model, this time we
+decided to use vanilla gradient ascent algorithm
 - `iterationsLimit` - number of learning iterations. Selected optimization algorithm (gradient ascent in our case) will 
 be run this amount of times
 - `learningRateType` - a strategy for learning rate update. In our case the learning rate will decrease after every 
@@ -196,8 +195,9 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
-Future main() async {
+void main() async {
   final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
+  final targetColumnName = 'class variable (0 or 1)';
   final splits = splitData(samples, [0.7]);
   final validationData = splits[0];
   final testData = splits[1];
@@ -205,7 +205,7 @@ Future main() async {
   final createClassifier = (DataFrame samples, _) =>
     LogisticRegressor(
       samples
-      ['class variable (0 or 1)'],
+      [targetColumnName],
       optimizerType: LinearOptimizerType.gradient,
       iterationsLimit: 90,
       learningRateType: LearningRateType.decreasingAdaptive,
