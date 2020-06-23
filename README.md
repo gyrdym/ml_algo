@@ -41,14 +41,16 @@ the lib, please do not use it in a browser.
 
     - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
     A class that makes prediction for each new observation basing on first `k` closest observations from 
-    training data. It may catch non-linear pattern of the data. 
+    training data. It may catch non-linear pattern of the data.
+    
+For more information on the library's API, please visit [API reference](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) 
 
 ## Examples
 
 ### Logistic regression
 
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
-via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/linear_classifier.dart)
+via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
 
 Import all necessary packages. First, it's needed to ensure, if you have `ml_preprocessing` and `ml_dataframe` package 
 in your dependencies:
