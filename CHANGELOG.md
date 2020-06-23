@@ -1,5 +1,8 @@
 # Changelog
 
+## 14.1.1
+- `README`: Advanced usage example on Logistic regression added
+
 ## 14.1.0
 - `Model selection`: `splitData` helper added
 
