@@ -84,29 +84,60 @@ on each row. This column is our target - we should predict a class label for eac
 ````dart
 final targetColumnName = 'class variable (0 or 1)';
 ````
- 
-Then we should create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
-of our model. We should pass training data (our `samples` variable), a list of target column names (in our case it's 
+
+Now it's the time to prepare data splits. Since we have a smallish dataset (only 768 records), we can't afford to
+split the data into just train and test sets and evaluate the model on them, the best approach in our case is Cross 
+Validation. According to this, let's split the data in the following way using the library's [splitData](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/split_data.dart) 
+function:
+
+```dart
+final splits = splitData(samples, [0.7]);
+final validationData = splits[0];
+final testData = splits[1];
+```
+
+`splitData` accepts `DataFrame` instance as the first argument and ratio list as the second one. Now we have 70% of our
+data as a validation set and 30% as a test set for evaluating generalization error.
+
+Then we may create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
+of our model. We should pass validation data (our `validationData` variable), a list of target column names (in our case it's 
 just a name stored in `targetColumnName` variable) and a number of folds into CrossValidator constructor.
  
 ````dart
-final validator = CrossValidator.KFold(samples, [targetColumnName], numberOfFolds: 5);
+final validator = CrossValidator.KFold(validationData, [targetColumnName], numberOfFolds: 5);
 ````
 
-All are set, so we can do our classification.
+Let's create a factory for the classifier with desired hyperparameters. We have to decide after the cross validation, 
+if the selected hyperparametrs are good enough or not:
 
-Evaluate our model via accuracy metric:
+```dart
+final createClassifier = (DataFrame samples, _) =>
+  LogisticRegressor(
+    samples
+    ['class variable (0 or 1)'],
+    optimizerType: LinearOptimizerType.gradient,
+    iterationsLimit: 90,
+    learningRateType: LearningRateType.decreasingAdaptive,
+    batchSize: trainSamples.rows.length,
+    probabilityThreshold: 0.7,
+  );
+```
+
+Let's describe our hyperparameters:
+- `optimizerType` - type of optimization algorithm that will be used to learn coefficients of our model
+- `iterationsLimit` - number of learning iterations. Selected optimization algorithm (gradient ascent in our case) will 
+be run this amount of times
+- `learningRateType` - a strategy for learning rate update. In our case the learning rate will decrease after every 
+iteration
+- `batchSize` - size of data (in rows) that will be used per each iteration. As we have a really small dataset we may use
+full-batch gradient ascent, that's why we used `trainSamples.rows.length` here - the total amount of data.
+- `probabilityThreshold` - lower bound for positive label probability
+
+Assume, we chose good hyperprameters which can lead to a high-performant model. In order to validate our hypothesis let's 
+use CrossValidator instance created before:
 
 ````dart
-final scores = await validator.evaluate((samples, targetNames) => 
-    LogisticRegressor(
-        samples,
-        targetNames[0], // remember, we provided a list of just a single name
-        optimizerType: LinearOptimizerType.gradient,
-        learningRateType: LearningRateType.decreasingAdaptive,
-        probabilityThreshold: 0.7,
-        randomSeed: 3,
-    ), MetricType.accuracy);
+final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
 ````
 
 Since the CrossValidator's instance returns a Vector of scores as a result of our predictor evaluation, we may choose
@@ -118,14 +149,45 @@ final accuracy = scores.mean();
 
 Let's print the score:
 ````dart
-print('accuracy on classification: ${accuracy.toStringAsFixed(2)}');
+print('accuracy on k fold validation: ${accuracy.toStringAsFixed(2)}');
 ````
 
 We will see something like this:
 
 ````
-acuracy on classification: 0.65
+accuracy on k fold validation: 0.65
 ````
+
+Let's assess our hyperparameters on test set in order to evaluate the model's generalization error:
+
+```dart
+final testSplits = splitData(testData, [0.8]);
+final classifier = createClassifier(testSplits[0], targetNames);
+final finalScore = classifier.assess(testSplits[1], targetNames, MetricType.accuracy);
+```
+
+The final score is like:
+
+```dart
+print(finalScore.toStringAsFixed(2)); // approx. 0.75
+```
+
+Seems, our model has a good generalization ability, and that means we may use it in the future.
+To do so we may store the model to file as JSON:
+
+```dart
+await classifier.saveAsJson('diabetes_classifier.json');
+```
+
+After that we can simply read the model from the file:
+
+```dart
+import 'dart:io';
+
+final file = File(fileName);
+final encodedData = await file.readAsString();
+final classifier = LogisticRegressor.fromJson(encodedData);
+```
 
 All the code above all together:
 
@@ -136,83 +198,33 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 Future main() async {
   final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
-  final targetColumnName = 'class variable (0 or 1)';
-  final validator = CrossValidator.KFold(samples, [targetColumnName], numberOfFolds: 5);
-  final scores = await validator.evaluate((samples, targetNames) => 
-      LogisticRegressor(
-          samples,
-          targetNames[0], // remember, we provide a list of just a single name
-          optimizerType: LinearOptimizerType.gradient,
-          learningRateType: LearningRateType.decreasingAdaptive,
-          probabilityThreshold: 0.7,
-          randomSeed: 3,
-      ), MetricType.accuracy);
+  final splits = splitData(samples, [0.7]);
+  final validationData = splits[0];
+  final testData = splits[1];
+  final validator = CrossValidator.KFold(validationData, [targetColumnName], numberOfFolds: 5);
+  final createClassifier = (DataFrame samples, _) =>
+    LogisticRegressor(
+      samples
+      ['class variable (0 or 1)'],
+      optimizerType: LinearOptimizerType.gradient,
+      iterationsLimit: 90,
+      learningRateType: LearningRateType.decreasingAdaptive,
+      batchSize: trainSamples.rows.length,
+      probabilityThreshold: 0.7,
+    );
+  final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
   final accuracy = scores.mean();
+  
+  print('accuracy on k fold validation: ${accuracy.toStringAsFixed(2)}');
 
-  print('accuracy on classification: ${accuracy.toStringFixed(2)}');
+  final testSplits = splitData(testData, [0.8]);
+  final classifier = createClassifier(testSplits[0], targetNames);
+  final finalScore = classifier.assess(testSplits[1], targetNames, MetricType.accuracy);
+  
+  print(finalScore.toStringAsFixed(2));
+
+  await classifier.saveAsJson('diabetes_classifier.json');
 }
-````
-
-### K nearest neighbour regression
-
-Let's do some prediction with a well-known non-parametric regression algorithm - k nearest neighbours. Let's take a 
-state of the art dataset - [boston housing](https://www.kaggle.com/c/boston-housing).
-
-As usual, import all necessary packages
-
-````dart
-import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_preprocessing/ml_preprocessing.dart';
-````
-
-and download and read the data
-
-````dart
-final samples = await fromCsv('lib/_datasets/housing.csv',
-    headerExists: false,
-    fieldDelimiter: ' ',
-);
-````
-
-As you can see, the dataset is headless, and that means that there is no a descriptive line in the beginning of the file,
-so we may use an autogenerated header in order to point the target column:
-
-```dart
-print(samples.header);
-``` 
-
-It will output the following:
-````dart
-(col_0, col_1, col_2, col_3, col_4, col_5, col_6, col_7, col_8, col_9, col_10, col_11, col_12, col_13)
-````
-
-Our target is `col_13`. Let's store it:
-
-````dart
-final targetColumnName = 'col_13';
-````
-
-Let's create a cross-validator instance:
-
-````dart
-final validator = CrossValidator.KFold(samples, [targetColumnName], numberOfFolds: 5);
-````
-
-Let the `k` parameter be equal to `4`.
-
-Assess a knn regressor with the chosen `k` value using MAPE metric
-
-````dart
-final scores = await validator.evaluate((samples, targetNames) => 
-  KnnRegressor(samples, targetNames[0], 4), MetricType.mape);
-final averageError = scores.mean();
-````
-
-Let's print our error
-
-````dart
-print('MAPE error on k-fold validation: ${averageError.toStringAsFixed(2)}%'); // it yields approx. 6.18
 ````
 
 ### Contacts
