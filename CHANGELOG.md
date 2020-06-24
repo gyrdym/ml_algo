@@ -1,5 +1,8 @@
 # Changelog
 
+## 14.2.1
+- `README`: Examples on prediction and collecting learning data added
+
 ## 14.2.0
 - `SoftmaxRegressor`:
     - `Default constructor`: `collectLearningData` parameter added
