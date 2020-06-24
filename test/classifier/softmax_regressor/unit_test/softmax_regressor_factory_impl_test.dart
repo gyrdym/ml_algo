@@ -22,6 +22,7 @@ void main() {
       final interceptScale = 1;
       final positiveLabel = 1;
       final negativeLabel = -1;
+      final costPerIteration = [1, 2, 3];
       final dtype = DType.float32;
 
       final regressor = factory.create(
@@ -32,6 +33,7 @@ void main() {
         interceptScale,
         positiveLabel,
         negativeLabel,
+        costPerIteration,
         dtype,
       );
 
