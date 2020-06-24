@@ -145,8 +145,8 @@ final createClassifier = (DataFrame samples, _) =>
   );
 ```
 
-This argument activates collecting costs per each optimization iteration, and you can see the cost values after model 
-creation.
+This argument activates collecting costs per each optimization iteration, and you can see the cost values right after 
+the model creation.
 
 Assume, we chose good hyperprameters which can lead to a high-performant model. In order to validate our hypothesis let's 
 use CrossValidator instance created before:
@@ -261,6 +261,9 @@ void main() async {
   await classifier.saveAsJson('diabetes_classifier.json');
 }
 ````
+
+The workflow with other predictors (SoftmaxRegressor, DecisionTreeClassifier and so on) is quite similar to the described
+above for LogisticRegressor, feel free to experiment with other models. 
 
 ### Contacts
 If you have questions, feel free to write me on 
