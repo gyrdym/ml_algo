@@ -134,6 +134,20 @@ iteration
 full-batch gradient ascent, that's why we used `trainSamples.rows.length` here - the total amount of data.
 - `probabilityThreshold` - lower bound for positive label probability
 
+If we want to evaluate the learning process more thoroughly, we may pass `collectLearningData` argument to the classifier
+constructor:
+
+```dart
+final createClassifier = (DataFrame samples, _) =>
+  LogisticRegressor(
+    ...,
+    collectLearningData: true,
+  );
+```
+
+This argument activates collecting costs per each optimization iteration, and you can see the cost values right after 
+the model creation.
+
 Assume, we chose good hyperprameters which can lead to a high-performant model. In order to validate our hypothesis let's 
 use CrossValidator instance created before:
 
@@ -173,14 +187,21 @@ The final score is like:
 print(finalScore.toStringAsFixed(2)); // approx. 0.75
 ```
 
+If we specified `collectLearningData` parameter, we may see costs per each iteration in order to evaluate how our cost 
+changed from iteration to iteration during the learning process:
+
+```dart
+print(classifier.costPerIteration);
+```
+
 Seems, our model has a good generalization ability, and that means we may use it in the future.
-To do so we may store the model to file as JSON:
+To do so we may store the model to a file as JSON:
 
 ```dart
 await classifier.saveAsJson('diabetes_classifier.json');
 ```
 
-After that we can simply read the model from the file:
+After that we can simply read the model from the file and make predictions:
 
 ```dart
 import 'dart:io';
@@ -188,6 +209,18 @@ import 'dart:io';
 final file = File(fileName);
 final encodedData = await file.readAsString();
 final classifier = LogisticRegressor.fromJson(encodedData);
+final unlabelledData = await fromCsv('some_unlabelled_data.csv');
+final prediction = classifier.predict(unlabelledData);
+
+print(prediction.header); // ('class variable (0 or 1)')
+print(prediction.rows); // [ 
+                        //   (1),
+                        //   (0),
+                        //   (0),
+                        //   (1),
+                        //   ...,
+                        //   (1),
+                        // ]
 ```
 
 All the code above all together:
@@ -228,6 +261,9 @@ void main() async {
   await classifier.saveAsJson('diabetes_classifier.json');
 }
 ````
+
+The workflow with other predictors (SoftmaxRegressor, DecisionTreeClassifier and so on) is quite similar to the described
+above for LogisticRegressor, feel free to experiment with other models. 
 
 ### Contacts
 If you have questions, feel free to write me on 
