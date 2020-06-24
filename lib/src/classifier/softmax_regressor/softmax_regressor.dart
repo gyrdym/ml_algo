@@ -105,6 +105,11 @@ abstract class SoftmaxRegressor implements
   /// [negativeLabel] Defines the value that will be used for `negative` class.
   /// By default, `0`.
   ///
+  /// [collectLearningData] Whether or not to collect learning data, for
+  /// instance cost function value per each iteration. Affects performance much.
+  /// If [collectLearningData] is true, one may access [costPerIteration]
+  /// getter in order to evaluate learning process more thoroughly.
+  ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
@@ -129,6 +134,7 @@ abstract class SoftmaxRegressor implements
         Matrix initialCoefficients,
         num positiveLabel = 1,
         num negativeLabel = 0,
+        bool collectLearningData = false,
         DType dtype = DType.float32,
       }
   ) => createSoftmaxRegressor(
@@ -150,6 +156,7 @@ abstract class SoftmaxRegressor implements
     initialCoefficients,
     positiveLabel,
     negativeLabel,
+    collectLearningData,
     dtype,
   );
 
@@ -192,4 +199,8 @@ abstract class SoftmaxRegressor implements
   /// ````
   factory SoftmaxRegressor.fromJson(String json) =>
       createSoftmaxRegressorFromJson(json);
+
+  /// Returns a list of cost values per each learning iteration. Returns null
+  /// if the parameter `collectLearningData` of the default constructor is false
+  List<num> get costPerIteration;
 }

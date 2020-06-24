@@ -31,6 +31,7 @@ void main() {
     DType dtype = DType.float32,
     num positiveLabel = 1,
     num negativeLabel = -1,
+    bool collectLearningData = false,
   }) {
     final sourceData = <Iterable<dynamic>>[
       <String>[...featureNames, ...targetNames],
@@ -49,6 +50,7 @@ void main() {
       interceptScale: interceptScale,
       positiveLabel: positiveLabel,
       negativeLabel: negativeLabel,
+      collectLearningData: collectLearningData,
       dtype: dtype,
     );
   };
@@ -242,6 +244,36 @@ void main() {
       expect(restoredClassifier.linkFunction.runtimeType,
           classifier.linkFunction.runtimeType);
       expect(restoredClassifier.dtype, classifier.dtype);
+    });
+
+    test('should save the model to a file as json, '
+        'collectLearningData=false', () async {
+      final classifier = createClassifier(
+        dtype: DType.float32,
+        collectLearningData: false,
+      );
+      await classifier.saveAsJson(fileName);
+
+      final file = File(fileName);
+      final decodedData = await file.readAsString();
+      final restoredClassifier = SoftmaxRegressor.fromJson(decodedData);
+
+      expect(restoredClassifier.costPerIteration, isNull);
+    });
+
+    test('should save the model to a file as json, '
+        'collectLearningData=true', () async {
+      final classifier = createClassifier(
+        dtype: DType.float32,
+        collectLearningData: true,
+      );
+      await classifier.saveAsJson(fileName);
+
+      final file = File(fileName);
+      final decodedData = await file.readAsString();
+      final restoredClassifier = SoftmaxRegressor.fromJson(decodedData);
+
+      expect(restoredClassifier.costPerIteration, classifier.costPerIteration);
     });
   });
 }

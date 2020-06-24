@@ -33,6 +33,7 @@ class SoftmaxRegressorImpl
       this.interceptScale,
       this.positiveLabel,
       this.negativeLabel,
+      this.costPerIteration,
       this.dtype,
   ) {
     validateClassLabels(positiveLabel, negativeLabel);
@@ -93,6 +94,13 @@ class SoftmaxRegressorImpl
 
   @JsonKey(name: softmaxRegressorNegativeLabelJsonKey)
   final num negativeLabel;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorCostPerIterationJsonKey,
+    includeIfNull: false,
+  )
+  final List<num> costPerIteration;
 
   @override
   DataFrame predict(DataFrame testFeatures) {

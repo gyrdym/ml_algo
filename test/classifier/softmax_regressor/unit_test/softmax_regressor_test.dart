@@ -70,6 +70,8 @@ void main() {
       [1, 2, 3],
     ]);
 
+    final costPerIteration = [10, 0, -10, 33.1];
+
     LinkFunction linkFunctionMock;
 
     CostFunction costFunctionMock;
@@ -106,7 +108,9 @@ void main() {
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
         isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: anyNamed('collectLearningData'),
       )).thenReturn(learnedCoefficients);
+      when(optimizerMock.costPerIteration).thenReturn(costPerIteration);
     });
 
     tearDownAll(() => injector = null);
@@ -221,6 +225,48 @@ void main() {
         initialCoefficients: initialCoefficients,
         isMinimizingObjective: false,
       )).called(1);
+    });
+
+    test('should pass collectLearningData to the optimizer mock\'s findExtrema '
+        'method, collectLearningData=true', () {
+      SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        collectLearningData: true,
+      );
+
+      verify(optimizerMock.findExtrema(
+        initialCoefficients: anyNamed('initialCoefficients'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: true,
+      )).called(1);
+    });
+
+    test('should pass collectLearningData to the optimizer mock\'s findExtrema '
+        'method, collectLearningData=false', () {
+      SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        collectLearningData: false,
+      );
+
+      verify(optimizerMock.findExtrema(
+        initialCoefficients: anyNamed('initialCoefficients'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: false,
+      )).called(1);
+    });
+
+    test('should pass cost per iteration list to the softmax regressor '
+        'factory', () {
+      SoftmaxRegressor(
+        observations,
+        ['target_1', 'target_2', 'target_3'],
+        collectLearningData: true,
+      );
+
+      verify(softmaxRegressorFactoryMock.create(any, any, any, any, any, any,
+          any, costPerIteration, any));
     });
   });
 }

@@ -6,3 +6,4 @@ const softmaxRegressorDTypeJsonKey = 'DT';
 const softmaxRegressorLinkFunctionJsonKey = 'LF';
 const softmaxRegressorPositiveLabelJsonKey = 'PL';
 const softmaxRegressorNegativeLabelJsonKey = 'NL';
+const softmaxRegressorCostPerIterationJsonKey = 'CPI';

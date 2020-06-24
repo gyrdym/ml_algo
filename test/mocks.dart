@@ -252,7 +252,7 @@ KnnRegressorFactory createKnnRegressorFactoryMock(KnnRegressor regressor) {
 SoftmaxRegressorFactory createSoftmaxRegressorFactoryMock(
     SoftmaxRegressor softmaxRegressor) {
   final factory = SoftmaxRegressorFactoryMock();
-  when(factory.create(any, any, any, any, any, any, any, any))
+  when(factory.create(any, any, any, any, any, any, any, any, any))
       .thenReturn(softmaxRegressor);
   return factory;
 }

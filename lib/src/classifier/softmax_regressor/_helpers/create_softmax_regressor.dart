@@ -32,6 +32,7 @@ SoftmaxRegressor createSoftmaxRegressor(
     Matrix initialCoefficients,
     num positiveLabel,
     num negativeLabel,
+    bool collectLearningData,
     DType dtype,
 ) {
   if (targetNames.isNotEmpty && targetNames.length < 2) {
@@ -69,7 +70,11 @@ SoftmaxRegressor createSoftmaxRegressor(
   final coefficientsByClasses = optimizer.findExtrema(
     initialCoefficients: initialCoefficients,
     isMinimizingObjective: false,
+    collectLearningData: collectLearningData,
   );
+  final costPerIteration = optimizer.costPerIteration.isNotEmpty
+      ? optimizer.costPerIteration
+      : null;
 
   final regressorFactory = dependencies
       .getDependency<SoftmaxRegressorFactory>();
@@ -82,6 +87,7 @@ SoftmaxRegressor createSoftmaxRegressor(
     interceptScale,
     positiveLabel,
     negativeLabel,
+    costPerIteration,
     dtype,
   );
 }

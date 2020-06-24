@@ -16,6 +16,7 @@ void main() {
     final interceptScale = 10;
     final positiveLabel = 1.0;
     final negativeLabel = -1.0;
+    final costPerIteration = [10, -10, 20, 2.3];
     final dtype = DType.float32;
 
     final coefficientsByClasses = Matrix.fromList([
@@ -91,6 +92,7 @@ void main() {
         interceptScale,
         positiveLabel,
         negativeLabel,
+        costPerIteration,
         dtype,
       );
     });
@@ -109,6 +111,7 @@ void main() {
           interceptScale,
           positiveLabel,
           negativeLabel,
+          costPerIteration,
           dtype,
         );
 
@@ -129,6 +132,7 @@ void main() {
           interceptScale,
           positiveLabel,
           negativeLabel,
+          costPerIteration,
           dtype,
         );
 
@@ -246,6 +250,10 @@ void main() {
         final probabilities = regressor.predictProbabilities(testFeatures);
 
         expect(probabilities.header, equals(targetNames));
+      });
+
+      test('should persist cost per iteration list', () {
+        expect(regressor.costPerIteration, costPerIteration);
       });
     });
   });

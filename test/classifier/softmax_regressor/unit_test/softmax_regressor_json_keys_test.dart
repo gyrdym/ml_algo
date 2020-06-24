@@ -34,5 +34,9 @@ void main() {
     test('should contain a proper key for negative label field', () {
       expect(softmaxRegressorNegativeLabelJsonKey, 'NL');
     });
+
+    test('should contain a proper key for cost per iteration field', () {
+      expect(softmaxRegressorCostPerIterationJsonKey, 'CPI');
+    });
   });
 }

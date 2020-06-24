@@ -8,8 +8,17 @@ part of 'softmax_regressor_impl.dart';
 
 SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
   return $checkedNew('SoftmaxRegressorImpl', json, () {
-    $checkKeys(json,
-        allowedKeys: const ['CN', 'FI', 'IS', 'CBC', 'DT', 'LF', 'PL', 'NL']);
+    $checkKeys(json, allowedKeys: const [
+      'CN',
+      'FI',
+      'IS',
+      'CBC',
+      'DT',
+      'LF',
+      'PL',
+      'NL',
+      'CPI'
+    ]);
     final val = SoftmaxRegressorImpl(
       $checkedConvert(
           json, 'CBC', (v) => fromMatrixJson(v as Map<String, dynamic>)),
@@ -19,6 +28,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'IS', (v) => v as num),
       $checkedConvert(json, 'PL', (v) => v as num),
       $checkedConvert(json, 'NL', (v) => v as num),
+      $checkedConvert(
+          json, 'CPI', (v) => (v as List)?.map((dynamic e) => e as num)?.toList()),
       $checkedConvert(json, 'DT', (v) => fromDTypeJson(v as String)),
     );
     return val;
@@ -30,19 +41,30 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     'interceptScale': 'IS',
     'positiveLabel': 'PL',
     'negativeLabel': 'NL',
+    'costPerIteration': 'CPI',
     'dtype': 'DT'
   });
 }
 
 Map<String, dynamic> _$SoftmaxRegressorImplToJson(
-        SoftmaxRegressorImpl instance) =>
-    <String, dynamic>{
-      'CN': instance.classNames?.toList(),
-      'FI': instance.fitIntercept,
-      'IS': instance.interceptScale,
-      'CBC': matrixToJson(instance.coefficientsByClasses),
-      'DT': dTypeToJson(instance.dtype),
-      'LF': linkFunctionToJson(instance.linkFunction),
-      'PL': instance.positiveLabel,
-      'NL': instance.negativeLabel,
-    };
+    SoftmaxRegressorImpl instance) {
+  final val = <String, dynamic>{
+    'CN': instance.classNames?.toList(),
+    'FI': instance.fitIntercept,
+    'IS': instance.interceptScale,
+    'CBC': matrixToJson(instance.coefficientsByClasses),
+    'DT': dTypeToJson(instance.dtype),
+    'LF': linkFunctionToJson(instance.linkFunction),
+    'PL': instance.positiveLabel,
+    'NL': instance.negativeLabel,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('CPI', instance.costPerIteration);
+  return val;
+}
