@@ -17,6 +17,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       num interceptScale,
       num positiveLabel,
       num negativeLabel,
+      List<num> costPerIteration,
       DType dtype,
   ) => SoftmaxRegressorImpl(
     coefficientsByClasses,
@@ -26,6 +27,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
     interceptScale,
     positiveLabel,
     negativeLabel,
+    costPerIteration,
     dtype,
   );
 }

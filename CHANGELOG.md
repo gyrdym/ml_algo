@@ -1,5 +1,9 @@
 # Changelog
 
+## 14.2.0
+- `SoftmaxRegressor`:
+    - `Default constructor`: `collectLearningData` parameter added
+
 ## 14.1.1
 - `README`: Advanced usage example on Logistic regression added
 

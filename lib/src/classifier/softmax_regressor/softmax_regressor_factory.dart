@@ -12,6 +12,7 @@ abstract class SoftmaxRegressorFactory {
       num interceptScale,
       num positiveLabel,
       num negativeLabel,
+      List<num> costPerIteration,
       DType dtype,
   );
 }
