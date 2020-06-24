@@ -251,6 +251,10 @@ void main() {
 
         expect(probabilities.header, equals(targetNames));
       });
+
+      test('should persist cost per iteration list', () {
+        expect(regressor.costPerIteration, costPerIteration);
+      });
     });
   });
 }

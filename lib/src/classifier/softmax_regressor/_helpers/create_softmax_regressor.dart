@@ -72,7 +72,9 @@ SoftmaxRegressor createSoftmaxRegressor(
     isMinimizingObjective: false,
     collectLearningData: collectLearningData,
   );
-  final costPerIteration = optimizer.costPerIteration;
+  final costPerIteration = optimizer.costPerIteration.isNotEmpty
+      ? optimizer.costPerIteration
+      : null;
 
   final regressorFactory = dependencies
       .getDependency<SoftmaxRegressorFactory>();
