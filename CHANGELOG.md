@@ -1,5 +1,8 @@
 # Changelog
 
+## 14.2.2
+- `ml_dataframe` 0.2.0 supported
+
 ## 14.2.1
 - `README`: Examples on prediction and collecting learning data added
 
