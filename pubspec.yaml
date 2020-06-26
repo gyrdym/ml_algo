@@ -1,6 +1,6 @@
 name: ml_algo
 description: Machine learning algorithms, Machine learning models performance evaluation functionality
-version: 14.2.1
+version: 14.2.2
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
   injector: ^1.0.8
   json_annotation: ^3.0.1
   json_serializable: ^3.3.0
-  ml_dataframe: ^0.1.1
+  ml_dataframe: ^0.2.0
   ml_linalg: ^12.17.1
   quiver: ^2.0.2
   xrange: ^0.0.8
