@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
+import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -26,6 +27,8 @@ void main() {
     Matrix labels;
 
     setUp(() {
+      initCommonModule();
+
       data = Matrix.fromList([point1, point2, point3, point4]);
       labels = Matrix.fromList([
         [20.0],
@@ -42,7 +45,7 @@ void main() {
           lambda: lambda);
     });
 
-    tearDownAll(() => injector = null);
+    tearDownAll(injector.clearAll);
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(unregularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal coefficients for the given data', () {
@@ -67,6 +70,7 @@ void main() {
     Matrix labels;
 
     setUp(() {
+      initCommonModule();
       data = Matrix.fromList([point1, point2, point3]);
       labels = Matrix.fromList([
         [2.0],
@@ -84,6 +88,8 @@ void main() {
         lambda: lambda,
       );
     });
+
+    tearDown(injector.clearAll);
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(regularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal coefficients for the given data', () {

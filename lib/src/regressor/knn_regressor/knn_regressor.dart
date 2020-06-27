@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
-import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/_helpers/create_knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/_init_module.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -50,7 +50,16 @@ abstract class KnnRegressor implements Assessable, Predictor {
         Distance distance = Distance.euclidean,
         DType dtype = DType.float32,
       }
-  ) => dependencies
-      .get<KnnRegressorFactory>()
-      .create(fittingData, targetName, k, kernel, distance, dtype);
+  ) {
+    initKnnRegressorModule();
+
+    return createKnnRegressor(
+      fittingData: fittingData,
+      targetName: targetName,
+      k: k,
+      kernel: kernel,
+      distance: distance,
+      dtype: dtype,
+    );
+  }
 }

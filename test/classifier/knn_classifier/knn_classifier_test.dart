@@ -1,5 +1,6 @@
-import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/_helpers/create_knn_classifier.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/di/injector.dart';
@@ -49,7 +50,7 @@ void main() {
       knnClassifierFactoryMock = createKnnClassifierFactoryMock(
           knnClassifierMock);
 
-      injector = Injector()
+      knnClassifierInjector
         ..registerSingleton<KernelFactory>(() => kernelFactoryMock)
         ..registerSingleton<KnnSolverFactory>(() => solverFactoryMock)
         ..registerSingleton<KnnClassifierFactory>(() => knnClassifierFactoryMock);
@@ -65,17 +66,18 @@ void main() {
       reset(knnClassifierMock);
       reset(knnClassifierFactoryMock);
 
-      injector = null;
+      injector.clearAll();
+      knnClassifierInjector.clearAll();
     });
 
     test('should call kernel factory with proper kernel type', () {
-      KnnClassifier(
+      createKnnClassifier(
         data,
         targetName,
         2,
-        kernel: KernelType.uniform,
-        distance: Distance.cosine,
-        dtype: DType.float32,
+        KernelType.uniform,
+        Distance.cosine,
+        DType.float32,
       );
 
       verify(kernelFactoryMock.createByType(KernelType.uniform)).called(1);
@@ -83,13 +85,13 @@ void main() {
 
     test('should call solver factory with proper train features, train labels, '
         'k parameter, distance type and standardization flag', () {
-      KnnClassifier(
+      createKnnClassifier(
         data,
         targetName,
         2,
-        kernel: KernelType.uniform,
-        distance: Distance.hamming,
-        dtype: DType.float32,
+        KernelType.uniform,
+        Distance.hamming,
+        DType.float32,
       );
 
       verify(solverFactoryMock.create(
@@ -112,13 +114,13 @@ void main() {
     });
 
     test('should call KnnClassifierFactory in order to create a classifier', () {
-      final classifier = KnnClassifier(
+      final classifier = createKnnClassifier(
         data,
         targetName,
         2,
-        kernel: KernelType.uniform,
-        distance: Distance.cosine,
-        dtype: DType.float32,
+        KernelType.uniform,
+        Distance.cosine,
+        DType.float32,
       );
 
       verify(knnClassifierFactoryMock.create(
@@ -141,13 +143,13 @@ void main() {
           ],
       );
 
-      KnnClassifier(
+      createKnnClassifier(
         data,
         'target',
         2,
-        kernel: KernelType.uniform,
-        distance: Distance.hamming,
-        dtype: DType.float32,
+        KernelType.uniform,
+        Distance.hamming,
+        DType.float32,
       );
 
       final expectedLabels = [1, 3, 2];
@@ -158,13 +160,13 @@ void main() {
 
     test('should throw an exception if target column does not exist in the '
         'train data', () {
-      final actual = () => KnnClassifier(
+      final actual = () => createKnnClassifier(
         data,
         'unknown_column',
         2,
-        kernel: KernelType.uniform,
-        distance: Distance.hamming,
-        dtype: DType.float32,
+        KernelType.uniform,
+        Distance.hamming,
+        DType.float32,
       );
 
       expect(actual, throwsException);

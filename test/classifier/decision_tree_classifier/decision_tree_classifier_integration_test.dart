@@ -21,12 +21,10 @@ void main() {
     ]);
 
     final targetName = 'col_8';
-
     final classifier = DecisionTreeClassifier(fakeDataSet, targetName,
         minError: 0.3, minSamplesCount: 1, maxDepth: 3);
-
     final testFileName = 'test/classifier/decision_tree_classifier/serialized_classifier.json';
-    
+
     test('should create classifier', () {
       expect(classifier, isA<DecisionTreeClassifierImpl>());
     });

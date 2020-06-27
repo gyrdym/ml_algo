@@ -1,1 +1,0 @@
-enum ClassificationMetricType { accuracy }

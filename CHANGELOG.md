@@ -1,5 +1,14 @@
 # Changelog
 
+## 15.0.0
+- Breaking changes:
+    - `CrossValidator`: 
+        - `targetNames` argument removed
+        - returning type changed to Future<Vector> (previous one was `double`)
+    - `Assessable`, `assess` method: `targetNames` argument removed
+- Precision metric added
+- Coordinate descent optimization logic fixed: dtype considered
+
 ## 14.2.6
 - `injector` lib 1.0.9 supported
 

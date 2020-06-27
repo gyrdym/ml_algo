@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -43,6 +44,8 @@ void main() {
       if (await file.exists()) {
         await file.delete();
       }
+
+      injector.clearAll();
     });
 
     test('should serialize', () {

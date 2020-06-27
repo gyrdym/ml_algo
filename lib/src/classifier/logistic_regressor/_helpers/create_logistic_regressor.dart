@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
 import 'package:ml_algo/src/helpers/validate_train_data.dart';
@@ -16,29 +16,30 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-LogisticRegressor createLogisticRegressor(
-    DataFrame trainData,
-    String targetName,
-    LinearOptimizerType optimizerType,
-    int iterationsLimit,
-    double initialLearningRate,
-    double minCoefficientsUpdate,
-    double probabilityThreshold,
-    double lambda,
-    RegularizationType regularizationType,
-    int randomSeed,
-    int batchSize,
-    bool fitIntercept,
-    double interceptScale,
-    bool isFittingDataNormalized,
-    LearningRateType learningRateType,
-    InitialCoefficientsType initialCoefficientsType,
-    Vector initialCoefficients,
-    num positiveLabel,
-    num negativeLabel,
-    bool collectLearningData,
-    DType dtype,
-) {
+LogisticRegressor createLogisticRegressor({
+  DataFrame trainData,
+  String targetName,
+  LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
+  int iterationsLimit = 100,
+  double initialLearningRate = 1e-3,
+  double minCoefficientsUpdate = 1e-12,
+  double probabilityThreshold = 0.5,
+  double lambda = 0.0,
+  RegularizationType regularizationType,
+  int randomSeed,
+  int batchSize = 1,
+  bool fitIntercept = false,
+  double interceptScale = 1.0,
+  bool isFittingDataNormalized = false,
+  LearningRateType learningRateType = LearningRateType.constant,
+  InitialCoefficientsType initialCoefficientsType =
+      InitialCoefficientsType.zeroes,
+  Vector initialCoefficients,
+  num positiveLabel = 1,
+  num negativeLabel = 0,
+  bool collectLearningData = false,
+  DType dtype = DType.float32,
+}) {
   validateTrainData(trainData, [targetName]);
   validateClassLabels(positiveLabel, negativeLabel);
 
@@ -47,7 +48,7 @@ LogisticRegressor createLogisticRegressor(
         trainData.toMatrix(dtype).columnsNum - 1);
   }
 
-  final linkFunction = dependencies.get<LinkFunction>(
+  final linkFunction = logisticRegressorInjector.get<LinkFunction>(
       dependencyName: dTypeToInverseLogitLinkFunctionToken[dtype]);
   final optimizer = createLogLikelihoodOptimizer(
     trainData,

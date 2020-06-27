@@ -1,6 +1,9 @@
+import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
+import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
@@ -58,6 +61,8 @@ void main() {
 
     tearDown(() {
       reset(linkFunctionMock);
+      injector.clearAll();
+      logisticRegressorInjector.clearAll();
     });
 
     group('default constructor', () {
@@ -261,6 +266,15 @@ void main() {
         final prediction = regressor.predict(testFeatures);
 
         expect(prediction.header, equals([className]));
+      });
+    });
+
+    group('LogisticRegressor.allowedMetrics', () {
+      test('should contain appropriate metrics', () {
+        expect(regressor.allowedMetrics, [
+          MetricType.accuracy,
+          MetricType.precision,
+        ]);
       });
     });
   });

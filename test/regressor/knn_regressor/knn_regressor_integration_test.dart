@@ -1,4 +1,5 @@
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/_helpers/create_knn_regressor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -60,8 +61,11 @@ void main() {
         [9.0, 9.0, 9.0, 9.0, 9.0],
       ]);
 
-      final regressor = KnnRegressor(data, 'target', k,
-        kernel: KernelType.epanechnikov);
+      final regressor = createKnnRegressor(
+          fittingData: data,
+          targetName: 'target',
+          k: k,
+          kernel: KernelType.epanechnikov);
 
       final actual = regressor.predict(
         DataFrame.fromMatrix(testFeatures),

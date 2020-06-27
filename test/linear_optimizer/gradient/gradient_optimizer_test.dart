@@ -1,4 +1,3 @@
-import 'package:injector/injector.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
@@ -79,7 +78,8 @@ void main() {
       convergenceDetectorFactoryMock =
           createConvergenceDetectorFactoryMock(convergenceDetectorMock);
 
-      injector = Injector()
+      injector
+        ..clearAll()
         ..registerDependency<LearningRateGeneratorFactory>(
                 () => learningRateGeneratorFactoryMock)
         ..registerDependency<InitialCoefficientsGeneratorFactory>(
@@ -123,9 +123,8 @@ void main() {
     tearDown(() {
       resetMockitoState();
       reset(costFunctionMock);
+      injector.clearAll();
     });
-
-    tearDownAll(() => injector = null);
 
     test('should process `batchSize` parameter, batchSize=$batchSize1', () {
       final optimizer = GradientOptimizer(

@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor_from_json.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_init_module.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -99,10 +100,10 @@ abstract class SoftmaxRegressor implements
   /// [initialCoefficients] matrix is a vector of coefficients of a certain
   /// class.
   ///
-  /// [positiveLabel] Defines the value that will be used for `positive` class.
+  /// [positiveLabel] A value that will be used for the positive class.
   /// By default, `1`.
   ///
-  /// [negativeLabel] Defines the value that will be used for `negative` class.
+  /// [negativeLabel] A value that will be used for the negative class.
   /// By default, `0`.
   ///
   /// [collectLearningData] Whether or not to collect learning data, for
@@ -137,28 +138,32 @@ abstract class SoftmaxRegressor implements
         bool collectLearningData = false,
         DType dtype = DType.float32,
       }
-  ) => createSoftmaxRegressor(
-    trainData,
-    targetNames,
-    optimizerType,
-    iterationsLimit,
-    initialLearningRate,
-    minCoefficientsUpdate,
-    lambda,
-    regularizationType,
-    randomSeed,
-    batchSize,
-    fitIntercept,
-    interceptScale,
-    learningRateType,
-    isFittingDataNormalized,
-    initialCoefficientsType,
-    initialCoefficients,
-    positiveLabel,
-    negativeLabel,
-    collectLearningData,
-    dtype,
-  );
+  ) {
+    initSoftmaxRegressorModule();
+
+    return createSoftmaxRegressor(
+      trainData: trainData,
+      targetNames: targetNames,
+      optimizerType: optimizerType,
+      iterationsLimit: iterationsLimit,
+      initialLearningRate: initialLearningRate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
+      lambda: lambda,
+      regularizationType: regularizationType,
+      randomSeed: randomSeed,
+      batchSize: batchSize,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      learningRateType: learningRateType,
+      isFittingDataNormalized: isFittingDataNormalized,
+      initialCoefficientsType: initialCoefficientsType,
+      initialCoefficients: initialCoefficients,
+      positiveLabel: positiveLabel,
+      negativeLabel: negativeLabel,
+      collectLearningData: collectLearningData,
+      dtype: dtype,
+    );
+  }
 
   /// Restores previously fitted classifier instance from the [json]
   ///
