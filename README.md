@@ -113,8 +113,8 @@ if the selected hyperparametrs are good enough or not:
 ```dart
 final createClassifier = (DataFrame samples, _) =>
   LogisticRegressor(
-    samples
-    [targetColumnName],
+    samples,
+    'targetColumnName',
     optimizerType: LinearOptimizerType.gradient,
     iterationsLimit: 90,
     learningRateType: LearningRateType.decreasingAdaptive,
