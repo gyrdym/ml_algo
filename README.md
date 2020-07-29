@@ -104,7 +104,7 @@ of our model. We should pass validation data (our `validationData` variable), a 
 just a name stored in `targetColumnName` variable) and a number of folds into CrossValidator constructor.
  
 ````dart
-final validator = CrossValidator.KFold(validationData, [targetColumnName], numberOfFolds: 5);
+final validator = CrossValidator.kFold(validationData, [targetColumnName], numberOfFolds: 5);
 ````
 
 Let's create a factory for the classifier with desired hyperparameters. We have to decide after the cross validation, 
@@ -113,12 +113,12 @@ if the selected hyperparametrs are good enough or not:
 ```dart
 final createClassifier = (DataFrame samples, _) =>
   LogisticRegressor(
-    samples
-    [targetColumnName],
+    samples,
+    'targetColumnName',
     optimizerType: LinearOptimizerType.gradient,
     iterationsLimit: 90,
     learningRateType: LearningRateType.decreasingAdaptive,
-    batchSize: trainSamples.rows.length,
+    batchSize: samples.rows.length,
     probabilityThreshold: 0.7,
   );
 ```
@@ -177,8 +177,8 @@ Let's assess our hyperparameters on test set in order to evaluate the model's ge
 
 ```dart
 final testSplits = splitData(testData, [0.8]);
-final classifier = createClassifier(testSplits[0], targetNames);
-final finalScore = classifier.assess(testSplits[1], targetNames, MetricType.accuracy);
+final classifier = createClassifier(testSplits[0], [targetColumnName]);
+final finalScore = classifier.assess(testSplits[1], [targetColumnName], MetricType.accuracy);
 ```
 
 The final score is like:
