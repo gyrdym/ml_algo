@@ -77,7 +77,7 @@ read it (of course, you should provide a proper path to your downloaded file):
 final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
 ````
 
-Regarding the file path - keep in mind, that it depends on your entry point: if you run your code from the root of your
+Regarding the file path - keep in mind that it depends on your entry point: if you run your code from the root of your
 project having directory `datasets` in the root, a path like `datasets/pima_indians_diabetes_database.csv` will work 
 for you, but if you run your code from nested directories, you should add `../` in the beginning of the path as may 
 times as you need in order to ascend to the project's root. 
