@@ -1,5 +1,11 @@
 # Changelog
 
+## 14.2.3
+- `README`:
+    - Kfold constructor renamed to kFold
+    - brackets removed from LogisticRegressor constructor arguments
+    - file path note added
+
 ## 14.2.2
 - `ml_dataframe` 0.2.0 supported
 
