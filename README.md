@@ -77,6 +77,11 @@ read it (of course, you should provide a proper path to your downloaded file):
 final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
 ````
 
+*Regarding the file path - keep in mind that it depends on your entry point: if you run your code from the root of your
+project having directory `datasets` in the root, a path like `datasets/pima_indians_diabetes_database.csv` will work 
+for you, but if you run your code from nested directories, you should add `../` in the beginning of the path as may 
+times as you need in order to ascend to the project's root.* 
+
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. The column's name is
 `class variable (0 or 1)`. Let's store it:
@@ -104,7 +109,7 @@ of our model. We should pass validation data (our `validationData` variable), a 
 just a name stored in `targetColumnName` variable) and a number of folds into CrossValidator constructor.
  
 ````dart
-final validator = CrossValidator.KFold(validationData, [targetColumnName], numberOfFolds: 5);
+final validator = CrossValidator.kFold(validationData, [targetColumnName], numberOfFolds: 5);
 ````
 
 Let's create a factory for the classifier with desired hyperparameters. We have to decide after the cross validation, 
@@ -114,7 +119,7 @@ if the selected hyperparametrs are good enough or not:
 final createClassifier = (DataFrame samples, _) =>
   LogisticRegressor(
     samples
-    [targetColumnName],
+    targetColumnName,
     optimizerType: LinearOptimizerType.gradient,
     iterationsLimit: 90,
     learningRateType: LearningRateType.decreasingAdaptive,
@@ -236,11 +241,11 @@ void main() async {
   final splits = splitData(samples, [0.7]);
   final validationData = splits[0];
   final testData = splits[1];
-  final validator = CrossValidator.KFold(validationData, [targetColumnName], numberOfFolds: 5);
+  final validator = CrossValidator.kFold(validationData, [targetColumnName], numberOfFolds: 5);
   final createClassifier = (DataFrame samples, _) =>
     LogisticRegressor(
       samples
-      [targetColumnName],
+      targetColumnName,
       optimizerType: LinearOptimizerType.gradient,
       iterationsLimit: 90,
       learningRateType: LearningRateType.decreasingAdaptive,
