@@ -77,10 +77,8 @@ read it (of course, you should provide a proper path to your downloaded file):
 final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
 ````
 
-*Regarding the file path - keep in mind that it depends on your entry point: if you run your code from the root of your
-project having directory `datasets` in the root, a path like `datasets/pima_indians_diabetes_database.csv` will work 
-for you, but if you run your code from nested directories, you should add `../` in the beginning of the path as may 
-times as you need in order to ascend to the project's root.* 
+*For flutter developers: please, read the official flutter.dev article [Read and write files](https://flutter.dev/docs/cookbook/persistence/reading-writing-files) 
+before manipulating with file system in order to build a correct path to your dataset*
 
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. The column's name is

@@ -1,5 +1,9 @@
 # Changelog
 
+## 14.2.4
+- `README`:
+    - File path note for flutter developers added
+
 ## 14.2.3
 - `README`:
     - Kfold constructor renamed to kFold
