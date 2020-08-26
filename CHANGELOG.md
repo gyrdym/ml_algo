@@ -1,5 +1,9 @@
 # Changelog
 
+## 14.2.5
+- `pubspec`:
+    - `injector` dependency corrected
+
 ## 14.2.4
 - `README`:
     - File path note for flutter developers added
