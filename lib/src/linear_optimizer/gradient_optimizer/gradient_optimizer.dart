@@ -36,19 +36,19 @@ class GradientOptimizer implements LinearOptimizer {
         _dtype = dtype,
 
         _initialCoefficientsGenerator = dependencies
-            .getDependency<InitialCoefficientsGeneratorFactory>()
+            .get<InitialCoefficientsGeneratorFactory>()
             .fromType(initialCoefficientsType, dtype),
 
         _learningRateGenerator = dependencies
-            .getDependency<LearningRateGeneratorFactory>()
+            .get<LearningRateGeneratorFactory>()
             .fromType(learningRateType),
 
         _convergenceDetector = dependencies
-            .getDependency<ConvergenceDetectorFactory>()
+            .get<ConvergenceDetectorFactory>()
             .create(minCoefficientsUpdate, iterationLimit),
 
         _randomizer = dependencies
-            .getDependency<RandomizerFactory>()
+            .get<RandomizerFactory>()
             .create(randomSeed) {
     if (batchSize < 1 || batchSize > points.rowsNum) {
       throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '

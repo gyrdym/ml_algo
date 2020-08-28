@@ -97,13 +97,13 @@ void main() {
           softmaxRegressorMock);
 
       injector = Injector()
-        ..registerSingleton<LinkFunction>((_) => linkFunctionMock,
+        ..registerSingleton<LinkFunction>(() => linkFunctionMock,
             dependencyName: float32SoftmaxLinkFunctionToken)
         ..registerDependency<CostFunctionFactory>(
-                (_) => costFunctionFactoryMock)
-        ..registerSingleton<LinearOptimizerFactory>((_) => optimizerFactoryMock)
+                () => costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>(() => optimizerFactoryMock)
         ..registerSingleton<SoftmaxRegressorFactory>(
-                (_) => softmaxRegressorFactoryMock);
+                () => softmaxRegressorFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),

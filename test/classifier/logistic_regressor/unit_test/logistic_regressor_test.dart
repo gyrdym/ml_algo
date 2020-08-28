@@ -55,12 +55,12 @@ void main() {
 
       injector = Injector()
         ..registerSingleton<LinkFunction>(
-                (_) => linkFunctionMock,
+                () => linkFunctionMock,
             dependencyName: float32InverseLogitLinkFunctionToken)
         ..registerDependency<CostFunctionFactory>(
-                (_) => costFunctionFactoryMock)
+                () => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(
-                (_) => optimizerFactoryMock);
+                () => optimizerFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),

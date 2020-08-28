@@ -50,9 +50,9 @@ void main() {
           knnClassifierMock);
 
       injector = Injector()
-        ..registerSingleton<KernelFactory>((_) => kernelFactoryMock)
-        ..registerSingleton<KnnSolverFactory>((_) => solverFactoryMock)
-        ..registerSingleton<KnnClassifierFactory>((_) => knnClassifierFactoryMock);
+        ..registerSingleton<KernelFactory>(() => kernelFactoryMock)
+        ..registerSingleton<KnnSolverFactory>(() => solverFactoryMock)
+        ..registerSingleton<KnnClassifierFactory>(() => knnClassifierFactoryMock);
     });
 
     tearDown(() {

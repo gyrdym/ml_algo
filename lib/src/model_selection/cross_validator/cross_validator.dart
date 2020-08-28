@@ -38,7 +38,7 @@ abstract class CrossValidator {
         DType dtype = DType.float32,
       }) {
     final dataSplitterFactory = dependencies
-        .getDependency<SplitIndicesProviderFactory>();
+        .get<SplitIndicesProviderFactory>();
     final dataSplitter = dataSplitterFactory
         .createByType(SplitIndicesProviderType.kFold, numberOfFolds: numberOfFolds);
 
@@ -72,7 +72,7 @@ abstract class CrossValidator {
         DType dtype = DType.float32,
       }) {
     final dataSplitterFactory = dependencies
-        .getDependency<SplitIndicesProviderFactory>();
+        .get<SplitIndicesProviderFactory>();
     final dataSplitter = dataSplitterFactory
         .createByType(SplitIndicesProviderType.lpo, p: p);
 

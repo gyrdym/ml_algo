@@ -48,9 +48,9 @@ void main() {
 
       injector = Injector()
         ..registerDependency<CostFunctionFactory>(
-                (_) => costFunctionFactoryMock)
+                () => costFunctionFactoryMock)
         ..registerDependency<LinearOptimizerFactory>(
-                (_) => linearOptimizerFactoryMock);
+                () => linearOptimizerFactoryMock);
 
       when(linearOptimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),

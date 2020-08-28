@@ -1,5 +1,8 @@
 # Changelog
 
+## 14.2.6
+- `injector` lib 1.0.9 supported
+
 ## 14.2.5
 - `pubspec`:
     - `injector` dependency corrected

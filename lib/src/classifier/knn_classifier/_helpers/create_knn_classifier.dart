@@ -41,10 +41,10 @@ KnnClassifier createKnnClassifier(
           .unique()
           .toList(growable: false);
 
-  final kernelFactory = dependencies.getDependency<KernelFactory>();
+  final kernelFactory = dependencies.get<KernelFactory>();
   final kernel = kernelFactory.createByType(kernelType);
 
-  final solverFactory = dependencies.getDependency<KnnSolverFactory>();
+  final solverFactory = dependencies.get<KnnSolverFactory>();
 
   final solver = solverFactory.create(
     trainFeatures,
@@ -55,7 +55,7 @@ KnnClassifier createKnnClassifier(
   );
 
   final knnClassifierFactory = dependencies
-      .getDependency<KnnClassifierFactory>();
+      .get<KnnClassifierFactory>();
 
   return knnClassifierFactory.create(
     targetName,

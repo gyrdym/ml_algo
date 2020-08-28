@@ -26,7 +26,7 @@ void main() {
       dataSplitterFactory = createDataSplitterFactoryMock(dataSplitter);
 
       injector = Injector()
-        ..registerDependency<SplitIndicesProviderFactory>((_) => dataSplitterFactory);
+        ..registerDependency<SplitIndicesProviderFactory>(() => dataSplitterFactory);
     });
 
     tearDown(() => injector = null);
