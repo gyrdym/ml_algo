@@ -30,7 +30,7 @@ void main() {
     final knnRegressorFactory = createKnnRegressorFactoryMock(knnRegressor);
 
     setUp(() => injector = Injector()
-      ..registerSingleton<KnnRegressorFactory>((_) => knnRegressorFactory),
+      ..registerSingleton<KnnRegressorFactory>(() => knnRegressorFactory),
     );
 
     tearDown(() => injector = null);
