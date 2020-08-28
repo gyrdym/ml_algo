@@ -47,7 +47,7 @@ LogisticRegressor createLogisticRegressor(
         trainData.toMatrix(dtype).columnsNum - 1);
   }
 
-  final linkFunction = dependencies.getDependency<LinkFunction>(
+  final linkFunction = dependencies.get<LinkFunction>(
       dependencyName: dTypeToInverseLogitLinkFunctionToken[dtype]);
   final optimizer = createLogLikelihoodOptimizer(
     trainData,

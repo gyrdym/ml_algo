@@ -27,6 +27,6 @@ DecisionTreeClassifier createDecisionTreeClassifier(
   final treeRootNode = trainer.train(trainData.toMatrix(dtype));
 
   return dependencies
-      .getDependency<DecisionTreeClassifierFactory>()
+      .get<DecisionTreeClassifierFactory>()
       .create(treeRootNode, targetName, dtype);
 }

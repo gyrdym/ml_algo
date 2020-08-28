@@ -54,101 +54,101 @@ import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 Injector get dependencies =>
     injector ??= Injector()
       ..registerSingleton<LinearOptimizerFactory>(
-              (_) => const LinearOptimizerFactoryImpl())
+              () => const LinearOptimizerFactoryImpl())
 
       ..registerSingleton<RandomizerFactory>(
-              (_) => const RandomizerFactoryImpl())
+              () => const RandomizerFactoryImpl())
 
       ..registerSingleton<LearningRateGeneratorFactory>(
-              (_) => const LearningRateGeneratorFactoryImpl())
+              () => const LearningRateGeneratorFactoryImpl())
 
       ..registerSingleton<InitialCoefficientsGeneratorFactory>(
-              (_) => const InitialCoefficientsGeneratorFactoryImpl())
+              () => const InitialCoefficientsGeneratorFactoryImpl())
 
       ..registerDependency<ConvergenceDetectorFactory>(
-              (_) => const ConvergenceDetectorFactoryImpl())
+              () => const ConvergenceDetectorFactoryImpl())
 
       ..registerSingleton<CostFunctionFactory>(
-              (_) => const CostFunctionFactoryImpl())
+              () => const CostFunctionFactoryImpl())
 
       ..registerSingleton<LinkFunction>(
-              (_) => const Float32InverseLogitLinkFunction(),
+              () => const Float32InverseLogitLinkFunction(),
           dependencyName: float32InverseLogitLinkFunctionToken)
 
       ..registerSingleton<LinkFunction>(
-              (_) => const Float64InverseLogitLinkFunction(),
+              () => const Float64InverseLogitLinkFunction(),
           dependencyName: float64InverseLogitLinkFunctionToken)
 
       ..registerSingleton<LinkFunction>(
-              (_) => const Float32SoftmaxLinkFunction(),
+              () => const Float32SoftmaxLinkFunction(),
           dependencyName: float32SoftmaxLinkFunctionToken)
 
       ..registerSingleton<LinkFunction>(
-              (_) => const Float64SoftmaxLinkFunction(),
+              () => const Float64SoftmaxLinkFunction(),
           dependencyName: float64SoftmaxLinkFunctionToken)
 
       ..registerSingleton<SplitIndicesProviderFactory>(
-              (_) => const SplitIndicesProviderFactoryImpl())
+              () => const SplitIndicesProviderFactoryImpl())
 
       ..registerSingleton<SoftmaxRegressorFactory>(
-              (_) => const SoftmaxRegressorFactoryImpl())
+              () => const SoftmaxRegressorFactoryImpl())
 
       ..registerSingleton<KernelFactory>(
-              (_) => const KernelFactoryImpl())
+              () => const KernelFactoryImpl())
 
       ..registerDependency<KnnSolverFactory>(
-              (_) => const KnnSolverFactoryImpl())
+              () => const KnnSolverFactoryImpl())
 
       ..registerSingleton<KnnClassifierFactory>(
-              (_) => const KnnClassifierFactoryImpl())
+              () => const KnnClassifierFactoryImpl())
 
       ..registerSingleton<KnnRegressorFactory>(
-              (injector) => KnnRegressorFactoryImpl(
-                injector.getDependency<KernelFactory>(),
-                injector.getDependency<KnnSolverFactory>(),
+              () => KnnRegressorFactoryImpl(
+                injector.get<KernelFactory>(),
+                injector.get<KnnSolverFactory>(),
           ))
 
       ..registerSingleton<SequenceElementsDistributionCalculatorFactory>(
-              (_) => const SequenceElementsDistributionCalculatorFactoryImpl())
+              () => const SequenceElementsDistributionCalculatorFactoryImpl())
 
       ..registerSingleton<NominalTreeSplitterFactory>(
-              (_) => const NominalTreeSplitterFactoryImpl())
+              () => const NominalTreeSplitterFactoryImpl())
 
       ..registerSingleton<NumericalTreeSplitterFactory>(
-              (_) => const NumericalTreeSplitterFactoryImpl())
+              () => const NumericalTreeSplitterFactoryImpl())
       
       ..registerSingleton<TreeSplitAssessorFactory>(
-              (_) => const TreeSplitAssessorFactoryImpl())
+              () => const TreeSplitAssessorFactoryImpl())
 
       ..registerSingleton<TreeSplitterFactory>(
-              (injector) => TreeSplitterFactoryImpl(
-                injector.getDependency<TreeSplitAssessorFactory>(),
-                injector.getDependency<NominalTreeSplitterFactory>(),
-                injector.getDependency<NumericalTreeSplitterFactory>(),
+              () => TreeSplitterFactoryImpl(
+                injector.get<TreeSplitAssessorFactory>(),
+                injector.get<NominalTreeSplitterFactory>(),
+                injector.get<NumericalTreeSplitterFactory>(),
               ))
 
       ..registerSingleton<TreeSplitSelectorFactory>(
-              (injector) => TreeSplitSelectorFactoryImpl(
-                injector.getDependency<TreeSplitAssessorFactory>(),
-                injector.getDependency<TreeSplitterFactory>(),
+              () => TreeSplitSelectorFactoryImpl(
+                injector.get<TreeSplitAssessorFactory>(),
+                injector.get<TreeSplitterFactory>(),
               ))
       
       ..registerSingleton<TreeLeafDetectorFactory>(
-              (injector) => TreeLeafDetectorFactoryImpl(
-                injector.getDependency<TreeSplitAssessorFactory>(),
+              () => TreeLeafDetectorFactoryImpl(
+                injector.get<TreeSplitAssessorFactory>(),
               ))
 
       ..registerSingleton<TreeLeafLabelFactoryFactory>(
-              (injector) => TreeLeafLabelFactoryFactoryImpl(
-                injector.getDependency<SequenceElementsDistributionCalculatorFactory>(),
+              () => TreeLeafLabelFactoryFactoryImpl(
+                injector.get<SequenceElementsDistributionCalculatorFactory>(),
               ))
 
       ..registerSingleton<TreeTrainerFactory>(
-              (injector) => TreeTrainerFactoryImpl(
-                  injector.getDependency<TreeLeafDetectorFactory>(),
-                  injector.getDependency<TreeLeafLabelFactoryFactory>(),
-                  injector.getDependency<TreeSplitSelectorFactory>(),
+              () => TreeTrainerFactoryImpl(
+                  injector.get<TreeLeafDetectorFactory>(),
+                  injector.get<TreeLeafLabelFactoryFactory>(),
+                  injector.get<TreeSplitSelectorFactory>(),
               ))
 
       ..registerSingleton<DecisionTreeClassifierFactory>(
-              (injector) => const DecisionTreeClassifierFactoryImpl());
+              () => const DecisionTreeClassifierFactoryImpl());

@@ -45,8 +45,8 @@ LinearOptimizer createLogLikelihoodOptimizer(
       .toList();
   final points = splits[0].toMatrix(dtype);
   final labels = splits[1].toMatrix(dtype);
-  final optimizerFactory = dependencies.getDependency<LinearOptimizerFactory>();
-  final costFunctionFactory = dependencies.getDependency<CostFunctionFactory>();
+  final optimizerFactory = dependencies.get<LinearOptimizerFactory>();
+  final costFunctionFactory = dependencies.get<CostFunctionFactory>();
   final costFunction = costFunctionFactory.createByType(
     CostFunctionType.logLikelihood,
     linkFunction: linkFunction,

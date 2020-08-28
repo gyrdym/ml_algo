@@ -51,6 +51,6 @@ abstract class KnnRegressor implements Assessable, Predictor {
         DType dtype = DType.float32,
       }
   ) => dependencies
-      .getDependency<KnnRegressorFactory>()
+      .get<KnnRegressorFactory>()
       .create(fittingData, targetName, k, kernel, distance, dtype);
 }

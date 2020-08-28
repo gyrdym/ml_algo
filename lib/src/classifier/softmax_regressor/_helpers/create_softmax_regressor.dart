@@ -42,7 +42,7 @@ SoftmaxRegressor createSoftmaxRegressor(
 
   validateTrainData(trainData, targetNames);
 
-  final linkFunction = dependencies.getDependency<LinkFunction>(
+  final linkFunction = dependencies.get<LinkFunction>(
       dependencyName: dTypeToSoftmaxLinkFunctionToken[dtype]);
 
   final optimizer = createLogLikelihoodOptimizer(
@@ -77,7 +77,7 @@ SoftmaxRegressor createSoftmaxRegressor(
       : null;
 
   final regressorFactory = dependencies
-      .getDependency<SoftmaxRegressorFactory>();
+      .get<SoftmaxRegressorFactory>();
 
   return regressorFactory.create(
     coefficientsByClasses,

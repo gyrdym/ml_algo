@@ -40,10 +40,10 @@ LinearOptimizer createSquaredCostOptimizer(
   final labels = splits[1].toMatrix(dtype);
 
   final optimizerFactory = dependencies
-      .getDependency<LinearOptimizerFactory>();
+      .get<LinearOptimizerFactory>();
 
   final costFunctionFactory = dependencies
-      .getDependency<CostFunctionFactory>();
+      .get<CostFunctionFactory>();
 
   final costFunction = costFunctionFactory.createByType(
     CostFunctionType.leastSquare,

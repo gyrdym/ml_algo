@@ -35,7 +35,7 @@ TreeTrainer createDecisionTreeTrainer(
       ),
   );
 
-  final trainerFactory = dependencies.getDependency<TreeTrainerFactory>();
+  final trainerFactory = dependencies.get<TreeTrainerFactory>();
 
   return trainerFactory.createByType(
     TreeTrainerType.decision,
