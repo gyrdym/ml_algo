@@ -57,8 +57,8 @@ in your dependencies:
 
 ````
 dependencies:
-  ml_dataframe: ^0.1.1
-  ml_preprocessing: ^5.1.0
+  ml_dataframe: ^0.2.0
+  ml_preprocessing: ^5.2.0
 ````
 
 We need these repos to parse raw data in order to use it farther. For more details, please
@@ -103,18 +103,18 @@ final testData = splits[1];
 data as a validation set and 30% as a test set for evaluating generalization error.
 
 Then we may create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
-of our model. We should pass validation data (our `validationData` variable), a list of target column names (in our case it's 
-just a name stored in `targetColumnName` variable) and a number of folds into CrossValidator constructor.
+of our model. We should pass validation data (our `validationData` variable), and a number of folds into CrossValidator 
+constructor.
  
 ````dart
-final validator = CrossValidator.kFold(validationData, [targetColumnName], numberOfFolds: 5);
+final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
 ````
 
 Let's create a factory for the classifier with desired hyperparameters. We have to decide after the cross validation, 
 if the selected hyperparametrs are good enough or not:
 
 ```dart
-final createClassifier = (DataFrame samples, _) =>
+final createClassifier = (DataFrame samples) =>
   LogisticRegressor(
     samples
     targetColumnName,
@@ -141,7 +141,7 @@ If we want to evaluate the learning process more thoroughly, we may pass `collec
 constructor:
 
 ```dart
-final createClassifier = (DataFrame samples, _) =>
+final createClassifier = (DataFrame samples) =>
   LogisticRegressor(
     ...,
     collectLearningData: true,
@@ -180,8 +180,8 @@ Let's assess our hyperparameters on test set in order to evaluate the model's ge
 
 ```dart
 final testSplits = splitData(testData, [0.8]);
-final classifier = createClassifier(testSplits[0], targetNames);
-final finalScore = classifier.assess(testSplits[1], targetNames, MetricType.accuracy);
+final classifier = createClassifier(testSplits[0]);
+final finalScore = classifier.assess(testSplits[1], MetricType.accuracy);
 ```
 
 The final score is like:
@@ -239,8 +239,8 @@ void main() async {
   final splits = splitData(samples, [0.7]);
   final validationData = splits[0];
   final testData = splits[1];
-  final validator = CrossValidator.kFold(validationData, [targetColumnName], numberOfFolds: 5);
-  final createClassifier = (DataFrame samples, _) =>
+  final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
+  final createClassifier = (DataFrame samples) =>
     LogisticRegressor(
       samples
       targetColumnName,
