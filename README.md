@@ -8,7 +8,7 @@
 ## What is the ml_algo for?
 
 The main purpose of the library is to give native Dart implementation of machine learning algorithms to those who are 
-interested both in Dart language and data science. This library targeted to dart vm, so to get smoothest experience with 
+interested both in Dart language and data science. This library targeted to the dart vm, so to get smoothest experience with 
 the lib, please do not use it in a browser.
 
 ## The library's content
