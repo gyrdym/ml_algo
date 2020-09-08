@@ -27,7 +27,7 @@ class SoftmaxRegressorImpl
 
   SoftmaxRegressorImpl(
       this.coefficientsByClasses,
-      this.classNames,
+      this.targetNames,
       this.linkFunction,
       this.fitIntercept,
       this.interceptScale,
@@ -54,9 +54,8 @@ class SoftmaxRegressorImpl
   Map<String, dynamic> toJson() => _$SoftmaxRegressorImplToJson(this);
 
   @override
-  @deprecated
   @JsonKey(name: softmaxRegressorClassNamesJsonKey)
-  final Iterable<String> classNames;
+  final Iterable<String> targetNames;
 
   @override
   @JsonKey(name: softmaxRegressorFitInterceptJsonKey)
@@ -104,9 +103,6 @@ class SoftmaxRegressorImpl
     includeIfNull: false,
   )
   final List<num> costPerIteration;
-
-  @override
-  Iterable<String> get targetNames => classNames;
 
   @override
   DataFrame predict(DataFrame testFeatures) {

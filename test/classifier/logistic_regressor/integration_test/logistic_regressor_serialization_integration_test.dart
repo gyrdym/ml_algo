@@ -316,7 +316,7 @@ void main() {
       expect(restoredClassifier.dtype, classifier.dtype);
       expect(restoredClassifier.linkFunction,
           isA<Float32InverseLogitLinkFunction>());
-      expect(restoredClassifier.classNames, [targetName]);
+      expect(restoredClassifier.targetNames, [targetName]);
     });
 
     test('should restore a classifier instance from json file, '
@@ -335,7 +335,7 @@ void main() {
       expect(restoredClassifier.dtype, classifier.dtype);
       expect(restoredClassifier.linkFunction,
           isA<Float64InverseLogitLinkFunction>());
-      expect(restoredClassifier.classNames, [targetName]);
+      expect(restoredClassifier.targetNames, [targetName]);
     });
   });
 }

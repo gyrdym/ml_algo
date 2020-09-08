@@ -274,7 +274,7 @@ void main() {
       expect(classifier.fitIntercept, fitIntercept);
       expect(classifier.dtype, dtype);
       expect(classifier.coefficientsByClasses, learnedCoefficients);
-      expect(classifier.classNames, [targetName]);
+      expect(classifier.targetNames, [targetName]);
     });
   });
 }

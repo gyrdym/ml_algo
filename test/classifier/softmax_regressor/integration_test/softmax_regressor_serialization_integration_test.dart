@@ -230,7 +230,7 @@ void main() {
 
       expect(restoredClassifier.interceptScale, classifier.interceptScale);
       expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
-      expect(restoredClassifier.classNames, classifier.classNames);
+      expect(restoredClassifier.targetNames, classifier.targetNames);
       expect(restoredClassifier.coefficientsByClasses,
           classifier.coefficientsByClasses);
       expect(restoredClassifier.linkFunction.runtimeType,
@@ -249,7 +249,7 @@ void main() {
 
       expect(restoredClassifier.interceptScale, classifier.interceptScale);
       expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
-      expect(restoredClassifier.classNames, classifier.classNames);
+      expect(restoredClassifier.targetNames, classifier.targetNames);
       expect(restoredClassifier.coefficientsByClasses,
           classifier.coefficientsByClasses);
       expect(restoredClassifier.linkFunction.runtimeType,

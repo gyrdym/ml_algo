@@ -68,7 +68,7 @@ void main() {
     group('default constructor', () {
       test('should create the instance with `classNames` list of just one '
           'element', () {
-        expect(regressor.classNames, equals([className]));
+        expect(regressor.targetNames, equals([className]));
       });
 
       test('should throw an exception if probability threshold is less '
