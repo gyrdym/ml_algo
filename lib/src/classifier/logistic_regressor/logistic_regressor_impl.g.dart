@@ -37,7 +37,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
     );
     return val;
   }, fieldKeyMap: const {
-    'classNames': 'CN',
+    'targetNames': 'CN',
     'linkFunction': 'LF',
     'fitIntercept': 'FI',
     'interceptScale': 'IS',
@@ -54,7 +54,7 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
     LogisticRegressorImpl instance) {
   final val = <String, dynamic>{
     'CBC': matrixToJson(instance.coefficientsByClasses),
-    'CN': instance.classNames?.toList(),
+    'CN': instance.targetNames?.toList(),
     'FI': instance.fitIntercept,
     'IS': instance.interceptScale,
     'DT': dTypeToJson(instance.dtype),

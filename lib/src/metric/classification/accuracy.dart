@@ -14,7 +14,8 @@ class AccuracyMetric implements Metric {
     }
 
     final score = zip([origLabels.rows, predictedLabels.rows])
-        .where((rows) => rows.first == rows.last).length;
+        .where((rows) => rows.first == rows.last)
+        .length;
 
     return score / origLabels.rowsNum;
   }

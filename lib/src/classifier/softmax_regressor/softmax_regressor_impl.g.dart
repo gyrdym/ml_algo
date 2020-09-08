@@ -35,7 +35,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     return val;
   }, fieldKeyMap: const {
     'coefficientsByClasses': 'CBC',
-    'classNames': 'CN',
+    'targetNames': 'CN',
     'linkFunction': 'LF',
     'fitIntercept': 'FI',
     'interceptScale': 'IS',
@@ -49,7 +49,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$SoftmaxRegressorImplToJson(
     SoftmaxRegressorImpl instance) {
   final val = <String, dynamic>{
-    'CN': instance.classNames?.toList(),
+    'CN': instance.targetNames?.toList(),
     'FI': instance.fitIntercept,
     'IS': instance.interceptScale,
     'CBC': matrixToJson(instance.coefficientsByClasses),

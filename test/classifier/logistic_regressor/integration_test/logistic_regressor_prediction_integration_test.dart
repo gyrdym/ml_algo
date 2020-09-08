@@ -1,5 +1,4 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -18,18 +17,20 @@ void main() {
     ];
     final targetName = 'col_3';
     final samples = DataFrame(data, headerExists: false);
-    final classifier = LogisticRegressor(
-      samples,
-      targetName,
-      iterationsLimit: 2,
-      learningRateType: LearningRateType.constant,
-      initialLearningRate: 1.0,
-      batchSize: 5,
-      fitIntercept: false,
-      dtype: dtype,
-    );
+    LogisticRegressor classifier;
 
-    tearDownAll(() => injector = null);
+    setUp(() {
+      classifier = LogisticRegressor(
+        samples,
+        targetName,
+        iterationsLimit: 2,
+        learningRateType: LearningRateType.constant,
+        initialLearningRate: 1.0,
+        batchSize: 5,
+        fitIntercept: false,
+        dtype: dtype,
+      );
+    });
 
     test('should make prediction', () {
       final newFeatures = Matrix.fromList([
@@ -53,10 +54,9 @@ void main() {
     test('should evaluate prediction quality, accuracy = 0', () {
       final newSamples = DataFrame([
         <num>[2.0, 4.0, 1.0, 1.0],
-      ], header: ['first', 'second', 'third', 'target'], headerExists: false);
+      ], headerExists: false);
 
-      final score = classifier.assess(newSamples, ['target'],
-          MetricType.accuracy);
+      final score = classifier.assess(newSamples, MetricType.accuracy);
 
       expect(score, equals(0.0));
     });
@@ -64,20 +64,21 @@ void main() {
     test('should evaluate prediction quality, accuracy = 1', () {
       final newFeatures = DataFrame([
         <num>[2, 4, 1, 0],
-      ], header: ['first', 'second', 'third', 'target'], headerExists: false);
+      ], headerExists: false);
 
-      final score = classifier.assess(newFeatures, ['target'],
-          MetricType.accuracy);
+      final score = classifier.assess(newFeatures, MetricType.accuracy);
 
       expect(score, equals(1.0));
     });
   };
 
-  group('LogisticRegressor.predict (dtype=DType.float32)', () {
-    testPredictMethod(DType.float32);
-  });
+  group('LogisticRegressor.predict', () {
+    group('(dtype=DType.float32)', () {
+      testPredictMethod(DType.float32);
+    });
 
-  group('LogisticRegressor.predict (dtype=DType.float64)', () {
-    testPredictMethod(DType.float64);
+    group('(dtype=DType.float64)', () {
+      testPredictMethod(DType.float64);
+    });
   });
 }

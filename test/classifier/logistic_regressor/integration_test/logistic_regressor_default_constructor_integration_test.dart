@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
@@ -44,7 +45,10 @@ void main() {
       final targetName = 'col_3';
       final samples = DataFrame(data, headerExists: false);
 
-      tearDownAll(() => injector = null);
+      tearDown(() {
+        injector.clearAll();
+        logisticRegressorInjector.clearAll();
+      });
 
       test('should fit given data, float32 case', () {
         final classifier = LogisticRegressor(
@@ -90,6 +94,11 @@ void main() {
         [1.0, 2.0, 3.0, 0.0],
       ], headerExists: false);
       final targetName = 'col_3';
+
+      tearDown(() {
+        injector.clearAll();
+        logisticRegressorInjector.clearAll();
+      });
 
       test('should consider intercept term, dtype=DType.float32', () {
         final classifier = createClassifier(samples: features,

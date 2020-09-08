@@ -1,16 +1,20 @@
+import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/helpers/validate_class_label_list.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
-import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
+class KnnClassifierImpl
+    with
+        AssessableClassifierMixin
+    implements
+        KnnClassifier {
   KnnClassifierImpl(
       this._targetColumnName,
       this._classLabels,
@@ -26,10 +30,19 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   @override
   final DType dtype;
 
+  @override
+  Iterable<String> get targetNames => [_targetColumnName];
+
   final List<num> _classLabels;
   final Kernel _kernel;
   final KnnSolver _solver;
   final String _columnPrefix = 'Class label';
+
+  @override
+  final num positiveLabel = null;
+
+  @override
+  final num negativeLabel = null;
 
   @override
   DataFrame predict(DataFrame features) {
@@ -39,14 +52,30 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
     final labels = labelsToProbabilities.keys.toList();
     final predictedOutcomes = _getProbabilityMatrix(labelsToProbabilities)
         .rows
-        .map((row) => labels[row.toList().indexOf(row.max())])
+        .map((probabilities) {
+          // TODO: extract max element index search logic to ml_linalg
+          // TODO: fix corner cases with NaN and Infinity
+          final maxProbability = probabilities.max();
+          final maxProbabilityIndex = probabilities
+              .toList()
+              .indexOf(maxProbability);
+
+          if (maxProbabilityIndex == -1) {
+            print('KnnClassifier error: cannot find max probability, '
+                'max probability is $maxProbability');
+
+            return labels.first;
+          }
+
+          return labels[maxProbabilityIndex];
+        })
         .toList();
 
     final outcomesAsVector = Vector.fromList(predictedOutcomes, dtype: dtype);
 
     return DataFrame.fromMatrix(
       Matrix.fromColumns([outcomesAsVector], dtype: dtype),
-      header: [_targetColumnName],
+      header: targetNames,
     );
   }
 
@@ -83,7 +112,7 @@ class KnnClassifierImpl with AssessablePredictorMixin implements KnnClassifier {
   /// ```
   ///
   /// where each row is a classes probability distribution for the appropriate
-  /// feature record from test feature matrix
+  /// feature record from the test feature matrix
   Map<num, List<num>> _getLabelToProbabilityMapping(DataFrame features) {
     final kNeighbourGroups = _solver.findKNeighbours(features.toMatrix(dtype));
     final classLabelsAsSet = Set<num>.from(_classLabels);

@@ -19,8 +19,8 @@ class CrossValidatorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    crossValidator.evaluate((trainSamples, targetFeatureNames) =>
-        KnnRegressor(trainSamples, targetFeatureNames.first, 7),
+    crossValidator.evaluate((trainSamples) =>
+        KnnRegressor(trainSamples, 'col_20', 7),
         MetricType.mape);
   }
 
@@ -28,11 +28,9 @@ class CrossValidatorBenchmark extends BenchmarkBase {
   void setup() {
     final samples = Matrix.fromRows(List.generate(observationsNum,
             (i) => Vector.randomFilled(columnsNum)));
-
     final dataFrame = DataFrame.fromMatrix(samples);
 
-    crossValidator = CrossValidator.kFold(dataFrame, ['col_20'],
-        numberOfFolds: 5);
+    crossValidator = CrossValidator.kFold(dataFrame, numberOfFolds: 5);
   }
 
   void tearDown() {}

@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
@@ -32,19 +32,12 @@ LinearOptimizer createSquaredCostOptimizer(
       Matrix initialCoefficients,
       DType dtype,
     }) {
-
   final splits = featuresTargetSplit(observations,
       targetNames: [targetName]).toList();
-
   final points = splits[0].toMatrix(dtype);
   final labels = splits[1].toMatrix(dtype);
-
-  final optimizerFactory = dependencies
-      .get<LinearOptimizerFactory>();
-
-  final costFunctionFactory = dependencies
-      .get<CostFunctionFactory>();
-
+  final optimizerFactory = injector.get<LinearOptimizerFactory>();
+  final costFunctionFactory = injector.get<CostFunctionFactory>();
   final costFunction = costFunctionFactory.createByType(
     CostFunctionType.leastSquare,
   );

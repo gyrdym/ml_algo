@@ -1,1 +1,1 @@
-enum MetricType { mape, rmse, accuracy }
+enum MetricType { mape, rmse, accuracy, precision }

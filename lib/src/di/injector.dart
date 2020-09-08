@@ -1,3 +1,3 @@
 import 'package:injector/injector.dart';
 
-Injector injector;
+final injector = Injector();

@@ -1,5 +1,15 @@
 # Changelog
 
+## 15.0.0
+- Breaking changes:
+    - `CrossValidator`: 
+        - `targetNames` argument removed
+    - `Assessable`, `assess` method: `targetNames` argument removed
+- Precision metric added
+- Coordinate descent optimization logic fixed: dtype considered
+- `LinearClassifier`:
+    - `classNames` property replaced with `targetNames` property in `Predictor`
+
 ## 14.2.6
 - `injector` lib 1.0.9 supported
 

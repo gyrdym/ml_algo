@@ -1,4 +1,3 @@
-import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -9,6 +8,7 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/_helpers/create_linear_regressor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -46,7 +46,7 @@ void main() {
       linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
           linearOptimizerMock);
 
-      injector = Injector()
+      injector
         ..registerDependency<CostFunctionFactory>(
                 () => costFunctionFactoryMock)
         ..registerDependency<LinearOptimizerFactory>(
@@ -60,19 +60,25 @@ void main() {
       when(linearOptimizerMock.costPerIteration).thenReturn(costPerIteration);
     });
 
-    tearDownAll(() => injector = null);
+    tearDown(injector.clearAll);
 
     test('should throw an error if the target column does not exist', () {
       final targetColumn = 'absent_column';
       expect(
-        () => LinearRegressor(observations, targetColumn),
+        () => createLinearRegressor(
+          fittingData: observations,
+          targetName: targetColumn,
+        ),
         throwsException,
       );
     });
 
     test('should call cost function factory in order to create '
         'squared cost function instance', () {
-      LinearRegressor(observations, 'target');
+      createLinearRegressor(
+        fittingData: observations,
+        targetName: 'target',
+      );
 
       verify(costFunctionFactoryMock.createByType(
         CostFunctionType.leastSquare,
@@ -81,7 +87,9 @@ void main() {
 
     test('should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
-      LinearRegressor(observations, 'target',
+      createLinearRegressor(
+        fittingData: observations,
+        targetName: 'target',
         optimizerType: LinearOptimizerType.coordinate,
         iterationsLimit: 1000,
         initialLearningRate: 5,
@@ -125,7 +133,9 @@ void main() {
 
     test('should find the extrema for fitting observations while '
         'instantiating', () {
-      LinearRegressor(observations, 'target',
+      createLinearRegressor(
+        fittingData: observations,
+        targetName: 'target',
         initialCoefficients: initialCoefficients,
       );
 
@@ -136,9 +146,9 @@ void main() {
     });
 
     test('should predict values basing on learned coefficients', () {
-      final predictor = LinearRegressor(
-        observations,
-        'target',
+      final predictor = createLinearRegressor(
+        fittingData: observations,
+        targetName: 'target',
         initialCoefficients: initialCoefficients,
         fitIntercept: true,
         interceptScale: 2.0,
@@ -164,9 +174,9 @@ void main() {
 
     test('should collect cost values per iteration if collectLearningData is '
         'true', () {
-      final regressor = LinearRegressor(
-        observations,
-        'target',
+      final regressor = createLinearRegressor(
+        fittingData: observations,
+        targetName: 'target',
         initialCoefficients: initialCoefficients,
         collectLearningData: true,
       );
@@ -181,9 +191,9 @@ void main() {
 
     test('should not collect cost values per iteration if collectLearningData is '
         'false', () {
-      LinearRegressor(
-        observations,
-        'target',
+      createLinearRegressor(
+        fittingData: observations,
+        targetName: 'target',
         initialCoefficients: initialCoefficients,
         collectLearningData: false,
       );

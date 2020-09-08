@@ -1,5 +1,6 @@
-import 'package:injector/injector.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
@@ -13,7 +14,6 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
-import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -43,24 +43,27 @@ void main() {
     CostFunctionFactory costFunctionFactoryMock;
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
-    LogisticRegressor logisticRegressorMock;
 
     setUp(() {
+      injector.clearAll();
+      logisticRegressorInjector.clearAll();
+
       linkFunctionMock = LinkFunctionMock();
       costFunctionMock = CostFunctionMock();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
-      logisticRegressorMock = LogisticRegressorMock();
 
-      injector = Injector()
-        ..registerSingleton<LinkFunction>(
-                () => linkFunctionMock,
-            dependencyName: float32InverseLogitLinkFunctionToken)
+      injector
         ..registerDependency<CostFunctionFactory>(
                 () => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(
                 () => optimizerFactoryMock);
+
+      logisticRegressorInjector
+        ..registerSingleton<LinkFunction>(
+                () => linkFunctionMock,
+            dependencyName: float32InverseLogitLinkFunctionToken);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -70,15 +73,19 @@ void main() {
       when(optimizerMock.costPerIteration).thenReturn(errors);
     });
 
-    tearDownAll(() => injector = null);
+    tearDown(() {
+      injector.clearAll();
+      logisticRegressorInjector.clearAll();
+    });
 
     test('should throw an exception if a probability threshold is less than '
         '0.0', () {
       final probabilityThreshold = -0.01;
-      final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
+      final actual = () => createLogisticRegressor(
+        trainData: observations,
+        targetName: targetColumnName,
         probabilityThreshold: probabilityThreshold,
+        initialCoefficients: Vector.empty(),
       );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -87,10 +94,11 @@ void main() {
     test('should throw an exception if a probability threshold is equal to '
         '0.0', () {
       final probabilityThreshold = 0.0;
-      final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
+      final actual = () => createLogisticRegressor(
+        trainData: observations,
+        targetName: targetColumnName,
         probabilityThreshold: probabilityThreshold,
+        initialCoefficients: Vector.empty(),
       );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -99,10 +107,11 @@ void main() {
     test('should throw an exception if a probability threshold is equal to '
         '1.0', () {
       final probabilityThreshold = 1.0;
-      final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
+      final actual = () => createLogisticRegressor(
+        trainData: observations,
+        targetName: targetColumnName,
         probabilityThreshold: probabilityThreshold,
+        initialCoefficients: Vector.empty(),
       );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -111,10 +120,11 @@ void main() {
     test('should throw an exception if a probability threshold is greater than '
         '1.0', () {
       final probabilityThreshold = 1.01;
-      final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
+      final actual = () => createLogisticRegressor(
+        trainData: observations,
+        targetName: targetColumnName,
         probabilityThreshold: probabilityThreshold,
+        initialCoefficients: Vector.empty(),
       );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -123,9 +133,10 @@ void main() {
     test('should throw an exception if a target column does not exist', () {
       final targetColumnName = 'col_10';
 
-      final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
+      final actual = () => createLogisticRegressor(
+        trainData: observations,
+        targetName: targetColumnName,
+        initialCoefficients: Vector.empty(),
       );
 
       expect(actual, throwsException);
@@ -133,9 +144,9 @@ void main() {
 
     test('should throw an exception if too few initial coefficients '
         'provided', () {
-      final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
+      final actual = () => createLogisticRegressor(
+        trainData: observations,
+        targetName: targetColumnName,
         initialCoefficients: Vector.fromList([1, 2]),
       );
 
@@ -147,9 +158,9 @@ void main() {
 
       final targetColumnName = 'col_4';
 
-      final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
+      final actual = () => createLogisticRegressor(
+        trainData: observations,
+        targetName: targetColumnName,
         initialCoefficients: Vector.fromList([1, 2, 3, 4, 5, 6]),
       );
 
@@ -158,11 +169,12 @@ void main() {
 
     test('should call cost function factory in order to create '
         'loglikelihood cost function', () {
-      LogisticRegressor(
-        observations,
-        'col_4',
+      createLogisticRegressor(
+        trainData: observations,
+        targetName: 'col_4',
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
+        initialCoefficients: Vector.empty(),
       );
 
       verify(costFunctionFactoryMock.createByType(
@@ -174,9 +186,9 @@ void main() {
     });
 
     test('should call linear optimizer factory and consider intercept term', () {
-      LogisticRegressor(
-        observations,
-        'col_4',
+      createLogisticRegressor(
+        trainData: observations,
+        targetName: 'col_4',
         learningRateType: LearningRateType.decreasingAdaptive,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 1000,
@@ -221,9 +233,9 @@ void main() {
 
     test('should find the extrema for provided observations while '
         'instantiating', () {
-      LogisticRegressor(
-        observations,
-        'col_4',
+      createLogisticRegressor(
+        trainData: observations,
+        targetName: 'col_4',
         initialCoefficients: initialCoefficients,
         fitIntercept: true,
       );
@@ -244,11 +256,12 @@ void main() {
       final interceptScale = -12.0;
       final dtype = DType.float32;
 
-      final classifier = LogisticRegressor(
-        observations,
-        targetName,
+      final classifier = createLogisticRegressor(
+        trainData: observations,
+        targetName: targetName,
         probabilityThreshold: probabilityThreshold,
         fitIntercept: fitIntercept,
+        initialCoefficients: Vector.empty(),
         interceptScale: interceptScale,
         isFittingDataNormalized: true,
         positiveLabel: positiveLabel,
@@ -261,7 +274,7 @@ void main() {
       expect(classifier.fitIntercept, fitIntercept);
       expect(classifier.dtype, dtype);
       expect(classifier.coefficientsByClasses, learnedCoefficients);
-      expect(classifier.classNames, [targetName]);
+      expect(classifier.targetNames, [targetName]);
     });
   });
 }

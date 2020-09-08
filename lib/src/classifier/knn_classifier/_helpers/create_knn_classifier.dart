@@ -1,6 +1,6 @@
+import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
@@ -23,13 +23,10 @@ KnnClassifier createKnnClassifier(
   final splits = featuresTargetSplit(trainData,
     targetNames: [targetName],
   ).toList();
-
   final featuresSplit = splits[0];
   final targetSplit = splits[1];
-
   final trainFeatures = featuresSplit.toMatrix(dtype);
   final trainLabels = targetSplit.toMatrix(dtype);
-
   final classLabels = targetSplit[targetName].isDiscrete
       ? targetSplit[targetName]
           .discreteValues
@@ -40,12 +37,12 @@ KnnClassifier createKnnClassifier(
           .getColumn(0)
           .unique()
           .toList(growable: false);
-
-  final kernelFactory = dependencies.get<KernelFactory>();
-  final kernel = kernelFactory.createByType(kernelType);
-
-  final solverFactory = dependencies.get<KnnSolverFactory>();
-
+  final kernelFactory = knnClassifierInjector
+      .get<KernelFactory>();
+  final kernel = kernelFactory
+      .createByType(kernelType);
+  final solverFactory = knnClassifierInjector
+      .get<KnnSolverFactory>();
   final solver = solverFactory.create(
     trainFeatures,
     trainLabels,
@@ -53,8 +50,7 @@ KnnClassifier createKnnClassifier(
     distance,
     true,
   );
-
-  final knnClassifierFactory = dependencies
+  final knnClassifierFactory = knnClassifierInjector
       .get<KnnClassifierFactory>();
 
   return knnClassifierFactory.create(

@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
@@ -35,19 +35,19 @@ class GradientOptimizer implements LinearOptimizer {
         _costFunction = costFunction,
         _dtype = dtype,
 
-        _initialCoefficientsGenerator = dependencies
+        _initialCoefficientsGenerator = injector
             .get<InitialCoefficientsGeneratorFactory>()
             .fromType(initialCoefficientsType, dtype),
 
-        _learningRateGenerator = dependencies
+        _learningRateGenerator = injector
             .get<LearningRateGeneratorFactory>()
             .fromType(learningRateType),
 
-        _convergenceDetector = dependencies
+        _convergenceDetector = injector
             .get<ConvergenceDetectorFactory>()
             .create(minCoefficientsUpdate, iterationLimit),
 
-        _randomizer = dependencies
+        _randomizer = injector
             .get<RandomizerFactory>()
             .create(randomSeed) {
     if (batchSize < 1 || batchSize > points.rowsNum) {

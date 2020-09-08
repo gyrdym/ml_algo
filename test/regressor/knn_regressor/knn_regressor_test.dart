@@ -1,7 +1,6 @@
-import 'package:injector/injector.dart';
-import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
-import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/_helpers/create_knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
@@ -29,17 +28,16 @@ void main() {
     final knnRegressor = KnnRegressorMock();
     final knnRegressorFactory = createKnnRegressorFactoryMock(knnRegressor);
 
-    setUp(() => injector = Injector()
+    setUp(() => knnRegressorInjector
+      ..clearAll()
       ..registerSingleton<KnnRegressorFactory>(() => knnRegressorFactory),
     );
 
-    tearDown(() => injector = null);
-
     test('should call KnnRegressorFactory in order to create a regressor', () {
-      final regressor = KnnRegressor(
-        data,
-        targetName,
-        2,
+      final regressor = createKnnRegressor(
+        fittingData: data,
+        targetName: targetName,
+        k: 2,
         kernel: KernelType.epanechnikov,
         distance: Distance.cosine,
         dtype: DType.float64,

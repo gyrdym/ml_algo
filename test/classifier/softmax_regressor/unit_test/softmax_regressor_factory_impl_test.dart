@@ -47,7 +47,7 @@ void main() {
     test('should persist data passed to the `create` method', () {
       expect(regressor.costPerIteration, costPerIteration);
       expect(regressor.dtype, dtype);
-      expect(regressor.classNames, classNames);
+      expect(regressor.targetNames, classNames);
       expect(regressor.interceptScale, interceptScale);
       expect(regressor.linkFunction, linkFunction);
       expect(regressor.fitIntercept, fitIntercept);

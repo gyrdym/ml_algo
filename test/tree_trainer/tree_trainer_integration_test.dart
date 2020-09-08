@@ -1,3 +1,5 @@
+import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/tree_trainer/_helpers/create_decision_tree_trainer.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:test/test.dart';
@@ -8,6 +10,10 @@ import '../majority_tree_data_mock.dart';
 void main() {
   group('TreeTrainer', () {
     group('DecisionTreeTrainer', () {
+      setUp(initDecisionTreeModule);
+
+      tearDown(injector.clearAll);
+
       test('should build a decision tree', () {
         final targetName = 'col_8';
         final minErrorOnNode = 0.3;
