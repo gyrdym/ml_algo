@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
@@ -23,11 +23,11 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
         _labels = fittingLabels,
         _lambda = lambda ?? 0.0,
 
-        _initialCoefficientsGenerator = dependencies
+        _initialCoefficientsGenerator = injector
             .get<InitialCoefficientsGeneratorFactory>()
             .fromType(initialWeightsType, dtype),
 
-        _convergenceDetector = dependencies
+        _convergenceDetector = injector
             .get<ConvergenceDetectorFactory>()
             .create(minCoefficientsUpdate, iterationsLimit),
 
@@ -90,7 +90,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
     return Vector
         // TODO Convert the logic into SIMD-way (SIMD way mapping)
         .fromList(coefficients.map((coef) => _regularize(coef, _lambda, j))
-        .toList(growable: false));
+        .toList(growable: false), dtype: _dtype);
   }
 
   double _regularize(double coefficient, double lambda, int coefNum) {

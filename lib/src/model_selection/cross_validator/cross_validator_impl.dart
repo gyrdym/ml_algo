@@ -12,14 +12,12 @@ import 'package:quiver/iterables.dart';
 class CrossValidatorImpl implements CrossValidator {
   CrossValidatorImpl(
       this.samples,
-      this.targetNames,
       this._splitter,
       this.dtype,
   );
 
   final DataFrame samples;
   final DType dtype;
-  final Iterable<String> targetNames;
   final SplitIndicesProvider _splitter;
 
   @override
@@ -59,8 +57,8 @@ class CrossValidatorImpl implements CrossValidator {
                 transformedTestDataColumnsNum);
           }
 
-          return predictorFactory(transformedTrainData, targetNames)
-              .assess(transformedTestData, targetNames, metricType);
+          return predictorFactory(transformedTrainData)
+              .assess(transformedTestData, metricType);
         })
         .toList();
 

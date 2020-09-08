@@ -13,8 +13,10 @@ class RmseMetric implements Metric {
           'a matrix-column');
     }
 
-    final predicted = predictedLabels.getColumn(0);
-    final original = origLabels.getColumn(0);
+    final predicted = predictedLabels
+        .getColumn(0);
+    final original = origLabels
+        .getColumn(0);
 
     return math.sqrt(((predicted - original).pow(2)).mean());
   }

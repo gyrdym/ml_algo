@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
-import 'package:ml_algo/src/di/dependencies.dart';
 import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -13,28 +13,29 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
-SoftmaxRegressor createSoftmaxRegressor(
+SoftmaxRegressor createSoftmaxRegressor({
     DataFrame trainData,
     List<String> targetNames,
-    LinearOptimizerType optimizerType,
-    int iterationsLimit,
-    double initialLearningRate,
-    double minCoefficientsUpdate,
+    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
+    int iterationsLimit = 100,
+    double initialLearningRate = 1e-3,
+    double minCoefficientsUpdate = 1e-12,
     double lambda,
     RegularizationType regularizationType,
     int randomSeed,
-    int batchSize,
-    bool fitIntercept,
-    double interceptScale,
-    LearningRateType learningRateType,
+    int batchSize = 1,
+    bool fitIntercept = false,
+    double interceptScale = 1.0,
+    LearningRateType learningRateType = LearningRateType.constant,
     bool isFittingDataNormalized,
-    InitialCoefficientsType initialCoefficientsType,
+    InitialCoefficientsType initialCoefficientsType =
+        InitialCoefficientsType.zeroes,
     Matrix initialCoefficients,
-    num positiveLabel,
-    num negativeLabel,
-    bool collectLearningData,
-    DType dtype,
-) {
+    num positiveLabel = 1,
+    num negativeLabel = 0,
+    bool collectLearningData = false,
+    DType dtype = DType.float32,
+  }) {
   if (targetNames.isNotEmpty && targetNames.length < 2) {
     throw Exception('The target column should be encoded properly '
         '(e.g., via one-hot encoder)');
@@ -42,8 +43,9 @@ SoftmaxRegressor createSoftmaxRegressor(
 
   validateTrainData(trainData, targetNames);
 
-  final linkFunction = dependencies.get<LinkFunction>(
-      dependencyName: dTypeToSoftmaxLinkFunctionToken[dtype]);
+  final linkFunction = softmaxRegressorInjector
+      .get<LinkFunction>(
+        dependencyName: dTypeToSoftmaxLinkFunctionToken[dtype]);
 
   final optimizer = createLogLikelihoodOptimizer(
     trainData,
@@ -66,17 +68,18 @@ SoftmaxRegressor createSoftmaxRegressor(
     negativeLabel: negativeLabel,
     dtype: dtype,
   );
-
   final coefficientsByClasses = optimizer.findExtrema(
     initialCoefficients: initialCoefficients,
     isMinimizingObjective: false,
     collectLearningData: collectLearningData,
   );
-  final costPerIteration = optimizer.costPerIteration.isNotEmpty
-      ? optimizer.costPerIteration
-      : null;
+  final costPerIteration = optimizer
+      .costPerIteration
+      .isNotEmpty
+        ? optimizer.costPerIteration
+        : null;
 
-  final regressorFactory = dependencies
+  final regressorFactory = softmaxRegressorInjector
       .get<SoftmaxRegressorFactory>();
 
   return regressorFactory.create(

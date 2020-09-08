@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_init_module.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -56,6 +59,11 @@ void main() {
   };
 
   group('SoftmaxRegressor.toJson', () {
+    tearDown(() {
+      injector.clearAll();
+      softmaxRegressorInjector.clearAll();
+    });
+
     test('should serialize classNames field', () {
       final classifier = createClassifier();
       final serialized = classifier.toJson();
@@ -197,6 +205,9 @@ void main() {
       if (await file.exists()) {
         await file.delete();
       }
+
+      injector.clearAll();
+      softmaxRegressorInjector.clearAll();
     });
 
     test('should return a pointer to a file while saving the model into the '
@@ -219,7 +230,7 @@ void main() {
 
       expect(restoredClassifier.interceptScale, classifier.interceptScale);
       expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
-      expect(restoredClassifier.classNames, classifier.classNames);
+      expect(restoredClassifier.targetNames, classifier.targetNames);
       expect(restoredClassifier.coefficientsByClasses,
           classifier.coefficientsByClasses);
       expect(restoredClassifier.linkFunction.runtimeType,
@@ -238,7 +249,7 @@ void main() {
 
       expect(restoredClassifier.interceptScale, classifier.interceptScale);
       expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
-      expect(restoredClassifier.classNames, classifier.classNames);
+      expect(restoredClassifier.targetNames, classifier.targetNames);
       expect(restoredClassifier.coefficientsByClasses,
           classifier.coefficientsByClasses);
       expect(restoredClassifier.linkFunction.runtimeType,

@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
+import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
@@ -283,6 +285,9 @@ void main() {
       if (await file.exists()) {
         await file.delete();
       }
+
+      injector.clearAll();
+      logisticRegressorInjector.clearAll();
     });
 
     test('should return a pointer to a json file while saving serialized '
@@ -311,7 +316,7 @@ void main() {
       expect(restoredClassifier.dtype, classifier.dtype);
       expect(restoredClassifier.linkFunction,
           isA<Float32InverseLogitLinkFunction>());
-      expect(restoredClassifier.classNames, [targetName]);
+      expect(restoredClassifier.targetNames, [targetName]);
     });
 
     test('should restore a classifier instance from json file, '
@@ -330,7 +335,7 @@ void main() {
       expect(restoredClassifier.dtype, classifier.dtype);
       expect(restoredClassifier.linkFunction,
           isA<Float64InverseLogitLinkFunction>());
-      expect(restoredClassifier.classNames, [targetName]);
+      expect(restoredClassifier.targetNames, [targetName]);
     });
   });
 }

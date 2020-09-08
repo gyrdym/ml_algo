@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/_helpers/create_knn_classifier.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/_init_module.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -46,5 +47,16 @@ abstract class KnnClassifier implements Assessable, Classifier {
         Distance distance = Distance.euclidean,
         DType dtype = DType.float32,
       }
-  ) => createKnnClassifier(trainData, targetName, k, kernel, distance, dtype);
+  ) {
+    initKnnClassifierModule();
+
+    return createKnnClassifier(
+      trainData,
+      targetName,
+      k,
+      kernel,
+      distance,
+      dtype,
+    );
+  }
 }

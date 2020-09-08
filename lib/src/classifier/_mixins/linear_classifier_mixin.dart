@@ -12,7 +12,7 @@ mixin LinearClassifierMixin implements LinearClassifier {
 
     return DataFrame.fromMatrix(
       probabilities,
-      header: classNames,
+      header: targetNames,
     );
   }
 

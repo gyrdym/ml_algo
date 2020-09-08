@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
@@ -22,7 +23,10 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
+import 'package:ml_algo/src/metric/metric.dart';
+import 'package:ml_algo/src/metric/metric_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
@@ -43,8 +47,32 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/matrix.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+
+class MetricFactoryMock extends Mock implements MetricFactory {}
+
+class MetricMock extends Mock implements Metric {}
+
+class EncoderFactoryMock extends Mock {
+  Encoder create(DataFrame data, Iterable<String> targetNames);
+}
+
+class FeatureTargetSplitterMock extends Mock {
+  Iterable<DataFrame> split(DataFrame samples, {
+    Iterable<String> targetNames,
+    Iterable<int> targetIndices,
+  });
+}
+
+class ClassLabelsNormalizerMock extends Mock {
+  Matrix normalize(Matrix classLabels, num positiveLabel, num negativeLabel);
+}
+
+class EncoderMock extends Mock implements Encoder {}
 
 class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
 
@@ -150,6 +178,10 @@ class SoftmaxRegressorMock extends Mock implements SoftmaxRegressor {}
 
 class SoftmaxRegressorFactoryMock extends Mock implements
     SoftmaxRegressorFactory {}
+
+class ClassifierMock extends Mock implements Classifier {}
+
+class ClassifierAssessorMock extends Mock implements ClassifierAssessor {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {

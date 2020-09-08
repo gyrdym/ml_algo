@@ -1,13 +1,13 @@
 import 'package:ml_algo/src/common/serializable/serializable.dart';
+import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
-import 'package:ml_algo/src/regressor/_helpers/squared_cost_optimizer_factory.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/_helpers/create_linear_regressor.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/_helpers/create_linear_regressor_from_json.dart';
-import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -121,38 +121,26 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
     bool collectLearningData = false,
     DType dtype = DType.float32,
   }) {
-    final optimizer = createSquaredCostOptimizer(
-      fittingData,
-      targetName,
+    initCommonModule();
+
+    return createLinearRegressor(
+      fittingData: fittingData,
+      targetName: targetName,
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
+      learningRateType: learningRateType,
+      initialCoefficientsType: initialCoefficientsType,
       initialLearningRate: initialLearningRate,
       minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
       regularizationType: regularizationType,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
       randomSeed: randomSeed,
       batchSize: batchSize,
-      learningRateType: learningRateType,
-      initialCoefficientsType: initialCoefficientsType,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      isFittingDataNormalized: isFittingDataNormalized,
-      dtype: dtype,
-    );
-
-    final coefficients = optimizer.findExtrema(
       initialCoefficients: initialCoefficients,
-      isMinimizingObjective: true,
+      isFittingDataNormalized: isFittingDataNormalized,
       collectLearningData: collectLearningData,
-    ).getColumn(0);
-    final costPerIteration = optimizer.costPerIteration;
-
-    return LinearRegressorImpl(
-      coefficients,
-      targetName,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      costPerIteration: costPerIteration,
       dtype: dtype,
     );
   }

@@ -34,20 +34,18 @@ void main() {
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
       final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(allObservations,
-          ['target'], splitter, DType.float32);
+      final validator = CrossValidatorImpl(allObservations, splitter,
+          DType.float32);
       final score = 20.0;
-      when(predictor.assess(any, any, any)).thenReturn(score);
+      when(predictor.assess(any, any)).thenReturn(score);
 
-      final actual = await validator
-          .evaluate((observations, outcomes) => predictor, metric);
+      final actual = await validator.evaluate((_) => predictor, metric);
 
       expect(actual, [20, 20]);
 
       final verificationResult = verify(
         predictor.assess(
           captureThat(isNotNull),
-          argThat(equals(['target'])),
           metric,
         ));
       final firstAssessCallArgs = verificationResult.captured;
@@ -80,12 +78,12 @@ void main() {
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
       final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(allObservations,
-          ['target'], splitter, DType.float32);
+      final validator = CrossValidatorImpl(allObservations, splitter,
+          DType.float32);
 
-      when(predictor.assess(any, any, any)).thenReturn(1);
+      when(predictor.assess(any, any)).thenReturn(1);
 
-      int iterationCounter = 0;
+      var iterationCounter = 0;
 
       final iterationToResponse = <int, List<DataFrame>>{
         0: [
@@ -113,7 +111,7 @@ void main() {
       };
 
       await validator.evaluate(
-        (observations, outcomes) {
+        (observations) {
           expect(
             observations.toMatrix(),
             equals(iterationToResponse[iterationCounter++][0].toMatrix()),
@@ -140,12 +138,12 @@ void main() {
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
       final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(allObservations,
-          ['target'], splitter, DType.float32);
+      final validator = CrossValidatorImpl(allObservations, splitter,
+          DType.float32);
 
-      when(predictor.assess(any, any, any)).thenReturn(1);
+      when(predictor.assess(any, any)).thenReturn(1);
 
-      int iterationCounter = 0;
+      var iterationCounter = 0;
 
       final iterationToResponse = <int, List<DataFrame>>{
         0: [
@@ -172,18 +170,14 @@ void main() {
       };
 
       await validator.evaluate(
-        (observations, outcomes) => predictor,
+        (_) => predictor,
         metric,
         onDataSplit: (trainData, testData) =>
-        iterationToResponse[iterationCounter++],
+          iterationToResponse[iterationCounter++],
       );
 
       final verificationResult = verify(
-          predictor.assess(
-            captureThat(isNotNull),
-            argThat(equals(['target'])),
-            metric,
-          ));
+          predictor.assess(captureThat(isNotNull), metric));
       final firstAssessCallArgs = verificationResult.captured;
 
       expect((firstAssessCallArgs[0] as DataFrame).rows, equals([
@@ -224,11 +218,11 @@ void main() {
       final splitter = createSplitter([[0], [2], [4]]);
       final predictor = AssessableMock();
       final validator = CrossValidatorImpl(allObservations,
-          ['target'], splitter, DType.float32);
+          splitter, DType.float32);
 
-      when(predictor.assess(any, any, any)).thenReturn(1);
+      when(predictor.assess(any, any)).thenReturn(1);
 
-      int iterationCounter = 0;
+      var iterationCounter = 0;
 
       final iterationToSplits = {
         0: {
@@ -285,7 +279,7 @@ void main() {
       };
 
       await validator.evaluate(
-        (observations, outcomes) => predictor,
+        (_) => predictor,
         metric,
         onDataSplit: (trainData, testData) {
           final expectedSplits = iterationToSplits[iterationCounter++];
@@ -325,10 +319,10 @@ void main() {
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
       final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData,
-          ['target'], splitter, DType.float32);
+      final validator = CrossValidatorImpl(originalData, splitter,
+          DType.float32);
 
-      when(predictor.assess(any, any, any)).thenReturn(1);
+      when(predictor.assess(any, any)).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2]],
           headerExists: false);
@@ -336,13 +330,13 @@ void main() {
           headerExists: false);
 
       final actual = () => validator.evaluate(
-              (observations, outcomes) => predictor,
-          metric,
-          onDataSplit: (trainData, testData) =>
-            [
-              transformedTrainData,
-              transformedTestData,
-            ],
+            (_) => predictor,
+        metric,
+        onDataSplit: (trainData, testData) =>
+          [
+            transformedTrainData,
+            transformedTestData,
+          ],
       );
 
       expect(actual, throwsA(isA<InvalidTrainDataColumnsNumberException>()));
@@ -369,10 +363,10 @@ void main() {
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
       final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData,
-          ['target'], splitter, DType.float32);
+      final validator = CrossValidatorImpl(originalData, splitter,
+          DType.float32);
 
-      when(predictor.assess(any, any, any)).thenReturn(1);
+      when(predictor.assess(any, any)).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2, 3, 4, 5]],
           headerExists: false);
@@ -380,7 +374,7 @@ void main() {
           headerExists: false);
 
       final actual = () => validator.evaluate(
-        (observations, outcomes) => predictor,
+        (_) => predictor,
         metric,
         onDataSplit: (trainData, testData) => [
           transformedTrainData,
@@ -412,10 +406,10 @@ void main() {
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
       final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData,
-          ['target'], splitter, DType.float32);
+      final validator = CrossValidatorImpl(originalData, splitter,
+          DType.float32);
 
-      when(predictor.assess(any, any, any)).thenReturn(1);
+      when(predictor.assess(any, any)).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2, 3, 4]],
           headerExists: false);
@@ -423,7 +417,7 @@ void main() {
           headerExists: false);
 
       final actual = () => validator.evaluate(
-        (observations, outcomes) => predictor,
+        (_) => predictor,
         metric,
         onDataSplit: (trainData, testData) => [
           transformedTrainData,
@@ -455,10 +449,10 @@ void main() {
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
       final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData,
-          ['target'], splitter, DType.float32);
+      final validator = CrossValidatorImpl(originalData, splitter,
+          DType.float32);
 
-      when(predictor.assess(any, any, any)).thenReturn(1);
+      when(predictor.assess(any, any)).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2, 3, 4]],
           headerExists: false);
@@ -466,7 +460,7 @@ void main() {
           headerExists: false);
 
       final actual = () => validator.evaluate(
-        (observations, outcomes) => predictor,
+        (_) => predictor,
         metric,
         onDataSplit: (trainData, testData) => [
           transformedTrainData,

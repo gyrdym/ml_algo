@@ -1,4 +1,7 @@
+import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
+import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -99,6 +102,8 @@ void main() {
 
     tearDown(() {
       reset(linkFunctionMock);
+      injector.clearAll();
+      softmaxRegressorInjector.clearAll();
     });
 
     group('constructor', () {

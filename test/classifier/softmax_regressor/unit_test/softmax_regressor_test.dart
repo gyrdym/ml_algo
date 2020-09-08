@@ -1,5 +1,7 @@
 import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
@@ -96,14 +98,20 @@ void main() {
       softmaxRegressorFactoryMock = createSoftmaxRegressorFactoryMock(
           softmaxRegressorMock);
 
-      injector = Injector()
+      softmaxRegressorInjector
+        ..clearAll()
         ..registerSingleton<LinkFunction>(() => linkFunctionMock,
             dependencyName: float32SoftmaxLinkFunctionToken)
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
-        ..registerSingleton<LinearOptimizerFactory>(() => optimizerFactoryMock)
+        ..registerSingleton<LinkFunction>(() => linkFunctionMock,
+            dependencyName: float64SoftmaxLinkFunctionToken)
         ..registerSingleton<SoftmaxRegressorFactory>(
                 () => softmaxRegressorFactoryMock);
+
+      injector
+        ..clearAll()
+        ..registerDependency<CostFunctionFactory>(
+                () => costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>(() => optimizerFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -113,14 +121,17 @@ void main() {
       when(optimizerMock.costPerIteration).thenReturn(costPerIteration);
     });
 
-    tearDownAll(() => injector = null);
+    tearDown(() {
+      injector.clearAll();
+      softmaxRegressorInjector.clearAll();
+    });
 
     test('should throw an exception if some target columns do not exist', () {
       final targetColumnNames = ['target_1', 'some', 'unknown', 'columns'];
 
-      final actual = () => SoftmaxRegressor(
-        observations,
-        targetColumnNames,
+      final actual = () => createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: targetColumnNames,
       );
 
       expect(actual, throwsException);
@@ -134,9 +145,9 @@ void main() {
       final targetColumnNames =
         ['target_1'];
 
-      final actual = () => SoftmaxRegressor(
-        observations,
-        targetColumnNames,
+      final actual = () => createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: targetColumnNames,
       );
 
       expect(actual, throwsException);
@@ -144,11 +155,12 @@ void main() {
 
     test('should call cost function factory in order to create '
         'loglikelihood cost function', () {
-      SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
+      createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: ['target_1', 'target_2', 'target_3'],
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
+        dtype: DType.float32,
       );
 
       verify(costFunctionFactoryMock.createByType(
@@ -161,9 +173,9 @@ void main() {
 
     test('should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
-      SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
+      createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: ['target_1', 'target_2', 'target_3'],
         optimizerType: LinearOptimizerType.gradient,
         learningRateType: LearningRateType.constant,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
@@ -215,10 +227,11 @@ void main() {
 
     test('should find the extrema for fitting observations while '
         'instantiating', () {
-      SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
+      createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: ['target_1', 'target_2', 'target_3'],
         initialCoefficients: initialCoefficients,
+        dtype: DType.float32,
       );
 
       verify(optimizerMock.findExtrema(
@@ -229,10 +242,11 @@ void main() {
 
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=true', () {
-      SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
+      createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: true,
+        dtype: DType.float32,
       );
 
       verify(optimizerMock.findExtrema(
@@ -244,10 +258,11 @@ void main() {
 
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=false', () {
-      SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
+      createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: false,
+        dtype: DType.float32,
       );
 
       verify(optimizerMock.findExtrema(
@@ -259,10 +274,11 @@ void main() {
 
     test('should pass cost per iteration list to the softmax regressor '
         'factory', () {
-      SoftmaxRegressor(
-        observations,
-        ['target_1', 'target_2', 'target_3'],
+      createSoftmaxRegressor(
+        trainData: observations,
+        targetNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: true,
+        dtype: DType.float32,
       );
 
       verify(softmaxRegressorFactoryMock.create(any, any, any, any, any, any,

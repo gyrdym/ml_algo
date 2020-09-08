@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor_from_json.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_init_module.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -106,10 +107,10 @@ abstract class LogisticRegressor implements
   /// should contain an extra element in the beginning of the vector and it
   /// denotes the intercept term coefficient
   ///
-  /// [positiveLabel] Defines the value, that will be used for `positive` class.
+  /// [positiveLabel] A value that will be used for the positive class.
   /// By default, `1`.
   ///
-  /// [negativeLabel] Defines the value, that will be used for `negative` class.
+  /// [negativeLabel] A value that will be used for the negative class.
   /// By default, `0`.
   ///
   /// [collectLearningData] Whether or not to collect learning data, for
@@ -143,29 +144,33 @@ abstract class LogisticRegressor implements
     num negativeLabel = 0,
     bool collectLearningData = false,
     DType dtype = DType.float32,
-  }) => createLogisticRegressor(
-    trainData,
-    targetName,
-    optimizerType,
-    iterationsLimit,
-    initialLearningRate,
-    minCoefficientsUpdate,
-    probabilityThreshold,
-    lambda,
-    regularizationType,
-    randomSeed,
-    batchSize,
-    fitIntercept,
-    interceptScale,
-    isFittingDataNormalized,
-    learningRateType,
-    initialCoefficientsType,
-    initialCoefficients ?? Vector.empty(dtype: dtype),
-    positiveLabel,
-    negativeLabel,
-    collectLearningData,
-    dtype,
-  );
+  }) {
+    initLogisticRegressorModule();
+
+    return createLogisticRegressor(
+      trainData: trainData,
+      targetName: targetName,
+      optimizerType: optimizerType,
+      iterationsLimit: iterationsLimit,
+      initialLearningRate: initialLearningRate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
+      probabilityThreshold: probabilityThreshold,
+      lambda: lambda,
+      regularizationType: regularizationType,
+      randomSeed: randomSeed,
+      batchSize: batchSize,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      isFittingDataNormalized: isFittingDataNormalized,
+      learningRateType: learningRateType,
+      initialCoefficientsType: initialCoefficientsType,
+      initialCoefficients: initialCoefficients ?? Vector.empty(dtype: dtype),
+      positiveLabel: positiveLabel,
+      negativeLabel: negativeLabel,
+      collectLearningData: collectLearningData,
+      dtype: dtype,
+    );
+  }
 
   /// Restores previously fitted classifier instance from the [json]
   ///

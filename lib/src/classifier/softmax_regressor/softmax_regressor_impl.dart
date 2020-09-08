@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
@@ -8,7 +9,6 @@ import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/predictor/assessable_predictor_mixin.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -20,14 +20,14 @@ part 'softmax_regressor_impl.g.dart';
 class SoftmaxRegressorImpl
     with
         LinearClassifierMixin,
-        AssessablePredictorMixin,
+        AssessableClassifierMixin,
         SerializableMixin
     implements
         SoftmaxRegressor {
 
   SoftmaxRegressorImpl(
       this.coefficientsByClasses,
-      this.classNames,
+      this.targetNames,
       this.linkFunction,
       this.fitIntercept,
       this.interceptScale,
@@ -55,7 +55,7 @@ class SoftmaxRegressorImpl
 
   @override
   @JsonKey(name: softmaxRegressorClassNamesJsonKey)
-  final Iterable<String> classNames;
+  final Iterable<String> targetNames;
 
   @override
   @JsonKey(name: softmaxRegressorFitInterceptJsonKey)
@@ -89,9 +89,11 @@ class SoftmaxRegressorImpl
   )
   final LinkFunction linkFunction;
 
+  @override
   @JsonKey(name: softmaxRegressorPositiveLabelJsonKey)
   final num positiveLabel;
 
+  @override
   @JsonKey(name: softmaxRegressorNegativeLabelJsonKey)
   final num negativeLabel;
 
@@ -121,7 +123,7 @@ class SoftmaxRegressorImpl
 
     return DataFrame.fromMatrix(
       labels,
-      header: classNames,
+      header: targetNames,
     );
   }
 }
