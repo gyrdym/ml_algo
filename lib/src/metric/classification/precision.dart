@@ -27,7 +27,7 @@ class PrecisionMetric implements Metric {
     //--------------------------------
     //
     // in order to count correctly predicted positive labels in matrix notation
-    // we may multiple predicted labels by 2, and then subtract the two
+    // we may multiply predicted labels by 2, and then subtract the two
     // matrices from each other:
     //
     // 1 - (1 * 2) = -1

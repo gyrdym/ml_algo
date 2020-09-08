@@ -268,14 +268,5 @@ void main() {
         expect(prediction.header, equals([className]));
       });
     });
-
-    group('LogisticRegressor.allowedMetrics', () {
-      test('should contain appropriate metrics', () {
-        expect(regressor.allowedMetrics, [
-          MetricType.accuracy,
-          MetricType.precision,
-        ]);
-      });
-    });
   });
 }

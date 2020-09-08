@@ -5,7 +5,6 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 abstract class Assessable {
   /// Assesses model performance according to provided [metricType]
   ///
-  /// Throws an exception if inappropriate [metricType] provided. All the
-  /// appropriate metric types are in [allowedMetrics]
+  /// Throws an exception if inappropriate [metricType] provided.
   double assess(DataFrame observations, MetricType metricType);
 }

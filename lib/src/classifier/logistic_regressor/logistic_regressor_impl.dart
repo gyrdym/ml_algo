@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
-import 'package:ml_algo/src/classifier/_mixins/classification_metrics_mixin.dart';
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
@@ -26,8 +25,7 @@ class LogisticRegressorImpl
     with
         LinearClassifierMixin,
         AssessableClassifierMixin,
-        SerializableMixin,
-        ClassificationMetricsMixin
+        SerializableMixin
     implements
         LogisticRegressor {
 

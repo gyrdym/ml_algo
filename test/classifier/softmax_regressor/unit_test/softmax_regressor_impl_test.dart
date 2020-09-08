@@ -261,14 +261,5 @@ void main() {
         expect(regressor.costPerIteration, costPerIteration);
       });
     });
-
-    group('LogisticRegressor.allowedMetrics', () {
-      test('should contain appropriate metrics', () {
-        expect(regressor.allowedMetrics, [
-          MetricType.accuracy,
-          MetricType.precision,
-        ]);
-      });
-    });
   });
 }

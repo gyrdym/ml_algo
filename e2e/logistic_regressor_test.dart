@@ -43,7 +43,7 @@ Future main() async {
     });
 
     test('should return adequate score on pima indians diabetes dataset using '
-        'precision metric, dtype=DType.float64', () async {
+        'accuracy metric, dtype=DType.float64', () async {
       final scores = await evaluateLogisticRegressor(MetricType.accuracy,
           DType.float32);
 

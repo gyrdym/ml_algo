@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
-import 'package:ml_algo/src/classifier/_mixins/classification_metrics_mixin.dart';
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
@@ -22,8 +21,7 @@ class SoftmaxRegressorImpl
     with
         LinearClassifierMixin,
         AssessableClassifierMixin,
-        SerializableMixin,
-        ClassificationMetricsMixin
+        SerializableMixin
     implements
         SoftmaxRegressor {
 
