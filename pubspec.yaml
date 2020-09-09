@@ -1,6 +1,6 @@
 name: ml_algo
 description: Machine learning algorithms, Machine learning models performance evaluation functionality
-version: 15.0.0
+version: 15.0.1
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:

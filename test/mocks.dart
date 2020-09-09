@@ -29,6 +29,7 @@ import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
@@ -180,6 +181,8 @@ class SoftmaxRegressorFactoryMock extends Mock implements
     SoftmaxRegressorFactory {}
 
 class ClassifierMock extends Mock implements Classifier {}
+
+class PredictorMock extends Mock implements Predictor {}
 
 class ClassifierAssessorMock extends Mock implements ClassifierAssessor {}
 
