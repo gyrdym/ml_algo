@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.0.1
+- RegressorAssessor: unit tests added
+
 ## 15.0.0
 - Breaking changes:
     - `CrossValidator`: 
