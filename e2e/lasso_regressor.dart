@@ -33,7 +33,7 @@ void main() {
       final scores = await evaluateLassoRegressor(MetricType.mape,
           DType.float32);
 
-      expect(scores.mean(),  lessThan(50));
+      expect(scores.mean(),  lessThan(0.5));
     });
 
     test('should return adequate error on mape metric, '
@@ -41,7 +41,7 @@ void main() {
       final scores = await evaluateLassoRegressor(MetricType.mape,
           DType.float64);
 
-      expect(scores.mean(),  lessThan(50));
+      expect(scores.mean(),  lessThan(0.5));
     });
   });
 }
