@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.1.0
+- Metrics: output range squeezed to [0, 1]
+
 ## 15.0.1
 - RegressorAssessor: unit tests added
 
