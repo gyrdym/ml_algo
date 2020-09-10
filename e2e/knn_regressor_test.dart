@@ -36,7 +36,7 @@ void main() {
         'metric, dtype=DType.float64', () async {
       final scores = await evaluateKnnRegressor(MetricType.mape, DType.float64);
 
-      expect(scores.mean(), lessThan(50));
+      expect(scores.mean(), lessThan(0.5));
     });
   });
 }

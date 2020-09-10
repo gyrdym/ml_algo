@@ -35,7 +35,7 @@ void main() async {
         'dtype=DType.float32', () async {
       expect(
         (await evaluateLinearRegressor(MetricType.mape, DType.float32)).mean(),
-        lessThan(50),
+        lessThan(0.5),
       );
     });
 
@@ -43,7 +43,7 @@ void main() async {
         'dtype=DType.float64', () async {
       expect(
         (await evaluateLinearRegressor(MetricType.mape, DType.float64)).mean(),
-        lessThan(50),
+        lessThan(0.5),
       );
     });
   });
