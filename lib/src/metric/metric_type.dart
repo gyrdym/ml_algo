@@ -22,4 +22,9 @@ enum MetricType {
   /// better the prediction's quality is. The metric produces scores within the
   /// range [0, 1]
   precision,
+
+  /// A classification metric. The greater the score produced by the metric, the
+  /// better the prediction's quality is. The metric produces scores within the
+  /// range [0, 1]
+  recall,
 }

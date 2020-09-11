@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.2.0
+- Recall metric added
+
 ## 15.1.0
 - MAPE metric: output range squeezed to [0, 1]
 
