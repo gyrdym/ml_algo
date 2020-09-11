@@ -72,5 +72,21 @@ Future main() async {
 
       expect(scores.mean(), greaterThan(0.5));
     });
+
+    test('should return adequate score on iris dataset using recall '
+        'metric, dtype=DType.float32', () async {
+      final scores = await evaluateSoftmaxRegressor(MetricType.recall,
+          DType.float32);
+
+      expect(scores.mean(), greaterThan(0.5));
+    });
+
+    test('should return adequate score on iris dataset using recall '
+        'metric, dtype=DType.float64', () async {
+      final scores = await evaluateSoftmaxRegressor(MetricType.recall,
+          DType.float64);
+
+      expect(scores.mean(), greaterThan(0.5));
+    });
   });
 }

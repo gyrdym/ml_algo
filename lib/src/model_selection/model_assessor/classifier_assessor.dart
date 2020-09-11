@@ -3,6 +3,7 @@ import 'package:ml_algo/src/common/exception/invalid_metric_type_exception.dart'
 import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/helpers/features_target_split_interface.dart';
 import 'package:ml_algo/src/helpers/normalize_class_labels_interface.dart';
+import 'package:ml_algo/src/metric/metric_constants.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/model_assessor.dart';
@@ -16,11 +17,6 @@ class ClassifierAssessor implements ModelAssessor<Classifier> {
       this._normalizeClassLabels,
   );
 
-  static const List<MetricType> _allowedMetricTypes = [
-    MetricType.precision,
-    MetricType.accuracy,
-  ];
-
   final MetricFactory _metricFactory;
   final EncoderFactory _encoderFactory;
   final FeaturesTargetSplit _featuresTargetSplit;
@@ -32,9 +28,9 @@ class ClassifierAssessor implements ModelAssessor<Classifier> {
       MetricType metricType,
       DataFrame samples,
   ) {
-    if (!_allowedMetricTypes.contains(metricType)) {
+    if (!classificationMetrics.contains(metricType)) {
       throw InvalidMetricTypeException(
-          metricType, _allowedMetricTypes);
+          metricType, classificationMetrics);
     }
 
     final splits = _featuresTargetSplit(

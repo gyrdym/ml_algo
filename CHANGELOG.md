@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.2.1
+- `classificationMetrics` constant list added
+- `regressionMetrics` constant list added
+
 ## 15.2.0
 - Recall metric added
 
