@@ -1,7 +1,7 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/common/exception/invalid_metric_type_exception.dart';
 import 'package:ml_algo/src/helpers/features_target_split_interface.dart';
-import 'package:ml_algo/src/metric/metric.constants.dart';
+import 'package:ml_algo/src/metric/metric_constants.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/model_assessor.dart';
