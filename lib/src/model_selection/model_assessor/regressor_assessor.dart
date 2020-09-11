@@ -1,6 +1,7 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/common/exception/invalid_metric_type_exception.dart';
 import 'package:ml_algo/src/helpers/features_target_split_interface.dart';
+import 'package:ml_algo/src/metric/metric_constants.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/model_assessor.dart';
@@ -13,11 +14,6 @@ class RegressorAssessor implements ModelAssessor<Predictor> {
       this._featuresTargetSplit,
   );
 
-  static const List<MetricType> _allowedMetricTypes = [
-    MetricType.rmse,
-    MetricType.mape,
-  ];
-
   final MetricFactory _metricFactory;
   final FeaturesTargetSplit _featuresTargetSplit;
 
@@ -27,9 +23,9 @@ class RegressorAssessor implements ModelAssessor<Predictor> {
       MetricType metricType,
       DataFrame samples,
   ) {
-    if (!_allowedMetricTypes.contains(metricType)) {
+    if (!regressionMetrics.contains(metricType)) {
       throw InvalidMetricTypeException(
-          metricType, _allowedMetricTypes);
+          metricType, regressionMetrics);
     }
 
     final splits = _featuresTargetSplit(

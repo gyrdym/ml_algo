@@ -65,5 +65,21 @@ Future main() async {
 
       expect(scores.mean(), greaterThan(0.5));
     });
+
+    test('should return adequate score on pima indians diabetes dataset using '
+        'recall metric, dtype=DType.float32', () async {
+      final scores = await evaluateLogisticRegressor(MetricType.recall,
+          DType.float32);
+
+      expect(scores.mean(), greaterThan(0.5));
+    });
+
+    test('should return adequate score on pima indians diabetes dataset using '
+        'recall metric, dtype=DType.float64', () async {
+      final scores = await evaluateLogisticRegressor(MetricType.recall,
+          DType.float32);
+
+      expect(scores.mean(), greaterThan(0.5));
+    });
   });
 }
