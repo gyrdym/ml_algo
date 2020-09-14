@@ -8,6 +8,7 @@ enum MetricType {
   ///
   ///
   /// where Y - original value, Y with hat - predicted one
+  /// 
   ///
   /// The less the score produced by the metric, the better the prediction's
   /// quality is. Can lead to error if there are zero values among the original
