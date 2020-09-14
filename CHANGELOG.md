@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.2.2
+- Documentation for MAPE metrics improved
+
 ## 15.2.1
 - `classificationMetrics` constant list added
 - `regressionMetrics` constant list added
