@@ -1,7 +1,10 @@
 # Changelog
 
+## 15.2.3
+- Documentation for RMSE metric improved
+
 ## 15.2.2
-- Documentation for MAPE metrics improved
+- Documentation for MAPE metric improved
 
 ## 15.2.1
 - `classificationMetrics` constant list added
