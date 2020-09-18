@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/common/exception/matrix_column_exception.dart';
+import 'package:ml_algo/src/helpers/validate_matrix_columns.dart';
 import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_linalg/linalg.dart';
 
@@ -7,16 +7,12 @@ class MapeMetric implements Metric {
 
   @override
   double getScore(Matrix predictedLabels, Matrix originalLabels) {
-    if (predictedLabels.columnsNum != 1) {
-      throw MatrixColumnException(predictedLabels);
-    }
+    validateMatrixColumns([predictedLabels, originalLabels]);
 
-    if (originalLabels.columnsNum != 1) {
-      throw MatrixColumnException(originalLabels);
-    }
-
-    final predicted = predictedLabels.getColumn(0);
-    final original = originalLabels.getColumn(0);
+    final predicted = predictedLabels
+        .toVector();
+    final original = originalLabels
+        .toVector();
 
     return ((original - predicted) / original)
         .abs()
