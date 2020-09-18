@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.3.0
+- RSS metric added
+
 ## 15.2.4
 - Documentation for classification metrics improved
 
