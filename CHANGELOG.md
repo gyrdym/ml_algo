@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.2.4
+- Documentation for classification metrics improved
+
 ## 15.2.3
 - Documentation for RMSE metric improved
 
