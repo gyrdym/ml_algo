@@ -46,6 +46,7 @@ enum MetricType {
   /// where `k` is a number of correctly predicted labels, `n` - total amount
   /// of labels
   ///
+  ///
   /// The greater the score produced by the metric, the better the prediction's
   /// quality is. The metric produces scores within the range [0, 1]
   accuracy,
@@ -59,7 +60,8 @@ enum MetricType {
   ///
   ///
   /// where TP is a number of correctly predicted positive labels (true positive),
-  /// FP - a number of incorrectly predicted positive labels (false positive)
+  /// FP - a number of incorrectly predicted positive labels (false positive). In
+  /// other words, TP + FP is a number of all the labels predicted to be positive
   ///
   /// The formula for a multi-class problem is
   ///
