@@ -35,63 +35,99 @@ class CrossValidatorImpl implements CrossValidator {
         .map((indexedSeries) => indexedSeries.index);
     final allIndicesGroups = _splitter.getIndices(samplesAsMatrix.rowsNum);
     final scores = allIndicesGroups
-        .map((testRowsIndices) {
-          final split = _makeSplit(testRowsIndices, discreteColumns);
-          final trainDataFrame = split[0];
-          final testDataFrame = split[1];
-          final splits = onDataSplit != null
-              ? onDataSplit(trainDataFrame, testDataFrame)
-              : [trainDataFrame, testDataFrame];
-          final transformedTrainData = splits[0];
-          final transformedTestData = splits[1];
-          final transformedTrainDataColumnsNum = transformedTrainData.header.length;
-          final transformedTestDataColumnsNum = transformedTestData.header.length;
-
-          if (transformedTrainDataColumnsNum != sourceColumnsNum) {
-            throw InvalidTrainDataColumnsNumberException(sourceColumnsNum,
-                transformedTrainDataColumnsNum);
-          }
-
-          if (transformedTestDataColumnsNum != sourceColumnsNum) {
-            throw InvalidTestDataColumnsNumberException(sourceColumnsNum,
-                transformedTestDataColumnsNum);
-          }
-
-          return predictorFactory(transformedTrainData)
-              .assess(transformedTestData, metricType);
-        })
+        .map((testRowsIndices) => _makeSplit(testRowsIndices, discreteColumns))
+        .map((split) => _evaluateSplit(split,
+          onDataSplit: onDataSplit,
+          sourceColumnsNum: sourceColumnsNum,
+          predictorFactory: predictorFactory,
+          metricType: metricType,
+        ))
         .toList();
 
-    return Future.value(Vector.fromList(scores, dtype: dtype));
+    return Future.value(
+      Vector.fromList(scores, dtype: dtype),
+    );
+  }
+
+  double _evaluateSplit(List<DataFrame> split, {
+    DataPreprocessFn onDataSplit,
+    PredictorFactory predictorFactory,
+    MetricType metricType,
+    int sourceColumnsNum,
+  }) {
+    final trainDataFrame = split[0];
+    final testDataFrame = split[1];
+    final splits = onDataSplit != null
+        ? onDataSplit(trainDataFrame, testDataFrame)
+        : [trainDataFrame, testDataFrame];
+    final transformedTrainData = splits[0];
+    final transformedTestData = splits[1];
+    final transformedTrainDataColumnsNum = transformedTrainData
+        .header
+        .length;
+    final transformedTestDataColumnsNum = transformedTestData
+        .header
+        .length;
+
+    if (transformedTrainDataColumnsNum != sourceColumnsNum) {
+      throw InvalidTrainDataColumnsNumberException(
+        sourceColumnsNum,
+        transformedTrainDataColumnsNum,
+      );
+    }
+
+    if (transformedTestDataColumnsNum != sourceColumnsNum) {
+      throw InvalidTestDataColumnsNumberException(
+        sourceColumnsNum,
+        transformedTestDataColumnsNum,
+      );
+    }
+
+    return predictorFactory(
+      transformedTrainData,
+    ).assess(
+      transformedTestData,
+      metricType,
+    );
   }
 
   List<DataFrame> _makeSplit(Iterable<int> testRowsIndices,
       Iterable<int> discreteColumns) {
-    final samplesAsMatrix = samples.toMatrix(dtype);
-    final testRowsIndicesAsSet = Set<int>.from(testRowsIndices);
+    final samplesAsMatrix = samples
+        .toMatrix(dtype);
+    final testRowsIndicesAsSet = Set<int>
+        .from(testRowsIndices);
     final trainSamples =
-      List<Vector>(samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length);
+      List<Vector>(
+        samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length,
+      );
     final testSamples = List<Vector>(testRowsIndicesAsSet.length);
 
     var trainSamplesCounter = 0;
     var testSamplesCounter = 0;
 
-    samplesAsMatrix.rowIndices.forEach((i) {
-      if (testRowsIndicesAsSet.contains(i)) {
-        testSamples[testSamplesCounter++] = samplesAsMatrix[i];
-      } else {
-        trainSamples[trainSamplesCounter++] = samplesAsMatrix[i];
-      }
+    samplesAsMatrix
+        .rowIndices
+        .forEach((i) {
+          testRowsIndicesAsSet.contains(i)
+            ? testSamples[testSamplesCounter++] = samplesAsMatrix[i]
+            : trainSamples[trainSamplesCounter++] = samplesAsMatrix[i];
     });
 
     return [
       DataFrame.fromMatrix(
-        Matrix.fromRows(trainSamples, dtype: dtype),
+        Matrix.fromRows(
+          trainSamples,
+          dtype: dtype,
+        ),
         header: samples.header,
         discreteColumns: discreteColumns,
       ),
       DataFrame.fromMatrix(
-        Matrix.fromRows(testSamples, dtype: dtype),
+        Matrix.fromRows(
+          testSamples,
+          dtype: dtype,
+        ),
         header: samples.header,
         discreteColumns: discreteColumns,
       ),
