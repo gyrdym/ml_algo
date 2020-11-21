@@ -8,7 +8,7 @@ import 'package:ml_linalg/matrix.dart';
 
 class DecisionTreeTrainer implements TreeTrainer {
   DecisionTreeTrainer(
-      this._featureIndices,
+      this._columnIndices,
       this._targetIdx,
       this._featureToUniqueValues,
       this._leafDetector,
@@ -16,7 +16,7 @@ class DecisionTreeTrainer implements TreeTrainer {
       this._splitSelector,
   );
   
-  final Iterable<int> _featureIndices;
+  final Iterable<int> _columnIndices;
   final int _targetIdx;
   final Map<int, List<num>> _featureToUniqueValues;
   final TreeLeafDetector _leafDetector;
@@ -25,7 +25,14 @@ class DecisionTreeTrainer implements TreeTrainer {
 
   @override
   TreeNode train(Matrix samples) =>
-      _train(samples, null, null, null, _featureIndices, 0);
+      _train(
+        samples,
+        null,
+        null,
+        null,
+        _columnIndices,
+        0,
+      );
 
   TreeNode _train(
       Matrix samples,
@@ -35,8 +42,15 @@ class DecisionTreeTrainer implements TreeTrainer {
       Iterable<int> featuresColumnIdxs,
       int level,
   ) {
-    if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, level)) {
-      final label = _leafLabelFactory.create(samples, _targetIdx);
+    if (_leafDetector.isLeaf(
+      samples,
+      _targetIdx,
+      featuresColumnIdxs,
+      level,
+    )) {
+      final label = _leafLabelFactory
+          .create(samples, _targetIdx);
+
       return TreeNode(
         splittingPredicateType,
         splittingValue,
@@ -53,36 +67,37 @@ class DecisionTreeTrainer implements TreeTrainer {
         featuresColumnIdxs,
         _featureToUniqueValues,
     );
-
     final newLevel = level + 1;
+    final childNodes = bestSplit
+        .entries
+        .map((entry) {
+          final splitNode = entry.key;
+          final splitSamples = entry.value;
+          final isSplitByNominalValue = _featureToUniqueValues
+              .containsKey(splitNode.splittingIndex);
+          final updatedColumnRanges = isSplitByNominalValue
+              ? (Set<int>.from(featuresColumnIdxs)
+                  ..remove(splitNode.splittingIndex))
+              : featuresColumnIdxs;
 
-    final childNodes = bestSplit.entries.map((entry) {
-      final splitNode = entry.key;
-      final splitSamples = entry.value;
-
-      final isSplitByNominalValue = _featureToUniqueValues
-          .containsKey(splitNode.splittingIndex);
-
-      final updatedColumnRanges = isSplitByNominalValue
-          ? (Set<int>.from(featuresColumnIdxs)
-              ..remove(splitNode.splittingIndex))
-          : featuresColumnIdxs;
-
-      return _train(
-          splitSamples,
-          splitNode.splittingValue,
-          splitNode.splittingIndex,
-          splitNode.predicateType,
-          updatedColumnRanges,
-          newLevel);
-    });
+          return _train(
+            splitSamples,
+            splitNode.splittingValue,
+            splitNode.splittingIndex,
+            splitNode.predicateType,
+            updatedColumnRanges,
+            newLevel,
+          );
+        });
 
     return TreeNode(
-        splittingPredicateType,
-        splittingValue,
-        splittingIdx,
-        childNodes.toList(growable: false),
-        null,
-        level);
+      splittingPredicateType,
+      splittingValue,
+      splittingIdx,
+      childNodes
+          .toList(growable: false),
+      null,
+      level,
+    );
   }
 }

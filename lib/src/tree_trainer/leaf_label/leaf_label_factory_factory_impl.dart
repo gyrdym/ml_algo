@@ -1,3 +1,4 @@
+import 'package:inject/inject.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
@@ -7,6 +8,7 @@ import 'package:ml_algo/src/tree_trainer/leaf_label/majority_leaf_label_factory.
 class TreeLeafLabelFactoryFactoryImpl implements
     TreeLeafLabelFactoryFactory {
 
+  @provide
   TreeLeafLabelFactoryFactoryImpl(this._distributionCalculatorFactory);
 
   final DistributionCalculatorFactory

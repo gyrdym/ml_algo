@@ -32,6 +32,9 @@ import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices
 import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
+import 'package:ml_algo/src/services/class_label_normalizer/class_label_normalizer.dart';
+import 'package:ml_algo/src/services/encoder_factory/encoder_factory.dart';
+import 'package:ml_algo/src/services/feature_target_splitter/feature_target_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
@@ -48,8 +51,6 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -58,20 +59,11 @@ class MetricFactoryMock extends Mock implements MetricFactory {}
 
 class MetricMock extends Mock implements Metric {}
 
-class EncoderFactoryMock extends Mock {
-  Encoder create(DataFrame data, Iterable<String> targetNames);
-}
+class EncoderFactoryMock extends Mock implements EncoderFactory {}
 
-class FeatureTargetSplitterMock extends Mock {
-  Iterable<DataFrame> split(DataFrame samples, {
-    Iterable<String> targetNames,
-    Iterable<int> targetIndices,
-  });
-}
+class FeatureTargetSplitterMock extends Mock implements FeatureTargetSplitter {}
 
-class ClassLabelsNormalizerMock extends Mock {
-  Matrix normalize(Matrix classLabels, num positiveLabel, num negativeLabel);
-}
+class ClassLabelsNormalizerMock extends Mock implements ClassLabelNormalizer {}
 
 class EncoderMock extends Mock implements Encoder {}
 

@@ -36,7 +36,6 @@ void main() {
           [-4.0],
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
-        final a = 2.3;
 
         expect(probabilities, iterable2dAlmostEqualTo([
           [0.268],

@@ -1,0 +1,3 @@
+[submodule "vendor/inject.dart"]
+	path = vendor/inject.dart
+	url = https://github.com/gyrdym/inject.dart.git

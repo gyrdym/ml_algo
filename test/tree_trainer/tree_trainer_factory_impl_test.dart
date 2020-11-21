@@ -16,6 +16,7 @@ import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../fake_data_set.dart';
 import '../mocks.dart';
 
 void main() {
@@ -33,14 +34,12 @@ void main() {
     TreeTrainer trainer;
 
     final type = TreeTrainerType.decision;
-    final featureIndices = [0, 1, 2, 3];
-    final targetIdx = 4;
-    final featureToUniqueValues = {
-      1: [20, -20],
-    };
+    final targetName = fakeDataSet
+        .header
+        .last;
     final minErrorOnNode = 0.3;
-    final minSamplesCount = 10;
-    final maxDepth = 7;
+    final minSamplesCount = 1;
+    final maxDepth = 3;
     final assessorType = TreeSplitAssessorType.majority;
     final leafLabelFactoryType = TreeLeafLabelFactoryType.majority;
     final splitSelectorType = TreeSplitSelectorType.greedy;
@@ -67,9 +66,8 @@ void main() {
 
       trainer = factory.createByType(
         type,
-        featureIndices,
-        targetIdx,
-        featureToUniqueValues,
+        fakeDataSet,
+        targetName,
         minErrorOnNode,
         minSamplesCount,
         maxDepth,
@@ -99,7 +97,7 @@ void main() {
           minSamplesCount, maxDepth)).called(1);
     });
 
-    test('should call leaf label factory factory while creating the instance', () {
+    test('should call leaf label factory while creating the instance', () {
       verify(leafLabelFactoryFactoryMock.createByType(leafLabelFactoryType))
           .called(1);
     });

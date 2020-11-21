@@ -1,4 +1,3 @@
-import 'package:injector/injector.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';

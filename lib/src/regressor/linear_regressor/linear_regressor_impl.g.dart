@@ -17,7 +17,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       interceptScale:
           $checkedConvert(json, 'IS', (v) => (v as num)?.toDouble()),
       costPerIteration: $checkedConvert(
-          json, 'CPI', (v) => (v as List)?.map((dynamic e) => e as num)?.toList()),
+          json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
       dtype: $checkedConvert(json, 'DT', (v) => fromDTypeJson(v as String)),
     );
     return val;

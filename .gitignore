@@ -9,3 +9,4 @@ doc/api/
 /.dart_tool/
 
 pubspec.lock
+*.inject.summary

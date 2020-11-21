@@ -1,3 +1,4 @@
+import 'package:inject/inject.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/greedy_split_selector.dart';
@@ -8,6 +9,8 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
 
 class TreeSplitSelectorFactoryImpl implements TreeSplitSelectorFactory {
+
+  @provide
   TreeSplitSelectorFactoryImpl(
     this._assessorFactory,
     this._splitterFactory,

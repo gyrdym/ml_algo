@@ -1,1 +1,5 @@
 include: package:ml_tech/analysis_options.yaml
+
+analyzer:
+  strong-mode:
+    implicit-dynamic: true

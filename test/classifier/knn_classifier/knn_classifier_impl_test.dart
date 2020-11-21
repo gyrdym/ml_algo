@@ -2,7 +2,6 @@ import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';

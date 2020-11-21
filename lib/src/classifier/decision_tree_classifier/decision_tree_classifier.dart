@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/_helper/create_decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_helper/create_decision_tree_classifier_from_json.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_runtime_injector.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -45,18 +45,16 @@ abstract class DecisionTreeClassifier implements
     int minSamplesCount,
     int maxDepth,
     DType dtype = DType.float32,
-  }) {
-    initDecisionTreeModule();
-
-    return createDecisionTreeClassifier(
-      trainData,
-      targetName,
-      minError,
-      minSamplesCount,
-      maxDepth,
-      dtype,
-    );
-  }
+  }) => decisionTreeClassifierRuntimeInjector
+      .get<DecisionTreeClassifierFactory>()
+      .create(
+        trainData,
+        targetName,
+        minError,
+        minSamplesCount,
+        maxDepth,
+        dtype,
+      );
 
   /// Restores previously fitted classifier instance from the given [json]
   ///

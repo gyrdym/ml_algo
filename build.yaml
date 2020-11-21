@@ -12,3 +12,10 @@ targets:
           ignore_unannotated: false
           include_if_null: true
           nullable: true
+
+      inject_generator:
+        generate_for:
+          - "lib/**/*.summary"
+          - "lib/**/*_impl.dart"
+          - "lib/**/*_module.dart"
+          - "lib/**/*_injector.dart"

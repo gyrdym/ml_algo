@@ -1,12 +1,14 @@
 name: ml_algo
 description: Machine learning algorithms, Machine learning models performance evaluation functionality
-version: 15.3.2
+version: 15.3.3
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:
   sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
+  inject:
+    path: ./vendor/inject.dart/package/inject
   injector: ^1.0.9
   json_annotation: ^3.0.1
   json_serializable: ^3.3.0
@@ -21,6 +23,8 @@ dev_dependencies:
   build_runner: ^1.1.2
   build_test: ^0.10.2
   grinder: ^0.8.3
+  inject_generator:
+    path: ./vendor/inject.dart/package/inject_generator
   ml_tech: ^0.0.8
   mockito: ^3.0.0
   process_run: ^0.10.12

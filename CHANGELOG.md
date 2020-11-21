@@ -1,5 +1,13 @@
 # Changelog
 
+## 15.3.3
+- `DecisionTreeClassifier`: 
+    - compile-time DI module added
+- `Code analysis`:
+    - unnecessary imports removed
+    - unnecessary variables removed
+- `CONTRIBUTING.md` added
+
 ## 15.3.2
 - Awfully long identifier `SequenceElementsDistributionCalculator` renamed to `DistributionCalculator`
 

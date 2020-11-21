@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:ml_algo/src/common/exception/invalid_metric_type_exception.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
-import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart';
+import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
@@ -19,11 +19,11 @@ void main() {
     final encoderMock = EncoderMock();
     final featureTargetSplitterMock = FeatureTargetSplitterMock();
     final classLabelsNormalizerMock = ClassLabelsNormalizerMock();
-    final assessor = ClassifierAssessor(
+    final assessor = ClassifierAssessorImpl(
       metricFactoryMock,
-      encoderFactoryMock.create,
-      featureTargetSplitterMock.split,
-      classLabelsNormalizerMock.normalize,
+      encoderFactoryMock,
+      featureTargetSplitterMock,
+      classLabelsNormalizerMock,
     );
     final metricType = MetricType.precision;
     final classifierMock = ClassifierMock();
@@ -56,9 +56,12 @@ void main() {
 
     setUp(() {
       when(
-          encoderFactoryMock.create(
+          encoderFactoryMock.createOneHot(
             argThat(anything),
-            argThat(anything),
+            featureIds: anyNamed('featureIds'),
+            featureNames: anyNamed('featureNames'),
+            headerPrefix: anyNamed('headerPrefix'),
+            headerPostfix: anyNamed('headerPostfix'),
           )
       ).thenReturn(encoderMock);
       when(classifierMock.dtype).thenReturn(dtype);

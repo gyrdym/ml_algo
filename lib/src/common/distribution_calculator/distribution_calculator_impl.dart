@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
 
 class DistributionCalculatorImpl implements DistributionCalculator {
-
   const DistributionCalculatorImpl();
 
   @override

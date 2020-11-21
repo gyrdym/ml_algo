@@ -12,16 +12,16 @@ void main() {
       });
     }
 
-    testLpoSplitter(2, 4, [
+    testLpoSplitter(2, 4, {
       [0, 1],
       [0, 2],
       [0, 3],
       [1, 2],
       [1, 3],
       [2, 3],
-    ].toSet());
+    });
 
-    testLpoSplitter(2, 5, [
+    testLpoSplitter(2, 5, {
       [0, 1],
       [0, 2],
       [0, 3],
@@ -32,24 +32,24 @@ void main() {
       [2, 3],
       [2, 4],
       [3, 4],
-    ].toSet());
+    });
 
-    testLpoSplitter(1, 5, [
+    testLpoSplitter(1, 5, {
       [0],
       [1],
       [2],
       [3],
       [4],
-    ].toSet());
+    });
 
-    testLpoSplitter(3, 4, [
+    testLpoSplitter(3, 4, {
       [0, 1, 2],
       [0, 1, 3],
       [0, 2, 3],
       [1, 2, 3],
-    ].toSet());
+    });
 
-    testLpoSplitter(3, 5, [
+    testLpoSplitter(3, 5, {
       [0, 1, 2],
       [0, 1, 3],
       [0, 1, 4],
@@ -60,7 +60,7 @@ void main() {
       [1, 2, 4],
       [1, 3, 4],
       [2, 3, 4],
-    ].toSet());
+    });
 
     test('should throw an error, if p is equal to 0', () {
       expect(() => LpoIndicesProvider(0), throwsUnsupportedError);
