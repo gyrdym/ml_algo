@@ -21,11 +21,11 @@ the lib, please do not use it in a browser.
 
 - #### Classification algorithms
     - [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
-    A class that performs linear binary classification of data. To use this kind of classifier your data have to be 
+    A class that performs linear binary classification of data. To use this kind of classifier your data has to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
     - [SoftmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/softmax_regressor.dart). 
-    A class that performs linear multiclass classification of data. To use this kind of classifier your data have to be 
+    A class that performs linear multiclass classification of data. To use this kind of classifier your data has to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
         
     - [DecisionTreeClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/decision_tree_classifier/decision_tree_classifier.dart)
@@ -121,7 +121,7 @@ final createClassifier = (DataFrame samples) =>
     optimizerType: LinearOptimizerType.gradient,
     iterationsLimit: 90,
     learningRateType: LearningRateType.decreasingAdaptive,
-    batchSize: trainSamples.rows.length,
+    batchSize: samples.rows.length,
     probabilityThreshold: 0.7,
   );
 ```
@@ -134,7 +134,7 @@ be run this amount of times
 - `learningRateType` - a strategy for learning rate update. In our case the learning rate will decrease after every 
 iteration
 - `batchSize` - size of data (in rows) that will be used per each iteration. As we have a really small dataset we may use
-full-batch gradient ascent, that's why we used `trainSamples.rows.length` here - the total amount of data.
+full-batch gradient ascent, that's why we used `samples.rows.length` here - the total amount of data.
 - `probabilityThreshold` - lower bound for positive label probability
 
 If we want to evaluate the learning process more thoroughly, we may pass `collectLearningData` argument to the classifier
@@ -247,7 +247,7 @@ void main() async {
       optimizerType: LinearOptimizerType.gradient,
       iterationsLimit: 90,
       learningRateType: LearningRateType.decreasingAdaptive,
-      batchSize: trainSamples.rows.length,
+      batchSize: samples.rows.length,
       probabilityThreshold: 0.7,
     );
   final scores = await validator.evaluate(createClassifier, MetricType.accuracy);

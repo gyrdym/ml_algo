@@ -1,5 +1,10 @@
 # Changelog
 
+## 15.3.1
+- README: 
+    - typos corrected
+    - LogisticRegressor example corrected
+
 ## 15.3.0
 - RSS metric added
 
