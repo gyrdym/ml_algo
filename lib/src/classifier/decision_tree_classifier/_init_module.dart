@@ -1,10 +1,9 @@
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory_impl.dart';
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory_impl.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory_impl.dart';
 import 'package:ml_algo/src/di/common/init_common_module.dart';
-import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
@@ -27,8 +26,8 @@ void initDecisionTreeModule() {
 
   decisionTreeInjector
     ..clearAll()
-    ..registerSingleton<SequenceElementsDistributionCalculatorFactory>(
-            () => const SequenceElementsDistributionCalculatorFactoryImpl())
+    ..registerSingleton<DistributionCalculatorFactory>(
+            () => const DistributionCalculatorFactoryImpl())
 
     ..registerSingleton<NominalTreeSplitterFactory>(
             () => const NominalTreeSplitterFactoryImpl())
@@ -60,7 +59,7 @@ void initDecisionTreeModule() {
     ..registerSingleton<TreeLeafLabelFactoryFactory>(
             () => TreeLeafLabelFactoryFactoryImpl(
           decisionTreeInjector
-              .get<SequenceElementsDistributionCalculatorFactory>(),
+              .get<DistributionCalculatorFactory>(),
         ))
 
     ..registerSingleton<TreeTrainerFactory>(
