@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_impl.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_impl.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
@@ -8,7 +8,7 @@ void main() {
       test('should calculate probability distribution of the given '
           'sequence', () {
         final labels = [1, 1, 1, 2, 3];
-        final calculator = const SequenceElementsDistributionCalculatorImpl();
+        final calculator = const DistributionCalculatorImpl();
         final actual = calculator.calculate(labels);
         final expected = {
           1: closeTo(3 / 5, 1e-4),
@@ -22,7 +22,7 @@ void main() {
           'equal to for the given sequence consisting of one repeating '
           'value', () {
         final values = [1, 1, 1, 1, 1];
-        final calculator = const SequenceElementsDistributionCalculatorImpl();
+        final calculator = const DistributionCalculatorImpl();
         final actual = calculator.calculate(values);
         final expected = {
           1: 1.0,
@@ -33,7 +33,7 @@ void main() {
       test('should return a map where all values (probabilities) are uniform '
           'if the given sequence elements are all different', () {
         final values = [10, 20, 30, 40, 60];
-        final calculator = const SequenceElementsDistributionCalculatorImpl();
+        final calculator = const DistributionCalculatorImpl();
         final actual = calculator.calculate(values);
         final expected = {
           10: 1 / 5,
@@ -56,7 +56,7 @@ void main() {
           Vector.fromList([0, 1, 0]),
           Vector.fromList([1, 0, 0]),
         ];
-        final calculator = const SequenceElementsDistributionCalculatorImpl();
+        final calculator = const DistributionCalculatorImpl();
         final actual = calculator.calculate(values);
         final expected = {
           Vector.fromList([1, 0, 0]): 2 / 5,
@@ -75,7 +75,7 @@ void main() {
           Vector.fromList([1, 0, 0]),
           Vector.fromList([1, 0, 0]),
         ];
-        final calculator = const SequenceElementsDistributionCalculatorImpl();
+        final calculator = const DistributionCalculatorImpl();
         final actual = calculator.calculate(values);
         final expected = {
           Vector.fromList([1, 0, 0]): 1.0,
@@ -90,7 +90,7 @@ void main() {
           Vector.fromList([1, 2, 3]),
           Vector.fromList([4, 5, 6]),
         ];
-        final calculator = const SequenceElementsDistributionCalculatorImpl();
+        final calculator = const DistributionCalculatorImpl();
         final actual = calculator.calculate(values);
         final expected = {
           Vector.fromList([1, 0, 0]): closeTo(1 / 3, 1e-4),
@@ -108,7 +108,7 @@ void main() {
         'class 2',
         'class 3',
       ];
-      final calculator = const SequenceElementsDistributionCalculatorImpl();
+      final calculator = const DistributionCalculatorImpl();
       final actual = calculator.calculate(values, 10);
       final expected = {
         'class 1': 1 / 10,
@@ -121,7 +121,7 @@ void main() {
     test('should throw an error if value collection is empty (provided length '
         'should be ignored)', () {
       final values = <double>[];
-      final calculator = const SequenceElementsDistributionCalculatorImpl();
+      final calculator = const DistributionCalculatorImpl();
       final actual = () => calculator.calculate(values, 10);
 
       expect(actual, throwsException);
@@ -129,7 +129,7 @@ void main() {
 
     test('should throw an error if given length is 0', () {
       final values = <double>[1, 2, 3];
-      final calculator = const SequenceElementsDistributionCalculatorImpl();
+      final calculator = const DistributionCalculatorImpl();
       final actual = () => calculator.calculate(values, 0);
 
       expect(actual, throwsException);

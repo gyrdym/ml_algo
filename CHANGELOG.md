@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.3.2
+- Awfully long identifier `SequenceElementsDistributionCalculator` renamed to `DistributionCalculator`
+
 ## 15.3.1
 - README: 
     - typos corrected

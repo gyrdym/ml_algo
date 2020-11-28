@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -10,7 +10,7 @@ class MajorityTreeLeafLabelFactory implements TreeLeafLabelFactory {
 
   MajorityTreeLeafLabelFactory(this.distributionCalculator);
 
-  final SequenceElementsDistributionCalculator distributionCalculator;
+  final DistributionCalculator distributionCalculator;
 
   @override
   TreeLeafLabel create(Matrix samples, int targetIdx) {

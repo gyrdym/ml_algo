@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
@@ -9,7 +9,7 @@ class TreeLeafLabelFactoryFactoryImpl implements
 
   TreeLeafLabelFactoryFactoryImpl(this._distributionCalculatorFactory);
 
-  final SequenceElementsDistributionCalculatorFactory
+  final DistributionCalculatorFactory
     _distributionCalculatorFactory;
 
   @override

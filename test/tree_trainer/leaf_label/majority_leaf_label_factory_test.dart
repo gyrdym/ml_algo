@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/majority_leaf_label_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
@@ -70,7 +70,7 @@ void main() {
   });
 }
 
-SequenceElementsDistributionCalculator createDistributionCalculator(
+DistributionCalculator createDistributionCalculator(
     Iterable<num> values, HashMap<double, double> distribution) {
   final distributionCalculator = DistributionCalculatorMock();
 
