@@ -4,8 +4,8 @@ import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dar
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator.dart';
-import 'package:ml_algo/src/common/sequence_elements_distribution_calculator/distribution_calculator_factory.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
@@ -133,10 +133,10 @@ class NominalTreeSplitterFactoryMock extends Mock implements
     NominalTreeSplitterFactory {}
 
 class DistributionCalculatorMock extends Mock implements
-    SequenceElementsDistributionCalculator {}
+    DistributionCalculator {}
 
 class DistributionCalculatorFactoryMock extends Mock implements
-    SequenceElementsDistributionCalculatorFactory {}
+    DistributionCalculatorFactory {}
 
 class TreeLeafDetectorMock extends Mock implements TreeLeafDetector {}
 
@@ -343,8 +343,8 @@ TreeSplitSelectorFactory createTreeSplitSelectorFactoryMock(
   return factory;
 }
 
-SequenceElementsDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
-  SequenceElementsDistributionCalculator calculator,
+DistributionCalculatorFactory createDistributionCalculatorFactoryMock(
+  DistributionCalculator calculator,
 ) {
   final factory = DistributionCalculatorFactoryMock();
   when(factory.create()).thenReturn(calculator);
