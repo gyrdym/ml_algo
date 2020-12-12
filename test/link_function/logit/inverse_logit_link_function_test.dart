@@ -4,8 +4,9 @@ import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.d
 import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
+
+import '../../helpers.dart';
 
 void main() {
   void testInverseLogitLinkFunction(LinkFunction inverseLogitLink, DType dtype) {
@@ -36,7 +37,6 @@ void main() {
           [-4.0],
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
-        final a = 2.3;
 
         expect(probabilities, iterable2dAlmostEqualTo([
           [0.268],

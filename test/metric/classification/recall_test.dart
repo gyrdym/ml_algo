@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/metric/classification/precision.dart';
 import 'package:ml_algo/src/metric/classification/recall.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';

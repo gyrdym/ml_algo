@@ -1,1 +1,1 @@
-include: package:ml_tech/analysis_options.yaml
+include: package:pedantic/analysis_options.yaml
