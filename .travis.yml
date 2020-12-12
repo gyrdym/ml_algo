@@ -1,5 +1,0 @@
-language: dart
-dart:
-  - "2.7.2"
-script: pub run grinder start
-after_success: pub run grinder finish

@@ -28,7 +28,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    final Matrix observations = Matrix.fromRows(List.generate(observationsNum,
+    final observations = Matrix.fromRows(List.generate(observationsNum,
             (i) => Vector.randomFilled(columnsNum)));
 
     _data = DataFrame.fromMatrix(observations);

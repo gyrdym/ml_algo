@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.3.5
+- Github actions set up
+
 ## 15.3.4
 - `DI logic`: 
     - conditional dependency registering added

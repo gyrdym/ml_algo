@@ -3,8 +3,9 @@ import 'package:ml_algo/src/link_function/softmax/float32_softmax_link_function.
 import 'package:ml_algo/src/link_function/softmax/float64_softmax_link_function.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
+
+import '../../helpers.dart';
 
 void main() {
   void testSoftmaxLinkFunction(LinkFunction linkFunction, DType dtype) {
