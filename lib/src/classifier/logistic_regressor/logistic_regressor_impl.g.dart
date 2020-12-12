@@ -22,7 +22,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       'CPI'
     ]);
     final val = LogisticRegressorImpl(
-      $checkedConvert(json, 'CN', (v) => (v as List)?.map((dynamic e) => e as String)),
+      $checkedConvert(json, 'CN', (v) => (v as List)?.map((e) => e as String)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
       $checkedConvert(json, 'FI', (v) => v as bool),
       $checkedConvert(json, 'IS', (v) => v as num),
@@ -32,7 +32,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       $checkedConvert(json, 'NL', (v) => v as num),
       $checkedConvert(json, 'PL', (v) => v as num),
       $checkedConvert(
-          json, 'CPI', (v) => (v as List)?.map((dynamic e) => e as num)?.toList()),
+          json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
       $checkedConvert(json, 'DT', (v) => fromDTypeJson(v as String)),
     );
     return val;

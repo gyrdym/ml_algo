@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 class RandomMock extends Mock implements Random {}
 
 void main() {
-  const int maxEpoch = 400;
+  const maxEpoch = 400;
 
   Random baseGenerator;
   Randomizer randomizer;
@@ -100,7 +100,7 @@ void main() {
       final start = 2;
       final end = 13;
 
-      for (int i = 0; i < maxEpoch; i++) {
+      for (var i = 0; i < maxEpoch; i++) {
         final value = randomizer.getIntegerFromInterval(start, end);
         expect(start <= value && value < end, isTrue);
       }
@@ -112,7 +112,7 @@ void main() {
       final start = 6;
       final end = 17;
 
-      for (int i = 0; i < maxEpoch; i++) {
+      for (var i = 0; i < maxEpoch; i++) {
         final interval = randomizer.getIntegerInterval(start, end,
             intervalLength: intervalLength);
 
@@ -135,7 +135,7 @@ void main() {
       final start = 0;
       final end = 1;
 
-      for (int i = 0; i < maxEpoch; i++) {
+      for (var i = 0; i < maxEpoch; i++) {
         final value = randomizer.getIntegerFromInterval(start, end);
         expect(value, isZero);
       }
@@ -155,7 +155,7 @@ void main() {
       final start = 5.3;
       final end = 123.4;
 
-      for (int i = 0; i < maxEpoch; i++) {
+      for (var i = 0; i < maxEpoch; i++) {
         final value = randomizer.getDoubleFromInterval(start, end);
         expect(start <= value && value < end, isTrue);
       }

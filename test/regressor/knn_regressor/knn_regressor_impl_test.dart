@@ -1,15 +1,14 @@
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
-import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import '../../helpers.dart';
 import '../../mocks.dart';
 
 void main() {

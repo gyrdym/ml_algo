@@ -3,7 +3,6 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_imp
 import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';

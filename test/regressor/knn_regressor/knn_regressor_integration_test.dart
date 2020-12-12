@@ -3,8 +3,9 @@ import 'package:ml_algo/src/regressor/knn_regressor/_helpers/create_knn_regresso
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
+
+import '../../helpers.dart';
 
 void main() {
   group('KnnRegressor', () {

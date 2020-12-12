@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/_init_module.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';

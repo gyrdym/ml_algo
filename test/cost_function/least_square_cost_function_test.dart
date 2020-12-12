@@ -2,8 +2,9 @@ import 'dart:math' as math;
 
 import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
-import 'package:ml_tech/unit_testing/matchers/iterable_2d_almost_equal_to.dart';
 import 'package:test/test.dart';
+
+import '../helpers.dart';
 
 void main() {
   group('LeastSquareCostFunction', () {

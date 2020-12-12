@@ -1,9 +1,9 @@
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_tech/unit_testing/readers/json.dart';
 import 'package:test/test.dart';
 
+import '../../helpers.dart';
 import 'tree.dart';
 
 void main() {

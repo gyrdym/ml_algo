@@ -51,6 +51,7 @@ class SoftmaxRegressorImpl
   factory SoftmaxRegressorImpl.fromJson(Map<String, dynamic> json) =>
       _$SoftmaxRegressorImplFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$SoftmaxRegressorImplToJson(this);
 
   @override
