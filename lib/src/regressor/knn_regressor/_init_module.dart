@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/di/common/init_common_module.dart';
+import 'package:ml_algo/src/extensions/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory_impl.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
@@ -11,14 +12,13 @@ void initKnnRegressorModule() {
   initCommonModule();
 
   knnRegressorInjector
-    ..clearAll()
-    ..registerSingleton<KernelFactory>(
+    ..registerSingletonIf<KernelFactory>(
             () => const KernelFactoryImpl())
 
-    ..registerDependency<KnnSolverFactory>(
+    ..registerSingletonIf<KnnSolverFactory>(
             () => const KnnSolverFactoryImpl())
 
-    ..registerSingleton<KnnRegressorFactory>(
+    ..registerSingletonIf<KnnRegressorFactory>(
             () => KnnRegressorFactoryImpl(
           knnRegressorInjector.get<KernelFactory>(),
           knnRegressorInjector.get<KnnSolverFactory>(),

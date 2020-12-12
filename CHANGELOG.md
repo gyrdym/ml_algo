@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.3.4
+- `DI logic`: 
+    - conditional dependency registering added
+
 ## 15.3.3
 - FUNDING.yml created
 
