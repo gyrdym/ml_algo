@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.3.3
+- FUNDING.yml created
+
 ## 15.3.2
 - Awfully long identifier `SequenceElementsDistributionCalculator` renamed to `DistributionCalculator`
 
