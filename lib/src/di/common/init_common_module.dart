@@ -3,6 +3,7 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/di/dependency_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/extensions/injector.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/helpers/features_target_split_interface.dart';
 import 'package:ml_algo/src/helpers/normalize_class_labels.dart';
@@ -30,40 +31,39 @@ typedef EncoderFactory = Encoder Function(DataFrame, Iterable<String>);
 
 void initCommonModule() {
   injector
-    ..clearAll()
-    ..registerSingleton<EncoderFactory>(
+    ..registerSingletonIf<EncoderFactory>(
             () => (DataFrame data, Iterable<String> targetNames) =>
             Encoder.oneHot(data, featureNames: targetNames),
         dependencyName: oneHotEncoderFactoryKey)
 
-    ..registerSingleton<RandomizerFactory>(
+    ..registerSingletonIf<RandomizerFactory>(
             () => const RandomizerFactoryImpl())
 
-    ..registerDependency<FeaturesTargetSplit>(
+    ..registerSingletonIf<FeaturesTargetSplit>(
             () => featuresTargetSplit)
 
-    ..registerSingleton<MetricFactory>(
+    ..registerSingletonIf<MetricFactory>(
             () => const MetricFactoryImpl())
 
-    ..registerDependency<NormalizeClassLabels>(
+    ..registerSingletonIf<NormalizeClassLabels>(
             () => normalizeClassLabels)
 
-    ..registerSingleton<LinearOptimizerFactory>(
+    ..registerSingletonIf<LinearOptimizerFactory>(
             () => const LinearOptimizerFactoryImpl())
 
-    ..registerSingleton<LearningRateGeneratorFactory>(
+    ..registerSingletonIf<LearningRateGeneratorFactory>(
             () => const LearningRateGeneratorFactoryImpl())
 
-    ..registerSingleton<InitialCoefficientsGeneratorFactory>(
+    ..registerSingletonIf<InitialCoefficientsGeneratorFactory>(
             () => const InitialCoefficientsGeneratorFactoryImpl())
 
-    ..registerDependency<ConvergenceDetectorFactory>(
+    ..registerSingletonIf<ConvergenceDetectorFactory>(
             () => const ConvergenceDetectorFactoryImpl())
 
-    ..registerSingleton<CostFunctionFactory>(
+    ..registerSingletonIf<CostFunctionFactory>(
             () => const CostFunctionFactoryImpl())
       
-    ..registerSingleton<ModelAssessor<Classifier>>(() =>
+    ..registerSingletonIf<ModelAssessor<Classifier>>(() =>
         ClassifierAssessor(
             injector.get<MetricFactory>(),
             injector.get<EncoderFactory>(
@@ -72,7 +72,7 @@ void initCommonModule() {
             normalizeClassLabels,
         ))
 
-    ..registerSingleton<ModelAssessor<Predictor>>(() =>
+    ..registerSingletonIf<ModelAssessor<Predictor>>(() =>
         RegressorAssessor(
           injector.get<MetricFactory>(),
           featuresTargetSplit,
