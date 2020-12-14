@@ -18,6 +18,8 @@ SplitIndicesProvider createSplitter(Iterable<Iterable<int>> indices) {
 
 void main() {
   group('CrossValidatorImpl', () {
+    final workerManagerMock = WorkerManagerMock();
+
     test('should evaluate performance of a predictor on given test '
         'splits', () async {
       final allObservations = DataFrame(<Iterable<num>>[
@@ -33,9 +35,13 @@ void main() {
       ], header: ['first', 'second', 'third', 'target'], headerExists: false);
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(allObservations, splitter,
-          DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        allObservations,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
       final score = 20.0;
       when(predictor.assess(any, any)).thenReturn(score);
 
@@ -77,9 +83,13 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(allObservations, splitter,
-          DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        allObservations,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
 
       when(predictor.assess(any, any)).thenReturn(1);
 
@@ -137,9 +147,13 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(allObservations, splitter,
-          DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        allObservations,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
 
       when(predictor.assess(any, any)).thenReturn(1);
 
@@ -216,9 +230,13 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(allObservations,
-          splitter, DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        allObservations,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
 
       when(predictor.assess(any, any)).thenReturn(1);
 
@@ -318,9 +336,13 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData, splitter,
-          DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        originalData,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
 
       when(predictor.assess(any, any)).thenReturn(1);
 
@@ -362,9 +384,13 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData, splitter,
-          DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        originalData,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
 
       when(predictor.assess(any, any)).thenReturn(1);
 
@@ -405,9 +431,13 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData, splitter,
-          DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        originalData,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
 
       when(predictor.assess(any, any)).thenReturn(1);
 
@@ -448,9 +478,13 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
-      final validator = CrossValidatorImpl(originalData, splitter,
-          DType.float32);
+      final predictor = SerializablePredictorMock();
+      final validator = CrossValidatorImpl(
+        originalData,
+        workerManagerMock,
+        splitter,
+        DType.float32,
+      );
 
       when(predictor.assess(any, any)).thenReturn(1);
 

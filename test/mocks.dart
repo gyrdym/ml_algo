@@ -30,6 +30,7 @@ import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart';
+import 'package:ml_algo/src/model_selection/serializable_predictor.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
@@ -37,6 +38,7 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart';
+import 'package:ml_algo/src/service/worker_manager/worker_manager.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
@@ -117,6 +119,8 @@ class DataSplitterMock extends Mock implements SplitIndicesProvider {}
 class DataSplitterFactoryMock extends Mock implements SplitIndicesProviderFactory {}
 
 class AssessableMock extends Mock implements Assessable {}
+
+class SerializablePredictorMock extends Mock implements SerializablePredictor {}
 
 class TreeSplitAssessorMock extends Mock implements TreeSplitAssessor {}
 
@@ -204,6 +208,8 @@ class DecisionTreeClassifierMock extends Mock
 
 class LogisticRegressorFactoryMock extends Mock
     implements LogisticRegressorFactory {}
+
+class WorkerManagerMock extends Mock implements WorkerManager {}
 
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
