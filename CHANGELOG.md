@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.3.6
+- `ml_dataframe`: version 0.3.0 supported
+- `README.md`: build badge corrected
+
 ## 15.3.5
 - Github actions set up
 
