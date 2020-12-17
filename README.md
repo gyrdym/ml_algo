@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/gyrdym/ml_algo/workflows/CI%20pipeline/badge.svg)](https://github.com/gyrdym/ml_algo/actions?query=workflow%3A%22CI+pipeline%22)
+[![Build Status](https://github.com/gyrdym/ml_algo/workflows/CI%20pipeline/badge.svg)](https://github.com/gyrdym/ml_algo/actions?query=branch%3Amaster+)
 [![Coverage Status](https://coveralls.io/repos/github/gyrdym/ml_algo/badge.svg?branch=master)](https://coveralls.io/github/gyrdym/ml_algo?branch=master)
 [![pub package](https://img.shields.io/pub/v/ml_algo.svg)](https://pub.dartlang.org/packages/ml_algo)
 [![Gitter Chat](https://badges.gitter.im/gyrdym/gyrdym.svg)](https://gitter.im/gyrdym/)
@@ -57,8 +57,8 @@ in your dependencies:
 
 ````
 dependencies:
-  ml_dataframe: ^0.2.0
-  ml_preprocessing: ^5.2.0
+  ml_dataframe: ^0.3.0
+  ml_preprocessing: ^5.2.1
 ````
 
 We need these repos to parse raw data in order to use it farther. For more details, please
