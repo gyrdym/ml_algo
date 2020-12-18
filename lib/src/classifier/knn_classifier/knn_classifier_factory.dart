@@ -9,6 +9,7 @@ abstract class KnnClassifierFactory {
       List<num> classLabels,
       Kernel kernel,
       KnnSolver solver,
+      String columnPrefix,
       DType dtype,
   );
 }

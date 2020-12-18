@@ -1,37 +1,70 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_json_converter.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_json_converter.dart';
 import 'package:ml_algo/src/regressor/_mixins/assessable_regressor_mixin.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/dtype_to_json.dart';
+import 'package:ml_linalg/from_dtype_json.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
+part 'knn_regressor_impl.g.dart';
+
+final _float32zeroVector = Vector.zero(1, dtype: DType.float32);
+final _float64zeroVector = Vector.zero(1, dtype: DType.float64);
+
+@JsonSerializable()
+@KnnSolverJsonConverter()
+@KernelJsonConverter()
 class KnnRegressorImpl
     with
-        AssessableRegressorMixin
+        AssessableRegressorMixin,
+        SerializableMixin
     implements
         KnnRegressor {
   KnnRegressorImpl(
-      this._targetName,
-      this._solver,
-      this._kernel,
+      this.targetName,
+      this.solver,
+      this.kernel,
       this.dtype,
   );
 
+  factory KnnRegressorImpl.fromJson(Map<String, dynamic> json) =>
+      _$KnnRegressorImplFromJson(json);
+
   @override
+  Map<String, dynamic> toJson() => _$KnnRegressorImplToJson(this);
+
+  @override
+  @JsonKey(
+    name: knnRegressorDTypeJsonKey,
+    toJson: dTypeToJson,
+    fromJson: fromDTypeJson,
+  )
   final DType dtype;
 
+  @JsonKey(name: knnRegressorTargetNameJsonKey)
+  final String targetName;
+
+  @JsonKey(name: knnRegressorSolverJsonKey)
+  final KnnSolver solver;
+
+  @JsonKey(name: knnRegressorKernelJsonKey)
+  final Kernel kernel;
+
   @override
-  Iterable<String> get targetNames => [_targetName];
+  Iterable<String> get targetNames => [targetName];
 
-  final String _targetName;
-  final KnnSolver _solver;
-  final Kernel _kernel;
-
-  Vector get _zeroVector => _cachedZeroVector ??= Vector.zero(1, dtype: dtype);
-  Vector _cachedZeroVector;
+  Vector get _zeroVector => dtype == DType.float32
+      ? _float32zeroVector
+      : _float64zeroVector;
 
   @override
   DataFrame predict(DataFrame testFeatures) {
@@ -45,24 +78,24 @@ class KnnRegressorImpl
 
     return DataFrame.fromMatrix(
       prediction,
-      header: [_targetName],
+      header: [targetName],
     );
   }
 
   Iterable<Vector> _predictOutcomes(Matrix features) {
-    final neighbours = _solver.findKNeighbours(features);
+    final neighbours = solver.findKNeighbours(features);
 
     return neighbours.map((kNeighbours) {
       final weightedLabels = kNeighbours.fold<Vector>(_zeroVector,
               (weightedSum, neighbour) {
-        final weight = _kernel.getWeightByDistance(neighbour.distance);
+        final weight = kernel.getWeightByDistance(neighbour.distance);
         final weightedLabel = neighbour.label * weight;
 
         return weightedSum + weightedLabel;
       });
 
       final weightsSum = kNeighbours.fold<num>(0,
-              (sum, neighbour) => sum + _kernel
+              (sum, neighbour) => sum + kernel
                   .getWeightByDistance(neighbour.distance));
 
       return weightedLabels / weightsSum;
