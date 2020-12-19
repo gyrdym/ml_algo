@@ -3,6 +3,8 @@ import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart'
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
+import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
+import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
@@ -11,12 +13,14 @@ import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/linalg.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
 part 'softmax_regressor_impl.g.dart';
 
 @JsonSerializable()
+@DTypeJsonConverter()
+@MatrixJsonConverter()
 class SoftmaxRegressorImpl
     with
         LinearClassifierMixin,
@@ -67,19 +71,11 @@ class SoftmaxRegressorImpl
   final num interceptScale;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorCoefficientsByClassesJsonKey,
-    toJson: matrixToJson,
-    fromJson: fromMatrixJson,
-  )
+  @JsonKey(name: softmaxRegressorCoefficientsByClassesJsonKey)
   final Matrix coefficientsByClasses;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorDTypeJsonKey,
-    toJson: dTypeToJson,
-    fromJson: fromDTypeJson,
-  )
+  @JsonKey(name: softmaxRegressorDTypeJsonKey)
   final DType dtype;
 
   @override

@@ -27,13 +27,17 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       $checkedConvert(json, 'FI', (v) => v as bool),
       $checkedConvert(json, 'IS', (v) => v as num),
       $checkedConvert(
-          json, 'CBC', (v) => fromMatrixJson(v as Map<String, dynamic>)),
+          json,
+          'CBC',
+          (v) =>
+              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'PT', (v) => v as num),
       $checkedConvert(json, 'NL', (v) => v as num),
       $checkedConvert(json, 'PL', (v) => v as num),
       $checkedConvert(
           json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
-      $checkedConvert(json, 'DT', (v) => fromDTypeJson(v as String)),
+      $checkedConvert(
+          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
     );
     return val;
   }, fieldKeyMap: const {
@@ -53,11 +57,11 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
 Map<String, dynamic> _$LogisticRegressorImplToJson(
     LogisticRegressorImpl instance) {
   final val = <String, dynamic>{
-    'CBC': matrixToJson(instance.coefficientsByClasses),
+    'CBC': const MatrixJsonConverter().toJson(instance.coefficientsByClasses),
     'CN': instance.targetNames?.toList(),
     'FI': instance.fitIntercept,
     'IS': instance.interceptScale,
-    'DT': dTypeToJson(instance.dtype),
+    'DT': const DTypeJsonConverter().toJson(instance.dtype),
     'PT': instance.probabilityThreshold,
     'PL': instance.positiveLabel,
     'NL': instance.negativeLabel,
