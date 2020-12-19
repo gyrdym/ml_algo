@@ -11,14 +11,18 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
     $checkKeys(json, allowedKeys: const ['TN', 'FI', 'IS', 'CS', 'CPI', 'DT']);
     final val = LinearRegressorImpl(
       $checkedConvert(
-          json, 'CS', (v) => fromVectorJson(v as Map<String, dynamic>)),
+          json,
+          'CS',
+          (v) =>
+              const VectorJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'TN', (v) => v as String),
       fitIntercept: $checkedConvert(json, 'FI', (v) => v as bool),
       interceptScale:
           $checkedConvert(json, 'IS', (v) => (v as num)?.toDouble()),
       costPerIteration: $checkedConvert(
           json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
-      dtype: $checkedConvert(json, 'DT', (v) => fromDTypeJson(v as String)),
+      dtype: $checkedConvert(
+          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
     );
     return val;
   }, fieldKeyMap: const {
@@ -36,7 +40,7 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
     'TN': instance.targetName,
     'FI': instance.fitIntercept,
     'IS': instance.interceptScale,
-    'CS': vectorToJson(instance.coefficients),
+    'CS': const VectorJsonConverter().toJson(instance.coefficients),
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -46,6 +50,6 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
   }
 
   writeNotNull('CPI', instance.costPerIteration);
-  val['DT'] = dTypeToJson(instance.dtype);
+  val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
   return val;
 }

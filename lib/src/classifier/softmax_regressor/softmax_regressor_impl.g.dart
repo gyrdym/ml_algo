@@ -21,7 +21,10 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     ]);
     final val = SoftmaxRegressorImpl(
       $checkedConvert(
-          json, 'CBC', (v) => fromMatrixJson(v as Map<String, dynamic>)),
+          json,
+          'CBC',
+          (v) =>
+              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'CN', (v) => (v as List)?.map((e) => e as String)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
       $checkedConvert(json, 'FI', (v) => v as bool),
@@ -30,7 +33,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'NL', (v) => v as num),
       $checkedConvert(
           json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
-      $checkedConvert(json, 'DT', (v) => fromDTypeJson(v as String)),
+      $checkedConvert(
+          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
     );
     return val;
   }, fieldKeyMap: const {
@@ -52,8 +56,8 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
     'CN': instance.targetNames?.toList(),
     'FI': instance.fitIntercept,
     'IS': instance.interceptScale,
-    'CBC': matrixToJson(instance.coefficientsByClasses),
-    'DT': dTypeToJson(instance.dtype),
+    'CBC': const MatrixJsonConverter().toJson(instance.coefficientsByClasses),
+    'DT': const DTypeJsonConverter().toJson(instance.dtype),
     'LF': linkFunctionToJson(instance.linkFunction),
     'PL': instance.positiveLabel,
     'NL': instance.negativeLabel,

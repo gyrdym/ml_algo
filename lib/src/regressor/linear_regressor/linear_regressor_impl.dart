@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
+import 'package:ml_algo/src/common/json_converter/vector_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/regressor/_mixins/assessable_regressor_mixin.dart';
@@ -6,15 +8,13 @@ import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/dtype_to_json.dart';
-import 'package:ml_linalg/from_dtype_json.dart';
-import 'package:ml_linalg/from_vector_json.dart';
 import 'package:ml_linalg/vector.dart';
-import 'package:ml_linalg/vector_to_json.dart';
 
 part 'linear_regressor_impl.g.dart';
 
 @JsonSerializable()
+@DTypeJsonConverter()
+@VectorJsonConverter()
 class LinearRegressorImpl
     with
         AssessableRegressorMixin,
@@ -50,11 +50,7 @@ class LinearRegressorImpl
   final double interceptScale;
 
   @override
-  @JsonKey(
-    name: linearRegressorCoefficientsJsonKey,
-    toJson: vectorToJson,
-    fromJson: fromVectorJson,
-  )
+  @JsonKey(name: linearRegressorCoefficientsJsonKey)
   final Vector coefficients;
 
   @override
@@ -65,11 +61,7 @@ class LinearRegressorImpl
   final List<num> costPerIteration;
 
   @override
-  @JsonKey(
-    name: linearRegressorDTypeJsonKey,
-    toJson: dTypeToJson,
-    fromJson: fromDTypeJson,
-  )
+  @JsonKey(name: linearRegressorDTypeJsonKey)
   final DType dtype;
 
   @override

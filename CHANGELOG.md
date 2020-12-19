@@ -1,5 +1,11 @@
 # Changelog
 
+## 15.4.1
+- `DTypeJsonConverter` added
+- `MatrixJsonConverter` added
+- `VectorJsonConverter` added
+- `DistanceTypeJsonConverter` added
+
 ## 15.4.0
 - `KnnClassifier`:
     - serialization/deserialization functionality added with possibility to save the model into a json file

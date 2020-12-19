@@ -3,6 +3,8 @@ import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart'
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
+import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
+import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
@@ -12,15 +14,13 @@ import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/dtype_to_json.dart';
-import 'package:ml_linalg/from_dtype_json.dart';
-import 'package:ml_linalg/from_matrix_json.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:ml_linalg/matrix_to_json.dart';
 
 part 'logistic_regressor_impl.g.dart';
 
 @JsonSerializable()
+@DTypeJsonConverter()
+@MatrixJsonConverter()
 class LogisticRegressorImpl
     with
         LinearClassifierMixin,
@@ -64,11 +64,7 @@ class LogisticRegressorImpl
   /// N x 1 matrix, where N - number of features. It has only one column since
   /// in case of Logistic Regression only one class is used
   @override
-  @JsonKey(
-    name: logisticRegressorCoefficientsByClassesJsonKey,
-    toJson: matrixToJson,
-    fromJson: fromMatrixJson,
-  )
+  @JsonKey(name: logisticRegressorCoefficientsByClassesJsonKey)
   final Matrix coefficientsByClasses;
 
   @override
@@ -84,11 +80,7 @@ class LogisticRegressorImpl
   final num interceptScale;
 
   @override
-  @JsonKey(
-    name: logisticRegressorDTypeJsonKey,
-    toJson: dTypeToJson,
-    fromJson: fromDTypeJson,
-  )
+  @JsonKey(name: logisticRegressorDTypeJsonKey)
   final DType dtype;
 
   @JsonKey(name: logisticRegressorProbabilityThresholdJsonKey)

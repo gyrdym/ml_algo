@@ -21,7 +21,8 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
           (v) => const KnnSolverJsonConverter()
               .fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'P', (v) => v as String),
-      $checkedConvert(json, 'D', (v) => fromDTypeJson(v as String)),
+      $checkedConvert(
+          json, 'D', (v) => const DTypeJsonConverter().fromJson(v as String)),
     );
     return val;
   }, fieldKeyMap: const {
@@ -37,7 +38,7 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$KnnClassifierImplToJson(KnnClassifierImpl instance) =>
     <String, dynamic>{
       'T': instance.targetColumnName,
-      'D': dTypeToJson(instance.dtype),
+      'D': const DTypeJsonConverter().toJson(instance.dtype),
       'C': instance.classLabels,
       'K': const KernelJsonConverter().toJson(instance.kernel),
       'S': const KnnSolverJsonConverter().toJson(instance.solver),

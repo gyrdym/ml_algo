@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_json_keys.dart';
+import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_label_list.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
@@ -12,8 +13,6 @@ import 'package:ml_algo/src/knn_solver/knn_solver_json_converter.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/dtype_to_json.dart';
-import 'package:ml_linalg/from_dtype_json.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -22,6 +21,7 @@ part 'knn_classifier_impl.g.dart';
 @JsonSerializable()
 @KnnSolverJsonConverter()
 @KernelJsonConverter()
+@DTypeJsonConverter()
 class KnnClassifierImpl
     with
         AssessableClassifierMixin,
@@ -49,11 +49,7 @@ class KnnClassifierImpl
   final String targetColumnName;
 
   @override
-  @JsonKey(
-    name: knnClassifierDTypeJsonKey,
-    toJson: dTypeToJson,
-    fromJson: fromDTypeJson,
-  )
+  @JsonKey(name: knnClassifierDTypeJsonKey)
   final DType dtype;
 
   @override

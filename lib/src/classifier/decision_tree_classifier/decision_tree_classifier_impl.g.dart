@@ -14,7 +14,8 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
       $checkedConvert(
           json, 'R', (v) => fromTreeNodeJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'T', (v) => v as String),
-      $checkedConvert(json, 'DT', (v) => fromDTypeJson(v as String)),
+      $checkedConvert(
+          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
     );
     return val;
   }, fieldKeyMap: const {
@@ -27,7 +28,7 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
 Map<String, dynamic> _$DecisionTreeClassifierImplToJson(
         DecisionTreeClassifierImpl instance) =>
     <String, dynamic>{
-      'DT': dTypeToJson(instance.dtype),
+      'DT': const DTypeJsonConverter().toJson(instance.dtype),
       'T': instance.targetColumnName,
       'R': treeNodeToJson(instance.treeRootNode),
     };
