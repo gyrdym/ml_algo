@@ -93,6 +93,9 @@ abstract class DecisionTreeClassifier implements
   /// // here you can use previously fitted restored classifier to make
   /// // some prediction, e.g. via `DecisionTreeClassifier.predict(...)`;
   /// ````
-  factory DecisionTreeClassifier.fromJson(String json) =>
-      createDecisionTreeClassifierFromJson(json);
+  factory DecisionTreeClassifier.fromJson(String json) {
+    initDecisionTreeModule();
+
+    return createDecisionTreeClassifierFromJson(json);
+  }
 }

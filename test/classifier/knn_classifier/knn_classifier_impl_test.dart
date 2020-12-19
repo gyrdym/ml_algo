@@ -12,6 +12,8 @@ import '../../mocks.dart';
 
 void main() {
   group('KnnClassifierImpl', () {
+    final classLabelPrefix = 'awesome class label';
+
     group('constructor', () {
       final solverMock = KnnSolverMock();
       final kernelMock = KernelMock();
@@ -30,6 +32,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -54,6 +57,7 @@ void main() {
           [1],
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -71,6 +75,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -137,6 +142,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -172,6 +178,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -211,6 +218,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -266,6 +274,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -331,6 +340,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -383,6 +393,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -406,7 +417,12 @@ void main() {
         final actual = classifier.predictProbabilities(testFeatures);
 
         expect(actual.header,
-            equals(['Class label 1', 'Class label 2', 'Class label 3']));
+          equals([
+            '$classLabelPrefix 1',
+            '$classLabelPrefix 2',
+            '$classLabelPrefix 3'
+          ]),
+        );
       });
 
       test('should consider initial order of column labels', () {
@@ -421,6 +437,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 
@@ -455,7 +472,12 @@ void main() {
         final predictedProbabilities = actual.rows;
 
         expect(actual.header,
-            equals(['Class label 3', 'Class label 1', 'Class label 2']));
+            equals([
+              '$classLabelPrefix 3',
+              '$classLabelPrefix 1',
+              '$classLabelPrefix 2',
+            ]),
+        );
         expect(predictedProbabilities, iterable2dAlmostEqualTo([
           [thirdClassWeight / 260, firstClassWeight / 260, secondClassWeight / 260],
         ]));
@@ -473,6 +495,7 @@ void main() {
           classLabels,
           kernelMock,
           solverMock,
+          classLabelPrefix,
           DType.float32,
         );
 

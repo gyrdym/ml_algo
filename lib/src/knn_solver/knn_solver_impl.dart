@@ -1,44 +1,83 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_json_keys.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_linalg/distance.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart';
 
-class KnnSolverImpl implements KnnSolver {
+part 'knn_solver_impl.g.dart';
+
+@JsonSerializable()
+class KnnSolverImpl
+    with
+        SerializableMixin
+    implements
+        KnnSolver {
+
   KnnSolverImpl(
-      this._trainFeatures,
-      this._trainOutcomes,
-      this._k,
-      this._distanceType,
-      this._standardize,
+      this.trainFeatures,
+      this.trainOutcomes,
+      this.k,
+      this.distanceType,
+      this.standardize,
   ) {
-    if (!_trainFeatures.hasData) {
+    if (!trainFeatures.hasData) {
       throw Exception('Empty features matrix provided');
     }
-    if (!_trainOutcomes.hasData) {
+    if (!trainOutcomes.hasData) {
       throw Exception('Empty outcomes matrix provided');
     }
-    if (_trainOutcomes.columnsNum > 1) {
+    if (trainOutcomes.columnsNum > 1) {
       throw Exception('Invalid outcome matrix: it is expected to be a column '
-          'vector, but a matrix of ${_trainOutcomes.columnsNum} colums is '
+          'vector, but a matrix of ${trainOutcomes.columnsNum} colums is '
           'given');
     }
-    if (_trainFeatures.rowsNum != _trainOutcomes.rowsNum) {
+    if (trainFeatures.rowsNum != trainOutcomes.rowsNum) {
       throw Exception('Number of feature records and number of associated '
           'outcomes must be equal');
     }
-    if (_k <= 0 || _k > _trainFeatures.rowsNum) {
-      throw RangeError.value(_k, 'Parameter k should be within the range '
-          '1..${_trainFeatures.rowsNum} (both inclusive)');
+    if (k <= 0 || k > trainFeatures.rowsNum) {
+      throw RangeError.value(k, 'Parameter k should be within the range '
+          '1..${trainFeatures.rowsNum} (both inclusive)');
     }
   }
 
-  final Matrix _trainFeatures;
-  final Matrix _trainOutcomes;
-  final int _k;
-  final Distance _distanceType;
-  final bool _standardize;
+  factory KnnSolverImpl.fromJson(Map<String, dynamic> json) =>
+      _$KnnSolverImplFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$KnnSolverImplToJson(this);
+
+  @JsonKey(
+    name: knnSolverTrainFeaturesJsonKey,
+    toJson: matrixToJson,
+    fromJson: fromMatrixJson,
+  )
+  final Matrix trainFeatures;
+
+  @JsonKey(
+    name: knnSolverTrainOutcomesJsonKey,
+    toJson: matrixToJson,
+    fromJson: fromMatrixJson,
+  )
+  final Matrix trainOutcomes;
+
+  @JsonKey(name: knnSolverKJsonKey)
+  final int k;
+
+  @JsonKey(
+    name: knnSolverDistanceTypeJsonKey,
+    toJson: distanceTypeToJson,
+    fromJson: fromDistanceTypeJson,
+  )
+  final Distance distanceType;
+
+  @JsonKey(name: knnSolverStandardizeJsonKey)
+  final bool standardize;
 
   @override
   Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(Matrix features) {
@@ -46,20 +85,20 @@ class KnnSolverImpl implements KnnSolver {
       throw Exception('No features provided');
     }
 
-    if (features.columnsNum != _trainFeatures.columnsNum) {
+    if (features.columnsNum != trainFeatures.columnsNum) {
       throw Exception('Invalid feature matrix: expected columns number: '
-          '${_trainFeatures.columnsNum}, given: '
+          '${trainFeatures.columnsNum}, given: '
           '${features.columnsNum}');
     }
 
-    final allNeighbours = zip([_trainFeatures.rows, _trainOutcomes.rows]);
-    final firstKNeighbours = allNeighbours.take(_k);
-    final restNeighbours = allNeighbours.skip(_k);
+    final allNeighbours = zip([trainFeatures.rows, trainOutcomes.rows]);
+    final firstKNeighbours = allNeighbours.take(k);
+    final restNeighbours = allNeighbours.skip(k);
 
     return features.rows.map((observation) {
       final sortedKNeighbors = firstKNeighbours
           .map((pair) => Neighbour(pair.first
-          .distanceTo(observation, distance: _distanceType), pair.last))
+          .distanceTo(observation, distance: distanceType), pair.last))
           .toList(growable: false)
         ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
 
@@ -69,13 +108,13 @@ class KnnSolverImpl implements KnnSolver {
         final newNeighbourIdx = _findNewNeighbourIdx(newKNeighbour.distance,
             sortedKNeighbors);
         if (newNeighbourIdx != -1) {
-          sortedKNeighbors.setRange(newNeighbourIdx + 1, _k, sortedKNeighbors,
+          sortedKNeighbors.setRange(newNeighbourIdx + 1, k, sortedKNeighbors,
               newNeighbourIdx);
           sortedKNeighbors[newNeighbourIdx] = newKNeighbour;
         }
       });
 
-      if (_standardize && sortedKNeighbors.isNotEmpty) {
+      if (standardize && sortedKNeighbors.isNotEmpty) {
         final distanceOfLast = sortedKNeighbors.last.distance;
         return sortedKNeighbors.map((neighbour) =>
             Neighbour(neighbour.distance / distanceOfLast, neighbour.label));

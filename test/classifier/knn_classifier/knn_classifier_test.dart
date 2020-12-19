@@ -18,6 +18,7 @@ import '../../mocks.dart';
 
 void main() {
   group('KnnClassifier', () {
+    final classLabelPrefix = 'class label';
     final data = DataFrame.fromSeries(
         [
           Series('first' , <num>[1, 1, 1, 1]),
@@ -77,6 +78,7 @@ void main() {
         2,
         KernelType.uniform,
         Distance.cosine,
+        classLabelPrefix,
         DType.float32,
       );
 
@@ -91,6 +93,7 @@ void main() {
         2,
         KernelType.uniform,
         Distance.hamming,
+        classLabelPrefix,
         DType.float32,
       );
 
@@ -120,15 +123,17 @@ void main() {
         2,
         KernelType.uniform,
         Distance.cosine,
+        classLabelPrefix,
         DType.float32,
       );
 
       verify(knnClassifierFactoryMock.create(
-          targetName,
-          [1, 3, 2],
-          kernelMock,
-          solverMock,
-          DType.float32,
+        targetName,
+        [1, 3, 2],
+        kernelMock,
+        solverMock,
+        classLabelPrefix,
+        DType.float32,
       )).called(1);
 
       expect(classifier, same(knnClassifierMock));
@@ -149,13 +154,20 @@ void main() {
         2,
         KernelType.uniform,
         Distance.hamming,
+        classLabelPrefix,
         DType.float32,
       );
 
       final expectedLabels = [1, 3, 2];
 
-      verify(knnClassifierFactoryMock.create(any, expectedLabels, any, any, any))
-          .called(1);
+      verify(knnClassifierFactoryMock.create(
+        any,
+        expectedLabels,
+        any,
+        any,
+        classLabelPrefix,
+        any,
+      )).called(1);
     });
 
     test('should throw an exception if target column does not exist in the '
@@ -166,6 +178,7 @@ void main() {
         2,
         KernelType.uniform,
         Distance.hamming,
+        classLabelPrefix,
         DType.float32,
       );
 

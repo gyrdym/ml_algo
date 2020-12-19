@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type_json_keys.dart';
 
 class EpanechnikovKernel implements Kernel {
   const EpanechnikovKernel();
@@ -8,4 +9,7 @@ class EpanechnikovKernel implements Kernel {
       distance.abs() <= bandwidth
           ? 0.75 * (1 - distance * distance)
           : 0;
+
+  @override
+  String toJson() => epanechnikovKernelEncodedValue;
 }

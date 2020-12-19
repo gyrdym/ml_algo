@@ -16,6 +16,7 @@ KnnClassifier createKnnClassifier(
     int k,
     KernelType kernelType,
     Distance distance,
+    String columnPrefix,
     DType dtype,
 ) {
   validateTrainData(trainData, [targetName]);
@@ -25,8 +26,10 @@ KnnClassifier createKnnClassifier(
   ).toList();
   final featuresSplit = splits[0];
   final targetSplit = splits[1];
-  final trainFeatures = featuresSplit.toMatrix(dtype);
-  final trainLabels = targetSplit.toMatrix(dtype);
+  final trainFeatures = featuresSplit
+      .toMatrix(dtype);
+  final trainLabels = targetSplit
+      .toMatrix(dtype);
   final classLabels = targetSplit[targetName].isDiscrete
       ? targetSplit[targetName]
           .discreteValues
@@ -37,27 +40,27 @@ KnnClassifier createKnnClassifier(
           .getColumn(0)
           .unique()
           .toList(growable: false);
-  final kernelFactory = knnClassifierInjector
-      .get<KernelFactory>();
-  final kernel = kernelFactory
+  final kernel = knnClassifierInjector
+      .get<KernelFactory>()
       .createByType(kernelType);
-  final solverFactory = knnClassifierInjector
-      .get<KnnSolverFactory>();
-  final solver = solverFactory.create(
-    trainFeatures,
-    trainLabels,
-    k,
-    distance,
-    true,
-  );
-  final knnClassifierFactory = knnClassifierInjector
-      .get<KnnClassifierFactory>();
+  final solver = knnClassifierInjector
+      .get<KnnSolverFactory>()
+      .create(
+        trainFeatures,
+        trainLabels,
+        k,
+        distance,
+        true,
+      );
 
-  return knnClassifierFactory.create(
-    targetName,
-    classLabels,
-    kernel,
-    solver,
-    dtype,
-  );
+  return knnClassifierInjector
+      .get<KnnClassifierFactory>()
+      .create(
+        targetName,
+        classLabels,
+        kernel,
+        solver,
+        columnPrefix,
+        dtype,
+      );
 }
