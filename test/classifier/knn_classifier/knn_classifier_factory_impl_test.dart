@@ -13,8 +13,14 @@ void main() {
       final solverMock = KnnSolverMock();
       final dtype = DType.float32;
 
-      final actual = factory.create('target', [1, 2, 3], kernelMock, solverMock,
-          dtype);
+      final actual = factory.create(
+        'target',
+        [1, 2, 3],
+        kernelMock,
+        solverMock,
+        'label',
+        dtype,
+      );
 
       expect(actual, isA<KnnClassifierImpl>());
     });

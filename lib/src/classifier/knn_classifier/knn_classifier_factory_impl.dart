@@ -14,6 +14,14 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
       List<num> classLabels,
       Kernel kernel,
       KnnSolver solver,
+      String columnPrefix,
       DType dtype,
-  ) => KnnClassifierImpl(targetName, classLabels, kernel, solver, dtype);
+  ) => KnnClassifierImpl(
+    targetName,
+    classLabels,
+    kernel,
+    solver,
+    columnPrefix,
+    dtype,
+  );
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 15.4.0
+- `KnnClassifier`:
+    - serialization/deserialization functionality added with possibility to save the model into a json file
+- `KnnRegressor`:
+    - serialization/deserialization functionality added with possibility to save the model into a json file
+
 ## 15.3.6
 - `ml_dataframe`: version 0.3.0 supported
 - `README.md`: build badge corrected

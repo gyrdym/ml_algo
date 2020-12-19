@@ -1,42 +1,75 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_json_keys.dart';
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_label_list.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_json_converter.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_json_converter.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/dtype_to_json.dart';
+import 'package:ml_linalg/from_dtype_json.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
+part 'knn_classifier_impl.g.dart';
+
+@JsonSerializable()
+@KnnSolverJsonConverter()
+@KernelJsonConverter()
 class KnnClassifierImpl
     with
-        AssessableClassifierMixin
+        AssessableClassifierMixin,
+        SerializableMixin
     implements
         KnnClassifier {
   KnnClassifierImpl(
-      this._targetColumnName,
-      this._classLabels,
-      this._kernel,
-      this._solver,
+      this.targetColumnName,
+      this.classLabels,
+      this.kernel,
+      this.solver,
+      this.classLabelPrefix,
       this.dtype,
   ) {
-    validateClassLabelList(_classLabels);
+    validateClassLabelList(classLabels);
   }
 
-  final String _targetColumnName;
+  factory KnnClassifierImpl.fromJson(Map<String, dynamic> json) =>
+      _$KnnClassifierImplFromJson(json);
 
   @override
+  Map<String, dynamic> toJson() => _$KnnClassifierImplToJson(this);
+
+  @JsonKey(name: knnClassifierTargetColumnNameJsonKey)
+  final String targetColumnName;
+
+  @override
+  @JsonKey(
+    name: knnClassifierDTypeJsonKey,
+    toJson: dTypeToJson,
+    fromJson: fromDTypeJson,
+  )
   final DType dtype;
 
   @override
-  Iterable<String> get targetNames => [_targetColumnName];
+  Iterable<String> get targetNames => [targetColumnName];
 
-  final List<num> _classLabels;
-  final Kernel _kernel;
-  final KnnSolver _solver;
-  final String _columnPrefix = 'Class label';
+  @JsonKey(name: knnClassifierClassLabelsJsonKey)
+  final List<num> classLabels;
+
+  @JsonKey(name: knnClassifierKernelJsonKey)
+  final Kernel kernel;
+
+  @JsonKey(name: knnClassifierSolverJsonKey)
+  final KnnSolver solver;
+
+  @JsonKey(name: knnClassifierClassLabelPrefixJsonKey)
+  final String classLabelPrefix;
 
   @override
   final num positiveLabel = null;
@@ -83,10 +116,12 @@ class KnnClassifierImpl
   DataFrame predictProbabilities(DataFrame features) {
     final labelsToProbabilities = _getLabelToProbabilityMapping(features);
     final probabilityMatrix = _getProbabilityMatrix(labelsToProbabilities);
-
     final header = labelsToProbabilities
         .keys
-        .map((label) => '${_columnPrefix} ${label.toString()}');
+        .map((label) =>
+          [classLabelPrefix.trim(), label.toString().trim()]
+              .where((element) => element.isNotEmpty)
+              .join(' '));
 
     return DataFrame.fromMatrix(probabilityMatrix, header: header);
   }
@@ -114,8 +149,8 @@ class KnnClassifierImpl
   /// where each row is a classes probability distribution for the appropriate
   /// feature record from the test feature matrix
   Map<num, List<num>> _getLabelToProbabilityMapping(DataFrame features) {
-    final kNeighbourGroups = _solver.findKNeighbours(features.toMatrix(dtype));
-    final classLabelsAsSet = Set<num>.from(_classLabels);
+    final kNeighbourGroups = solver.findKNeighbours(features.toMatrix(dtype));
+    final classLabelsAsSet = Set<num>.from(classLabels);
 
     return kNeighbourGroups.fold<Map<num, List<num>>>(
         {}, (allLabelsToProbabilities, kNeighbours) {
@@ -142,7 +177,7 @@ class KnnClassifierImpl
       // if labels are equiprobable, make the first neighbour's label
       // probability equal to 1 and probabilities of the rest neighbour labels -
       // equal to 0
-      _classLabels.forEach((label) {
+      classLabels.forEach((label) {
         final probability = areLabelsEquiprobable
             ? label == kNeighbours.first.label.first
                 ? 1
@@ -174,7 +209,7 @@ class KnnClassifierImpl
       Map<num, num> labelToWeightMapping,
       Neighbour<Vector> neighbour,
   ) {
-    final weight = _kernel.getWeightByDistance(neighbour.distance);
+    final weight = kernel.getWeightByDistance(neighbour.distance);
     return labelToWeightMapping
       ..update(
         neighbour.label.first,

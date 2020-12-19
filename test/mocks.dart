@@ -274,7 +274,7 @@ KnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
 
 KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
   final factory = KnnClassifierFactoryMock();
-  when(factory.create(any, any, any, any, any)).thenReturn(classifier);
+  when(factory.create(any, any, any, any, any, any)).thenReturn(classifier);
   return factory;
 }
 

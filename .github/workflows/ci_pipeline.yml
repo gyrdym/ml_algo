@@ -30,11 +30,3 @@ jobs:
 
       - name: Run e2e tests
         run: dart pub run test e2e -p vm
-
-      - name: Code coverage
-        run: dart pub run test_coverage
-
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v1.1.2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}

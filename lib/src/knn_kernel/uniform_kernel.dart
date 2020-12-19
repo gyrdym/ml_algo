@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type_json_keys.dart';
 
 class UniformKernel implements Kernel {
   const UniformKernel();
@@ -8,4 +9,7 @@ class UniformKernel implements Kernel {
       distance.abs() <= bandwidth
           ? 1/2
           : 0;
+
+  @override
+  String toJson() => uniformKernelEncodedValue;
 }

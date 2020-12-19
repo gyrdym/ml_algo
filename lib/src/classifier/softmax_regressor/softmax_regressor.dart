@@ -202,8 +202,11 @@ abstract class SoftmaxRegressor implements
   /// // here you can use previously fitted restored classifier to make
   /// // some prediction, e.g. via `restoredClassifier.predict(...)`;
   /// ````
-  factory SoftmaxRegressor.fromJson(String json) =>
-      createSoftmaxRegressorFromJson(json);
+  factory SoftmaxRegressor.fromJson(String json) {
+    initSoftmaxRegressorModule();
+
+    return createSoftmaxRegressorFromJson(json);
+  }
 
   /// Returns a list of cost values per each learning iteration. Returns null
   /// if the parameter `collectLearningData` of the default constructor is false

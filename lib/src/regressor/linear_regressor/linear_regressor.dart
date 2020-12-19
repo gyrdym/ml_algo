@@ -184,8 +184,11 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   /// // here you can use previously fitted restored regressor to make
   /// // some prediction, e.g. via `restoredRegressor.predict(...)`;
   /// ````
-  factory LinearRegressor.fromJson(String json) =>
-      createLinearRegressorFromJson(json);
+  factory LinearRegressor.fromJson(String json) {
+    initCommonModule();
+
+    return createLinearRegressorFromJson(json);
+  }
 
   /// Learned coefficients (or weights) for given features
   Vector get coefficients;

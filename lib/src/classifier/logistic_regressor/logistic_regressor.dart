@@ -210,8 +210,11 @@ abstract class LogisticRegressor implements
   /// // here you can use previously fitted restored classifier to make
   /// // some prediction, e.g. via `restoredClassifier.predict(...)`;
   /// ````
-  factory LogisticRegressor.fromJson(String json) =>
-      createLogisticRegressorFromJson(json);
+  factory LogisticRegressor.fromJson(String json) {
+    initLogisticRegressorModule();
+
+    return createLogisticRegressorFromJson(json);
+  }
 
   /// Returns a list of cost values per each learning iteration. Returns null
   /// if the parameter `collectLearningData` of the default constructor is false
