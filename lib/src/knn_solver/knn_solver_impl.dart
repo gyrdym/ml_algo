@@ -1,10 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/json_converter/distance_type_json_converter.dart';
+import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_json_keys.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_linalg/distance.dart';
-import 'package:ml_linalg/linalg.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart';
@@ -12,6 +13,8 @@ import 'package:quiver/iterables.dart';
 part 'knn_solver_impl.g.dart';
 
 @JsonSerializable()
+@MatrixJsonConverter()
+@DistanceTypeJsonConverter()
 class KnnSolverImpl
     with
         SerializableMixin
@@ -52,28 +55,16 @@ class KnnSolverImpl
   @override
   Map<String, dynamic> toJson() => _$KnnSolverImplToJson(this);
 
-  @JsonKey(
-    name: knnSolverTrainFeaturesJsonKey,
-    toJson: matrixToJson,
-    fromJson: fromMatrixJson,
-  )
+  @JsonKey(name: knnSolverTrainFeaturesJsonKey)
   final Matrix trainFeatures;
 
-  @JsonKey(
-    name: knnSolverTrainOutcomesJsonKey,
-    toJson: matrixToJson,
-    fromJson: fromMatrixJson,
-  )
+  @JsonKey(name: knnSolverTrainOutcomesJsonKey)
   final Matrix trainOutcomes;
 
   @JsonKey(name: knnSolverKJsonKey)
   final int k;
 
-  @JsonKey(
-    name: knnSolverDistanceTypeJsonKey,
-    toJson: distanceTypeToJson,
-    fromJson: fromDistanceTypeJson,
-  )
+  @JsonKey(name: knnSolverDistanceTypeJsonKey)
   final Distance distanceType;
 
   @JsonKey(name: knnSolverStandardizeJsonKey)

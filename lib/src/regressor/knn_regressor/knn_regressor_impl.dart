@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
@@ -10,8 +11,6 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/dtype_to_json.dart';
-import 'package:ml_linalg/from_dtype_json.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -23,6 +22,7 @@ final _float64zeroVector = Vector.zero(1, dtype: DType.float64);
 @JsonSerializable()
 @KnnSolverJsonConverter()
 @KernelJsonConverter()
+@DTypeJsonConverter()
 class KnnRegressorImpl
     with
         AssessableRegressorMixin,
@@ -43,11 +43,7 @@ class KnnRegressorImpl
   Map<String, dynamic> toJson() => _$KnnRegressorImplToJson(this);
 
   @override
-  @JsonKey(
-    name: knnRegressorDTypeJsonKey,
-    toJson: dTypeToJson,
-    fromJson: fromDTypeJson,
-  )
+  @JsonKey(name: knnRegressorDTypeJsonKey)
   final DType dtype;
 
   @JsonKey(name: knnRegressorTargetNameJsonKey)

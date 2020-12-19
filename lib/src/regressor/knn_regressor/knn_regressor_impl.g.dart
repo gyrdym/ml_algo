@@ -18,7 +18,8 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
               .fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
           json, 'K', (v) => const KernelJsonConverter().fromJson(v as String)),
-      $checkedConvert(json, 'D', (v) => fromDTypeJson(v as String)),
+      $checkedConvert(
+          json, 'D', (v) => const DTypeJsonConverter().fromJson(v as String)),
     );
     return val;
   }, fieldKeyMap: const {
@@ -31,7 +32,7 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$KnnRegressorImplToJson(KnnRegressorImpl instance) =>
     <String, dynamic>{
-      'D': dTypeToJson(instance.dtype),
+      'D': const DTypeJsonConverter().toJson(instance.dtype),
       'T': instance.targetName,
       'S': const KnnSolverJsonConverter().toJson(instance.solver),
       'K': const KernelJsonConverter().toJson(instance.kernel),
