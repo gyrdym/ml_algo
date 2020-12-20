@@ -98,4 +98,27 @@ abstract class DecisionTreeClassifier implements
 
     return createDecisionTreeClassifierFromJson(json);
   }
+
+  /// A minimal error on a single decision tree node. It is used as a
+  /// stop criteria to avoid farther decision's tree node splitting: if the
+  /// node is good enough, there is no need to split it and thus it can be
+  /// considered a leaf.
+  ///
+  /// The value is within the range 0..1 (both inclusive).
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final num minError;
+
+  /// A minimal number of samples (observations) on the
+  /// decision's tree node. The value is used as a stop criteria to avoid
+  /// farther decision's tree node splitting: if the node contains less than or
+  /// equal to [minSamplesCount] observations, the node is considered a leaf.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final int minSamplesCount;
+
+  /// A maximum number of decision tree levels.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final int maxDepth;
 }

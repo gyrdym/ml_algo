@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 
 Future<Vector> evaluateLinearRegressor(MetricType metricType,
     DType dtype) async {
-  final samples = (await fromCsv('e2e/datasets/housing.csv',
+  final samples = (await fromCsv('e2e/_datasets/housing.csv',
       headerExists: false,
       columnDelimiter: ' ')).shuffle();
   final folds = 5;

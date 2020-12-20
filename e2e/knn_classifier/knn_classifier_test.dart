@@ -5,28 +5,28 @@ import 'package:ml_linalg/vector.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 
-Future<Vector> evaluateClassifier(MetricType metric, DType dtype) async {
-  final samples = (await fromCsv('e2e/datasets/iris.csv'))
+Future<Vector> evaluateKnnClassifier(MetricType metric, DType dtype) async {
+  final samples = (await fromCsv('e2e/_datasets/iris.csv'))
       .shuffle()
       .dropSeries(seriesNames: ['Id']);
+  final targetName = 'Species';
   final pipeline = Pipeline(samples, [
     encodeAsIntegerLabels(
-      featureNames: ['Species'],
+      featureNames: [targetName],
     ),
   ]);
-  final numberOfFolds = 5;
   final processed = pipeline.process(samples);
+  final numberOfFolds = 7;
+  final numberOfNeighbours = 5;
   final validator = CrossValidator.kFold(
     processed,
     numberOfFolds: numberOfFolds,
   );
   final createClassifier = (DataFrame trainSamples) =>
-      DecisionTreeClassifier(
+      KnnClassifier(
         trainSamples,
-        'Species',
-        minError: 0.3,
-        minSamplesCount: 5,
-        maxDepth: 4,
+        targetName,
+        numberOfNeighbours,
         dtype: dtype,
       );
 
@@ -37,51 +37,51 @@ Future<Vector> evaluateClassifier(MetricType metric, DType dtype) async {
 }
 
 void main() async {
-  group('DecisionTreeClassifier', () {
+  group('KnnClassifier', () {
     test('should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateClassifier(
-          MetricType.accuracy, DType.float32);
+      final scores = await evaluateKnnClassifier(MetricType.accuracy,
+          DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test('should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateClassifier(
-          MetricType.accuracy, DType.float64);
+      final scores = await evaluateKnnClassifier(MetricType.accuracy,
+          DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test('should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateClassifier(
-          MetricType.precision, DType.float32);
+      final scores = await evaluateKnnClassifier(MetricType.precision,
+          DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test('should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateClassifier(
-          MetricType.precision, DType.float64);
+      final scores = await evaluateKnnClassifier(MetricType.precision,
+          DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test('should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateClassifier(
-          MetricType.recall, DType.float32);
+      final scores = await evaluateKnnClassifier(MetricType.recall,
+          DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test('should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateClassifier(
-          MetricType.recall, DType.float64);
+      final scores = await evaluateKnnClassifier(MetricType.recall,
+          DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });

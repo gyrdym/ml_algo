@@ -26,8 +26,8 @@ abstract class KnnClassifier implements Assessable, Classifier, Serializable {
   ///
   /// [trainData] Labelled observations. Must contain [targetName] column.
   ///
-  /// [targetName] A string that serves as a name of the column containing class
-  /// labels (or outcomes).
+  /// [targetName] A string that serves as a name of the column containing
+  /// outcomes.
   ///
   /// [k] a number of nearest neighbours to be found among [trainData]
   ///
@@ -102,4 +102,20 @@ abstract class KnnClassifier implements Assessable, Classifier, Serializable {
 
     return createKnnClassifierFromJson(json);
   }
+
+  /// A number of nearest neighbours
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final int k;
+
+  /// A kernel type
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final KernelType kernelType;
+
+  /// A distance type that is used to measure a distance between two
+  /// observations
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final Distance distanceType;
 }

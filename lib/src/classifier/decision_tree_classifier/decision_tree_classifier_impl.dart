@@ -25,6 +25,9 @@ class DecisionTreeClassifierImpl
         DecisionTreeClassifier {
 
   DecisionTreeClassifierImpl(
+      this.minError,
+      this.minSamplesCount,
+      this.maxDepth,
       this.treeRootNode,
       this.targetColumnName,
       this.dtype,
@@ -37,17 +40,29 @@ class DecisionTreeClassifierImpl
   Map<String, dynamic> toJson() => _$DecisionTreeClassifierImplToJson(this);
 
   @override
-  @JsonKey(name: dTypeJsonKey)
+  @JsonKey(name: decisionTreeClassifierMinErrorJsonKey)
+  final num minError;
+
+  @override
+  @JsonKey(name: decisionTreeClassifierMinSamplesCountJsonKey)
+  final int minSamplesCount;
+
+  @override
+  @JsonKey(name: decisionTreeClassifierMaxDepthJsonKey)
+  final int maxDepth;
+
+  @override
+  @JsonKey(name: decisionTreeClassifierDTypeJsonKey)
   final DType dtype;
 
-  @JsonKey(name: targetColumnNameJsonKey)
+  @JsonKey(name: decisionTreeClassifierTargetColumnNameJsonKey)
   final String targetColumnName;
 
   @override
   Iterable<String> get targetNames => [targetColumnName];
 
   @JsonKey(
-    name: treeRootNodeJsonKey,
+    name: decisionTreeClassifierTreeRootNodeJsonKey,
     toJson: treeNodeToJson,
     fromJson: fromTreeNodeJson,
   )

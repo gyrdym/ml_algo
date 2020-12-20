@@ -1,6 +1,10 @@
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -14,6 +18,18 @@ import '../../../mocks.dart';
 void main() {
   group('SoftmaxRegressorImpl', () {
     final linkFunctionMock = LinkFunctionMock();
+    final optimizerType = LinearOptimizerType.gradient;
+    final iterationsLimit = 3;
+    final initialLearningRate = 0.75;
+    final minCoefficientsUpdate = 0.3;
+    final lambda = 12.5;
+    final regularizationType = RegularizationType.L2;
+    final randomSeed = 144;
+    final batchSize = 2;
+    final isFittingDataNormalized = true;
+    final learningRateType = LearningRateType.decreasingAdaptive;
+    final initialCoefficientsType = InitialCoefficientsType.zeroes;
+    final initialCoefficients = Matrix.fromList([[13, 43, 55]]);
     final fitIntercept = true;
     final interceptScale = 10;
     final positiveLabel = 1.0;
@@ -87,6 +103,18 @@ void main() {
       when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
 
       regressor = SoftmaxRegressorImpl(
+        optimizerType,
+        iterationsLimit,
+        initialLearningRate,
+        minCoefficientsUpdate,
+        lambda,
+        regularizationType,
+        randomSeed,
+        batchSize,
+        isFittingDataNormalized,
+        learningRateType,
+        initialCoefficientsType,
+        initialCoefficients,
         coefficientsByClasses,
         targetNames,
         linkFunctionMock,
@@ -108,6 +136,18 @@ void main() {
     group('constructor', () {
       test('should throw an exception if no coefficients are provided', () {
         final actual = () => SoftmaxRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           Matrix.empty(),
           targetNames,
           linkFunctionMock,
@@ -125,6 +165,18 @@ void main() {
       test('should throw an exception if coefficients for too few number of '
           'classes are provided', () {
         final actual = () => SoftmaxRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           Matrix.fromList([
             [1],
             [2],
@@ -141,6 +193,45 @@ void main() {
         );
 
         expect(actual, throwsException);
+      });
+
+      test('should persist hyperparameters', () {
+        final classifier = SoftmaxRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
+          coefficientsByClasses,
+          targetNames,
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          positiveLabel,
+          negativeLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(classifier.optimizerType, optimizerType);
+        expect(classifier.iterationsLimit, iterationsLimit);
+        expect(classifier.initialLearningRate, initialLearningRate);
+        expect(classifier.minCoefficientsUpdate, minCoefficientsUpdate);
+        expect(classifier.lambda, lambda);
+        expect(classifier.regularizationType, regularizationType);
+        expect(classifier.randomSeed, randomSeed);
+        expect(classifier.batchSize, batchSize);
+        expect(classifier.isFittingDataNormalized, isFittingDataNormalized);
+        expect(classifier.learningRateType, learningRateType);
+        expect(classifier.initialCoefficientsType, initialCoefficientsType);
+        expect(classifier.initialCoefficients, initialCoefficients);
       });
     });
 

@@ -8,10 +8,12 @@ import 'package:ml_algo/src/helpers/validate_class_label_list.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_json_converter.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_json_converter.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -72,6 +74,15 @@ class KnnClassifierImpl
 
   @override
   final num negativeLabel = null;
+
+  @override
+  int get k => solver.k;
+
+  @override
+  KernelType get kernelType => kernel.type;
+
+  @override
+  Distance get distanceType => solver.distanceType;
 
   @override
   DataFrame predict(DataFrame features) {

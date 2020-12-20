@@ -15,8 +15,8 @@ import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../helpers.dart';
-import '../mocks.dart';
+import '../../helpers.dart';
+import '../../mocks.dart';
 
 void main() {
   group('LinearRegressor', () {

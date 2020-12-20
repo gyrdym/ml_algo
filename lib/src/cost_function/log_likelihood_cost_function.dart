@@ -42,5 +42,6 @@ class LogLikelihoodCostFunction implements CostFunction {
 
   @override
   Vector getSubGradient(int wIdx, Matrix x, Matrix w, Matrix y) =>
-      throw UnimplementedError();
+      throw UnimplementedError('Coordinate optimization is not implemented yet '
+          'for log likelihood cost function');
 }

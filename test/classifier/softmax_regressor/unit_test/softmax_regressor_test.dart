@@ -280,8 +280,29 @@ void main() {
         dtype: DType.float32,
       );
 
-      verify(softmaxRegressorFactoryMock.create(any, any, any, any, any, any,
-          any, costPerIteration, any));
+      verify(softmaxRegressorFactoryMock.create(
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          costPerIteration,
+          any,
+      ));
     });
   });
 }

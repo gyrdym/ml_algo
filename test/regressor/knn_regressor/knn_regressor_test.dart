@@ -22,9 +22,7 @@ void main() {
       headerExists: false,
       header: ['first', 'second', 'third', 'fourth', 'fifth'],
     );
-
     final targetName = 'fifth';
-
     final knnRegressor = KnnRegressorMock();
     final knnRegressorFactory = createKnnRegressorFactoryMock(knnRegressor);
 
@@ -53,6 +51,29 @@ void main() {
       )).called(1);
 
       expect(regressor, same(knnRegressor));
+    });
+
+    test('should persist hyperparameters', () {
+      final k = 213;
+      final kernel = KernelType.epanechnikov;
+      final distance = Distance.cosine;
+
+      when(knnRegressor.k).thenReturn(k);
+      when(knnRegressor.kernelType).thenReturn(kernel);
+      when(knnRegressor.distanceType).thenReturn(distance);
+
+      final regressor = createKnnRegressor(
+        fittingData: data,
+        targetName: targetName,
+        k: 213,
+        kernel: KernelType.epanechnikov,
+        distance: Distance.cosine,
+        dtype: DType.float64,
+      );
+
+      expect(regressor.k, k);
+      expect(regressor.kernelType, kernel);
+      expect(regressor.distanceType, distance);
     });
   });
 }
