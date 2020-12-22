@@ -5,42 +5,45 @@ import 'package:ml_linalg/vector.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 
-Future<Vector> evaluateKnnClassifier(MetricType metric, DType dtype) async {
-  final samples = (await fromCsv('e2e/datasets/iris.csv'))
+Future<Vector> evaluateSoftmaxRegressor(MetricType metricType,
+    DType dtype) async {
+  final samples = (await fromCsv('e2e/_datasets/iris.csv'))
       .shuffle()
       .dropSeries(seriesNames: ['Id']);
-  final targetName = 'Species';
   final pipeline = Pipeline(samples, [
-    encodeAsIntegerLabels(
-      featureNames: [targetName],
+    encodeAsOneHotLabels(
+      featureNames: ['Species'],
     ),
   ]);
+  final classNames = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica'];
   final processed = pipeline.process(samples);
-  final numberOfFolds = 7;
-  final numberOfNeighbours = 5;
+  final numberOfFolds = 5;
   final validator = CrossValidator.kFold(
     processed,
     numberOfFolds: numberOfFolds,
   );
-  final createClassifier = (DataFrame trainSamples) =>
-      KnnClassifier(
-        trainSamples,
-        targetName,
-        numberOfNeighbours,
+  final predictorFactory = (DataFrame trainingSamples) =>
+      SoftmaxRegressor(
+        trainingSamples,
+        classNames,
+        initialLearningRate: 0.035,
+        iterationsLimit: 5000,
+        minCoefficientsUpdate: null,
+        learningRateType: LearningRateType.constant,
         dtype: dtype,
       );
 
   return validator.evaluate(
-    createClassifier,
-    metric,
+    predictorFactory,
+    metricType,
   );
 }
 
-void main() async {
-  group('KnnClassifier', () {
+Future main() async {
+  group('SoftmaxRegressor', () {
     test('should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateKnnClassifier(MetricType.accuracy,
+      final scores = await evaluateSoftmaxRegressor(MetricType.accuracy,
           DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
@@ -48,7 +51,7 @@ void main() async {
 
     test('should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateKnnClassifier(MetricType.accuracy,
+      final scores = await evaluateSoftmaxRegressor(MetricType.accuracy,
           DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
@@ -56,7 +59,7 @@ void main() async {
 
     test('should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateKnnClassifier(MetricType.precision,
+      final scores = await evaluateSoftmaxRegressor(MetricType.precision,
           DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
@@ -64,7 +67,7 @@ void main() async {
 
     test('should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateKnnClassifier(MetricType.precision,
+      final scores = await evaluateSoftmaxRegressor(MetricType.precision,
           DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
@@ -72,7 +75,7 @@ void main() async {
 
     test('should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateKnnClassifier(MetricType.recall,
+      final scores = await evaluateSoftmaxRegressor(MetricType.recall,
           DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
@@ -80,7 +83,7 @@ void main() async {
 
     test('should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateKnnClassifier(MetricType.recall,
+      final scores = await evaluateSoftmaxRegressor(MetricType.recall,
           DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));

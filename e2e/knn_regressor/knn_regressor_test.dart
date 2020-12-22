@@ -6,7 +6,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 
 Future<Vector> evaluateKnnRegressor(MetricType metricType, DType dtype) async {
-  final data = (await fromCsv('e2e/datasets/housing.csv',
+  final data = (await fromCsv('e2e/_datasets/housing.csv',
     headerExists: false,
     columnDelimiter: ' ',
   )).shuffle();

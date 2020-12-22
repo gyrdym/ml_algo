@@ -4,15 +4,15 @@ import 'package:test/test.dart';
 void main() {
   group('Decision tree json keys', () {
     test('should have a proper key for dType field', () {
-      expect(dTypeJsonKey, 'DT');
+      expect(decisionTreeClassifierDTypeJsonKey, 'DT');
     });
 
     test('should have a proper key for target column name field', () {
-      expect(targetColumnNameJsonKey, 'T');
+      expect(decisionTreeClassifierTargetColumnNameJsonKey, 'T');
     });
 
     test('should have a proper key for tree root node field', () {
-      expect(treeRootNodeJsonKey, 'R');
+      expect(decisionTreeClassifierTreeRootNodeJsonKey, 'R');
     });
   });
 }

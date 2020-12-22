@@ -5,22 +5,37 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dar
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
+import 'package:ml_algo/src/common/json_converter/vector_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
 import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type_json_converter.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:ml_linalg/vector.dart';
 
 part 'logistic_regressor_impl.g.dart';
 
 @JsonSerializable()
+@LinearOptimizerTypeJsonConverter()
 @DTypeJsonConverter()
 @MatrixJsonConverter()
+@VectorJsonConverter()
+@RegularizationTypeJsonConverter()
+@LearningRateTypeJsonConverter()
+@InitialCoefficientsTypeJsonConverter()
 class LogisticRegressorImpl
     with
         LinearClassifierMixin,
@@ -30,6 +45,18 @@ class LogisticRegressorImpl
         LogisticRegressor {
 
   LogisticRegressorImpl(
+      this.optimizerType,
+      this.iterationsLimit,
+      this.initialLearningRate,
+      this.minCoefficientsUpdate,
+      this.lambda,
+      this.regularizationType,
+      this.randomSeed,
+      this.batchSize,
+      this.isFittingDataNormalized,
+      this.learningRateType,
+      this.initialCoefficientsType,
+      this.initialCoefficients,
       this.targetNames,
       this.linkFunction,
       this.fitIntercept,
@@ -61,6 +88,78 @@ class LogisticRegressorImpl
   @override
   Map<String, dynamic> toJson() => _$LogisticRegressorImplToJson(this);
 
+  @override
+  @JsonKey(name: logisticRegressorLinearOptimizerTypeJsonKey)
+  final LinearOptimizerType optimizerType;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorIterationsLimitJsonKey,
+    includeIfNull: false,
+  )
+  final int iterationsLimit;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorInitialLearningRateJsonKey,
+    includeIfNull: false,
+  )
+  final double initialLearningRate;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorMinCoefsUpdateJsonKey,
+    includeIfNull: false,
+  )
+  final double minCoefficientsUpdate;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorLambdaJsonKey,
+    includeIfNull: false,
+  )
+  final double lambda;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorRegularizationTypeJsonKey,
+    includeIfNull: false,
+  )
+  final RegularizationType regularizationType;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorRandomSeedJsonKey,
+    includeIfNull: false,
+  )
+  final int randomSeed;
+
+  @override
+  @JsonKey(name: logisticRegressorBatchSizeJsonKey)
+  final int batchSize;
+
+  @override
+  @JsonKey(name: logisticRegressorDataNormalizedFlagJsonKey)
+  final bool isFittingDataNormalized;
+
+  @override
+  @JsonKey(name: logisticRegressorLearningRateTypeJsonKey)
+  final LearningRateType learningRateType;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorInitCoefficientsTypeJsonKey,
+    includeIfNull: false,
+  )
+  final InitialCoefficientsType initialCoefficientsType;
+
+  @override
+  @JsonKey(
+    name: logisticRegressorInitCoefficientsJsonKey,
+    includeIfNull: false,
+  )
+  final Vector initialCoefficients;
+
   /// N x 1 matrix, where N - number of features. It has only one column since
   /// in case of Logistic Regression only one class is used
   @override
@@ -83,6 +182,7 @@ class LogisticRegressorImpl
   @JsonKey(name: logisticRegressorDTypeJsonKey)
   final DType dtype;
 
+  @override
   @JsonKey(name: logisticRegressorProbabilityThresholdJsonKey)
   final num probabilityThreshold;
 

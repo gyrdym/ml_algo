@@ -10,10 +10,16 @@ class DecisionTreeClassifierFactoryImpl implements
 
   @override
   DecisionTreeClassifier create(
+      num minError,
+      int minSamplesCount,
+      int maxDepth,
       TreeNode root,
       String targetName,
       DType dtype,
   ) => DecisionTreeClassifierImpl(
+    minError,
+    minSamplesCount,
+    maxDepth,
     root,
     targetName,
     dtype,

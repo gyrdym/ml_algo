@@ -5,7 +5,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 Future<Vector> evaluateLassoRegressor(MetricType metricType, DType dtype) async {
-  final samples = (await fromCsv('e2e/datasets/advertising.csv'))
+  final samples = (await fromCsv('e2e/_datasets/advertising.csv'))
       .shuffle()
       .dropSeries(seriesNames: ['Num']);
   final targetName = 'Sales';

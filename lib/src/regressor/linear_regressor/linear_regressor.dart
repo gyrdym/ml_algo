@@ -190,6 +190,53 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
     return createLinearRegressorFromJson(json);
   }
 
+  /// Optimization algorithm that was used to learn the model's coefficients
+  LinearOptimizerType get optimizerType;
+
+  /// A maximum number of optimization iterations that was used
+  /// during model's coefficients learning
+  int get iterationsLimit;
+
+  /// Learning rate update strategy that was used to learn the model's
+  /// coefficients
+  LearningRateType get learningRateType;
+
+  /// Coefficients generator type that was used at the very first optimization
+  /// iteration during the model's coefficients learning stage
+  InitialCoefficientsType get initialCoefficientsType;
+
+  /// A learning rate value that was used at the very first optimization
+  /// iteration during the model's coefficients learning stage
+  num get initialLearningRate;
+
+  /// A coefficients update value that was used as a stop criteria during the
+  /// model's coefficients learning process
+  num get minCoefficientsUpdate;
+
+  /// A regularization value that was used to prevent overfitting of the model
+  num get lambda;
+
+  /// A regularization strategy that was used to prevent overfitting of the
+  /// model
+  RegularizationType get regularizationType;
+
+  /// A value that was used during the model's coefficients learning stage to
+  /// init the randomizer for a stochastic optimizer (if the latter was chosen
+  /// to learn the model's coefficients)
+  int get randomSeed;
+
+  /// A size of a batch of data that was used in a single iteration of the
+  /// optimization algorithm
+  int get batchSize;
+
+  /// Coefficients that were used at the very first optimization iteration
+  /// during the model's coefficients learning stage
+  Matrix get initialCoefficients;
+
+  /// Was the train data normalized or not prior to the model's coefficients
+  /// learning stage
+  bool get isFittingDataNormalized;
+
   /// Learned coefficients (or weights) for given features
   Vector get coefficients;
 

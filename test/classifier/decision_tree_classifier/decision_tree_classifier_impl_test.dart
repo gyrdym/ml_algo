@@ -24,6 +24,9 @@ import '../../mocks.dart';
 
 void main() {
   group('DecisionTreeClassifierImpl', () {
+    final minError = 0.2;
+    final minSamplesCount = 3;
+    final maxDepth = 5;
     final classifierAssessorMock = ClassifierAssessorMock();
     final sample1 = Vector.fromList([1, 2, 3]);
     final sample2 = Vector.fromList([10, 20, 30]);
@@ -76,14 +79,20 @@ void main() {
       childrenJsonKey: <Map<String, dynamic>>[],
     };
     final classifier32Json = {
-      dTypeJsonKey: dTypeToJson(DType.float32),
-      targetColumnNameJsonKey: targetColumnName,
-      treeRootNodeJsonKey: rootNodeJson,
+      decisionTreeClassifierMinErrorJsonKey: minError,
+      decisionTreeClassifierMaxDepthJsonKey: maxDepth,
+      decisionTreeClassifierMinSamplesCountJsonKey: minSamplesCount,
+      decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float32),
+      decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
+      decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
     };
     final classifier64Json = {
-      dTypeJsonKey: dTypeToJson(DType.float64),
-      targetColumnNameJsonKey: targetColumnName,
-      treeRootNodeJsonKey: rootNodeJson,
+      decisionTreeClassifierMinErrorJsonKey: minError,
+      decisionTreeClassifierMaxDepthJsonKey: maxDepth,
+      decisionTreeClassifierMinSamplesCountJsonKey: minSamplesCount,
+      decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float64),
+      decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
+      decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
     };
     final treeRootMock = createRootNodeMock({
       sample1: learnedLeafLabel1,
@@ -119,12 +128,18 @@ void main() {
         ..registerSingleton<MetricFactory>(() => metricFactoryMock);
 
       classifier32 = DecisionTreeClassifierImpl(
+        minError,
+        minSamplesCount,
+        maxDepth,
         treeRootMock,
         targetColumnName,
         DType.float32,
       );
 
       classifier64 = DecisionTreeClassifierImpl(
+        minError,
+        minSamplesCount,
+        maxDepth,
         treeRootMock,
         targetColumnName,
         DType.float64,
@@ -142,6 +157,18 @@ void main() {
       decisionTreeInjector.clearAll();
     });
 
+    test('should persist hyperparameters for float32-based classifier', () {
+      expect(classifier32.maxDepth, maxDepth);
+      expect(classifier32.minSamplesCount, minSamplesCount);
+      expect(classifier32.minError, minError);
+    });
+
+    test('should persist hyperparameters for float64-based classifier', () {
+      expect(classifier64.maxDepth, maxDepth);
+      expect(classifier64.minSamplesCount, minSamplesCount);
+      expect(classifier64.minError, minError);
+    });
+
     test('should predict labels for passed unlabelled features dataframe', () {
       final actual = classifier32.predict(unlabelledFeaturesFrame);
 
@@ -154,24 +181,22 @@ void main() {
       expect(actual.header, classifier32.targetNames);
     });
 
-    test(
-        'should return data frame with empty header if input matrix is '
+    test('should return data frame with empty header if input matrix is '
         'empty', () {
       final predictedClasses = classifier32.predict(DataFrame([<num>[]]));
 
       expect(predictedClasses.header, isEmpty);
     });
 
-    test(
-        'should return data frame with empty matrix if input feature matrix is '
-        'empty', () {
+    test('should return data frame with empty matrix if input feature matrix '
+        'is empty', () {
       final predictedClasses = classifier32.predict(DataFrame([<num>[]]));
 
       expect(predictedClasses.toMatrix(), isEmpty);
     });
 
-    test('should return data frame with probabilities for each class label',
-        () {
+    test('should return data frame with probabilities for each class '
+        'label', () {
       final predictedLabels =
           classifier32.predictProbabilities(unlabelledFeaturesFrame);
 
