@@ -1,7 +1,9 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -38,6 +40,10 @@ void main() {
     final positiveLabel = 1;
     final dtype = DType.float32;
     final costPerIteration = [1.2, 233.01, 23, -10001];
+    final retrainingData = DataFrame([[10, -10, 20, -20]]);
+    final retrainedModelMock = LogisticRegressorMock();
+    final classifierFactory = createLogisticRegressorFactoryMock(
+        retrainedModelMock);
 
     final regressor = LogisticRegressorImpl(
       optimizerType,
@@ -83,6 +89,9 @@ void main() {
     final mockedProbabilities = Matrix.column([0.8, 0.5, 0.6, 0.7, 0.3]);
 
     setUp(() {
+      logisticRegressorInjector
+          .registerSingleton<LogisticRegressorFactory>(() => classifierFactory);
+
       when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
     });
 
@@ -366,7 +375,7 @@ void main() {
       });
     });
 
-    group('LogisticRegressorImpl.predict', () {
+    group('predict', () {
       test('should throw an exception if no test features are provided', () {
         final testFeatures = DataFrame.fromMatrix(Matrix.empty());
 
@@ -418,6 +427,75 @@ void main() {
         final prediction = regressor.predict(testFeatures);
 
         expect(prediction.header, equals([className]));
+      });
+    });
+
+    group('retrain', () {
+      test('should call a factory while retraining the model', () {
+        regressor.retrain(retrainingData);
+
+        verify(classifierFactory.create(
+          trainData: retrainingData,
+          targetName: className,
+          optimizerType: optimizerType,
+          iterationsLimit: iterationsLimit,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minCoefficientsUpdate,
+          lambda: lambda,
+          regularizationType: regularizationType,
+          randomSeed: randomSeed,
+          batchSize: batchSize,
+          isFittingDataNormalized: isFittingDataNormalized,
+          learningRateType: learningRateType,
+          initialCoefficientsType: initialCoefficientsType,
+          initialCoefficients: initialCoefficients,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale,
+          probabilityThreshold: probabilityThreshold,
+          negativeLabel: negativeLabel,
+          positiveLabel: positiveLabel,
+          collectLearningData: false,
+          dtype: dtype,
+        )).called(1);
+      });
+
+      test('should return a new instance as a retrained model', () {
+        final retrainedModel = regressor.retrain(retrainingData);
+
+        expect(retrainedModel, same(retrainedModelMock));
+        expect(retrainedModel, isNot(same(regressor)));
+      });
+
+      test('should throw exception if the model schema is outdated, '
+          'schemaVersion is null', () {
+        final model = LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          probabilityThreshold,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+          schemaVersion: null,
+        );
+
+        expect(() => model.retrain(retrainingData),
+            throwsA(isA<OutdatedJsonSchemaException>()));
       });
     });
   });

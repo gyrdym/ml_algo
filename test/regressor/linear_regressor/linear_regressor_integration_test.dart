@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_encoded_values.dart';
@@ -10,6 +11,7 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type_json_encoded_values.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_constants.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -121,6 +123,7 @@ void main() {
         linearRegressorDTypeJsonKey: dTypeToJson(dtype),
         linearRegressorCostPerIterationJsonKey: regressor.costPerIteration,
         linearRegressorIterationsLimitJsonKey: regressor.iterationsLimit,
+        jsonSchemaVersionJsonKey: linearRegressorJsonSchemaVersion,
       });
     });
 

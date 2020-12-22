@@ -1,8 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/distance_type_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_constants.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_json_keys.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_linalg/distance.dart';
@@ -27,6 +29,9 @@ class KnnSolverImpl
       this.k,
       this.distanceType,
       this.standardize,
+      {
+        this.schemaVersion = knnSolverJsonSchemaVersion,
+      }
   ) {
     if (!trainFeatures.hasData) {
       throw Exception('Empty features matrix provided');
@@ -71,6 +76,10 @@ class KnnSolverImpl
 
   @JsonKey(name: knnSolverStandardizeJsonKey)
   final bool standardize;
+
+  @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final schemaVersion;
 
   @override
   Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(Matrix features) {

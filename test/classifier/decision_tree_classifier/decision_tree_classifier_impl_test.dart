@@ -1,8 +1,12 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/di/dependency_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
@@ -85,6 +89,7 @@ void main() {
       decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float32),
       decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
       decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
+      jsonSchemaVersionJsonKey: decisionTreeClassifierJsonSchemaVersion,
     };
     final classifier64Json = {
       decisionTreeClassifierMinErrorJsonKey: minError,
@@ -93,6 +98,7 @@ void main() {
       decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float64),
       decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
       decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
+      jsonSchemaVersionJsonKey: decisionTreeClassifierJsonSchemaVersion,
     };
     final treeRootMock = createRootNodeMock({
       sample1: learnedLeafLabel1,
@@ -107,6 +113,11 @@ void main() {
       predictedBinarizedLabelsFrame,
       originalBinarizedLabelsFrame,
     ];
+    final retrainingDataFrame = DataFrame([
+      [1, 2, 3, 4],
+    ]);
+    final classifierFactoryMock = DecisionTreeClassifierFactoryMock();
+    final retrainedClassifier = DecisionTreeClassifierMock();
     var encoderCallIteration = 0;
 
     DecisionTreeClassifierImpl classifier32;
@@ -118,14 +129,18 @@ void main() {
       when(encoderFactoryMock.create(any, any)).thenReturn(encoderMock);
       when(encoderMock.process(any))
           .thenAnswer((_) => encodedLabelsFrames[encoderCallIteration++]);
+      when(classifierFactoryMock.create(any, any, any, any, any, any))
+          .thenReturn(retrainedClassifier);
 
       injector
-        ..clearAll()
         ..registerDependency<ModelAssessor<Classifier>>(
             () => classifierAssessorMock)
         ..registerDependency<EncoderFactory>(() => encoderFactoryMock.create,
             dependencyName: oneHotEncoderFactoryKey)
         ..registerSingleton<MetricFactory>(() => metricFactoryMock);
+      decisionTreeInjector
+        ..registerSingleton<DecisionTreeClassifierFactory>(
+                () => classifierFactoryMock);
 
       classifier32 = DecisionTreeClassifierImpl(
         minError,
@@ -247,6 +262,42 @@ void main() {
         metricType,
         labelledFeaturesFrame,
       )).called(1);
+    });
+
+    test('should call classifier factory while retraining the model', () {
+      classifier32.retrain(retrainingDataFrame);
+
+      verify(classifierFactoryMock.create(
+        retrainingDataFrame,
+        minError,
+        minSamplesCount,
+        maxDepth,
+        targetColumnName,
+        DType.float32,
+      )).called(1);
+    });
+
+    test('should return a new instance for the retrained model', () {
+      final retrainedModel = classifier32.retrain(retrainingDataFrame);
+
+      expect(retrainedModel, same(retrainedClassifier));
+      expect(retrainedModel, isNot(same(classifier32)));
+    });
+
+    test('should throw exception if the model schema is outdated, '
+        'schemaVersion is null', () {
+      final model = DecisionTreeClassifierImpl(
+        minError,
+        minSamplesCount,
+        maxDepth,
+        treeRootMock,
+        targetColumnName,
+        DType.float64,
+        schemaVersion: null,
+      );
+
+      expect(() => model.retrain(retrainingDataFrame),
+          throwsA(isA<OutdatedJsonSchemaException>()));
     });
   });
 }

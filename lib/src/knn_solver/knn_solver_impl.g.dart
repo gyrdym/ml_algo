@@ -8,7 +8,7 @@ part of 'knn_solver_impl.dart';
 
 KnnSolverImpl _$KnnSolverImplFromJson(Map<String, dynamic> json) {
   return $checkedNew('KnnSolverImpl', json, () {
-    $checkKeys(json, allowedKeys: const ['F', 'O', 'K', 'D', 'S']);
+    $checkKeys(json, allowedKeys: const ['F', 'O', 'K', 'D', 'S', r'$V']);
     final val = KnnSolverImpl(
       $checkedConvert(
           json,
@@ -24,6 +24,7 @@ KnnSolverImpl _$KnnSolverImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'D',
           (v) => const DistanceTypeJsonConverter().fromJson(v as String)),
       $checkedConvert(json, 'S', (v) => v as bool),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
   }, fieldKeyMap: const {
@@ -31,7 +32,8 @@ KnnSolverImpl _$KnnSolverImplFromJson(Map<String, dynamic> json) {
     'trainOutcomes': 'O',
     'k': 'K',
     'distanceType': 'D',
-    'standardize': 'S'
+    'standardize': 'S',
+    'schemaVersion': r'$V'
   });
 }
 
@@ -42,4 +44,5 @@ Map<String, dynamic> _$KnnSolverImplToJson(KnnSolverImpl instance) =>
       'K': instance.k,
       'D': const DistanceTypeJsonConverter().toJson(instance.distanceType),
       'S': instance.standardize,
+      r'$V': instance.schemaVersion,
     };

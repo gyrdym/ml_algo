@@ -1,7 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
@@ -31,6 +36,9 @@ class DecisionTreeClassifierImpl
       this.treeRootNode,
       this.targetColumnName,
       this.dtype,
+      {
+        this.schemaVersion = decisionTreeClassifierJsonSchemaVersion,
+      }
   );
 
   factory DecisionTreeClassifierImpl.fromJson(Map<String, dynamic> json) =>
@@ -75,6 +83,12 @@ class DecisionTreeClassifierImpl
   @override
   @JsonKey(includeIfNull: false)
   final num negativeLabel = null;
+
+  @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final schemaVersion;
+
+  final _outdatedSchemaVersions = [null];
 
   @override
   DataFrame predict(DataFrame features) {
@@ -133,5 +147,23 @@ class DecisionTreeClassifierImpl
     }
 
     throw Exception('Given sample does not conform any splitting condition');
+  }
+
+  @override
+  DecisionTreeClassifier retrain(DataFrame data) {
+    if (_outdatedSchemaVersions.contains(schemaVersion)) {
+      throw OutdatedJsonSchemaException();
+    }
+
+    return decisionTreeInjector
+        .get<DecisionTreeClassifierFactory>()
+        .create(
+      data,
+      minError,
+      minSamplesCount,
+      maxDepth,
+      targetColumnName,
+      dtype,
+    );
   }
 }

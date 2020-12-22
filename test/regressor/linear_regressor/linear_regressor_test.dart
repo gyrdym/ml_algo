@@ -1,208 +1,114 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
-import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/regressor/linear_regressor/_helpers/create_linear_regressor.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/_injector.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../helpers.dart';
 import '../../mocks.dart';
 
 void main() {
   group('LinearRegressor', () {
-    final initialCoefficients = Matrix.column([1, 2, 3, 4, 5]);
-    final learnedCoefficients = Matrix.fromColumns([
-      Vector.fromList([55, 66, 77, 88, 99]),
-    ]);
-    final observations = DataFrame(
-      [
-        <num>[10, 20, 30, 40, 200],
-        <num>[11, 22, 33, 44, 500],
-      ],
-      header: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'target'],
-      headerExists: false,
-    );
-    final costPerIteration = [1, 2, 3, 100];
+    final features = [
+      [23, 32, 33],
+      [11, -1,  0],
+      [87, 77, 39],
+    ];
+    final outcomes = [
+      [100],
+      [200],
+      [300],
+    ];
+    final featuresName = ['f1', 'f2', 'f3'];
+    final targetName = 'target';
+    final header = [...featuresName, targetName];
+    final fittingData = DataFrame([
+      [...features[0], ...outcomes[0]],
+      [...features[1], ...outcomes[1]],
+      [...features[2], ...outcomes[2]],
+    ], headerExists: false, header: header);
+    final optimizerType = LinearOptimizerType.coordinate;
+    final iterationsLimit = 199;
+    final learningRateType = LearningRateType.constant;
+    final initialCoefficientsType = InitialCoefficientsType.zeroes;
+    final initialLearningRate = 0.7;
+    final minCoefficientsUpdate = 1.57;
+    final lambda = 125.4;
+    final regularizationType = RegularizationType.L1;
+    final fitIntercept = false;
+    final interceptScale = 781.999;
+    final randomSeed = 4561;
+    final batchSize = 2;
+    final initialCoeffs = Matrix.column([201, 301, 401, 501]);
+    final isFittingDataNormalized = true;
+    final collectLearningDate = true;
+    final dtype = DType.float32;
+    final regressorMock = LinearRegressorMock();
+    final factoryMock = createLinearRegressorFactoryMock(regressorMock);
 
-    CostFunction costFunctionMock;
-    CostFunctionFactory costFunctionFactoryMock;
-    LinearOptimizer linearOptimizerMock;
-    LinearOptimizerFactory linearOptimizerFactoryMock;
+    LinearRegressor regressor;
 
     setUp(() {
-      costFunctionMock = CostFunctionMock();
-      costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-      linearOptimizerMock = LinearOptimizerMock();
-      linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
-          linearOptimizerMock);
+      linearRegressorInjector
+          .registerSingleton(() => factoryMock);
 
-      injector
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
-        ..registerDependency<LinearOptimizerFactory>(
-                () => linearOptimizerFactoryMock);
-
-      when(linearOptimizerMock.findExtrema(
-        initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective'),
-        collectLearningData: anyNamed('collectLearningData'),
-      )).thenReturn(learnedCoefficients);
-      when(linearOptimizerMock.costPerIteration).thenReturn(costPerIteration);
-    });
-
-    tearDown(injector.clearAll);
-
-    test('should throw an error if the target column does not exist', () {
-      final targetColumn = 'absent_column';
-      expect(
-        () => createLinearRegressor(
-          fittingData: observations,
-          targetName: targetColumn,
-        ),
-        throwsException,
+      regressor = LinearRegressor(
+        fittingData,
+        targetName,
+        optimizerType: optimizerType,
+        iterationsLimit: iterationsLimit,
+        learningRateType: learningRateType,
+        initialCoefficientsType: initialCoefficientsType,
+        initialLearningRate: initialLearningRate,
+        minCoefficientsUpdate: minCoefficientsUpdate,
+        lambda: lambda,
+        regularizationType: regularizationType,
+        fitIntercept: fitIntercept,
+        interceptScale: interceptScale,
+        randomSeed: randomSeed,
+        batchSize: batchSize,
+        initialCoefficients: initialCoeffs,
+        isFittingDataNormalized: isFittingDataNormalized,
+        collectLearningData: collectLearningDate,
+        dtype: dtype,
       );
     });
 
-    test('should call cost function factory in order to create '
-        'squared cost function instance', () {
-      createLinearRegressor(
-        fittingData: observations,
-        targetName: 'target',
-      );
+    tearDown(() {
+      injector.clearAll();
+      linearRegressorInjector.clearAll();
+    });
 
-      verify(costFunctionFactoryMock.createByType(
-        CostFunctionType.leastSquare,
+    test('should call the factory', () {
+      verify(factoryMock.create(
+        fittingData: fittingData,
+        targetName: targetName,
+        optimizerType: optimizerType,
+        iterationsLimit: iterationsLimit,
+        learningRateType: learningRateType,
+        initialCoefficientsType: initialCoefficientsType,
+        initialLearningRate: initialLearningRate,
+        minCoefficientsUpdate: minCoefficientsUpdate,
+        lambda: lambda,
+        regularizationType: regularizationType,
+        fitIntercept: fitIntercept,
+        interceptScale: interceptScale,
+        randomSeed: randomSeed,
+        batchSize: batchSize,
+        initialCoefficients: initialCoeffs,
+        isFittingDataNormalized: isFittingDataNormalized,
+        collectLearningData: collectLearningDate,
+        dtype: dtype,
       )).called(1);
     });
 
-    test('should call linear optimizer factory and consider intercept term '
-        'while calling the factory', () {
-      createLinearRegressor(
-        fittingData: observations,
-        targetName: 'target',
-        optimizerType: LinearOptimizerType.coordinate,
-        iterationsLimit: 1000,
-        initialLearningRate: 5,
-        minCoefficientsUpdate: 1000,
-        lambda: 20.0,
-        regularizationType: RegularizationType.L1,
-        randomSeed: 200,
-        batchSize: 100,
-        fitIntercept: true,
-        interceptScale: 3.0,
-        learningRateType: LearningRateType.decreasingAdaptive,
-        initialCoefficientsType: InitialCoefficientsType.zeroes,
-        initialCoefficients: initialCoefficients,
-        dtype: DType.float32,
-      );
-
-      verify(linearOptimizerFactoryMock.createByType(
-        LinearOptimizerType.coordinate,
-        argThat(iterable2dAlmostEqualTo([
-          [3.0, 10, 20, 30, 40],
-          [3.0, 11, 22, 33, 44],
-        ])),
-        argThat(equals([
-          [200],
-          [500],
-        ])),
-        dtype: DType.float32,
-        costFunction: costFunctionMock,
-        learningRateType: LearningRateType.decreasingAdaptive,
-        initialCoefficientsType: InitialCoefficientsType.zeroes,
-        initialLearningRate: 5,
-        minCoefficientsUpdate: 1000,
-        iterationLimit: 1000,
-        lambda: 20.0,
-        regularizationType: RegularizationType.L1,
-        batchSize: 100,
-        randomSeed: 200,
-        isFittingDataNormalized: false,
-      )).called(1);
-    });
-
-    test('should find the extrema for fitting observations while '
-        'instantiating', () {
-      createLinearRegressor(
-        fittingData: observations,
-        targetName: 'target',
-        initialCoefficients: initialCoefficients,
-      );
-
-      verify(linearOptimizerMock.findExtrema(
-        initialCoefficients: initialCoefficients,
-        isMinimizingObjective: true,
-      )).called(1);
-    });
-
-    test('should predict values basing on learned coefficients', () {
-      final predictor = createLinearRegressor(
-        fittingData: observations,
-        targetName: 'target',
-        initialCoefficients: initialCoefficients,
-        fitIntercept: true,
-        interceptScale: 2.0,
-      );
-      final features = Matrix.fromList([
-        [55, 44, 33, 22],
-        [10, 88, 77, 11],
-        [12, 22, 39, 13],
-      ]);
-      final featuresWithIntercept = Matrix.fromColumns([
-        Vector.filled(3, 2),
-        ...features.columns,
-      ]);
-      final prediction = predictor.predict(
-        DataFrame.fromMatrix(features),
-      );
-
-      expect(prediction.header, equals(['target']));
-      expect(prediction.toMatrix(), equals(
-        featuresWithIntercept * learnedCoefficients,
-      ));
-    });
-
-    test('should collect cost values per iteration if collectLearningData is '
-        'true', () {
-      final regressor = createLinearRegressor(
-        fittingData: observations,
-        targetName: 'target',
-        initialCoefficients: initialCoefficients,
-        collectLearningData: true,
-      );
-
-      expect(regressor.costPerIteration, same(costPerIteration));
-      verify(linearOptimizerMock.findExtrema(
-        initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective'),
-        collectLearningData: true,
-      )).called(1);
-    });
-
-    test('should not collect cost values per iteration if collectLearningData is '
-        'false', () {
-      createLinearRegressor(
-        fittingData: observations,
-        targetName: 'target',
-        initialCoefficients: initialCoefficients,
-        collectLearningData: false,
-      );
-
-      verify(linearOptimizerMock.findExtrema(
-        initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective'),
-        collectLearningData: false,
-      )).called(1);
+    test('should return an instance from the factory', () {
+      expect(regressor, same(regressorMock));
     });
   });
 }

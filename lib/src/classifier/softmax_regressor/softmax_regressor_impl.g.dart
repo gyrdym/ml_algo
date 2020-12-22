@@ -29,7 +29,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       'LF',
       'PL',
       'NL',
-      'CPI'
+      'CPI',
+      r'$V'
     ]);
     final val = SoftmaxRegressorImpl(
       $checkedConvert(
@@ -73,6 +74,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
           json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
       $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
   }, fieldKeyMap: const {
@@ -96,7 +98,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     'positiveLabel': 'PL',
     'negativeLabel': 'NL',
     'costPerIteration': 'CPI',
-    'dtype': 'DT'
+    'dtype': 'DT',
+    'schemaVersion': r'$V'
   });
 }
 
@@ -142,5 +145,6 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
   val['PL'] = instance.positiveLabel;
   val['NL'] = instance.negativeLabel;
   writeNotNull('CPI', instance.costPerIteration);
+  val[r'$V'] = instance.schemaVersion;
   return val;
 }

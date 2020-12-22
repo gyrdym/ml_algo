@@ -26,7 +26,8 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       'IS',
       'CS',
       'CPI',
-      'DT'
+      'DT',
+      r'$V'
     ]);
     final val = LinearRegressorImpl(
       $checkedConvert(
@@ -68,6 +69,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
           json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
       dtype: $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
   }, fieldKeyMap: const {
@@ -88,7 +90,8 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
     'fitIntercept': 'FI',
     'interceptScale': 'IS',
     'costPerIteration': 'CPI',
-    'dtype': 'DT'
+    'dtype': 'DT',
+    'schemaVersion': r'$V'
   });
 }
 
@@ -126,6 +129,7 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
   val['CS'] = const VectorJsonConverter().toJson(instance.coefficients);
   writeNotNull('CPI', instance.costPerIteration);
   val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
+  val[r'$V'] = instance.schemaVersion;
   return val;
 }
 

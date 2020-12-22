@@ -1,5 +1,7 @@
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -31,10 +33,14 @@ void main() {
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
     final initialCoefficients = Matrix.fromList([[13, 43, 55]]);
     final fitIntercept = true;
-    final interceptScale = 10;
+    final interceptScale = 10.0;
     final positiveLabel = 1.0;
     final negativeLabel = -1.0;
     final costPerIteration = [10, -10, 20, 2.3];
+    final retrainingData = DataFrame([[1, 2, -90, 100]]);
+    final retrainedModelMock = SoftmaxRegressorMock();
+    final classifierFactory = createSoftmaxRegressorFactoryMock(
+        retrainedModelMock);
     final dtype = DType.float32;
 
     final coefficientsByClasses = Matrix.fromList([
@@ -102,6 +108,9 @@ void main() {
     setUp(() {
       when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
 
+      softmaxRegressorInjector
+          .registerSingleton<SoftmaxRegressorFactory>(() => classifierFactory);
+
       regressor = SoftmaxRegressorImpl(
         optimizerType,
         iterationsLimit,
@@ -133,7 +142,7 @@ void main() {
       softmaxRegressorInjector.clearAll();
     });
 
-    group('constructor', () {
+    group('default constructor', () {
       test('should throw an exception if no coefficients are provided', () {
         final actual = () => SoftmaxRegressorImpl(
           optimizerType,
@@ -235,7 +244,7 @@ void main() {
       });
     });
 
-    group('`predict` method', () {
+    group('predict', () {
       test('should throw an exception if no features provided', () {
         final testFeatureMatrix = Matrix.empty();
         final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
@@ -301,7 +310,7 @@ void main() {
       });
     });
 
-    group('`predictProbabilities` method', () {
+    group('predictProbabilities', () {
       test('should throw an exception if no features provided', () {
         final testFeatures = DataFrame.fromMatrix(Matrix.empty());
 
@@ -349,6 +358,72 @@ void main() {
 
       test('should persist cost per iteration list', () {
         expect(regressor.costPerIteration, costPerIteration);
+      });
+    });
+
+    group('retrain', () {
+      test('should call a factory while retraining the model', () {
+        regressor.retrain(retrainingData);
+
+        verify(classifierFactory.create(
+          trainData: retrainingData,
+          targetNames: targetNames,
+          optimizerType: optimizerType,
+          iterationsLimit: iterationsLimit,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minCoefficientsUpdate,
+          lambda: lambda,
+          regularizationType: regularizationType,
+          randomSeed: randomSeed,
+          batchSize: batchSize,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale,
+          learningRateType: learningRateType,
+          isFittingDataNormalized: isFittingDataNormalized,
+          initialCoefficientsType: initialCoefficientsType,
+          initialCoefficients: initialCoefficients,
+          positiveLabel: positiveLabel,
+          negativeLabel: negativeLabel,
+          dtype: dtype,
+        )).called(1);
+      });
+
+      test('should return a new instance as a retrained model', () {
+        final retrainedModel = regressor.retrain(retrainingData);
+
+        expect(retrainedModel, same(retrainedModelMock));
+        expect(retrainedModel, isNot(same(regressor)));
+      });
+
+      test('should throw exception if the model schema is outdated, '
+          'schemaVersion is null', () {
+        final model = SoftmaxRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
+          coefficientsByClasses,
+          targetNames,
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          positiveLabel,
+          negativeLabel,
+          costPerIteration,
+          dtype,
+          schemaVersion: null,
+        );
+
+        expect(() => model.retrain(retrainingData),
+            throwsA(isA<OutdatedJsonSchemaException>()));
       });
     });
   });

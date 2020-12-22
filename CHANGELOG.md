@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.6.0
+- Models retraining functionality added 
+
 ## 15.5.0
 - `KnnClassifier`, `DecisionTreeClassifier`, `LogisticRegressor`, `SoftmaxRegressor`, `KnnRegressor`, `LinearRegressor`
     - hyperparameters added to the interfaces
