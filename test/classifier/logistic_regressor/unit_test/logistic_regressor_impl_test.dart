@@ -3,6 +3,10 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_imp
 import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
@@ -12,6 +16,18 @@ import '../../../mocks.dart';
 
 void main() {
   group('LogisticRegressorImpl', () {
+    final optimizerType = LinearOptimizerType.gradient;
+    final iterationsLimit = 123;
+    final initialLearningRate = 0.75;
+    final minCoefficientsUpdate = 0.5;
+    final lambda = 11.0;
+    final regularizationType = RegularizationType.L2;
+    final randomSeed = 1234;
+    final batchSize = 100;
+    final isFittingDataNormalized = false;
+    final learningRateType = LearningRateType.decreasingAdaptive;
+    final initialCoefficientsType = InitialCoefficientsType.zeroes;
+    final initialCoefficients = Vector.fromList([1, 2, 3, 4, 5]);
     final linkFunctionMock = LinkFunctionMock();
     final className = 'class 1';
     final fitIntercept = true;
@@ -24,6 +40,18 @@ void main() {
     final costPerIteration = [1.2, 233.01, 23, -10001];
 
     final regressor = LogisticRegressorImpl(
+      optimizerType,
+      iterationsLimit,
+      initialLearningRate,
+      minCoefficientsUpdate,
+      lambda,
+      regularizationType,
+      randomSeed,
+      batchSize,
+      isFittingDataNormalized,
+      learningRateType,
+      initialCoefficientsType,
+      initialCoefficients,
       [className],
       linkFunctionMock,
       fitIntercept,
@@ -74,6 +102,18 @@ void main() {
           'than 0', () {
         final probabilityThreshold = -0.1;
         final actual = () => LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           [className],
           linkFunctionMock,
           fitIntercept,
@@ -93,6 +133,18 @@ void main() {
           'equal to 0', () {
         final probabilityThreshold = 0;
         final actual = () => LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           [className],
           linkFunctionMock,
           fitIntercept,
@@ -112,6 +164,18 @@ void main() {
           'to 1', () {
         final probabilityThreshold = 1;
         final actual = () => LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           [className],
           linkFunctionMock,
           fitIntercept,
@@ -131,6 +195,18 @@ void main() {
           'than 1', () {
         final probabilityThreshold = 1.2;
         final actual = () => LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           [className],
           linkFunctionMock,
           fitIntercept,
@@ -151,6 +227,18 @@ void main() {
         final negativeLabel = 1000;
         final positiveLabel = 1000;
         final actual = () => LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           [className],
           linkFunctionMock,
           fitIntercept,
@@ -169,6 +257,18 @@ void main() {
       test('should throw an exception if no coefficients are provided', () {
         final coefficients = Matrix.empty();
         final actual = () => LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           [className],
           linkFunctionMock,
           fitIntercept,
@@ -193,6 +293,18 @@ void main() {
           [1, 3, 3],
         ]);
         final actual = () => LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
           [className],
           linkFunctionMock,
           fitIntercept,
@@ -210,6 +322,47 @@ void main() {
 
       test('should persist cost per iteration', () {
         expect(regressor.costPerIteration, costPerIteration);
+      });
+
+      test('should persist hyperparameters', () {
+        final model = LogisticRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
+          [className],
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          coefficients,
+          probabilityThreshold,
+          negativeLabel,
+          positiveLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(model.optimizerType, optimizerType);
+        expect(model.iterationsLimit, iterationsLimit);
+        expect(model.initialLearningRate, initialLearningRate);
+        expect(model.minCoefficientsUpdate, minCoefficientsUpdate);
+        expect(model.probabilityThreshold, probabilityThreshold);
+        expect(model.lambda, lambda);
+        expect(model.regularizationType, regularizationType);
+        expect(model.randomSeed, randomSeed);
+        expect(model.batchSize, batchSize);
+        expect(model.isFittingDataNormalized, isFittingDataNormalized);
+        expect(model.learningRateType, learningRateType);
+        expect(model.initialCoefficientsType, initialCoefficientsType);
+        expect(model.initialCoefficients, initialCoefficients);
       });
     });
 

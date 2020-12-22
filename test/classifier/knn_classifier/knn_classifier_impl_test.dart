@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -17,6 +18,15 @@ void main() {
     group('constructor', () {
       final solverMock = KnnSolverMock();
       final kernelMock = KernelMock();
+      final k = 10;
+      final distanceType = Distance.hamming;
+      final kernelType = KernelType.epanechnikov;
+
+      setUp(() {
+        when(solverMock.k).thenReturn(k);
+        when(solverMock.distanceType).thenReturn(distanceType);
+        when(kernelMock.type).thenReturn(kernelType);
+      });
 
       tearDown(() {
         reset(solverMock);
@@ -37,6 +47,21 @@ void main() {
         );
 
         expect(actual, throwsException);
+      });
+
+      test('should persist model hyperparameters', () {
+        final classifier = KnnClassifierImpl(
+          'target',
+          [1, 2, 3],
+          kernelMock,
+          solverMock,
+          classLabelPrefix,
+          DType.float32,
+        );
+
+        expect(classifier.k, k);
+        expect(classifier.kernelType, kernelType);
+        expect(classifier.distanceType, distanceType);
       });
     });
 

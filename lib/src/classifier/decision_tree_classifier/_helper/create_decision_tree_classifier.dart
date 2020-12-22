@@ -28,5 +28,12 @@ DecisionTreeClassifier createDecisionTreeClassifier(
 
   return decisionTreeInjector
       .get<DecisionTreeClassifierFactory>()
-      .create(treeRootNode, targetName, dtype);
+      .create(
+        minError,
+        minSamplesCount,
+        maxDepth,
+        treeRootNode,
+        targetName,
+        dtype,
+      );
 }

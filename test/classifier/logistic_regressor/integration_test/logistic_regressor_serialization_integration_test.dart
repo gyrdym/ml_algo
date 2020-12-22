@@ -5,6 +5,13 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dar
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type_json_encoded_values.dart';
 import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
 import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
 import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
@@ -12,6 +19,7 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/dtype_to_json.dart';
 import 'package:ml_linalg/matrix_to_json.dart';
+import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -45,6 +53,19 @@ void main() {
   final negativeLabel3 = 11;
 
   final createClassifier = ({
+    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
+    int iterationsLimit = 2,
+    double minCoefficientsUpdate = 1e-12,
+    double initialLearningRate = 1.0,
+    num lambda,
+    RegularizationType regularizationType,
+    int randomSeed,
+    int batchSize = 5,
+    bool isFittingDataNormalized = false,
+    LearningRateType learningRateType = LearningRateType.constant,
+    InitialCoefficientsType initialCoefficientsType =
+        InitialCoefficientsType.zeroes,
+    Vector initialCoefficients,
     String targetName = 'col_3',
     bool fitIntercept = false,
     double interceptScale = 3.0,
@@ -56,10 +77,18 @@ void main() {
   }) => LogisticRegressor(
     samples,
     targetName,
-    iterationsLimit: 2,
-    learningRateType: LearningRateType.constant,
-    initialLearningRate: 1.0,
-    batchSize: 5,
+    iterationsLimit: iterationsLimit,
+    minCoefficientsUpdate: minCoefficientsUpdate,
+    optimizerType: optimizerType,
+    initialLearningRate: initialLearningRate,
+    lambda: lambda,
+    regularizationType: regularizationType,
+    batchSize: batchSize,
+    randomSeed: randomSeed,
+    isFittingDataNormalized: isFittingDataNormalized,
+    learningRateType: learningRateType,
+    initialCoefficientsType: initialCoefficientsType,
+    initialCoefficients: initialCoefficients,
     fitIntercept: fitIntercept,
     interceptScale: interceptScale,
     dtype: dtype,
@@ -78,6 +107,239 @@ void main() {
         serialized[logisticRegressorCoefficientsByClassesJsonKey],
         matrixToJson(classifier.coefficientsByClasses),
       );
+    });
+
+    test('should serialize optimizerType field, gradient_optimizer optimizer', () {
+      final classifier = createClassifier(
+          optimizerType: LinearOptimizerType.gradient,
+      );
+      final serialized = classifier.toJson();
+
+      expect(
+        serialized[logisticRegressorLinearOptimizerTypeJsonKey],
+        gradientLinearOptimizerTypeEncodedValue,
+      );
+    });
+
+    // coordinate optimization is not implemented yet for LogisticRegressor
+    test('should serialize optimizerType field, coordinate optimizer', () {
+      final classifier = createClassifier(
+        optimizerType: LinearOptimizerType.coordinate,
+      );
+      final serialized = classifier.toJson();
+
+      expect(
+        serialized[logisticRegressorLinearOptimizerTypeJsonKey],
+        coordinateLinearOptimizerTypeEncodedValue,
+      );
+    }, skip: true);
+
+    test('should serialize iterationsLimit field, iterationsLimit=100', () {
+      final classifier = createClassifier(
+        iterationsLimit: 100,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorIterationsLimitJsonKey], 100);
+    });
+
+    test('should serialize iterationsLimit field, iterationsLimit=null', () {
+      final classifier = createClassifier(
+        iterationsLimit: null,
+        minCoefficientsUpdate: 100,
+      );
+      final serialized = classifier.toJson();
+
+      expect(
+          serialized.containsKey(logisticRegressorIterationsLimitJsonKey),
+          false,
+      );
+    });
+
+    test('should serialize initialLearningRate field, initialLearningRate=10', () {
+      final classifier = createClassifier(
+        initialLearningRate: 10,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorInitialLearningRateJsonKey], 10);
+    });
+
+    test('should serialize initialLearningRate field, initialLearningRate=null', () {
+      final classifier = createClassifier(
+        initialLearningRate: null,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized
+          .containsKey(logisticRegressorInitialLearningRateJsonKey), false);
+    });
+
+    test('should serialize minCoefficientsUpdate field, '
+        'minCoefficientsUpdate=100', () {
+      final classifier = createClassifier(
+        minCoefficientsUpdate: 100,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorMinCoefsUpdateJsonKey], 100);
+    });
+
+    test('should serialize minCoefficientsUpdate field, '
+        'minCoefficientsUpdate=null', () {
+      final classifier = createClassifier(
+        iterationsLimit: 5,
+        minCoefficientsUpdate: null,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized
+          .containsKey(logisticRegressorMinCoefsUpdateJsonKey), false);
+    });
+
+    test('should serialize lambda field, lambda=199', () {
+      final classifier = createClassifier(
+        lambda: 199.0,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorLambdaJsonKey], 199.0);
+    });
+
+    test('should serialize lambda field, lambda=null', () {
+      final classifier = createClassifier(
+        lambda: null,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized.containsKey(logisticRegressorLambdaJsonKey), false);
+    });
+
+    // coordinate optimization is not implemented yet for LogisticRegressor
+    test('should serialize regularizationType field, regularizationType=L1', () {
+      final classifier = createClassifier(
+        optimizerType: LinearOptimizerType.coordinate,
+        regularizationType: RegularizationType.L1,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorRegularizationTypeJsonKey],
+          l1RegularizationTypeJsonEncodedValue);
+    }, skip: true);
+
+    test('should serialize regularizationType field, regularizationType=L2', () {
+      final classifier = createClassifier(
+        optimizerType: LinearOptimizerType.gradient,
+        regularizationType: RegularizationType.L2,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorRegularizationTypeJsonKey],
+          l2RegularizationTypeJsonEncodedValue);
+    });
+
+    test('should serialize regularizationType field, regularizationType=null', () {
+      final classifier = createClassifier(
+        optimizerType: LinearOptimizerType.gradient,
+        regularizationType: null,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized
+          .containsKey(logisticRegressorRegularizationTypeJsonKey), false);
+    });
+
+    test('should serialize randomSeed field, randomSeed=100', () {
+      final classifier = createClassifier(
+        randomSeed: 100,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorRandomSeedJsonKey], 100);
+    });
+
+    test('should serialize randomSeed field, randomSeed=null', () {
+      final classifier = createClassifier(
+        randomSeed: null,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized.containsKey(logisticRegressorRandomSeedJsonKey), false);
+    });
+
+    test('should serialize batchSize field, batchSize=4', () {
+      final classifier = createClassifier(
+        batchSize: 4,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorBatchSizeJsonKey], 4);
+    });
+
+    test('should serialize isFittingDataNormalized field, '
+        'isFittingDataNormalized=true', () {
+      final classifier = createClassifier(
+        isFittingDataNormalized: true,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorDataNormalizedFlagJsonKey], true);
+    });
+
+    test('should serialize isFittingDataNormalized field, '
+        'isFittingDataNormalized=false', () {
+      final classifier = createClassifier(
+        isFittingDataNormalized: false,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorDataNormalizedFlagJsonKey], false);
+    });
+
+    test('should serialize learningRateType field, '
+        'learningRateType=decreasingAdaptive', () {
+
+      final classifier = createClassifier(
+        learningRateType: LearningRateType.decreasingAdaptive,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorLearningRateTypeJsonKey],
+          decreasingAdaptiveLearningRateTypeJsonEncodedValue);
+    });
+
+    test('should serialize learningRateType field, '
+        'learningRateType=constant', () {
+
+      final classifier = createClassifier(
+        learningRateType: LearningRateType.constant,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorLearningRateTypeJsonKey],
+          constantLearningRateTypeJsonEncodedValue);
+    });
+
+    test('should serialize initialCoefficientsType field, '
+        'initialCoefficientsType=zero', () {
+      final classifier = createClassifier(
+        initialCoefficientsType: InitialCoefficientsType.zeroes,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorInitCoefficientsTypeJsonKey],
+          zeroesInitialCoefficientsTypeJsonEncodedValue);
+    });
+
+    test('should serialize initialCoefficients field, '
+        'initialCoefficients=[2, 2, 2]', () {
+      final classifier = createClassifier(
+        initialCoefficients: Vector.fromList([2, 2, 2]),
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorInitCoefficientsJsonKey],
+          Vector.fromList([2, 2, 2]).toJson());
     });
 
     test('should serialize classNames field', () {

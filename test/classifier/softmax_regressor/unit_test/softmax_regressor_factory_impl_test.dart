@@ -1,6 +1,7 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
@@ -16,6 +17,18 @@ void main() {
       [1, 2, 3],
       [1, 2, 3],
     ]);
+    final optimizerType = LinearOptimizerType.gradient;
+    final iterationsLimit = 3;
+    final initialLearningRate = 0.75;
+    final minCoefficientsUpdate = 0.3;
+    final lambda = 12.5;
+    final regularizationType = RegularizationType.L2;
+    final randomSeed = 144;
+    final batchSize = 2;
+    final isFittingDataNormalized = true;
+    final learningRateType = LearningRateType.decreasingAdaptive;
+    final initialCoefficientsType = InitialCoefficientsType.zeroes;
+    final initialCoefficients = Matrix.fromList([[13, 43, 55]]);
     final classNames = ['class 1', 'class 2', 'class 3'];
     final linkFunction = LinkFunctionMock();
     final fitIntercept = false;
@@ -28,6 +41,18 @@ void main() {
 
     setUp(() {
       regressor = factory.create(
+        optimizerType,
+        iterationsLimit,
+        initialLearningRate,
+        minCoefficientsUpdate,
+        lambda,
+        regularizationType,
+        randomSeed,
+        batchSize,
+        isFittingDataNormalized,
+        learningRateType,
+        initialCoefficientsType,
+        initialCoefficients,
         coefficientsByClasses,
         classNames,
         linkFunction,

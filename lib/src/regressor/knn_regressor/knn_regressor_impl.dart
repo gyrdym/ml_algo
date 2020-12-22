@@ -4,12 +4,14 @@ import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_json_converter.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_json_converter.dart';
 import 'package:ml_algo/src/regressor/_mixins/assessable_regressor_mixin.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -41,6 +43,15 @@ class KnnRegressorImpl
 
   @override
   Map<String, dynamic> toJson() => _$KnnRegressorImplToJson(this);
+
+  @override
+  int get k => solver.k;
+
+  @override
+  KernelType get kernelType => kernel.type;
+
+  @override
+  Distance get distanceType => solver.distanceType;
 
   @override
   @JsonKey(name: knnRegressorDTypeJsonKey)

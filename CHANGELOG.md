@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.5.0
+- `KnnClassifier`, `DecisionTreeClassifier`, `LogisticRegressor`, `SoftmaxRegressor`, `KnnRegressor`, `LinearRegressor`
+    - hyperparameters added to the interfaces
+
 ## 15.4.1
 - `DTypeJsonConverter` added
 - `MatrixJsonConverter` added

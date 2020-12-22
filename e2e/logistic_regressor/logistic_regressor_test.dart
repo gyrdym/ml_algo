@@ -5,7 +5,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) async {
-  final samples = (await fromCsv('e2e/datasets/pima_indians_diabetes_database.csv'))
+  final samples = (await fromCsv('e2e/_datasets/pima_indians_diabetes_database.csv'))
       .shuffle();
   final numberOfFolds = 5;
   final targetNames = ['class variable (0 or 1)'];

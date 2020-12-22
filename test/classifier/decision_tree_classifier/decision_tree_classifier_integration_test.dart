@@ -145,17 +145,17 @@ void main() {
 
     test('should serialize dtype field', () {
       final json = classifier.toJson();
-      expect(json[dTypeJsonKey], dTypeToJson(DType.float32));
+      expect(json[decisionTreeClassifierDTypeJsonKey], dTypeToJson(DType.float32));
     });
 
     test('should serialize target column name field', () {
       final json = classifier.toJson();
-      expect(json[targetColumnNameJsonKey], targetName);
+      expect(json[decisionTreeClassifierTargetColumnNameJsonKey], targetName);
     });
 
     test('should serialize root node', () {
       final json = classifier.toJson();
-      expect(json[treeRootNodeJsonKey], majorityTreeDataMock);
+      expect(json[decisionTreeClassifierTreeRootNodeJsonKey], majorityTreeDataMock);
     });
 
     group('saveAsJson', () {

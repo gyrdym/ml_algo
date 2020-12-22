@@ -208,6 +208,78 @@ abstract class SoftmaxRegressor implements
     return createSoftmaxRegressorFromJson(json);
   }
 
+  /// A linear optimization algorithm that was used
+  /// to find the best coefficients of log-likelihood cost function. Also
+  /// shows which regularization type (L1 or L2) was used to learn the model's
+  /// coefficients.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final LinearOptimizerType optimizerType;
+
+  /// A number of fitting iterations that was used to learn the model's
+  /// coefficients.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final int iterationsLimit;
+
+  /// A value that was used for the initial value of learning rate of the chosen
+  /// optimization algorithm
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final double initialLearningRate;
+
+  /// A minimum distance between coefficient vectors in
+  /// two contiguous iterations which was used to learn the model's
+  /// coefficients.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final double minCoefficientsUpdate;
+
+  /// A coefficient of regularization
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final double lambda;
+
+  /// A way the coefficients of the classification were regularized during the
+  /// model's coefficients learning process to prevent model overfitting.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final RegularizationType regularizationType;
+
+  /// A seed that was passed to a random value generator used by a stochastic
+  /// optimizer.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final int randomSeed;
+
+  /// A size of a batch of data (in rows) that was used in a single iteration
+  /// of learning model's coefficients algorithm
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final int batchSize;
+
+  /// Whether the fitting data was normalized or not prior to the model's
+  /// coefficients learning
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final bool isFittingDataNormalized;
+
+  /// A type of a learning rate behaviour update strategy.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final LearningRateType learningRateType;
+
+  /// A coefficients generator type that was used by the chosen optimizer at
+  /// the very first iteration of the model's coefficients learning algorithm.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final InitialCoefficientsType initialCoefficientsType;
+
+  /// Coefficients which were used at the very first learning iteration.
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  final Matrix initialCoefficients;
+
   /// Returns a list of cost values per each learning iteration. Returns null
   /// if the parameter `collectLearningData` of the default constructor is false
   List<num> get costPerIteration;

@@ -83,6 +83,18 @@ LogisticRegressor createLogisticRegressor({
       : null;
 
   return LogisticRegressorImpl(
+    optimizerType,
+    iterationsLimit,
+    initialLearningRate,
+    minCoefficientsUpdate,
+    lambda,
+    regularizationType,
+    randomSeed,
+    batchSize,
+    isFittingDataNormalized,
+    learningRateType,
+    initialCoefficientsType,
+    initialCoefficients,
     [targetName],
     linkFunction,
     fitIntercept,

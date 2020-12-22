@@ -4,6 +4,11 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type_json_encoded_values.dart';
 import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -27,13 +32,33 @@ void main() {
   final negativeLabel2 = 2000;
   final negativeLabel3 = 0;
 
+  final initialCoeffs = Matrix.fromList([
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3],
+    [1, 2, 3],
+  ]);
+
   final createClassifier = ({
+    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
+    int iterationsLimit = 100,
+    double initialLearningRate = 1e-3,
+    double minCoefficientsUpdate = 1e-12,
+    double lambda,
+    RegularizationType regularizationType,
+    int randomSeed,
+    int batchSize = 1,
     bool fitIntercept = true,
-    double interceptScale = 10,
-    DType dtype = DType.float32,
+    double interceptScale = 10.0,
+    LearningRateType learningRateType = LearningRateType.constant,
+    bool isFittingDataNormalized,
+    InitialCoefficientsType initialCoefficientsType =
+        InitialCoefficientsType.zeroes,
+    Matrix initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = -1,
     bool collectLearningData = false,
+    DType dtype = DType.float32,
   }) {
     final sourceData = <Iterable<dynamic>>[
       <String>[...featureNames, ...targetNames],
@@ -48,8 +73,20 @@ void main() {
     return SoftmaxRegressor(
       dataFrame,
       targetNames,
+      optimizerType: optimizerType,
+      iterationsLimit: iterationsLimit,
+      initialLearningRate: initialLearningRate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
+      lambda: lambda,
+      regularizationType: regularizationType,
+      randomSeed: randomSeed,
+      batchSize: batchSize,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
+      learningRateType: learningRateType,
+      isFittingDataNormalized: isFittingDataNormalized,
+      initialCoefficientsType: initialCoefficientsType,
+      initialCoefficients: initialCoefficients,
       positiveLabel: positiveLabel,
       negativeLabel: negativeLabel,
       collectLearningData: collectLearningData,
@@ -61,6 +98,182 @@ void main() {
     tearDown(() {
       injector.clearAll();
       softmaxRegressorInjector.clearAll();
+    });
+
+    test('should serialize optimizerType field', () {
+      final classifier = createClassifier();
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorOptimizerTypeJsonKey],
+          gradientLinearOptimizerTypeEncodedValue);
+    });
+
+    test('should serialize iterationsLimit field', () {
+      final classifier = createClassifier(iterationsLimit: 3);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorIterationsLimitJsonKey], 3);
+    });
+
+    test('should serialize iterationsLimit field, iterationsLimit=null', () {
+      final classifier = createClassifier(
+        iterationsLimit: null,
+        minCoefficientsUpdate: 1,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized
+          .containsKey(softmaxRegressorIterationsLimitJsonKey), false);
+    });
+
+    test('should serialize initialLearningRate field', () {
+      final classifier = createClassifier(initialLearningRate: 5.5);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorInitialLearningRateJsonKey], 5.5);
+    });
+
+    test('should serialize minCoefficientsUpdate field', () {
+      final classifier = createClassifier(minCoefficientsUpdate: 7);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorMinCoefsUpdateJsonKey], 7);
+    });
+
+    test('should serialize minCoefficientsUpdate field, '
+        'minCoefficientsUpdate=null', () {
+
+      final classifier = createClassifier(
+        iterationsLimit: 7,
+        minCoefficientsUpdate: null,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized
+          .containsKey(softmaxRegressorMinCoefsUpdateJsonKey), false);
+    });
+
+    test('should serialize lambda field', () {
+      final classifier = createClassifier(lambda: 341);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorLambdaJsonKey], 341);
+    });
+
+    test('should serialize lambda field, lambda=null', () {
+      final classifier = createClassifier(lambda: null);
+      final serialized = classifier.toJson();
+
+      expect(serialized.containsKey(softmaxRegressorLambdaJsonKey), false);
+    });
+
+    test('should serialize regularizationType field', () {
+      final classifier = createClassifier(
+          regularizationType: RegularizationType.L2);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorRegularizationTypeJsonKey],
+          l2RegularizationTypeJsonEncodedValue);
+    });
+
+    test('should serialize regularizationType field, '
+        'regularizationType=null', () {
+
+      final classifier = createClassifier(
+          regularizationType: null);
+      final serialized = classifier.toJson();
+
+      expect(serialized
+          .containsKey(softmaxRegressorRegularizationTypeJsonKey), false);
+    });
+
+    test('should serialize randomSeed field', () {
+      final classifier = createClassifier(randomSeed: 100009);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorRandomSeedJsonKey], 100009);
+    });
+
+    test('should serialize randomSeed field, randomSeed=null', () {
+      final classifier = createClassifier(randomSeed: null);
+      final serialized = classifier.toJson();
+
+      expect(serialized.containsKey(softmaxRegressorRandomSeedJsonKey), false);
+    });
+
+    test('should serialize batchSize field', () {
+      final classifier = createClassifier(batchSize: 2);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorBatchSizeJsonKey], 2);
+    });
+
+    test('should serialize isFittingDataNormalized field, '
+        'isFittingDataNormalized=true', () {
+
+      final classifier = createClassifier(isFittingDataNormalized: true);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorFittingDataNormalizedFlagJsonKey],
+          true);
+    });
+
+    test('should serialize isFittingDataNormalized field, '
+        'isFittingDataNormalized=false', () {
+
+      final classifier = createClassifier(isFittingDataNormalized: false);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorFittingDataNormalizedFlagJsonKey],
+          false);
+    });
+
+    test('should serialize learningRateType field, '
+        'decreasingAdaptive type', () {
+      final classifier = createClassifier(
+          learningRateType: LearningRateType.decreasingAdaptive);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorLearningRateTypeJsonKey],
+          decreasingAdaptiveLearningRateTypeJsonEncodedValue);
+    });
+
+    test('should serialize learningRateType field, '
+        'constant type', () {
+      final classifier = createClassifier(
+          learningRateType: LearningRateType.constant);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorLearningRateTypeJsonKey],
+          constantLearningRateTypeJsonEncodedValue);
+    });
+
+    test('should serialize initialCoefficientsType field, '
+        'initialCoefficientsType=InitialCoefficientsType.zeros', () {
+      final classifier = createClassifier(
+          initialCoefficientsType: InitialCoefficientsType.zeroes);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorInitialCoefsTypeJsonKey],
+          zeroesInitialCoefficientsTypeJsonEncodedValue);
+    });
+
+    test('should serialize initialCoefficients field', () {
+      final classifier = createClassifier(
+          initialCoefficients: initialCoeffs);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorInitialCoefsJsonKey], initialCoeffs.toJson());
+    });
+
+    test('should serialize initialCoefficients field, '
+        'initialCoefficients=null', () {
+      final classifier = createClassifier(
+          initialCoefficients: null);
+      final serialized = classifier.toJson();
+
+      expect(serialized.containsKey(softmaxRegressorInitialCoefsJsonKey),
+          false);
     });
 
     test('should serialize classNames field', () {

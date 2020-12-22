@@ -8,6 +8,14 @@ import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type_json_converter.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -20,6 +28,10 @@ part 'softmax_regressor_impl.g.dart';
 
 @JsonSerializable()
 @DTypeJsonConverter()
+@LinearOptimizerTypeJsonConverter()
+@RegularizationTypeJsonConverter()
+@LearningRateTypeJsonConverter()
+@InitialCoefficientsTypeJsonConverter()
 @MatrixJsonConverter()
 class SoftmaxRegressorImpl
     with
@@ -30,6 +42,18 @@ class SoftmaxRegressorImpl
         SoftmaxRegressor {
 
   SoftmaxRegressorImpl(
+      this.optimizerType,
+      this.iterationsLimit,
+      this.initialLearningRate,
+      this.minCoefficientsUpdate,
+      this.lambda,
+      this.regularizationType,
+      this.randomSeed,
+      this.batchSize,
+      this.isFittingDataNormalized,
+      this.learningRateType,
+      this.initialCoefficientsType,
+      this.initialCoefficients,
       this.coefficientsByClasses,
       this.targetNames,
       this.linkFunction,
@@ -57,6 +81,75 @@ class SoftmaxRegressorImpl
 
   @override
   Map<String, dynamic> toJson() => _$SoftmaxRegressorImplToJson(this);
+
+  @override
+  @JsonKey(name: softmaxRegressorOptimizerTypeJsonKey)
+  final LinearOptimizerType optimizerType;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorIterationsLimitJsonKey,
+    includeIfNull: false,
+  )
+  final int iterationsLimit;
+
+  @override
+  @JsonKey(name: softmaxRegressorInitialLearningRateJsonKey)
+  final double initialLearningRate;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorMinCoefsUpdateJsonKey,
+    includeIfNull: false,
+  )
+  final double minCoefficientsUpdate;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorLambdaJsonKey,
+    includeIfNull: false,
+  )
+  final double lambda;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorRegularizationTypeJsonKey,
+    includeIfNull: false,
+  )
+  final RegularizationType regularizationType;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorRandomSeedJsonKey,
+    includeIfNull: false,
+  )
+  final int randomSeed;
+
+  @override
+  @JsonKey(name: softmaxRegressorBatchSizeJsonKey)
+  final int batchSize;
+
+  @override
+  @JsonKey(name: softmaxRegressorFittingDataNormalizedFlagJsonKey)
+  final bool isFittingDataNormalized;
+
+  @override
+  @JsonKey(name: softmaxRegressorLearningRateTypeJsonKey)
+  final LearningRateType learningRateType;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorInitialCoefsTypeJsonKey,
+    includeIfNull: false,
+  )
+  final InitialCoefficientsType initialCoefficientsType;
+
+  @override
+  @JsonKey(
+    name: softmaxRegressorInitialCoefsJsonKey,
+    includeIfNull: false,
+  )
+  final Matrix initialCoefficients;
 
   @override
   @JsonKey(name: softmaxRegressorClassNamesJsonKey)

@@ -61,9 +61,11 @@ class KnnSolverImpl
   @JsonKey(name: knnSolverTrainOutcomesJsonKey)
   final Matrix trainOutcomes;
 
+  @override
   @JsonKey(name: knnSolverKJsonKey)
   final int k;
 
+  @override
   @JsonKey(name: knnSolverDistanceTypeJsonKey)
   final Distance distanceType;
 

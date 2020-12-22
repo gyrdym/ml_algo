@@ -83,6 +83,18 @@ SoftmaxRegressor createSoftmaxRegressor({
       .get<SoftmaxRegressorFactory>();
 
   return regressorFactory.create(
+    optimizerType,
+    iterationsLimit,
+    initialLearningRate,
+    minCoefficientsUpdate,
+    lambda,
+    regularizationType,
+    randomSeed,
+    batchSize,
+    isFittingDataNormalized,
+    learningRateType,
+    initialCoefficientsType,
+    initialCoefficients,
     coefficientsByClasses,
     targetNames,
     linkFunction,

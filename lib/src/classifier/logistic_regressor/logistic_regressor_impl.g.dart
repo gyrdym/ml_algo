@@ -10,6 +10,18 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
     Map<String, dynamic> json) {
   return $checkedNew('LogisticRegressorImpl', json, () {
     $checkKeys(json, allowedKeys: const [
+      'O',
+      'I',
+      'LR',
+      'U',
+      'L',
+      'R',
+      'RS',
+      'B',
+      'N',
+      'LRT',
+      'ICT',
+      'IC',
       'CBC',
       'CN',
       'FI',
@@ -22,6 +34,32 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       'CPI'
     ]);
     final val = LogisticRegressorImpl(
+      $checkedConvert(
+          json,
+          'O',
+          (v) =>
+              const LinearOptimizerTypeJsonConverter().fromJson(v as String)),
+      $checkedConvert(json, 'I', (v) => v as int),
+      $checkedConvert(json, 'LR', (v) => (v as num)?.toDouble()),
+      $checkedConvert(json, 'U', (v) => (v as num)?.toDouble()),
+      $checkedConvert(json, 'L', (v) => (v as num)?.toDouble()),
+      $checkedConvert(json, 'R',
+          (v) => const RegularizationTypeJsonConverter().fromJson(v as String)),
+      $checkedConvert(json, 'RS', (v) => v as int),
+      $checkedConvert(json, 'B', (v) => v as int),
+      $checkedConvert(json, 'N', (v) => v as bool),
+      $checkedConvert(json, 'LRT',
+          (v) => const LearningRateTypeJsonConverter().fromJson(v as String)),
+      $checkedConvert(
+          json,
+          'ICT',
+          (v) => const InitialCoefficientsTypeJsonConverter()
+              .fromJson(v as String)),
+      $checkedConvert(
+          json,
+          'IC',
+          (v) =>
+              const VectorJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'CN', (v) => (v as List)?.map((e) => e as String)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
       $checkedConvert(json, 'FI', (v) => v as bool),
@@ -41,6 +79,18 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
     );
     return val;
   }, fieldKeyMap: const {
+    'optimizerType': 'O',
+    'iterationsLimit': 'I',
+    'initialLearningRate': 'LR',
+    'minCoefficientsUpdate': 'U',
+    'lambda': 'L',
+    'regularizationType': 'R',
+    'randomSeed': 'RS',
+    'batchSize': 'B',
+    'isFittingDataNormalized': 'N',
+    'learningRateType': 'LRT',
+    'initialCoefficientsType': 'ICT',
+    'initialCoefficients': 'IC',
     'targetNames': 'CN',
     'linkFunction': 'LF',
     'fitIntercept': 'FI',
@@ -57,15 +107,8 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
 Map<String, dynamic> _$LogisticRegressorImplToJson(
     LogisticRegressorImpl instance) {
   final val = <String, dynamic>{
-    'CBC': const MatrixJsonConverter().toJson(instance.coefficientsByClasses),
-    'CN': instance.targetNames?.toList(),
-    'FI': instance.fitIntercept,
-    'IS': instance.interceptScale,
-    'DT': const DTypeJsonConverter().toJson(instance.dtype),
-    'PT': instance.probabilityThreshold,
-    'PL': instance.positiveLabel,
-    'NL': instance.negativeLabel,
-    'LF': linkFunctionToJson(instance.linkFunction),
+    'O':
+        const LinearOptimizerTypeJsonConverter().toJson(instance.optimizerType),
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -74,6 +117,35 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
     }
   }
 
+  writeNotNull('I', instance.iterationsLimit);
+  writeNotNull('LR', instance.initialLearningRate);
+  writeNotNull('U', instance.minCoefficientsUpdate);
+  writeNotNull('L', instance.lambda);
+  writeNotNull(
+      'R',
+      const RegularizationTypeJsonConverter()
+          .toJson(instance.regularizationType));
+  writeNotNull('RS', instance.randomSeed);
+  val['B'] = instance.batchSize;
+  val['N'] = instance.isFittingDataNormalized;
+  val['LRT'] =
+      const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
+  writeNotNull(
+      'ICT',
+      const InitialCoefficientsTypeJsonConverter()
+          .toJson(instance.initialCoefficientsType));
+  writeNotNull(
+      'IC', const VectorJsonConverter().toJson(instance.initialCoefficients));
+  val['CBC'] =
+      const MatrixJsonConverter().toJson(instance.coefficientsByClasses);
+  val['CN'] = instance.targetNames?.toList();
+  val['FI'] = instance.fitIntercept;
+  val['IS'] = instance.interceptScale;
+  val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
+  val['PT'] = instance.probabilityThreshold;
+  val['PL'] = instance.positiveLabel;
+  val['NL'] = instance.negativeLabel;
+  val['LF'] = linkFunctionToJson(instance.linkFunction);
   writeNotNull('CPI', instance.costPerIteration);
   return val;
 }
