@@ -1,13 +1,13 @@
 import 'package:ml_algo/src/common/serializable/serializable.dart';
-import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
-import 'package:ml_algo/src/regressor/linear_regressor/_helpers/create_linear_regressor.dart';
-import 'package:ml_algo/src/regressor/linear_regressor/_helpers/create_linear_regressor_from_json.dart';
+import 'package:ml_algo/src/predictor/retrainable.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/_init_module.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -22,7 +22,12 @@ import 'package:ml_linalg/vector.dart';
 /// regressor should predict, and since all the `x` values are known (since they
 /// are the input for the algorithm), the regressor should find the best
 /// coefficients (weights) for each `x`-es to make a best prediction of `y` term.
-abstract class LinearRegressor implements Assessable, Serializable, Predictor {
+abstract class LinearRegressor
+    implements
+        Assessable,
+        Serializable,
+        Retrainable,
+        Predictor {
   /// Parameters:
   ///
   /// [fittingData] A [DataFrame] with observations that is used by the
@@ -120,30 +125,29 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
     bool isFittingDataNormalized = false,
     bool collectLearningData = false,
     DType dtype = DType.float32,
-  }) {
-    initCommonModule();
-
-    return createLinearRegressor(
-      fittingData: fittingData,
-      targetName: targetName,
-      optimizerType: optimizerType,
-      iterationsLimit: iterationsLimit,
-      learningRateType: learningRateType,
-      initialCoefficientsType: initialCoefficientsType,
-      initialLearningRate: initialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate,
-      lambda: lambda,
-      regularizationType: regularizationType,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      randomSeed: randomSeed,
-      batchSize: batchSize,
-      initialCoefficients: initialCoefficients,
-      isFittingDataNormalized: isFittingDataNormalized,
-      collectLearningData: collectLearningData,
-      dtype: dtype,
-    );
-  }
+  }) =>
+      initLinearRegressorModule()
+          .get<LinearRegressorFactory>()
+          .create(
+        fittingData: fittingData,
+        targetName: targetName,
+        optimizerType: optimizerType,
+        iterationsLimit: iterationsLimit,
+        learningRateType: learningRateType,
+        initialCoefficientsType: initialCoefficientsType,
+        initialLearningRate: initialLearningRate,
+        minCoefficientsUpdate: minCoefficientsUpdate,
+        lambda: lambda,
+        regularizationType: regularizationType,
+        fitIntercept: fitIntercept,
+        interceptScale: interceptScale,
+        randomSeed: randomSeed,
+        batchSize: batchSize,
+        initialCoefficients: initialCoefficients,
+        isFittingDataNormalized: isFittingDataNormalized,
+        collectLearningData: collectLearningData,
+        dtype: dtype,
+      );
 
   /// Restores previously fitted [LinearRegressor] instance from the [json]
   ///
@@ -184,11 +188,10 @@ abstract class LinearRegressor implements Assessable, Serializable, Predictor {
   /// // here you can use previously fitted restored regressor to make
   /// // some prediction, e.g. via `restoredRegressor.predict(...)`;
   /// ````
-  factory LinearRegressor.fromJson(String json) {
-    initCommonModule();
-
-    return createLinearRegressorFromJson(json);
-  }
+  factory LinearRegressor.fromJson(String json) =>
+      initLinearRegressorModule()
+          .get<LinearRegressorFactory>()
+          .fromJson(json);
 
   /// Optimization algorithm that was used to learn the model's coefficients
   LinearOptimizerType get optimizerType;

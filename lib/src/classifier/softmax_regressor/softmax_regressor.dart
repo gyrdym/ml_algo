@@ -1,13 +1,13 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor_from_json.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_init_module.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/predictor/retrainable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -26,8 +26,13 @@ import 'package:ml_linalg/matrix.dart';
 ///
 /// Also it is worth to mention that the algorithm is a generalization of
 /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression))
-abstract class SoftmaxRegressor implements
-    LinearClassifier, Assessable, Serializable {
+abstract class SoftmaxRegressor
+    implements
+        Assessable,
+        Serializable,
+        Retrainable,
+        LinearClassifier {
+
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations which are used by the
@@ -138,10 +143,10 @@ abstract class SoftmaxRegressor implements
         bool collectLearningData = false,
         DType dtype = DType.float32,
       }
-  ) {
-    initSoftmaxRegressorModule();
-
-    return createSoftmaxRegressor(
+  ) =>
+    initSoftmaxRegressorModule()
+        .get<SoftmaxRegressorFactory>()
+        .create(
       trainData: trainData,
       targetNames: targetNames,
       optimizerType: optimizerType,
@@ -163,7 +168,6 @@ abstract class SoftmaxRegressor implements
       collectLearningData: collectLearningData,
       dtype: dtype,
     );
-  }
 
   /// Restores previously fitted classifier instance from the [json]
   ///
@@ -202,11 +206,10 @@ abstract class SoftmaxRegressor implements
   /// // here you can use previously fitted restored classifier to make
   /// // some prediction, e.g. via `restoredClassifier.predict(...)`;
   /// ````
-  factory SoftmaxRegressor.fromJson(String json) {
-    initSoftmaxRegressorModule();
-
-    return createSoftmaxRegressorFromJson(json);
-  }
+  factory SoftmaxRegressor.fromJson(String json) =>
+      initSoftmaxRegressorModule()
+          .get<SoftmaxRegressorFactory>()
+          .fromJson(json);
 
   /// A linear optimization algorithm that was used
   /// to find the best coefficients of log-likelihood cost function. Also

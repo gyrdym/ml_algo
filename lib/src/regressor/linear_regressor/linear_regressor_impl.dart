@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/vector_json_converter.dart';
@@ -12,7 +14,10 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/regressor/_mixins/assessable_regressor_mixin.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_constants.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -52,6 +57,7 @@ class LinearRegressorImpl
     double interceptScale = 1.0,
     this.costPerIteration,
     this.dtype = DType.float32,
+    this.schemaVersion = linearRegressorJsonSchemaVersion,
   }) :
     fitIntercept = fitIntercept,
     interceptScale = interceptScale;
@@ -159,7 +165,13 @@ class LinearRegressorImpl
   final DType dtype;
 
   @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final schemaVersion;
+
+  @override
   Iterable<String> get targetNames => [targetName];
+
+  final _outdatedSchemaVersions = [null];
 
   @override
   DataFrame predict(DataFrame features) {
@@ -173,6 +185,36 @@ class LinearRegressorImpl
     return DataFrame.fromMatrix(
         prediction,
         header: targetNames,
+    );
+  }
+
+  @override
+  LinearRegressor retrain(DataFrame data) {
+    if (_outdatedSchemaVersions.contains(schemaVersion)) {
+      throw OutdatedJsonSchemaException();
+    }
+
+    return linearRegressorInjector
+        .get<LinearRegressorFactory>()
+        .create(
+      fittingData: data,
+      targetName: targetName,
+      optimizerType: optimizerType,
+      iterationsLimit: iterationsLimit,
+      learningRateType: learningRateType,
+      initialCoefficientsType: initialCoefficientsType,
+      initialLearningRate: initialLearningRate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
+      lambda: lambda,
+      regularizationType: regularizationType,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      randomSeed: randomSeed,
+      batchSize: batchSize,
+      initialCoefficients: initialCoefficients,
+      isFittingDataNormalized: isFittingDataNormalized,
+      collectLearningData: false,
+      dtype: dtype,
     );
   }
 }

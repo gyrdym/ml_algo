@@ -13,4 +13,6 @@ abstract class KnnRegressorFactory {
       Distance distance,
       DType dtype,
   );
+
+  KnnRegressor fromJson(String json);
 }

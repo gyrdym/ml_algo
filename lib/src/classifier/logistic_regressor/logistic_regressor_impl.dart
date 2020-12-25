@@ -1,8 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_constants.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/vector_json_converter.dart';
@@ -67,6 +72,9 @@ class LogisticRegressorImpl
       this.positiveLabel,
       this.costPerIteration,
       this.dtype,
+      {
+        this.schemaVersion = logisticRegressorJsonSchemaVersion,
+      }
   ) {
     validateProbabilityThreshold(probabilityThreshold);
     validateClassLabels(positiveLabel, negativeLabel);
@@ -210,6 +218,12 @@ class LogisticRegressorImpl
   final List<num> costPerIteration;
 
   @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final schemaVersion;
+
+  final _outdatedSchemaVersions = [null];
+
+  @override
   DataFrame predict(DataFrame testFeatures) {
     final predictedLabels = getProbabilitiesMatrix(testFeatures)
         .mapColumns(
@@ -223,6 +237,39 @@ class LogisticRegressorImpl
     return DataFrame.fromMatrix(
       predictedLabels,
       header: targetNames,
+    );
+  }
+
+  @override
+  LogisticRegressor retrain(DataFrame data) {
+    if (_outdatedSchemaVersions.contains(schemaVersion)) {
+      throw OutdatedJsonSchemaException();
+    }
+
+    return logisticRegressorInjector
+        .get<LogisticRegressorFactory>()
+        .create(
+      trainData: data,
+      targetName: targetNames.first,
+      optimizerType: optimizerType,
+      iterationsLimit: iterationsLimit,
+      initialLearningRate: initialLearningRate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
+      probabilityThreshold: probabilityThreshold,
+      lambda: lambda,
+      regularizationType: regularizationType,
+      randomSeed: randomSeed,
+      batchSize: batchSize,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      isFittingDataNormalized: isFittingDataNormalized,
+      learningRateType: learningRateType,
+      initialCoefficientsType: initialCoefficientsType,
+      initialCoefficients: initialCoefficients ?? Vector.empty(dtype: dtype),
+      positiveLabel: positiveLabel,
+      negativeLabel: negativeLabel,
+      collectLearningData: false,
+      dtype: dtype,
     );
   }
 }

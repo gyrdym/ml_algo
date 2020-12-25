@@ -2,9 +2,9 @@ import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
-import 'package:ml_algo/src/regressor/knn_regressor/_helpers/create_knn_regressor.dart';
-import 'package:ml_algo/src/regressor/knn_regressor/_helpers/create_knn_regressor_from_json.dart';
+import 'package:ml_algo/src/predictor/retrainable.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/_init_module.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -22,7 +22,12 @@ import 'package:ml_linalg/dtype.dart';
 /// To get a more precise result, one may use weighted average of found labels -
 /// the farther a found observation from the target one, the lower the weight of
 /// the observation is. To obtain these weights one may use a kernel function.
-abstract class KnnRegressor implements Assessable, Serializable, Predictor {
+abstract class KnnRegressor
+    implements
+        Assessable,
+        Serializable,
+        Retrainable,
+        Predictor {
   /// Parameters:
   ///
   /// [fittingData] Labelled observations, among which will be searched [k]
@@ -52,18 +57,17 @@ abstract class KnnRegressor implements Assessable, Serializable, Predictor {
         Distance distance = Distance.euclidean,
         DType dtype = DType.float32,
       }
-  ) {
-    initKnnRegressorModule();
-
-    return createKnnRegressor(
-      fittingData: fittingData,
-      targetName: targetName,
-      k: k,
-      kernel: kernel,
-      distance: distance,
-      dtype: dtype,
-    );
-  }
+  ) =>
+      initKnnRegressorModule()
+          .get<KnnRegressorFactory>()
+          .create(
+        fittingData,
+        targetName,
+        k,
+        kernel,
+        distance,
+        dtype,
+      );
 
   /// Restores previously fitted regressor instance from the given [json]
   ///
@@ -98,11 +102,10 @@ abstract class KnnRegressor implements Assessable, Serializable, Predictor {
   /// // here you can use previously fitted restored regressor to make
   /// // some prediction, e.g. via `restoredRegressor.predict(...)`;
   /// ````
-  factory KnnRegressor.fromJson(String json) {
-    initKnnRegressorModule();
-
-    return createKnnRegressorFromJson(json);
-  }
+  factory KnnRegressor.fromJson(String json) =>
+      initKnnRegressorModule()
+          .get<KnnRegressorFactory>()
+          .fromJson(json);
 
   /// A number of nearest neighbours
   ///

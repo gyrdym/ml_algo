@@ -1,9 +1,12 @@
 import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_impl.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -14,14 +17,23 @@ import '../../mocks.dart';
 void main() {
   group('KnnClassifierImpl', () {
     final classLabelPrefix = 'awesome class label';
+    final targetColumnName = 'target';
+    final classLabels = [1, 2, 3];
+    final dtype = DType.float32;
+    final solverMock = KnnSolverMock();
+    final kernelMock = KernelMock();
+    final k = 10;
+    final distanceType = Distance.hamming;
+    final kernelType = KernelType.epanechnikov;
 
-    group('constructor', () {
-      final solverMock = KnnSolverMock();
-      final kernelMock = KernelMock();
-      final k = 10;
-      final distanceType = Distance.hamming;
-      final kernelType = KernelType.epanechnikov;
+    tearDown(() {
+      reset(solverMock);
+      reset(kernelMock);
+      injector.clearAll();
+      knnClassifierInjector.clearAll();
+    });
 
+    group('default constructor', () {
       setUp(() {
         when(solverMock.k).thenReturn(k);
         when(solverMock.distanceType).thenReturn(distanceType);
@@ -38,12 +50,12 @@ void main() {
       test('should throw an exception if no class labels are provided', () {
         final classLabels = <num>[];
         final actual = () => KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         expect(actual, throwsException);
@@ -51,12 +63,12 @@ void main() {
 
       test('should persist model hyperparameters', () {
         final classifier = KnnClassifierImpl(
-          'target',
-          [1, 2, 3],
+          targetColumnName,
+          classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         expect(classifier.k, k);
@@ -65,7 +77,7 @@ void main() {
       });
     });
 
-    group('predict method', () {
+    group('predict', () {
       final solverMock = KnnSolverMock();
       final kernelMock = KernelMock();
 
@@ -78,12 +90,12 @@ void main() {
 
       test('should throw an exception if no features are provided', () {
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           [1],
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final features = DataFrame.fromMatrix(Matrix.empty());
@@ -94,14 +106,13 @@ void main() {
       test('should return a dataframe with just one column, consisting of '
           'weighted majority-based outcomes of closest observations of provided '
           'features', () {
-        final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -163,12 +174,12 @@ void main() {
         final classLabels = [1, 2];
 
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -192,19 +203,18 @@ void main() {
 
         final actual = classifier.predict(testFeatures);
 
-        expect(actual.header, equals(['target']));
+        expect(actual.header, equals([targetColumnName]));
       });
 
       test('should return a label of first neighbour among found k neighbours '
           'if there is no major class', () {
-        final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -237,14 +247,13 @@ void main() {
 
       test('should return a label of neighbours with bigger weights even if '
           'they are not the majority', () {
-        final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -293,14 +302,13 @@ void main() {
 
       test('should return probability distribution of classes for each feature '
           'row', () {
-        final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -359,14 +367,13 @@ void main() {
 
       test('should return probability distribution of classes where '
           'probabilities of absent class labels are 0.0', () {
-        final classLabels = [1, 2, 3];
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -411,15 +418,13 @@ void main() {
 
       test('should return a dataframe with a header, containing proper column '
           'names', () {
-        final classLabels = [1, 2, 3];
-
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -458,12 +463,12 @@ void main() {
         final classLabels = [thirdClassLabel, firstClassLabel, secondClassLabel];
 
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -516,12 +521,12 @@ void main() {
         final unexpectedClassLabel = 100;
         final classLabels = [thirdClassLabel, firstClassLabel, secondClassLabel];
         final classifier = KnnClassifierImpl(
-          'target',
+          targetColumnName,
           classLabels,
           kernelMock,
           solverMock,
           classLabelPrefix,
-          DType.float32,
+          dtype,
         );
 
         final testFeatureMatrix = Matrix.fromList(
@@ -544,6 +549,76 @@ void main() {
         final actual = () => classifier.predictProbabilities(testFeatures);
 
         expect(actual, throwsException);
+      });
+    });
+
+    group('retrain', () {
+      final retrainingData = DataFrame([
+        [1, 20, 300, 400],
+      ]);
+      final classifierFactory = KnnClassifierFactoryMock();
+      final retrainedModelMock = KnnClassifierMock();
+      final classifier = KnnClassifierImpl(
+        targetColumnName,
+        classLabels,
+        kernelMock,
+        solverMock,
+        classLabelPrefix,
+        dtype,
+      );
+
+      setUp(() {
+        when(solverMock.k).thenReturn(k);
+        when(solverMock.distanceType).thenReturn(distanceType);
+        when(kernelMock.type).thenReturn(kernelType);
+        when(classifierFactory.create(any, any, any, any, any, any, any))
+            .thenReturn(retrainedModelMock);
+
+        knnClassifierInjector
+            .registerSingleton<KnnClassifierFactory>(
+                () => classifierFactory);
+      });
+
+      tearDown(() {
+        injector.clearAll();
+        knnClassifierInjector.clearAll();
+      });
+
+      test('should call classifier factory while retraining the model', () {
+        classifier.retrain(retrainingData);
+
+        verify(classifierFactory.create(
+          retrainingData,
+          targetColumnName,
+          k,
+          kernelType,
+          distanceType,
+          classLabelPrefix,
+          dtype,
+        )).called(1);
+      });
+
+      test('should return a new instance for the retrained model', () {
+        final retrainedModel = classifier.retrain(retrainingData);
+
+        expect(retrainedModel, same(retrainedModelMock));
+        expect(retrainedModel, isNot(same(classifier)));
+      });
+
+      test('should throw exception if the model schema is outdated, '
+          'schemaVersion is null', () {
+        final model = KnnClassifierImpl(
+          targetColumnName,
+          classLabels,
+          kernelMock,
+          solverMock,
+          classLabelPrefix,
+          dtype,
+          schemaVersion: null,
+        );
+
+        expect(() => model.retrain(retrainingData),
+            throwsA(isA<OutdatedJsonSchemaException>()));
       });
     });
   });

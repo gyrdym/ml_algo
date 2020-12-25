@@ -1,0 +1,1 @@
+const knnRegressorJsonSchemaVersion = 1;

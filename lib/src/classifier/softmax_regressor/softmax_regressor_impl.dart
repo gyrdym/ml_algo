@@ -1,8 +1,13 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/_mixins/linear_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_constants.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
@@ -63,6 +68,9 @@ class SoftmaxRegressorImpl
       this.negativeLabel,
       this.costPerIteration,
       this.dtype,
+      {
+        this.schemaVersion = softmaxRegressorJsonSchemaVersion,
+      }
   ) {
     validateClassLabels(positiveLabel, negativeLabel);
     validateCoefficientsMatrix(coefficientsByClasses);
@@ -195,6 +203,12 @@ class SoftmaxRegressorImpl
   final List<num> costPerIteration;
 
   @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final schemaVersion;
+
+  final _outdatedSchemaVersions = [null];
+
+  @override
   DataFrame predict(DataFrame testFeatures) {
     final allProbabilities = getProbabilitiesMatrix(testFeatures);
     final labels = allProbabilities.mapRows((probabilities) {
@@ -214,6 +228,37 @@ class SoftmaxRegressorImpl
     return DataFrame.fromMatrix(
       labels,
       header: targetNames,
+    );
+  }
+
+  @override
+  SoftmaxRegressor retrain(DataFrame data) {
+    if (_outdatedSchemaVersions.contains(schemaVersion)) {
+      throw OutdatedJsonSchemaException();
+    }
+
+    return softmaxRegressorInjector
+        .get<SoftmaxRegressorFactory>()
+        .create(
+      trainData: data,
+      targetNames: targetNames,
+      optimizerType: optimizerType,
+      iterationsLimit: iterationsLimit,
+      initialLearningRate: initialLearningRate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
+      lambda: lambda,
+      regularizationType: regularizationType,
+      randomSeed: randomSeed,
+      batchSize: batchSize,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      learningRateType: learningRateType,
+      isFittingDataNormalized: isFittingDataNormalized,
+      initialCoefficientsType: initialCoefficientsType,
+      initialCoefficients: initialCoefficients,
+      positiveLabel: positiveLabel,
+      negativeLabel: negativeLabel,
+      dtype: dtype,
     );
   }
 }

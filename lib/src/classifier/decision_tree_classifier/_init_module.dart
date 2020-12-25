@@ -1,3 +1,4 @@
+import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory_impl.dart';
@@ -22,10 +23,10 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 
-void initDecisionTreeModule() {
+Injector initDecisionTreeModule() {
   initCommonModule();
 
-  decisionTreeInjector
+  return decisionTreeInjector
     ..registerSingletonIf<DistributionCalculatorFactory>(
             () => const DistributionCalculatorFactoryImpl())
 

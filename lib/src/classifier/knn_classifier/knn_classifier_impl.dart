@@ -1,7 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_constants.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_label_list.dart';
@@ -37,6 +42,9 @@ class KnnClassifierImpl
       this.solver,
       this.classLabelPrefix,
       this.dtype,
+      {
+        this.schemaVersion = knnClassifierJsonSchemaVersion,
+      }
   ) {
     validateClassLabelList(classLabels);
   }
@@ -85,6 +93,12 @@ class KnnClassifierImpl
   Distance get distanceType => solver.distanceType;
 
   @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final schemaVersion;
+
+  final _outdatedSchemaVersions = [null];
+
+  @override
   DataFrame predict(DataFrame features) {
     validateTestFeatures(features, dtype);
 
@@ -131,6 +145,25 @@ class KnnClassifierImpl
               .join(' '));
 
     return DataFrame.fromMatrix(probabilityMatrix, header: header);
+  }
+
+  @override
+  KnnClassifier retrain(DataFrame data) {
+    if (_outdatedSchemaVersions.contains(schemaVersion)) {
+      throw OutdatedJsonSchemaException();
+    }
+
+    return knnClassifierInjector
+        .get<KnnClassifierFactory>()
+        .create(
+      data,
+      targetColumnName,
+      k,
+      kernelType,
+      distanceType,
+      classLabelPrefix,
+      dtype,
+    );
   }
 
   /// Returns a map of the following format:

@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_constants.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type_json_keys.dart';
+import 'package:ml_algo/src/knn_solver/knn_solver_constants.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
@@ -73,8 +76,10 @@ void main() {
             knnSolverKJsonKey: k,
             knnSolverDistanceTypeJsonKey: distanceTypeToJson(Distance.hamming),
             knnSolverStandardizeJsonKey: true,
+            jsonSchemaVersionJsonKey: knnSolverJsonSchemaVersion,
           },
           knnClassifierClassLabelPrefixJsonKey: classLabelPrefix,
+          jsonSchemaVersionJsonKey: knnClassifierJsonSchemaVersion,
         });
       });
     });

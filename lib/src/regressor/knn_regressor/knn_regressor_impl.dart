@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
@@ -8,7 +10,10 @@ import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_json_converter.dart';
 import 'package:ml_algo/src/regressor/_mixins/assessable_regressor_mixin.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_constants.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
@@ -36,6 +41,9 @@ class KnnRegressorImpl
       this.solver,
       this.kernel,
       this.dtype,
+      {
+        this.schemaVersion = knnRegressorJsonSchemaVersion,
+      }
   );
 
   factory KnnRegressorImpl.fromJson(Map<String, dynamic> json) =>
@@ -69,6 +77,12 @@ class KnnRegressorImpl
   @override
   Iterable<String> get targetNames => [targetName];
 
+  @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final schemaVersion;
+
+  final _outdatedSchemaVersions = [null];
+
   Vector get _zeroVector => dtype == DType.float32
       ? _float32zeroVector
       : _float64zeroVector;
@@ -86,6 +100,24 @@ class KnnRegressorImpl
     return DataFrame.fromMatrix(
       prediction,
       header: [targetName],
+    );
+  }
+
+  @override
+  KnnRegressor retrain(DataFrame data) {
+    if (_outdatedSchemaVersions.contains(schemaVersion)) {
+      throw OutdatedJsonSchemaException();
+    }
+
+    return knnRegressorInjector
+        .get<KnnRegressorFactory>()
+        .create(
+      data,
+      targetName,
+      k,
+      kernelType,
+      distanceType,
+      dtype,
     );
   }
 

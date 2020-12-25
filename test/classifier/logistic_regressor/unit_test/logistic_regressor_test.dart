@@ -1,5 +1,4 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/_helpers/create_logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
@@ -81,9 +80,9 @@ void main() {
     test('should throw an exception if a probability threshold is less than '
         '0.0', () {
       final probabilityThreshold = -0.01;
-      final actual = () => createLogisticRegressor(
-        trainData: observations,
-        targetName: targetColumnName,
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
         probabilityThreshold: probabilityThreshold,
         initialCoefficients: Vector.empty(),
       );
@@ -94,9 +93,9 @@ void main() {
     test('should throw an exception if a probability threshold is equal to '
         '0.0', () {
       final probabilityThreshold = 0.0;
-      final actual = () => createLogisticRegressor(
-        trainData: observations,
-        targetName: targetColumnName,
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
         probabilityThreshold: probabilityThreshold,
         initialCoefficients: Vector.empty(),
       );
@@ -107,9 +106,9 @@ void main() {
     test('should throw an exception if a probability threshold is equal to '
         '1.0', () {
       final probabilityThreshold = 1.0;
-      final actual = () => createLogisticRegressor(
-        trainData: observations,
-        targetName: targetColumnName,
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
         probabilityThreshold: probabilityThreshold,
         initialCoefficients: Vector.empty(),
       );
@@ -120,9 +119,9 @@ void main() {
     test('should throw an exception if a probability threshold is greater than '
         '1.0', () {
       final probabilityThreshold = 1.01;
-      final actual = () => createLogisticRegressor(
-        trainData: observations,
-        targetName: targetColumnName,
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
         probabilityThreshold: probabilityThreshold,
         initialCoefficients: Vector.empty(),
       );
@@ -133,9 +132,9 @@ void main() {
     test('should throw an exception if a target column does not exist', () {
       final targetColumnName = 'col_10';
 
-      final actual = () => createLogisticRegressor(
-        trainData: observations,
-        targetName: targetColumnName,
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
         initialCoefficients: Vector.empty(),
       );
 
@@ -144,9 +143,9 @@ void main() {
 
     test('should throw an exception if too few initial coefficients '
         'provided', () {
-      final actual = () => createLogisticRegressor(
-        trainData: observations,
-        targetName: targetColumnName,
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
         initialCoefficients: Vector.fromList([1, 2]),
       );
 
@@ -158,9 +157,9 @@ void main() {
 
       final targetColumnName = 'col_4';
 
-      final actual = () => createLogisticRegressor(
-        trainData: observations,
-        targetName: targetColumnName,
+      final actual = () => LogisticRegressor(
+        observations,
+        targetColumnName,
         initialCoefficients: Vector.fromList([1, 2, 3, 4, 5, 6]),
       );
 
@@ -169,9 +168,9 @@ void main() {
 
     test('should call cost function factory in order to create '
         'loglikelihood cost function', () {
-      createLogisticRegressor(
-        trainData: observations,
-        targetName: 'col_4',
+      LogisticRegressor(
+        observations,
+        'col_4',
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
         initialCoefficients: Vector.empty(),
@@ -186,9 +185,9 @@ void main() {
     });
 
     test('should call linear optimizer factory and consider intercept term', () {
-      createLogisticRegressor(
-        trainData: observations,
-        targetName: 'col_4',
+      LogisticRegressor(
+        observations,
+        'col_4',
         learningRateType: LearningRateType.decreasingAdaptive,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         iterationsLimit: 1000,
@@ -233,9 +232,9 @@ void main() {
 
     test('should find the extrema for provided observations while '
         'instantiating', () {
-      createLogisticRegressor(
-        trainData: observations,
-        targetName: 'col_4',
+      LogisticRegressor(
+        observations,
+        'col_4',
         initialCoefficients: initialCoefficients,
         fitIntercept: true,
       );
@@ -256,9 +255,9 @@ void main() {
       final interceptScale = -12.0;
       final dtype = DType.float32;
 
-      final classifier = createLogisticRegressor(
-        trainData: observations,
-        targetName: targetName,
+      final classifier = LogisticRegressor(
+        observations,
+        targetName,
         probabilityThreshold: probabilityThreshold,
         fitIntercept: fitIntercept,
         initialCoefficients: Vector.empty(),

@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -156,6 +158,12 @@ void main() {
     test('should serialize root node', () {
       final json = classifier.toJson();
       expect(json[decisionTreeClassifierTreeRootNodeJsonKey], majorityTreeDataMock);
+    });
+
+    test('should serialize schemaVersion field', () {
+      final json = classifier.toJson();
+      expect(json[jsonSchemaVersionJsonKey],
+          decisionTreeClassifierJsonSchemaVersion);
     });
 
     group('saveAsJson', () {

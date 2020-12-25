@@ -1,8 +1,7 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/_helpers/create_softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
@@ -25,10 +24,9 @@ import '../../../helpers.dart';
 import '../../../mocks.dart';
 
 void main() {
-  group('SoftmaxRegressor', () {
+  group('SoftmaxRegressorFactoryImpl', () {
     final negativeLabel = 10.0;
     final positiveLabel = 20.0;
-
     final features = Matrix.fromList([
       [10.1, 10.2, 12.0, 13.4],
       [13.1, 15.2, 61.0, 27.2],
@@ -37,7 +35,6 @@ void main() {
       [35.1, 95.2, 56.0, 52.6],
       [90.1, 20.2, 10.0, 12.1],
     ]);
-
     final outcomes = Matrix.fromList([
       [positiveLabel, negativeLabel, negativeLabel],
       [negativeLabel, negativeLabel, positiveLabel],
@@ -46,7 +43,6 @@ void main() {
       [negativeLabel, negativeLabel, positiveLabel],
       [positiveLabel, negativeLabel, negativeLabel],
     ]);
-
     final observations = DataFrame.fromMatrix(
       Matrix.fromColumns([
         ...features.columns,
@@ -54,7 +50,6 @@ void main() {
       ], dtype: DType.float32),
       header: ['a', 'b', 'c', 'd', 'target_1', 'target_2', 'target_3'],
     );
-
     final initialCoefficients = Matrix.fromList([
       [1.0],
       [10.0],
@@ -62,7 +57,6 @@ void main() {
       [30.0],
       [40.0],
     ]);
-
     final learnedCoefficients = Matrix.fromList([
       [1, 2, 3],
       [1, 2, 3],
@@ -70,32 +64,22 @@ void main() {
       [1, 2, 3],
       [1, 2, 3],
     ]);
-
     final costPerIteration = [10, 0, -10, 33.1];
+    final factory = const SoftmaxRegressorFactoryImpl();
 
     LinkFunction linkFunctionMock;
-
     CostFunction costFunctionMock;
     CostFunctionFactory costFunctionFactoryMock;
-
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
-
-    SoftmaxRegressor softmaxRegressorMock;
     SoftmaxRegressorFactory softmaxRegressorFactoryMock;
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
-
       costFunctionMock = CostFunctionMock();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
-
-      softmaxRegressorMock = SoftmaxRegressorMock();
-      softmaxRegressorFactoryMock = createSoftmaxRegressorFactoryMock(
-          softmaxRegressorMock);
 
       softmaxRegressorInjector
         ..clearAll()
@@ -128,7 +112,7 @@ void main() {
     test('should throw an exception if some target columns do not exist', () {
       final targetColumnNames = ['target_1', 'some', 'unknown', 'columns'];
 
-      final actual = () => createSoftmaxRegressor(
+      final actual = () => factory.create(
         trainData: observations,
         targetNames: targetColumnNames,
       );
@@ -144,7 +128,7 @@ void main() {
       final targetColumnNames =
         ['target_1'];
 
-      final actual = () => createSoftmaxRegressor(
+      final actual = () => factory.create(
         trainData: observations,
         targetNames: targetColumnNames,
       );
@@ -154,7 +138,7 @@ void main() {
 
     test('should call cost function factory in order to create '
         'loglikelihood cost function', () {
-      createSoftmaxRegressor(
+      factory.create(
         trainData: observations,
         targetNames: ['target_1', 'target_2', 'target_3'],
         positiveLabel: positiveLabel,
@@ -172,7 +156,7 @@ void main() {
 
     test('should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
-      createSoftmaxRegressor(
+      factory.create(
         trainData: observations,
         targetNames: ['target_1', 'target_2', 'target_3'],
         optimizerType: LinearOptimizerType.gradient,
@@ -226,7 +210,7 @@ void main() {
 
     test('should find the extrema for fitting observations while '
         'instantiating', () {
-      createSoftmaxRegressor(
+      factory.create(
         trainData: observations,
         targetNames: ['target_1', 'target_2', 'target_3'],
         initialCoefficients: initialCoefficients,
@@ -241,7 +225,7 @@ void main() {
 
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=true', () {
-      createSoftmaxRegressor(
+      factory.create(
         trainData: observations,
         targetNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: true,
@@ -257,7 +241,7 @@ void main() {
 
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=false', () {
-      createSoftmaxRegressor(
+      factory.create(
         trainData: observations,
         targetNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: false,
@@ -269,40 +253,6 @@ void main() {
         isMinimizingObjective: anyNamed('isMinimizingObjective'),
         collectLearningData: false,
       )).called(1);
-    });
-
-    test('should pass cost per iteration list to the softmax regressor '
-        'factory', () {
-      createSoftmaxRegressor(
-        trainData: observations,
-        targetNames: ['target_1', 'target_2', 'target_3'],
-        collectLearningData: true,
-        dtype: DType.float32,
-      );
-
-      verify(softmaxRegressorFactoryMock.create(
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          any,
-          costPerIteration,
-          any,
-      ));
     });
   });
 }

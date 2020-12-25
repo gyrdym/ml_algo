@@ -1,7 +1,10 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
@@ -32,6 +35,8 @@ import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices
 import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
@@ -186,6 +191,20 @@ class PredictorMock extends Mock implements Predictor {}
 
 class ClassifierAssessorMock extends Mock implements ClassifierAssessor {}
 
+class LinearRegressorFactoryMock extends Mock
+    implements LinearRegressorFactory {}
+
+class LinearRegressorMock extends Mock implements LinearRegressor {}
+
+class DecisionTreeClassifierFactoryMock extends Mock
+    implements DecisionTreeClassifierFactory {}
+
+class DecisionTreeClassifierMock extends Mock
+    implements DecisionTreeClassifier {}
+
+class LogisticRegressorFactoryMock extends Mock
+    implements LogisticRegressorFactory {}
+
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
@@ -274,7 +293,8 @@ KnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
 
 KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
   final factory = KnnClassifierFactoryMock();
-  when(factory.create(any, any, any, any, any, any)).thenReturn(classifier);
+  when(factory.create(any, any, any, any, any, any, any))
+      .thenReturn(classifier);
   return factory;
 }
 
@@ -284,12 +304,88 @@ KnnRegressorFactory createKnnRegressorFactoryMock(KnnRegressor regressor) {
   return factory;
 }
 
+LogisticRegressorFactory createLogisticRegressorFactoryMock(
+    LogisticRegressor logisticRegressor) {
+  final factory = LogisticRegressorFactoryMock();
+  when(factory.create(
+    trainData: anyNamed('trainData'),
+    targetName: anyNamed('targetName'),
+    optimizerType: anyNamed('optimizerType'),
+    iterationsLimit: anyNamed('iterationsLimit'),
+    initialLearningRate: anyNamed('initialLearningRate'),
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+    lambda: anyNamed('lambda'),
+    regularizationType: anyNamed('regularizationType'),
+    randomSeed: anyNamed('randomSeed'),
+    batchSize: anyNamed('batchSize'),
+    fitIntercept: anyNamed('fitIntercept'),
+    interceptScale: anyNamed('interceptScale'),
+    learningRateType: anyNamed('learningRateType'),
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
+    initialCoefficientsType: anyNamed('initialCoefficientsType'),
+    initialCoefficients: anyNamed('initialCoefficients'),
+    positiveLabel: anyNamed('positiveLabel'),
+    negativeLabel: anyNamed('negativeLabel'),
+    collectLearningData: anyNamed('collectLearningData'),
+    probabilityThreshold: anyNamed('probabilityThreshold'),
+    dtype: anyNamed('dtype'),
+  ))
+      .thenReturn(logisticRegressor);
+  return factory;
+}
+
 SoftmaxRegressorFactory createSoftmaxRegressorFactoryMock(
     SoftmaxRegressor softmaxRegressor) {
   final factory = SoftmaxRegressorFactoryMock();
-  when(factory.create(any, any, any, any, any, any, any, any, any, any, any,
-      any, any, any, any, any, any, any, any, any, any))
+  when(factory.create(
+    trainData: anyNamed('trainData'),
+    targetNames: anyNamed('targetNames'),
+    optimizerType: anyNamed('optimizerType'),
+    iterationsLimit: anyNamed('iterationsLimit'),
+    initialLearningRate: anyNamed('initialLearningRate'),
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+    lambda: anyNamed('lambda'),
+    regularizationType: anyNamed('regularizationType'),
+    randomSeed: anyNamed('randomSeed'),
+    batchSize: anyNamed('batchSize'),
+    fitIntercept: anyNamed('fitIntercept'),
+    interceptScale: anyNamed('interceptScale'),
+    learningRateType: anyNamed('learningRateType'),
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
+    initialCoefficientsType: anyNamed('initialCoefficientsType'),
+    initialCoefficients: anyNamed('initialCoefficients'),
+    positiveLabel: anyNamed('positiveLabel'),
+    negativeLabel: anyNamed('negativeLabel'),
+    dtype: anyNamed('dtype'),
+  ))
       .thenReturn(softmaxRegressor);
+  return factory;
+}
+
+LinearRegressorFactory createLinearRegressorFactoryMock(
+    LinearRegressor regressor) {
+  final factory = LinearRegressorFactoryMock();
+  when(factory.create(
+    fittingData: anyNamed('fittingData'),
+    targetName: anyNamed('targetName'),
+    optimizerType: anyNamed('optimizerType'),
+    iterationsLimit: anyNamed('iterationsLimit'),
+    initialLearningRate: anyNamed('initialLearningRate'),
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+    lambda: anyNamed('lambda'),
+    regularizationType: anyNamed('regularizationType'),
+    randomSeed: anyNamed('randomSeed'),
+    batchSize: anyNamed('batchSize'),
+    fitIntercept: anyNamed('fitIntercept'),
+    interceptScale: anyNamed('interceptScale'),
+    learningRateType: anyNamed('learningRateType'),
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
+    initialCoefficientsType: anyNamed('initialCoefficientsType'),
+    initialCoefficients: anyNamed('initialCoefficients'),
+    collectLearningData: anyNamed('collectLearningData'),
+    dtype: anyNamed('dtype'),
+  ))
+      .thenReturn(regressor);
   return factory;
 }
 

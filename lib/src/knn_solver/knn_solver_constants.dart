@@ -1,0 +1,1 @@
+const knnSolverJsonSchemaVersion = 1;
