@@ -1,9 +1,9 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/_helper/create_decision_tree_classifier.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/_helper/create_decision_tree_classifier_from_json.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/predictor/retrainable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 
@@ -16,8 +16,13 @@ import 'package:ml_linalg/dtype.dart';
 /// decision tree learning. Once a decision tree learned, it may be used to
 /// classify new samples with the same features that were used to learn the
 /// tree.
-abstract class DecisionTreeClassifier implements
-    Classifier, Assessable, Serializable {
+abstract class DecisionTreeClassifier
+    implements
+        Assessable,
+        Serializable,
+        Retrainable,
+        Classifier {
+
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations that will be used by the
@@ -45,18 +50,17 @@ abstract class DecisionTreeClassifier implements
     int minSamplesCount,
     int maxDepth,
     DType dtype = DType.float32,
-  }) {
-    initDecisionTreeModule();
-
-    return createDecisionTreeClassifier(
+  }) =>
+    initDecisionTreeModule()
+        .get<DecisionTreeClassifierFactory>()
+        .create(
       trainData,
-      targetName,
       minError,
       minSamplesCount,
       maxDepth,
+      targetName,
       dtype,
     );
-  }
 
   /// Restores previously fitted classifier instance from the given [json]
   ///
@@ -93,11 +97,10 @@ abstract class DecisionTreeClassifier implements
   /// // here you can use previously fitted restored classifier to make
   /// // some prediction, e.g. via `DecisionTreeClassifier.predict(...)`;
   /// ````
-  factory DecisionTreeClassifier.fromJson(String json) {
-    initDecisionTreeModule();
-
-    return createDecisionTreeClassifierFromJson(json);
-  }
+  factory DecisionTreeClassifier.fromJson(String json) =>
+      initDecisionTreeModule()
+          .get<DecisionTreeClassifierFactory>()
+          .fromJson(json);
 
   /// A minimal error on a single decision tree node. It is used as a
   /// stop criteria to avoid farther decision's tree node splitting: if the

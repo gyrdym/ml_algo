@@ -1,10 +1,10 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
-import 'package:ml_algo/src/classifier/knn_classifier/_helpers/create_knn_classifier.dart';
-import 'package:ml_algo/src/classifier/knn_classifier/_helpers/create_knn_classifier_from_json.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/_init_module.dart';
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
+import 'package:ml_algo/src/predictor/retrainable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -21,7 +21,12 @@ import 'package:ml_linalg/dtype.dart';
 /// imprecise result. Thus the weighted version of KNN algorithm is used in the
 /// classifier. To get weight of a particular observation one may use a kernel
 /// function.
-abstract class KnnClassifier implements Assessable, Classifier, Serializable {
+abstract class KnnClassifier
+    implements
+        Assessable,
+        Serializable,
+        Retrainable,
+        Classifier {
   /// Parameters:
   ///
   /// [trainData] Labelled observations. Must contain [targetName] column.
@@ -50,19 +55,17 @@ abstract class KnnClassifier implements Assessable, Classifier, Serializable {
         String classLabelPrefix = 'Class label',
         DType dtype = DType.float32,
       }
-  ) {
-    initKnnClassifierModule();
-
-    return createKnnClassifier(
-      trainData,
-      targetName,
-      k,
-      kernel,
-      distance,
-      classLabelPrefix,
-      dtype,
-    );
-  }
+  ) => initKnnClassifierModule()
+      .get<KnnClassifierFactory>()
+      .create(
+    trainData,
+    targetName,
+    k,
+    kernel,
+    distance,
+    classLabelPrefix,
+    dtype,
+  );
 
   /// Restores previously fitted classifier instance from the given [json]
   ///
@@ -97,11 +100,10 @@ abstract class KnnClassifier implements Assessable, Classifier, Serializable {
   /// // here you can use previously fitted restored classifier to make
   /// // some prediction, e.g. via `KnnClassifier.predict(...)`;
   /// ````
-  factory KnnClassifier.fromJson(String json) {
-    initKnnClassifierModule();
-
-    return createKnnClassifierFromJson(json);
-  }
+  factory KnnClassifier.fromJson(String json) =>
+      initKnnClassifierModule()
+          .get<KnnClassifierFactory>()
+          .fromJson(json);
 
   /// A number of nearest neighbours
   ///

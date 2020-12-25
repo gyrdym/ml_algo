@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_constants.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_encoded_values.dart';
@@ -537,6 +539,14 @@ void main() {
 
       expect(serialized[logisticRegressorCostPerIterationJsonKey],
           classifier.costPerIteration);
+    });
+
+    test('should serialize schemaVersion field', () {
+      final classifier = createClassifier(collectLearningData: true);
+      final serialized = classifier.toJson();
+
+      expect(serialized[jsonSchemaVersionJsonKey],
+          logisticRegressorJsonSchemaVersion);
     });
   });
 

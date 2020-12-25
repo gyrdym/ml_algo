@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
@@ -11,8 +13,10 @@ import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 
 class KnnRegressorFactoryImpl implements KnnRegressorFactory {
-
-  KnnRegressorFactoryImpl(this._kernelFnFactory, this._solverFactory);
+  const KnnRegressorFactoryImpl(
+    this._kernelFnFactory,
+    this._solverFactory
+  );
 
   final KernelFactory _kernelFnFactory;
   final KnnSolverFactory _solverFactory;
@@ -51,5 +55,17 @@ class KnnRegressorFactoryImpl implements KnnRegressorFactory {
       kernel,
       dtype,
     );
+  }
+
+  @override
+  KnnRegressor fromJson(String json) {
+    if (json.isEmpty) {
+      throw Exception('Provided JSON object is empty, please provide a proper '
+          'JSON object');
+    }
+
+    final decodedJson = jsonDecode(json) as Map<String, dynamic>;
+
+    return KnnRegressorImpl.fromJson(decodedJson);
   }
 }

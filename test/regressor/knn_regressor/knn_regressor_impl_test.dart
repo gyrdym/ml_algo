@@ -1,8 +1,12 @@
+import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/_injector.dart';
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
@@ -13,28 +17,34 @@ import '../../mocks.dart';
 
 void main() {
   group('KnnRegressorImpl', () {
-    group('predict method', () {
-      final targetName = 'target';
-      final solver = KnnSolverMock();
-      final kernel = KernelMock();
-      final dtype = DType.float32;
+    final targetName = 'target';
+    final kernelType = KernelType.epanechnikov;
+    final distanceType = Distance.manhattan;
+    final k = 3209;
+    final solver = KnnSolverMock();
+    final kernel = KernelMock();
+    final dtype = DType.float32;
+    final retrainedModelMock = KnnRegressorMock();
+    final regressorFactory = createKnnRegressorFactoryMock(retrainedModelMock);
+    final regressor = KnnRegressorImpl(
+      targetName,
+      solver,
+      kernel,
+      dtype,
+    );
 
+    tearDown(() {
+      injector.clearAll();
+      knnRegressorInjector.clearAll();
+    });
+
+    group('predict', () {
       tearDown(() {
         reset(solver);
         reset(kernel);
-
-        injector.clearAll();
-        knnRegressorInjector.clearAll();
       });
 
       test('should throw an exception if no features are provided', () {
-        final regressor = KnnRegressorImpl(
-          targetName,
-          solver,
-          kernel,
-          dtype,
-        );
-
         final data = DataFrame.fromMatrix(Matrix.empty());
 
         expect(() => regressor.predict(data), throwsException);
@@ -42,13 +52,6 @@ void main() {
 
       test('should return weighted average of outcomes of found k neighbours as '
           'a prediction for each test feature record', () {
-        final regressor = KnnRegressorImpl(
-          targetName,
-          solver,
-          kernel,
-          dtype,
-        );
-
         final testFeatureMatrix = Matrix.fromList([
           [10, 20, 30, 50,  10],
           [22, 20, 27, 50,  34],
@@ -132,13 +135,6 @@ void main() {
       });
 
       test('should return a dataframe with a proper header', () {
-        final regressor = KnnRegressorImpl(
-          targetName,
-          solver,
-          kernel,
-          dtype,
-        );
-
         when(solver.findKNeighbours(any)).thenReturn([
           [
             Neighbour(23, Vector.fromList([1]))
@@ -152,6 +148,59 @@ void main() {
         ]));
 
         expect(regressor.predict(data).header, equals([targetName]));
+      });
+    });
+
+    group('retrain', () {
+      final retrainingData = DataFrame([[100, -200, 300, 444.55]]);
+
+      setUp(() {
+        when(solver.distanceType).thenReturn(distanceType);
+        when(solver.k).thenReturn(k);
+        when(kernel.type).thenReturn(kernelType);
+
+        knnRegressorInjector
+            .registerSingleton<KnnRegressorFactory>(
+                () => regressorFactory);
+      });
+
+      tearDown(() {
+        reset(solver);
+        reset(kernel);
+      });
+
+      test('should call a factory while retraining the model', () {
+        regressor.retrain(retrainingData);
+
+        verify(regressorFactory.create(
+          retrainingData,
+          targetName,
+          k,
+          kernelType,
+          distanceType,
+          dtype,
+        )).called(1);
+      });
+
+      test('should return a new instance as a retrained model', () {
+        final retrainedModel = regressor.retrain(retrainingData);
+
+        expect(retrainedModel, same(retrainedModelMock));
+        expect(retrainedModel, isNot(same(regressor)));
+      });
+
+      test('should throw exception if the model schema is outdated, '
+          'schemaVersion is null', () {
+        final model = KnnRegressorImpl(
+          targetName,
+          solver,
+          kernel,
+          dtype,
+          schemaVersion: null,
+        );
+
+        expect(() => model.retrain(retrainingData),
+            throwsA(isA<OutdatedJsonSchemaException>()));
       });
     });
   });

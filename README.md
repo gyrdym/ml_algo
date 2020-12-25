@@ -210,8 +210,8 @@ After that we can simply read the model from the file and make predictions:
 import 'dart:io';
 
 final file = File(fileName);
-final encodedData = await file.readAsString();
-final classifier = LogisticRegressor.fromJson(encodedData);
+final encodedModel = await file.readAsString();
+final classifier = LogisticRegressor.fromJson(encodedModel);
 final unlabelledData = await fromCsv('some_unlabelled_data.csv');
 final prediction = classifier.predict(unlabelledData);
 
@@ -225,6 +225,15 @@ print(prediction.rows); // [
                         //   (1),
                         // ]
 ```
+
+Please note that all the hyperparameters that we used to generate the model are persisted as the model's readonly 
+fields, and we can access it anytime:
+
+```dart
+print(classifier.iterationsLimit);
+print(classifier.probabilityThreshold);
+// and so on
+``` 
 
 All the code above all together:
 
@@ -264,6 +273,25 @@ void main() async {
   await classifier.saveAsJson('diabetes_classifier.json');
 }
 ````
+
+Someday our previously shining model can degrade in terms of prediction accuracy - in this case we can retrain it. 
+Retraining means simply re-running the same learning algorithm that was used to generate our current model
+keeping the same hyperparameters but using a new data set with the same features:
+
+```dart
+import 'dart:io';
+
+final encodedModel = await file.readAsString();
+final classifier = LogisticRegressor.fromJson(encodedModel);
+
+// ... 
+// here we do something and realize that our classifier performance is not so good
+// ...
+
+final newData = await fromCsv('path/to/dataset/with/new/data/to/retrain/the/classifier');
+final retrainedClassifier = classifier.retrain(newData);
+
+```
 
 The workflow with other predictors (SoftmaxRegressor, DecisionTreeClassifier and so on) is quite similar to the described
 above for LogisticRegressor, feel free to experiment with other models. 

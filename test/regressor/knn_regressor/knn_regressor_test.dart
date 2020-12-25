@@ -1,5 +1,5 @@
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
-import 'package:ml_algo/src/regressor/knn_regressor/_helpers/create_knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -32,10 +32,10 @@ void main() {
     );
 
     test('should call KnnRegressorFactory in order to create a regressor', () {
-      final regressor = createKnnRegressor(
-        fittingData: data,
-        targetName: targetName,
-        k: 2,
+      final regressor = KnnRegressor(
+        data,
+        targetName,
+        2,
         kernel: KernelType.epanechnikov,
         distance: Distance.cosine,
         dtype: DType.float64,
@@ -62,10 +62,10 @@ void main() {
       when(knnRegressor.kernelType).thenReturn(kernel);
       when(knnRegressor.distanceType).thenReturn(distance);
 
-      final regressor = createKnnRegressor(
-        fittingData: data,
-        targetName: targetName,
-        k: 213,
+      final regressor = KnnRegressor(
+        data,
+        targetName,
+        213,
         kernel: KernelType.epanechnikov,
         distance: Distance.cosine,
         dtype: DType.float64,
