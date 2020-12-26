@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.6.1
+- README.md: example for flutter developers added
+
 ## 15.6.0
 - Models retraining functionality added 
 
