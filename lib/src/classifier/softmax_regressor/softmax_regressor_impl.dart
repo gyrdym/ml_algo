@@ -251,7 +251,7 @@ class SoftmaxRegressorImpl
       randomSeed: randomSeed,
       batchSize: batchSize,
       fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
+      interceptScale: interceptScale?.toDouble(),
       learningRateType: learningRateType,
       isFittingDataNormalized: isFittingDataNormalized,
       initialCoefficientsType: initialCoefficientsType,
