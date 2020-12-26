@@ -59,7 +59,7 @@ void main() {
     int iterationsLimit = 2,
     double minCoefficientsUpdate = 1e-12,
     double initialLearningRate = 1.0,
-    num lambda,
+    double lambda,
     RegularizationType regularizationType,
     int randomSeed,
     int batchSize = 5,

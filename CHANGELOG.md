@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.6.2
+- More strict analyser options added
+
 ## 15.6.1
 - README.md: example for flutter developers added
 

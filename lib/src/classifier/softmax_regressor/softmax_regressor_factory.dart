@@ -10,7 +10,7 @@ import 'package:ml_linalg/matrix.dart';
 abstract class SoftmaxRegressorFactory {
   SoftmaxRegressor create({
     DataFrame trainData,
-    List<String> targetNames,
+    Iterable<String> targetNames,
     LinearOptimizerType optimizerType,
     int iterationsLimit,
     double initialLearningRate,
