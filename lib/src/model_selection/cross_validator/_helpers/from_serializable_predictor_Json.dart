@@ -1,5 +1,5 @@
-import 'package:ml_algo/src/model_selection/serializable_predictor.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 
-SerializablePredictor fromSerializablePredictorJson(Map<String, dynamic> json) {
+Predictor fromSerializablePredictorJson(Map<String, dynamic> json) {
   return null;
 }

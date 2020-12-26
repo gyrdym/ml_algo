@@ -3,15 +3,15 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/_init_module.dart';
 import 'package:ml_algo/src/model_selection/_injector.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl.dart';
-import 'package:ml_algo/src/model_selection/serializable_predictor.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_type.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/service/worker_manager/worker_manager.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
-typedef PredictorFactoryFn = SerializablePredictor Function(DataFrame observations);
+typedef PredictorFactoryFn = Predictor Function(DataFrame observations);
 
 typedef DataPreprocessFn = List<DataFrame> Function(DataFrame trainData,
     DataFrame testData);

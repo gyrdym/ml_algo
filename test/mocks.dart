@@ -9,6 +9,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart'
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
+import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
@@ -28,9 +29,7 @@ import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_algo/src/metric/metric.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
-import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart';
-import 'package:ml_algo/src/model_selection/serializable_predictor.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
@@ -118,9 +117,8 @@ class DataSplitterMock extends Mock implements SplitIndicesProvider {}
 
 class DataSplitterFactoryMock extends Mock implements SplitIndicesProviderFactory {}
 
-class AssessableMock extends Mock implements Assessable {}
-
-class SerializablePredictorMock extends Mock implements SerializablePredictor {}
+class SerializablePredictorMock extends Mock
+    implements Serializable, Predictor {}
 
 class TreeSplitAssessorMock extends Mock implements TreeSplitAssessor {}
 

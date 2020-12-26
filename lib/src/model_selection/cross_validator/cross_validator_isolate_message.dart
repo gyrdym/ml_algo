@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/_helpers/from_serializable_predictor_Json.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_isolate_message_json_keys.dart';
-import 'package:ml_algo/src/model_selection/serializable_predictor.dart';
+import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
 part 'cross_validator_isolate_message.g.dart';
@@ -13,7 +13,7 @@ class CrossValidatorIsolateMessage {
     name: predictorPrototypeJsonKey,
     fromJson: fromSerializablePredictorJson,
   )
-  final SerializablePredictor predictorPrototype;
+  final Predictor predictorPrototype;
 
   @JsonKey(name: trainDataJsonKey)
   final DataFrame trainData;

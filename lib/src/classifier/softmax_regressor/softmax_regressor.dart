@@ -6,8 +6,6 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_ge
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/predictor/retrainable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -26,12 +24,7 @@ import 'package:ml_linalg/matrix.dart';
 ///
 /// Also it is worth to mention that the algorithm is a generalization of
 /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression))
-abstract class SoftmaxRegressor
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        LinearClassifier {
+abstract class SoftmaxRegressor implements Serializable, LinearClassifier {
 
   /// Parameters:
   ///
