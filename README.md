@@ -52,7 +52,7 @@ For more information on the library's API, please visit [API reference](https://
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
 
-Import all necessary packages. First, it's needed to ensure, if you have `ml_preprocessing` and `ml_dataframe` package 
+Import all necessary packages. First, it's needed to ensure if you have `ml_preprocessing` and `ml_dataframe` packages 
 in your dependencies:
 
 ````
@@ -77,8 +77,28 @@ read it (of course, you should provide a proper path to your downloaded file):
 final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
 ````
 
-*For flutter developers: please, read the official flutter.dev article [Read and write files](https://flutter.dev/docs/cookbook/persistence/reading-writing-files) 
-before manipulating with file system in order to build a correct path to your dataset*
+#### For flutter developers
+
+*Please, read the official flutter.dev article [Read and write files](https://flutter.dev/docs/cookbook/persistence/reading-writing-files) 
+before manipulating with the file system in order to build a correct path to your dataset.* 
+
+*Generally, you need to add `path_provider` 
+package to your dependencies:*
+
+````
+dependencies:
+  path_provider: ^1.6.24 # or find the actual version of the lib
+````
+
+*After that you need to write the following code (some parts of the code can be altered depending on the details of your app):*
+
+```dart
+import 'package:path_provider/path_provider.dart';
+
+final directory = await getApplicationDocumentsDirectory(); // getApplicationDocumentsDirectory is a function from `path_provider` package
+final filePath = `${directory.path}/assets/pima_indians_diabetes_database.csv`;
+final samples = await fromCsv(filePath, headerExists: true);
+```
 
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. The column's name is
