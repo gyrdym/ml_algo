@@ -22,7 +22,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
   @override
   SoftmaxRegressor create({
     DataFrame trainData,
-    List<String> targetNames,
+    Iterable<String> targetNames,
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
