@@ -2,6 +2,7 @@ import 'package:ml_algo/src/common/exception/invalid_test_data_columns_number_ex
 import 'package:ml_algo/src/common/exception/invalid_train_data_columns_number_exception.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/_helpers/assess_predictor.dart';
+import 'package:ml_algo/src/model_selection/cross_validator/_helpers/get_predictor_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_isolate_message.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
@@ -124,6 +125,7 @@ class CrossValidatorImpl implements CrossValidator {
 
     final samplesPrototype = samples.sampleFromRows([0]);
     final predictorPrototype = predictorFactoryFn(samplesPrototype);
+    final predictorType = getPredictorType(predictorPrototype);
 
     return _workerManager
         .executor
@@ -132,6 +134,7 @@ class CrossValidatorImpl implements CrossValidator {
         predictorPrototype,
         trainData,
         testData,
+        predictorType,
         metricType,
       ).toJson(),
       fun1: assessPredictor,
