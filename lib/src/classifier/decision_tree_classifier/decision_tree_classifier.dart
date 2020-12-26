@@ -1,7 +1,6 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
-import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 
@@ -14,7 +13,7 @@ import 'package:ml_linalg/dtype.dart';
 /// decision tree learning. Once a decision tree learned, it may be used to
 /// classify new samples with the same features that were used to learn the
 /// tree.
-abstract class DecisionTreeClassifier implements Serializable, Classifier {
+abstract class DecisionTreeClassifier implements Classifier {
 
   /// Parameters:
   ///

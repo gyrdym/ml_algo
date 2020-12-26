@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -20,7 +19,7 @@ import 'package:ml_linalg/vector.dart';
 /// regressor should predict, and since all the `x` values are known (since they
 /// are the input for the algorithm), the regressor should find the best
 /// coefficients (weights) for each `x`-es to make a best prediction of `y` term.
-abstract class LinearRegressor implements Serializable, Predictor {
+abstract class LinearRegressor implements Predictor {
   /// Parameters:
   ///
   /// [fittingData] A [DataFrame] with observations that is used by the

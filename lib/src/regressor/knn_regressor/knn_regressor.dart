@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/_init_module.dart';
@@ -20,7 +19,7 @@ import 'package:ml_linalg/dtype.dart';
 /// To get a more precise result, one may use weighted average of found labels -
 /// the farther a found observation from the target one, the lower the weight of
 /// the observation is. To obtain these weights one may use a kernel function.
-abstract class KnnRegressor implements Serializable, Predictor {
+abstract class KnnRegressor implements Predictor {
   /// Parameters:
   ///
   /// [fittingData] Labelled observations, among which will be searched [k]

@@ -1,9 +1,10 @@
+import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 
 /// A common interface for all types of classifiers and regressors
-abstract class Predictor {
+abstract class Predictor implements Serializable {
   /// A collection of target column names of a dataset used to learn the ML
   /// model
   Iterable<String> get targetNames;
