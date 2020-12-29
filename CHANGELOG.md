@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.6.3
+- `ml_dataframe` 0.4.0 supported
+- README.md: example for flutter developers corrected
+
 ## 15.6.2
 - More strict analyser options added
 
