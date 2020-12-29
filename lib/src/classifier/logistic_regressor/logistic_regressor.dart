@@ -1,13 +1,10 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_init_module.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
-import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/model_selection/assessable.dart';
-import 'package:ml_algo/src/predictor/retrainable.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
@@ -19,12 +16,7 @@ import 'package:ml_linalg/vector.dart';
 /// In other words, the regressor iteratively tries to select coefficients
 /// that makes combination of passed features and these coefficients most
 /// likely.
-abstract class LogisticRegressor
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        LinearClassifier {
+abstract class LogisticRegressor implements LinearClassifier {
 
   /// Parameters:
   ///

@@ -14,6 +14,7 @@ dependencies:
   ml_linalg: ^12.17.8
   ml_preprocessing: ^5.2.1
   quiver: ^2.0.2
+  worker_manager: ^3.1.8
   xrange: ^0.0.8
 
 dev_dependencies:

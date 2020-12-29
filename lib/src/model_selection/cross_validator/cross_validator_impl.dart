@@ -1,8 +1,12 @@
 import 'package:ml_algo/src/common/exception/invalid_test_data_columns_number_exception.dart';
 import 'package:ml_algo/src/common/exception/invalid_train_data_columns_number_exception.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
+import 'package:ml_algo/src/model_selection/cross_validator/_helpers/assess_predictor.dart';
+import 'package:ml_algo/src/model_selection/cross_validator/_helpers/get_predictor_type.dart';
 import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
+import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_isolate_message.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
+import 'package:ml_algo/src/service/worker_manager/worker_manager.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -12,40 +16,49 @@ import 'package:quiver/iterables.dart';
 class CrossValidatorImpl implements CrossValidator {
   CrossValidatorImpl(
       this.samples,
+      this._workerManager,
       this._splitter,
       this.dtype,
   );
 
   final DataFrame samples;
-  final DType dtype;
+  final WorkerManager _workerManager;
   final SplitIndicesProvider _splitter;
+  final DType dtype;
 
   @override
   Future<Vector> evaluate(
-      PredictorFactory predictorFactory,
+      PredictorFactoryFn predictorFactory,
       MetricType metricType,
       {
         DataPreprocessFn onDataSplit,
       }
-  ) {
+  ) async {
+    await _workerManager.init();
+
     final samplesAsMatrix = samples.toMatrix(dtype);
     final sourceColumnsNum = samplesAsMatrix.columnsNum;
     final discreteColumns = enumerate(samples.series)
         .where((indexedSeries) => indexedSeries.value.isDiscrete)
         .map((indexedSeries) => indexedSeries.index);
-    final allIndicesGroups = _splitter.getIndices(samplesAsMatrix.rowsNum);
-    final scores = allIndicesGroups
+    final allIndicesGroups = _splitter
+        .getIndices(samplesAsMatrix.rowsNum);
+    final scoreFutures = allIndicesGroups
         .map((testRowsIndices) {
           final split = _makeSplit(testRowsIndices, discreteColumns);
           final trainDataFrame = split[0];
           final testDataFrame = split[1];
-          final splits = onDataSplit != null
+          final transformedData = onDataSplit != null
               ? onDataSplit(trainDataFrame, testDataFrame)
               : [trainDataFrame, testDataFrame];
-          final transformedTrainData = splits[0];
-          final transformedTestData = splits[1];
-          final transformedTrainDataColumnsNum = transformedTrainData.header.length;
-          final transformedTestDataColumnsNum = transformedTestData.header.length;
+          final transformedTrainData = transformedData[0];
+          final transformedTestData = transformedData[1];
+          final transformedTrainDataColumnsNum = transformedTrainData
+              .header
+              .length;
+          final transformedTestDataColumnsNum = transformedTestData
+              .header
+              .length;
 
           if (transformedTrainDataColumnsNum != sourceColumnsNum) {
             throw InvalidTrainDataColumnsNumberException(sourceColumnsNum,
@@ -57,12 +70,18 @@ class CrossValidatorImpl implements CrossValidator {
                 transformedTestDataColumnsNum);
           }
 
-          return predictorFactory(transformedTrainData)
-              .assess(transformedTestData, metricType);
+          return _assessPredictor(
+            predictorFactory,
+            transformedTrainData,
+            transformedTestData,
+            metricType,
+          );
         })
         .toList();
+    final scores = await Future.wait(scoreFutures);
 
-    return Future.value(Vector.fromList(scores, dtype: dtype));
+    return Future
+        .value(Vector.fromList(scores, dtype: dtype));
   }
 
   List<DataFrame> _makeSplit(Iterable<int> testRowsIndices,
@@ -96,5 +115,29 @@ class CrossValidatorImpl implements CrossValidator {
         discreteColumns: discreteColumns,
       ),
     ];
+  }
+
+  Future<num> _assessPredictor(
+    PredictorFactoryFn predictorFactoryFn,
+    DataFrame trainData,
+    DataFrame testData,
+    MetricType metricType,
+  ) async {
+    final samplesPrototype = samples.sampleFromRows([0]);
+    final predictorPrototype = predictorFactoryFn(samplesPrototype);
+    final predictorType = getPredictorType(predictorPrototype);
+
+    return _workerManager
+        .executor
+        .execute(
+      arg1: CrossValidatorIsolateMessage(
+        predictorPrototype,
+        trainData,
+        testData,
+        predictorType,
+        metricType,
+      ).toJson(),
+      fun1: assessPredictor,
+    );
   }
 }

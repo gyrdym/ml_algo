@@ -24,6 +24,8 @@ import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.d
 import 'package:ml_algo/src/model_selection/model_assessor/model_assessor.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/regressor_assessor.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
+import 'package:ml_algo/src/service/worker_manager/worker_manager.dart';
+import 'package:ml_algo/src/service/worker_manager/worker_manager_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
@@ -76,5 +78,8 @@ void initCommonModule() {
         RegressorAssessor(
           injector.get<MetricFactory>(),
           featuresTargetSplit,
-        ));
+        ))
+
+    ..registerSingletonIf<WorkerManager>(
+            () => WorkerManagerImpl());
 }
