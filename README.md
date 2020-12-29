@@ -3,13 +3,13 @@
 [![pub package](https://img.shields.io/pub/v/ml_algo.svg)](https://pub.dartlang.org/packages/ml_algo)
 [![Gitter Chat](https://badges.gitter.im/gyrdym/gyrdym.svg)](https://gitter.im/gyrdym/)
 
-# Machine learning algorithms with dart
+# Machine learning algorithms for Dart developers
 
 ## What is the ml_algo for?
 
 The main purpose of the library is to give native Dart implementation of machine learning algorithms to those who are 
-interested both in Dart language and data science. This library targeted to the dart vm, so to get smoothest experience with 
-the lib, please do not use it in a browser.
+interested both in Dart language and data science. This library is aimed at Dart VM and Flutter, it's impossible to use 
+it in web applications.
 
 ## The library's content
 
@@ -47,8 +47,6 @@ For more information on the library's API, please visit [API reference](https://
 
 ## Examples
 
-### Logistic regression
-
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
 
@@ -57,11 +55,11 @@ in your dependencies:
 
 ````
 dependencies:
-  ml_dataframe: ^0.3.0
-  ml_preprocessing: ^5.2.1
+  ml_dataframe: ^0.4.0
+  ml_preprocessing: ^5.2.2
 ````
 
-We need these repos to parse raw data in order to use it farther. For more details, please
+We need these repos to parse raw data in order to use it further. For more details, please
 visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page.
 
 ````dart  
@@ -70,35 +68,52 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 ````
 
-Download dataset from [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database) and 
-read it (of course, you should provide a proper path to your downloaded file): 
+### Read a dataset's file
+
+Download dataset from [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
+
+#### For a desktop application: 
+
+Just provide a proper path to your downloaded file and use a function-factory `fromCsv` from `ml_dataframe` package to 
+read the file:
 
 ````dart
-final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
+final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv');
 ````
 
-#### For flutter developers
+#### For a flutter application:
 
-*Please, read the official flutter.dev article [Read and write files](https://flutter.dev/docs/cookbook/persistence/reading-writing-files) 
-before manipulating with the file system in order to build a correct path to your dataset.* 
-
-*Generally, you need to add `path_provider` 
-package to your dependencies:*
+Be sure that you have ml_dataframe package version at least 0.4.0 and ml_algo package version at least 15.6.3 
+in your pubspec.yaml:
 
 ````
 dependencies:
-  path_provider: ^1.6.24 # or find the actual version of the lib
+  ...
+  ml_algo: ^15.6.3
+  ml_dataframe: ^0.4.0
+  ...
 ````
 
-*After that you need to write the following code (some parts of the code can be altered depending on the details of your app):*
+Then it's needed to add a dataset to the flutter assets by adding the following config in the pubspec.yaml:
+
+````
+flutter:
+  assets:
+    - assets/datasets/pima_indians_diabetes_database.csv
+````
+
+Of course you need to create the assets directory in the file system and put the dataset's file there. After that you 
+can access the dataset:
 
 ```dart
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:ml_dataframe/ml_dataframe.dart';
 
-final directory = await getApplicationDocumentsDirectory(); // getApplicationDocumentsDirectory is a function from `path_provider` package
-final filePath = `${directory.path}/assets/pima_indians_diabetes_database.csv`;
-final samples = await fromCsv(filePath, headerExists: true);
+final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
+final samples = DataFrame.fromRawCsv(rawCsvContent);
 ```
+
+### Prepare datasets for training and test
 
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. The column's name is
@@ -121,6 +136,8 @@ final testData = splits[1];
 
 `splitData` accepts `DataFrame` instance as the first argument and ratio list as the second one. Now we have 70% of our
 data as a validation set and 30% as a test set for evaluating generalization error.
+
+### Set up a model selection algorithm 
 
 Then we may create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
 of our model. We should pass validation data (our `validationData` variable), and a number of folds into CrossValidator 
@@ -171,14 +188,16 @@ final createClassifier = (DataFrame samples) =>
 This argument activates collecting costs per each optimization iteration, and you can see the cost values right after 
 the model creation.
 
-Assume, we chose good hyperprameters which can lead to a high-performant model. In order to validate our hypothesis let's 
-use CrossValidator instance created before:
+### Evaluate performance of the model
+
+Assume, we chose really good hyperprameters. In order to validate this hypothesis let's use CrossValidator instance 
+created before:
 
 ````dart
 final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
 ````
 
-Since the CrossValidator's instance returns a [Vector](https://github.com/gyrdym/ml_linalg/blob/master/lib/vector.dart) of scores as a result of our predictor evaluation, we may choose
+Since the CrossValidator instance returns a [Vector](https://github.com/gyrdym/ml_linalg/blob/master/lib/vector.dart) of scores as a result of our predictor evaluation, we may choose
 any way to reduce all the collected scores to a single number, for instance we may use Vector's `mean` method:
 
 ```dart
@@ -190,7 +209,7 @@ Let's print the score:
 print('accuracy on k fold validation: ${accuracy.toStringAsFixed(2)}');
 ````
 
-We will see something like this:
+We can see something like this:
 
 ````
 accuracy on k fold validation: 0.65
@@ -217,6 +236,8 @@ changed from iteration to iteration during the learning process:
 print(classifier.costPerIteration);
 ```
 
+### Write the model to a json file
+
 Seems, our model has a good generalization ability, and that means we may use it in the future.
 To do so we may store the model to a file as JSON:
 
@@ -229,6 +250,7 @@ After that we can simply read the model from the file and make predictions:
 ```dart
 import 'dart:io';
 
+final fileName = 'diabetes_classifier.json';
 final file = File(fileName);
 final encodedModel = await file.readAsString();
 final classifier = LogisticRegressor.fromJson(encodedModel);
@@ -255,7 +277,8 @@ print(classifier.probabilityThreshold);
 // and so on
 ``` 
 
-All the code above all together:
+<details>
+<summary>All the code above all together for a desktop application:</summary>
 
 ````dart
 import 'package:ml_algo/ml_algo.dart';
@@ -293,6 +316,52 @@ void main() async {
   await classifier.saveAsJson('diabetes_classifier.json');
 }
 ````
+</details>
+
+<details>
+<summary>All the code above all together for a flutter application:</summary>
+
+````dart
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
+
+void main() async {
+  final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
+  final samples = DataFrame.fromRawCsv(rawCsvContent);
+  final targetColumnName = 'class variable (0 or 1)';
+  final splits = splitData(samples, [0.7]);
+  final validationData = splits[0];
+  final testData = splits[1];
+  final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
+  final createClassifier = (DataFrame samples) =>
+    LogisticRegressor(
+      samples
+      targetColumnName,
+      optimizerType: LinearOptimizerType.gradient,
+      iterationsLimit: 90,
+      learningRateType: LearningRateType.decreasingAdaptive,
+      batchSize: samples.rows.length,
+      probabilityThreshold: 0.7,
+    );
+  final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
+  final accuracy = scores.mean();
+  
+  print('accuracy on k fold validation: ${accuracy.toStringAsFixed(2)}');
+
+  final testSplits = splitData(testData, [0.8]);
+  final classifier = createClassifier(testSplits[0], targetNames);
+  final finalScore = classifier.assess(testSplits[1], targetNames, MetricType.accuracy);
+  
+  print(finalScore.toStringAsFixed(2));
+
+  await classifier.saveAsJson('diabetes_classifier.json');
+}
+````
+</details>
+
+## Models retraining
 
 Someday our previously shining model can degrade in terms of prediction accuracy - in this case we can retrain it. 
 Retraining means simply re-running the same learning algorithm that was used to generate our current model
@@ -301,6 +370,8 @@ keeping the same hyperparameters but using a new data set with the same features
 ```dart
 import 'dart:io';
 
+final fileName = 'diabetes_classifier.json';
+final file = File(fileName);
 final encodedModel = await file.readAsString();
 final classifier = LogisticRegressor.fromJson(encodedModel);
 
