@@ -34,6 +34,8 @@ class CrossValidatorImpl implements CrossValidator {
         DataPreprocessFn onDataSplit,
       }
   ) async {
+    await _workerManager.init();
+
     final samplesAsMatrix = samples.toMatrix(dtype);
     final sourceColumnsNum = samplesAsMatrix.columnsNum;
     final discreteColumns = enumerate(samples.series)
@@ -116,13 +118,11 @@ class CrossValidatorImpl implements CrossValidator {
   }
 
   Future<num> _assessPredictor(
-      PredictorFactoryFn predictorFactoryFn,
-      DataFrame trainData,
-      DataFrame testData,
-      MetricType metricType,
-      ) async {
-    await _workerManager.init();
-
+    PredictorFactoryFn predictorFactoryFn,
+    DataFrame trainData,
+    DataFrame testData,
+    MetricType metricType,
+  ) async {
     final samplesPrototype = samples.sampleFromRows([0]);
     final predictorPrototype = predictorFactoryFn(samplesPrototype);
     final predictorType = getPredictorType(predictorPrototype);
