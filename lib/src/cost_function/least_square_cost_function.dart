@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
-import 'package:xrange/integers.dart';
+import 'package:xrange/xrange.dart';
 
 class LeastSquareCostFunction implements CostFunction {
   const LeastSquareCostFunction();
@@ -27,8 +27,7 @@ class LeastSquareCostFunction implements CostFunction {
 
   Matrix _excludeColumn(Matrix x, int column) {
     if (column == 0) {
-      return x.sample(columnIndices: integers(1, x.columnsNum,
-          upperClosed: false));
+      return x.sample(columnIndices: integers(1, x.columnsNum));
     }
 
     if (column == x.columnsNum - 1) {
@@ -36,8 +35,8 @@ class LeastSquareCostFunction implements CostFunction {
     }
 
     return x.sample(columnIndices: [
-      ...integers(0, column, upperClosed: false),
-      ...integers(column + 1, x.columnsNum, upperClosed: false),
+      ...integers(0, column),
+      ...integers(column + 1, x.columnsNum),
     ]);
   }
 }
