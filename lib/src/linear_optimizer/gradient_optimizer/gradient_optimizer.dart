@@ -13,7 +13,7 @@ import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:xrange/integers.dart';
+import 'package:xrange/xrange.dart';
 
 class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
@@ -119,9 +119,9 @@ class GradientOptimizer implements LinearOptimizer {
     final start = range.first;
     final end = range.last;
     final pointsBatch = _points
-        .sample(rowIndices: integers(start, end, upperClosed: false));
+        .sample(rowIndices: integers(start, end));
     final labelsBatch = _labels
-        .sample(rowIndices: integers(start, end, upperClosed: false));
+        .sample(rowIndices: integers(start, end));
 
     return _makeGradientStep(
       coefficients,

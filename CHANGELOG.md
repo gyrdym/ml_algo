@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.6.4
+- `xrange` 1.0.0 supported
+
 ## 15.6.3
 - `ml_dataframe` 0.4.0 supported
 - README.md: example for flutter developers corrected

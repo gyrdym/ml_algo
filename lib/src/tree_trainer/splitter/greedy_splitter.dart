@@ -5,7 +5,7 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
-import 'package:xrange/integers.dart';
+import 'package:xrange/xrange.dart';
 
 class GreedyTreeSplitter implements TreeSplitter {
   GreedyTreeSplitter(this._assessor, this._numericalSplitter,

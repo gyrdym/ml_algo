@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
-import 'package:xrange/integers.dart';
+import 'package:xrange/xrange.dart';
 
 class KFoldIndicesProvider implements SplitIndicesProvider {
   KFoldIndicesProvider(this._numberOfFolds) {
@@ -24,7 +24,7 @@ class KFoldIndicesProvider implements SplitIndicesProvider {
       // if we reached the last fold of size [foldSize] then all the next folds
       // up to the last one have size of [foldSize] + 1
       endIdx = startIdx + foldSize + (i >= _numberOfFolds - remainder ? 1 : 0);
-      yield integers(startIdx, endIdx, upperClosed: false);
+      yield integers(startIdx, endIdx);
       startIdx = endIdx;
     }
   }
