@@ -9,10 +9,11 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:quiver/iterables.dart';
 
 class TreeTrainerFactoryImpl implements TreeTrainerFactory {
-
-  TreeTrainerFactoryImpl(
+  const TreeTrainerFactoryImpl(
       this._leafDetectorFactory,
       this._leafLabelFactoryFactory,
       this._splitSelectorFactory,
@@ -25,9 +26,8 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
   @override
   TreeTrainer createByType(
       TreeTrainerType type,
-      Iterable<int> featureIndices,
-      int targetIdx,
-      Map<int, List<num>> featureIdxToUniqueValues,
+      DataFrame samples,
+      String targetName,
       num minErrorOnNode,
       int minSamplesCount,
       int maxDepth,
@@ -37,6 +37,21 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
       TreeSplitAssessorType splitAssessorType,
       TreeSplitterType splitterType,
   ) {
+    final targetIdx = enumerate(samples.header)
+        .firstWhere((indexedName) => indexedName.value == targetName)
+        .index;
+    final featuresIndexedSeries = enumerate(samples.series)
+        .where((indexed) => indexed.index != targetIdx);
+    final featureIdxToUniqueValues = Map.fromEntries(
+        featuresIndexedSeries
+            .where((indexed) => indexed.value.isDiscrete)
+            .map((indexed) => MapEntry(indexed.index, indexed
+            .value
+            .discreteValues
+            .map((dynamic value) => value as num)
+            .toList(growable: false)
+        )),
+    );
     final leafDetector = _leafDetectorFactory
         .create(assessorType, minErrorOnNode, minSamplesCount, maxDepth);
 
@@ -49,7 +64,8 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
     switch (type) {
       case TreeTrainerType.decision:
         return DecisionTreeTrainer(
-          featureIndices,
+          featuresIndexedSeries
+              .map((indexed) => indexed.index),
           targetIdx,
           featureIdxToUniqueValues,
           leafDetector,

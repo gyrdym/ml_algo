@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
@@ -9,10 +8,10 @@ import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
-import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -30,14 +29,15 @@ void main() {
     TreeSplitSelectorFactory splitSelectorFactoryMock;
 
     TreeTrainerFactory factory;
-    TreeTrainer trainer;
 
     final type = TreeTrainerType.decision;
-    final featureIndices = [0, 1, 2, 3];
-    final targetIdx = 4;
-    final featureToUniqueValues = {
-      1: [20, -20],
-    };
+    final targetName = 'target';
+    final header = ['feature_1', 'feature_2', 'feature_3', 'feature_4',
+      targetName];
+    final data = DataFrame([
+      header,
+      [1, 2, 3, 4, 100],
+    ]);
     final minErrorOnNode = 0.3;
     final minSamplesCount = 10;
     final maxDepth = 7;
@@ -65,11 +65,10 @@ void main() {
       factory = TreeTrainerFactoryImpl(leafDetectorFactoryMock,
           leafLabelFactoryFactoryMock, splitSelectorFactoryMock);
 
-      trainer = factory.createByType(
+      factory.createByType(
         type,
-        featureIndices,
-        targetIdx,
-        featureToUniqueValues,
+        data,
+        targetName,
         minErrorOnNode,
         minSamplesCount,
         maxDepth,
@@ -88,10 +87,6 @@ void main() {
       reset(leafDetectorFactoryMock);
       reset(leafLabelFactoryFactoryMock);
       reset(splitSelectorFactoryMock);
-    });
-
-    test('should create a DecisionTreeSolver instance', () {
-      expect(trainer, isA<DecisionTreeTrainer>());
     });
 
     test('should call leaf detector factory while creating the instance', () {

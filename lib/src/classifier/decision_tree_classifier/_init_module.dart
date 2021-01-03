@@ -71,5 +71,7 @@ Injector initDecisionTreeModule() {
         ))
 
     ..registerSingletonIf<DecisionTreeClassifierFactory>(
-            () => const DecisionTreeClassifierFactoryImpl());
+            () => DecisionTreeClassifierFactoryImpl(
+                decisionTreeInjector.get<TreeTrainerFactory>(),
+            ));
 }
