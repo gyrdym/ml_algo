@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.6.5
+- `DecisionTreeTrainer`: redundant helper for trainer creation removed 
+
 ## 15.6.4
 - `xrange` 1.0.0 supported
 
