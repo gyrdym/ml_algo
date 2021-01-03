@@ -1,1 +1,1 @@
-const logisticRegressorJsonSchemaVersion = 1;
+const logisticRegressorJsonSchemaVersion = 2;

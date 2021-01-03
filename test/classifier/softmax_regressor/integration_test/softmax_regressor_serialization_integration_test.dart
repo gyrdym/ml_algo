@@ -352,7 +352,7 @@ void main() {
       final serialized = classifier.toJson();
 
       expect(serialized[softmaxRegressorLinkFunctionJsonKey],
-          float32SoftmaxLinkFunctionEncoded);
+          softmaxLinkFunctionEncoded);
     });
 
     test('should serialize linkFunction field, dtype=DType.float64', () {
@@ -360,7 +360,7 @@ void main() {
       final serialized = classifier.toJson();
 
       expect(serialized[softmaxRegressorLinkFunctionJsonKey],
-          float64SoftmaxLinkFunctionEncoded);
+          softmaxLinkFunctionEncoded);
     });
 
     test('should serialize positiveLabel field, '

@@ -1,14 +1,14 @@
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
-import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
 import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
-import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
+import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
+import 'package:ml_algo/src/link_function/inverse_logit_link_function.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('CostFunctionFactoryImpl', () {
     final factory = const CostFunctionFactoryImpl();
-    final linkFn = const Float32InverseLogitLinkFunction();
+    final linkFn = const InverseLogitLinkFunction();
     final positiveLabel = 100;
     final negativeLabel = 0;
 

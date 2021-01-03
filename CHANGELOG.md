@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.6.6
+- `LogisticRegressor`, `SoftmaxRegressor`: redundant link function implementations removed
+
 ## 15.6.5
 - `DecisionTreeTrainer`: redundant helper for trainer creation removed 
 
