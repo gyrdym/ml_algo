@@ -9,6 +9,7 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_ge
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
+import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
@@ -18,56 +19,78 @@ import '../../../mocks.dart';
 
 void main() {
   group('LogisticRegressorImpl', () {
-    final optimizerType = LinearOptimizerType.gradient;
-    final iterationsLimit = 123;
-    final initialLearningRate = 0.75;
-    final minCoefficientsUpdate = 0.5;
-    final lambda = 11.0;
-    final regularizationType = RegularizationType.L2;
-    final randomSeed = 1234;
-    final batchSize = 100;
-    final isFittingDataNormalized = false;
-    final learningRateType = LearningRateType.decreasingAdaptive;
-    final initialCoefficientsType = InitialCoefficientsType.zeroes;
-    final initialCoefficients = Vector.fromList([1, 2, 3, 4, 5]);
+    final defaultOptimizerType = LinearOptimizerType.gradient;
+    final defaultIterationsLimit = 123;
+    final defaultInitialLearningRate = 0.75;
+    final defaultMinCoefficientsUpdate = 0.5;
+    final defaultLambda = 11.0;
+    final defaultRegularizationType = RegularizationType.L2;
+    final defaultRandomSeed = 1234;
+    final defaultBatchSize = 100;
+    final defaultIsFittingDataNormalizedFlag = false;
+    final defaultLearningRateType = LearningRateType.decreasingAdaptive;
+    final defaultInitialCoefficientsType = InitialCoefficientsType.zeroes;
+    final defaultInitialCoefficients = Vector.fromList([1, 2, 3, 4, 5]);
     final linkFunctionMock = LinkFunctionMock();
     final className = 'class 1';
-    final fitIntercept = true;
-    final interceptScale = 10.0;
-    final coefficients = Matrix.column([1, 2, 3, 4]);
-    final probabilityThreshold = 0.6;
-    final negativeLabel = -1;
-    final positiveLabel = 1;
-    final dtype = DType.float32;
-    final costPerIteration = [1.2, 233.01, 23, -10001];
+    final defaultFitIntercept = true;
+    final defaultInterceptScale = 10.0;
+    final defaultCoefficients = Matrix.column([1, 2, 3, 4]);
+    final defaultProbabilityThreshold = 0.6;
+    final defaultNegativeLabel = -1;
+    final defaultPositiveLabel = 1;
+    final defaultDType = DType.float32;
+    final defaultCostPerIteration = [1.2, 233.01, 23, -10001];
     final retrainingData = DataFrame([[10, -10, 20, -20]]);
     final retrainedModelMock = LogisticRegressorMock();
     final classifierFactory = createLogisticRegressorFactoryMock(
         retrainedModelMock);
-
-    final regressor = LogisticRegressorImpl(
-      optimizerType,
-      iterationsLimit,
-      initialLearningRate,
-      minCoefficientsUpdate,
-      lambda,
-      regularizationType,
-      randomSeed,
-      batchSize,
-      isFittingDataNormalized,
-      learningRateType,
-      initialCoefficientsType,
-      initialCoefficients,
-      [className],
-      linkFunctionMock,
-      fitIntercept,
-      interceptScale,
-      coefficients,
-      probabilityThreshold,
-      negativeLabel,
-      positiveLabel,
-      costPerIteration,
-      dtype,
+    final createRegressor = ({
+      LinearOptimizerType optimizerType,
+      int iterationsLimit,
+      double initialLearningRate,
+      double minCoefficientsUpdate,
+      double lambda,
+      RegularizationType regularizationType,
+      int randomSeed,
+      int batchSize,
+      bool isFittingDataNormalized,
+      LearningRateType learningRateType,
+      InitialCoefficientsType initialCoefficientsType,
+      Vector initialCoefficients,
+      Iterable<String> targetNames,
+      LinkFunction linkFunction,
+      bool fitIntercept,
+      double interceptScale,
+      Matrix coefficients,
+      double probabilityThreshold,
+      num negativeLabel,
+      num positiveLabel,
+      List<num> costPerIteration,
+      DType dtype,
+    }) => LogisticRegressorImpl(
+      optimizerType ?? defaultOptimizerType,
+      iterationsLimit ?? defaultIterationsLimit,
+      initialLearningRate ?? defaultInitialLearningRate,
+      minCoefficientsUpdate ?? defaultMinCoefficientsUpdate,
+      lambda ?? defaultLambda,
+      regularizationType ?? defaultRegularizationType,
+      randomSeed ?? defaultRandomSeed,
+      batchSize ?? defaultBatchSize,
+      isFittingDataNormalized ?? defaultIsFittingDataNormalizedFlag,
+      learningRateType ?? defaultLearningRateType,
+      initialCoefficientsType ?? defaultInitialCoefficientsType,
+      initialCoefficients ?? defaultInitialCoefficients,
+      targetNames ?? [className],
+      linkFunction ?? linkFunctionMock,
+      fitIntercept ?? defaultFitIntercept,
+      interceptScale ?? defaultInterceptScale,
+      coefficients ?? defaultCoefficients,
+      probabilityThreshold ?? defaultProbabilityThreshold,
+      negativeLabel ?? defaultNegativeLabel,
+      positiveLabel ?? defaultPositiveLabel,
+      costPerIteration ?? defaultCostPerIteration,
+      dtype ?? defaultDType,
     );
 
     final testFeatureMatrix = Matrix.fromList([
@@ -79,11 +102,11 @@ void main() {
     ]);
 
     final featuresWithIntercept = Matrix.fromList([
-      [interceptScale, 20, 30, 40],
-      [interceptScale, 20, 22, 11],
-      [interceptScale, 90, 87, 52],
-      [interceptScale, 12, 20, 21],
-      [interceptScale, 33, 44, 55],
+      [defaultInterceptScale, 20, 30, 40],
+      [defaultInterceptScale, 20, 22, 11],
+      [defaultInterceptScale, 90, 87, 52],
+      [defaultInterceptScale, 12, 20, 21],
+      [defaultInterceptScale, 33, 44, 55],
     ]);
 
     final mockedProbabilities = Matrix.column([0.8, 0.5, 0.6, 0.7, 0.3]);
@@ -104,35 +127,14 @@ void main() {
     group('default constructor', () {
       test('should create the instance with `classNames` list of just one '
           'element', () {
-        expect(regressor.targetNames, equals([className]));
+        expect(createRegressor().targetNames, equals([className]));
       });
 
       test('should throw an exception if probability threshold is less '
           'than 0', () {
         final probabilityThreshold = -0.1;
-        final actual = () => LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+        final actual = () => createRegressor(
+            probabilityThreshold: probabilityThreshold,
         );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -140,30 +142,9 @@ void main() {
 
       test('should throw an exception if probability threshold is less '
           'equal to 0', () {
-        final probabilityThreshold = 0;
-        final actual = () => LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+        final probabilityThreshold = 0.0;
+        final actual = () => createRegressor(
+          probabilityThreshold: probabilityThreshold,
         );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -171,30 +152,9 @@ void main() {
 
       test('should throw an exception if probability threshold is equal '
           'to 1', () {
-        final probabilityThreshold = 1;
-        final actual = () => LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+        final probabilityThreshold = 1.0;
+        final actual = () => createRegressor(
+          probabilityThreshold: probabilityThreshold,
         );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -203,29 +163,8 @@ void main() {
       test('should throw an exception if probability threshold is greater '
           'than 1', () {
         final probabilityThreshold = 1.2;
-        final actual = () => LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+        final actual = () => createRegressor(
+          probabilityThreshold: probabilityThreshold,
         );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
@@ -235,29 +174,9 @@ void main() {
           'negative class label', () {
         final negativeLabel = 1000;
         final positiveLabel = 1000;
-        final actual = () => LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+        final actual = () => createRegressor(
+          negativeLabel: negativeLabel,
+          positiveLabel: positiveLabel,
         );
 
         expect(actual, throwsA(isA<InvalidClassLabelsException>()));
@@ -265,29 +184,8 @@ void main() {
 
       test('should throw an exception if no coefficients are provided', () {
         final coefficients = Matrix.empty();
-        final actual = () => LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+        final actual = () => createRegressor(
+          coefficients: coefficients,
         );
 
         expect(actual, throwsException);
@@ -301,77 +199,33 @@ void main() {
           [2, 0, 9],
           [1, 3, 3],
         ]);
-        final actual = () => LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+        final actual = () => createRegressor(
+          coefficients: coefficients,
         );
 
         expect(actual, throwsException);
       });
 
       test('should persist cost per iteration', () {
-        expect(regressor.costPerIteration, costPerIteration);
+        expect(createRegressor().costPerIteration, defaultCostPerIteration);
       });
 
       test('should persist hyperparameters', () {
-        final model = LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          [className],
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
-        );
+        final model = createRegressor();
 
-        expect(model.optimizerType, optimizerType);
-        expect(model.iterationsLimit, iterationsLimit);
-        expect(model.initialLearningRate, initialLearningRate);
-        expect(model.minCoefficientsUpdate, minCoefficientsUpdate);
-        expect(model.probabilityThreshold, probabilityThreshold);
-        expect(model.lambda, lambda);
-        expect(model.regularizationType, regularizationType);
-        expect(model.randomSeed, randomSeed);
-        expect(model.batchSize, batchSize);
-        expect(model.isFittingDataNormalized, isFittingDataNormalized);
-        expect(model.learningRateType, learningRateType);
-        expect(model.initialCoefficientsType, initialCoefficientsType);
-        expect(model.initialCoefficients, initialCoefficients);
+        expect(model.optimizerType, defaultOptimizerType);
+        expect(model.iterationsLimit, defaultIterationsLimit);
+        expect(model.initialLearningRate, defaultInitialLearningRate);
+        expect(model.minCoefficientsUpdate, defaultMinCoefficientsUpdate);
+        expect(model.probabilityThreshold, defaultProbabilityThreshold);
+        expect(model.lambda, defaultLambda);
+        expect(model.regularizationType, defaultRegularizationType);
+        expect(model.randomSeed, defaultRandomSeed);
+        expect(model.batchSize, defaultBatchSize);
+        expect(model.isFittingDataNormalized, defaultIsFittingDataNormalizedFlag);
+        expect(model.learningRateType, defaultLearningRateType);
+        expect(model.initialCoefficientsType, defaultInitialCoefficientsType);
+        expect(model.initialCoefficients, defaultInitialCoefficients);
       });
     });
 
@@ -379,15 +233,15 @@ void main() {
       test('should throw an exception if no test features are provided', () {
         final testFeatures = DataFrame.fromMatrix(Matrix.empty());
 
-        expect(() => regressor.predict(testFeatures), throwsException);
+        expect(() => createRegressor().predict(testFeatures), throwsException);
       });
 
       test('should consider intercept term', () {
         final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
 
-        regressor.predict(testFeatures);
+        createRegressor().predict(testFeatures);
 
-        verify(linkFunctionMock.link(featuresWithIntercept * coefficients))
+        verify(linkFunctionMock.link(featuresWithIntercept * defaultCoefficients))
             .called(1);
       });
 
@@ -397,7 +251,7 @@ void main() {
         ]);
         final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
 
-        expect(() => regressor.predict(testFeatures), throwsException);
+        expect(() => createRegressor().predict(testFeatures), throwsException);
       });
 
       test('should throw an error if too few features are provided', () {
@@ -406,25 +260,25 @@ void main() {
         ]);
         final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
 
-        expect(() => regressor.predict(testFeatures), throwsException);
+        expect(() => createRegressor().predict(testFeatures), throwsException);
       });
 
       test('should predict class labels basing on calculated probabilities', () {
         final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
-        final prediction = regressor.predict(testFeatures);
+        final prediction = createRegressor().predict(testFeatures);
 
         expect(prediction.rows, equals([
-          [positiveLabel],
-          [negativeLabel],
-          [positiveLabel],
-          [positiveLabel],
-          [negativeLabel],
+          [defaultPositiveLabel],
+          [defaultNegativeLabel],
+          [defaultPositiveLabel],
+          [defaultPositiveLabel],
+          [defaultNegativeLabel],
         ]));
       });
 
       test('should return a dataframe with a proper header', () {
         final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
-        final prediction = regressor.predict(testFeatures);
+        final prediction = createRegressor().predict(testFeatures);
 
         expect(prediction.header, equals([className]));
       });
@@ -432,70 +286,75 @@ void main() {
 
     group('retrain', () {
       test('should call a factory while retraining the model', () {
-        regressor.retrain(retrainingData);
+        createRegressor().retrain(retrainingData);
 
         verify(classifierFactory.create(
           trainData: retrainingData,
           targetName: className,
-          optimizerType: optimizerType,
-          iterationsLimit: iterationsLimit,
-          initialLearningRate: initialLearningRate,
-          minCoefficientsUpdate: minCoefficientsUpdate,
-          lambda: lambda,
-          regularizationType: regularizationType,
-          randomSeed: randomSeed,
-          batchSize: batchSize,
-          isFittingDataNormalized: isFittingDataNormalized,
-          learningRateType: learningRateType,
-          initialCoefficientsType: initialCoefficientsType,
-          initialCoefficients: initialCoefficients,
-          fitIntercept: fitIntercept,
-          interceptScale: interceptScale,
-          probabilityThreshold: probabilityThreshold,
-          negativeLabel: negativeLabel,
-          positiveLabel: positiveLabel,
+          optimizerType: defaultOptimizerType,
+          iterationsLimit: defaultIterationsLimit,
+          initialLearningRate: defaultInitialLearningRate,
+          minCoefficientsUpdate: defaultMinCoefficientsUpdate,
+          lambda: defaultLambda,
+          regularizationType: defaultRegularizationType,
+          randomSeed: defaultRandomSeed,
+          batchSize: defaultBatchSize,
+          isFittingDataNormalized: defaultIsFittingDataNormalizedFlag,
+          learningRateType: defaultLearningRateType,
+          initialCoefficientsType: defaultInitialCoefficientsType,
+          initialCoefficients: defaultInitialCoefficients,
+          fitIntercept: defaultFitIntercept,
+          interceptScale: defaultInterceptScale,
+          probabilityThreshold: defaultProbabilityThreshold,
+          negativeLabel: defaultNegativeLabel,
+          positiveLabel: defaultPositiveLabel,
           collectLearningData: false,
-          dtype: dtype,
+          dtype: defaultDType,
         )).called(1);
       });
 
       test('should return a new instance as a retrained model', () {
+        final regressor = createRegressor();
         final retrainedModel = regressor.retrain(retrainingData);
 
         expect(retrainedModel, same(retrainedModelMock));
         expect(retrainedModel, isNot(same(regressor)));
       });
 
-      test('should throw exception if the model schema is outdated, '
-          'schemaVersion is null', () {
+      test('should throw exception if the model schema is outdated or '
+          'null', () {
         final model = LogisticRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
+          defaultOptimizerType,
+          defaultIterationsLimit,
+          defaultInitialLearningRate,
+          defaultMinCoefficientsUpdate,
+          defaultLambda,
+          defaultRegularizationType,
+          defaultRandomSeed,
+          defaultBatchSize,
+          defaultIsFittingDataNormalizedFlag,
+          defaultLearningRateType,
+          defaultInitialCoefficientsType,
+          defaultInitialCoefficients,
           [className],
           linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          coefficients,
-          probabilityThreshold,
-          negativeLabel,
-          positiveLabel,
-          costPerIteration,
-          dtype,
+          defaultFitIntercept,
+          defaultInterceptScale,
+          defaultCoefficients,
+          defaultProbabilityThreshold,
+          defaultNegativeLabel,
+          defaultPositiveLabel,
+          defaultCostPerIteration,
+          defaultDType,
           schemaVersion: null,
         );
 
         expect(() => model.retrain(retrainingData),
             throwsA(isA<OutdatedJsonSchemaException>()));
+      });
+
+      test('should have a proper json schema version', () {
+        expect(createRegressor().schemaVersion, 2);
       });
     });
   });

@@ -1,16 +1,15 @@
 import 'package:ml_algo/src/common/exception/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
-import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
+import 'package:ml_algo/src/link_function/inverse_logit_link_function.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
-import '../../helpers.dart';
+import '../helpers.dart';
 
 void main() {
   void testInverseLogitLinkFunction(LinkFunction inverseLogitLink, DType dtype) {
-    group(inverseLogitLink.runtimeType, () {
+    group('InverseLogitLinkFunction ($dtype)', () {
       test('should translate positive scores to probabilities', () {
         final scores = Matrix.fromList([
           [1.0],
@@ -137,8 +136,6 @@ void main() {
     });
   }
 
-  testInverseLogitLinkFunction(const Float32InverseLogitLinkFunction(),
-      DType.float32);
-  testInverseLogitLinkFunction(const Float64InverseLogitLinkFunction(),
-      DType.float64);
+  testInverseLogitLinkFunction(const InverseLogitLinkFunction(), DType.float32);
+  testInverseLogitLinkFunction(const InverseLogitLinkFunction(), DType.float64);
 }

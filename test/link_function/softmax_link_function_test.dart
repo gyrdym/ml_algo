@@ -1,15 +1,14 @@
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/softmax/float32_softmax_link_function.dart';
-import 'package:ml_algo/src/link_function/softmax/float64_softmax_link_function.dart';
+import 'package:ml_algo/src/link_function/softmax_link_function.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
-import '../../helpers.dart';
+import '../helpers.dart';
 
 void main() {
   void testSoftmaxLinkFunction(LinkFunction linkFunction, DType dtype) {
-    group(linkFunction.runtimeType, () {
+    group('SoftmaxLinkFunction ($dtype)', () {
       test('should translate positive scores to probabilities', () {
         final scores = Matrix.fromList([
           [ 2,  1, -3],
@@ -33,6 +32,6 @@ void main() {
     });
   }
 
-  testSoftmaxLinkFunction(const Float32SoftmaxLinkFunction(), DType.float32);
-  testSoftmaxLinkFunction(const Float64SoftmaxLinkFunction(), DType.float64);
+  testSoftmaxLinkFunction(const SoftmaxLinkFunction(), DType.float32);
+  testSoftmaxLinkFunction(const SoftmaxLinkFunction(), DType.float64);
 }

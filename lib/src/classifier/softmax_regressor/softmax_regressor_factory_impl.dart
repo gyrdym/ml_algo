@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
-import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
@@ -11,13 +10,14 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
-  const SoftmaxRegressorFactoryImpl();
+  const SoftmaxRegressorFactoryImpl(this._linkFunction);
+
+  final LinkFunction _linkFunction;
 
   @override
   SoftmaxRegressor create({
@@ -50,14 +50,10 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
 
     validateTrainData(trainData, targetNames);
 
-    final linkFunction = softmaxRegressorInjector
-        .get<LinkFunction>(
-        dependencyName: dTypeToSoftmaxLinkFunctionToken[dtype]);
-
     final optimizer = createLogLikelihoodOptimizer(
       trainData,
       targetNames,
-      linkFunction,
+      _linkFunction,
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
@@ -101,7 +97,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       initialCoefficients,
       coefficientsByClasses,
       targetNames,
-      linkFunction,
+      _linkFunction,
       fitIntercept,
       interceptScale,
       positiveLabel,

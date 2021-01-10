@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
@@ -13,14 +12,15 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
 import 'package:ml_dataframe/src/data_frame/data_frame.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
-  const LogisticRegressorFactoryImpl();
+  const LogisticRegressorFactoryImpl(this._linkFunction);
+
+  final LinkFunction _linkFunction;
 
   @override
   LogisticRegressor create({
@@ -55,12 +55,10 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
           trainData.toMatrix(dtype).columnsNum - 1);
     }
 
-    final linkFunction = logisticRegressorInjector.get<LinkFunction>(
-        dependencyName: dTypeToInverseLogitLinkFunctionToken[dtype]);
     final optimizer = createLogLikelihoodOptimizer(
       trainData,
       [targetName],
-      linkFunction,
+      _linkFunction,
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
@@ -103,7 +101,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       initialCoefficientsType,
       initialCoefficients,
       [targetName],
-      linkFunction,
+      _linkFunction,
       fitIntercept,
       interceptScale,
       coefficientsByClasses,

@@ -395,8 +395,8 @@ void main() {
         expect(retrainedModel, isNot(same(regressor)));
       });
 
-      test('should throw exception if the model schema is outdated, '
-          'schemaVersion is null', () {
+      test('should throw exception if the model schema is outdated or '
+          ' null', () {
         final model = SoftmaxRegressorImpl(
           optimizerType,
           iterationsLimit,
@@ -424,6 +424,34 @@ void main() {
 
         expect(() => model.retrain(retrainingData),
             throwsA(isA<OutdatedJsonSchemaException>()));
+      });
+
+      test('should have a proper jsdon schema version', () {
+        final model = SoftmaxRegressorImpl(
+          optimizerType,
+          iterationsLimit,
+          initialLearningRate,
+          minCoefficientsUpdate,
+          lambda,
+          regularizationType,
+          randomSeed,
+          batchSize,
+          isFittingDataNormalized,
+          learningRateType,
+          initialCoefficientsType,
+          initialCoefficients,
+          coefficientsByClasses,
+          targetNames,
+          linkFunctionMock,
+          fitIntercept,
+          interceptScale,
+          positiveLabel,
+          negativeLabel,
+          costPerIteration,
+          dtype,
+        );
+
+        expect(model.schemaVersion, 2);
       });
     });
   });

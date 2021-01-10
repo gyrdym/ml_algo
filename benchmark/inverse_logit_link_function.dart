@@ -1,22 +1,22 @@
-// 0.24 sec
+// 0.3 sec
 
 import 'package:benchmark_harness/benchmark_harness.dart';
-import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
+import 'package:ml_algo/src/link_function/inverse_logit_link_function.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 const scoresCount = 100000;
 
-class Float32InverseLogitLinkFunctionBenchmark extends BenchmarkBase {
-  Float32InverseLogitLinkFunctionBenchmark() :
-        super('Float32InverseLogitLinkFunction benchmark');
+class InverseLogitLinkFunctionBenchmark extends BenchmarkBase {
+  InverseLogitLinkFunctionBenchmark() :
+        super('InverseLogitLinkFunctionBenchmark benchmark');
 
-  final linkFunction = const Float32InverseLogitLinkFunction();
+  final linkFunction = const InverseLogitLinkFunction();
 
   Matrix samples;
 
   static void main() {
-    Float32InverseLogitLinkFunctionBenchmark().report();
+    InverseLogitLinkFunctionBenchmark().report();
   }
 
   @override
@@ -37,5 +37,5 @@ class Float32InverseLogitLinkFunctionBenchmark extends BenchmarkBase {
 }
 
 Future main() async {
-  Float32InverseLogitLinkFunctionBenchmark.main();
+  InverseLogitLinkFunctionBenchmark.main();
 }
