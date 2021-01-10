@@ -14,9 +14,8 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_values.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type_json_encoded_values.dart';
+import 'package:ml_algo/src/link_function/inverse_logit_link_function.dart';
 import 'package:ml_algo/src/link_function/link_function_encoded_values.dart';
-import 'package:ml_algo/src/link_function/logit/float32_inverse_logit_function.dart';
-import 'package:ml_algo/src/link_function/logit/float64_inverse_logit_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/dtype_to_json.dart';
@@ -513,23 +512,13 @@ void main() {
       );
     });
 
-    test('should serialize linkFunction field, dtype=DType.float32', () {
-      final classifier = createClassifier(dtype: DType.float32);
+    test('should serialize linkFunction field', () {
+      final classifier = createClassifier();
       final serialized = classifier.toJson();
 
       expect(
         serialized[logisticRegressorLinkFunctionJsonKey],
-        float32InverseLogitLinkFunctionEncoded,
-      );
-    });
-
-    test('should serialize linkFunction field, dtype=DType.float64', () {
-      final classifier = createClassifier(dtype: DType.float64);
-      final serialized = classifier.toJson();
-
-      expect(
-        serialized[logisticRegressorLinkFunctionJsonKey],
-        float64InverseLogitLinkFunctionEncoded,
+        inverseLogitLinkFunctionEncoded,
       );
     });
 
@@ -587,7 +576,7 @@ void main() {
       expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
       expect(restoredClassifier.dtype, classifier.dtype);
       expect(restoredClassifier.linkFunction,
-          isA<Float32InverseLogitLinkFunction>());
+          isA<InverseLogitLinkFunction>());
       expect(restoredClassifier.targetNames, [targetName]);
     });
 
@@ -606,7 +595,7 @@ void main() {
       expect(restoredClassifier.fitIntercept, classifier.fitIntercept);
       expect(restoredClassifier.dtype, classifier.dtype);
       expect(restoredClassifier.linkFunction,
-          isA<Float64InverseLogitLinkFunction>());
+          isA<InverseLogitLinkFunction>());
       expect(restoredClassifier.targetNames, [targetName]);
     });
   });

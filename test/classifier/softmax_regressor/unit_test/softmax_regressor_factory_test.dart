@@ -12,7 +12,6 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
-import 'package:ml_algo/src/link_function/link_function_dependency_tokens.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -65,14 +64,13 @@ void main() {
       [1, 2, 3],
     ]);
     final costPerIteration = [10, 0, -10, 33.1];
-    final factory = const SoftmaxRegressorFactoryImpl();
 
     LinkFunction linkFunctionMock;
     CostFunction costFunctionMock;
     CostFunctionFactory costFunctionFactoryMock;
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
-    SoftmaxRegressorFactory softmaxRegressorFactoryMock;
+    SoftmaxRegressorFactory factory;
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
@@ -80,15 +78,6 @@ void main() {
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
-
-      softmaxRegressorInjector
-        ..clearAll()
-        ..registerSingleton<LinkFunction>(() => linkFunctionMock,
-            dependencyName: float32SoftmaxLinkFunctionToken)
-        ..registerSingleton<LinkFunction>(() => linkFunctionMock,
-            dependencyName: float64SoftmaxLinkFunctionToken)
-        ..registerSingleton<SoftmaxRegressorFactory>(
-                () => softmaxRegressorFactoryMock);
 
       injector
         ..clearAll()
@@ -102,6 +91,8 @@ void main() {
         collectLearningData: anyNamed('collectLearningData'),
       )).thenReturn(learnedCoefficients);
       when(optimizerMock.costPerIteration).thenReturn(costPerIteration);
+
+      factory = SoftmaxRegressorFactoryImpl(linkFunctionMock);
     });
 
     tearDown(() {

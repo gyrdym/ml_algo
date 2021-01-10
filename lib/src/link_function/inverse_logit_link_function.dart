@@ -1,14 +1,23 @@
 import 'dart:math' as math;
 
+import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/exception/logit_scores_matrix_dimension_exception.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_linalg/matrix.dart';
 
-class Float64InverseLogitLinkFunction implements LinkFunction {
-  const Float64InverseLogitLinkFunction();
+part 'inverse_logit_link_function.g.dart';
 
+@JsonSerializable()
+class InverseLogitLinkFunction implements LinkFunction {
   static final upperBound = 10;
   static final lowerBound = -10;
+
+  const InverseLogitLinkFunction();
+
+  factory InverseLogitLinkFunction.fromJson(Map<String, dynamic> json) =>
+      _$InverseLogitLinkFunctionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InverseLogitLinkFunctionToJson(this);
 
   @override
   Matrix link(Matrix scores) {
