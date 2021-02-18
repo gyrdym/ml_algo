@@ -50,6 +50,14 @@ For more information on the library's API, please visit [API reference](https://
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
 
+**Important note:**
+
+Please pay attention to problems which classifiers and regressors exposed by the library solve. E.g. 
+[Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
+solves only **binary classification** problem, and that means that you can't use this classifier to deal with dataset 
+with more than two classes, keep that in mind - in order to find out more abot regresseors and classifiers, please refer to
+the [api documentation](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) of the package
+
 Import all necessary packages. First, it's needed to ensure if you have `ml_preprocessing` and `ml_dataframe` packages 
 in your dependencies:
 
@@ -60,7 +68,13 @@ dependencies:
 ````
 
 We need these repos to parse raw data in order to use it further. For more details, please
-visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page.
+visit [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing) repository page. 
+
+**Important note:**
+
+Regressors and classifiers exposed by the library do not handle strings, booleans and nulls, they can only deal with 
+numbers! You necessarily need to convert all the improper values of your dataset to numbers, please refer to [ml_preprocessing](https://github.com/gyrdym/ml_preprocessing)
+library to find out more about data preprocessing.
 
 ````dart  
 import 'package:ml_algo/ml_algo.dart';
