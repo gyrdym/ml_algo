@@ -72,18 +72,18 @@ void main() {
     LinearOptimizerFactory optimizerFactoryMock;
     SoftmaxRegressorFactory factory;
 
-    setUp(() {
+    setUp(() async {
       linkFunctionMock = LinkFunctionMock();
       costFunctionMock = CostFunctionMock();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
-      injector
-        ..clearAll()
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
-        ..registerSingleton<LinearOptimizerFactory>(() => optimizerFactoryMock);
+      await module.reset();
+
+      module
+        ..registerSingleton<CostFunctionFactory>(costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>(optimizerFactoryMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -95,9 +95,9 @@ void main() {
       factory = SoftmaxRegressorFactoryImpl(linkFunctionMock);
     });
 
-    tearDown(() {
-      injector.clearAll();
-      softmaxRegressorInjector.clearAll();
+    tearDown(() async {
+      await module.reset();
+      await softmaxRegressorModule.reset();
     });
 
     test('should throw an exception if some target columns do not exist', () {

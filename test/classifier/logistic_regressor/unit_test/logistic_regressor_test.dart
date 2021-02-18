@@ -42,9 +42,9 @@ void main() {
     LinearOptimizer optimizerMock;
     LinearOptimizerFactory optimizerFactoryMock;
 
-    setUp(() {
-      injector.clearAll();
-      logisticRegressorInjector.clearAll();
+    setUp(() async {
+      await module.reset();
+      await logisticRegressorModule.reset();
 
       linkFunctionMock = LinkFunctionMock();
       costFunctionMock = CostFunctionMock();
@@ -52,14 +52,12 @@ void main() {
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
-      injector
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
-        ..registerSingleton<LinearOptimizerFactory>(
-                () => optimizerFactoryMock);
+      module
+        ..registerSingleton<CostFunctionFactory>(costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>(optimizerFactoryMock);
 
-      logisticRegressorInjector
-        ..registerSingleton<LinkFunction>(() => linkFunctionMock);
+      logisticRegressorModule
+        ..registerSingleton<LinkFunction>(linkFunctionMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -69,9 +67,9 @@ void main() {
       when(optimizerMock.costPerIteration).thenReturn(errors);
     });
 
-    tearDown(() {
-      injector.clearAll();
-      logisticRegressorInjector.clearAll();
+    tearDown(() async {
+      await module.reset();
+      await logisticRegressorModule.reset();
     });
 
     test('should throw an exception if a probability threshold is less than '

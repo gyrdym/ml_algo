@@ -547,8 +547,8 @@ void main() {
         await file.delete();
       }
 
-      injector.clearAll();
-      logisticRegressorInjector.clearAll();
+      await module.reset();
+      await logisticRegressorModule.reset();
     });
 
     test('should return a pointer to a json file while saving serialized '

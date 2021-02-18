@@ -54,7 +54,7 @@ void main() {
     LinearRegressor regressor;
 
     setUp(() {
-      linearRegressorInjector
+      linearRegressorModule
           .registerSingleton(() => factoryMock);
 
       regressor = LinearRegressor(
@@ -79,9 +79,9 @@ void main() {
       );
     });
 
-    tearDown(() {
-      injector.clearAll();
-      linearRegressorInjector.clearAll();
+    tearDown(() async {
+      await module.reset();
+      await linearRegressorModule.reset();
     });
 
     test('should call the factory', () {

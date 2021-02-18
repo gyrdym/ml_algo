@@ -112,16 +112,16 @@ void main() {
     final mockedProbabilities = Matrix.column([0.8, 0.5, 0.6, 0.7, 0.3]);
 
     setUp(() {
-      logisticRegressorInjector
-          .registerSingleton<LogisticRegressorFactory>(() => classifierFactory);
+      logisticRegressorModule
+          .registerSingleton<LogisticRegressorFactory>(classifierFactory);
 
       when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
     });
 
-    tearDown(() {
+    tearDown(() async {
       reset(linkFunctionMock);
-      injector.clearAll();
-      logisticRegressorInjector.clearAll();
+      await module.reset();
+      await logisticRegressorModule.reset();
     });
 
     group('default constructor', () {

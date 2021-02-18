@@ -82,8 +82,8 @@ void main() {
     );
 
     setUp(() {
-      softmaxRegressorInjector
-        ..registerSingleton<SoftmaxRegressorFactory>(() => factoryMock);
+      softmaxRegressorModule
+        ..registerSingleton<SoftmaxRegressorFactory>(factoryMock);
 
       when(factoryMock.create(
         trainData: observations,
@@ -109,11 +109,9 @@ void main() {
       )).thenReturn(regressorMock);
     });
 
-    tearDown(() {
-      injector
-        ..clearAll();
-      softmaxRegressorInjector
-        ..clearAll();
+    tearDown(() async {
+      await module.reset();
+      await softmaxRegressorModule.reset();
     });
 
     test('should pass all the arguments to the softmax regressor factory', () {

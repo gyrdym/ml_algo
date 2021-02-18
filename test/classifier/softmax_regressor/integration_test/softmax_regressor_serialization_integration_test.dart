@@ -97,9 +97,9 @@ void main() {
   };
 
   group('SoftmaxRegressor.toJson', () {
-    tearDown(() {
-      injector.clearAll();
-      softmaxRegressorInjector.clearAll();
+    tearDown(() async {
+      await module.reset();
+      await softmaxRegressorModule.reset();
     });
 
     test('should serialize optimizerType field', () {
@@ -428,8 +428,8 @@ void main() {
         await file.delete();
       }
 
-      injector.clearAll();
-      softmaxRegressorInjector.clearAll();
+      await module.reset();
+      await softmaxRegressorModule.reset();
     });
 
     test('should return a pointer to a file while saving the model into the '

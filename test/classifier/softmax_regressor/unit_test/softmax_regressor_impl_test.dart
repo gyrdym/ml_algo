@@ -108,8 +108,8 @@ void main() {
     setUp(() {
       when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
 
-      softmaxRegressorInjector
-          .registerSingleton<SoftmaxRegressorFactory>(() => classifierFactory);
+      softmaxRegressorModule
+          .registerSingleton<SoftmaxRegressorFactory>(classifierFactory);
 
       regressor = SoftmaxRegressorImpl(
         optimizerType,
@@ -136,10 +136,10 @@ void main() {
       );
     });
 
-    tearDown(() {
+    tearDown(() async {
       reset(linkFunctionMock);
-      injector.clearAll();
-      softmaxRegressorInjector.clearAll();
+      await module.reset();
+      await softmaxRegressorModule.reset();
     });
 
     group('default constructor', () {

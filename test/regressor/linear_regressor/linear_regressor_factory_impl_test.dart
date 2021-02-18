@@ -47,11 +47,9 @@ void main() {
       linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
           linearOptimizerMock);
 
-      injector
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
-        ..registerDependency<LinearOptimizerFactory>(
-                () => linearOptimizerFactoryMock);
+      module
+        ..registerSingleton<CostFunctionFactory>(costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>(linearOptimizerFactoryMock);
 
       when(linearOptimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -61,7 +59,9 @@ void main() {
       when(linearOptimizerMock.costPerIteration).thenReturn(costPerIteration);
     });
 
-    tearDown(injector.clearAll);
+    tearDown(() async {
+      await module.reset();
+    });
 
     test('should throw an error if the target column does not exist', () {
       final targetColumn = 'absent_column';

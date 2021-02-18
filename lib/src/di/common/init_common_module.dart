@@ -3,7 +3,7 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory_impl.dart';
 import 'package:ml_algo/src/di/dependency_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/extensions/injector.dart';
+import 'package:ml_algo/src/extensions/get_it.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/helpers/features_target_split_interface.dart';
 import 'package:ml_algo/src/helpers/normalize_class_labels.dart';
@@ -30,51 +30,56 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 typedef EncoderFactory = Encoder Function(DataFrame, Iterable<String>);
 
 void initCommonModule() {
-  injector
+  module
     ..registerSingletonIf<EncoderFactory>(
-            () => (DataFrame data, Iterable<String> targetNames) =>
-            Encoder.oneHot(data, featureNames: targetNames),
-        dependencyName: oneHotEncoderFactoryKey)
+            (DataFrame data, Iterable<String> targetNames) =>
+                Encoder.oneHot(data, featureNames: targetNames),
+        instanceName: oneHotEncoderFactoryKey)
 
-    ..registerSingletonIf<RandomizerFactory>(
-            () => const RandomizerFactoryImpl())
+    ..registerSingletonIf<RandomizerFactory>(const RandomizerFactoryImpl())
 
-    ..registerSingletonIf<FeaturesTargetSplit>(
-            () => featuresTargetSplit)
+    ..registerSingletonIf<FeaturesTargetSplit>(featuresTargetSplit)
 
-    ..registerSingletonIf<MetricFactory>(
-            () => const MetricFactoryImpl())
+    ..registerSingleton<MetricFactory>(const MetricFactoryImpl())
 
-    ..registerSingletonIf<NormalizeClassLabels>(
-            () => normalizeClassLabels)
+    ..registerSingletonIf<NormalizeClassLabels>(normalizeClassLabels)
 
     ..registerSingletonIf<LinearOptimizerFactory>(
-            () => const LinearOptimizerFactoryImpl())
+        const LinearOptimizerFactoryImpl())
 
     ..registerSingletonIf<LearningRateGeneratorFactory>(
-            () => const LearningRateGeneratorFactoryImpl())
+        const LearningRateGeneratorFactoryImpl())
 
     ..registerSingletonIf<InitialCoefficientsGeneratorFactory>(
-            () => const InitialCoefficientsGeneratorFactoryImpl())
+        const InitialCoefficientsGeneratorFactoryImpl())
 
     ..registerSingletonIf<ConvergenceDetectorFactory>(
-            () => const ConvergenceDetectorFactoryImpl())
+        const ConvergenceDetectorFactoryImpl())
 
     ..registerSingletonIf<CostFunctionFactory>(
-            () => const CostFunctionFactoryImpl())
+        const CostFunctionFactoryImpl())
       
-    ..registerSingletonIf<ModelAssessor<Classifier>>(() =>
-        ClassifierAssessor(
-            injector.get<MetricFactory>(),
-            injector.get<EncoderFactory>(
-                dependencyName: oneHotEncoderFactoryKey),
-            featuresTargetSplit,
-            normalizeClassLabels,
-        ))
+    ..registerSingletonWithDependencies<ModelAssessor<Classifier>>(
+        () => ClassifierAssessor(
+          module<MetricFactory>(),
+          module<EncoderFactory>(instanceName: oneHotEncoderFactoryKey),
+          module<FeaturesTargetSplit>(),
+          module<NormalizeClassLabels>(),
+        ),
+        dependsOn: [
+          MetricFactory,
+          EncoderFactory,
+          FeaturesTargetSplit,
+          NormalizeClassLabels,
+        ])
 
-    ..registerSingletonIf<ModelAssessor<Predictor>>(() =>
-        RegressorAssessor(
-          injector.get<MetricFactory>(),
-          featuresTargetSplit,
-        ));
+    ..registerSingletonWithDependencies<ModelAssessor<Predictor>>(
+        () => RegressorAssessor(
+          module.get<MetricFactory>(),
+          module.get<FeaturesTargetSplit>(),
+        ),
+        dependsOn: [
+          MetricFactory,
+          FeaturesTargetSplit,
+        ]);
 }

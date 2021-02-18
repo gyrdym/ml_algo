@@ -29,8 +29,8 @@ void main() {
     tearDown(() {
       reset(solverMock);
       reset(kernelMock);
-      injector.clearAll();
-      knnClassifierInjector.clearAll();
+      module.reset();
+      knnClassifierModule.reset();
     });
 
     group('default constructor', () {
@@ -43,8 +43,8 @@ void main() {
       tearDown(() {
         reset(solverMock);
         reset(kernelMock);
-        injector.clearAll();
-        knnClassifierInjector.clearAll();
+        module.reset();
+        knnClassifierModule.reset();
       });
 
       test('should throw an exception if no class labels are provided', () {
@@ -574,14 +574,13 @@ void main() {
         when(classifierFactory.create(any, any, any, any, any, any, any))
             .thenReturn(retrainedModelMock);
 
-        knnClassifierInjector
-            .registerSingleton<KnnClassifierFactory>(
-                () => classifierFactory);
+        knnClassifierModule
+            .registerSingleton<KnnClassifierFactory>(classifierFactory);
       });
 
-      tearDown(() {
-        injector.clearAll();
-        knnClassifierInjector.clearAll();
+      tearDown(() async {
+        await module.reset();
+        await knnClassifierModule.reset();
       });
 
       test('should call classifier factory while retraining the model', () {

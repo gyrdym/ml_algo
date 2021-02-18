@@ -7,10 +7,10 @@ environment:
   sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
-  injector: ^1.0.9
+  get_it: ^5.0.6
   json_annotation: ^3.0.1
   json_serializable: ^3.3.0
-  ml_dataframe: ^0.4.0
+  ml_dataframe: ^0.4.1
   ml_linalg: ^12.17.10
   ml_preprocessing: ^5.2.2
   quiver: ^2.0.2

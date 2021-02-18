@@ -153,7 +153,7 @@ class KnnClassifierImpl
       throw OutdatedJsonSchemaException();
     }
 
-    return knnClassifierInjector
+    return knnClassifierModule
         .get<KnnClassifierFactory>()
         .create(
       data,

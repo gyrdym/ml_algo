@@ -22,8 +22,8 @@ void main() {
     LogisticRegressor classifier;
 
     setUp(() {
-      injector.clearAll();
-      logisticRegressorInjector.clearAll();
+      module.reset();
+      logisticRegressorModule.reset();
 
       classifier = LogisticRegressor(
         samples,

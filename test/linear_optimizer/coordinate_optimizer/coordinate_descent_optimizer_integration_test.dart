@@ -46,7 +46,9 @@ void main() {
           lambda: lambda);
     });
 
-    tearDownAll(injector.clearAll);
+    tearDownAll(() async {
+      await module.reset();
+    });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(unregularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal coefficients for the given data', () {
@@ -90,7 +92,9 @@ void main() {
       );
     });
 
-    tearDown(injector.clearAll);
+    tearDown(() async {
+      await module.reset();
+    });
 
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(regularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal coefficients for the given data', () {

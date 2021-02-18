@@ -33,9 +33,9 @@ void main() {
       dtype,
     );
 
-    tearDown(() {
-      injector.clearAll();
-      knnRegressorInjector.clearAll();
+    tearDown(() async {
+      await module.reset();
+      await knnRegressorModule.reset();
     });
 
     group('predict', () {
@@ -159,9 +159,8 @@ void main() {
         when(solver.k).thenReturn(k);
         when(kernel.type).thenReturn(kernelType);
 
-        knnRegressorInjector
-            .registerSingleton<KnnRegressorFactory>(
-                () => regressorFactory);
+        knnRegressorModule
+            .registerSingleton<KnnRegressorFactory>(regressorFactory);
       });
 
       tearDown(() {

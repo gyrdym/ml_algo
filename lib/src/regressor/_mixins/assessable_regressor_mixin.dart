@@ -13,7 +13,7 @@ mixin AssessableRegressorMixin implements
   double assess(
       DataFrame samples,
       MetricType metricType,
-  ) => injector
+  ) => module
       .get<ModelAssessor<Predictor>>()
       .assess(this, metricType, samples);
 }

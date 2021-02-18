@@ -1,3 +1,3 @@
-import 'package:injector/injector.dart';
+import 'package:get_it/get_it.dart';
 
-final logisticRegressorInjector = Injector();
+final logisticRegressorModule = GetIt.asNewInstance();

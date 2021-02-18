@@ -155,7 +155,7 @@ class DecisionTreeClassifierImpl
       throw OutdatedJsonSchemaException();
     }
 
-    return decisionTreeInjector
+    return decisionTreeModule
         .get<DecisionTreeClassifierFactory>()
         .create(
       data,

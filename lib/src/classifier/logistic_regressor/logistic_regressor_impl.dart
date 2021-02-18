@@ -246,7 +246,7 @@ class LogisticRegressorImpl
       throw OutdatedJsonSchemaException();
     }
 
-    return logisticRegressorInjector
+    return logisticRegressorModule
         .get<LogisticRegressorFactory>()
         .create(
       trainData: data,

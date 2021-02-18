@@ -30,22 +30,23 @@ void main() {
     KnnClassifier knnClassifierMock;
     KnnClassifierFactory knnClassifierFactoryMock;
 
-    setUp(() {
+    setUp(() async {
       knnClassifierMock = KnnClassifierMock();
       knnClassifierFactoryMock = createKnnClassifierFactoryMock(
           knnClassifierMock);
 
-      knnClassifierInjector
-        ..clearAll()
-        ..registerSingleton<KnnClassifierFactory>(() => knnClassifierFactoryMock);
+      await knnClassifierModule.reset();
+
+      knnClassifierModule
+          .registerSingleton<KnnClassifierFactory>(knnClassifierFactoryMock);
     });
 
-    tearDown(() {
+    tearDown(() async {
       reset(knnClassifierMock);
       reset(knnClassifierFactoryMock);
 
-      injector.clearAll();
-      knnClassifierInjector.clearAll();
+      await module.reset();
+      await knnClassifierModule.reset();
     });
 
     test('should call KnnClassifierFactory in order to create a classifier', () {

@@ -35,19 +35,19 @@ class GradientOptimizer implements LinearOptimizer {
         _costFunction = costFunction,
         _dtype = dtype,
 
-        _initialCoefficientsGenerator = injector
+        _initialCoefficientsGenerator = module
             .get<InitialCoefficientsGeneratorFactory>()
             .fromType(initialCoefficientsType, dtype),
 
-        _learningRateGenerator = injector
+        _learningRateGenerator = module
             .get<LearningRateGeneratorFactory>()
             .fromType(learningRateType),
 
-        _convergenceDetector = injector
+        _convergenceDetector = module
             .get<ConvergenceDetectorFactory>()
             .create(minCoefficientsUpdate, iterationLimit),
 
-        _randomizer = injector
+        _randomizer = module
             .get<RandomizerFactory>()
             .create(randomSeed) {
     if (batchSize < 1 || batchSize > points.rowsNum) {

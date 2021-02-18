@@ -1,3 +1,3 @@
-import 'package:injector/injector.dart';
+import 'package:get_it/get_it.dart';
 
-final softmaxRegressorInjector = Injector();
+final softmaxRegressorModule = GetIt.asNewInstance();

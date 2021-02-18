@@ -67,16 +67,16 @@ void main() {
 
     setUp(() {
       regressorFactory = createLinearRegressorFactoryMock(retrainedModelMock);
-      linearRegressorInjector
-          .registerSingleton<LinearRegressorFactory>(() => regressorFactory);
+      linearRegressorModule
+          .registerSingleton<LinearRegressorFactory>(regressorFactory);
     });
 
-    tearDown(() {
+    tearDown(() async {
       reset(regressorFactory);
       reset(retrainedModelMock);
 
-      injector.clearAll();
-      linearRegressorInjector.clearAll();
+      await module.reset();
+      await linearRegressorModule.reset();
     });
 
     test('should call a factory while retraining the model', () {

@@ -47,8 +47,8 @@ void main() {
       final samples = DataFrame(data, headerExists: false);
 
       tearDown(() {
-        injector.clearAll();
-        logisticRegressorInjector.clearAll();
+        module.reset();
+        logisticRegressorModule.reset();
       });
 
       test('should fit given data, float32 case', () {
@@ -97,8 +97,8 @@ void main() {
       final targetName = 'col_3';
 
       tearDown(() {
-        injector.clearAll();
-        logisticRegressorInjector.clearAll();
+        module.reset();
+        logisticRegressorModule.reset();
       });
 
       test('should consider intercept term, dtype=DType.float32', () {

@@ -109,7 +109,7 @@ class KnnRegressorImpl
       throw OutdatedJsonSchemaException();
     }
 
-    return knnRegressorInjector
+    return knnRegressorModule
         .get<KnnRegressorFactory>()
         .create(
       data,

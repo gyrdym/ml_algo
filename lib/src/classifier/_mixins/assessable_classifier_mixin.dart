@@ -11,7 +11,7 @@ mixin AssessableClassifierMixin implements Assessable, Classifier {
     DataFrame samples,
     MetricType metricType,
   ) =>
-      injector
+      module
           .get<ModelAssessor<Classifier>>()
           .assess(this, metricType, samples);
 }

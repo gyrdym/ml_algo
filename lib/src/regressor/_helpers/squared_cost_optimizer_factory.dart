@@ -36,8 +36,8 @@ LinearOptimizer createSquaredCostOptimizer(
       targetNames: [targetName]).toList();
   final points = splits[0].toMatrix(dtype);
   final labels = splits[1].toMatrix(dtype);
-  final optimizerFactory = injector.get<LinearOptimizerFactory>();
-  final costFunctionFactory = injector.get<CostFunctionFactory>();
+  final optimizerFactory = module.get<LinearOptimizerFactory>();
+  final costFunctionFactory = module.get<CostFunctionFactory>();
   final costFunction = costFunctionFactory.createByType(
     CostFunctionType.leastSquare,
   );

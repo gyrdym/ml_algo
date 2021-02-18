@@ -132,15 +132,14 @@ void main() {
       when(classifierFactoryMock.create(any, any, any, any, any, any))
           .thenReturn(retrainedClassifier);
 
-      injector
-        ..registerDependency<ModelAssessor<Classifier>>(
-            () => classifierAssessorMock)
-        ..registerDependency<EncoderFactory>(() => encoderFactoryMock.create,
-            dependencyName: oneHotEncoderFactoryKey)
-        ..registerSingleton<MetricFactory>(() => metricFactoryMock);
-      decisionTreeInjector
+      module
+        ..registerSingleton<ModelAssessor<Classifier>>(classifierAssessorMock)
+        ..registerSingleton<EncoderFactory>(encoderFactoryMock.create,
+            instanceName: oneHotEncoderFactoryKey)
+        ..registerSingleton<MetricFactory>(metricFactoryMock);
+      decisionTreeModule
         ..registerSingleton<DecisionTreeClassifierFactory>(
-                () => classifierFactoryMock);
+            classifierFactoryMock);
 
       classifier32 = DecisionTreeClassifierImpl(
         minError,
@@ -161,15 +160,15 @@ void main() {
       );
     });
 
-    tearDown(() {
+    tearDown(() async {
       reset(metricFactoryMock);
       reset(metricMock);
       reset(encoderFactoryMock);
       reset(encoderMock);
       encoderCallIteration = 0;
 
-      injector.clearAll();
-      decisionTreeInjector.clearAll();
+      await module.reset();
+      await decisionTreeModule.reset();
     });
 
     test('should persist hyperparameters for float32-based classifier', () {

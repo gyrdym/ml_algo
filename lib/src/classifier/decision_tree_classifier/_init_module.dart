@@ -1,11 +1,11 @@
-import 'package:injector/injector.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory_impl.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory_impl.dart';
 import 'package:ml_algo/src/di/common/init_common_module.dart';
-import 'package:ml_algo/src/extensions/injector.dart';
+import 'package:ml_algo/src/extensions/get_it.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
@@ -23,55 +23,55 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 
-Injector initDecisionTreeModule() {
+GetIt initDecisionTreeModule() {
   initCommonModule();
 
-  return decisionTreeInjector
+  return decisionTreeModule
     ..registerSingletonIf<DistributionCalculatorFactory>(
-            () => const DistributionCalculatorFactoryImpl())
+        const DistributionCalculatorFactoryImpl())
 
     ..registerSingletonIf<NominalTreeSplitterFactory>(
-            () => const NominalTreeSplitterFactoryImpl())
+        const NominalTreeSplitterFactoryImpl())
 
     ..registerSingletonIf<NumericalTreeSplitterFactory>(
-            () => const NumericalTreeSplitterFactoryImpl())
+        const NumericalTreeSplitterFactoryImpl())
 
     ..registerSingletonIf<TreeSplitAssessorFactory>(
-            () => const TreeSplitAssessorFactoryImpl())
+        const TreeSplitAssessorFactoryImpl())
 
     ..registerSingletonIf<TreeSplitterFactory>(
-            () => TreeSplitterFactoryImpl(
-          decisionTreeInjector.get<TreeSplitAssessorFactory>(),
-          decisionTreeInjector.get<NominalTreeSplitterFactory>(),
-          decisionTreeInjector.get<NumericalTreeSplitterFactory>(),
+        TreeSplitterFactoryImpl(
+          decisionTreeModule.get<TreeSplitAssessorFactory>(),
+          decisionTreeModule.get<NominalTreeSplitterFactory>(),
+          decisionTreeModule.get<NumericalTreeSplitterFactory>(),
         ))
 
     ..registerSingletonIf<TreeSplitSelectorFactory>(
-            () => TreeSplitSelectorFactoryImpl(
-          decisionTreeInjector.get<TreeSplitAssessorFactory>(),
-          decisionTreeInjector.get<TreeSplitterFactory>(),
+        TreeSplitSelectorFactoryImpl(
+          decisionTreeModule.get<TreeSplitAssessorFactory>(),
+          decisionTreeModule.get<TreeSplitterFactory>(),
         ))
 
     ..registerSingletonIf<TreeLeafDetectorFactory>(
-            () => TreeLeafDetectorFactoryImpl(
-          decisionTreeInjector.get<TreeSplitAssessorFactory>(),
+        TreeLeafDetectorFactoryImpl(
+          decisionTreeModule.get<TreeSplitAssessorFactory>(),
         ))
 
     ..registerSingletonIf<TreeLeafLabelFactoryFactory>(
-            () => TreeLeafLabelFactoryFactoryImpl(
-          decisionTreeInjector
+        TreeLeafLabelFactoryFactoryImpl(
+          decisionTreeModule
               .get<DistributionCalculatorFactory>(),
         ))
 
     ..registerSingletonIf<TreeTrainerFactory>(
-            () => TreeTrainerFactoryImpl(
-          decisionTreeInjector.get<TreeLeafDetectorFactory>(),
-          decisionTreeInjector.get<TreeLeafLabelFactoryFactory>(),
-          decisionTreeInjector.get<TreeSplitSelectorFactory>(),
+        TreeTrainerFactoryImpl(
+          decisionTreeModule.get<TreeLeafDetectorFactory>(),
+          decisionTreeModule.get<TreeLeafLabelFactoryFactory>(),
+          decisionTreeModule.get<TreeSplitSelectorFactory>(),
         ))
 
     ..registerSingletonIf<DecisionTreeClassifierFactory>(
-            () => DecisionTreeClassifierFactoryImpl(
-                decisionTreeInjector.get<TreeTrainerFactory>(),
-            ));
+        DecisionTreeClassifierFactoryImpl(
+          decisionTreeModule.get<TreeTrainerFactory>(),
+        ));
 }

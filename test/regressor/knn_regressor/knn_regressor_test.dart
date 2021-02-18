@@ -26,10 +26,12 @@ void main() {
     final knnRegressor = KnnRegressorMock();
     final knnRegressorFactory = createKnnRegressorFactoryMock(knnRegressor);
 
-    setUp(() => knnRegressorInjector
-      ..clearAll()
-      ..registerSingleton<KnnRegressorFactory>(() => knnRegressorFactory),
-    );
+    setUp(() async {
+      await knnRegressorModule.reset();
+
+      knnRegressorModule
+        ..registerSingleton<KnnRegressorFactory>(knnRegressorFactory);
+    });
 
     test('should call KnnRegressorFactory in order to create a regressor', () {
       final regressor = KnnRegressor(

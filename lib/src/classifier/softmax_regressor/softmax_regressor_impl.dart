@@ -237,7 +237,7 @@ class SoftmaxRegressorImpl
       throw OutdatedJsonSchemaException();
     }
 
-    return softmaxRegressorInjector
+    return softmaxRegressorModule
         .get<SoftmaxRegressorFactory>()
         .create(
       trainData: data,

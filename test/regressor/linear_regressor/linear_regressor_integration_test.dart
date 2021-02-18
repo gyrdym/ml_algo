@@ -78,7 +78,7 @@ void main() {
         await file.delete();
       }
 
-      injector.clearAll();
+      await module.reset();
     });
 
     test('should persist hyperparameters', () {

@@ -23,13 +23,13 @@ void main() {
     group('DecisionTreeTrainer', () {
       setUp(initDecisionTreeModule);
 
-      tearDown(() {
-        injector.clearAll();
-        decisionTreeInjector.clearAll();
+      tearDown(() async {
+        await module.reset();
+        await decisionTreeModule.reset();
       });
 
       test('should build a decision tree', () {
-        final trainer = decisionTreeInjector
+        final trainer = decisionTreeModule
             .get<TreeTrainerFactory>()
             .createByType(
           TreeTrainerType.decision,

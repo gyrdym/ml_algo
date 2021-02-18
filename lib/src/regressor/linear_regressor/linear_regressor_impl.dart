@@ -194,7 +194,7 @@ class LinearRegressorImpl
       throw OutdatedJsonSchemaException();
     }
 
-    return linearRegressorInjector
+    return linearRegressorModule
         .get<LinearRegressorFactory>()
         .create(
       fittingData: data,
