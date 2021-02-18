@@ -1,5 +1,8 @@
 # Changelog
 
+## 15.6.7
+- `README`: important notes on data handling added
+
 ## 15.6.6
 - `LogisticRegressor`, `SoftmaxRegressor`: redundant link function implementations removed
 
