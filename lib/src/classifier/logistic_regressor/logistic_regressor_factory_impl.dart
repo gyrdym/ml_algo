@@ -24,16 +24,16 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
 
   @override
   LogisticRegressor create({
-    DataFrame trainData,
-    String targetName,
+    required DataFrame trainData,
+    required String targetName,
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     double probabilityThreshold = 0.5,
     double lambda = 0.0,
-    RegularizationType regularizationType,
-    int randomSeed,
+    RegularizationType? regularizationType,
+    int? randomSeed,
     int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
@@ -41,7 +41,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
-    Vector initialCoefficients,
+    Vector? initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
     bool collectLearningData = false,
@@ -50,8 +50,8 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     validateTrainData(trainData, [targetName]);
     validateClassLabels(positiveLabel, negativeLabel);
 
-    if (initialCoefficients.isNotEmpty) {
-      validateInitialCoefficients(initialCoefficients, fitIntercept,
+    if (initialCoefficients?.isNotEmpty == true) {
+      validateInitialCoefficients(initialCoefficients!, fitIntercept,
           trainData.toMatrix(dtype).columnsNum - 1);
     }
 
@@ -68,7 +68,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       randomSeed: randomSeed,
       batchSize: batchSize,
       learningRateType: learningRateType,
-      initialWeightsType: initialCoefficientsType,
+      initialCoefficientsType: initialCoefficientsType,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
       isFittingDataNormalized: isFittingDataNormalized,
@@ -77,8 +77,8 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       dtype: dtype,
     );
     final coefficientsByClasses = optimizer.findExtrema(
-      initialCoefficients: initialCoefficients.isNotEmpty
-          ? Matrix.fromColumns([initialCoefficients], dtype: dtype)
+      initialCoefficients: initialCoefficients?.isNotEmpty == true
+          ? Matrix.fromColumns([initialCoefficients!], dtype: dtype)
           : null,
       isMinimizingObjective: false,
       collectLearningData: collectLearningData,

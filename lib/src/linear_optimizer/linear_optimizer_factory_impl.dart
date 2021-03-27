@@ -20,20 +20,21 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
       Matrix fittingPoints,
       Matrix fittingLabels, {
         DType dtype = DType.float32,
-        CostFunction costFunction,
-        LearningRateType learningRateType,
-        InitialCoefficientsType initialCoefficientsType,
-        double initialLearningRate,
-        double minCoefficientsUpdate,
-        int iterationLimit,
-        double lambda,
-        RegularizationType regularizationType,
-        int batchSize,
-        int randomSeed,
-        bool isFittingDataNormalized,
+        required CostFunction costFunction,
+        LearningRateType learningRateType = LearningRateType.decreasingAdaptive,
+        InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
+        double initialLearningRate = 1e-3,
+        double minCoefficientsUpdate = 1e-12,
+        int iterationLimit = 100,
+        required double lambda,
+        RegularizationType? regularizationType,
+        required int batchSize,
+        int? randomSeed,
+        required bool isFittingDataNormalized,
       }) {
+
     if (regularizationType != null &&
-        !optimizerToRegularization[optimizerType]
+        !optimizerToRegularization[optimizerType]!
             .contains(regularizationType)) {
       throw UnsupportedError('Regularization type $regularizationType is '
           'unsupported by optimizer $optimizerType');

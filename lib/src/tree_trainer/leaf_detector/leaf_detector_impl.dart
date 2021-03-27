@@ -17,16 +17,21 @@ class TreeLeafDetectorImpl implements TreeLeafDetector {
     if (_maxDepth <= treeDepth) {
       return true;
     }
+
     if (featureColumnIdxs.isEmpty) {
       return true;
     }
+
     if (samples.rowsNum <= _minSamplesCount) {
       return true;
     }
+
     final outcomes = samples.getColumn(targetIdx);
+
     if (outcomes.unique().length == 1) {
       return true;
     }
+
     final errorOnNode = _assessor.getError(samples, targetIdx);
 
     return errorOnNode <= _minErrorOnNode;

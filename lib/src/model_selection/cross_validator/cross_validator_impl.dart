@@ -25,7 +25,7 @@ class CrossValidatorImpl implements CrossValidator {
       PredictorFactory predictorFactory,
       MetricType metricType,
       {
-        DataPreprocessFn onDataSplit,
+        DataPreprocessFn? onDataSplit,
       }
   ) {
     final samplesAsMatrix = samples.toMatrix(dtype);
@@ -69,9 +69,14 @@ class CrossValidatorImpl implements CrossValidator {
       Iterable<int> discreteColumns) {
     final samplesAsMatrix = samples.toMatrix(dtype);
     final testRowsIndicesAsSet = Set<int>.from(testRowsIndices);
-    final trainSamples =
-      List<Vector>(samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length);
-    final testSamples = List<Vector>(testRowsIndicesAsSet.length);
+    final trainSamples = List<Vector>.filled(
+      samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length,
+      Vector.empty(dtype: dtype),
+    );
+    final testSamples = List<Vector>.filled(
+      testRowsIndicesAsSet.length,
+      Vector.empty(dtype: dtype),
+    );
 
     var trainSamplesCounter = 0;
     var testSamplesCounter = 0;

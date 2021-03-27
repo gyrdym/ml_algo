@@ -18,15 +18,15 @@ import 'package:xrange/xrange.dart';
 class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
     DType dtype = DType.float32,
-    CostFunction costFunction,
-    LearningRateType learningRateType = LearningRateType.decreasingAdaptive,
-    InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
+    required CostFunction costFunction,
+    required LearningRateType learningRateType,
+    required InitialCoefficientsType initialCoefficientsType,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     int iterationLimit = 100,
-    double lambda,
-    int batchSize,
-    int randomSeed,
+    double? lambda,
+    required int batchSize,
+    int? randomSeed,
   })  :
         _points = points,
         _labels = labels,
@@ -54,6 +54,7 @@ class GradientOptimizer implements LinearOptimizer {
       throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '
           'value');
     }
+
     _learningRateGenerator.init(initialLearningRate ?? 1.0);
   }
 
@@ -74,7 +75,7 @@ class GradientOptimizer implements LinearOptimizer {
 
   @override
   Matrix findExtrema({
-    Matrix initialCoefficients,
+    Matrix? initialCoefficients,
     bool isMinimizingObjective = true,
     bool collectLearningData = false,
   }) {

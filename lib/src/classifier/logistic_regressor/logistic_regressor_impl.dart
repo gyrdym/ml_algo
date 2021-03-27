@@ -133,14 +133,14 @@ class LogisticRegressorImpl
     name: logisticRegressorRegularizationTypeJsonKey,
     includeIfNull: false,
   )
-  final RegularizationType regularizationType;
+  final RegularizationType? regularizationType;
 
   @override
   @JsonKey(
     name: logisticRegressorRandomSeedJsonKey,
     includeIfNull: false,
   )
-  final int randomSeed;
+  final int? randomSeed;
 
   @override
   @JsonKey(name: logisticRegressorBatchSizeJsonKey)
@@ -166,7 +166,7 @@ class LogisticRegressorImpl
     name: logisticRegressorInitCoefficientsJsonKey,
     includeIfNull: false,
   )
-  final Vector initialCoefficients;
+  final Vector? initialCoefficients;
 
   /// N x 1 matrix, where N - number of features. It has only one column since
   /// in case of Logistic Regression only one class is used
@@ -215,7 +215,7 @@ class LogisticRegressorImpl
     name: logisticRegressorCostPerIterationJsonKey,
     includeIfNull: false,
   )
-  final List<num> costPerIteration;
+  final List<num>? costPerIteration;
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
@@ -255,13 +255,13 @@ class LogisticRegressorImpl
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
       minCoefficientsUpdate: minCoefficientsUpdate,
-      probabilityThreshold: probabilityThreshold?.toDouble(),
+      probabilityThreshold: probabilityThreshold.toDouble(),
       lambda: lambda,
       regularizationType: regularizationType,
       randomSeed: randomSeed,
       batchSize: batchSize,
       fitIntercept: fitIntercept,
-      interceptScale: interceptScale?.toDouble(),
+      interceptScale: interceptScale.toDouble(),
       isFittingDataNormalized: isFittingDataNormalized,
       learningRateType: learningRateType,
       initialCoefficientsType: initialCoefficientsType,

@@ -9,27 +9,28 @@ import 'package:ml_linalg/vector.dart';
 
 abstract class LogisticRegressorFactory {
   LogisticRegressor create({
-    DataFrame trainData,
-    String targetName,
+    required DataFrame trainData,
+    required String targetName,
     LinearOptimizerType optimizerType,
     int iterationsLimit,
     double initialLearningRate,
     double minCoefficientsUpdate,
     double probabilityThreshold,
     double lambda,
-    RegularizationType regularizationType,
-    int randomSeed,
+    RegularizationType? regularizationType,
+    int? randomSeed,
     int batchSize,
     bool fitIntercept,
     double interceptScale,
     bool isFittingDataNormalized,
     LearningRateType learningRateType,
     InitialCoefficientsType initialCoefficientsType,
-    Vector initialCoefficients,
-    num positiveLabel,
-    num negativeLabel,
+    Vector? initialCoefficients,
+    required num positiveLabel,
+    required num negativeLabel,
     bool collectLearningData,
     DType dtype,
   });
+
   LogisticRegressor fromJson(String json);
 }

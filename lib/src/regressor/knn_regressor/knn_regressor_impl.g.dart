@@ -18,8 +18,7 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
               .fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
           json, 'K', (v) => const KernelJsonConverter().fromJson(v as String)),
-      $checkedConvert(
-          json, 'D', (v) => const DTypeJsonConverter().fromJson(v as String)),
+      $checkedConvert(json, 'D', (v) => _$enumDecode(_$DTypeEnumMap, v)),
       schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
@@ -34,9 +33,40 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$KnnRegressorImplToJson(KnnRegressorImpl instance) =>
     <String, dynamic>{
-      'D': const DTypeJsonConverter().toJson(instance.dtype),
+      'D': _$DTypeEnumMap[instance.dtype],
       'T': instance.targetName,
       'S': const KnnSolverJsonConverter().toJson(instance.solver),
       'K': const KernelJsonConverter().toJson(instance.kernel),
       r'$V': instance.schemaVersion,
     };
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+const _$DTypeEnumMap = {
+  DType.float32: 'float32',
+  DType.float64: 'float64',
+};

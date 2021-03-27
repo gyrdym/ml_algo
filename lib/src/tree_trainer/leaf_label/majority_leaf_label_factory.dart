@@ -34,11 +34,18 @@ class MajorityTreeLeafLabelFactory implements TreeLeafLabelFactory {
     quiver_iterables.max<MapEntry<T, double>>(
       distribution.entries, (first, second) {
         final diff = first.value - second.value;
-        if (diff < 0) return -1;
-        if (diff > 0) return 1;
+
+        if (diff < 0) {
+          return -1;
+        }
+
+        if (diff > 0) {
+          return 1;
+        }
+
         return 0;
       },
-    );
+    )!;
 }
 
 class _LabelData<T> {

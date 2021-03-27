@@ -8,7 +8,7 @@ part 'leaf_label.g.dart';
 class TreeLeafLabel {
   TreeLeafLabel(this.value, {this.probability}) {
     if (probability != null) {
-      validateProbabilityValue(probability);
+      validateProbabilityValue(probability!);
     }
   }
 
@@ -20,5 +20,5 @@ class TreeLeafLabel {
   final num value;
 
   @JsonKey(name: probabilityJsonKey)
-  final num probability;
+  final num? probability;
 }

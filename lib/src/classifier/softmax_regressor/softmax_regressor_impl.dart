@@ -124,14 +124,14 @@ class SoftmaxRegressorImpl
     name: softmaxRegressorRegularizationTypeJsonKey,
     includeIfNull: false,
   )
-  final RegularizationType regularizationType;
+  final RegularizationType? regularizationType;
 
   @override
   @JsonKey(
     name: softmaxRegressorRandomSeedJsonKey,
     includeIfNull: false,
   )
-  final int randomSeed;
+  final int? randomSeed;
 
   @override
   @JsonKey(name: softmaxRegressorBatchSizeJsonKey)
@@ -157,7 +157,7 @@ class SoftmaxRegressorImpl
     name: softmaxRegressorInitialCoefsJsonKey,
     includeIfNull: false,
   )
-  final Matrix initialCoefficients;
+  final Matrix? initialCoefficients;
 
   @override
   @JsonKey(name: softmaxRegressorClassNamesJsonKey)
@@ -200,7 +200,7 @@ class SoftmaxRegressorImpl
     name: softmaxRegressorCostPerIterationJsonKey,
     includeIfNull: false,
   )
-  final List<num> costPerIteration;
+  final List<num>? costPerIteration;
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
@@ -251,7 +251,7 @@ class SoftmaxRegressorImpl
       randomSeed: randomSeed,
       batchSize: batchSize,
       fitIntercept: fitIntercept,
-      interceptScale: interceptScale?.toDouble(),
+      interceptScale: interceptScale.toDouble(),
       learningRateType: learningRateType,
       isFittingDataNormalized: isFittingDataNormalized,
       initialCoefficientsType: initialCoefficientsType,
@@ -259,6 +259,7 @@ class SoftmaxRegressorImpl
       positiveLabel: positiveLabel,
       negativeLabel: negativeLabel,
       dtype: dtype,
+      collectLearningData: false,
     );
   }
 }

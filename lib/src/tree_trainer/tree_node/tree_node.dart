@@ -36,37 +36,39 @@ class TreeNode {
     toJson: treeNodesToJson,
     fromJson: fromTreeNodesJson,
   )
-  final List<TreeNode> children;
+  final List<TreeNode>? children;
 
   @JsonKey(
     name: labelJsonKey,
     toJson: leafLabelToJson,
     fromJson: fromLeafLabelJson,
   )
-  final TreeLeafLabel label;
+  final TreeLeafLabel? label;
 
   @JsonKey(
     name: predicateTypeJsonKey,
     toJson: splittingPredicateTypeToJson,
     fromJson: fromSplittingPredicateTypeJson,
   )
-  final TreeNodeSplittingPredicateType predicateType;
+  final TreeNodeSplittingPredicateType? predicateType;
 
   @JsonKey(name: splittingValueJsonKey)
-  final num splittingValue;
+  final num? splittingValue;
 
   @JsonKey(name: splittingIndexJsonKey)
-  final int splittingIndex;
+  final int? splittingIndex;
 
   @JsonKey(name: levelJsonKey)
   final int level;
 
-  bool get isLeaf => children == null || children.isEmpty;
+  bool get isLeaf => children == null || children!.isEmpty;
 
-  bool isSamplePassed(Vector sample) =>
-      getTreeNodeSplittingPredicateByType(predicateType)(
+  bool isSamplePassed(Vector sample) => predicateType != null
+          && splittingIndex != null
+          && splittingValue != null
+          && getTreeNodeSplittingPredicateByType(predicateType!)(
         sample,
-        splittingIndex,
-        splittingValue,
+        splittingIndex!,
+        splittingValue!,
       );
 }

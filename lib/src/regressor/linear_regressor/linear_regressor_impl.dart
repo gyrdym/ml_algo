@@ -41,23 +41,23 @@ class LinearRegressorImpl
         LinearRegressor {
 
   LinearRegressorImpl(this.coefficients, this.targetName, {
-    this.optimizerType,
-    this.iterationsLimit,
-    this.learningRateType,
-    this.initialCoefficientsType,
-    this.initialLearningRate,
-    this.minCoefficientsUpdate,
-    this.lambda,
-    this.regularizationType,
-    this.randomSeed,
-    this.batchSize,
-    this.initialCoefficients,
-    this.isFittingDataNormalized,
+    required this.optimizerType,
+    required this.iterationsLimit,
+    required this.learningRateType,
+    required this.initialCoefficientsType,
+    required this.initialLearningRate,
+    required this.minCoefficientsUpdate,
+    required this.lambda,
+    required this.batchSize,
+    required this.isFittingDataNormalized,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    this.costPerIteration,
     this.dtype = DType.float32,
     this.schemaVersion = linearRegressorJsonSchemaVersion,
+    this.regularizationType,
+    this.randomSeed,
+    this.initialCoefficients,
+    this.costPerIteration,
   }) :
     fitIntercept = fitIntercept,
     interceptScale = interceptScale;
@@ -113,14 +113,14 @@ class LinearRegressorImpl
     name: linearRegressorRegularizationTypeJsonKey,
     includeIfNull: false,
   )
-  final RegularizationType regularizationType;
+  final RegularizationType? regularizationType;
 
   @override
   @JsonKey(
     name: linearRegressorRandomSeedJsonKey,
     includeIfNull: false,
   )
-  final int randomSeed;
+  final int? randomSeed;
 
   @override
   @JsonKey(name: linearRegressorBatchSizeJsonKey)
@@ -131,7 +131,7 @@ class LinearRegressorImpl
     name: linearRegressorInitialCoefficientsJsonKey,
     includeIfNull: false,
   )
-  final Matrix initialCoefficients;
+  final Matrix? initialCoefficients;
 
   @override
   @JsonKey(name: linearRegressorFittingDataNormalizedFlagJsonKey)
@@ -158,7 +158,7 @@ class LinearRegressorImpl
     name: linearRegressorCostPerIterationJsonKey,
     includeIfNull: false,
   )
-  final List<num> costPerIteration;
+  final List<num>? costPerIteration;
 
   @override
   @JsonKey(name: linearRegressorDTypeJsonKey)
@@ -203,9 +203,9 @@ class LinearRegressorImpl
       iterationsLimit: iterationsLimit,
       learningRateType: learningRateType,
       initialCoefficientsType: initialCoefficientsType,
-      initialLearningRate: initialLearningRate?.toDouble(),
-      minCoefficientsUpdate: minCoefficientsUpdate?.toDouble(),
-      lambda: lambda?.toDouble(),
+      initialLearningRate: initialLearningRate.toDouble(),
+      minCoefficientsUpdate: minCoefficientsUpdate.toDouble(),
+      lambda: lambda.toDouble(),
       regularizationType: regularizationType,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,

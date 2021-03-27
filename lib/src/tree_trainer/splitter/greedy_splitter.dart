@@ -17,7 +17,7 @@ class GreedyTreeSplitter implements TreeSplitter {
 
   @override
   Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      int targetId, [List<num> uniqueValues]) =>
+      int targetId, [List<num>? uniqueValues]) =>
       uniqueValues != null
           ? _createByNominalValues(samples, splittingIdx, uniqueValues)
           : _createByNumericalValue(samples, splittingIdx, targetId);
@@ -59,6 +59,7 @@ class GreedyTreeSplitter implements TreeSplitter {
     final sorted = errors.keys.toList(growable: false)
       ..sort();
     final minError = sorted.first;
-    return errors[minError].first;
+
+    return errors[minError]!.first;
   }
 }

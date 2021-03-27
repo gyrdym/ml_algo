@@ -11,8 +11,8 @@ const featuresNum = 20;
 class KnnRegressorBenchmark extends BenchmarkBase {
   KnnRegressorBenchmark() : super('Knn regression benchmark');
 
-  DataFrame testFeatures;
-  KnnRegressor regressor;
+  late DataFrame testFeatures;
+  late KnnRegressor regressor;
 
 
   static void main() {

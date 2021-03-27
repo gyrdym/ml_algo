@@ -34,46 +34,40 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     ]);
     final val = SoftmaxRegressorImpl(
       $checkedConvert(
-          json,
-          'OT',
-          (v) =>
-              const LinearOptimizerTypeJsonConverter().fromJson(v as String)),
+          json, 'OT', (v) => _$enumDecode(_$LinearOptimizerTypeEnumMap, v)),
       $checkedConvert(json, 'IL', (v) => v as int),
-      $checkedConvert(json, 'ILR', (v) => (v as num)?.toDouble()),
-      $checkedConvert(json, 'MCU', (v) => (v as num)?.toDouble()),
-      $checkedConvert(json, 'L', (v) => (v as num)?.toDouble()),
-      $checkedConvert(json, 'RT',
-          (v) => const RegularizationTypeJsonConverter().fromJson(v as String)),
-      $checkedConvert(json, 'RS', (v) => v as int),
-      $checkedConvert(json, 'BS', (v) => v as int),
-      $checkedConvert(json, 'FDN', (v) => v as bool),
-      $checkedConvert(json, 'LR',
-          (v) => const LearningRateTypeJsonConverter().fromJson(v as String)),
+      $checkedConvert(json, 'ILR', (v) => (v as num).toDouble()),
+      $checkedConvert(json, 'MCU', (v) => (v as num).toDouble()),
+      $checkedConvert(json, 'L', (v) => (v as num).toDouble()),
       $checkedConvert(
           json,
-          'ICT',
-          (v) => const InitialCoefficientsTypeJsonConverter()
-              .fromJson(v as String)),
+          'RT',
+          (v) =>
+              const RegularizationTypeJsonConverter().fromJson(v as String?)),
+      $checkedConvert(json, 'RS', (v) => v as int?),
+      $checkedConvert(json, 'BS', (v) => v as int),
+      $checkedConvert(json, 'FDN', (v) => v as bool),
+      $checkedConvert(
+          json, 'LR', (v) => _$enumDecode(_$LearningRateTypeEnumMap, v)),
+      $checkedConvert(json, 'ICT',
+          (v) => _$enumDecode(_$InitialCoefficientsTypeEnumMap, v)),
       $checkedConvert(
           json,
           'IC',
           (v) =>
               const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
-          json,
-          'CBC',
-          (v) =>
-              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
-      $checkedConvert(json, 'CN', (v) => (v as List)?.map((e) => e as String)),
+          json, 'CBC', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
+      $checkedConvert(
+          json, 'CN', (v) => (v as List<dynamic>).map((e) => e as String)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
       $checkedConvert(json, 'FI', (v) => v as bool),
       $checkedConvert(json, 'IS', (v) => v as num),
       $checkedConvert(json, 'PL', (v) => v as num),
       $checkedConvert(json, 'NL', (v) => v as num),
-      $checkedConvert(
-          json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
-      $checkedConvert(
-          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
+      $checkedConvert(json, 'CPI',
+          (v) => (v as List<dynamic>?)?.map((e) => e as num).toList()),
+      $checkedConvert(json, 'DT', (v) => _$enumDecode(_$DTypeEnumMap, v)),
       schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
@@ -106,8 +100,11 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$SoftmaxRegressorImplToJson(
     SoftmaxRegressorImpl instance) {
   final val = <String, dynamic>{
-    'OT':
-        const LinearOptimizerTypeJsonConverter().toJson(instance.optimizerType),
+    'OT': _$LinearOptimizerTypeEnumMap[instance.optimizerType],
+    'IL': instance.iterationsLimit,
+    'ILR': instance.initialLearningRate,
+    'MCU': instance.minCoefficientsUpdate,
+    'L': instance.lambda,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -116,10 +113,6 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
     }
   }
 
-  writeNotNull('IL', instance.iterationsLimit);
-  val['ILR'] = instance.initialLearningRate;
-  writeNotNull('MCU', instance.minCoefficientsUpdate);
-  writeNotNull('L', instance.lambda);
   writeNotNull(
       'RT',
       const RegularizationTypeJsonConverter()
@@ -127,20 +120,16 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
   writeNotNull('RS', instance.randomSeed);
   val['BS'] = instance.batchSize;
   val['FDN'] = instance.isFittingDataNormalized;
-  val['LR'] =
-      const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
-  writeNotNull(
-      'ICT',
-      const InitialCoefficientsTypeJsonConverter()
-          .toJson(instance.initialCoefficientsType));
+  val['LR'] = _$LearningRateTypeEnumMap[instance.learningRateType];
+  val['ICT'] =
+      _$InitialCoefficientsTypeEnumMap[instance.initialCoefficientsType];
   writeNotNull(
       'IC', const MatrixJsonConverter().toJson(instance.initialCoefficients));
-  val['CN'] = instance.targetNames?.toList();
+  val['CN'] = instance.targetNames.toList();
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;
-  val['CBC'] =
-      const MatrixJsonConverter().toJson(instance.coefficientsByClasses);
-  val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
+  val['CBC'] = instance.coefficientsByClasses;
+  val['DT'] = _$DTypeEnumMap[instance.dtype];
   val['LF'] = linkFunctionToJson(instance.linkFunction);
   val['PL'] = instance.positiveLabel;
   val['NL'] = instance.negativeLabel;
@@ -148,3 +137,48 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
   val[r'$V'] = instance.schemaVersion;
   return val;
 }
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+const _$LinearOptimizerTypeEnumMap = {
+  LinearOptimizerType.gradient: 'gradient',
+  LinearOptimizerType.coordinate: 'coordinate',
+};
+
+const _$LearningRateTypeEnumMap = {
+  LearningRateType.decreasingAdaptive: 'decreasingAdaptive',
+  LearningRateType.constant: 'constant',
+};
+
+const _$InitialCoefficientsTypeEnumMap = {
+  InitialCoefficientsType.zeroes: 'zeroes',
+};
+
+const _$DTypeEnumMap = {
+  DType.float32: 'float32',
+  DType.float64: 'float64',
+};

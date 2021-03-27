@@ -78,11 +78,11 @@ class DecisionTreeClassifierImpl
 
   @override
   @JsonKey(includeIfNull: false)
-  final num positiveLabel = null;
+  late final num positiveLabel;
 
   @override
   @JsonKey(includeIfNull: false)
-  final num negativeLabel = null;
+  late final num negativeLabel;
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
@@ -119,7 +119,7 @@ class DecisionTreeClassifierImpl
         .rows;
     final probabilities = sampleVectors
         .map((sample) => _getLabelForSample(sample, treeRootNode))
-        .map((label) => label.probability)
+        .map((label) => label.probability!)
         .toList(growable: false);
     final probabilitiesVector = Vector.fromList(
       probabilities,
@@ -137,10 +137,10 @@ class DecisionTreeClassifierImpl
 
   TreeLeafLabel _getLabelForSample(Vector sample, TreeNode node) {
     if (node.isLeaf) {
-      return node.label;
+      return node.label!;
     }
 
-    for (final childNode in node.children) {
+    for (final childNode in node.children!) {
       if (childNode.isSamplePassed(sample)) {
         return _getLabelForSample(sample, childNode);
       }
@@ -159,11 +159,11 @@ class DecisionTreeClassifierImpl
         .get<DecisionTreeClassifierFactory>()
         .create(
       data,
+      targetColumnName,
+      dtype,
       minError,
       minSamplesCount,
       maxDepth,
-      targetColumnName,
-      dtype,
     );
   }
 }

@@ -15,20 +15,24 @@ class GreedyTreeSplitSelector implements TreeSplitSelector {
       Matrix samples,
       int targetId,
       Iterable<int> featuresColumnIdxs,
-      [Map<int, List<num>> columnIdToUniqueValues]) {
+      [Map<int, List<num>>? columnIdToUniqueValues]) {
     final errors = <double, List<Map<TreeNode, Matrix>>>{};
+
     featuresColumnIdxs.forEach((colIdx) {
       final uniqueValues = columnIdToUniqueValues != null
           ? columnIdToUniqueValues[colIdx]
           : null;
       final split = _splitter.split(samples, colIdx, targetId, uniqueValues);
       final error = _assessor.getAggregatedError(split.values, targetId);
+
       errors.update(error, (splits) => splits..add(split),
           ifAbsent: () => [split]);
     });
+
     final sorted = errors.keys.toList(growable: false)
       ..sort();
     final minError = sorted.first;
-    return errors[minError].first;
+
+    return errors[minError]!.first;
   }
 }

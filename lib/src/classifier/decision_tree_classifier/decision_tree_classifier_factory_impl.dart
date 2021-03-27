@@ -26,11 +26,11 @@ class DecisionTreeClassifierFactoryImpl implements
   @override
   DecisionTreeClassifier create(
       DataFrame trainData,
+      String targetName,
+      DType dtype,
       num minError,
       int minSamplesCount,
       int maxDepth,
-      String targetName,
-      DType dtype,
   ) {
     validateTrainData(trainData, [targetName]);
     validateTreeSolverMinError(minError);

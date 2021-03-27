@@ -17,8 +17,8 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
 
   @override
   LinearRegressor create({
-    DataFrame fittingData,
-    String targetName,
+    required DataFrame fittingData,
+    required String targetName,
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     LearningRateType learningRateType = LearningRateType.constant,
@@ -26,13 +26,13 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
         InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
-    double lambda,
-    RegularizationType regularizationType,
+    required double lambda,
+    RegularizationType? regularizationType,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    int randomSeed,
+    int? randomSeed,
     int batchSize = 1,
-    Matrix initialCoefficients,
+    Matrix? initialCoefficients,
     bool isFittingDataNormalized = false,
     bool collectLearningData = false,
     DType dtype = DType.float32,

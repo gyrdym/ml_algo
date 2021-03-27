@@ -3,12 +3,12 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
 
 class InitialCoefficientsTypeJsonConverter implements
-    JsonConverter<InitialCoefficientsType, String> {
+    JsonConverter<InitialCoefficientsType?, String?> {
 
   const InitialCoefficientsTypeJsonConverter();
 
   @override
-  InitialCoefficientsType fromJson(String json) {
+  InitialCoefficientsType? fromJson(String? json) {
     switch (json) {
       case zeroesInitialCoefficientsTypeJsonEncodedValue:
         return InitialCoefficientsType.zeroes;
@@ -19,7 +19,7 @@ class InitialCoefficientsTypeJsonConverter implements
   }
 
   @override
-  String toJson(InitialCoefficientsType type) {
+  String? toJson(InitialCoefficientsType? type) {
     switch (type) {
       case InitialCoefficientsType.zeroes:
         return zeroesInitialCoefficientsTypeJsonEncodedValue;

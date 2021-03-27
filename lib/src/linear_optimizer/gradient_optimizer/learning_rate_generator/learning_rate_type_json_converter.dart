@@ -3,12 +3,12 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_ge
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_encoded_values.dart';
 
 class LearningRateTypeJsonConverter implements
-    JsonConverter<LearningRateType, String> {
+    JsonConverter<LearningRateType?, String?> {
 
   const LearningRateTypeJsonConverter();
 
   @override
-  LearningRateType fromJson(String json) {
+  LearningRateType? fromJson(String? json) {
     switch (json) {
       case decreasingAdaptiveLearningRateTypeJsonEncodedValue:
         return LearningRateType.decreasingAdaptive;
@@ -22,7 +22,7 @@ class LearningRateTypeJsonConverter implements
   }
 
   @override
-  String toJson(LearningRateType type) {
+  String? toJson(LearningRateType? type) {
     switch (type) {
       case LearningRateType.decreasingAdaptive:
         return decreasingAdaptiveLearningRateTypeJsonEncodedValue;

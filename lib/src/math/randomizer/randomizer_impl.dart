@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 
 class RandomizerImpl implements Randomizer {
-  RandomizerImpl({Random generator, int seed})
+  RandomizerImpl({Random? generator, int? seed})
       : _generator = generator ?? Random(seed);
 
   final Random _generator;

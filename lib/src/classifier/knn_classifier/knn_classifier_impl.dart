@@ -78,10 +78,10 @@ class KnnClassifierImpl
   final String classLabelPrefix;
 
   @override
-  final num positiveLabel = null;
+  late final num positiveLabel;
 
   @override
-  final num negativeLabel = null;
+  late final num negativeLabel;
 
   @override
   int get k => solver.k;
