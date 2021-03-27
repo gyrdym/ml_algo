@@ -55,7 +55,7 @@ class GradientOptimizer implements LinearOptimizer {
           'value');
     }
 
-    _learningRateGenerator.init(initialLearningRate ?? 1.0);
+    _learningRateGenerator.init(initialLearningRate);
   }
 
   final Matrix _points;
