@@ -11,13 +11,13 @@ void main() {
       final encodedData = await file.readAsString();
       final classifier = DecisionTreeClassifier.fromJson(encodedData);
 
-      expect(classifier.dtype, DType.float32);
+      expect(classifier.dtype, DType.float64);
       expect(classifier.targetNames, ['Species']);
-      expect(classifier.positiveLabel, isNull);
-      expect(classifier.negativeLabel, isNull);
-      expect(classifier.minSamplesCount, isNull);
-      expect(classifier.maxDepth, isNull);
-      expect(classifier.minError, isNull);
+      expect(classifier.positiveLabel, isNaN);
+      expect(classifier.negativeLabel, isNaN);
+      expect(classifier.minSamplesCount, 5);
+      expect(classifier.maxDepth, 4);
+      expect(classifier.minError, 0.3);
     });
   });
 }

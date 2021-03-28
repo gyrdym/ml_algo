@@ -20,6 +20,8 @@ import 'package:ml_linalg/vector.dart';
 
 part 'decision_tree_classifier_impl.g.dart';
 
+const classLabelsWarningMessage = 'There is no use in positive and negative class labels for decision tree classifier';
+
 @JsonSerializable()
 @DTypeJsonConverter()
 class DecisionTreeClassifierImpl
@@ -77,12 +79,18 @@ class DecisionTreeClassifierImpl
   final TreeNode treeRootNode;
 
   @override
-  @JsonKey(includeIfNull: false)
-  late final num positiveLabel;
+  num get positiveLabel {
+    print(classLabelsWarningMessage);
+
+    return double.nan;
+  }
 
   @override
-  @JsonKey(includeIfNull: false)
-  late final num negativeLabel;
+  num get negativeLabel {
+    print(classLabelsWarningMessage);
+
+    return double.nan;
+  }
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)

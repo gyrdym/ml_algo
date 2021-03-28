@@ -67,7 +67,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'NL', (v) => v as num),
       $checkedConvert(json, 'CPI',
           (v) => (v as List<dynamic>?)?.map((e) => e as num).toList()),
-      $checkedConvert(json, 'DT', (v) => _$enumDecode(_$DTypeEnumMap, v)),
+      $checkedConvert(
+          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
       schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
@@ -129,7 +130,7 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;
   val['CBC'] = instance.coefficientsByClasses;
-  val['DT'] = _$DTypeEnumMap[instance.dtype];
+  val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
   val['LF'] = linkFunctionToJson(instance.linkFunction);
   val['PL'] = instance.positiveLabel;
   val['NL'] = instance.negativeLabel;
@@ -176,9 +177,4 @@ const _$LearningRateTypeEnumMap = {
 
 const _$InitialCoefficientsTypeEnumMap = {
   InitialCoefficientsType.zeroes: 'zeroes',
-};
-
-const _$DTypeEnumMap = {
-  DType.float32: 'float32',
-  DType.float64: 'float64',
 };

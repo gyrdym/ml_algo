@@ -9,17 +9,7 @@ part of 'decision_tree_classifier_impl.dart';
 DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
     Map<String, dynamic> json) {
   return $checkedNew('DecisionTreeClassifierImpl', json, () {
-    $checkKeys(json, allowedKeys: const [
-      'E',
-      'S',
-      'D',
-      'DT',
-      'T',
-      'R',
-      'positiveLabel',
-      'negativeLabel',
-      r'$V'
-    ]);
+    $checkKeys(json, allowedKeys: const ['E', 'S', 'D', 'DT', 'T', 'R', r'$V']);
     final val = DecisionTreeClassifierImpl(
       $checkedConvert(json, 'E', (v) => v as num),
       $checkedConvert(json, 'S', (v) => v as int),
@@ -27,11 +17,10 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
       $checkedConvert(
           json, 'R', (v) => fromTreeNodeJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'T', (v) => v as String),
-      $checkedConvert(json, 'DT', (v) => _$enumDecode(_$DTypeEnumMap, v)),
+      $checkedConvert(
+          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
       schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
-    $checkedConvert(json, 'positiveLabel', (v) => val.positiveLabel = v as num);
-    $checkedConvert(json, 'negativeLabel', (v) => val.negativeLabel = v as num);
     return val;
   }, fieldKeyMap: const {
     'minError': 'E',
@@ -50,41 +39,8 @@ Map<String, dynamic> _$DecisionTreeClassifierImplToJson(
       'E': instance.minError,
       'S': instance.minSamplesCount,
       'D': instance.maxDepth,
-      'DT': _$DTypeEnumMap[instance.dtype],
+      'DT': const DTypeJsonConverter().toJson(instance.dtype),
       'T': instance.targetColumnName,
       'R': treeNodeToJson(instance.treeRootNode),
-      'positiveLabel': instance.positiveLabel,
-      'negativeLabel': instance.negativeLabel,
       r'$V': instance.schemaVersion,
     };
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
-
-const _$DTypeEnumMap = {
-  DType.float32: 'float32',
-  DType.float64: 'float64',
-};

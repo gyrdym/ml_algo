@@ -47,8 +47,8 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       isFittingDataNormalized: $checkedConvert(json, 'FDN', (v) => v as bool),
       fitIntercept: $checkedConvert(json, 'FI', (v) => v as bool),
       interceptScale: $checkedConvert(json, 'IS', (v) => (v as num).toDouble()),
-      dtype:
-          $checkedConvert(json, 'DT', (v) => _$enumDecode(_$DTypeEnumMap, v)),
+      dtype: $checkedConvert(
+          json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
       schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
       regularizationType: $checkedConvert(json, 'RT',
           (v) => _$enumDecodeNullable(_$RegularizationTypeEnumMap, v)),
@@ -113,7 +113,7 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
   val['IS'] = instance.interceptScale;
   val['CS'] = instance.coefficients;
   writeNotNull('CPI', instance.costPerIteration);
-  val['DT'] = _$DTypeEnumMap[instance.dtype];
+  val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
   val[r'$V'] = instance.schemaVersion;
   return val;
 }
@@ -156,11 +156,6 @@ const _$LearningRateTypeEnumMap = {
 
 const _$InitialCoefficientsTypeEnumMap = {
   InitialCoefficientsType.zeroes: 'zeroes',
-};
-
-const _$DTypeEnumMap = {
-  DType.float32: 'float32',
-  DType.float64: 'float64',
 };
 
 K? _$enumDecodeNullable<K, V>(
