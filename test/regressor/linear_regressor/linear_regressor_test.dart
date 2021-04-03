@@ -51,7 +51,7 @@ void main() {
     final regressorMock = LinearRegressorMock();
     final factoryMock = createLinearRegressorFactoryMock(regressorMock);
 
-    LinearRegressor regressor;
+    late LinearRegressor regressor;
 
     setUp(() {
       linearRegressorInjector

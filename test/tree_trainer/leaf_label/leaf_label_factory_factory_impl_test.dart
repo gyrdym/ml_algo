@@ -21,9 +21,5 @@ void main() {
 
       expect(leafLabelFactory, isA<MajorityTreeLeafLabelFactory>());
     });
-
-    test('should throw an error if null passed as a factory type', () {
-      expect(() => factory.createByType(null), throwsUnsupportedError);
-    });
   });
 }

@@ -45,7 +45,7 @@ void main() {
     test('should not throw error if the iteration limit is null', () {
       final minUpdate = 0.5;
       final update = 0.3;
-      final detector = ConvergenceDetectorImpl(minUpdate, null);
+      final detector = ConvergenceDetectorImpl(minUpdate, 1e100 as int);
       expect(detector.isConverged(update, 10), isTrue);
     });
   });

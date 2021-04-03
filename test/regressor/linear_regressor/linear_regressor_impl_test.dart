@@ -19,7 +19,7 @@ import '../../mocks.dart';
 
 void main() {
   group('LinearRegressorImpl', () {
-    LinearRegressorFactory regressorFactory;
+    late LinearRegressorFactory regressorFactory;
 
     final coefficients = Vector.fromList([1, 2, 3, 4, 5]);
     final targetName = 'Target';
@@ -110,14 +110,6 @@ void main() {
 
       expect(retrainedModel, same(retrainedModelMock));
       expect(retrainedModel, isNot(same(regressor)));
-    });
-
-    test('should throw exception if the model schema is outdated, '
-        'schemaVersion is null', () {
-      final model = createRegressor(schemaVersion: null);
-
-      expect(() => model.retrain(retrainingData),
-          throwsA(isA<OutdatedJsonSchemaException>()));
     });
   });
 }

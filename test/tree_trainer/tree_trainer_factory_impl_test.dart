@@ -12,6 +12,7 @@ import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -19,16 +20,13 @@ import '../mocks.dart';
 
 void main() {
   group('TreeTrainerFactoryImpl', () {
-    TreeLeafDetector leafDetectorMock;
-    TreeLeafDetectorFactory leafDetectorFactoryMock;
-
-    TreeLeafLabelFactory leafLabelFactoryMock;
-    TreeLeafLabelFactoryFactory leafLabelFactoryFactoryMock;
-
-    TreeSplitSelector splitSelectorMock;
-    TreeSplitSelectorFactory splitSelectorFactoryMock;
-
-    TreeTrainerFactory factory;
+    late TreeLeafDetector leafDetectorMock;
+    late TreeLeafDetectorFactory leafDetectorFactoryMock;
+    late TreeLeafLabelFactory leafLabelFactoryMock;
+    late TreeLeafLabelFactoryFactory leafLabelFactoryFactoryMock;
+    late TreeSplitSelector splitSelectorMock;
+    late TreeSplitSelectorFactory splitSelectorFactoryMock;
+    late TreeTrainerFactory factory;
 
     final type = TreeTrainerType.decision;
     final targetName = 'target';
@@ -52,7 +50,14 @@ void main() {
       leafDetectorFactoryMock = createTreeLeafDetectorFactoryMock(
           leafDetectorMock);
 
-      when(leafDetectorMock.isLeaf(any, any, any, any)).thenReturn(true);
+      when(
+        leafDetectorMock.isLeaf(
+          any as Matrix,
+          any as int,
+          any as Iterable<int>,
+          any as int,
+        ),
+      ).thenReturn(true);
 
       leafLabelFactoryMock = TreeLeafLabelFactoryMock();
       leafLabelFactoryFactoryMock = createTreeLeafLabelFactoryFactoryMock(

@@ -27,8 +27,8 @@ void main() {
 
     final targetName = 'fifth';
 
-    KnnClassifier knnClassifierMock;
-    KnnClassifierFactory knnClassifierFactoryMock;
+    late KnnClassifier knnClassifierMock;
+    late KnnClassifierFactory knnClassifierFactoryMock;
 
     setUp(() {
       knnClassifierMock = KnnClassifierMock();

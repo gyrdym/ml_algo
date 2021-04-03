@@ -78,10 +78,10 @@ class KnnClassifierImpl
   final String classLabelPrefix;
 
   @override
-  late final num positiveLabel;
+  num get positiveLabel => double.nan;
 
   @override
-  late final num negativeLabel;
+  num get negativeLabel  => double.nan;
 
   @override
   int get k => solver.k;
@@ -96,7 +96,7 @@ class KnnClassifierImpl
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final schemaVersion;
 
-  final _outdatedSchemaVersions = [null];
+  final List<num?> _outdatedSchemaVersions = [null];
 
   @override
   DataFrame predict(DataFrame features) {

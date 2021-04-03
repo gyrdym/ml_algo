@@ -7,13 +7,13 @@ void main() {
   group('LearningRateTypeJsonConverter', () {
     test('should decode ${LearningRateType.decreasingAdaptive} value', () {
       expect(const LearningRateTypeJsonConverter()
-          .fromJson(decreasingAdaptiveLearningRateTypeJsonEncodedValue),
+          .fromJson(learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]!),
           LearningRateType.decreasingAdaptive);
     });
 
     test('should decode ${LearningRateType.constant} value', () {
       expect(const LearningRateTypeJsonConverter()
-          .fromJson(constantLearningRateTypeJsonEncodedValue),
+          .fromJson(learningRateTypeToEncodedValue[LearningRateType.constant]!),
           LearningRateType.constant);
     });
 
@@ -25,17 +25,13 @@ void main() {
     test('should encode ${LearningRateType.decreasingAdaptive} value', () {
       expect(const LearningRateTypeJsonConverter()
           .toJson(LearningRateType.decreasingAdaptive),
-          decreasingAdaptiveLearningRateTypeJsonEncodedValue);
+          learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]!);
     });
 
     test('should encode ${LearningRateType.constant} value', () {
       expect(const LearningRateTypeJsonConverter()
           .toJson(LearningRateType.constant),
-          constantLearningRateTypeJsonEncodedValue);
-    });
-
-    test('should return null for unknown learning rate type', () {
-      expect(const LearningRateTypeJsonConverter().toJson(null), null);
+          learningRateTypeToEncodedValue[LearningRateType.constant]!);
     });
   });
 }

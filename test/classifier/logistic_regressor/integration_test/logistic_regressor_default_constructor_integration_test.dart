@@ -12,8 +12,8 @@ import '../../../helpers.dart';
 void main() {
   group('LogisticRegressor', () {
     final createClassifier = ({
-      DataFrame samples,
-      String targetName,
+      required DataFrame samples,
+      required String targetName,
       int iterationsLimit = 1,
       LearningRateType learningRateType = LearningRateType.constant,
       double initialLearningRate = 1.0,
@@ -21,7 +21,7 @@ void main() {
       bool fitIntercept = true,
       double interceptScale = 2.0,
       bool collectLearningData = false,
-      DType dtype,
+      required DType dtype,
     }) => LogisticRegressor(
       samples,
       targetName,

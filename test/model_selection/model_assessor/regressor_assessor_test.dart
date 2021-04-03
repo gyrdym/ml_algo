@@ -5,6 +5,7 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/regressor_assessor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -57,18 +58,18 @@ void main() {
       ).thenReturn(DType.float64);
       when(
           featureTargetSplitterMock.split(
-            argThat(anything),
-            targetNames: anyNamed('targetNames'),
+            argThat(anything) as DataFrame,
+            targetNames: anyNamed('targetNames') as Iterable<String>,
           )
       ).thenReturn([featuresMock, targetMock]);
       when(
         predictorMock.predict(
-          argThat(anything),
+          argThat(anything) as DataFrame,
         ),
       ).thenReturn(predictionMock);
       when(
         metricFactoryMock.createByType(
-          argThat(anything),
+          argThat(anything) as MetricType,
         ),
       ).thenReturn(metricMock);
     });
@@ -106,7 +107,10 @@ void main() {
       final score = generator.nextDouble();
 
       when(
-        metricMock.getScore(argThat(anything), argThat(anything)),
+        metricMock.getScore(
+          argThat(anything) as Matrix,
+          argThat(anything) as Matrix,
+        ),
       ).thenReturn(score);
 
       final actual = assessor.assess(predictorMock, metricType, samples);

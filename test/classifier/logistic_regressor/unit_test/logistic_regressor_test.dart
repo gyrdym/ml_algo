@@ -36,11 +36,11 @@ void main() {
     final targetColumnName = 'col_4';
     final errors = <num>[];
 
-    LinkFunction linkFunctionMock;
-    CostFunction costFunctionMock;
-    CostFunctionFactory costFunctionFactoryMock;
-    LinearOptimizer optimizerMock;
-    LinearOptimizerFactory optimizerFactoryMock;
+    late LinkFunction linkFunctionMock;
+    late CostFunction costFunctionMock;
+    late CostFunctionFactory costFunctionFactoryMock;
+    late LinearOptimizer optimizerMock;
+    late LinearOptimizerFactory optimizerFactoryMock;
 
     setUp(() {
       injector.clearAll();
@@ -63,7 +63,7 @@ void main() {
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
       )).thenReturn(learnedCoefficients);
 
       when(optimizerMock.costPerIteration).thenReturn(errors);
@@ -207,11 +207,11 @@ void main() {
         argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 3.1, 5.2, 6.0, 77.4],
-        ])),
+        ])) as Matrix,
         argThat(equals([
           [1.0],
           [0.0],
-        ])),
+        ])) as Matrix,
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.decreasingAdaptive,

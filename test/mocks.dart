@@ -11,6 +11,7 @@ import 'package:ml_algo/src/common/distribution_calculator/distribution_calculat
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
+import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
@@ -19,8 +20,10 @@ import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_de
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -54,6 +57,7 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:mockito/mockito.dart';
@@ -208,7 +212,9 @@ class LogisticRegressorFactoryMock extends Mock
 LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
   final factory = LearningRateGeneratorFactoryMock();
-  when(factory.fromType(any)).thenReturn(generator);
+
+  when(factory.fromType(any as LearningRateType)).thenReturn(generator);
+
   return factory;
 }
 
@@ -221,7 +227,14 @@ RandomizerFactory createRandomizerFactoryMock(Randomizer randomizer) {
 InitialCoefficientsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
     InitialCoefficientsGenerator generator) {
   final factory = InitialWeightsGeneratorFactoryMock();
-  when(factory.fromType(any, any)).thenReturn(generator);
+
+  when(
+    factory.fromType(
+      any as InitialCoefficientsType,
+      any as DType,
+    ),
+  ).thenReturn(generator);
+
   return factory;
 }
 
@@ -229,10 +242,12 @@ CostFunctionFactory createCostFunctionFactoryMock(
     CostFunction costFunctionMock) {
   final costFunctionFactory = CostFunctionFactoryMock();
 
-  when(costFunctionFactory.createByType(argThat(isNotNull),
+  when(
+    costFunctionFactory.createByType(
+      argThat(isNotNull) as CostFunctionType,
       linkFunction: anyNamed('linkFunction'),
       positiveLabel: anyNamed('positiveLabel'),
-      negativeLabel: anyNamed('negativeLabel')
+      negativeLabel: anyNamed('negativeLabel'),
   )).thenReturn(costFunctionMock);
 
   return costFunctionFactory;
@@ -241,7 +256,14 @@ CostFunctionFactory createCostFunctionFactoryMock(
 ConvergenceDetectorFactory createConvergenceDetectorFactoryMock(
     ConvergenceDetector detector) {
   final convergenceDetectorFactory = ConvergenceDetectorFactoryMock();
-  when(convergenceDetectorFactory.create(any, any)).thenReturn(detector);
+
+  when(
+    convergenceDetectorFactory.create(
+      any as double,
+      any as int,
+    ),
+  ).thenReturn(detector);
+
   return convergenceDetectorFactory;
 }
 

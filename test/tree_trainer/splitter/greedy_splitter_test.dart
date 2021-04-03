@@ -20,35 +20,27 @@ void main() {
         [4.0, 34.0],
         [0.0, 10.0],
       ]);
-
       final targetIdx = 1;
-
       final bestSplittingValue = 4.5;
       final splittingColumnIdx = 0;
-
       final mockedWorstSplit = {
         TreeNodeMock(): Matrix.fromList([[12.0, 22.0]]),
         TreeNodeMock(): Matrix.fromList([[19.0, 31.0]]),
       };
-
       final mockedWorseSplit = {
         TreeNodeMock(): Matrix.fromList([[13.0, 24.0]]),
         TreeNodeMock(): Matrix.fromList([[29.0, 53.0]]),
       };
-
       final mockedGoodSplit = {
         TreeNodeMock(): Matrix.fromList([[1.0, 2.0]]),
         TreeNodeMock(): Matrix.fromList([[9.0, 3.0]]),
       };
-
       final bestNodeLeft = TreeNodeMock();
       final bestNodeRight = TreeNodeMock();
-
       final mockedBestSplit = {
         bestNodeLeft: Matrix.fromList([[100.0, 200.0]]),
         bestNodeRight: Matrix.fromList([[300.0, 400.0]]),
       };
-
       final mockedSplitDataToBeReturned = [
         {
           'splittingValue': -5.0,
@@ -67,7 +59,6 @@ void main() {
           'split': mockedWorstSplit,
         },
       ];
-
       final assessor = TreeSplitAssessorMock();
 
       when(assessor.getAggregatedError(mockedWorstSplit.values,
@@ -87,6 +78,7 @@ void main() {
 
       for (final splitInfo in mockedSplitDataToBeReturned) {
         final splittingValue = splitInfo['splittingValue'] as double;
+
         verify(numericalSplitter.split(inputObservations, splittingColumnIdx,
             splittingValue)).called(1);
       }

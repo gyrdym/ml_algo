@@ -24,8 +24,9 @@ import '../../../mocks.dart';
 
 void main() {
   group('SoftmaxRegressorFactoryImpl', () {
-    final negativeLabel = 10.0;
-    final positiveLabel = 20.0;
+    final defaultNegativeLabel = 10.0;
+    final defaultPositiveLabel = 20.0;
+    final defaultNormalizedFlag = false;
     final features = Matrix.fromList([
       [10.1, 10.2, 12.0, 13.4],
       [13.1, 15.2, 61.0, 27.2],
@@ -35,12 +36,12 @@ void main() {
       [90.1, 20.2, 10.0, 12.1],
     ]);
     final outcomes = Matrix.fromList([
-      [positiveLabel, negativeLabel, negativeLabel],
-      [negativeLabel, negativeLabel, positiveLabel],
-      [negativeLabel, positiveLabel, negativeLabel],
-      [positiveLabel, negativeLabel, negativeLabel],
-      [negativeLabel, negativeLabel, positiveLabel],
-      [positiveLabel, negativeLabel, negativeLabel],
+      [defaultPositiveLabel, defaultNegativeLabel, defaultNegativeLabel],
+      [defaultNegativeLabel, defaultNegativeLabel, defaultPositiveLabel],
+      [defaultNegativeLabel, defaultPositiveLabel, defaultNegativeLabel],
+      [defaultPositiveLabel, defaultNegativeLabel, defaultNegativeLabel],
+      [defaultNegativeLabel, defaultNegativeLabel, defaultPositiveLabel],
+      [defaultPositiveLabel, defaultNegativeLabel, defaultNegativeLabel],
     ]);
     final observations = DataFrame.fromMatrix(
       Matrix.fromColumns([
@@ -49,7 +50,7 @@ void main() {
       ], dtype: DType.float32),
       header: ['a', 'b', 'c', 'd', 'target_1', 'target_2', 'target_3'],
     );
-    final initialCoefficients = Matrix.fromList([
+    final defaultInitialCoefficients = Matrix.fromList([
       [1.0],
       [10.0],
       [20.0],
@@ -65,12 +66,55 @@ void main() {
     ]);
     final costPerIteration = [10, 0, -10, 33.1];
 
-    LinkFunction linkFunctionMock;
-    CostFunction costFunctionMock;
-    CostFunctionFactory costFunctionFactoryMock;
-    LinearOptimizer optimizerMock;
-    LinearOptimizerFactory optimizerFactoryMock;
-    SoftmaxRegressorFactory factory;
+    late LinkFunction linkFunctionMock;
+    late CostFunction costFunctionMock;
+    late CostFunctionFactory costFunctionFactoryMock;
+    late LinearOptimizer optimizerMock;
+    late LinearOptimizerFactory optimizerFactoryMock;
+    late SoftmaxRegressorFactory factory;
+
+    final createRegressor = ({
+      DataFrame? trainData,
+      LinearOptimizerType? optimizerType,
+      LearningRateType? learningRateType,
+      InitialCoefficientsType? initialCoefficientsType,
+      required Iterable<String> targetColumnNames,
+      int iterationsLimit = 100,
+      double initialLearningRate = 0.01,
+      double minCoefficientsUpdate = 0.001,
+      double lambda = 0.1,
+      RegularizationType? regularizationType,
+      bool fitIntercept = false,
+      double interceptScale = 1,
+      Matrix? initialCoefficients,
+      int? randomSeed,
+      double? positiveLabel,
+      double? negativeLabel,
+      bool? isFittingDataNormalized,
+      bool collectLearningData = false,
+      DType dtype = DType.float32,
+    }) => factory.create(
+      trainData: trainData ?? observations,
+      targetNames: targetColumnNames,
+      optimizerType: optimizerType ?? LinearOptimizerType.gradient,
+      learningRateType: learningRateType ?? LearningRateType.constant,
+      initialCoefficientsType: initialCoefficientsType ?? InitialCoefficientsType.zeroes,
+      iterationsLimit: iterationsLimit,
+      initialLearningRate: initialLearningRate,
+      minCoefficientsUpdate: minCoefficientsUpdate,
+      lambda: lambda,
+      regularizationType: regularizationType,
+      fitIntercept: fitIntercept,
+      interceptScale: interceptScale,
+      initialCoefficients: initialCoefficients ?? defaultInitialCoefficients,
+      randomSeed: randomSeed,
+      positiveLabel: positiveLabel ?? defaultPositiveLabel,
+      negativeLabel: negativeLabel ?? defaultNegativeLabel,
+      isFittingDataNormalized: isFittingDataNormalized ?? defaultNormalizedFlag,
+      collectLearningData: collectLearningData,
+      dtype: dtype,
+      batchSize: (trainData ?? observations).rows.length,
+    );
 
     setUp(() {
       linkFunctionMock = LinkFunctionMock();
@@ -87,8 +131,8 @@ void main() {
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective'),
-        collectLearningData: anyNamed('collectLearningData'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
+        collectLearningData: anyNamed('collectLearningData') as bool,
       )).thenReturn(learnedCoefficients);
       when(optimizerMock.costPerIteration).thenReturn(costPerIteration);
 
@@ -103,10 +147,7 @@ void main() {
     test('should throw an exception if some target columns do not exist', () {
       final targetColumnNames = ['target_1', 'some', 'unknown', 'columns'];
 
-      final actual = () => factory.create(
-        trainData: observations,
-        targetNames: targetColumnNames,
-      );
+      final actual = () => createRegressor(targetColumnNames: targetColumnNames);
 
       expect(actual, throwsException);
     });
@@ -119,9 +160,8 @@ void main() {
       final targetColumnNames =
         ['target_1'];
 
-      final actual = () => factory.create(
-        trainData: observations,
-        targetNames: targetColumnNames,
+      final actual = () => createRegressor(
+        targetColumnNames: targetColumnNames,
       );
 
       expect(actual, throwsException);
@@ -129,27 +169,23 @@ void main() {
 
     test('should call cost function factory in order to create '
         'loglikelihood cost function', () {
-      factory.create(
-        trainData: observations,
-        targetNames: ['target_1', 'target_2', 'target_3'],
-        positiveLabel: positiveLabel,
-        negativeLabel: negativeLabel,
-        dtype: DType.float32,
+      createRegressor(
+        targetColumnNames: ['target_1', 'target_2', 'target_3'],
       );
 
       verify(costFunctionFactoryMock.createByType(
         CostFunctionType.logLikelihood,
         linkFunction: linkFunctionMock,
-        positiveLabel: positiveLabel,
-        negativeLabel: negativeLabel,
+        positiveLabel: defaultPositiveLabel,
+        negativeLabel: defaultNegativeLabel,
       )).called(1);
     });
 
     test('should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
-      factory.create(
+      createRegressor(
         trainData: observations,
-        targetNames: ['target_1', 'target_2', 'target_3'],
+        targetColumnNames: ['target_1', 'target_2', 'target_3'],
         optimizerType: LinearOptimizerType.gradient,
         learningRateType: LearningRateType.constant,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
@@ -160,10 +196,10 @@ void main() {
         regularizationType: RegularizationType.L2,
         fitIntercept: true,
         interceptScale: 2.0,
-        initialCoefficients: initialCoefficients,
+        initialCoefficients: defaultInitialCoefficients,
         randomSeed: 123,
-        negativeLabel: negativeLabel,
-        positiveLabel: positiveLabel,
+        negativeLabel: defaultNegativeLabel,
+        positiveLabel: defaultPositiveLabel,
         dtype: DType.float32,
       );
 
@@ -176,7 +212,7 @@ void main() {
           [2.0, 32.1, 35.2, 36.0, 41.5],
           [2.0, 35.1, 95.2, 56.0, 52.6],
           [2.0, 90.1, 20.2, 10.0, 12.1],
-        ], 1e-2)),
+        ], 1e-2)) as Matrix,
         argThat(equals([
           [1.0, 0.0, 0.0],
           [0.0, 0.0, 1.0],
@@ -184,7 +220,7 @@ void main() {
           [1.0, 0.0, 0.0],
           [0.0, 0.0, 1.0],
           [1.0, 0.0, 0.0],
-        ])),
+        ])) as Matrix,
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.constant,
@@ -196,52 +232,53 @@ void main() {
         regularizationType: RegularizationType.L2,
         batchSize: 1,
         randomSeed: 123,
+        isFittingDataNormalized: defaultNormalizedFlag,
       )).called(1);
     });
 
     test('should find the extrema for fitting observations while '
         'instantiating', () {
-      factory.create(
+      createRegressor(
         trainData: observations,
-        targetNames: ['target_1', 'target_2', 'target_3'],
-        initialCoefficients: initialCoefficients,
+        targetColumnNames: ['target_1', 'target_2', 'target_3'],
+        initialCoefficients: defaultInitialCoefficients,
         dtype: DType.float32,
       );
 
       verify(optimizerMock.findExtrema(
-        initialCoefficients: initialCoefficients,
+        initialCoefficients: defaultInitialCoefficients,
         isMinimizingObjective: false,
       )).called(1);
     });
 
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=true', () {
-      factory.create(
+      createRegressor(
         trainData: observations,
-        targetNames: ['target_1', 'target_2', 'target_3'],
+        targetColumnNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: true,
         dtype: DType.float32,
       );
 
       verify(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
         collectLearningData: true,
       )).called(1);
     });
 
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=false', () {
-      factory.create(
+      createRegressor(
         trainData: observations,
-        targetNames: ['target_1', 'target_2', 'target_3'],
+        targetColumnNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: false,
         dtype: DType.float32,
       );
 
       verify(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
         collectLearningData: false,
       )).called(1);
     });

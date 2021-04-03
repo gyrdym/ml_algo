@@ -41,14 +41,6 @@ void main() {
       expect(splitter, isA<GreedyTreeSplitter>());
     });
 
-    test('should throw an error if null passed as a type of tree splitter '
-        'factory', () {
-      final assessorType = TreeSplitAssessorType.majority;
-
-      expect(() => factory.createByType(null, assessorType),
-          throwsUnsupportedError);
-    });
-
     test('should call assessor factory while creating the instance', () {
       final type = TreeSplitterType.greedy;
       final assessorType = TreeSplitAssessorType.majority;

@@ -74,8 +74,12 @@ DistributionCalculator createDistributionCalculator(
     Iterable<num> values, HashMap<double, double> distribution) {
   final distributionCalculator = DistributionCalculatorMock();
 
-  when(distributionCalculator.calculate<double>(argThat(equals(values)), any))
-      .thenReturn(distribution);
+  when(
+      distributionCalculator.calculate<double>(
+        argThat(equals(values)) as Iterable<double>,
+        any as int,
+      )
+  ).thenReturn(distribution);
 
   return distributionCalculator;
 }

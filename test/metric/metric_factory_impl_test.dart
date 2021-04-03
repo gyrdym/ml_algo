@@ -30,9 +30,5 @@ void main() {
     test('should create RecallMetric instance', () {
       expect(factory.createByType(MetricType.recall), isA<RecallMetric>());
     });
-
-    test('should throw an error if null is passed as metric type', () {
-      expect(() => factory.createByType(null), throwsUnsupportedError);
-    });
   });
 }

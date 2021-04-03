@@ -10,3 +10,5 @@ enum LearningRateType {
   /// Learning rate will be constant throughout the whole fitting process
   constant,
 }
+
+const defaultLearningRateType = LearningRateType.decreasingAdaptive;

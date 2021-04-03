@@ -79,22 +79,14 @@ class DecisionTreeClassifierImpl
   final TreeNode treeRootNode;
 
   @override
-  num get positiveLabel {
-    print(classLabelsWarningMessage);
-
-    return double.nan;
-  }
+  num get positiveLabel => double.nan;
 
   @override
-  num get negativeLabel {
-    print(classLabelsWarningMessage);
-
-    return double.nan;
-  }
+  num get negativeLabel => double.nan;
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final schemaVersion;
+  final int? schemaVersion;
 
   final _outdatedSchemaVersions = [null];
 
@@ -127,7 +119,7 @@ class DecisionTreeClassifierImpl
         .rows;
     final probabilities = sampleVectors
         .map((sample) => _getLabelForSample(sample, treeRootNode))
-        .map((label) => label.probability!)
+        .map((label) => label.probability)
         .toList(growable: false);
     final probabilitiesVector = Vector.fromList(
       probabilities,

@@ -23,9 +23,9 @@ void main() {
     final point3 = [70.0, 80.0, 90.0];
     final point4 = [20.0, 30.0, 10.0];
 
-    CoordinateDescentOptimizer optimizer;
-    Matrix data;
-    Matrix labels;
+    late CoordinateDescentOptimizer optimizer;
+    late Matrix data;
+    late Matrix labels;
 
     setUp(() {
       initCommonModule();
@@ -38,12 +38,16 @@ void main() {
         [40.0]
       ]);
       optimizer = CoordinateDescentOptimizer(
-          data, labels,
-          initialWeightsType: InitialCoefficientsType.zeroes,
-          costFunction: const LeastSquareCostFunction(),
-          minCoefficientsUpdate: 1e-5,
-          iterationsLimit: iterationsNumber,
-          lambda: lambda);
+        data,
+        labels,
+        initialWeightsType: InitialCoefficientsType.zeroes,
+        costFunction: const LeastSquareCostFunction(),
+        minCoefficientsUpdate: 1e-5,
+        iterationsLimit: iterationsNumber,
+        lambda: lambda,
+        dtype: DType.float32,
+        isFittingDataNormalized: false,
+      );
     });
 
     tearDownAll(injector.clearAll);
@@ -66,9 +70,9 @@ void main() {
     final point2 = [20.0, 30.0, 40.0];
     final point3 = [70.0, 80.0, 90.0];
 
-    CoordinateDescentOptimizer optimizer;
-    Matrix data;
-    Matrix labels;
+    late CoordinateDescentOptimizer optimizer;
+    late Matrix data;
+    late Matrix labels;
 
     setUp(() {
       initCommonModule();
@@ -87,6 +91,7 @@ void main() {
         iterationsLimit: iterationsNumber,
         initialWeightsType: InitialCoefficientsType.zeroes,
         lambda: lambda,
+        dtype: DType.float32,
       );
     });
 

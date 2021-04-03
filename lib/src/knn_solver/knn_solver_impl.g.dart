@@ -18,7 +18,7 @@ KnnSolverImpl _$KnnSolverImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'D',
           (v) => const DistanceTypeJsonConverter().fromJson(v as String)),
       $checkedConvert(json, 'S', (v) => v as bool),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
     );
     return val;
   }, fieldKeyMap: const {

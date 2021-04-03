@@ -47,8 +47,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'RS', (v) => v as int?),
       $checkedConvert(json, 'BS', (v) => v as int),
       $checkedConvert(json, 'FDN', (v) => v as bool),
-      $checkedConvert(
-          json, 'LR', (v) => _$enumDecode(_$LearningRateTypeEnumMap, v)),
+      $checkedConvert(json, 'LR',
+          (v) => const LearningRateTypeJsonConverter().fromJson(v as String)),
       $checkedConvert(json, 'ICT',
           (v) => _$enumDecode(_$InitialCoefficientsTypeEnumMap, v)),
       $checkedConvert(
@@ -69,7 +69,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
           (v) => (v as List<dynamic>?)?.map((e) => e as num).toList()),
       $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
     );
     return val;
   }, fieldKeyMap: const {
@@ -121,7 +121,8 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
   writeNotNull('RS', instance.randomSeed);
   val['BS'] = instance.batchSize;
   val['FDN'] = instance.isFittingDataNormalized;
-  val['LR'] = _$LearningRateTypeEnumMap[instance.learningRateType];
+  val['LR'] =
+      const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
   val['ICT'] =
       _$InitialCoefficientsTypeEnumMap[instance.initialCoefficientsType];
   writeNotNull(
@@ -168,11 +169,6 @@ K _$enumDecode<K, V>(
 const _$LinearOptimizerTypeEnumMap = {
   LinearOptimizerType.gradient: 'gradient',
   LinearOptimizerType.coordinate: 'coordinate',
-};
-
-const _$LearningRateTypeEnumMap = {
-  LearningRateType.decreasingAdaptive: 'decreasingAdaptive',
-  LearningRateType.constant: 'constant',
 };
 
 const _$InitialCoefficientsTypeEnumMap = {

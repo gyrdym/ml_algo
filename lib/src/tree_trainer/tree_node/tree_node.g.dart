@@ -16,7 +16,7 @@ TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'SI', (v) => v as int?),
       $checkedConvert(json, 'CN', (v) => fromTreeNodesJson(v as List?)),
       $checkedConvert(
-          json, 'LB', (v) => fromLeafLabelJson(v as Map<String, dynamic>?)),
+          json, 'LB', (v) => fromLeafLabelJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'LV', (v) => v as int),
     );
     return val;

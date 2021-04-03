@@ -120,17 +120,24 @@ void main() {
     final retrainedClassifier = DecisionTreeClassifierMock();
     var encoderCallIteration = 0;
 
-    DecisionTreeClassifierImpl classifier32;
-    DecisionTreeClassifierImpl classifier64;
+    late DecisionTreeClassifierImpl classifier32;
+    late DecisionTreeClassifierImpl classifier64;
 
     setUp(() {
-      when(metricFactoryMock.createByType(argThat(isA<MetricType>())))
+      when(metricFactoryMock.createByType(argThat(isA<MetricType>()) as MetricType))
           .thenReturn(metricMock);
-      when(encoderFactoryMock.create(any, any)).thenReturn(encoderMock);
-      when(encoderMock.process(any))
+      when(encoderFactoryMock.create(any as DataFrame, any as Iterable<String>))
+          .thenReturn(encoderMock);
+      when(encoderMock.process(any as DataFrame))
           .thenAnswer((_) => encodedLabelsFrames[encoderCallIteration++]);
-      when(classifierFactoryMock.create(any, any, any, any, any, any))
-          .thenReturn(retrainedClassifier);
+      when(classifierFactoryMock.create(
+          any as DataFrame,
+          any as String,
+          any as DType,
+          any as num,
+          any as int,
+          any as int)
+      ).thenReturn(retrainedClassifier);
 
       injector
         ..registerDependency<ModelAssessor<Classifier>>(
@@ -139,7 +146,7 @@ void main() {
             dependencyName: oneHotEncoderFactoryKey)
         ..registerSingleton<MetricFactory>(() => metricFactoryMock);
       decisionTreeInjector
-        ..registerSingleton<DecisionTreeClassifierFactory>(
+        .registerSingleton<DecisionTreeClassifierFactory>(
                 () => classifierFactoryMock);
 
       classifier32 = DecisionTreeClassifierImpl(
@@ -269,11 +276,11 @@ void main() {
 
       verify(classifierFactoryMock.create(
         retrainingDataFrame,
+        targetColumnName,
+        DType.float32,
         minError,
         minSamplesCount,
         maxDepth,
-        targetColumnName,
-        DType.float32,
       )).called(1);
     });
 

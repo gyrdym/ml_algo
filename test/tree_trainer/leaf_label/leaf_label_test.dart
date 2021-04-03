@@ -70,7 +70,7 @@ void main() {
 
     test('should serialize (probability value is null)', () {
       final labelValue = 1000;
-      final leafLabel = TreeLeafLabel(labelValue);
+      final leafLabel = TreeLeafLabel(labelValue, probability: 0.5);
       final serialized = leafLabel.toJson();
 
       expect(serialized, equals({

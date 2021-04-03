@@ -96,26 +96,26 @@ void main() {
           ],
         ];
 
-        when(kernel.getWeightByDistance(10, any)).thenReturn(30);
-        when(kernel.getWeightByDistance(20, any)).thenReturn(29);
-        when(kernel.getWeightByDistance(30, any)).thenReturn(28);
+        when(kernel.getWeightByDistance(10, any as num)).thenReturn(30);
+        when(kernel.getWeightByDistance(20, any as num)).thenReturn(29);
+        when(kernel.getWeightByDistance(30, any as num)).thenReturn(28);
 
-        when(kernel.getWeightByDistance(100, any)).thenReturn(10);
-        when(kernel.getWeightByDistance(1000, any)).thenReturn(0);
+        when(kernel.getWeightByDistance(100, any as num)).thenReturn(10);
+        when(kernel.getWeightByDistance(1000, any as num)).thenReturn(0);
 
-        when(kernel.getWeightByDistance(-10, any)).thenReturn(0);
-        when(kernel.getWeightByDistance(5, any)).thenReturn(-1);
-        when(kernel.getWeightByDistance(12, any)).thenReturn(-2);
+        when(kernel.getWeightByDistance(-10, any as num)).thenReturn(0);
+        when(kernel.getWeightByDistance(5, any as num)).thenReturn(-1);
+        when(kernel.getWeightByDistance(12, any as num)).thenReturn(-2);
 
-        when(kernel.getWeightByDistance(0, any)).thenReturn(10);
-        when(kernel.getWeightByDistance(13, any)).thenReturn(1);
+        when(kernel.getWeightByDistance(0, any as num)).thenReturn(10);
+        when(kernel.getWeightByDistance(13, any as num)).thenReturn(1);
 
-        when(kernel.getWeightByDistance(2000, any)).thenReturn(4);
-        when(kernel.getWeightByDistance(3000, any)).thenReturn(0);
+        when(kernel.getWeightByDistance(2000, any as num)).thenReturn(4);
+        when(kernel.getWeightByDistance(3000, any as num)).thenReturn(0);
 
-        when(kernel.getWeightByDistance(1, any)).thenReturn(3);
-        when(kernel.getWeightByDistance(2, any)).thenReturn(2);
-        when(kernel.getWeightByDistance(3, any)).thenReturn(1);
+        when(kernel.getWeightByDistance(1, any as num)).thenReturn(3);
+        when(kernel.getWeightByDistance(2, any as num)).thenReturn(2);
+        when(kernel.getWeightByDistance(3, any as num)).thenReturn(1);
 
         when(solver.findKNeighbours(testFeatureMatrix))
             .thenReturn(foundNeighbours);
@@ -135,13 +135,18 @@ void main() {
       });
 
       test('should return a dataframe with a proper header', () {
-        when(solver.findKNeighbours(any)).thenReturn([
+        when(solver.findKNeighbours(any as Matrix)).thenReturn([
           [
             Neighbour(23, Vector.fromList([1]))
           ],
         ]);
 
-        when(kernel.getWeightByDistance(any, any)).thenReturn(1);
+        when(
+          kernel.getWeightByDistance(
+            any as num,
+            any as num,
+          )
+        ).thenReturn(1);
 
         final data = DataFrame.fromMatrix(Matrix.fromList([
           [1, 2, 3],

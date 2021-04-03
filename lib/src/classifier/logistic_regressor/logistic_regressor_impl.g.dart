@@ -49,8 +49,8 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       $checkedConvert(json, 'RS', (v) => v as int?),
       $checkedConvert(json, 'B', (v) => v as int),
       $checkedConvert(json, 'N', (v) => v as bool),
-      $checkedConvert(
-          json, 'LRT', (v) => _$enumDecode(_$LearningRateTypeEnumMap, v)),
+      $checkedConvert(json, 'LRT',
+          (v) => const LearningRateTypeJsonConverter().fromJson(v as String)),
       $checkedConvert(json, 'ICT',
           (v) => _$enumDecode(_$InitialCoefficientsTypeEnumMap, v)),
       $checkedConvert(
@@ -72,7 +72,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
           (v) => (v as List<dynamic>?)?.map((e) => e as num).toList()),
       $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
     );
     return val;
   }, fieldKeyMap: const {
@@ -125,7 +125,8 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
   writeNotNull('RS', instance.randomSeed);
   val['B'] = instance.batchSize;
   val['N'] = instance.isFittingDataNormalized;
-  val['LRT'] = _$LearningRateTypeEnumMap[instance.learningRateType];
+  val['LRT'] =
+      const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
   val['ICT'] =
       _$InitialCoefficientsTypeEnumMap[instance.initialCoefficientsType];
   writeNotNull(
@@ -173,11 +174,6 @@ K _$enumDecode<K, V>(
 const _$LinearOptimizerTypeEnumMap = {
   LinearOptimizerType.gradient: 'gradient',
   LinearOptimizerType.coordinate: 'coordinate',
-};
-
-const _$LearningRateTypeEnumMap = {
-  LearningRateType.decreasingAdaptive: 'decreasingAdaptive',
-  LearningRateType.constant: 'constant',
 };
 
 const _$InitialCoefficientsTypeEnumMap = {

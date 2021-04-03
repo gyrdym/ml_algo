@@ -4,6 +4,7 @@ import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -44,10 +45,15 @@ void main() {
     final dtype = DType.float32;
 
     setUp(() {
-      when(kernelFactoryMock.createByType(any))
+      when(kernelFactoryMock.createByType(any as KernelType))
           .thenReturn(kernelMock);
-      when(solverFactoryMock.create(any, any, any, any, any))
-          .thenReturn(solverMock);
+      when(solverFactoryMock.create(
+          any as Matrix,
+          any as Matrix,
+          any as int,
+          any as Distance,
+          any as bool)
+      ).thenReturn(solverMock);
     });
 
     tearDown(() {
@@ -98,8 +104,8 @@ void main() {
       );
 
       verify(solverFactoryMock.create(
-        argThat(equals(features)),
-        argThat(equals(outcomes)),
+        argThat(equals(features)) as Matrix,
+        argThat(equals(outcomes)) as Matrix,
         k,
         distanceType,
         true,

@@ -46,28 +46,28 @@ void main() {
     final classifierFactory = createLogisticRegressorFactoryMock(
         retrainedModelMock);
     final createRegressor = ({
-      LinearOptimizerType optimizerType,
-      int iterationsLimit,
-      double initialLearningRate,
-      double minCoefficientsUpdate,
-      double lambda,
-      RegularizationType regularizationType,
-      int randomSeed,
-      int batchSize,
-      bool isFittingDataNormalized,
-      LearningRateType learningRateType,
-      InitialCoefficientsType initialCoefficientsType,
-      Vector initialCoefficients,
-      Iterable<String> targetNames,
-      LinkFunction linkFunction,
-      bool fitIntercept,
-      double interceptScale,
-      Matrix coefficients,
-      double probabilityThreshold,
-      num negativeLabel,
-      num positiveLabel,
-      List<num> costPerIteration,
-      DType dtype,
+      LinearOptimizerType? optimizerType,
+      int? iterationsLimit,
+      double? initialLearningRate,
+      double? minCoefficientsUpdate,
+      double? lambda,
+      RegularizationType? regularizationType,
+      int? randomSeed,
+      int? batchSize,
+      bool? isFittingDataNormalized,
+      LearningRateType? learningRateType,
+      InitialCoefficientsType? initialCoefficientsType,
+      Vector? initialCoefficients,
+      Iterable<String>? targetNames,
+      LinkFunction? linkFunction,
+      bool? fitIntercept,
+      double? interceptScale,
+      Matrix? coefficients,
+      double? probabilityThreshold,
+      num? negativeLabel,
+      num? positiveLabel,
+      List<num>? costPerIteration,
+      DType? dtype,
     }) => LogisticRegressorImpl(
       optimizerType ?? defaultOptimizerType,
       iterationsLimit ?? defaultIterationsLimit,
@@ -115,7 +115,7 @@ void main() {
       logisticRegressorInjector
           .registerSingleton<LogisticRegressorFactory>(() => classifierFactory);
 
-      when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
+      when(linkFunctionMock.link(any as Matrix)).thenReturn(mockedProbabilities);
     });
 
     tearDown(() {

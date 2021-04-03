@@ -30,7 +30,7 @@ void main() {
     ]);
 
     setUp(() {
-      when(mockedLinkFn.link(any)).thenReturn(Matrix.column([1, 1, 1]));
+      when(mockedLinkFn.link(any as Matrix)).thenReturn(Matrix.column([1, 1, 1]));
     });
 
     tearDown(resetMockitoState);
@@ -49,14 +49,20 @@ void main() {
 
     test('should return a subgradient vector', () {
       expect(
-        () => logLikelihoodCost.getSubGradient(null, null, null, null),
+        () => logLikelihoodCost.getSubGradient(
+            1,
+            Matrix.empty(),
+            Matrix.empty(),
+            Matrix.empty(),
+        ),
         throwsUnimplementedError,
       );
     });
 
     test('should return log likelihood cost', () {
       reset(mockedLinkFn);
-      when(mockedLinkFn.link(any)).thenReturn(Matrix.column([0.3, 0.7, 0.2]));
+      when(mockedLinkFn.link(any as Matrix))
+          .thenReturn(Matrix.column([0.3, 0.7, 0.2]));
 
       final cost = logLikelihoodCost.getCost(x, w, y);
 
@@ -70,7 +76,7 @@ void main() {
                         [-18],
                       ],
                   ),
-              ),
+              ) as Matrix,
           ),
       );
       expect(cost, closeTo(math.log(0.3) + math.log(0.7) + math.log(0.8), 1e-4));

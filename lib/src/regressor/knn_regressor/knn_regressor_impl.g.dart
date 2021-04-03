@@ -20,7 +20,7 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
           json, 'K', (v) => const KernelJsonConverter().fromJson(v as String)),
       $checkedConvert(
           json, 'D', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
     );
     return val;
   }, fieldKeyMap: const {

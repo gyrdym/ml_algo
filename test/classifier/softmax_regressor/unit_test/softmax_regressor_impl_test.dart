@@ -42,6 +42,7 @@ void main() {
     final classifierFactory = createSoftmaxRegressorFactoryMock(
         retrainedModelMock);
     final dtype = DType.float32;
+    final collectLearningData = false;
 
     final coefficientsByClasses = Matrix.fromList([
       [-1, -3,   -5],
@@ -103,10 +104,10 @@ void main() {
       header: ['1', '2', '3', '4', '5', ...targetNames],
     );
 
-    SoftmaxRegressorImpl regressor;
+    late SoftmaxRegressorImpl regressor;
 
     setUp(() {
-      when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
+      when(linkFunctionMock.link(any as Matrix)).thenReturn(mockedProbabilities);
 
       softmaxRegressorInjector
           .registerSingleton<SoftmaxRegressorFactory>(() => classifierFactory);
@@ -278,7 +279,7 @@ void main() {
         verify(linkFunctionMock.link(
           argThat(iterable2dAlmostEqualTo(
               testFeaturesMatrixWithIntercept * coefficientsByClasses),
-          ),
+          ) as Matrix,
         )).called(1);
       });
 
@@ -291,7 +292,7 @@ void main() {
       test('should predict the first class if outcome is equiprobable', () {
         reset(linkFunctionMock);
 
-        when(linkFunctionMock.link(any)).thenReturn(Matrix.fromList([
+        when(linkFunctionMock.link(any as Matrix)).thenReturn(Matrix.fromList([
           [0.33, 0.33, 0.33],
         ]));
         
@@ -385,6 +386,7 @@ void main() {
           positiveLabel: positiveLabel,
           negativeLabel: negativeLabel,
           dtype: dtype,
+          collectLearningData: collectLearningData,
         )).called(1);
       });
 

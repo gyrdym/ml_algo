@@ -36,8 +36,8 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       optimizerType: $checkedConvert(
           json, 'OT', (v) => _$enumDecode(_$LinearOptimizerTypeEnumMap, v)),
       iterationsLimit: $checkedConvert(json, 'IL', (v) => v as int),
-      learningRateType: $checkedConvert(
-          json, 'LRT', (v) => _$enumDecode(_$LearningRateTypeEnumMap, v)),
+      learningRateType: $checkedConvert(json, 'LRT',
+          (v) => const LearningRateTypeJsonConverter().fromJson(v as String)),
       initialCoefficientsType: $checkedConvert(json, 'ICT',
           (v) => _$enumDecode(_$InitialCoefficientsTypeEnumMap, v)),
       initialLearningRate: $checkedConvert(json, 'ILT', (v) => v as num),
@@ -49,7 +49,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       interceptScale: $checkedConvert(json, 'IS', (v) => (v as num).toDouble()),
       dtype: $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
       regularizationType: $checkedConvert(json, 'RT',
           (v) => _$enumDecodeNullable(_$RegularizationTypeEnumMap, v)),
       randomSeed: $checkedConvert(json, 'RS', (v) => v as int?),
@@ -89,7 +89,8 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
   final val = <String, dynamic>{
     'OT': _$LinearOptimizerTypeEnumMap[instance.optimizerType],
     'IL': instance.iterationsLimit,
-    'LRT': _$LearningRateTypeEnumMap[instance.learningRateType],
+    'LRT':
+        const LearningRateTypeJsonConverter().toJson(instance.learningRateType),
     'ICT': _$InitialCoefficientsTypeEnumMap[instance.initialCoefficientsType],
     'ILT': instance.initialLearningRate,
     'MCU': instance.minCoefficientsUpdate,
@@ -147,11 +148,6 @@ K _$enumDecode<K, V>(
 const _$LinearOptimizerTypeEnumMap = {
   LinearOptimizerType.gradient: 'gradient',
   LinearOptimizerType.coordinate: 'coordinate',
-};
-
-const _$LearningRateTypeEnumMap = {
-  LearningRateType.decreasingAdaptive: 'decreasingAdaptive',
-  LearningRateType.constant: 'constant',
 };
 
 const _$InitialCoefficientsTypeEnumMap = {

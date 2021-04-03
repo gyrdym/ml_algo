@@ -6,10 +6,10 @@ part 'leaf_label.g.dart';
 
 @JsonSerializable(includeIfNull: false)
 class TreeLeafLabel {
-  TreeLeafLabel(this.value, {this.probability}) {
-    if (probability != null) {
-      validateProbabilityValue(probability!);
-    }
+  TreeLeafLabel(this.value, {
+    required this.probability,
+  }) {
+    validateProbabilityValue(probability);
   }
 
   factory TreeLeafLabel.fromJson(Map<String, dynamic> json) =>
@@ -20,5 +20,5 @@ class TreeLeafLabel {
   final num value;
 
   @JsonKey(name: probabilityJsonKey)
-  final num? probability;
+  final num probability;
 }

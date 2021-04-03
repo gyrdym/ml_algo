@@ -81,7 +81,7 @@ void main() {
       final solverMock = KnnSolverMock();
       final kernelMock = KernelMock();
 
-      setUp(() => when(kernelMock.getWeightByDistance(any, any)).thenReturn(1));
+      setUp(() => when(kernelMock.getWeightByDistance(any as num, any as num)).thenReturn(1));
 
       tearDown(() {
         reset(solverMock);
@@ -293,7 +293,8 @@ void main() {
       final solverMock = KnnSolverMock();
       final kernelMock = KernelMock();
 
-      setUp(() => when(kernelMock.getWeightByDistance(any, any)).thenReturn(1));
+      setUp(() => when(kernelMock.getWeightByDistance(any as num, any as num))
+          .thenReturn(1));
 
       tearDown(() {
         reset(solverMock);
@@ -571,8 +572,15 @@ void main() {
         when(solverMock.k).thenReturn(k);
         when(solverMock.distanceType).thenReturn(distanceType);
         when(kernelMock.type).thenReturn(kernelType);
-        when(classifierFactory.create(any, any, any, any, any, any, any))
-            .thenReturn(retrainedModelMock);
+        when(classifierFactory.create(
+            any as DataFrame,
+            any as String,
+            any as int,
+            any as KernelType,
+            any as Distance,
+            any as String,
+            any as DType)
+        ).thenReturn(retrainedModelMock);
 
         knnClassifierInjector
             .registerSingleton<KnnClassifierFactory>(
