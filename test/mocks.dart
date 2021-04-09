@@ -14,6 +14,7 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
@@ -26,6 +27,8 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
@@ -35,6 +38,7 @@ import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
+import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_type.dart';
 import 'package:ml_algo/src/predictor/predictor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
@@ -45,18 +49,23 @@ import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
@@ -272,21 +281,21 @@ LinearOptimizerFactory createLinearOptimizerFactoryMock(
   final factory = LinearOptimizerFactoryMock();
 
   when(factory.createByType(
-    any,
-    any,
-    any,
-    dtype: anyNamed('dtype'),
-    costFunction: anyNamed('costFunction'),
-    learningRateType: anyNamed('learningRateType'),
-    initialCoefficientsType: anyNamed('initialCoefficientsType'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    iterationLimit: anyNamed('iterationLimit'),
-    lambda: anyNamed('lambda'),
-    regularizationType: anyNamed('regularizationType'),
-    batchSize: anyNamed('batchSize'),
-    randomSeed: anyNamed('randomSeed'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized')
+    any as LinearOptimizerType,
+    any as Matrix,
+    any as Matrix,
+    dtype: anyNamed('dtype') as DType,
+    costFunction: anyNamed('costFunction') as CostFunction,
+    learningRateType: anyNamed('learningRateType') as LearningRateType,
+    initialCoefficientsType: anyNamed('initialCoefficientsType') as InitialCoefficientsType,
+    initialLearningRate: anyNamed('initialLearningRate') as double,
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate') as double,
+    iterationLimit: anyNamed('iterationLimit') as int,
+    lambda: anyNamed('lambda') as double,
+    regularizationType: anyNamed('regularizationType') as RegularizationType,
+    batchSize: anyNamed('batchSize') as int,
+    randomSeed: anyNamed('randomSeed') as int,
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized') as bool,
   )).thenReturn(optimizer);
 
   return factory;
@@ -294,133 +303,182 @@ LinearOptimizerFactory createLinearOptimizerFactoryMock(
 
 SplitIndicesProviderFactory createDataSplitterFactoryMock(SplitIndicesProvider dataSplitter) {
   final factory = DataSplitterFactoryMock();
-  when(factory.createByType(any,
-      numberOfFolds: anyNamed('numberOfFolds'),
-      p: anyNamed('p')),
-  ).thenReturn(dataSplitter);
+
+  when(factory.createByType(
+    any as SplitIndicesProviderType,
+    numberOfFolds: anyNamed('numberOfFolds'),
+    p: anyNamed('p'),
+  )).thenReturn(dataSplitter);
+
   return factory;
 }
 
 KernelFactory createKernelFactoryMock(Kernel kernel) {
   final factory = KernelFunctionFactoryMock();
-  when(factory.createByType(any)).thenReturn(kernel);
+
+  when(factory.createByType(
+    any as KernelType,
+  )).thenReturn(kernel);
+
   return factory;
 }
 
 KnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
   final factory = KnnSolverFactoryMock();
-  when(factory.create(any, any, any, any, any)).thenReturn(solver);
+
+  when(factory.create(
+    any as Matrix,
+    any as Matrix,
+    any as int,
+    any as Distance,
+    any as bool,
+  )).thenReturn(solver);
+
   return factory;
 }
 
 KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
   final factory = KnnClassifierFactoryMock();
-  when(factory.create(any, any, any, any, any, any, any))
-      .thenReturn(classifier);
+
+  when(factory.create(
+    any as DataFrame,
+    any as String,
+    any as int,
+    any as KernelType,
+    any as Distance,
+    any as String,
+    any as DType,
+  )).thenReturn(classifier);
+
   return factory;
 }
 
 KnnRegressorFactory createKnnRegressorFactoryMock(KnnRegressor regressor) {
   final factory = KnnRegressorFactoryMock();
-  when(factory.create(any, any, any, any, any, any)).thenReturn(regressor);
+
+  when(factory.create(
+    any as DataFrame,
+    any as String,
+    any as int,
+    any as KernelType,
+    any as Distance,
+    any as DType,
+  )).thenReturn(regressor);
+
   return factory;
 }
 
 LogisticRegressorFactory createLogisticRegressorFactoryMock(
     LogisticRegressor logisticRegressor) {
   final factory = LogisticRegressorFactoryMock();
+
   when(factory.create(
-    trainData: anyNamed('trainData'),
-    targetName: anyNamed('targetName'),
-    optimizerType: anyNamed('optimizerType'),
-    iterationsLimit: anyNamed('iterationsLimit'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    lambda: anyNamed('lambda'),
-    regularizationType: anyNamed('regularizationType'),
-    randomSeed: anyNamed('randomSeed'),
-    batchSize: anyNamed('batchSize'),
-    fitIntercept: anyNamed('fitIntercept'),
-    interceptScale: anyNamed('interceptScale'),
-    learningRateType: anyNamed('learningRateType'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
-    initialCoefficientsType: anyNamed('initialCoefficientsType'),
+    trainData: anyNamed('trainData') as DataFrame,
+    targetName: anyNamed('targetName') as String,
+    optimizerType: anyNamed('optimizerType') as LinearOptimizerType,
+    iterationsLimit: anyNamed('iterationsLimit') as int,
+    initialLearningRate: anyNamed('initialLearningRate') as double,
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate') as double,
+    lambda: anyNamed('lambda') as double,
+    regularizationType: anyNamed('regularizationType') as RegularizationType,
+    randomSeed: anyNamed('randomSeed') as int,
+    batchSize: anyNamed('batchSize') as int,
+    fitIntercept: anyNamed('fitIntercept') as bool,
+    interceptScale: anyNamed('interceptScale') as double,
+    learningRateType: anyNamed('learningRateType') as LearningRateType,
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized') as bool,
+    initialCoefficientsType: anyNamed('initialCoefficientsType') as InitialCoefficientsType,
     initialCoefficients: anyNamed('initialCoefficients'),
-    positiveLabel: anyNamed('positiveLabel'),
-    negativeLabel: anyNamed('negativeLabel'),
-    collectLearningData: anyNamed('collectLearningData'),
-    probabilityThreshold: anyNamed('probabilityThreshold'),
-    dtype: anyNamed('dtype'),
+    positiveLabel: anyNamed('positiveLabel') as num,
+    negativeLabel: anyNamed('negativeLabel') as num,
+    collectLearningData: anyNamed('collectLearningData') as bool,
+    probabilityThreshold: anyNamed('probabilityThreshold') as double,
+    dtype: anyNamed('dtype') as DType,
   ))
       .thenReturn(logisticRegressor);
+
   return factory;
 }
 
 SoftmaxRegressorFactory createSoftmaxRegressorFactoryMock(
     SoftmaxRegressor softmaxRegressor) {
   final factory = SoftmaxRegressorFactoryMock();
+
   when(factory.create(
-    trainData: anyNamed('trainData'),
-    targetNames: anyNamed('targetNames'),
-    optimizerType: anyNamed('optimizerType'),
-    iterationsLimit: anyNamed('iterationsLimit'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    lambda: anyNamed('lambda'),
-    regularizationType: anyNamed('regularizationType'),
-    randomSeed: anyNamed('randomSeed'),
-    batchSize: anyNamed('batchSize'),
-    fitIntercept: anyNamed('fitIntercept'),
-    interceptScale: anyNamed('interceptScale'),
-    learningRateType: anyNamed('learningRateType'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
-    initialCoefficientsType: anyNamed('initialCoefficientsType'),
+    trainData: anyNamed('trainData') as DataFrame,
+    targetNames: anyNamed('targetNames') as Iterable<String>,
+    optimizerType: anyNamed('optimizerType') as LinearOptimizerType,
+    iterationsLimit: anyNamed('iterationsLimit') as int,
+    initialLearningRate: anyNamed('initialLearningRate') as double,
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate') as double,
+    lambda: anyNamed('lambda') as double,
+    regularizationType: anyNamed('regularizationType') as RegularizationType,
+    randomSeed: anyNamed('randomSeed') as int,
+    batchSize: anyNamed('batchSize') as int,
+    fitIntercept: anyNamed('fitIntercept') as bool,
+    interceptScale: anyNamed('interceptScale') as double,
+    learningRateType: anyNamed('learningRateType') as LearningRateType,
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized') as bool,
+    initialCoefficientsType: anyNamed('initialCoefficientsType') as InitialCoefficientsType,
     initialCoefficients: anyNamed('initialCoefficients'),
-    positiveLabel: anyNamed('positiveLabel'),
-    negativeLabel: anyNamed('negativeLabel'),
-    dtype: anyNamed('dtype'),
+    positiveLabel: anyNamed('positiveLabel') as num,
+    negativeLabel: anyNamed('negativeLabel') as num,
+    collectLearningData: anyNamed('collectLearningData') as bool,
+    dtype: anyNamed('dtype') as DType,
   ))
       .thenReturn(softmaxRegressor);
+
   return factory;
 }
 
 LinearRegressorFactory createLinearRegressorFactoryMock(
     LinearRegressor regressor) {
   final factory = LinearRegressorFactoryMock();
+
   when(factory.create(
-    fittingData: anyNamed('fittingData'),
-    targetName: anyNamed('targetName'),
-    optimizerType: anyNamed('optimizerType'),
-    iterationsLimit: anyNamed('iterationsLimit'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    lambda: anyNamed('lambda'),
-    regularizationType: anyNamed('regularizationType'),
+    fittingData: anyNamed('fittingData') as DataFrame,
+    targetName: anyNamed('targetName') as String,
+    optimizerType: anyNamed('optimizerType') as LinearOptimizerType,
+    iterationsLimit: anyNamed('iterationsLimit') as int,
+    initialLearningRate: anyNamed('initialLearningRate') as double,
+    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate') as double,
+    lambda: anyNamed('lambda') as double,
+    regularizationType: anyNamed('regularizationType') as RegularizationType,
     randomSeed: anyNamed('randomSeed'),
-    batchSize: anyNamed('batchSize'),
-    fitIntercept: anyNamed('fitIntercept'),
-    interceptScale: anyNamed('interceptScale'),
-    learningRateType: anyNamed('learningRateType'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
-    initialCoefficientsType: anyNamed('initialCoefficientsType'),
+    batchSize: anyNamed('batchSize') as int,
+    fitIntercept: anyNamed('fitIntercept') as bool,
+    interceptScale: anyNamed('interceptScale') as double,
+    learningRateType: anyNamed('learningRateType') as LearningRateType,
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized') as bool,
+    initialCoefficientsType: anyNamed('initialCoefficientsType') as InitialCoefficientsType,
     initialCoefficients: anyNamed('initialCoefficients'),
-    collectLearningData: anyNamed('collectLearningData'),
-    dtype: anyNamed('dtype'),
+    collectLearningData: anyNamed('collectLearningData') as bool,
+    dtype: anyNamed('dtype') as DType,
   ))
       .thenReturn(regressor);
+
   return factory;
 }
 
 TreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
     TreeSplitAssessor splitAssessor) {
   final factory = TreeSplitAssessorFactoryMock();
-  when(factory.createByType(any)).thenReturn(splitAssessor);
+
+  when(factory.createByType(
+    any as TreeSplitAssessorType,
+  )).thenReturn(splitAssessor);
+
   return factory;
 }
 
 TreeSplitterFactory createTreeSplitterFactoryMock(TreeSplitter splitter) {
   final factory = TreeSplitterFactoryMock();
-  when(factory.createByType(any, any)).thenReturn(splitter);
+
+  when(factory.createByType(
+    any as TreeSplitterType,
+    any as TreeSplitAssessorType,
+  )).thenReturn(splitter);
+
   return factory;
 }
 
@@ -428,7 +486,9 @@ NumericalTreeSplitterFactory createNumericalTreeSplitterFactoryMock(
   NumericalTreeSplitter splitter,
 ) {
   final factory = NumericalTreeSplitterFactoryMock();
+
   when(factory.create()).thenReturn(splitter);
+
   return factory;
 }
 
@@ -436,14 +496,23 @@ NominalTreeSplitterFactory createNominalTreeSplitterFactoryMock(
   NominalTreeSplitter splitter,
 ) {
   final factory = NominalTreeSplitterFactoryMock();
+
   when(factory.create()).thenReturn(splitter);
+
   return factory;
 }
 
 TreeLeafDetectorFactory createTreeLeafDetectorFactoryMock(
     TreeLeafDetector leafDetector) {
   final factory = TreeLeafDetectorFactoryMock();
-  when(factory.create(any, any, any, any)).thenReturn(leafDetector);
+
+  when(factory.create(
+    any as TreeSplitAssessorType,
+    any as num,
+    any as int,
+    any as int,
+  )).thenReturn(leafDetector);
+
   return factory;
 }
 
@@ -451,14 +520,24 @@ TreeLeafLabelFactoryFactory createTreeLeafLabelFactoryFactoryMock(
   TreeLeafLabelFactory leafLabelFactory,
 ) {
   final factory = TreeLeafLabelFactoryFactoryMock();
-  when(factory.createByType(any)).thenReturn(leafLabelFactory);
+
+  when(factory.createByType(
+    any as TreeLeafLabelFactoryType,
+  )).thenReturn(leafLabelFactory);
+
   return factory;
 }
 
 TreeSplitSelectorFactory createTreeSplitSelectorFactoryMock(
     TreeSplitSelector splitSelector) {
   final factory = TreeSplitSelectorFactoryMock();
-  when(factory.createByType(any, any, any)).thenReturn(splitSelector);
+
+  when(factory.createByType(
+    any as TreeSplitSelectorType,
+    any as TreeSplitAssessorType,
+    any as TreeSplitterType,
+  )).thenReturn(splitSelector);
+
   return factory;
 }
 
@@ -466,6 +545,8 @@ DistributionCalculatorFactory createDistributionCalculatorFactoryMock(
   DistributionCalculator calculator,
 ) {
   final factory = DistributionCalculatorFactoryMock();
+
   when(factory.create()).thenReturn(calculator);
+
   return factory;
 }
