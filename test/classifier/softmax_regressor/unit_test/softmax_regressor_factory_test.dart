@@ -21,6 +21,7 @@ import 'package:test/test.dart';
 
 import '../../../helpers.dart';
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('SoftmaxRegressorFactoryImpl', () {
@@ -117,8 +118,8 @@ void main() {
     );
 
     setUp(() {
-      linkFunctionMock = LinkFunctionMock();
-      costFunctionMock = CostFunctionMock();
+      linkFunctionMock = MockLinkFunction();
+      costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);

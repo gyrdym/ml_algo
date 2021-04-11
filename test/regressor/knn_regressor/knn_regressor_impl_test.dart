@@ -14,6 +14,7 @@ import 'package:test/test.dart';
 
 import '../../helpers.dart';
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnRegressorImpl', () {
@@ -21,8 +22,8 @@ void main() {
     final kernelType = KernelType.epanechnikov;
     final distanceType = Distance.manhattan;
     final k = 3209;
-    final solver = KnnSolverMock();
-    final kernel = KernelMock();
+    final solver = MockKnnSolver();
+    final kernel = MockKernel();
     final dtype = DType.float32;
     final retrainedModelMock = KnnRegressorMock();
     final regressorFactory = createKnnRegressorFactoryMock(retrainedModelMock);

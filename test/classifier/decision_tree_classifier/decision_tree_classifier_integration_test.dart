@@ -168,7 +168,7 @@ void main() {
 
     group('saveAsJson', () {
       tearDown(() async {
-        final file = await File(testFileName);
+        final file = File(testFileName);
         if (!await file.exists()) {
           return;
         }
@@ -178,7 +178,7 @@ void main() {
       test('should save to file as json', () async {
         await classifier.saveAsJson(testFileName);
 
-        final file = await File(testFileName);
+        final file = File(testFileName);
         final fileExists = await file.exists();
 
         expect(fileExists, isTrue);

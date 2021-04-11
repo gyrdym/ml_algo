@@ -1,14 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'dart:math' as math;
 
-import '../mocks.dart';
+import '../mocks.mocks.dart';
 
 void main() {
   group('LogLikelihoodCostFunction', () {
-    final mockedLinkFn = LinkFunctionMock();
+    final mockedLinkFn = MockLinkFunction();
     final positiveLabel = 10.0;
     final negativeLabel = -10.0;
     final logLikelihoodCost = LogLikelihoodCostFunction(
@@ -30,7 +31,11 @@ void main() {
     ]);
 
     setUp(() {
-      when(mockedLinkFn.link(any as Matrix)).thenReturn(Matrix.column([1, 1, 1]));
+      when(
+        mockedLinkFn.link(any),
+      ).thenReturn(
+        Matrix.column([1, 1, 1]),
+      );
     });
 
     tearDown(resetMockitoState);
@@ -61,8 +66,11 @@ void main() {
 
     test('should return log likelihood cost', () {
       reset(mockedLinkFn);
-      when(mockedLinkFn.link(any as Matrix))
-          .thenReturn(Matrix.column([0.3, 0.7, 0.2]));
+      when(
+        mockedLinkFn.link(any),
+      ).thenReturn(
+        Matrix.column([0.3, 0.7, 0.2]),
+      );
 
       final cost = logLikelihoodCost.getCost(x, w, y);
 
@@ -76,7 +84,7 @@ void main() {
                         [-18],
                       ],
                   ),
-              ) as Matrix,
+              ),
           ),
       );
       expect(cost, closeTo(math.log(0.3) + math.log(0.7) + math.log(0.8), 1e-4));

@@ -21,6 +21,7 @@ import 'package:test/test.dart';
 
 import '../../../helpers.dart';
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('LogisticRegressor', () {
@@ -46,8 +47,8 @@ void main() {
       injector.clearAll();
       logisticRegressorInjector.clearAll();
 
-      linkFunctionMock = LinkFunctionMock();
-      costFunctionMock = CostFunctionMock();
+      linkFunctionMock = MockLinkFunction();
+      costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
       optimizerMock = LinearOptimizerMock();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);

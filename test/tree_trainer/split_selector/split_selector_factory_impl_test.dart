@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/greedy_split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory_impl.dart';
@@ -7,22 +8,27 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('TreeSplitSelectorFactoryImpl', () {
-    final splitAssessorMock = TreeSplitAssessorMock();
-
-    final splitAssessorFactoryMock =
-      createTreeSplitAssessorFactoryMock(splitAssessorMock);
-
-    final splitterMock = TreeSplitterMock();
-
-    final splitterFactoryMock = createTreeSplitterFactoryMock(splitterMock);
-
-    final factory = TreeSplitSelectorFactoryImpl(
-        splitAssessorFactoryMock, splitterFactoryMock);
+    late TreeSplitAssessor splitAssessorMock;
+    late MockTreeSplitAssessorFactory splitAssessorFactoryMock;
+    late MockTreeSplitter splitterMock;
+    late MockTreeSplitterFactory splitterFactoryMock;
+    late TreeSplitSelectorFactoryImpl factory;
 
     setUp(() {
+      splitAssessorMock = MockTreeSplitAssessor();
+      splitAssessorFactoryMock =
+          createTreeSplitAssessorFactoryMock(splitAssessorMock);
+      splitterMock = MockTreeSplitter();
+      splitterFactoryMock = createTreeSplitterFactoryMock(splitterMock);
+      factory = TreeSplitSelectorFactoryImpl(
+          splitAssessorFactoryMock, splitterFactoryMock);
+    });
+
+    tearDown(() {
       reset(splitAssessorMock);
       reset(splitAssessorFactoryMock);
       reset(splitterMock);

@@ -6,32 +6,44 @@ import 'package:test/test.dart';
 void main() {
   group('LearningRateTypeJsonConverter', () {
     test('should decode ${LearningRateType.decreasingAdaptive} value', () {
-      expect(const LearningRateTypeJsonConverter()
-          .fromJson(learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]!),
-          LearningRateType.decreasingAdaptive);
+      expect(
+        const LearningRateTypeJsonConverter().fromJson(
+          learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]!,
+        ),
+        LearningRateType.decreasingAdaptive,
+      );
     });
 
     test('should decode ${LearningRateType.constant} value', () {
-      expect(const LearningRateTypeJsonConverter()
-          .fromJson(learningRateTypeToEncodedValue[LearningRateType.constant]!),
-          LearningRateType.constant);
+      expect(
+        const LearningRateTypeJsonConverter().fromJson(
+          learningRateTypeToEncodedValue[LearningRateType.constant]!,
+        ),
+        LearningRateType.constant,
+      );
     });
 
-    test('should return null for unknown encoded value', () {
-      expect(const LearningRateTypeJsonConverter()
-          .fromJson('unknown_value'), null);
+    test('should return LearningRateType.decreasingAdaptive for unknown encoded value', () {
+      expect(
+        const LearningRateTypeJsonConverter().fromJson('unknown_value'),
+        LearningRateType.decreasingAdaptive,
+      );
     });
 
     test('should encode ${LearningRateType.decreasingAdaptive} value', () {
-      expect(const LearningRateTypeJsonConverter()
-          .toJson(LearningRateType.decreasingAdaptive),
-          learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]!);
+      expect(
+        const LearningRateTypeJsonConverter().toJson(
+          LearningRateType.decreasingAdaptive,
+        ),
+        learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]!,
+      );
     });
 
     test('should encode ${LearningRateType.constant} value', () {
-      expect(const LearningRateTypeJsonConverter()
-          .toJson(LearningRateType.constant),
-          learningRateTypeToEncodedValue[LearningRateType.constant]!);
+      expect(
+        const LearningRateTypeJsonConverter().toJson(LearningRateType.constant),
+        learningRateTypeToEncodedValue[LearningRateType.constant]!,
+      );
     });
   });
 }

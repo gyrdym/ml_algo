@@ -7,11 +7,12 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
-  final treeSplitAssessorMock = TreeSplitAssessorMock();
-  final numericalTreeSplitterMock = NumericalTreeSplitterMock();
-  final nominalTreeSplitterMock = NominalTreeSplitterMock();
+  final treeSplitAssessorMock = MockTreeSplitAssessor();
+  final numericalTreeSplitterMock = MockNumericalTreeSplitter();
+  final nominalTreeSplitterMock = MockNominalTreeSplitter();
 
   group('TreeSplitAssessorMock', () {
     test('should sort observations (ASC-direction) by given column and '
@@ -63,7 +64,7 @@ void main() {
           'split': mockedWorstSplit,
         },
       ];
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(assessor.getAggregatedError(mockedWorstSplit.values,
           targetIdx)).thenReturn(0.99);
@@ -87,8 +88,13 @@ void main() {
       for (final splitInfo in mockedSplitDataToBeReturned) {
         final splittingValue = splitInfo['splittingValue'] as double;
 
-        verify(numericalSplitter.split(inputObservations, splittingColumnIdx,
-            splittingValue)).called(1);
+        verify(
+          numericalSplitter.split(
+            inputObservations,
+            splittingColumnIdx,
+            splittingValue,
+          ),
+        ).called(1);
       }
 
       expect(actualSplit.keys, equals(mockedBestSplit.keys));
@@ -151,13 +157,12 @@ void main() {
     ]);
     final splittingColumnIdx = 2;
     final splittingValues = <double>[];
-
-    final nominalSplitter = NominalTreeSplitterMock();
+    final nominalSplitter = MockNominalTreeSplitter();
 
     when(nominalSplitter.split(
-      any as Matrix,
-      any as int,
-      any as List<num>,
+      any,
+      any,
+      any,
     )).thenReturn({});
 
     final splitter = GreedyTreeSplitter(
@@ -188,22 +193,28 @@ void main() {
     final splittingColumnIdx = 0;
     final targetColumnIdx = 1;
 
-    final numericalSplitter = NumericalTreeSplitterMock();
-    final assessor = TreeSplitAssessorMock();
+    final numericalSplitter = MockNumericalTreeSplitter();
+    final assessor = MockTreeSplitAssessor();
 
     when(
       numericalSplitter.split(
         samples,
         splittingColumnIdx,
-        any as double,
+        any,
       ),
     ).thenReturn({});
     when(
       assessor.getError(
-        any as Matrix,
+        any,
         targetColumnIdx,
       ),
     ).thenReturn(0.5);
+    when(
+      assessor.getAggregatedError(
+        any,
+        any,
+      ),
+    ).thenReturn(1.0);
 
     final splitter = GreedyTreeSplitter(
       assessor,
@@ -223,7 +234,7 @@ void main() {
       numericalSplitter.split(
         samples,
         splittingColumnIdx,
-        captureThat(isNotNull) as double,
+        captureThat(isNotNull),
       ),
     );
 
@@ -285,15 +296,15 @@ void main() {
 
 NumericalTreeSplitter createNumericalSplitter(
     List<Map<String, dynamic>> mockedData) {
-  final splitter = NumericalTreeSplitterMock();
+  final splitter = MockNumericalTreeSplitter();
 
   for (final splitInfo in mockedData) {
     final splittingValue = splitInfo['splittingValue'] as double;
 
     when(
       splitter.split(
-        any as Matrix,
-        any as int,
+        any,
+        any,
         splittingValue,
       ),
     ).thenAnswer((_) => splitInfo['split'] as Map<TreeNode, Matrix>);
@@ -304,11 +315,11 @@ NumericalTreeSplitter createNumericalSplitter(
 
 NominalTreeSplitter createNominalSplitter(List<double> nominalValues,
     Map<TreeNode, Matrix> split) {
-  final splitter = NominalTreeSplitterMock();
+  final splitter = MockNominalTreeSplitter();
 
   when(splitter.split(
-    any as Matrix,
-    any as int,
+    any,
+    any,
     nominalValues,
   )).thenReturn(split);
 

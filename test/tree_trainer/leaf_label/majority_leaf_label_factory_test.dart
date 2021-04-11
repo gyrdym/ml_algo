@@ -7,6 +7,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('MajorityTreeLeafLabelFactory', () {
@@ -72,12 +73,12 @@ void main() {
 
 DistributionCalculator createDistributionCalculator(
     Iterable<num> values, HashMap<double, double> distribution) {
-  final distributionCalculator = DistributionCalculatorMock();
+  final distributionCalculator = MockDistributionCalculator();
 
   when(
       distributionCalculator.calculate<double>(
-        argThat(equals(values)) as Iterable<double>,
-        any as int,
+        argThat(equals(values)),
+        any,
       )
   ).thenReturn(distribution);
 

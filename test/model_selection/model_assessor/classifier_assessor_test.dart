@@ -10,14 +10,15 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('ClassifierAssessor', () {
     final generator = math.Random();
-    final metricFactoryMock = MetricFactoryMock();
-    final metricMock = MetricMock();
+    final metricFactoryMock = MockMetricFactory();
+    final metricMock = MockMetric();
     final encoderFactoryMock = EncoderFactoryMock();
-    final encoderMock = EncoderMock();
+    final encoderMock = MockEncoder();
     final featureTargetSplitterMock = FeatureTargetSplitterMock();
     final classLabelsNormalizerMock = ClassLabelsNormalizerMock();
     final assessor = ClassifierAssessor(
@@ -27,7 +28,7 @@ void main() {
       classLabelsNormalizerMock.normalize,
     );
     final metricType = MetricType.precision;
-    final classifierMock = ClassifierMock();
+    final classifierMock = MockClassifier();
     final featuresNames = ['feature_1', 'feature_2', 'feature_3'];
     final targetNames = ['target_1', 'target_2', 'target_2'];
     final samplesHeader = [...featuresNames, ...targetNames];
@@ -58,8 +59,8 @@ void main() {
     setUp(() {
       when(
           encoderFactoryMock.create(
-            argThat(anything) as DataFrame,
-            argThat(anything) as Iterable<String>,
+            any,
+            any,
           )
       ).thenReturn(encoderMock);
       when(classifierMock.dtype).thenReturn(dtype);
@@ -71,23 +72,23 @@ void main() {
       ).thenReturn(DType.float64);
       when(
           featureTargetSplitterMock.split(
-            argThat(anything) as DataFrame,
-            targetNames: anyNamed('targetNames') as Iterable<String>,
+            any,
+            targetNames: anyNamed('targetNames'),
           )
       ).thenReturn([featuresMock, targetMock]);
       when(
           classifierMock.predict(
-            argThat(anything) as DataFrame,
+            any,
           ),
       ).thenReturn(predictionMock);
       when(
           encoderMock.process(
-            argThat(anything) as DataFrame,
+            any,
           ),
       ).thenReturn(predictionMock);
       when(
           metricFactoryMock.createByType(
-            argThat(anything) as MetricType,
+            any,
           ),
       ).thenReturn(metricMock);
     });
@@ -166,8 +167,8 @@ void main() {
 
       when(
           metricMock.getScore(
-            argThat(anything) as Matrix,
-            argThat(anything) as Matrix,
+            any,
+            any,
           ),
       ).thenReturn(score);
 

@@ -13,6 +13,7 @@ import 'package:test/test.dart';
 
 import '../../helpers.dart';
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnClassifierImpl', () {
@@ -20,8 +21,8 @@ void main() {
     final targetColumnName = 'target';
     final classLabels = [1, 2, 3];
     final dtype = DType.float32;
-    final solverMock = KnnSolverMock();
-    final kernelMock = KernelMock();
+    final solverMock = MockKnnSolver();
+    final kernelMock = MockKernel();
     final k = 10;
     final distanceType = Distance.hamming;
     final kernelType = KernelType.epanechnikov;
@@ -78,8 +79,8 @@ void main() {
     });
 
     group('predict', () {
-      final solverMock = KnnSolverMock();
-      final kernelMock = KernelMock();
+      final solverMock = MockKnnSolver();
+      final kernelMock = MockKernel();
 
       setUp(() => when(kernelMock.getWeightByDistance(any as num, any as num)).thenReturn(1));
 
@@ -290,8 +291,8 @@ void main() {
     });
 
     group('predictProbability', () {
-      final solverMock = KnnSolverMock();
-      final kernelMock = KernelMock();
+      final solverMock = MockKnnSolver();
+      final kernelMock = MockKernel();
 
       setUp(() => when(kernelMock.getWeightByDistance(any as num, any as num))
           .thenReturn(1));
@@ -557,7 +558,7 @@ void main() {
       final retrainingData = DataFrame([
         [1, 20, 300, 400],
       ]);
-      final classifierFactory = KnnClassifierFactoryMock();
+      final classifierFactory = MockKnnClassifierFactory();
       final retrainedModelMock = KnnClassifierMock();
       final classifier = KnnClassifierImpl(
         targetColumnName,
@@ -572,14 +573,16 @@ void main() {
         when(solverMock.k).thenReturn(k);
         when(solverMock.distanceType).thenReturn(distanceType);
         when(kernelMock.type).thenReturn(kernelType);
-        when(classifierFactory.create(
-            any as DataFrame,
-            any as String,
-            any as int,
-            any as KernelType,
-            any as Distance,
-            any as String,
-            any as DType)
+        when(
+          classifierFactory.create(
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+          )
         ).thenReturn(retrainedModelMock);
 
         knnClassifierInjector

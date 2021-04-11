@@ -5,6 +5,7 @@ import 'package:quiver/iterables.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('TreeLeafDetectorImpl', () {
@@ -15,11 +16,11 @@ void main() {
 
     test('should detect tree leaf if given depth is greater than the maximum '
         'allowed tree depth', () {
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(mockedNodeError);
 
@@ -37,12 +38,12 @@ void main() {
 
     test('should detect tree leaf if given depth is equal to the maximum '
         'allowed tree depth value', () {
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(mockedNodeError);
 
@@ -60,12 +61,12 @@ void main() {
 
     test('should detect tree leaf if given features column ranges collection '
         'is empty', () {
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(mockedNodeError);
 
@@ -83,12 +84,12 @@ void main() {
 
     test('should detect tree leaf if given samples number is equal to minimum '
         'allowed samples number', () {
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(mockedNodeError);
 
@@ -104,12 +105,12 @@ void main() {
 
     test('should detect tree leaf if given samples number is less than the '
         'minimum allowed number', () {
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(mockedNodeError);
 
@@ -130,12 +131,12 @@ void main() {
         [10, 20, 1],
       ]);
 
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(mockedNodeError);
 
@@ -153,12 +154,12 @@ void main() {
         [20, 3, 2],
         [20, 3, 1],
       ]);
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(0.3);
 
@@ -178,12 +179,12 @@ void main() {
         [40, 50, 1],
       ]);
 
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(0.1);
 
@@ -204,12 +205,12 @@ void main() {
         [20, 1],
       ]);
 
-      final assessor = TreeSplitAssessorMock();
+      final assessor = MockTreeSplitAssessor();
 
       when(
         assessor.getError(
-          any as Matrix,
-          any as int,
+          any,
+          any,
         ),
       ).thenReturn(0.5);
 

@@ -5,15 +5,22 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('TreeLeafDetectorFactoryImpl', () {
-    final splitAssessorMock = TreeSplitAssessorMock();
-    final splitAssessorFactoryMock = createTreeSplitAssessorFactoryMock(
-        splitAssessorMock);
-    final factory = TreeLeafDetectorFactoryImpl(splitAssessorFactoryMock);
+    late MockTreeSplitAssessor splitAssessorMock;
+    late MockTreeSplitAssessorFactory splitAssessorFactoryMock;
+    late TreeLeafDetectorFactoryImpl factory;
 
     setUp(() {
+      splitAssessorMock = MockTreeSplitAssessor();
+      splitAssessorFactoryMock = createTreeSplitAssessorFactoryMock(
+          splitAssessorMock);
+      factory = TreeLeafDetectorFactoryImpl(splitAssessorFactoryMock);
+    });
+
+    tearDown(() {
       reset(splitAssessorMock);
       reset(splitAssessorFactoryMock);
     });

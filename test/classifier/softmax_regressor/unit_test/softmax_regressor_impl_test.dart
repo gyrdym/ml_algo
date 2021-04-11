@@ -16,10 +16,11 @@ import 'package:test/test.dart';
 
 import '../../../helpers.dart';
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('SoftmaxRegressorImpl', () {
-    final linkFunctionMock = LinkFunctionMock();
+    final linkFunctionMock = MockLinkFunction();
     final optimizerType = LinearOptimizerType.gradient;
     final iterationsLimit = 3;
     final initialLearningRate = 0.75;
@@ -107,7 +108,9 @@ void main() {
     late SoftmaxRegressorImpl regressor;
 
     setUp(() {
-      when(linkFunctionMock.link(any as Matrix)).thenReturn(mockedProbabilities);
+      when(
+        linkFunctionMock.link(any),
+      ).thenReturn(mockedProbabilities);
 
       softmaxRegressorInjector
           .registerSingleton<SoftmaxRegressorFactory>(() => classifierFactory);
@@ -279,7 +282,7 @@ void main() {
         verify(linkFunctionMock.link(
           argThat(iterable2dAlmostEqualTo(
               testFeaturesMatrixWithIntercept * coefficientsByClasses),
-          ) as Matrix,
+          ),
         )).called(1);
       });
 
@@ -292,9 +295,13 @@ void main() {
       test('should predict the first class if outcome is equiprobable', () {
         reset(linkFunctionMock);
 
-        when(linkFunctionMock.link(any as Matrix)).thenReturn(Matrix.fromList([
-          [0.33, 0.33, 0.33],
-        ]));
+        when(
+          linkFunctionMock.link(any),
+        ).thenReturn(
+          Matrix.fromList([
+            [0.33, 0.33, 0.33],
+          ]),
+        );
         
         final actual = regressor.predict(testFeatures);
         final expectedOutcome = Matrix.fromList([

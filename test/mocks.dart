@@ -11,7 +11,6 @@ import 'package:ml_algo/src/common/distribution_calculator/distribution_calculat
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
-import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/knn_kernel/kernel.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
@@ -69,21 +68,29 @@ import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class MetricFactoryMock extends Mock implements MetricFactory {}
+import './mocks.mocks.dart';
 
-class MetricMock extends Mock implements Metric {}
+class MockEncoder extends Mock implements Encoder {
+  @override
+  DataFrame process(DataFrame? input) =>
+      super.noSuchMethod(
+        Invocation.method(#process, [input]),
+//        returnValue: DataFrame([]),
+      ) as DataFrame;
+}
 
 class EncoderFactoryMock extends Mock {
-  Encoder create(DataFrame data, Iterable<String> targetNames);
+  Encoder create(DataFrame? data, Iterable<String>? targetNames);
 }
 
 class FeatureTargetSplitterMock extends Mock {
-  Iterable<DataFrame> split(DataFrame samples, {
-    Iterable<String> targetNames,
-    Iterable<int> targetIndices,
+  Iterable<DataFrame> split(DataFrame? samples, {
+    Iterable<String>? targetNames,
+    Iterable<int>? targetIndices,
   });
 }
 
@@ -91,29 +98,8 @@ class ClassLabelsNormalizerMock extends Mock {
   Matrix normalize(Matrix classLabels, num positiveLabel, num negativeLabel);
 }
 
-class EncoderMock extends Mock implements Encoder {}
-
-class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
-
-class RandomizerMock extends Mock implements Randomizer {}
-
-class CostFunctionMock extends Mock implements CostFunction {}
-
-class CostFunctionFactoryMock extends Mock implements CostFunctionFactory {}
-
-class LearningRateGeneratorFactoryMock extends Mock
-    implements LearningRateGeneratorFactory {}
-
 class LearningRateGeneratorMock extends Mock implements
     LearningRateGenerator {}
-
-class InitialWeightsGeneratorFactoryMock extends Mock
-    implements InitialCoefficientsGeneratorFactory {}
-
-class InitialWeightsGeneratorMock extends Mock
-    implements InitialCoefficientsGenerator {}
-
-class LinkFunctionMock extends Mock implements LinkFunction {}
 
 class LinearOptimizerFactoryMock extends Mock
     implements LinearOptimizerFactory {}
@@ -123,45 +109,11 @@ class LinearOptimizerMock extends Mock implements LinearOptimizer {}
 class ConvergenceDetectorFactoryMock extends Mock
     implements ConvergenceDetectorFactory {}
 
-class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
-
 class DataSplitterMock extends Mock implements SplitIndicesProvider {}
 
 class DataSplitterFactoryMock extends Mock implements SplitIndicesProviderFactory {}
 
 class AssessableMock extends Mock implements Assessable {}
-
-class TreeSplitAssessorMock extends Mock implements TreeSplitAssessor {}
-
-class TreeSplitAssessorFactoryMock extends Mock implements
-    TreeSplitAssessorFactory {}
-
-class TreeSplitterMock extends Mock implements TreeSplitter {}
-
-class TreeSplitterFactoryMock extends Mock implements TreeSplitterFactory {}
-
-class NumericalTreeSplitterMock extends Mock implements NumericalTreeSplitter {}
-
-class NumericalTreeSplitterFactoryMock extends Mock implements
-    NumericalTreeSplitterFactory {}
-
-class NominalTreeSplitterMock extends Mock implements NominalTreeSplitter {}
-
-class NominalTreeSplitterFactoryMock extends Mock implements
-    NominalTreeSplitterFactory {}
-
-class DistributionCalculatorMock extends Mock implements
-    DistributionCalculator {}
-
-class DistributionCalculatorFactoryMock extends Mock implements
-    DistributionCalculatorFactory {}
-
-class TreeLeafDetectorMock extends Mock implements TreeLeafDetector {}
-
-class TreeLeafDetectorFactoryMock extends Mock implements
-    TreeLeafDetectorFactory {}
-
-class TreeLeafLabelFactoryMock extends Mock implements TreeLeafLabelFactory {}
 
 class TreeLeafLabelFactoryFactoryMock extends Mock implements
     TreeLeafLabelFactoryFactory {}
@@ -175,21 +127,11 @@ class TreeNodeMock extends Mock implements TreeNode {}
 
 class TreeSolverMock extends Mock implements DecisionTreeTrainer {}
 
-class KernelFunctionFactoryMock extends Mock implements KernelFactory {}
-
-class KnnSolverFactoryMock extends Mock implements KnnSolverFactory {}
-
-class KnnClassifierFactoryMock extends Mock implements KnnClassifierFactory {}
-
 class KnnClassifierMock extends Mock implements KnnClassifier {}
 
 class KnnRegressorFactoryMock extends Mock implements KnnRegressorFactory {}
 
 class KnnRegressorMock extends Mock implements KnnRegressor {}
-
-class KnnSolverMock extends Mock implements KnnSolver {}
-
-class KernelMock extends Mock implements Kernel {}
 
 class LogisticRegressorMock extends Mock implements LogisticRegressor {}
 
@@ -198,19 +140,12 @@ class SoftmaxRegressorMock extends Mock implements SoftmaxRegressor {}
 class SoftmaxRegressorFactoryMock extends Mock implements
     SoftmaxRegressorFactory {}
 
-class ClassifierMock extends Mock implements Classifier {}
-
 class PredictorMock extends Mock implements Predictor {}
-
-class ClassifierAssessorMock extends Mock implements ClassifierAssessor {}
 
 class LinearRegressorFactoryMock extends Mock
     implements LinearRegressorFactory {}
 
 class LinearRegressorMock extends Mock implements LinearRegressor {}
-
-class DecisionTreeClassifierFactoryMock extends Mock
-    implements DecisionTreeClassifierFactory {}
 
 class DecisionTreeClassifierMock extends Mock
     implements DecisionTreeClassifier {}
@@ -218,29 +153,35 @@ class DecisionTreeClassifierMock extends Mock
 class LogisticRegressorFactoryMock extends Mock
     implements LogisticRegressorFactory {}
 
-LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
+MockLearningRateGeneratorFactory createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
-  final factory = LearningRateGeneratorFactoryMock();
+  final factory = MockLearningRateGeneratorFactory();
 
-  when(factory.fromType(any as LearningRateType)).thenReturn(generator);
+  when(
+    factory.fromType(any),
+  ).thenReturn(generator);
 
   return factory;
 }
 
 RandomizerFactory createRandomizerFactoryMock(Randomizer randomizer) {
-  final factory = RandomizerFactoryMock();
-  when(factory.create(any)).thenReturn(randomizer);
+  final factory = MockRandomizerFactory();
+
+  when(
+    factory.create(any),
+  ).thenReturn(randomizer);
+
   return factory;
 }
 
 InitialCoefficientsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
     InitialCoefficientsGenerator generator) {
-  final factory = InitialWeightsGeneratorFactoryMock();
+  final factory = MockInitialCoefficientsGeneratorFactory();
 
   when(
     factory.fromType(
-      any as InitialCoefficientsType,
-      any as DType,
+      any,
+      any,
     ),
   ).thenReturn(generator);
 
@@ -249,11 +190,11 @@ InitialCoefficientsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
 
 CostFunctionFactory createCostFunctionFactoryMock(
     CostFunction costFunctionMock) {
-  final costFunctionFactory = CostFunctionFactoryMock();
+  final costFunctionFactory = MockCostFunctionFactory();
 
   when(
     costFunctionFactory.createByType(
-      argThat(isNotNull) as CostFunctionType,
+      argThat(isNotNull),
       linkFunction: anyNamed('linkFunction'),
       positiveLabel: anyNamed('positiveLabel'),
       negativeLabel: anyNamed('negativeLabel'),
@@ -314,7 +255,7 @@ SplitIndicesProviderFactory createDataSplitterFactoryMock(SplitIndicesProvider d
 }
 
 KernelFactory createKernelFactoryMock(Kernel kernel) {
-  final factory = KernelFunctionFactoryMock();
+  final factory = MockKernelFactory();
 
   when(factory.createByType(
     any as KernelType,
@@ -324,31 +265,35 @@ KernelFactory createKernelFactoryMock(Kernel kernel) {
 }
 
 KnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
-  final factory = KnnSolverFactoryMock();
+  final factory = MockKnnSolverFactory();
 
-  when(factory.create(
-    any as Matrix,
-    any as Matrix,
-    any as int,
-    any as Distance,
-    any as bool,
-  )).thenReturn(solver);
+  when(
+    factory.create(
+      any,
+      any,
+      any,
+      any,
+      any,
+    ),
+  ).thenReturn(solver);
 
   return factory;
 }
 
 KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
-  final factory = KnnClassifierFactoryMock();
+  final factory = MockKnnClassifierFactory();
 
-  when(factory.create(
-    any as DataFrame,
-    any as String,
-    any as int,
-    any as KernelType,
-    any as Distance,
-    any as String,
-    any as DType,
-  )).thenReturn(classifier);
+  when(
+    factory.create(
+      any,
+      any,
+      any,
+      any,
+      any,
+      any,
+      any,
+    ),
+  ).thenReturn(classifier);
 
   return factory;
 }
@@ -460,42 +405,44 @@ LinearRegressorFactory createLinearRegressorFactoryMock(
   return factory;
 }
 
-TreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
+MockTreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
     TreeSplitAssessor splitAssessor) {
-  final factory = TreeSplitAssessorFactoryMock();
+  final factory = MockTreeSplitAssessorFactory();
 
-  when(factory.createByType(
-    any as TreeSplitAssessorType,
-  )).thenReturn(splitAssessor);
+  when(
+    factory.createByType(any),
+  ).thenReturn(splitAssessor);
 
   return factory;
 }
 
-TreeSplitterFactory createTreeSplitterFactoryMock(TreeSplitter splitter) {
-  final factory = TreeSplitterFactoryMock();
+MockTreeSplitterFactory createTreeSplitterFactoryMock(TreeSplitter splitter) {
+  final factory = MockTreeSplitterFactory();
 
   when(factory.createByType(
-    any as TreeSplitterType,
-    any as TreeSplitAssessorType,
+    any,
+    any,
   )).thenReturn(splitter);
 
   return factory;
 }
 
+@GenerateMocks([NumericalTreeSplitterFactory])
 NumericalTreeSplitterFactory createNumericalTreeSplitterFactoryMock(
   NumericalTreeSplitter splitter,
 ) {
-  final factory = NumericalTreeSplitterFactoryMock();
+  final factory = MockNumericalTreeSplitterFactory();
 
   when(factory.create()).thenReturn(splitter);
 
   return factory;
 }
 
+@GenerateMocks([NominalTreeSplitterFactory])
 NominalTreeSplitterFactory createNominalTreeSplitterFactoryMock(
   NominalTreeSplitter splitter,
 ) {
-  final factory = NominalTreeSplitterFactoryMock();
+  final factory = MockNominalTreeSplitterFactory();
 
   when(factory.create()).thenReturn(splitter);
 
@@ -504,13 +451,13 @@ NominalTreeSplitterFactory createNominalTreeSplitterFactoryMock(
 
 TreeLeafDetectorFactory createTreeLeafDetectorFactoryMock(
     TreeLeafDetector leafDetector) {
-  final factory = TreeLeafDetectorFactoryMock();
+  final factory = MockTreeLeafDetectorFactory();
 
   when(factory.create(
-    any as TreeSplitAssessorType,
-    any as num,
-    any as int,
-    any as int,
+    any,
+    any,
+    any,
+    any,
   )).thenReturn(leafDetector);
 
   return factory;
@@ -541,12 +488,46 @@ TreeSplitSelectorFactory createTreeSplitSelectorFactoryMock(
   return factory;
 }
 
-DistributionCalculatorFactory createDistributionCalculatorFactoryMock(
+MockDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
   DistributionCalculator calculator,
 ) {
-  final factory = DistributionCalculatorFactoryMock();
+  final factory = MockDistributionCalculatorFactory();
 
   when(factory.create()).thenReturn(calculator);
 
   return factory;
 }
+
+@GenerateMocks([
+  TreeSplitAssessor,
+  TreeSplitAssessorFactory,
+  NumericalTreeSplitter,
+  NominalTreeSplitter,
+  TreeSplitter,
+  TreeSplitterFactory,
+  MetricFactory,
+  Metric,
+  RandomizerFactory,
+  Randomizer,
+  CostFunction,
+  CostFunctionFactory,
+  DecisionTreeClassifierFactory,
+  LinkFunction,
+  InitialCoefficientsGenerator,
+  InitialCoefficientsGeneratorFactory,
+  ConvergenceDetector,
+  DistributionCalculator,
+  DistributionCalculatorFactory,
+  LearningRateGeneratorFactory,
+  TreeLeafDetector,
+  TreeLeafLabelFactory,
+  TreeLeafDetectorFactory,
+  ClassifierAssessor,
+  KnnSolver,
+  KnnSolverFactory,
+  Kernel,
+  KernelFactory,
+  KnnClassifierFactory,
+  Classifier,
+])
+void main() {}

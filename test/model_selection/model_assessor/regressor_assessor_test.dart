@@ -10,12 +10,13 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('RegressorAssessor', () {
     final generator = math.Random();
-    final metricFactoryMock = MetricFactoryMock();
-    final metricMock = MetricMock();
+    final metricFactoryMock = MockMetricFactory();
+    final metricMock = MockMetric();
     final featureTargetSplitterMock = FeatureTargetSplitterMock();
     final assessor = RegressorAssessor(
       metricFactoryMock,

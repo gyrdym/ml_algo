@@ -16,6 +16,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('LogisticRegressorImpl', () {
@@ -31,7 +32,7 @@ void main() {
     final defaultLearningRateType = LearningRateType.decreasingAdaptive;
     final defaultInitialCoefficientsType = InitialCoefficientsType.zeroes;
     final defaultInitialCoefficients = Vector.fromList([1, 2, 3, 4, 5]);
-    final linkFunctionMock = LinkFunctionMock();
+    final linkFunctionMock = MockLinkFunction();
     final className = 'class 1';
     final defaultFitIntercept = true;
     final defaultInterceptScale = 10.0;

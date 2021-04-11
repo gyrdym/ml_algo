@@ -1,27 +1,40 @@
+import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/greedy_splitter.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('TreeSplitterFactoryImpl', () {
-    final assessorMock = TreeSplitAssessorMock();
-    final assessorFactoryMock = createTreeSplitAssessorFactoryMock(assessorMock);
+    final assessorMock = MockTreeSplitAssessor();
+    final nominalSplitterMock = MockNominalTreeSplitter();
+    final numericalSplitterMock = MockNumericalTreeSplitter();
 
-    final nominalSplitterMock = NominalTreeSplitterMock();
-    final nominalSplitterFactoryMock = createNominalTreeSplitterFactoryMock(
-        nominalSplitterMock);
+    late TreeSplitAssessorFactory assessorFactoryMock;
+    late NominalTreeSplitterFactory nominalSplitterFactoryMock;
+    late NumericalTreeSplitterFactory numericalSplitterFactoryMock;
+    late TreeSplitterFactory factory;
 
-    final numericalSplitterMock = NumericalTreeSplitterMock();
-    final numericalSplitterFactoryMock = createNumericalTreeSplitterFactoryMock(
-        numericalSplitterMock);
+    setUp(() {
+      assessorFactoryMock = createTreeSplitAssessorFactoryMock(assessorMock);
 
-    final factory = TreeSplitterFactoryImpl(assessorFactoryMock,
-        nominalSplitterFactoryMock, numericalSplitterFactoryMock);
+      nominalSplitterFactoryMock = createNominalTreeSplitterFactoryMock(
+          nominalSplitterMock);
+
+      numericalSplitterFactoryMock = createNumericalTreeSplitterFactoryMock(
+          numericalSplitterMock);
+
+      factory = TreeSplitterFactoryImpl(assessorFactoryMock,
+          nominalSplitterFactoryMock, numericalSplitterFactoryMock);
+    });
 
     tearDown(() {
       reset(assessorMock);
@@ -35,7 +48,6 @@ void main() {
     test('should create a GreedyTreeSplitter instance', () {
       final type = TreeSplitterType.greedy;
       final assessorType = TreeSplitAssessorType.majority;
-
       final splitter = factory.createByType(type, assessorType);
 
       expect(splitter, isA<GreedyTreeSplitter>());
@@ -47,7 +59,9 @@ void main() {
 
       factory.createByType(type, assessorType);
 
-      verify(assessorFactoryMock.createByType(assessorType)).called(1);
+      verify(
+        assessorFactoryMock.createByType(assessorType),
+      ).called(1);
     });
 
     test('should call nominal splitter factory while creating the '

@@ -17,6 +17,7 @@ import 'package:test/test.dart';
 
 import '../../helpers.dart';
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('LinearRegressorFactoryImpl', () {
@@ -33,15 +34,15 @@ void main() {
       headerExists: false,
     );
     final costPerIteration = [1, 2, 3, 100];
+    final defaultLambda = 1.0;
     final factory = const LinearRegressorFactoryImpl();
-
     late CostFunction costFunctionMock;
     late CostFunctionFactory costFunctionFactoryMock;
     late LinearOptimizer linearOptimizerMock;
     late LinearOptimizerFactory linearOptimizerFactoryMock;
 
     setUp(() {
-      costFunctionMock = CostFunctionMock();
+      costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
       linearOptimizerMock = LinearOptimizerMock();
       linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
@@ -69,6 +70,7 @@ void main() {
         () => factory.create(
           fittingData: observations,
           targetName: targetColumn,
+          lambda: defaultLambda,
         ),
         throwsException,
       );
@@ -79,6 +81,7 @@ void main() {
       factory.create(
         fittingData: observations,
         targetName: 'target',
+        lambda: defaultLambda,
       );
 
       verify(costFunctionFactoryMock.createByType(
@@ -112,11 +115,11 @@ void main() {
         argThat(iterable2dAlmostEqualTo([
           [3.0, 10, 20, 30, 40],
           [3.0, 11, 22, 33, 44],
-        ])),
+        ])) as Matrix,
         argThat(equals([
           [200],
           [500],
-        ])),
+        ])) as Matrix,
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.decreasingAdaptive,
@@ -138,6 +141,7 @@ void main() {
         fittingData: observations,
         targetName: 'target',
         initialCoefficients: initialCoefficients,
+        lambda: defaultLambda,
       );
 
       verify(linearOptimizerMock.findExtrema(
@@ -153,6 +157,7 @@ void main() {
         initialCoefficients: initialCoefficients,
         fitIntercept: true,
         interceptScale: 2.0,
+        lambda: defaultLambda,
       );
       final features = Matrix.fromList([
         [55, 44, 33, 22],
@@ -180,6 +185,7 @@ void main() {
         targetName: 'target',
         initialCoefficients: initialCoefficients,
         collectLearningData: true,
+        lambda: defaultLambda,
       );
 
       expect(regressor.costPerIteration, same(costPerIteration));
@@ -197,6 +203,7 @@ void main() {
         targetName: 'target',
         initialCoefficients: initialCoefficients,
         collectLearningData: false,
+        lambda: defaultLambda,
       );
 
       verify(linearOptimizerMock.findExtrema(

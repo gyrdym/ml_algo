@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('GreedyTreeSplitSelector', () {
@@ -52,8 +53,8 @@ void main() {
       final featuresIdxs = [
         worstSplitIdx, bestSplitIdx, worseSplitIdx, goodSplitIdx,
       ];
-      final assessor = TreeSplitAssessorMock();
-      final splitter = TreeSplitterMock();
+      final assessor = MockTreeSplitAssessor();
+      final splitter = MockTreeSplitter();
 
       when(splitter.split(samples, worstSplitIdx, targetColIdx))
           .thenReturn(worstSplit);
@@ -115,8 +116,8 @@ void main() {
 
       final featuresIdxs = {goodFeatureColIdx, bestFeatureColIdx};
 
-      final assessor = TreeSplitAssessorMock();
-      final splitter = TreeSplitterMock();
+      final assessor = MockTreeSplitAssessor();
+      final splitter = MockTreeSplitter();
       final categoricalValues = [1.0, 2.0, 3.0];
       final colIdxToUniqueValues = {ignoredFeatureColIdx: categoricalValues};
 
