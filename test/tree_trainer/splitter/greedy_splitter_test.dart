@@ -29,19 +29,19 @@ void main() {
       final bestSplittingValue = 4.5;
       final splittingColumnIdx = 0;
       final mockedWorstSplit = {
-        TreeNodeMock(): Matrix.fromList([[12.0, 22.0]]),
-        TreeNodeMock(): Matrix.fromList([[19.0, 31.0]]),
+        MockTreeNode(): Matrix.fromList([[12.0, 22.0]]),
+        MockTreeNode(): Matrix.fromList([[19.0, 31.0]]),
       };
       final mockedWorseSplit = {
-        TreeNodeMock(): Matrix.fromList([[13.0, 24.0]]),
-        TreeNodeMock(): Matrix.fromList([[29.0, 53.0]]),
+        MockTreeNode(): Matrix.fromList([[13.0, 24.0]]),
+        MockTreeNode(): Matrix.fromList([[29.0, 53.0]]),
       };
       final mockedGoodSplit = {
-        TreeNodeMock(): Matrix.fromList([[1.0, 2.0]]),
-        TreeNodeMock(): Matrix.fromList([[9.0, 3.0]]),
+        MockTreeNode(): Matrix.fromList([[1.0, 2.0]]),
+        MockTreeNode(): Matrix.fromList([[9.0, 3.0]]),
       };
-      final bestNodeLeft = TreeNodeMock();
-      final bestNodeRight = TreeNodeMock();
+      final bestNodeLeft = MockTreeNode();
+      final bestNodeRight = MockTreeNode();
       final mockedBestSplit = {
         bestNodeLeft: Matrix.fromList([[100.0, 200.0]]),
         bestNodeRight: Matrix.fromList([[300.0, 400.0]]),
@@ -114,14 +114,14 @@ void main() {
     final splittingColumnIdx = 2;
     final splittingValues = [1.0, 3.0, 2.0];
     final mockedSplit = {
-      TreeNodeMock(): Matrix.fromList([
+      MockTreeNode(): Matrix.fromList([
         [11, 22, 1, 30],
         [60, 23, 1, 20],
       ]),
-      TreeNodeMock(): Matrix.fromList([
+      MockTreeNode(): Matrix.fromList([
         [13, 99, 3, 30],
       ]),
-      TreeNodeMock(): Matrix.fromList([
+      MockTreeNode(): Matrix.fromList([
         [20, 25, 2, 10],
         [17, 66, 2, 70],
       ]),

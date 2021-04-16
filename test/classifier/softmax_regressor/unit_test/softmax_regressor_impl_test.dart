@@ -39,7 +39,7 @@ void main() {
     final negativeLabel = -1.0;
     final costPerIteration = [10, -10, 20, 2.3];
     final retrainingData = DataFrame([[1, 2, -90, 100]]);
-    final retrainedModelMock = SoftmaxRegressorMock();
+    final retrainedModelMock = MockSoftmaxRegressor();
     final classifierFactory = createSoftmaxRegressorFactoryMock(
         retrainedModelMock);
     final dtype = DType.float32;

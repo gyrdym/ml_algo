@@ -40,8 +40,8 @@ void main() {
     late LinkFunction linkFunctionMock;
     late CostFunction costFunctionMock;
     late CostFunctionFactory costFunctionFactoryMock;
-    late LinearOptimizer optimizerMock;
-    late LinearOptimizerFactory optimizerFactoryMock;
+    late MockLinearOptimizer optimizerMock;
+    late MockLinearOptimizerFactory optimizerFactoryMock;
 
     setUp(() {
       injector.clearAll();
@@ -50,7 +50,7 @@ void main() {
       linkFunctionMock = MockLinkFunction();
       costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-      optimizerMock = LinearOptimizerMock();
+      optimizerMock = MockLinearOptimizer();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
       injector
@@ -60,11 +60,11 @@ void main() {
                 () => optimizerFactoryMock);
 
       logisticRegressorInjector
-        ..registerSingleton<LinkFunction>(() => linkFunctionMock);
+        .registerSingleton<LinkFunction>(() => linkFunctionMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
       )).thenReturn(learnedCoefficients);
 
       when(optimizerMock.costPerIteration).thenReturn(errors);
@@ -208,11 +208,11 @@ void main() {
         argThat(iterable2dAlmostEqualTo([
           [2.0, 10.1, 10.2, 12.0, 13.4],
           [2.0, 3.1, 5.2, 6.0, 77.4],
-        ])) as Matrix,
+        ])),
         argThat(equals([
           [1.0],
           [0.0],
-        ])) as Matrix,
+        ])),
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.decreasingAdaptive,

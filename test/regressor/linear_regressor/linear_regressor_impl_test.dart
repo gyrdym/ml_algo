@@ -16,6 +16,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('LinearRegressorImpl', () {
@@ -40,7 +41,7 @@ void main() {
     final costPerIteration = [23, 34, 12];
     final dtype = DType.float32;
     final retrainingData = DataFrame([[12, 34, -45.66]]);
-    final retrainedModelMock = LinearRegressorMock();
+    final retrainedModelMock = MockLinearRegressor();
     final createRegressor = ({
       int schemaVersion = linearRegressorJsonSchemaVersion,
     }) => LinearRegressorImpl(

@@ -17,13 +17,13 @@ void main() {
     final generator = math.Random();
     final metricFactoryMock = MockMetricFactory();
     final metricMock = MockMetric();
-    final featureTargetSplitterMock = FeatureTargetSplitterMock();
+    final featureTargetSplitterMock = MockFeatureTargetSplitter();
     final assessor = RegressorAssessor(
       metricFactoryMock,
       featureTargetSplitterMock.split,
     );
     final metricType = MetricType.mape;
-    final predictorMock = PredictorMock();
+    final predictorMock = MockPredictor();
     final featuresNames = ['feature_1', 'feature_2', 'feature_3'];
     final targetNames = ['target_1'];
     final samplesHeader = [...featuresNames, ...targetNames];
@@ -50,29 +50,43 @@ void main() {
     final dtype = DType.float64;
 
     setUp(() {
-      when(predictorMock.dtype).thenReturn(dtype);
+      when(
+        predictorMock.dtype,
+      ).thenReturn(dtype);
+
       when(
         predictorMock.targetNames,
       ).thenReturn(targetNames);
+
       when(
         predictorMock.dtype,
       ).thenReturn(DType.float64);
+
       when(
-          featureTargetSplitterMock.split(
-            argThat(anything) as DataFrame,
-            targetNames: anyNamed('targetNames') as Iterable<String>,
-          )
+        featureTargetSplitterMock.split(
+          argThat(anything),
+          targetNames: anyNamed('targetNames'),
+        ),
       ).thenReturn([featuresMock, targetMock]);
+
       when(
         predictorMock.predict(
-          argThat(anything) as DataFrame,
+          argThat(anything),
         ),
       ).thenReturn(predictionMock);
+
       when(
         metricFactoryMock.createByType(
-          argThat(anything) as MetricType,
+          argThat(anything),
         ),
       ).thenReturn(metricMock);
+
+      when(
+        metricMock.getScore(
+          any,
+          any,
+        ),
+      ).thenReturn(1.0);
     });
 
     tearDown(() {
@@ -109,8 +123,8 @@ void main() {
 
       when(
         metricMock.getScore(
-          argThat(anything) as Matrix,
-          argThat(anything) as Matrix,
+          argThat(anything),
+          argThat(anything),
         ),
       ).thenReturn(score);
 

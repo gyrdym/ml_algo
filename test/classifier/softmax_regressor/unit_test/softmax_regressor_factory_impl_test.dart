@@ -10,6 +10,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('SoftmaxRegressorFactoryImpl', () {
@@ -56,8 +57,8 @@ void main() {
     final interceptScale = 1.0;
     final dtype = DType.float32;
     final collectLearningData = true;
-    final factoryMock = SoftmaxRegressorFactoryMock();
-    final regressorMock = SoftmaxRegressorMock();
+    final factoryMock = MockSoftmaxRegressorFactory();
+    final regressorMock = MockSoftmaxRegressor();
     final createRegressor = () => SoftmaxRegressor(
       observations,
       targetNames,
@@ -83,7 +84,7 @@ void main() {
 
     setUp(() {
       softmaxRegressorInjector
-        ..registerSingleton<SoftmaxRegressorFactory>(() => factoryMock);
+        .registerSingleton<SoftmaxRegressorFactory>(() => factoryMock);
 
       when(factoryMock.create(
         trainData: observations,
@@ -111,9 +112,9 @@ void main() {
 
     tearDown(() {
       injector
-        ..clearAll();
+        .clearAll();
       softmaxRegressorInjector
-        ..clearAll();
+        .clearAll();
     });
 
     test('should pass all the arguments to the softmax regressor factory', () {

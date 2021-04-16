@@ -82,7 +82,7 @@ void main() {
       final solverMock = MockKnnSolver();
       final kernelMock = MockKernel();
 
-      setUp(() => when(kernelMock.getWeightByDistance(any as num, any as num)).thenReturn(1));
+      setUp(() => when(kernelMock.getWeightByDistance(any, any)).thenReturn(1));
 
       tearDown(() {
         reset(solverMock);
@@ -294,7 +294,7 @@ void main() {
       final solverMock = MockKnnSolver();
       final kernelMock = MockKernel();
 
-      setUp(() => when(kernelMock.getWeightByDistance(any as num, any as num))
+      setUp(() => when(kernelMock.getWeightByDistance(any, any))
           .thenReturn(1));
 
       tearDown(() {
@@ -559,7 +559,7 @@ void main() {
         [1, 20, 300, 400],
       ]);
       final classifierFactory = MockKnnClassifierFactory();
-      final retrainedModelMock = KnnClassifierMock();
+      final retrainedModelMock = MockKnnClassifier();
       final classifier = KnnClassifierImpl(
         targetColumnName,
         classLabels,

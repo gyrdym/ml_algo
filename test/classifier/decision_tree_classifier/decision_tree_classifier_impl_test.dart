@@ -108,7 +108,7 @@ void main() {
     }, rootNodeJson);
     final metricFactoryMock = MockMetricFactory();
     final metricMock = MockMetric();
-    final encoderFactoryMock = EncoderFactoryMock();
+    final encoderFactoryMock = MockEncoderFactory();
     final encoderMock = MockEncoder();
     final encodedLabelsFrames = [
       predictedBinarizedLabelsFrame,
@@ -118,19 +118,36 @@ void main() {
       [1, 2, 3, 4],
     ]);
     final classifierFactoryMock = MockDecisionTreeClassifierFactory();
-    final retrainedClassifier = DecisionTreeClassifierMock();
+    final retrainedClassifier = MockDecisionTreeClassifier();
     var encoderCallIteration = 0;
 
     late DecisionTreeClassifierImpl classifier32;
     late DecisionTreeClassifierImpl classifier64;
 
     setUp(() {
-      when(metricFactoryMock.createByType(argThat(isA<MetricType>()) as MetricType))
-          .thenReturn(metricMock);
-      when(encoderFactoryMock.create(any as DataFrame, any as Iterable<String>))
-          .thenReturn(encoderMock);
-      when(encoderMock.process(any as DataFrame))
-          .thenAnswer((_) => encodedLabelsFrames[encoderCallIteration++]);
+      when(
+        metricFactoryMock.createByType(
+          argThat(
+            isA<MetricType>(),
+          ),
+        ),
+      ).thenReturn(metricMock);
+
+      when(
+        encoderFactoryMock.create(
+          any,
+          any,
+        ),
+      ).thenReturn(encoderMock);
+
+      when(
+        encoderMock.process(
+          any,
+        )
+      ).thenAnswer(
+            (_) => encodedLabelsFrames[encoderCallIteration++],
+      );
+
       when(
         classifierFactoryMock.create(
           any,
@@ -319,13 +336,13 @@ void main() {
 
 TreeNode createRootNodeMock(Map<Vector, TreeLeafLabel> samplesByLabel,
     [Map<String, dynamic> jsonMock = const <String, dynamic>{}]) {
-  final rootMock = TreeNodeMock();
+  final rootMock = MockTreeNode();
   final children = <TreeNode>[];
 
   when(rootMock.isLeaf).thenReturn(false);
 
   samplesByLabel.forEach((sample, leafLabel) {
-    final node = TreeNodeMock();
+    final node = MockTreeNode();
 
     when(node.label).thenReturn(leafLabel);
     when(node.isLeaf).thenReturn(true);

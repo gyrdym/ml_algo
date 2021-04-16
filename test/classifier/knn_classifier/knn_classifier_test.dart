@@ -11,6 +11,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnClassifier', () {
@@ -31,7 +32,7 @@ void main() {
     late KnnClassifierFactory knnClassifierFactoryMock;
 
     setUp(() {
-      knnClassifierMock = KnnClassifierMock();
+      knnClassifierMock = MockKnnClassifier();
       knnClassifierFactoryMock = createKnnClassifierFactoryMock(
           knnClassifierMock);
 

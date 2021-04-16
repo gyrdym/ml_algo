@@ -96,7 +96,7 @@ void main() {
       randomizerMock = MockRandomizer();
       randomizerFactoryMock = createRandomizerFactoryMock(randomizerMock);
 
-      learningRateGeneratorMock = LearningRateGeneratorMock();
+      learningRateGeneratorMock = MockLearningRateGenerator();
       learningRateGeneratorFactoryMock =
           createLearningRateGeneratorFactoryMock(learningRateGeneratorMock);
 

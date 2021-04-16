@@ -38,13 +38,13 @@ void main() {
     final factory = const LinearRegressorFactoryImpl();
     late CostFunction costFunctionMock;
     late CostFunctionFactory costFunctionFactoryMock;
-    late LinearOptimizer linearOptimizerMock;
+    late MockLinearOptimizer linearOptimizerMock;
     late LinearOptimizerFactory linearOptimizerFactoryMock;
 
     setUp(() {
       costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-      linearOptimizerMock = LinearOptimizerMock();
+      linearOptimizerMock = MockLinearOptimizer();
       linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
           linearOptimizerMock);
 
@@ -56,8 +56,8 @@ void main() {
 
       when(linearOptimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
-        collectLearningData: anyNamed('collectLearningData') as bool,
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: anyNamed('collectLearningData'),
       )).thenReturn(learnedCoefficients);
       when(linearOptimizerMock.costPerIteration).thenReturn(costPerIteration);
     });
@@ -191,7 +191,7 @@ void main() {
       expect(regressor.costPerIteration, same(costPerIteration));
       verify(linearOptimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
         collectLearningData: true,
       )).called(1);
     });
@@ -208,7 +208,7 @@ void main() {
 
       verify(linearOptimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
         collectLearningData: false,
       )).called(1);
     });

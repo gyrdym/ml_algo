@@ -8,12 +8,16 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 SplitIndicesProvider createSplitter(Iterable<Iterable<int>> indices) {
-  final splitter = DataSplitterMock();
+  final splitter = MockSplitIndicesProvider();
 
-  when(splitter.getIndices(any as int)).thenReturn(indices);
+  when(
+    splitter.getIndices(
+      any,
+    ),
+  ).thenReturn(indices);
 
   return splitter;
 }
@@ -35,15 +39,15 @@ void main() {
       ], header: ['first', 'second', 'third', 'target'], headerExists: false);
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations, splitter,
           DType.float32);
       final score = 20.0;
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(score);
 
@@ -53,21 +57,27 @@ void main() {
 
       final verificationResult = verify(
         predictor.assess(
-          captureThat(isNotNull) as DataFrame,
+          captureThat(isNotNull),
           metric,
         ));
       final firstAssessCallArgs = verificationResult.captured;
 
-      expect((firstAssessCallArgs[0] as DataFrame).rows, equals([
-        [330, 930, 130, 100],
-        [730, 730, 330, 300],
-        [930, 530, 530, 500],
-      ]));
+      expect(
+        (firstAssessCallArgs[0]).rows,
+        equals([
+          [330, 930, 130, 100],
+          [730, 730, 330, 300],
+          [930, 530, 530, 500],
+        ]),
+      );
 
-      expect((firstAssessCallArgs[1] as DataFrame).rows, equals([
-        [230, 330, 730, 700],
-        [530, 130, 930, 900],
-      ]));
+      expect(
+        firstAssessCallArgs[1].rows,
+        equals([
+          [230, 330, 730, 700],
+          [530, 130, 930, 900],
+        ]),
+      );
 
       verificationResult.called(2);
     });
@@ -85,14 +95,14 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations, splitter,
           DType.float32);
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(1);
 
@@ -150,14 +160,14 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations, splitter,
           DType.float32);
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(1);
 
@@ -195,15 +205,15 @@ void main() {
       );
 
       final verificationResult = verify(
-          predictor.assess(captureThat(isNotNull) as DataFrame, metric));
+          predictor.assess(captureThat(isNotNull), metric));
       final firstAssessCallArgs = verificationResult.captured;
 
-      expect((firstAssessCallArgs[0] as DataFrame).rows, equals([
+      expect(firstAssessCallArgs[0].rows, equals([
         [14, 50, 39, 24],
         [77, 38, 29, 70],
       ]));
 
-      expect((firstAssessCallArgs[1] as DataFrame).rows, equals([
+      expect(firstAssessCallArgs[1].rows, equals([
         [154, 550, 939, 124],
       ]));
 
@@ -234,14 +244,14 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations,
           splitter, DType.float32);
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(1);
 
@@ -341,14 +351,14 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(1);
 
@@ -390,14 +400,14 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(1);
 
@@ -438,14 +448,14 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(1);
 
@@ -486,14 +496,14 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
       when(
         predictor.assess(
-          any as DataFrame,
-          any as MetricType,
+          any,
+          any,
         ),
       ).thenReturn(1);
 

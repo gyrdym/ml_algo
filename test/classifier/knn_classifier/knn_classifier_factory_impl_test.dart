@@ -45,7 +45,7 @@ void main() {
 
     setUp(() {
       when(
-        kernelFactoryMock.createByType(any as KernelType),
+        kernelFactoryMock.createByType(any),
       ).thenReturn(kernelMock);
       when(
         solverFactoryMock.create(

@@ -70,7 +70,7 @@ void main() {
     late LinkFunction linkFunctionMock;
     late CostFunction costFunctionMock;
     late CostFunctionFactory costFunctionFactoryMock;
-    late LinearOptimizer optimizerMock;
+    late MockLinearOptimizer optimizerMock;
     late LinearOptimizerFactory optimizerFactoryMock;
     late SoftmaxRegressorFactory factory;
 
@@ -121,7 +121,7 @@ void main() {
       linkFunctionMock = MockLinkFunction();
       costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-      optimizerMock = LinearOptimizerMock();
+      optimizerMock = MockLinearOptimizer();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
       injector
@@ -132,8 +132,8 @@ void main() {
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
-        collectLearningData: anyNamed('collectLearningData') as bool,
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
+        collectLearningData: anyNamed('collectLearningData'),
       )).thenReturn(learnedCoefficients);
       when(optimizerMock.costPerIteration).thenReturn(costPerIteration);
 

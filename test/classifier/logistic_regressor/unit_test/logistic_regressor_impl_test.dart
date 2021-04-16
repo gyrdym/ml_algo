@@ -43,7 +43,7 @@ void main() {
     final defaultDType = DType.float32;
     final defaultCostPerIteration = [1.2, 233.01, 23, -10001];
     final retrainingData = DataFrame([[10, -10, 20, -20]]);
-    final retrainedModelMock = LogisticRegressorMock();
+    final retrainedModelMock = MockLogisticRegressor();
     final classifierFactory = createLogisticRegressorFactoryMock(
         retrainedModelMock);
     final createRegressor = ({
@@ -116,7 +116,9 @@ void main() {
       logisticRegressorInjector
           .registerSingleton<LogisticRegressorFactory>(() => classifierFactory);
 
-      when(linkFunctionMock.link(any as Matrix)).thenReturn(mockedProbabilities);
+      when(
+        linkFunctionMock.link(any),
+      ).thenReturn(mockedProbabilities);
     });
 
     tearDown(() {

@@ -17,10 +17,10 @@ void main() {
     final generator = math.Random();
     final metricFactoryMock = MockMetricFactory();
     final metricMock = MockMetric();
-    final encoderFactoryMock = EncoderFactoryMock();
+    final encoderFactoryMock = MockEncoderFactory();
     final encoderMock = MockEncoder();
-    final featureTargetSplitterMock = FeatureTargetSplitterMock();
-    final classLabelsNormalizerMock = ClassLabelsNormalizerMock();
+    final featureTargetSplitterMock = MockFeatureTargetSplitter();
+    final classLabelsNormalizerMock = MockClassLabelsNormalizer();
     final assessor = ClassifierAssessor(
       metricFactoryMock,
       encoderFactoryMock.create,
@@ -58,39 +58,74 @@ void main() {
 
     setUp(() {
       when(
-          encoderFactoryMock.create(
-            any,
-            any,
-          )
+        encoderMock.process(
+          any,
+        ),
+      ).thenReturn(predictionMock);
+
+      when(
+        encoderFactoryMock.create(
+          any,
+          any,
+        ),
       ).thenReturn(encoderMock);
-      when(classifierMock.dtype).thenReturn(dtype);
+
+      when(
+        classifierMock.dtype,
+      ).thenReturn(dtype);
+
+      when(
+        classifierMock.negativeLabel,
+      ).thenReturn(negativeLabel);
+
+      when(
+        classifierMock.positiveLabel,
+      ).thenReturn(positiveLabel);
+
       when(
           classifierMock.targetNames,
       ).thenReturn(targetNames);
+
       when(
         classifierMock.dtype,
       ).thenReturn(DType.float64);
+
       when(
-          featureTargetSplitterMock.split(
-            any,
-            targetNames: anyNamed('targetNames'),
-          )
+        featureTargetSplitterMock.split(
+          any,
+          targetNames: anyNamed('targetNames'),
+          targetIndices: anyNamed('targetIndices'),
+        ),
       ).thenReturn([featuresMock, targetMock]);
+
       when(
-          classifierMock.predict(
-            any,
-          ),
+        classifierMock.predict(
+          any,
+        ),
       ).thenReturn(predictionMock);
-      when(
-          encoderMock.process(
-            any,
-          ),
-      ).thenReturn(predictionMock);
+
       when(
           metricFactoryMock.createByType(
             any,
           ),
       ).thenReturn(metricMock);
+
+      when(
+        classLabelsNormalizerMock.normalize(
+          any,
+          any,
+          any,
+        ),
+      ).thenReturn(
+        Matrix.empty(),
+      );
+
+      when(
+        metricMock.getScore(
+          any,
+          any,
+        ),
+      ).thenReturn(1.0);
     });
 
     tearDown(() {
@@ -166,10 +201,10 @@ void main() {
       final score = generator.nextDouble();
 
       when(
-          metricMock.getScore(
-            any,
-            any,
-          ),
+        metricMock.getScore(
+          any,
+          any,
+        ),
       ).thenReturn(score);
 
       final actual = assessor.assess(classifierMock, metricType, samples);

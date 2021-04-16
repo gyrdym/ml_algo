@@ -63,7 +63,7 @@ void main() {
       leafLabelFactoryFactoryMock = createTreeLeafLabelFactoryFactoryMock(
           leafLabelFactoryMock);
 
-      splitSelectorMock = TreeSplitSelectorMock();
+      splitSelectorMock = MockTreeSplitSelector();
       splitSelectorFactoryMock = createTreeSplitSelectorFactoryMock(
           splitSelectorMock);
 
