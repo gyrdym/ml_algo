@@ -16,16 +16,19 @@ class MajorityTreeLeafLabelFactory implements TreeLeafLabelFactory {
   TreeLeafLabel create(Matrix samples, int targetIdx) {
     final outcomes = samples.getColumn(targetIdx);
     final totalRecordsCount = outcomes.length;
-
     final labelData = _getLabelData<double>(outcomes, totalRecordsCount);
-    return TreeLeafLabel(labelData.value,
-        probability: labelData.probability);
+
+    return TreeLeafLabel(
+      labelData.value,
+      probability: labelData.probability,
+    );
   }
 
   _LabelData<T> _getLabelData<T>(Iterable<T> values, int totalCount) {
     final distribution = distributionCalculator
         .calculate<T>(values, totalCount);
     final targetLabelEntry = _findEntryWithMaxProbability(distribution);
+
     return _LabelData<T>(targetLabelEntry.key, targetLabelEntry.value);
   }
 

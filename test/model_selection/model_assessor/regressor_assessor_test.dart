@@ -5,7 +5,6 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/regressor_assessor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

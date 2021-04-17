@@ -97,17 +97,19 @@ void main() {
       );
 
       tearDown(() async {
-        final file = await File(testFileName);
+        final file = File(testFileName);
+
         if (!await file.exists()) {
           return;
         }
+
         await file.delete();
       });
 
       test('should save to file as json', () async {
         await classifier.saveAsJson(testFileName);
 
-        final file = await File(testFileName);
+        final file = File(testFileName);
         final fileExists = await file.exists();
 
         expect(fileExists, isTrue);
@@ -116,7 +118,7 @@ void main() {
       test('should save to a restorable json', () async {
         await classifier.saveAsJson(testFileName);
 
-        final file = await File(testFileName);
+        final file = File(testFileName);
         final json = await file.readAsString();
         final restoredClassifier = KnnClassifier.fromJson(json);
 

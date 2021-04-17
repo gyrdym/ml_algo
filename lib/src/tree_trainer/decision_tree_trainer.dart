@@ -35,13 +35,23 @@ class DecisionTreeTrainer implements TreeTrainer {
       Iterable<int> featuresColumnIdxs,
       int level,
   ) {
-    if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, level)) {
-      final label = _leafLabelFactory.create(samples, _targetIdx);
+    final isLeaf = _leafDetector.isLeaf(
+      samples,
+      _targetIdx,
+      featuresColumnIdxs,
+      level,
+    );
+
+    if (isLeaf) {
+      final label = _leafLabelFactory.create(
+        samples,
+        _targetIdx,
+      );
 
       return TreeNode(
-        splittingPredicateType!,
-        splittingValue!,
-        splittingIdx!,
+        splittingPredicateType,
+        splittingValue,
+        splittingIdx,
         null,
         label,
         level,
@@ -68,20 +78,22 @@ class DecisionTreeTrainer implements TreeTrainer {
           : featuresColumnIdxs;
 
       return _train(
-          splitSamples,
-          splitNode.splittingValue,
-          splitNode.splittingIndex,
-          splitNode.predicateType,
-          updatedColumnRanges,
-          newLevel);
+        splitSamples,
+        splitNode.splittingValue,
+        splitNode.splittingIndex,
+        splitNode.predicateType,
+        updatedColumnRanges,
+        newLevel,
+      );
     });
 
     return TreeNode(
-        splittingPredicateType,
-        splittingValue,
-        splittingIdx,
-        childNodes.toList(growable: false),
-        null,
-        level);
+      splittingPredicateType,
+      splittingValue,
+      splittingIdx,
+      childNodes.toList(growable: false),
+      null,
+      level,
+    );
   }
 }

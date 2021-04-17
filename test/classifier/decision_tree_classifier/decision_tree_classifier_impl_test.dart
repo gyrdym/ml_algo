@@ -82,6 +82,7 @@ void main() {
         headerExists: false, header: [targetColumnName]);
     final rootNodeJson = {
       childrenJsonKey: <Map<String, dynamic>>[],
+      levelJsonKey: 1,
     };
     final classifier32Json = {
       decisionTreeClassifierMinErrorJsonKey: minError,
@@ -143,7 +144,7 @@ void main() {
       when(
         encoderMock.process(
           any,
-        )
+        ),
       ).thenAnswer(
             (_) => encodedLabelsFrames[encoderCallIteration++],
       );
@@ -156,8 +157,16 @@ void main() {
           any,
           any,
           any,
-        )
+        ),
       ).thenReturn(retrainedClassifier);
+
+      when(
+        classifierAssessorMock.assess(
+          any,
+          any,
+          any,
+        ),
+      ).thenReturn(1.0);
 
       injector
         ..registerDependency<ModelAssessor<Classifier>>(
@@ -289,11 +298,14 @@ void main() {
       final metricType = MetricType.precision;
 
       classifier32.assess(labelledFeaturesFrame, metricType);
-      verify(classifierAssessorMock.assess(
-        classifier32,
-        metricType,
-        labelledFeaturesFrame,
-      )).called(1);
+
+      verify(
+        classifierAssessorMock.assess(
+          classifier32,
+          metricType,
+          labelledFeaturesFrame,
+        ),
+      ).called(1);
     });
 
     test('should call classifier factory while retraining the model', () {

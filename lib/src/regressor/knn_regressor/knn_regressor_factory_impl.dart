@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/helpers/features_target_split.dart';
-import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
@@ -30,8 +29,6 @@ class KnnRegressorFactoryImpl implements KnnRegressorFactory {
       Distance distance,
       DType dtype,
   ) {
-    validateTrainData(fittingData, [targetName]);
-
     final splits = featuresTargetSplit(fittingData,
       targetNames: [targetName],
     ).toList();

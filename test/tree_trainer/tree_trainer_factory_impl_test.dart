@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';

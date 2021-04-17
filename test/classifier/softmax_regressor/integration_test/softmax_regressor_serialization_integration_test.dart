@@ -407,7 +407,7 @@ void main() {
       final file = await classifier.saveAsJson(fileName);
 
       expect(await file.exists(), isTrue);
-      expect(await file.path, fileName);
+      expect(file.path, fileName);
     });
 
     test('should save the model to a file as json, '

@@ -59,8 +59,8 @@ class ClassifierAssessor implements ModelAssessor<Classifier> {
             .toMatrix(classifier.dtype)
         : originalLabelsFrame
             .toMatrix(classifier.dtype);
-    final predefinedClassLabelsExist = classifier.negativeLabel != null
-        && classifier.positiveLabel != null;
+    final predefinedClassLabelsExist = classifier.negativeLabel != double.nan
+        && classifier.positiveLabel != double.nan;
     final normalizedPredictedLabels = predefinedClassLabelsExist
         ? _normalizeClassLabels(
             predictedLabels,

@@ -55,7 +55,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
           json,
           'IC',
           (v) =>
-              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
+              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>?)),
       $checkedConvert(
           json, 'CBC', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(

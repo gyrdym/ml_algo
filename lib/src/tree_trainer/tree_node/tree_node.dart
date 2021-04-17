@@ -63,12 +63,21 @@ class TreeNode {
 
   bool get isLeaf => children == null || children!.isEmpty;
 
-  bool isSamplePassed(Vector sample) => predicateType != null
-          && splittingIndex != null
-          && splittingValue != null
-          && getTreeNodeSplittingPredicateByType(predicateType!)(
+  bool get isRoot => predicateType == null
+      || splittingIndex == null
+      || splittingValue == null;
+
+  bool isSamplePassed(Vector sample) {
+    if (isRoot) {
+      return true;
+    }
+
+    final isSamplePassedFn = getTreeNodeSplittingPredicateByType(predicateType!);
+
+    return isSamplePassedFn(
         sample,
         splittingIndex!,
         splittingValue!,
       );
+  }
 }
