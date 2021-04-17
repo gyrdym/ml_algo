@@ -1,35 +1,20 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/gradient_optimizer.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
 import '../../mocks.mocks.dart';
 
 void main() {
   group('Gradient optimizer', () {
     final costFunctionMock = MockCostFunction();
     late MockRandomizer randomizerMock;
-    late RandomizerFactory randomizerFactoryMock;
     late MockLearningRateGenerator learningRateGeneratorMock;
-    late MockLearningRateGeneratorFactory learningRateGeneratorFactoryMock;
     late MockInitialCoefficientsGenerator initialCoefficientsGeneratorMock;
-    late InitialCoefficientsGeneratorFactory initialWeightsGeneratorFactoryMock;
     late MockConvergenceDetector convergenceDetectorMock;
-    late ConvergenceDetectorFactory convergenceDetectorFactoryMock;
 
     final points = Matrix.fromList([
       [  5,  10,  15],
@@ -51,10 +36,7 @@ void main() {
     final zeroBatchSize = 0;
     final defaultLambda = 105.1;
     final cost = 12009.23;
-    final defaultMinCoefficientsUpdate = 1e-100000;
     final defaultInitialLearningRate = 1.0;
-    final defaultInitialCoefficientsType = InitialCoefficientsType.zeroes;
-    final defaultLearningRateType = LearningRateType.constant;
 
     final providedCoeffsIteration2 = providedCoefficients -
         gradient * learningRate;
@@ -67,57 +49,32 @@ void main() {
         gradient * learningRate;
 
     final createGradientOptimizer = ({
-      DType? dtype,
+      required int batchSize,
       CostFunction? costFunction,
-      LearningRateType? learningRateType,
       InitialCoefficientsType? initialCoefficientsType,
       double? initialLearningRate,
-      double? minCoefficientsUpdate,
-      int? iterationLimit,
       double? lambda,
-      required int batchSize,
       int? randomSeed,
+      DType? dtype,
     }) => GradientOptimizer(
       points,
       labels,
       costFunction: costFunction ?? costFunctionMock,
       initialLearningRate: initialLearningRate ?? defaultInitialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate ?? defaultMinCoefficientsUpdate,
-      iterationLimit: iterationLimit ?? defaultIterationsCount,
-      initialCoefficientsType: initialCoefficientsType ?? defaultInitialCoefficientsType,
-      learningRateType: learningRateType ?? defaultLearningRateType,
       batchSize: batchSize,
       dtype: dtype ?? DType.float32,
-      randomSeed: randomSeed,
       lambda: lambda ?? defaultLambda,
+      randomizer: randomizerMock,
+      learningRateGenerator: learningRateGeneratorMock,
+      initialCoefficientsGenerator: initialCoefficientsGeneratorMock,
+      convergenceDetector: convergenceDetectorMock,
     );
 
     setUp(() {
       randomizerMock = MockRandomizer();
-      randomizerFactoryMock = createRandomizerFactoryMock(randomizerMock);
-
       learningRateGeneratorMock = MockLearningRateGenerator();
-      learningRateGeneratorFactoryMock =
-          createLearningRateGeneratorFactoryMock(learningRateGeneratorMock);
-
       initialCoefficientsGeneratorMock = MockInitialCoefficientsGenerator();
-      initialWeightsGeneratorFactoryMock =
-          createInitialWeightsGeneratorFactoryMock(initialCoefficientsGeneratorMock);
-
       convergenceDetectorMock = MockConvergenceDetector();
-      convergenceDetectorFactoryMock =
-          createConvergenceDetectorFactoryMock(convergenceDetectorMock);
-
-      injector
-        ..clearAll()
-        ..registerDependency<LearningRateGeneratorFactory>(
-                () => learningRateGeneratorFactoryMock)
-        ..registerDependency<InitialCoefficientsGeneratorFactory>(
-                () => initialWeightsGeneratorFactoryMock)
-        ..registerDependency<ConvergenceDetectorFactory>(
-                () => convergenceDetectorFactoryMock)
-        ..registerDependency<RandomizerFactory>(
-                () => randomizerFactoryMock);
 
       when(
         initialCoefficientsGeneratorMock.generate(
@@ -127,10 +84,12 @@ void main() {
         autoGeneratedInitialCoefficients.toVector(),
       );
 
-      when(convergenceDetectorMock.isConverged(
-        any,
-        argThat(inInclusiveRange(0, defaultIterationsCount - 1)),
-      )).thenReturn(false);
+      when(
+        convergenceDetectorMock.isConverged(
+          any,
+          argThat(inInclusiveRange(0, defaultIterationsCount - 1)),
+        ),
+      ).thenReturn(false);
 
       when(
         convergenceDetectorMock.isConverged(
@@ -139,7 +98,13 @@ void main() {
         ),
       ).thenReturn(true);
 
-      when(learningRateGeneratorMock.getNextValue()).thenReturn(learningRate);
+      when(
+        learningRateGeneratorMock.getNextValue(),
+      ).thenReturn(learningRate);
+
+      when(
+        learningRateGeneratorMock.stop(),
+      ).thenReturn(null);
 
       when(
         randomizerMock.getIntegerInterval(
@@ -149,34 +114,34 @@ void main() {
         ),
       ).thenReturn(interval);
 
-      when(costFunctionMock.getCost(
-        argThat(anything),
-        argThat(anything),
-        argThat(anything),
-      )).thenReturn(cost);
+      when(
+        costFunctionMock.getCost(
+          argThat(anything),
+          argThat(anything),
+          argThat(anything),
+        ),
+      ).thenReturn(cost);
       
-      when(costFunctionMock.getGradient(
-        argThat(anything),
-        argThat(anything),
-        argThat(anything),
-      )).thenReturn(gradient);
+      when(
+        costFunctionMock.getGradient(
+          argThat(anything),
+          argThat(anything),
+          argThat(anything),
+        ),
+      ).thenReturn(gradient);
     });
 
     tearDown(() {
-      resetMockitoState();
+      reset(initialCoefficientsGeneratorMock);
+      reset(learningRateGeneratorMock);
+      reset(convergenceDetectorMock);
+      reset(randomizerMock);
       reset(costFunctionMock);
-      injector.clearAll();
     });
 
     test('should process `batchSize` parameter, batchSize=$batchSize1', () {
-      final optimizer = GradientOptimizer(
-        points,
-        labels,
-        costFunction: costFunctionMock,
-        iterationLimit: defaultIterationsCount,
+      final optimizer = createGradientOptimizer(
         batchSize: batchSize1,
-        initialCoefficientsType: defaultInitialCoefficientsType,
-        learningRateType: LearningRateType.constant,
       );
 
       optimizer.findExtrema();
@@ -234,6 +199,7 @@ void main() {
         'detected', () {
       final optimizer = createGradientOptimizer(
         batchSize: batchSize1,
+        lambda: 0,
       );
       final expectedDiff = ((autoGeneratedInitialCoefficients -
           gradient * learningRate) - autoGeneratedInitialCoefficients).norm();
@@ -246,6 +212,7 @@ void main() {
           any,
         ),
       ).called(1);
+
       verify(
         convergenceDetectorMock.isConverged(
           expectedDiff,
@@ -258,6 +225,7 @@ void main() {
         'detected', () {
       final optimizer = createGradientOptimizer(
         batchSize: batchSize1,
+        lambda: 0,
       );
       final expectedDiff = ((providedCoefficients -
           gradient * learningRate) - providedCoefficients).norm();
@@ -270,6 +238,7 @@ void main() {
           any,
         ),
       ).called(1);
+
       verify(
         convergenceDetectorMock.isConverged(
           expectedDiff,
@@ -282,6 +251,7 @@ void main() {
         'detected', () {
       final optimizer = createGradientOptimizer(
         batchSize: batchSize1,
+        lambda: 0,
       );
       final expectedDiff = ((providedCoefficients +
           gradient * learningRate) - providedCoefficients).norm();
@@ -295,6 +265,7 @@ void main() {
           any,
         ),
       ).called(1);
+
       verify(
         convergenceDetectorMock.isConverged(
           expectedDiff,
@@ -317,18 +288,21 @@ void main() {
           0,
         ),
       ).called(1);
+
       verify(
         convergenceDetectorMock.isConverged(
           any,
           1,
         ),
       ).called(1);
+
       verify(
         convergenceDetectorMock.isConverged(
           any,
           2,
         ),
       ).called(1);
+
       verify(
         convergenceDetectorMock.isConverged(
           any,
@@ -381,32 +355,68 @@ void main() {
     test('should calculate gradient using coefficients, points and labels', () {
       final optimizer = createGradientOptimizer(
         batchSize: batchSize1,
+        lambda: 0,
       );
 
       optimizer.findExtrema();
 
-      verify(costFunctionMock.getGradient(points,
-          autoGeneratedInitialCoefficients, labels)).called(1);
-      verify(costFunctionMock.getGradient(points,
-          autoGenCoeffsIteration2, labels)).called(1);
-      verify(costFunctionMock.getGradient(points,
-          autoGenCoeffsIteration3, labels)).called(1);
+      verify(
+        costFunctionMock.getGradient(
+          points,
+          autoGeneratedInitialCoefficients,
+          labels,
+        ),
+      ).called(1);
+
+      verify(
+        costFunctionMock.getGradient(
+          points,
+          autoGenCoeffsIteration2,
+          labels
+        ),
+      ).called(1);
+
+      verify(
+        costFunctionMock.getGradient(
+          points,
+          autoGenCoeffsIteration3,
+          labels,
+        ),
+      ).called(1);
     });
 
     test('should calculate gradient using coefficients, points and labels, '
         'initial coefficients are provided', () {
       final optimizer = createGradientOptimizer(
         batchSize: batchSize1,
+        lambda: 0,
       );
 
       optimizer.findExtrema(initialCoefficients: providedCoefficients);
 
-      verify(costFunctionMock.getGradient(points,
-          providedCoefficients, labels)).called(1);
-      verify(costFunctionMock.getGradient(points,
-          providedCoeffsIteration2, labels)).called(1);
-      verify(costFunctionMock.getGradient(points,
-          providedCoeffsIteration3, labels)).called(1);
+      verify(
+        costFunctionMock.getGradient(
+          points,
+          providedCoefficients,
+          labels,
+        )
+      ).called(1);
+
+      verify(
+        costFunctionMock.getGradient(
+          points,
+          providedCoeffsIteration2,
+          labels,
+        )
+      ).called(1);
+
+      verify(
+        costFunctionMock.getGradient(
+          points,
+          providedCoeffsIteration3,
+          labels,
+        ),
+      ).called(1);
     });
 
     test('should regularize coefficients', () {
@@ -427,6 +437,7 @@ void main() {
           labels,
         ),
       ).called(1);
+
       verify(
         costFunctionMock.getGradient(
           points,
@@ -434,6 +445,7 @@ void main() {
           labels,
         ),
       ).called(1);
+
       verify(
         costFunctionMock.getGradient(
           points,
@@ -446,6 +458,7 @@ void main() {
     test('should calculate cost values if collectLearningData is true', () {
       final optimizer = createGradientOptimizer(
         batchSize: batchSize1,
+        lambda: 0,
       );
 
       optimizer.findExtrema(collectLearningData: true);
@@ -457,6 +470,7 @@ void main() {
           labels,
         ),
       ).called(1);
+
       verify(
         costFunctionMock.getCost(
           points,
@@ -464,6 +478,7 @@ void main() {
           labels,
         ),
       ).called(1);
+
       verify(
         costFunctionMock.getCost(
           points,

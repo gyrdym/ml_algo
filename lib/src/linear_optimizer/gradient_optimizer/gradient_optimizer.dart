@@ -63,9 +63,13 @@ class GradientOptimizer implements LinearOptimizer {
     _costPerIteration.clear();
 
     var coefficients = initialCoefficients ??
-        Matrix.fromColumns(List.generate(_labels.columnsNum,
-            (i) => _initialCoefficientsGenerator.generate(_points.columnsNum)),
-            dtype: _dtype);
+        Matrix.fromColumns(
+          List.generate(
+            _labels.columnsNum,
+            (i) => _initialCoefficientsGenerator.generate(_points.columnsNum),
+          ),
+          dtype: _dtype,
+        );
 
     var iteration = 0;
     var coefficientsDiff = double.maxFinite;
@@ -78,6 +82,7 @@ class GradientOptimizer implements LinearOptimizer {
         isMinimization: isMinimizingObjective,
         collectLearningData: collectLearningData,
       );
+
       coefficientsDiff = (newCoefficients - coefficients).norm();
       iteration++;
       coefficients = newCoefficients;
@@ -126,7 +131,7 @@ class GradientOptimizer implements LinearOptimizer {
       Matrix coefficients,
       Matrix points,
       Matrix labels,
-      double eta,
+      double learningRate,
       {
         bool isMinimization = true,
         bool collectLearningData = false,
@@ -138,12 +143,20 @@ class GradientOptimizer implements LinearOptimizer {
       _costPerIteration.add(error);
     }
 
-    final gradient = _costFunction.getGradient(points, coefficients, labels);
-    final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
+    final gradient = _costFunction.getGradient(
+      points,
+      coefficients,
+      labels,
+    );
+    final regularizedCoefficients = _regularize(
+      learningRate,
+      _lambda,
+      coefficients,
+    );
 
     return isMinimization
-        ? regularizedCoefficients - gradient * eta
-        : regularizedCoefficients + gradient * eta;
+        ? regularizedCoefficients - gradient * learningRate
+        : regularizedCoefficients + gradient * learningRate;
   }
 
   Matrix _regularize(double learningRate, double lambda, Matrix coefficients) {
