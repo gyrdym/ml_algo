@@ -1,18 +1,32 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/gradient_optimizer.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/optimizer_to_regularization_mapping.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
+import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
-  const LinearOptimizerFactoryImpl();
+  const LinearOptimizerFactoryImpl(
+      this._initialCoefficientsGeneratorFactory,
+      this._learningRateGeneratorFactory,
+      this._convergenceDetectorFactory,
+      this._randomizerFactory,
+  );
+
+  final InitialCoefficientsGeneratorFactory _initialCoefficientsGeneratorFactory;
+  final LearningRateGeneratorFactory _learningRateGeneratorFactory;
+  final ConvergenceDetectorFactory _convergenceDetectorFactory;
+  final RandomizerFactory _randomizerFactory;
 
   @override
   LinearOptimizer createByType(
@@ -44,28 +58,33 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
 
       case LinearOptimizerType.gradient:
         return GradientOptimizer(
-          fittingPoints, fittingLabels,
+          fittingPoints,
+          fittingLabels,
           costFunction: costFunction,
-          learningRateType: learningRateType,
-          initialCoefficientsType: initialCoefficientsType,
           initialLearningRate: initialLearningRate,
-          minCoefficientsUpdate: minCoefficientsUpdate,
-          iterationLimit: iterationLimit,
           lambda: lambda,
           batchSize: batchSize,
-          randomSeed: randomSeed,
           dtype: dtype,
+          learningRateGenerator: _learningRateGeneratorFactory
+              .fromType(learningRateType),
+          initialCoefficientsGenerator: _initialCoefficientsGeneratorFactory
+              .fromType(initialCoefficientsType, dtype),
+          convergenceDetector: _convergenceDetectorFactory
+              .create(minCoefficientsUpdate, iterationLimit),
+          randomizer: _randomizerFactory.create(randomSeed),
         );
 
       case LinearOptimizerType.coordinate:
         return CoordinateDescentOptimizer(
-          fittingPoints, fittingLabels,
+          fittingPoints,
+          fittingLabels,
           dtype: dtype,
           costFunction: costFunction,
-          minCoefficientsUpdate: minCoefficientsUpdate,
-          iterationsLimit: iterationLimit,
           lambda: lambda,
-          initialWeightsType: initialCoefficientsType,
+          initialCoefficientsGenerator: _initialCoefficientsGeneratorFactory
+              .fromType(initialCoefficientsType, dtype),
+          convergenceDetector: _convergenceDetectorFactory
+              .create(minCoefficientsUpdate, iterationLimit),
           isFittingDataNormalized: isFittingDataNormalized,
         );
 

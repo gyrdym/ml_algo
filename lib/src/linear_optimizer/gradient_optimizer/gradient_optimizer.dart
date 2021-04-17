@@ -1,16 +1,9 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/xrange.dart';
@@ -18,15 +11,14 @@ import 'package:xrange/xrange.dart';
 class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(Matrix points, Matrix labels, {
     DType dtype = DType.float32,
+    required InitialCoefficientsGenerator initialCoefficientsGenerator,
     required CostFunction costFunction,
-    required LearningRateType learningRateType,
-    required InitialCoefficientsType initialCoefficientsType,
+    required LearningRateGenerator learningRateGenerator,
+    required ConvergenceDetector convergenceDetector,
+    required Randomizer randomizer,
     double initialLearningRate = 1e-3,
-    double minCoefficientsUpdate = 1e-12,
-    int iterationLimit = 100,
     double? lambda,
     required int batchSize,
-    int? randomSeed,
   })  :
         _points = points,
         _labels = labels,
@@ -34,22 +26,11 @@ class GradientOptimizer implements LinearOptimizer {
         _batchSize = batchSize,
         _costFunction = costFunction,
         _dtype = dtype,
+        _initialCoefficientsGenerator = initialCoefficientsGenerator,
+        _learningRateGenerator = learningRateGenerator,
+        _convergenceDetector = convergenceDetector,
+        _randomizer = randomizer {
 
-        _initialCoefficientsGenerator = injector
-            .get<InitialCoefficientsGeneratorFactory>()
-            .fromType(initialCoefficientsType, dtype),
-
-        _learningRateGenerator = injector
-            .get<LearningRateGeneratorFactory>()
-            .fromType(learningRateType),
-
-        _convergenceDetector = injector
-            .get<ConvergenceDetectorFactory>()
-            .create(minCoefficientsUpdate, iterationLimit),
-
-        _randomizer = injector
-            .get<RandomizerFactory>()
-            .create(randomSeed) {
     if (batchSize < 1 || batchSize > points.rowsNum) {
       throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '
           'value');

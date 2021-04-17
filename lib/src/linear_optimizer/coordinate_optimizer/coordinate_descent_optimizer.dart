@@ -1,10 +1,6 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -13,24 +9,16 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
   CoordinateDescentOptimizer(Matrix fittingPoints, Matrix fittingLabels, {
     required DType dtype, // = DType.float32,
     required CostFunction costFunction,
-    required double minCoefficientsUpdate, // = 1e-12,
-    required int iterationsLimit, // = 100,
+    required ConvergenceDetector convergenceDetector, // = min update 1e-12, iter. limit 100
     required double lambda,
-    required InitialCoefficientsType initialWeightsType, // = InitialCoefficientsType.zeroes,
+    required InitialCoefficientsGenerator initialCoefficientsGenerator, // = InitialCoefficientsType.zeroes,
     required bool isFittingDataNormalized, // = false,
   })  : _dtype = dtype,
         _points = fittingPoints,
         _labels = fittingLabels,
         _lambda = lambda,
-
-        _initialCoefficientsGenerator = injector
-            .get<InitialCoefficientsGeneratorFactory>()
-            .fromType(initialWeightsType, dtype),
-
-        _convergenceDetector = injector
-            .get<ConvergenceDetectorFactory>()
-            .create(minCoefficientsUpdate, iterationsLimit),
-
+        _initialCoefficientsGenerator = initialCoefficientsGenerator,
+        _convergenceDetector = convergenceDetector,
         _costFn = costFunction,
         _normalizer = isFittingDataNormalized
             ? Vector.filled(fittingPoints.columnsNum, 1.0, dtype: dtype)
