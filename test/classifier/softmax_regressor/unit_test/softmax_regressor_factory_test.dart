@@ -7,7 +7,6 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -67,11 +66,11 @@ void main() {
     ]);
     final costPerIteration = [10, 0, -10, 33.1];
 
-    late LinkFunction linkFunctionMock;
-    late CostFunction costFunctionMock;
+    late MockLinkFunction linkFunctionMock;
+    late MockCostFunction costFunctionMock;
     late CostFunctionFactory costFunctionFactoryMock;
     late MockLinearOptimizer optimizerMock;
-    late LinearOptimizerFactory optimizerFactoryMock;
+    late MockLinearOptimizerFactory optimizerFactoryMock;
     late SoftmaxRegressorFactory factory;
 
     final createRegressor = ({
@@ -213,7 +212,7 @@ void main() {
           [2.0, 32.1, 35.2, 36.0, 41.5],
           [2.0, 35.1, 95.2, 56.0, 52.6],
           [2.0, 90.1, 20.2, 10.0, 12.1],
-        ], 1e-2)) as Matrix,
+        ], 1e-2)),
         argThat(equals([
           [1.0, 0.0, 0.0],
           [0.0, 0.0, 1.0],
@@ -221,7 +220,7 @@ void main() {
           [1.0, 0.0, 0.0],
           [0.0, 0.0, 1.0],
           [1.0, 0.0, 0.0],
-        ])) as Matrix,
+        ])),
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.constant,

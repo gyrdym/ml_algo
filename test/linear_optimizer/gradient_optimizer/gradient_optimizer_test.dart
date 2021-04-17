@@ -24,8 +24,8 @@ void main() {
     final costFunctionMock = MockCostFunction();
     late MockRandomizer randomizerMock;
     late RandomizerFactory randomizerFactoryMock;
-    late LearningRateGenerator learningRateGeneratorMock;
-    late LearningRateGeneratorFactory learningRateGeneratorFactoryMock;
+    late MockLearningRateGenerator learningRateGeneratorMock;
+    late MockLearningRateGeneratorFactory learningRateGeneratorFactoryMock;
     late MockInitialCoefficientsGenerator initialCoefficientsGeneratorMock;
     late InitialCoefficientsGeneratorFactory initialWeightsGeneratorFactoryMock;
     late MockConvergenceDetector convergenceDetectorMock;

@@ -39,7 +39,7 @@ void main() {
     late CostFunction costFunctionMock;
     late CostFunctionFactory costFunctionFactoryMock;
     late MockLinearOptimizer linearOptimizerMock;
-    late LinearOptimizerFactory linearOptimizerFactoryMock;
+    late MockLinearOptimizerFactory linearOptimizerFactoryMock;
 
     setUp(() {
       costFunctionMock = MockCostFunction();
@@ -115,11 +115,11 @@ void main() {
         argThat(iterable2dAlmostEqualTo([
           [3.0, 10, 20, 30, 40],
           [3.0, 11, 22, 33, 44],
-        ])) as Matrix,
+        ])),
         argThat(equals([
           [200],
           [500],
-        ])) as Matrix,
+        ])),
         dtype: DType.float32,
         costFunction: costFunctionMock,
         learningRateType: LearningRateType.decreasingAdaptive,

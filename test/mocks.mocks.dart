@@ -700,7 +700,7 @@ class MockKnnSolver extends _i1.Mock implements _i18.KnnSolver {
   Iterable<Iterable<_i55.Neighbour<_i9.Vector>>> findKNeighbours(
           _i8.Matrix? features) =>
       (super.noSuchMethod(Invocation.method(#findKNeighbours, [features]),
-          returnValue: []) as Iterable<Iterable<_i55.Neighbour<_i9.Vector>>>);
+          returnValue: <Iterable<_i55.Neighbour<_i9.Vector>>>[]) as Iterable<Iterable<_i55.Neighbour<_i9.Vector>>>);
 }
 
 /// A class which mocks [KnnSolverFactory].
