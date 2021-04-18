@@ -2,10 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type_json_encoded_values.dart';
 
-class RegularizationTypeJsonConverter implements
+class RegularizationTypeJsonConverterNullable implements
     JsonConverter<RegularizationType?, String?> {
 
-  const RegularizationTypeJsonConverter();
+  const RegularizationTypeJsonConverterNullable();
 
   @override
   RegularizationType? fromJson(String? json) {

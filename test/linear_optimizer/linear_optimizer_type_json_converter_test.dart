@@ -17,9 +17,12 @@ void main() {
           LinearOptimizerType.coordinate);
     });
 
-    test('should return null for unknown encoded value', () {
-      expect(const LinearOptimizerTypeJsonConverter()
-          .fromJson('unknown_value'), null);
+    test('should throw exception if unknown value is provided', () {
+      expect(
+            () => const LinearOptimizerTypeJsonConverter()
+                .fromJson('unknown_value'),
+          throwsException,
+      );
     });
 
     test('should encode ${LinearOptimizerType.gradient} type', () {
@@ -32,10 +35,6 @@ void main() {
       expect(const LinearOptimizerTypeJsonConverter()
           .toJson(LinearOptimizerType.coordinate),
           coordinateLinearOptimizerTypeEncodedValue);
-    });
-
-    test('should return null for unknown type', () {
-      expect(const LinearOptimizerTypeJsonConverter().toJson(null), null);
     });
   });
 }

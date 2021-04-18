@@ -11,19 +11,15 @@ void main() {
           InitialCoefficientsType.zeroes);
     });
 
-    test('should return null for unknown encoded value', () {
-      expect(const InitialCoefficientsTypeJsonConverter()
-          .fromJson('unknown_value'), null);
+    test('should throw exception in case of unknown encoded value', () {
+      expect(() => const InitialCoefficientsTypeJsonConverter()
+          .fromJson('unknown_value'), throwsException);
     });
 
     test('should encode ${InitialCoefficientsType.zeroes} type', () {
       expect(const InitialCoefficientsTypeJsonConverter()
           .toJson(InitialCoefficientsType.zeroes),
           zeroesInitialCoefficientsTypeJsonEncodedValue);
-    });
-
-    test('should return null for unknown type', () {
-      expect(const InitialCoefficientsTypeJsonConverter().toJson(null), null);
     });
   });
 }

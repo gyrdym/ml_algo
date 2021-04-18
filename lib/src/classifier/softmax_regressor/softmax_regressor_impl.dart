@@ -10,6 +10,7 @@ import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
+import 'package:ml_algo/src/common/json_converter/matrix_json_converter_nullable.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
@@ -20,7 +21,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
-import 'package:ml_algo/src/linear_optimizer/regularization_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type_json_converter_nullable.dart';
 import 'package:ml_algo/src/link_function/helpers/from_link_function_json.dart';
 import 'package:ml_algo/src/link_function/helpers/link_function_to_json.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
@@ -34,10 +35,11 @@ part 'softmax_regressor_impl.g.dart';
 @JsonSerializable()
 @DTypeJsonConverter()
 @LinearOptimizerTypeJsonConverter()
-@RegularizationTypeJsonConverter()
+@RegularizationTypeJsonConverterNullable()
 @LearningRateTypeJsonConverter()
 @InitialCoefficientsTypeJsonConverter()
 @MatrixJsonConverter()
+@MatrixJsonConverterNullable()
 class SoftmaxRegressorImpl
     with
         LinearClassifierMixin,

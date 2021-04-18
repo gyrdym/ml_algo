@@ -11,9 +11,15 @@ KnnSolverImpl _$KnnSolverImplFromJson(Map<String, dynamic> json) {
     $checkKeys(json, allowedKeys: const ['F', 'O', 'K', 'D', 'S', r'$V']);
     final val = KnnSolverImpl(
       $checkedConvert(
-          json, 'F', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
+          json,
+          'F',
+          (v) =>
+              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
-          json, 'O', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
+          json,
+          'O',
+          (v) =>
+              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'K', (v) => v as int),
       $checkedConvert(json, 'D',
           (v) => const DistanceTypeJsonConverter().fromJson(v as String)),
@@ -33,8 +39,8 @@ KnnSolverImpl _$KnnSolverImplFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$KnnSolverImplToJson(KnnSolverImpl instance) =>
     <String, dynamic>{
-      'F': instance.trainFeatures,
-      'O': instance.trainOutcomes,
+      'F': const MatrixJsonConverter().toJson(instance.trainFeatures),
+      'O': const MatrixJsonConverter().toJson(instance.trainOutcomes),
       'K': instance.k,
       'D': const DistanceTypeJsonConverter().toJson(instance.distanceType),
       'S': instance.standardize,

@@ -34,7 +34,10 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     ]);
     final val = SoftmaxRegressorImpl(
       $checkedConvert(
-          json, 'OT', (v) => _$enumDecode(_$LinearOptimizerTypeEnumMap, v)),
+          json,
+          'OT',
+          (v) =>
+              const LinearOptimizerTypeJsonConverter().fromJson(v as String)),
       $checkedConvert(json, 'IL', (v) => v as int),
       $checkedConvert(json, 'ILR', (v) => (v as num).toDouble()),
       $checkedConvert(json, 'MCU', (v) => (v as num).toDouble()),
@@ -42,22 +45,28 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(
           json,
           'RT',
-          (v) =>
-              const RegularizationTypeJsonConverter().fromJson(v as String?)),
+          (v) => const RegularizationTypeJsonConverterNullable()
+              .fromJson(v as String?)),
       $checkedConvert(json, 'RS', (v) => v as int?),
       $checkedConvert(json, 'BS', (v) => v as int),
       $checkedConvert(json, 'FDN', (v) => v as bool),
       $checkedConvert(json, 'LR',
           (v) => const LearningRateTypeJsonConverter().fromJson(v as String)),
-      $checkedConvert(json, 'ICT',
-          (v) => _$enumDecode(_$InitialCoefficientsTypeEnumMap, v)),
+      $checkedConvert(
+          json,
+          'ICT',
+          (v) => const InitialCoefficientsTypeJsonConverter()
+              .fromJson(v as String)),
       $checkedConvert(
           json,
           'IC',
-          (v) =>
-              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>?)),
+          (v) => const MatrixJsonConverterNullable()
+              .fromJson(v as Map<String, dynamic>?)),
       $checkedConvert(
-          json, 'CBC', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
+          json,
+          'CBC',
+          (v) =>
+              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
           json, 'CN', (v) => (v as List<dynamic>).map((e) => e as String)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
@@ -101,7 +110,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$SoftmaxRegressorImplToJson(
     SoftmaxRegressorImpl instance) {
   final val = <String, dynamic>{
-    'OT': _$LinearOptimizerTypeEnumMap[instance.optimizerType],
+    'OT':
+        const LinearOptimizerTypeJsonConverter().toJson(instance.optimizerType),
     'IL': instance.iterationsLimit,
     'ILR': instance.initialLearningRate,
     'MCU': instance.minCoefficientsUpdate,
@@ -116,21 +126,24 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
 
   writeNotNull(
       'RT',
-      const RegularizationTypeJsonConverter()
+      const RegularizationTypeJsonConverterNullable()
           .toJson(instance.regularizationType));
   writeNotNull('RS', instance.randomSeed);
   val['BS'] = instance.batchSize;
   val['FDN'] = instance.isFittingDataNormalized;
   val['LR'] =
       const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
-  val['ICT'] =
-      _$InitialCoefficientsTypeEnumMap[instance.initialCoefficientsType];
   writeNotNull(
-      'IC', const MatrixJsonConverter().toJson(instance.initialCoefficients));
+      'ICT',
+      const InitialCoefficientsTypeJsonConverter()
+          .toJson(instance.initialCoefficientsType));
+  writeNotNull('IC',
+      const MatrixJsonConverterNullable().toJson(instance.initialCoefficients));
   val['CN'] = instance.targetNames.toList();
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;
-  val['CBC'] = instance.coefficientsByClasses;
+  val['CBC'] =
+      const MatrixJsonConverter().toJson(instance.coefficientsByClasses);
   val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
   val['LF'] = linkFunctionToJson(instance.linkFunction);
   val['PL'] = instance.positiveLabel;
@@ -139,38 +152,3 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
   val[r'$V'] = instance.schemaVersion;
   return val;
 }
-
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
-
-const _$LinearOptimizerTypeEnumMap = {
-  LinearOptimizerType.gradient: 'gradient',
-  LinearOptimizerType.coordinate: 'coordinate',
-};
-
-const _$InitialCoefficientsTypeEnumMap = {
-  InitialCoefficientsType.zeroes: 'zeroes',
-};
