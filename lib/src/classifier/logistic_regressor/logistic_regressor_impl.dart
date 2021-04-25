@@ -11,7 +11,7 @@ import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter_nullable.dart';
-import 'package:ml_algo/src/common/json_converter/vector_json_converter.dart';
+import 'package:ml_algo/src/common/json_converter/vector_json_converter_nullable.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
@@ -39,7 +39,7 @@ part 'logistic_regressor_impl.g.dart';
 @DTypeJsonConverter()
 @MatrixJsonConverter()
 @MatrixJsonConverterNullable()
-@VectorJsonConverter()
+@VectorJsonConverterNullable()
 @RegularizationTypeJsonConverterNullable()
 @LearningRateTypeJsonConverter()
 @InitialCoefficientsTypeJsonConverter()

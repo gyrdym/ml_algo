@@ -62,8 +62,8 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       $checkedConvert(
           json,
           'IC',
-          (v) =>
-              const VectorJsonConverter().fromJson(v as Map<String, dynamic>)),
+          (v) => const VectorJsonConverterNullable()
+              .fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
           json, 'CN', (v) => (v as List<dynamic>).map((e) => e as String)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
@@ -141,8 +141,8 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
       'ICT',
       const InitialCoefficientsTypeJsonConverter()
           .toJson(instance.initialCoefficientsType));
-  writeNotNull(
-      'IC', const VectorJsonConverter().toJson(instance.initialCoefficients));
+  writeNotNull('IC',
+      const VectorJsonConverterNullable().toJson(instance.initialCoefficients));
   val['CBC'] =
       const MatrixJsonConverter().toJson(instance.coefficientsByClasses);
   val['CN'] = instance.targetNames.toList();

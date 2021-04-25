@@ -41,7 +41,7 @@ void main() {
       [defaultNegativeLabel, defaultNegativeLabel, defaultPositiveLabel],
       [defaultPositiveLabel, defaultNegativeLabel, defaultNegativeLabel],
     ]);
-    final observations = DataFrame.fromMatrix(
+    final defaultTrainData = DataFrame.fromMatrix(
       Matrix.fromColumns([
         ...features.columns,
         ...outcomes.columns,
@@ -91,8 +91,9 @@ void main() {
       bool? isFittingDataNormalized,
       bool collectLearningData = false,
       DType dtype = DType.float32,
+      int? batchSize,
     }) => factory.create(
-      trainData: trainData ?? observations,
+      trainData: trainData ?? defaultTrainData,
       targetNames: targetColumnNames,
       optimizerType: optimizerType ?? LinearOptimizerType.gradient,
       learningRateType: learningRateType ?? LearningRateType.constant,
@@ -111,7 +112,7 @@ void main() {
       isFittingDataNormalized: isFittingDataNormalized ?? defaultNormalizedFlag,
       collectLearningData: collectLearningData,
       dtype: dtype,
-      batchSize: (trainData ?? observations).rows.length,
+      batchSize: batchSize ?? ((trainData ?? defaultTrainData).rows.length),
     );
 
     setUp(() {
@@ -182,7 +183,6 @@ void main() {
     test('should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
       createRegressor(
-        trainData: observations,
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
         optimizerType: LinearOptimizerType.gradient,
         learningRateType: LearningRateType.constant,
@@ -199,6 +199,7 @@ void main() {
         negativeLabel: defaultNegativeLabel,
         positiveLabel: defaultPositiveLabel,
         dtype: DType.float32,
+        batchSize: 1,
       );
 
       verify(optimizerFactoryMock.createByType(
@@ -237,7 +238,6 @@ void main() {
     test('should find the extrema for fitting observations while '
         'instantiating', () {
       createRegressor(
-        trainData: observations,
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
         initialCoefficients: defaultInitialCoefficients,
         dtype: DType.float32,
@@ -252,7 +252,6 @@ void main() {
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=true', () {
       createRegressor(
-        trainData: observations,
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: true,
         dtype: DType.float32,
@@ -260,7 +259,7 @@ void main() {
 
       verify(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
         collectLearningData: true,
       )).called(1);
     });
@@ -268,7 +267,6 @@ void main() {
     test('should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=false', () {
       createRegressor(
-        trainData: observations,
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
         collectLearningData: false,
         dtype: DType.float32,
@@ -276,7 +274,7 @@ void main() {
 
       verify(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
-        isMinimizingObjective: anyNamed('isMinimizingObjective') as bool,
+        isMinimizingObjective: anyNamed('isMinimizingObjective'),
         collectLearningData: false,
       )).called(1);
     });
