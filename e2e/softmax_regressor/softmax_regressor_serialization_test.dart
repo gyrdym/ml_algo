@@ -6,8 +6,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('SoftmaxRegressor', () {
-    test('should deserialize v0 schema version', () async {
-      final file = File('e2e/softmax_regressor/softmax_regressor_v0.json');
+    test('should deserialize v1 schema version', () async {
+      final file = File('e2e/softmax_regressor/softmax_regressor_v1.json');
       final encodedData = await file.readAsString();
       final regressor = SoftmaxRegressor.fromJson(encodedData);
 

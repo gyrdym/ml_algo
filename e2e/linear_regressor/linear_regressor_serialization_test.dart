@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 void main() {
   group('LinearRegressor', () {
     test('should deserialize v1 schema version', () async {
-      final file = File('e2e/linear_regressor/linear_regressor_v0.json');
+      final file = File('e2e/linear_regressor/linear_regressor_v1.json');
       final encodedData = await file.readAsString();
       final regressor = LinearRegressor.fromJson(encodedData);
 
