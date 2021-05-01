@@ -4,12 +4,11 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_ge
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
-import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('LinearRegressor', () {
-    test('should deserialize v0 schema version', () async {
+    test('should deserialize v1 schema version', () async {
       final file = File('e2e/linear_regressor/linear_regressor_v0.json');
       final encodedData = await file.readAsString();
       final regressor = LinearRegressor.fromJson(encodedData);

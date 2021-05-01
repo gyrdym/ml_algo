@@ -16,8 +16,8 @@ void main() {
       expect(classifier.distanceType, Distance.euclidean);
       expect(classifier.kernelType, KernelType.gaussian);
       expect(classifier.k, 5);
-      expect(classifier.negativeLabel, isNull);
-      expect(classifier.positiveLabel, isNull);
+      expect(classifier.negativeLabel, isNaN);
+      expect(classifier.positiveLabel, isNaN);
       expect(classifier.dtype, DType.float32);
       expect(classifier.targetNames, ['Species']);
     });

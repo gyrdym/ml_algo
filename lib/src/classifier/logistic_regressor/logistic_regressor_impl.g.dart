@@ -137,10 +137,8 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
   val['N'] = instance.isFittingDataNormalized;
   val['LRT'] =
       const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
-  writeNotNull(
-      'ICT',
-      const InitialCoefficientsTypeJsonConverter()
-          .toJson(instance.initialCoefficientsType));
+  val['ICT'] = const InitialCoefficientsTypeJsonConverter()
+      .toJson(instance.initialCoefficientsType);
   writeNotNull('IC',
       const VectorJsonConverterNullable().toJson(instance.initialCoefficients));
   val['CBC'] =
