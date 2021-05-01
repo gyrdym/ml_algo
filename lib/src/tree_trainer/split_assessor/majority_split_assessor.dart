@@ -17,12 +17,13 @@ class MajorityTreeSplitAssessor implements TreeSplitAssessor {
         throw Exception('Observations on the node are empty');
       }
       if (targetId >= nodeObservations.columnsNum) {
-        throw ArgumentError.value(targetId, 'targetId',
+        throw ArgumentError.value(
+            targetId,
+            'targetId',
             'the value should be in [0..${nodeObservations.columnsNum - 1}] '
                 'range, but given');
       }
-      errorCount += _getErrorCount(nodeObservations
-          .getColumn(targetId));
+      errorCount += _getErrorCount(nodeObservations.getColumn(targetId));
       totalCount += nodeObservations.rowsNum;
     }
     return errorCount / totalCount;
@@ -31,7 +32,7 @@ class MajorityTreeSplitAssessor implements TreeSplitAssessor {
   @override
   double getError(Matrix splitObservations, int targetId) =>
       _getErrorCount(splitObservations.getColumn(targetId)) /
-          splitObservations.rowsNum;
+      splitObservations.rowsNum;
 
   int _getErrorCount(Vector outcomes) {
     if (outcomes.isEmpty) {

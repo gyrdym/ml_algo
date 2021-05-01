@@ -20,12 +20,7 @@ import 'package:ml_linalg/vector.dart';
 /// that makes combination of passed features and these coefficients most
 /// likely.
 abstract class LogisticRegressor
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        LinearClassifier {
-
+    implements Assessable, Serializable, Retrainable, LinearClassifier {
   /// Parameters:
   ///
   /// [trainData] Observations that will be used by the classifier to learn
@@ -125,8 +120,8 @@ abstract class LogisticRegressor
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory LogisticRegressor(
-      DataFrame trainData,
-      String targetName, {
+    DataFrame trainData,
+    String targetName, {
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
@@ -148,31 +143,30 @@ abstract class LogisticRegressor
     Vector? initialCoefficients,
     int? randomSeed,
   }) =>
-      initLogisticRegressorModule()
-          .get<LogisticRegressorFactory>()
-          .create(
-        trainData: trainData,
-        targetName: targetName,
-        optimizerType: optimizerType,
-        iterationsLimit: iterationsLimit,
-        initialLearningRate: initialLearningRate,
-        minCoefficientsUpdate: minCoefficientsUpdate,
-        probabilityThreshold: probabilityThreshold,
-        lambda: lambda,
-        regularizationType: regularizationType,
-        randomSeed: randomSeed,
-        batchSize: batchSize,
-        fitIntercept: fitIntercept,
-        interceptScale: interceptScale,
-        isFittingDataNormalized: isFittingDataNormalized,
-        learningRateType: learningRateType,
-        initialCoefficientsType: initialCoefficientsType,
-        initialCoefficients: initialCoefficients ?? Vector.empty(dtype: dtype),
-        positiveLabel: positiveLabel,
-        negativeLabel: negativeLabel,
-        collectLearningData: collectLearningData,
-        dtype: dtype,
-      );
+      initLogisticRegressorModule().get<LogisticRegressorFactory>().create(
+            trainData: trainData,
+            targetName: targetName,
+            optimizerType: optimizerType,
+            iterationsLimit: iterationsLimit,
+            initialLearningRate: initialLearningRate,
+            minCoefficientsUpdate: minCoefficientsUpdate,
+            probabilityThreshold: probabilityThreshold,
+            lambda: lambda,
+            regularizationType: regularizationType,
+            randomSeed: randomSeed,
+            batchSize: batchSize,
+            fitIntercept: fitIntercept,
+            interceptScale: interceptScale,
+            isFittingDataNormalized: isFittingDataNormalized,
+            learningRateType: learningRateType,
+            initialCoefficientsType: initialCoefficientsType,
+            initialCoefficients:
+                initialCoefficients ?? Vector.empty(dtype: dtype),
+            positiveLabel: positiveLabel,
+            negativeLabel: negativeLabel,
+            collectLearningData: collectLearningData,
+            dtype: dtype,
+          );
 
   /// Restores previously fitted classifier instance from the [json]
   ///
@@ -213,9 +207,9 @@ abstract class LogisticRegressor
   /// // some prediction, e.g. via `restoredClassifier.predict(...)`;
   /// ````
   factory LogisticRegressor.fromJson(String json) =>
-    initLogisticRegressorModule()
-        .get<LogisticRegressorFactory>()
-        .fromJson(json);
+      initLogisticRegressorModule()
+          .get<LogisticRegressorFactory>()
+          .fromJson(json);
 
   /// An algorithm of linear optimization that was used
   /// to find the best coefficients of log-likelihood cost function. Also

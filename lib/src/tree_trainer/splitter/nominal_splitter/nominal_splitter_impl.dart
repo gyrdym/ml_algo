@@ -8,31 +8,30 @@ class NominalTreeSplitterImpl implements NominalTreeSplitter {
   const NominalTreeSplitterImpl();
 
   @override
-  Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      List<num> uniqueValues) =>
+  Map<TreeNode, Matrix> split(
+          Matrix samples, int splittingIdx, List<num> uniqueValues) =>
+      Map.fromEntries(
+        uniqueValues.map((value) {
+          final splittingClauseType = TreeNodeSplittingPredicateType.equalTo;
+          final splittingPredicate =
+              getTreeNodeSplittingPredicateByType(splittingClauseType);
 
-      Map.fromEntries(uniqueValues.map((value) {
-        final splittingClauseType = TreeNodeSplittingPredicateType.equalTo;
-        final splittingPredicate = getTreeNodeSplittingPredicateByType(
-            splittingClauseType);
+          final foundRows = samples.rows
+              .where((row) => splittingPredicate(row, splittingIdx, value))
+              .toList(growable: false);
 
-        final foundRows = samples
-            .rows
-            .where((row) => splittingPredicate(row, splittingIdx, value))
-            .toList(growable: false);
+          final node = TreeNode(
+            splittingClauseType,
+            value,
+            splittingIdx,
+            null,
+            null,
+          );
 
-        final node = TreeNode(
-          splittingClauseType,
-          value,
-          splittingIdx,
-          null,
-          null,
-        );
-
-        return MapEntry(
-          node,
-          Matrix.fromRows(foundRows, dtype: samples.dtype),
-        );
-      }).where((entry) => entry.value.rowsNum > 0),
-  );
+          return MapEntry(
+            node,
+            Matrix.fromRows(foundRows, dtype: samples.dtype),
+          );
+        }).where((entry) => entry.value.rowsNum > 0),
+      );
 }

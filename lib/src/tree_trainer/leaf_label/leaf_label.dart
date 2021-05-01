@@ -11,7 +11,8 @@ part 'leaf_label.g.dart';
 
 @JsonSerializable()
 class TreeLeafLabel implements Serializable {
-  TreeLeafLabel(this.value, {
+  TreeLeafLabel(
+    this.value, {
     required this.probability,
     // Define schema version here because of json serializer
   }) : schemaVersion = leafLabelJsonSchemaVersion {

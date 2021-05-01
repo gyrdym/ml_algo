@@ -57,11 +57,13 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
       dtype: dtype,
     );
 
-    final coefficients = optimizer.findExtrema(
-      initialCoefficients: initialCoefficients,
-      isMinimizingObjective: true,
-      collectLearningData: collectLearningData,
-    ).getColumn(0);
+    final coefficients = optimizer
+        .findExtrema(
+          initialCoefficients: initialCoefficients,
+          isMinimizingObjective: true,
+          collectLearningData: collectLearningData,
+        )
+        .getColumn(0);
     final costPerIteration = optimizer.costPerIteration;
 
     return LinearRegressorImpl(
@@ -93,5 +95,4 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
 
     return LinearRegressorImpl.fromJson(v2Schema);
   }
-
 }

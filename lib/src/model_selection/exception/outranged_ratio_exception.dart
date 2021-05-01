@@ -1,7 +1,7 @@
 class OutRangedRatioException implements Exception {
   OutRangedRatioException(double ratio)
       : message = 'Ratio value must be within the range 0..1 (both exclusive), '
-      '$ratio given';
+            '$ratio given';
 
   final String message;
 

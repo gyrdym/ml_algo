@@ -14,9 +14,9 @@ import 'package:quiver/iterables.dart';
 
 class TreeTrainerFactoryImpl implements TreeTrainerFactory {
   const TreeTrainerFactoryImpl(
-      this._leafDetectorFactory,
-      this._leafLabelFactoryFactory,
-      this._splitSelectorFactory,
+    this._leafDetectorFactory,
+    this._leafLabelFactoryFactory,
+    this._splitSelectorFactory,
   );
 
   final TreeLeafDetectorFactory _leafDetectorFactory;
@@ -25,17 +25,17 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
 
   @override
   TreeTrainer createByType(
-      TreeTrainerType type,
-      DataFrame samples,
-      String targetName,
-      num minErrorOnNode,
-      int minSamplesCount,
-      int maxDepth,
-      TreeSplitAssessorType assessorType,
-      TreeLeafLabelFactoryType leafLabelFactoryType,
-      TreeSplitSelectorType splitSelectorType,
-      TreeSplitAssessorType splitAssessorType,
-      TreeSplitterType splitterType,
+    TreeTrainerType type,
+    DataFrame samples,
+    String targetName,
+    num minErrorOnNode,
+    int minSamplesCount,
+    int maxDepth,
+    TreeSplitAssessorType assessorType,
+    TreeLeafLabelFactoryType leafLabelFactoryType,
+    TreeSplitSelectorType splitSelectorType,
+    TreeSplitAssessorType splitAssessorType,
+    TreeSplitterType splitterType,
   ) {
     final targetIdx = enumerate(samples.header)
         .firstWhere((indexedName) => indexedName.value == targetName)
@@ -43,29 +43,26 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
     final featuresIndexedSeries = enumerate(samples.series)
         .where((indexed) => indexed.index != targetIdx);
     final featureIdxToUniqueValues = Map.fromEntries(
-        featuresIndexedSeries
-            .where((indexed) => indexed.value.isDiscrete)
-            .map((indexed) => MapEntry(indexed.index, indexed
-            .value
-            .discreteValues
-            .map((dynamic value) => value as num)
-            .toList(growable: false)
-        )),
+      featuresIndexedSeries.where((indexed) => indexed.value.isDiscrete).map(
+          (indexed) => MapEntry(
+              indexed.index,
+              indexed.value.discreteValues
+                  .map((dynamic value) => value as num)
+                  .toList(growable: false))),
     );
-    final leafDetector = _leafDetectorFactory
-        .create(assessorType, minErrorOnNode, minSamplesCount, maxDepth);
+    final leafDetector = _leafDetectorFactory.create(
+        assessorType, minErrorOnNode, minSamplesCount, maxDepth);
 
-    final leafLabelFactory = _leafLabelFactoryFactory
-        .createByType(leafLabelFactoryType);
+    final leafLabelFactory =
+        _leafLabelFactoryFactory.createByType(leafLabelFactoryType);
 
-    final splitSelector = _splitSelectorFactory
-        .createByType(splitSelectorType, splitAssessorType, splitterType);
+    final splitSelector = _splitSelectorFactory.createByType(
+        splitSelectorType, splitAssessorType, splitterType);
 
     switch (type) {
       case TreeTrainerType.decision:
         return DecisionTreeTrainer(
-          featuresIndexedSeries
-              .map((indexed) => indexed.index),
+          featuresIndexedSeries.map((indexed) => indexed.index),
           targetIdx,
           featureIdxToUniqueValues,
           leafDetector,

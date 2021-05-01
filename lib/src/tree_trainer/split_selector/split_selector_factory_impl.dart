@@ -18,14 +18,14 @@ class TreeSplitSelectorFactoryImpl implements TreeSplitSelectorFactory {
 
   @override
   TreeSplitSelector createByType(
-      TreeSplitSelectorType type,
-      TreeSplitAssessorType assessorType,
-      TreeSplitterType splitterType,
+    TreeSplitSelectorType type,
+    TreeSplitAssessorType assessorType,
+    TreeSplitterType splitterType,
   ) {
     final assessor = _assessorFactory.createByType(assessorType);
     final splitter = _splitterFactory.createByType(splitterType, assessorType);
 
-    switch(type) {
+    switch (type) {
       case TreeSplitSelectorType.greedy:
         return GreedyTreeSplitSelector(assessor, splitter);
 

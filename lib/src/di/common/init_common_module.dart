@@ -32,53 +32,36 @@ typedef EncoderFactory = Encoder Function(DataFrame, Iterable<String>);
 void initCommonModule() {
   injector
     ..registerSingletonIf<EncoderFactory>(
-            () => (DataFrame data, Iterable<String> targetNames) =>
+        () => (DataFrame data, Iterable<String> targetNames) =>
             Encoder.oneHot(data, featureNames: targetNames),
         dependencyName: oneHotEncoderFactoryKey)
-
     ..registerSingletonIf<RandomizerFactory>(
-            () => const RandomizerFactoryImpl())
-
-    ..registerSingletonIf<FeaturesTargetSplit>(
-            () => featuresTargetSplit)
-
-    ..registerSingletonIf<MetricFactory>(
-            () => const MetricFactoryImpl())
-
-    ..registerSingletonIf<NormalizeClassLabels>(
-            () => normalizeClassLabels)
-
+        () => const RandomizerFactoryImpl())
+    ..registerSingletonIf<FeaturesTargetSplit>(() => featuresTargetSplit)
+    ..registerSingletonIf<MetricFactory>(() => const MetricFactoryImpl())
+    ..registerSingletonIf<NormalizeClassLabels>(() => normalizeClassLabels)
     ..registerSingletonIf<LearningRateGeneratorFactory>(
-            () => const LearningRateGeneratorFactoryImpl())
-
+        () => const LearningRateGeneratorFactoryImpl())
     ..registerSingletonIf<InitialCoefficientsGeneratorFactory>(
-            () => const InitialCoefficientsGeneratorFactoryImpl())
-
+        () => const InitialCoefficientsGeneratorFactoryImpl())
     ..registerSingletonIf<ConvergenceDetectorFactory>(
-            () => const ConvergenceDetectorFactoryImpl())
-
+        () => const ConvergenceDetectorFactoryImpl())
     ..registerSingletonIf<CostFunctionFactory>(
-            () => const CostFunctionFactoryImpl())
-
+        () => const CostFunctionFactoryImpl())
     ..registerSingletonIf<LinearOptimizerFactory>(
-            () => LinearOptimizerFactoryImpl(
-          injector.get<InitialCoefficientsGeneratorFactory>(),
-          injector.get<LearningRateGeneratorFactory>(),
-          injector.get<ConvergenceDetectorFactory>(),
-          injector.get<RandomizerFactory>(),
+        () => LinearOptimizerFactoryImpl(
+              injector.get<InitialCoefficientsGeneratorFactory>(),
+              injector.get<LearningRateGeneratorFactory>(),
+              injector.get<ConvergenceDetectorFactory>(),
+              injector.get<RandomizerFactory>(),
+            ))
+    ..registerSingletonIf<ModelAssessor<Classifier>>(() => ClassifierAssessor(
+          injector.get<MetricFactory>(),
+          injector.get<EncoderFactory>(dependencyName: oneHotEncoderFactoryKey),
+          featuresTargetSplit,
+          normalizeClassLabels,
         ))
-      
-    ..registerSingletonIf<ModelAssessor<Classifier>>(() =>
-        ClassifierAssessor(
-            injector.get<MetricFactory>(),
-            injector.get<EncoderFactory>(
-                dependencyName: oneHotEncoderFactoryKey),
-            featuresTargetSplit,
-            normalizeClassLabels,
-        ))
-
-    ..registerSingletonIf<ModelAssessor<Predictor>>(() =>
-        RegressorAssessor(
+    ..registerSingletonIf<ModelAssessor<Predictor>>(() => RegressorAssessor(
           injector.get<MetricFactory>(),
           featuresTargetSplit,
         ));

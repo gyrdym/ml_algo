@@ -4,12 +4,12 @@ import 'package:ml_linalg/dtype.dart';
 
 abstract class DecisionTreeClassifierFactory {
   DecisionTreeClassifier create(
-      DataFrame trainData,
-      String targetName,
-      DType dtype,
-      num minError,
-      int minSamplesCount,
-      int maxDepth,
+    DataFrame trainData,
+    String targetName,
+    DType dtype,
+    num minError,
+    int minSamplesCount,
+    int maxDepth,
   );
 
   DecisionTreeClassifier fromJson(String json);

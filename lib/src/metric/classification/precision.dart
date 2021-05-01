@@ -6,13 +6,14 @@ class PrecisionMetric implements Metric {
   const PrecisionMetric();
 
   @override
+
   /// Accepts [predictedLabels] and [origLabels] with entries with `1` as
   /// positive label and `0` as negative one
   double getScore(Matrix predictedLabels, Matrix origLabels) {
-    final predictedTrueCounts = predictedLabels
-        .reduceRows((counts, row) => counts + row);
+    final predictedTrueCounts =
+        predictedLabels.reduceRows((counts, row) => counts + row);
 
-    return divideTruePositiveBy(predictedTrueCounts, origLabels,
-        predictedLabels);
+    return divideTruePositiveBy(
+        predictedTrueCounts, origLabels, predictedLabels);
   }
 }

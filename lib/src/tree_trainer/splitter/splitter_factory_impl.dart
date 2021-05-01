@@ -8,11 +8,10 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
 
 class TreeSplitterFactoryImpl implements TreeSplitterFactory {
-
   TreeSplitterFactoryImpl(
-      this._assessorFactory,
-      this._nominalSplitterFactory,
-      this._numericalSplitterFactory,
+    this._assessorFactory,
+    this._nominalSplitterFactory,
+    this._numericalSplitterFactory,
   );
 
   final TreeSplitAssessorFactory _assessorFactory;
@@ -20,16 +19,15 @@ class TreeSplitterFactoryImpl implements TreeSplitterFactory {
   final NumericalTreeSplitterFactory _numericalSplitterFactory;
 
   @override
-  TreeSplitter createByType(TreeSplitterType type,
-      TreeSplitAssessorType assessorType) {
+  TreeSplitter createByType(
+      TreeSplitterType type, TreeSplitAssessorType assessorType) {
     final assessor = _assessorFactory.createByType(assessorType);
     final numericalSplitter = _numericalSplitterFactory.create();
     final nominalSplitter = _nominalSplitterFactory.create();
 
     switch (type) {
       case TreeSplitterType.greedy:
-        return GreedyTreeSplitter(assessor, numericalSplitter,
-            nominalSplitter);
+        return GreedyTreeSplitter(assessor, numericalSplitter, nominalSplitter);
 
       default:
         throw UnsupportedError('Tree splitter type $type is not '

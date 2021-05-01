@@ -12,9 +12,7 @@ class GreedyTreeSplitSelector implements TreeSplitSelector {
 
   @override
   Map<TreeNode, Matrix> select(
-      Matrix samples,
-      int targetId,
-      Iterable<int> featuresColumnIdxs,
+      Matrix samples, int targetId, Iterable<int> featuresColumnIdxs,
       [Map<int, List<num>>? columnIdToUniqueValues]) {
     final errors = <double, List<Map<TreeNode, Matrix>>>{};
 
@@ -29,8 +27,7 @@ class GreedyTreeSplitSelector implements TreeSplitSelector {
           ifAbsent: () => [split]);
     });
 
-    final sorted = errors.keys.toList(growable: false)
-      ..sort();
+    final sorted = errors.keys.toList(growable: false)..sort();
     final minError = sorted.first;
 
     return errors[minError]!.first;

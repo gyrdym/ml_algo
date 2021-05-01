@@ -4,5 +4,6 @@ import 'package:ml_linalg/dtype.dart';
 
 abstract class InitialCoefficientsGeneratorFactory {
   InitialCoefficientsGenerator zeroes(DType dtype);
-  InitialCoefficientsGenerator fromType(InitialCoefficientsType type, DType dtype);
+  InitialCoefficientsGenerator fromType(
+      InitialCoefficientsType type, DType dtype);
 }

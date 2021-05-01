@@ -13,14 +13,9 @@ Injector initKnnRegressorModule() {
   initCommonModule();
 
   return knnRegressorInjector
-    ..registerSingletonIf<KernelFactory>(
-            () => const KernelFactoryImpl())
-
-    ..registerSingletonIf<KnnSolverFactory>(
-            () => const KnnSolverFactoryImpl())
-
-    ..registerSingletonIf<KnnRegressorFactory>(
-            () => KnnRegressorFactoryImpl(
+    ..registerSingletonIf<KernelFactory>(() => const KernelFactoryImpl())
+    ..registerSingletonIf<KnnSolverFactory>(() => const KnnSolverFactoryImpl())
+    ..registerSingletonIf<KnnRegressorFactory>(() => KnnRegressorFactoryImpl(
           knnRegressorInjector.get<KernelFactory>(),
           knnRegressorInjector.get<KnnSolverFactory>(),
         ));

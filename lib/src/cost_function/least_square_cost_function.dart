@@ -6,9 +6,7 @@ class LeastSquareCostFunction implements CostFunction {
   const LeastSquareCostFunction();
 
   @override
-  double getCost(Matrix x, Matrix w, Matrix y) => (x * w - y)
-      .pow(2)
-      .sum();
+  double getCost(Matrix x, Matrix w, Matrix y) => (x * w - y).pow(2).sum();
 
   @override
   Matrix getGradient(Matrix x, Matrix w, Matrix y) =>

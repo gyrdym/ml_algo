@@ -11,10 +11,10 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 class ClassifierAssessor implements ModelAssessor<Classifier> {
   ClassifierAssessor(
-      this._metricFactory,
-      this._encoderFactory,
-      this._featuresTargetSplit,
-      this._normalizeClassLabels,
+    this._metricFactory,
+    this._encoderFactory,
+    this._featuresTargetSplit,
+    this._normalizeClassLabels,
   );
 
   final MetricFactory _metricFactory;
@@ -24,13 +24,12 @@ class ClassifierAssessor implements ModelAssessor<Classifier> {
 
   @override
   double assess(
-      Classifier classifier,
-      MetricType metricType,
-      DataFrame samples,
+    Classifier classifier,
+    MetricType metricType,
+    DataFrame samples,
   ) {
     if (!classificationMetrics.contains(metricType)) {
-      throw InvalidMetricTypeException(
-          metricType, classificationMetrics);
+      throw InvalidMetricTypeException(metricType, classificationMetrics);
     }
 
     final splits = _featuresTargetSplit(
@@ -39,28 +38,20 @@ class ClassifierAssessor implements ModelAssessor<Classifier> {
     ).toList();
     final featuresFrame = splits[0];
     final originalLabelsFrame = splits[1];
-    final metric = _metricFactory
-        .createByType(metricType);
-    final labelEncoder = _encoderFactory(
-        originalLabelsFrame,
-        originalLabelsFrame.header
-    );
+    final metric = _metricFactory.createByType(metricType);
+    final labelEncoder =
+        _encoderFactory(originalLabelsFrame, originalLabelsFrame.header);
     final isTargetEncoded = classifier.targetNames.length > 1;
     final predictedLabels = !isTargetEncoded
         ? labelEncoder
             .process(classifier.predict(featuresFrame))
             .toMatrix(classifier.dtype)
-        : classifier
-            .predict(featuresFrame)
-            .toMatrix(classifier.dtype);
+        : classifier.predict(featuresFrame).toMatrix(classifier.dtype);
     final originalLabels = !isTargetEncoded
-        ? labelEncoder
-            .process(originalLabelsFrame)
-            .toMatrix(classifier.dtype)
-        : originalLabelsFrame
-            .toMatrix(classifier.dtype);
-    final predefinedClassLabelsExist = !classifier.negativeLabel.isNaN
-        && !classifier.positiveLabel.isNaN;
+        ? labelEncoder.process(originalLabelsFrame).toMatrix(classifier.dtype)
+        : originalLabelsFrame.toMatrix(classifier.dtype);
+    final predefinedClassLabelsExist =
+        !classifier.negativeLabel.isNaN && !classifier.positiveLabel.isNaN;
     final normalizedPredictedLabels = predefinedClassLabelsExist
         ? _normalizeClassLabels(
             predictedLabels,

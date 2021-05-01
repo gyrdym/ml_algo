@@ -74,9 +74,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       isMinimizingObjective: false,
       collectLearningData: collectLearningData,
     );
-    final costPerIteration = optimizer
-        .costPerIteration
-        .isNotEmpty
+    final costPerIteration = optimizer.costPerIteration.isNotEmpty
         ? optimizer.costPerIteration
         : null;
 

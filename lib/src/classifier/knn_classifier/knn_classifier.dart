@@ -22,11 +22,7 @@ import 'package:ml_linalg/dtype.dart';
 /// classifier. To get weight of a particular observation one may use a kernel
 /// function.
 abstract class KnnClassifier
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        Classifier {
+    implements Assessable, Serializable, Retrainable, Classifier {
   /// Parameters:
   ///
   /// [trainData] Labelled observations. Must contain [targetName] column.
@@ -46,26 +42,23 @@ abstract class KnnClassifier
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory KnnClassifier(
-      DataFrame trainData,
-      String targetName,
-      int k,
-      {
-        KernelType kernel = KernelType.gaussian,
-        Distance distance = Distance.euclidean,
-        String classLabelPrefix = 'Class label',
-        DType dtype = DType.float32,
-      }
-  ) => initKnnClassifierModule()
-      .get<KnnClassifierFactory>()
-      .create(
-    trainData,
-    targetName,
-    k,
-    kernel,
-    distance,
-    classLabelPrefix,
-    dtype,
-  );
+    DataFrame trainData,
+    String targetName,
+    int k, {
+    KernelType kernel = KernelType.gaussian,
+    Distance distance = Distance.euclidean,
+    String classLabelPrefix = 'Class label',
+    DType dtype = DType.float32,
+  }) =>
+      initKnnClassifierModule().get<KnnClassifierFactory>().create(
+            trainData,
+            targetName,
+            k,
+            kernel,
+            distance,
+            classLabelPrefix,
+            dtype,
+          );
 
   /// Restores previously fitted classifier instance from the given [json]
   ///
@@ -101,9 +94,7 @@ abstract class KnnClassifier
   /// // some prediction, e.g. via `KnnClassifier.predict(...)`;
   /// ````
   factory KnnClassifier.fromJson(String json) =>
-      initKnnClassifierModule()
-          .get<KnnClassifierFactory>()
-          .fromJson(json);
+      initKnnClassifierModule().get<KnnClassifierFactory>().fromJson(json);
 
   /// A number of nearest neighbours
   ///
