@@ -460,7 +460,7 @@ void main() {
           dtype,
         );
 
-        expect(model.schemaVersion, 2);
+        expect(model.schemaVersion, 3);
       });
     });
   });

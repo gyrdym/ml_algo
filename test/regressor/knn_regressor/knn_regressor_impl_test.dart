@@ -208,6 +208,10 @@ void main() {
         expect(() => model.retrain(retrainingData),
             throwsA(isA<OutdatedJsonSchemaException>()));
       });
+
+      test('should return a proper schema version', () {
+        expect(regressor.schemaVersion, 1);
+      });
     });
   });
 }

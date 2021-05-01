@@ -343,6 +343,10 @@ void main() {
       expect(() => model.retrain(retrainingDataFrame),
           throwsA(isA<OutdatedJsonSchemaException>()));
     });
+
+    test('should return a proper schema version', () {
+      expect(classifier32.schemaVersion, 1);
+    });
   });
 }
 

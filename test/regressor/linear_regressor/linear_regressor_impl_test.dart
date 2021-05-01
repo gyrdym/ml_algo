@@ -111,5 +111,11 @@ void main() {
       expect(retrainedModel, same(retrainedModelMock));
       expect(retrainedModel, isNot(same(regressor)));
     });
+
+    test('should return a proper schema version', () {
+      final regressor = createRegressor();
+
+      expect(regressor.schemaVersion, 2);
+    });
   });
 }
