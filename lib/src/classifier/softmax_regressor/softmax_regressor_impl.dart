@@ -36,39 +36,32 @@ part 'softmax_regressor_impl.g.dart';
 @LearningRateTypeJsonConverter()
 @InitialCoefficientsTypeJsonConverter()
 class SoftmaxRegressorImpl
-    with
-        LinearClassifierMixin,
-        AssessableClassifierMixin,
-        SerializableMixin
-    implements
-        SoftmaxRegressor {
-
+    with LinearClassifierMixin, AssessableClassifierMixin, SerializableMixin
+    implements SoftmaxRegressor {
   SoftmaxRegressorImpl(
-      this.optimizerType,
-      this.iterationsLimit,
-      this.initialLearningRate,
-      this.minCoefficientsUpdate,
-      this.lambda,
-      this.regularizationType,
-      this.randomSeed,
-      this.batchSize,
-      this.isFittingDataNormalized,
-      this.learningRateType,
-      this.initialCoefficientsType,
-      this.initialCoefficients,
-      this.coefficientsByClasses,
-      this.targetNames,
-      this.linkFunction,
-      this.fitIntercept,
-      this.interceptScale,
-      this.positiveLabel,
-      this.negativeLabel,
-      this.costPerIteration,
-      this.dtype,
-      {
-        this.schemaVersion = softmaxRegressorJsonSchemaVersion,
-      }
-  ) {
+    this.optimizerType,
+    this.iterationsLimit,
+    this.initialLearningRate,
+    this.minCoefficientsUpdate,
+    this.lambda,
+    this.regularizationType,
+    this.randomSeed,
+    this.batchSize,
+    this.isFittingDataNormalized,
+    this.learningRateType,
+    this.initialCoefficientsType,
+    this.initialCoefficients,
+    this.coefficientsByClasses,
+    this.targetNames,
+    this.linkFunction,
+    this.fitIntercept,
+    this.interceptScale,
+    this.positiveLabel,
+    this.negativeLabel,
+    this.costPerIteration,
+    this.dtype, {
+    this.schemaVersion = softmaxRegressorJsonSchemaVersion,
+  }) {
     validateClassLabels(positiveLabel, negativeLabel);
     validateCoefficientsMatrix(coefficientsByClasses);
 
@@ -183,9 +176,8 @@ class SoftmaxRegressorImpl
   DataFrame predict(DataFrame testFeatures) {
     final allProbabilities = getProbabilitiesMatrix(testFeatures);
     final labels = allProbabilities.mapRows((probabilities) {
-      final positiveLabelIdx = probabilities
-          .toList()
-          .indexOf(probabilities.max());
+      final positiveLabelIdx =
+          probabilities.toList().indexOf(probabilities.max());
       final predictedRow = List.filled(
         coefficientsByClasses.columnsNum,
         negativeLabel,
@@ -204,29 +196,27 @@ class SoftmaxRegressorImpl
 
   @override
   SoftmaxRegressor retrain(DataFrame data) {
-    return softmaxRegressorInjector
-        .get<SoftmaxRegressorFactory>()
-        .create(
-      trainData: data,
-      targetNames: targetNames,
-      optimizerType: optimizerType,
-      iterationsLimit: iterationsLimit,
-      initialLearningRate: initialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate,
-      lambda: lambda,
-      regularizationType: regularizationType,
-      randomSeed: randomSeed,
-      batchSize: batchSize,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale.toDouble(),
-      learningRateType: learningRateType,
-      isFittingDataNormalized: isFittingDataNormalized,
-      initialCoefficientsType: initialCoefficientsType,
-      initialCoefficients: initialCoefficients,
-      positiveLabel: positiveLabel,
-      negativeLabel: negativeLabel,
-      dtype: dtype,
-      collectLearningData: false,
-    );
+    return softmaxRegressorInjector.get<SoftmaxRegressorFactory>().create(
+          trainData: data,
+          targetNames: targetNames,
+          optimizerType: optimizerType,
+          iterationsLimit: iterationsLimit,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minCoefficientsUpdate,
+          lambda: lambda,
+          regularizationType: regularizationType,
+          randomSeed: randomSeed,
+          batchSize: batchSize,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale.toDouble(),
+          learningRateType: learningRateType,
+          isFittingDataNormalized: isFittingDataNormalized,
+          initialCoefficientsType: initialCoefficientsType,
+          initialCoefficients: initialCoefficients,
+          positiveLabel: positiveLabel,
+          negativeLabel: negativeLabel,
+          dtype: dtype,
+          collectLearningData: false,
+        );
   }
 }

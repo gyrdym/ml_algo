@@ -11,11 +11,9 @@ Injector initLogisticRegressorModule() {
   initCommonModule();
 
   return logisticRegressorInjector
-    ..registerSingletonIf<LinkFunction>(
-            () => const InverseLogitLinkFunction())
-
+    ..registerSingletonIf<LinkFunction>(() => const InverseLogitLinkFunction())
     ..registerSingletonIf<LogisticRegressorFactory>(
-            () => LogisticRegressorFactoryImpl(
+        () => LogisticRegressorFactoryImpl(
               logisticRegressorInjector.get<LinkFunction>(),
             ));
 }

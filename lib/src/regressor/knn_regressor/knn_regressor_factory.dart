@@ -6,12 +6,12 @@ import 'package:ml_linalg/dtype.dart';
 
 abstract class KnnRegressorFactory {
   KnnRegressor create(
-      DataFrame fittingData,
-      String targetName,
-      int k,
-      KernelType kernelType,
-      Distance distance,
-      DType dtype,
+    DataFrame fittingData,
+    String targetName,
+    int k,
+    KernelType kernelType,
+    Distance distance,
+    DType dtype,
   );
 
   KnnRegressor fromJson(String json);

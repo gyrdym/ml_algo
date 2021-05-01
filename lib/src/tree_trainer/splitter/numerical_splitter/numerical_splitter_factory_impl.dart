@@ -2,12 +2,9 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_impl.dart';
 
-class NumericalTreeSplitterFactoryImpl implements
-    NumericalTreeSplitterFactory {
-
+class NumericalTreeSplitterFactoryImpl implements NumericalTreeSplitterFactory {
   const NumericalTreeSplitterFactoryImpl();
 
   @override
-  NumericalTreeSplitter create() =>
-      const NumericalTreeSplitterImpl();
+  NumericalTreeSplitter create() => const NumericalTreeSplitterImpl();
 }

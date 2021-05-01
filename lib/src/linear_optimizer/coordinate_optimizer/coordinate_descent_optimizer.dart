@@ -6,14 +6,16 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 
 class CoordinateDescentOptimizer implements LinearOptimizer {
-  CoordinateDescentOptimizer(Matrix fittingPoints, Matrix fittingLabels, {
+  CoordinateDescentOptimizer(
+    Matrix fittingPoints,
+    Matrix fittingLabels, {
     required DType dtype,
     required CostFunction costFunction,
     required ConvergenceDetector convergenceDetector,
     required double lambda,
     required InitialCoefficientsGenerator initialCoefficientsGenerator,
     required bool isFittingDataNormalized,
-  })  : _dtype = dtype,
+  })   : _dtype = dtype,
         _points = fittingPoints,
         _labels = fittingLabels,
         _lambda = lambda,
@@ -22,8 +24,8 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
         _costFn = costFunction,
         _normalizer = isFittingDataNormalized
             ? Vector.filled(fittingPoints.columnsNum, 1.0, dtype: dtype)
-            : fittingPoints.reduceRows(
-                (combine, vector) => (combine + vector * vector));
+            : fittingPoints
+                .reduceRows((combine, vector) => (combine + vector * vector));
 
   final Matrix _points;
   final Matrix _labels;
@@ -45,9 +47,12 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
     bool collectLearningData = false,
   }) {
     var coefficients = initialCoefficients ??
-        Matrix.fromRows(List<Vector>.generate(_labels.columnsNum,
-                (int i) => _initialCoefficientsGenerator
-                    .generate(_points.columnsNum)), dtype: _dtype);
+        Matrix.fromRows(
+            List<Vector>.generate(
+                _labels.columnsNum,
+                (int i) =>
+                    _initialCoefficientsGenerator.generate(_points.columnsNum)),
+            dtype: _dtype);
 
     var iteration = 0;
     var diff = double.infinity;
@@ -55,15 +60,13 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
     while (!_convergenceDetector.isConverged(diff, iteration)) {
       final newCoefsSource = List<Vector>.generate(_points.columnsNum, (j) {
         final jCoeffs = coefficients.getColumn(j);
-        final newJCoeffs = _optimizeCoordinate(j, _points, _labels,
-            coefficients);
+        final newJCoeffs =
+            _optimizeCoordinate(j, _points, _labels, coefficients);
 
         // TODO improve diff calculation way
         // Now we just get maximum diff throughout the whole coefficients
         // vector and compare it with some limit (inside _convergenceDetector)
-        diff = (jCoeffs - newJCoeffs)
-            .abs()
-            .max();
+        diff = (jCoeffs - newJCoeffs).abs().max();
 
         return newJCoeffs;
       });
@@ -83,8 +86,11 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
 
     return Vector
         // TODO Convert the logic into SIMD-way (SIMD way mapping)
-        .fromList(coefficients.map((coef) => _regularize(coef, _lambda, j))
-        .toList(growable: false), dtype: _dtype);
+        .fromList(
+            coefficients
+                .map((coef) => _regularize(coef, _lambda, j))
+                .toList(growable: false),
+            dtype: _dtype);
   }
 
   double _regularize(double coefficient, double lambda, int coefNum) {

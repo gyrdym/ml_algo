@@ -6,13 +6,11 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class NumericalTreeSplitterImpl implements NumericalTreeSplitter {
-
   const NumericalTreeSplitterImpl();
 
   @override
-  Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      double splittingValue) {
-
+  Map<TreeNode, Matrix> split(
+      Matrix samples, int splittingIdx, double splittingValue) {
     final left = <Vector>[];
     final right = <Vector>[];
 
@@ -20,25 +18,23 @@ class NumericalTreeSplitterImpl implements NumericalTreeSplitter {
     final oppositeSplittingPredicateType =
         TreeNodeSplittingPredicateType.greaterThanOrEqualTo;
 
-    final splittingPredicate = getTreeNodeSplittingPredicateByType(
-        splittingPredicateType);
+    final splittingPredicate =
+        getTreeNodeSplittingPredicateByType(splittingPredicateType);
 
-    samples
-        .rows
-        .forEach(
-            (row) => splittingPredicate(row, splittingIdx, splittingValue)
-                ? left.add(row)
-                : right.add(row),
+    samples.rows.forEach(
+      (row) => splittingPredicate(row, splittingIdx, splittingValue)
+          ? left.add(row)
+          : right.add(row),
     );
 
-    final createNode = (TreeNodeSplittingPredicateType predicateType) =>
-        TreeNode(
-          predicateType,
-          splittingValue,
-          splittingIdx,
-          null,
-          null,
-        );
+    final createNode =
+        (TreeNodeSplittingPredicateType predicateType) => TreeNode(
+              predicateType,
+              splittingValue,
+              splittingIdx,
+              null,
+              null,
+            );
 
     final leftNode = createNode(splittingPredicateType);
     final rightNode = createNode(oppositeSplittingPredicateType);

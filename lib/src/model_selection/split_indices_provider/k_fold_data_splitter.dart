@@ -6,7 +6,7 @@ class KFoldIndicesProvider implements SplitIndicesProvider {
     if (_numberOfFolds == 0 || _numberOfFolds == 1) {
       throw RangeError(
           'Number of folds must be greater than 1 and less than the number of '
-              'samples');
+          'samples');
     }
   }
 

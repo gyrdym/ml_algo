@@ -2,9 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_values.dart';
 
-class LinearOptimizerTypeJsonConverter implements
-    JsonConverter<LinearOptimizerType, String> {
-
+class LinearOptimizerTypeJsonConverter
+    implements JsonConverter<LinearOptimizerType, String> {
   const LinearOptimizerTypeJsonConverter();
 
   @override

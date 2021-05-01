@@ -5,8 +5,8 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
 
 abstract class TreeSplitSelectorFactory {
   TreeSplitSelector createByType(
-      TreeSplitSelectorType type,
-      TreeSplitAssessorType assessorType,
-      TreeSplitterType splitterType,
+    TreeSplitSelectorType type,
+    TreeSplitAssessorType assessorType,
+    TreeSplitterType splitterType,
   );
 }

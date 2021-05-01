@@ -16,30 +16,30 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 
 LinearOptimizer createLogLikelihoodOptimizer(
-    DataFrame fittingData,
-    Iterable<String> targetNames,
-    LinkFunction linkFunction, {
-      required LinearOptimizerType optimizerType,
-      required int iterationsLimit,
-      required double initialLearningRate,
-      required double minCoefficientsUpdate,
-      required double lambda,
-      required int batchSize,
-      required bool fitIntercept,
-      required double interceptScale,
-      required bool isFittingDataNormalized,
-      required LearningRateType learningRateType,
-      required InitialCoefficientsType initialCoefficientsType,
-      required num positiveLabel,
-      required num negativeLabel,
-      required DType dtype,
-      RegularizationType? regularizationType,
-      int? randomSeed,
+  DataFrame fittingData,
+  Iterable<String> targetNames,
+  LinkFunction linkFunction, {
+  required LinearOptimizerType optimizerType,
+  required int iterationsLimit,
+  required double initialLearningRate,
+  required double minCoefficientsUpdate,
+  required double lambda,
+  required int batchSize,
+  required bool fitIntercept,
+  required double interceptScale,
+  required bool isFittingDataNormalized,
+  required LearningRateType learningRateType,
+  required InitialCoefficientsType initialCoefficientsType,
+  required num positiveLabel,
+  required num negativeLabel,
+  required DType dtype,
+  RegularizationType? regularizationType,
+  int? randomSeed,
 }) {
   validateClassLabels(positiveLabel, negativeLabel);
 
-  final splits = featuresTargetSplit(fittingData, targetNames: targetNames)
-      .toList();
+  final splits =
+      featuresTargetSplit(fittingData, targetNames: targetNames).toList();
   final points = splits[0].toMatrix(dtype);
   final labels = splits[1].toMatrix(dtype);
   final optimizerFactory = injector.get<LinearOptimizerFactory>();
@@ -50,8 +50,8 @@ LinearOptimizer createLogLikelihoodOptimizer(
     positiveLabel: positiveLabel,
     negativeLabel: negativeLabel,
   );
-  final normalizedLabels = normalizeClassLabels(labels,
-      positiveLabel, negativeLabel);
+  final normalizedLabels =
+      normalizeClassLabels(labels, positiveLabel, negativeLabel);
 
   return optimizerFactory.createByType(
     optimizerType,

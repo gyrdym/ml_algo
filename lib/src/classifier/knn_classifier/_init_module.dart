@@ -13,15 +13,10 @@ Injector initKnnClassifierModule() {
   initCommonModule();
 
   return knnClassifierInjector
-    ..registerSingletonIf<KernelFactory>(
-            () => const KernelFactoryImpl())
-
-    ..registerSingletonIf<KnnSolverFactory>(
-            () => const KnnSolverFactoryImpl())
-
-    ..registerSingletonIf<KnnClassifierFactory>(
-            () => KnnClassifierFactoryImpl(
-              knnClassifierInjector.get<KernelFactory>(),
-              knnClassifierInjector.get<KnnSolverFactory>(),
-            ));
+    ..registerSingletonIf<KernelFactory>(() => const KernelFactoryImpl())
+    ..registerSingletonIf<KnnSolverFactory>(() => const KnnSolverFactoryImpl())
+    ..registerSingletonIf<KnnClassifierFactory>(() => KnnClassifierFactoryImpl(
+          knnClassifierInjector.get<KernelFactory>(),
+          knnClassifierInjector.get<KnnSolverFactory>(),
+        ));
 }

@@ -9,13 +9,9 @@ class MapeMetric implements Metric {
   double getScore(Matrix predictedLabels, Matrix originalLabels) {
     validateMatrixColumns([predictedLabels, originalLabels]);
 
-    final predicted = predictedLabels
-        .toVector();
-    final original = originalLabels
-        .toVector();
+    final predicted = predictedLabels.toVector();
+    final original = originalLabels.toVector();
 
-    return ((original - predicted) / original)
-        .abs()
-        .mean();
+    return ((original - predicted) / original).abs().mean();
   }
 }

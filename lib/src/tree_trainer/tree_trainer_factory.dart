@@ -8,16 +8,16 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 abstract class TreeTrainerFactory {
   TreeTrainer createByType(
-      TreeTrainerType type,
-      DataFrame samples,
-      String targetName,
-      num minErrorOnNode,
-      int minSamplesCount,
-      int maxDepth,
-      TreeSplitAssessorType assessorType,
-      TreeLeafLabelFactoryType leafLabelFactoryType,
-      TreeSplitSelectorType splitSelectorType,
-      TreeSplitAssessorType splitAssessorType,
-      TreeSplitterType splitterType,
+    TreeTrainerType type,
+    DataFrame samples,
+    String targetName,
+    num minErrorOnNode,
+    int minSamplesCount,
+    int maxDepth,
+    TreeSplitAssessorType assessorType,
+    TreeLeafLabelFactoryType leafLabelFactoryType,
+    TreeSplitSelectorType splitSelectorType,
+    TreeSplitAssessorType splitAssessorType,
+    TreeSplitterType splitterType,
   );
 }

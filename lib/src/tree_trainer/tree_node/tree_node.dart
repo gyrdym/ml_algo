@@ -14,15 +14,13 @@ part 'tree_node.g.dart';
 @JsonSerializable()
 class TreeNode {
   TreeNode(
-      this.predicateType,
-      this.splittingValue,
-      this.splittingIndex,
-      this.children,
-      this.label,
-      [
-        this.level = 0,
-      ]
-  );
+    this.predicateType,
+    this.splittingValue,
+    this.splittingIndex,
+    this.children,
+    this.label, [
+    this.level = 0,
+  ]);
 
   factory TreeNode.fromJson(Map<String, dynamic> json) =>
       _$TreeNodeFromJson(json);
@@ -57,21 +55,21 @@ class TreeNode {
 
   bool get isLeaf => children == null || children!.isEmpty;
 
-  bool get isRoot => predicateType == null
-      || splittingIndex == null
-      || splittingValue == null;
+  bool get isRoot =>
+      predicateType == null || splittingIndex == null || splittingValue == null;
 
   bool isSamplePassed(Vector sample) {
     if (isRoot) {
       return true;
     }
 
-    final isSamplePassedFn = getTreeNodeSplittingPredicateByType(predicateType!);
+    final isSamplePassedFn =
+        getTreeNodeSplittingPredicateByType(predicateType!);
 
     return isSamplePassedFn(
-        sample,
-        splittingIndex!,
-        splittingValue!,
-      );
+      sample,
+      splittingIndex!,
+      splittingValue!,
+    );
   }
 }

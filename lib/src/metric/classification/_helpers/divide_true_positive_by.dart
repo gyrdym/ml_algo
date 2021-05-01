@@ -3,9 +3,9 @@ import 'package:ml_linalg/vector.dart';
 import 'package:quiver/iterables.dart';
 
 double divideTruePositiveBy(
-    Vector divider,
-    Matrix origLabels,
-    Matrix predictedLabels,
+  Vector divider,
+  Matrix origLabels,
+  Matrix predictedLabels,
 ) {
   // Let's say we have the following data:
   //
@@ -32,10 +32,8 @@ double divideTruePositiveBy(
   // predicted positive label gives -1, thus we need to count number of elements
   // with value equals -1 in the resulting matrix
   final difference = origLabels - (predictedLabels * 2);
-  final truePositiveCounts = difference
-      .reduceRows(
-          (counts, row) => counts + row.mapToVector((diff) => diff == -1
-          ? 1 : 0),
+  final truePositiveCounts = difference.reduceRows(
+      (counts, row) => counts + row.mapToVector((diff) => diff == -1 ? 1 : 0),
       initValue: Vector.zero(
         origLabels.columnsNum,
         dtype: origLabels.dtype,

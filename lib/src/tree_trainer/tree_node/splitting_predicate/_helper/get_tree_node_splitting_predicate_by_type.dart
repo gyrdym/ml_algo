@@ -1,12 +1,11 @@
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_linalg/vector.dart';
 
-typedef SplittingPredicate = bool Function(Vector sample, int splittingIdx,
-    num value);
+typedef SplittingPredicate = bool Function(
+    Vector sample, int splittingIdx, num value);
 
 SplittingPredicate getTreeNodeSplittingPredicateByType(
     TreeNodeSplittingPredicateType type) {
-
   switch (type) {
     case TreeNodeSplittingPredicateType.lessThan:
       return _lessThanClause;
@@ -37,8 +36,8 @@ bool _lessThanOrEqualToClause(Vector sample, int splittingIdx, num value) =>
 bool _equalToClause(Vector sample, int splittingIdx, num value) =>
     sample[splittingIdx] == value;
 
-bool _greaterThanOrEqualToClause(Vector sample, int splittingIdx,
-    num value) => sample[splittingIdx] >= value;
+bool _greaterThanOrEqualToClause(Vector sample, int splittingIdx, num value) =>
+    sample[splittingIdx] >= value;
 
 bool _greaterThanClause(Vector sample, int splittingIdx, num value) =>
     sample[splittingIdx] > value;

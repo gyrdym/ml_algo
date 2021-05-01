@@ -23,11 +23,7 @@ import 'package:ml_linalg/dtype.dart';
 /// the farther a found observation from the target one, the lower the weight of
 /// the observation is. To obtain these weights one may use a kernel function.
 abstract class KnnRegressor
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        Predictor {
+    implements Assessable, Serializable, Retrainable, Predictor {
   /// Parameters:
   ///
   /// [fittingData] Labelled observations, among which will be searched [k]
@@ -49,25 +45,21 @@ abstract class KnnRegressor
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory KnnRegressor(
-      DataFrame fittingData,
-      String targetName,
-      int k,
-      {
-        KernelType kernel = KernelType.gaussian,
-        Distance distance = Distance.euclidean,
-        DType dtype = DType.float32,
-      }
-  ) =>
-      initKnnRegressorModule()
-          .get<KnnRegressorFactory>()
-          .create(
-        fittingData,
-        targetName,
-        k,
-        kernel,
-        distance,
-        dtype,
-      );
+    DataFrame fittingData,
+    String targetName,
+    int k, {
+    KernelType kernel = KernelType.gaussian,
+    Distance distance = Distance.euclidean,
+    DType dtype = DType.float32,
+  }) =>
+      initKnnRegressorModule().get<KnnRegressorFactory>().create(
+            fittingData,
+            targetName,
+            k,
+            kernel,
+            distance,
+            dtype,
+          );
 
   /// Restores previously fitted regressor instance from the given [json]
   ///
@@ -103,9 +95,7 @@ abstract class KnnRegressor
   /// // some prediction, e.g. via `restoredRegressor.predict(...)`;
   /// ````
   factory KnnRegressor.fromJson(String json) =>
-      initKnnRegressorModule()
-          .get<KnnRegressorFactory>()
-          .fromJson(json);
+      initKnnRegressorModule().get<KnnRegressorFactory>().fromJson(json);
 
   /// A number of nearest neighbours
   ///

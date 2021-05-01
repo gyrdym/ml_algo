@@ -10,5 +10,5 @@ Injector initLinearRegressorModule() {
 
   return linearRegressorInjector
     ..registerSingletonIf<LinearRegressorFactory>(
-            () => const LinearRegressorFactoryImpl());
+        () => const LinearRegressorFactoryImpl());
 }

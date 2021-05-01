@@ -4,21 +4,16 @@ import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.d
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/majority_leaf_label_factory.dart';
 
-class TreeLeafLabelFactoryFactoryImpl implements
-    TreeLeafLabelFactoryFactory {
-
+class TreeLeafLabelFactoryFactoryImpl implements TreeLeafLabelFactoryFactory {
   TreeLeafLabelFactoryFactoryImpl(this._distributionCalculatorFactory);
 
-  final DistributionCalculatorFactory
-    _distributionCalculatorFactory;
+  final DistributionCalculatorFactory _distributionCalculatorFactory;
 
   @override
-  TreeLeafLabelFactory createByType(
-      TreeLeafLabelFactoryType type) {
-
+  TreeLeafLabelFactory createByType(TreeLeafLabelFactoryType type) {
     final distributionCalculator = _distributionCalculatorFactory.create();
 
-    switch(type) {
+    switch (type) {
       case TreeLeafLabelFactoryType.majority:
         return MajorityTreeLeafLabelFactory(distributionCalculator);
 

@@ -10,9 +10,7 @@ class UniformKernel implements Kernel {
 
   @override
   num getWeightByDistance(num distance, [num bandwidth = 1]) =>
-      distance.abs() <= bandwidth
-          ? 1/2
-          : 0;
+      distance.abs() <= bandwidth ? 1 / 2 : 0;
 
   @override
   String toJson() => uniformKernelEncodedValue;

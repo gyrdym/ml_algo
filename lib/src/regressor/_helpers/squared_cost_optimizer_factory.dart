@@ -14,25 +14,26 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 
 LinearOptimizer createSquaredCostOptimizer(
-    DataFrame observations, String targetName, {
-      required LinearOptimizerType optimizerType,
-      required int iterationsLimit,
-      required double initialLearningRate,
-      required double minCoefficientsUpdate,
-      required double lambda,
-      required int batchSize,
-      required bool fitIntercept,
-      required double interceptScale,
-      required bool isFittingDataNormalized,
-      required LearningRateType learningRateType,
-      required InitialCoefficientsType initialCoefficientsType,
-      required DType dtype,
-      Matrix? initialCoefficients,
-      RegularizationType? regularizationType,
-      int? randomSeed,
-    }) {
-  final splits = featuresTargetSplit(observations,
-      targetNames: [targetName]).toList();
+  DataFrame observations,
+  String targetName, {
+  required LinearOptimizerType optimizerType,
+  required int iterationsLimit,
+  required double initialLearningRate,
+  required double minCoefficientsUpdate,
+  required double lambda,
+  required int batchSize,
+  required bool fitIntercept,
+  required double interceptScale,
+  required bool isFittingDataNormalized,
+  required LearningRateType learningRateType,
+  required InitialCoefficientsType initialCoefficientsType,
+  required DType dtype,
+  Matrix? initialCoefficients,
+  RegularizationType? regularizationType,
+  int? randomSeed,
+}) {
+  final splits =
+      featuresTargetSplit(observations, targetNames: [targetName]).toList();
   final points = splits[0].toMatrix(dtype);
   final labels = splits[1].toMatrix(dtype);
   final optimizerFactory = injector.get<LinearOptimizerFactory>();

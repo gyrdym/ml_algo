@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.0.1
+- README updated according to null-safety changes
+- All files from `lib` directory formatted by `dartfmt` tool
+
 ## 16.0.0
 - Null-safety stable release
 

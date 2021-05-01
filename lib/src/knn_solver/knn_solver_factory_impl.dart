@@ -9,16 +9,17 @@ class KnnSolverFactoryImpl implements KnnSolverFactory {
 
   @override
   KnnSolver create(
-      Matrix trainFeatures,
-      Matrix trainLabels,
-      int k,
-      Distance distanceType,
-      bool standardize,
-  ) => KnnSolverImpl(
-    trainFeatures,
-    trainLabels,
-    k,
-    distanceType,
-    standardize,
-  );
+    Matrix trainFeatures,
+    Matrix trainLabels,
+    int k,
+    Distance distanceType,
+    bool standardize,
+  ) =>
+      KnnSolverImpl(
+        trainFeatures,
+        trainLabels,
+        k,
+        distanceType,
+        standardize,
+      );
 }

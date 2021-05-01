@@ -4,7 +4,6 @@ import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.d
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
 
 class TreeSplitAssessorFactoryImpl implements TreeSplitAssessorFactory {
-
   const TreeSplitAssessorFactoryImpl();
 
   @override

@@ -11,11 +11,9 @@ Injector initSoftmaxRegressorModule() {
   initCommonModule();
 
   return softmaxRegressorInjector
-    ..registerSingletonIf<LinkFunction>(
-            () => const SoftmaxLinkFunction())
-
+    ..registerSingletonIf<LinkFunction>(() => const SoftmaxLinkFunction())
     ..registerSingletonIf<SoftmaxRegressorFactory>(
-            () => SoftmaxRegressorFactoryImpl(
+        () => SoftmaxRegressorFactoryImpl(
               softmaxRegressorInjector.get<LinkFunction>(),
             ));
 }

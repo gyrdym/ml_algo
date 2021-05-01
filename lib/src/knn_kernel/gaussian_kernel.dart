@@ -11,7 +11,7 @@ class GaussianKernel implements Kernel {
   final type = KernelType.gaussian;
 
   @override
-  num getWeightByDistance(num distance, [num bandwidth = 1])  =>
+  num getWeightByDistance(num distance, [num bandwidth = 1]) =>
       (1 / math.sqrt(2 * math.pi)) * math.exp(-0.5 * distance * distance);
 
   @override

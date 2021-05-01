@@ -17,28 +17,23 @@ import 'package:ml_linalg/vector.dart';
 
 part 'decision_tree_classifier_impl.g.dart';
 
-const classLabelsWarningMessage = 'There is no use in positive and negative class labels for decision tree classifier';
+const classLabelsWarningMessage =
+    'There is no use in positive and negative class labels for decision tree classifier';
 
 @JsonSerializable()
 @DTypeJsonConverter()
 class DecisionTreeClassifierImpl
-    with
-        AssessableClassifierMixin,
-        SerializableMixin
-    implements
-        DecisionTreeClassifier {
-
+    with AssessableClassifierMixin, SerializableMixin
+    implements DecisionTreeClassifier {
   DecisionTreeClassifierImpl(
-      this.minError,
-      this.minSamplesCount,
-      this.maxDepth,
-      this.treeRootNode,
-      this.targetColumnName,
-      this.dtype,
-      {
-        this.schemaVersion = decisionTreeClassifierJsonSchemaVersion,
-      }
-  );
+    this.minError,
+    this.minSamplesCount,
+    this.maxDepth,
+    this.treeRootNode,
+    this.targetColumnName,
+    this.dtype, {
+    this.schemaVersion = decisionTreeClassifierJsonSchemaVersion,
+  });
 
   factory DecisionTreeClassifierImpl.fromJson(Map<String, dynamic> json) =>
       _$DecisionTreeClassifierImplFromJson(json);
@@ -92,9 +87,8 @@ class DecisionTreeClassifierImpl
       return DataFrame([<num>[]]);
     }
 
-    final outcomeList = predictedLabels
-        .map((label) => label.value)
-        .toList(growable: false);
+    final outcomeList =
+        predictedLabels.map((label) => label.value).toList(growable: false);
     final outcomeVector = Vector.fromList(outcomeList, dtype: dtype);
 
     return DataFrame.fromMatrix(
@@ -105,9 +99,7 @@ class DecisionTreeClassifierImpl
 
   @override
   DataFrame predictProbabilities(DataFrame features) {
-    final sampleVectors = features
-        .toMatrix(dtype)
-        .rows;
+    final sampleVectors = features.toMatrix(dtype).rows;
     final probabilities = sampleVectors
         .map((sample) => _getLabelForSample(sample, treeRootNode))
         .map((label) => label.probability)
@@ -142,15 +134,13 @@ class DecisionTreeClassifierImpl
 
   @override
   DecisionTreeClassifier retrain(DataFrame data) {
-    return decisionTreeInjector
-        .get<DecisionTreeClassifierFactory>()
-        .create(
-      data,
-      targetColumnName,
-      dtype,
-      minError,
-      minSamplesCount,
-      maxDepth,
-    );
+    return decisionTreeInjector.get<DecisionTreeClassifierFactory>().create(
+          data,
+          targetColumnName,
+          dtype,
+          minError,
+          minSamplesCount,
+          maxDepth,
+        );
   }
 }

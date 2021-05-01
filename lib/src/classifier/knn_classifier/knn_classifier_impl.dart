@@ -29,22 +29,17 @@ part 'knn_classifier_impl.g.dart';
 @KernelJsonConverter()
 @DTypeJsonConverter()
 class KnnClassifierImpl
-    with
-        AssessableClassifierMixin,
-        SerializableMixin
-    implements
-        KnnClassifier {
+    with AssessableClassifierMixin, SerializableMixin
+    implements KnnClassifier {
   KnnClassifierImpl(
-      this.targetColumnName,
-      this.classLabels,
-      this.kernel,
-      this.solver,
-      this.classLabelPrefix,
-      this.dtype,
-      {
-        this.schemaVersion = knnClassifierJsonSchemaVersion,
-      }
-  ) {
+    this.targetColumnName,
+    this.classLabels,
+    this.kernel,
+    this.solver,
+    this.classLabelPrefix,
+    this.dtype, {
+    this.schemaVersion = knnClassifierJsonSchemaVersion,
+  }) {
     validateClassLabelList(classLabels);
   }
 
@@ -80,7 +75,7 @@ class KnnClassifierImpl
   num get positiveLabel => double.nan;
 
   @override
-  num get negativeLabel  => double.nan;
+  num get negativeLabel => double.nan;
 
   @override
   int get k => solver.k;
@@ -101,26 +96,23 @@ class KnnClassifierImpl
 
     final labelsToProbabilities = _getLabelToProbabilityMapping(features);
     final labels = labelsToProbabilities.keys.toList();
-    final predictedOutcomes = _getProbabilityMatrix(labelsToProbabilities)
-        .rows
-        .map((probabilities) {
-          // TODO: extract max element index search logic to ml_linalg
-          // TODO: fix corner cases with NaN and Infinity
-          final maxProbability = probabilities.max();
-          final maxProbabilityIndex = probabilities
-              .toList()
-              .indexOf(maxProbability);
+    final predictedOutcomes =
+        _getProbabilityMatrix(labelsToProbabilities).rows.map((probabilities) {
+      // TODO: extract max element index search logic to ml_linalg
+      // TODO: fix corner cases with NaN and Infinity
+      final maxProbability = probabilities.max();
+      final maxProbabilityIndex =
+          probabilities.toList().indexOf(maxProbability);
 
-          if (maxProbabilityIndex == -1) {
-            print('KnnClassifier error: cannot find max probability, '
-                'max probability is $maxProbability');
+      if (maxProbabilityIndex == -1) {
+        print('KnnClassifier error: cannot find max probability, '
+            'max probability is $maxProbability');
 
-            return labels.first;
-          }
+        return labels.first;
+      }
 
-          return labels[maxProbabilityIndex];
-        })
-        .toList();
+      return labels[maxProbabilityIndex];
+    }).toList();
 
     final outcomesAsVector = Vector.fromList(predictedOutcomes, dtype: dtype);
 
@@ -134,29 +126,25 @@ class KnnClassifierImpl
   DataFrame predictProbabilities(DataFrame features) {
     final labelsToProbabilities = _getLabelToProbabilityMapping(features);
     final probabilityMatrix = _getProbabilityMatrix(labelsToProbabilities);
-    final header = labelsToProbabilities
-        .keys
-        .map((label) =>
-          [classLabelPrefix.trim(), label.toString().trim()]
-              .where((element) => element.isNotEmpty)
-              .join(' '));
+    final header = labelsToProbabilities.keys.map((label) => [
+          classLabelPrefix.trim(),
+          label.toString().trim()
+        ].where((element) => element.isNotEmpty).join(' '));
 
     return DataFrame.fromMatrix(probabilityMatrix, header: header);
   }
 
   @override
   KnnClassifier retrain(DataFrame data) {
-    return knnClassifierInjector
-        .get<KnnClassifierFactory>()
-        .create(
-      data,
-      targetColumnName,
-      k,
-      kernelType,
-      distanceType,
-      classLabelPrefix,
-      dtype,
-    );
+    return knnClassifierInjector.get<KnnClassifierFactory>().create(
+          data,
+          targetColumnName,
+          k,
+          kernelType,
+          distanceType,
+          classLabelPrefix,
+          dtype,
+        );
   }
 
   /// Returns a map of the following format:
@@ -185,11 +173,10 @@ class KnnClassifierImpl
     final kNeighbourGroups = solver.findKNeighbours(features.toMatrix(dtype));
     final classLabelsAsSet = Set<num>.from(classLabels);
 
-    return kNeighbourGroups.fold<Map<num, List<num>>>(
-        {}, (allLabelsToProbabilities, kNeighbours) {
-
-      final labelsToWeights = kNeighbours.fold<Map<num, num>>(
-          {}, (mapping, neighbour) {
+    return kNeighbourGroups.fold<Map<num, List<num>>>({},
+        (allLabelsToProbabilities, kNeighbours) {
+      final labelsToWeights =
+          kNeighbours.fold<Map<num, num>>({}, (mapping, neighbour) {
         if (!classLabelsAsSet.contains(neighbour.label.first)) {
           throw Exception('Wrong KNN solver provided: unexpected neighbour '
               'class label - ${neighbour.label.first}');
@@ -197,15 +184,14 @@ class KnnClassifierImpl
         return _updateLabelToWeightMapping(mapping, neighbour);
       });
 
-      final sumOfAllWeights = labelsToWeights
-          .values
-          .reduce((sum, weight) => sum + weight);
+      final sumOfAllWeights =
+          labelsToWeights.values.reduce((sum, weight) => sum + weight);
 
       final labelsToProbabilities = labelsToWeights
           .map((key, weight) => MapEntry(key, weight / sumOfAllWeights));
 
-      final areLabelsEquiprobable = _areLabelsEquiprobable(
-          labelsToProbabilities.values);
+      final areLabelsEquiprobable =
+          _areLabelsEquiprobable(labelsToProbabilities.values);
 
       // if labels are equiprobable, make the first neighbour's label
       // probability equal to 1 and probabilities of the rest neighbour labels -
@@ -229,18 +215,16 @@ class KnnClassifierImpl
   }
 
   Matrix _getProbabilityMatrix(Map<num, List<num>> allLabelsToProbabilities) {
-    final probabilityVectors = allLabelsToProbabilities
-        .values
+    final probabilityVectors = allLabelsToProbabilities.values
         .map((probabilities) => Vector.fromList(probabilities, dtype: dtype))
         .toList(growable: false);
 
-    return Matrix
-        .fromColumns(probabilityVectors, dtype: dtype);
+    return Matrix.fromColumns(probabilityVectors, dtype: dtype);
   }
 
   Map<num, num> _updateLabelToWeightMapping(
-      Map<num, num> labelToWeightMapping,
-      Neighbour<Vector> neighbour,
+    Map<num, num> labelToWeightMapping,
+    Neighbour<Vector> neighbour,
   ) {
     final weight = kernel.getWeightByDistance(neighbour.distance);
     return labelToWeightMapping

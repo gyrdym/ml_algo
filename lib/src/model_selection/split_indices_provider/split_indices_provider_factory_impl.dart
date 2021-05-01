@@ -8,7 +8,8 @@ class SplitIndicesProviderFactoryImpl implements SplitIndicesProviderFactory {
   const SplitIndicesProviderFactoryImpl();
 
   @override
-  SplitIndicesProvider createByType(SplitIndicesProviderType splitterType, {
+  SplitIndicesProvider createByType(
+    SplitIndicesProviderType splitterType, {
     int? numberOfFolds,
     int? p,
   }) {

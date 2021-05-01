@@ -5,21 +5,20 @@ import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.d
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
 
 class TreeLeafDetectorFactoryImpl implements TreeLeafDetectorFactory {
-
   TreeLeafDetectorFactoryImpl(this._splitAssessorFactory);
 
   final TreeSplitAssessorFactory _splitAssessorFactory;
 
   @override
   TreeLeafDetector create(
-      TreeSplitAssessorType assessorType,
-      num minErrorOnNode,
-      int minSamplesCount,
-      int maxDepth,
+    TreeSplitAssessorType assessorType,
+    num minErrorOnNode,
+    int minSamplesCount,
+    int maxDepth,
   ) {
     final assessor = _splitAssessorFactory.createByType(assessorType);
 
-    return TreeLeafDetectorImpl(assessor, minErrorOnNode,
-        minSamplesCount, maxDepth);
+    return TreeLeafDetectorImpl(
+        assessor, minErrorOnNode, minSamplesCount, maxDepth);
   }
 }

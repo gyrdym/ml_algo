@@ -4,8 +4,7 @@ import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices
 
 void initModelSelectionModule() {
   if (!modelSelectionInjector.exists<SplitIndicesProviderFactory>()) {
-    modelSelectionInjector
-        .registerSingleton<SplitIndicesProviderFactory>(
-              () => const SplitIndicesProviderFactoryImpl());
+    modelSelectionInjector.registerSingleton<SplitIndicesProviderFactory>(
+        () => const SplitIndicesProviderFactoryImpl());
   }
 }

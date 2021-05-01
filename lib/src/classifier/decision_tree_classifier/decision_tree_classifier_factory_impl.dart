@@ -15,21 +15,20 @@ import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 
-class DecisionTreeClassifierFactoryImpl implements
-    DecisionTreeClassifierFactory {
-
+class DecisionTreeClassifierFactoryImpl
+    implements DecisionTreeClassifierFactory {
   const DecisionTreeClassifierFactoryImpl(this._treeTrainerFactory);
 
   final TreeTrainerFactory _treeTrainerFactory;
 
   @override
   DecisionTreeClassifier create(
-      DataFrame trainData,
-      String targetName,
-      DType dtype,
-      num minError,
-      int minSamplesCount,
-      int maxDepth,
+    DataFrame trainData,
+    String targetName,
+    DType dtype,
+    num minError,
+    int minSamplesCount,
+    int maxDepth,
   ) {
     validateTreeSolverMinError(minError);
     validateTreeSolversMinSamplesCount(minSamplesCount);
@@ -48,8 +47,7 @@ class DecisionTreeClassifierFactoryImpl implements
       TreeSplitAssessorType.majority,
       TreeSplitterType.greedy,
     );
-    final treeRootNode = trainer
-        .train(trainData.toMatrix(dtype));
+    final treeRootNode = trainer.train(trainData.toMatrix(dtype));
 
     return DecisionTreeClassifierImpl(
       minError,

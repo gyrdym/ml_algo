@@ -6,13 +6,13 @@ import 'package:ml_linalg/dtype.dart';
 
 abstract class KnnClassifierFactory {
   KnnClassifier create(
-      DataFrame trainData,
-      String targetName,
-      int k,
-      KernelType kernelType,
-      Distance distance,
-      String columnPrefix,
-      DType dtype,
+    DataFrame trainData,
+    String targetName,
+    int k,
+    KernelType kernelType,
+    Distance distance,
+    String columnPrefix,
+    DType dtype,
   );
 
   KnnClassifier fromJson(String json);

@@ -9,10 +9,12 @@ class InitialCoefficientsGeneratorFactoryImpl
   const InitialCoefficientsGeneratorFactoryImpl();
 
   @override
-  InitialCoefficientsGenerator zeroes(DType dtype) => ZeroCoefficientsGenerator(dtype);
+  InitialCoefficientsGenerator zeroes(DType dtype) =>
+      ZeroCoefficientsGenerator(dtype);
 
   @override
-  InitialCoefficientsGenerator fromType(InitialCoefficientsType type, DType dtype) {
+  InitialCoefficientsGenerator fromType(
+      InitialCoefficientsType type, DType dtype) {
     switch (type) {
       case InitialCoefficientsType.zeroes:
         return zeroes(dtype);

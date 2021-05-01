@@ -9,7 +9,8 @@ class CostFunctionFactoryImpl implements CostFunctionFactory {
   const CostFunctionFactoryImpl();
 
   @override
-  CostFunction createByType(CostFunctionType type, {
+  CostFunction createByType(
+    CostFunctionType type, {
     LinkFunction? linkFunction,
     num? positiveLabel,
     num? negativeLabel,

@@ -11,8 +11,8 @@ import 'package:ml_linalg/linalg.dart';
 
 typedef PredictorFactory = Assessable Function(DataFrame observations);
 
-typedef DataPreprocessFn = List<DataFrame> Function(DataFrame trainData,
-    DataFrame testData);
+typedef DataPreprocessFn = List<DataFrame> Function(
+    DataFrame trainData, DataFrame testData);
 
 /// A factory and an interface for all the cross validator types
 abstract class CrossValidator {
@@ -30,17 +30,17 @@ abstract class CrossValidator {
   ///
   /// [dtype] A type for all the numerical data
   factory CrossValidator.kFold(
-      DataFrame samples,
-      {
-        int numberOfFolds = 5,
-        DType dtype = DType.float32,
-      }) {
+    DataFrame samples, {
+    int numberOfFolds = 5,
+    DType dtype = DType.float32,
+  }) {
     initModelSelectionModule();
 
-    final dataSplitterFactory = modelSelectionInjector
-        .get<SplitIndicesProviderFactory>();
-    final dataSplitter = dataSplitterFactory
-        .createByType(SplitIndicesProviderType.kFold, numberOfFolds: numberOfFolds);
+    final dataSplitterFactory =
+        modelSelectionInjector.get<SplitIndicesProviderFactory>();
+    final dataSplitter = dataSplitterFactory.createByType(
+        SplitIndicesProviderType.kFold,
+        numberOfFolds: numberOfFolds);
 
     return CrossValidatorImpl(
       samples,
@@ -63,16 +63,16 @@ abstract class CrossValidator {
   ///
   /// [dtype] A type for all the numerical data.
   factory CrossValidator.lpo(
-      DataFrame samples,
-      int p, {
-        DType dtype = DType.float32,
-      }) {
+    DataFrame samples,
+    int p, {
+    DType dtype = DType.float32,
+  }) {
     initModelSelectionModule();
 
-    final dataSplitterFactory = modelSelectionInjector
-        .get<SplitIndicesProviderFactory>();
-    final dataSplitter = dataSplitterFactory
-        .createByType(SplitIndicesProviderType.lpo, p: p);
+    final dataSplitterFactory =
+        modelSelectionInjector.get<SplitIndicesProviderFactory>();
+    final dataSplitter =
+        dataSplitterFactory.createByType(SplitIndicesProviderType.lpo, p: p);
 
     return CrossValidatorImpl(
       samples,
@@ -133,10 +133,8 @@ abstract class CrossValidator {
   /// print(averageScore);
   /// ````
   Future<Vector> evaluate(
-      PredictorFactory predictorFactory,
-      MetricType metricType,
-      {
-        DataPreprocessFn? onDataSplit,
-      }
-  );
+    PredictorFactory predictorFactory,
+    MetricType metricType, {
+    DataPreprocessFn? onDataSplit,
+  });
 }

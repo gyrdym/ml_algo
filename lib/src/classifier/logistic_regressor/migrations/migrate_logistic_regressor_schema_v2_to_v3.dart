@@ -34,13 +34,13 @@ Map<String, dynamic> migrateLogisticRegressorSchemaV2toV3(
         'Setting it to LearningRateType.constant');
 
     migratedJson[logisticRegressorLearningRateTypeJsonKey] =
-    learningRateTypeToEncodedValue[LearningRateType.constant];
+        learningRateTypeToEncodedValue[LearningRateType.constant];
   }
 
   if (migratedJson[logisticRegressorInitCoefficientsTypeJsonKey] == null) {
     print(
         'WARNING. LogisticRegressor decoding, initial coefficients type is null. '
-            'Setting it to InitialCoefficientsType.zeroes');
+        'Setting it to InitialCoefficientsType.zeroes');
 
     migratedJson[logisticRegressorInitCoefficientsTypeJsonKey] =
         zeroesInitialCoefficientsTypeJsonEncodedValue;
@@ -54,7 +54,8 @@ Map<String, dynamic> migrateLogisticRegressorSchemaV2toV3(
   }
 
   if (migratedJson[logisticRegressorMinCoefsUpdateJsonKey] == null) {
-    print('WARNING. LogisticRegressor decoding, min coefficients update is null. '
+    print(
+        'WARNING. LogisticRegressor decoding, min coefficients update is null. '
         'Setting it to 1e-12');
 
     migratedJson[logisticRegressorMinCoefsUpdateJsonKey] = 1e-12;
@@ -77,7 +78,7 @@ Map<String, dynamic> migrateLogisticRegressorSchemaV2toV3(
   if (migratedJson[logisticRegressorDataNormalizedFlagJsonKey] == null) {
     print(
         'WARNING. LogisticRegressor decoding, fitting data normalized flag is null. '
-            'Setting it to false');
+        'Setting it to false');
 
     migratedJson[logisticRegressorDataNormalizedFlagJsonKey] = false;
   }

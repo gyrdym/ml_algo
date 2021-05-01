@@ -11,7 +11,6 @@ class ConvergenceDetectorImpl implements ConvergenceDetector {
 
   @override
   bool isConverged(double coefficientsDiff, int iteration) {
-    return iteration >= iterationsLimit
-        || coefficientsDiff <= minDiff;
+    return iteration >= iterationsLimit || coefficientsDiff <= minDiff;
   }
 }

@@ -4,10 +4,10 @@ import 'package:ml_linalg/matrix.dart';
 
 abstract class KnnSolverFactory {
   KnnSolver create(
-      Matrix trainFeatures,
-      Matrix trainLabels,
-      int k,
-      Distance distanceType,
-      bool standardize,
+    Matrix trainFeatures,
+    Matrix trainLabels,
+    int k,
+    Distance distanceType,
+    bool standardize,
   );
 }

@@ -23,11 +23,7 @@ import 'package:ml_linalg/vector.dart';
 /// are the input for the algorithm), the regressor should find the best
 /// coefficients (weights) for each `x`-es to make a best prediction of `y` term.
 abstract class LinearRegressor
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        Predictor {
+    implements Assessable, Serializable, Retrainable, Predictor {
   /// Parameters:
   ///
   /// [fittingData] A [DataFrame] with observations that is used by the
@@ -107,7 +103,9 @@ abstract class LinearRegressor
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32].
-  factory LinearRegressor(DataFrame fittingData, String targetName, {
+  factory LinearRegressor(
+    DataFrame fittingData,
+    String targetName, {
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     LearningRateType learningRateType = LearningRateType.constant,
@@ -126,28 +124,26 @@ abstract class LinearRegressor
     int? randomSeed,
     Matrix? initialCoefficients,
   }) =>
-      initLinearRegressorModule()
-          .get<LinearRegressorFactory>()
-          .create(
-        fittingData: fittingData,
-        targetName: targetName,
-        optimizerType: optimizerType,
-        iterationsLimit: iterationsLimit,
-        learningRateType: learningRateType,
-        initialCoefficientsType: initialCoefficientsType,
-        initialLearningRate: initialLearningRate,
-        minCoefficientsUpdate: minCoefficientsUpdate,
-        lambda: lambda,
-        regularizationType: regularizationType,
-        fitIntercept: fitIntercept,
-        interceptScale: interceptScale,
-        randomSeed: randomSeed,
-        batchSize: batchSize,
-        initialCoefficients: initialCoefficients,
-        isFittingDataNormalized: isFittingDataNormalized,
-        collectLearningData: collectLearningData,
-        dtype: dtype,
-      );
+      initLinearRegressorModule().get<LinearRegressorFactory>().create(
+            fittingData: fittingData,
+            targetName: targetName,
+            optimizerType: optimizerType,
+            iterationsLimit: iterationsLimit,
+            learningRateType: learningRateType,
+            initialCoefficientsType: initialCoefficientsType,
+            initialLearningRate: initialLearningRate,
+            minCoefficientsUpdate: minCoefficientsUpdate,
+            lambda: lambda,
+            regularizationType: regularizationType,
+            fitIntercept: fitIntercept,
+            interceptScale: interceptScale,
+            randomSeed: randomSeed,
+            batchSize: batchSize,
+            initialCoefficients: initialCoefficients,
+            isFittingDataNormalized: isFittingDataNormalized,
+            collectLearningData: collectLearningData,
+            dtype: dtype,
+          );
 
   /// Restores previously fitted [LinearRegressor] instance from the [json]
   ///
@@ -189,9 +185,7 @@ abstract class LinearRegressor
   /// // some prediction, e.g. via `restoredRegressor.predict(...)`;
   /// ````
   factory LinearRegressor.fromJson(String json) =>
-      initLinearRegressorModule()
-          .get<LinearRegressorFactory>()
-          .fromJson(json);
+      initLinearRegressorModule().get<LinearRegressorFactory>().fromJson(json);
 
   /// Optimization algorithm that was used to learn the model's coefficients
   LinearOptimizerType get optimizerType;

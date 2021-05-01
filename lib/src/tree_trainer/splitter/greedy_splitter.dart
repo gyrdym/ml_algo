@@ -8,22 +8,22 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/xrange.dart';
 
 class GreedyTreeSplitter implements TreeSplitter {
-  GreedyTreeSplitter(this._assessor, this._numericalSplitter,
-      this._nominalSplitter);
+  GreedyTreeSplitter(
+      this._assessor, this._numericalSplitter, this._nominalSplitter);
 
   final TreeSplitAssessor _assessor;
   final NumericalTreeSplitter _numericalSplitter;
   final NominalTreeSplitter _nominalSplitter;
 
   @override
-  Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx,
-      int targetId, [List<num>? uniqueValues]) =>
+  Map<TreeNode, Matrix> split(Matrix samples, int splittingIdx, int targetId,
+          [List<num>? uniqueValues]) =>
       uniqueValues != null
           ? _createByNominalValues(samples, splittingIdx, uniqueValues)
           : _createByNumericalValue(samples, splittingIdx, targetId);
 
-  Map<TreeNode, Matrix> _createByNominalValues(Matrix samples,
-      int splittingIdx, List<num> values) {
+  Map<TreeNode, Matrix> _createByNominalValues(
+      Matrix samples, int splittingIdx, List<num> values) {
     if (splittingIdx < 0 || splittingIdx > samples.columnsNum) {
       throw Exception('Unappropriate range given: $splittingIdx, '
           'expected a range within or equal '
@@ -32,8 +32,8 @@ class GreedyTreeSplitter implements TreeSplitter {
     return _nominalSplitter.split(samples, splittingIdx, values);
   }
 
-  Map<TreeNode, Matrix> _createByNumericalValue(Matrix samples,
-      int splittingIdx, int targetId) {
+  Map<TreeNode, Matrix> _createByNumericalValue(
+      Matrix samples, int splittingIdx, int targetId) {
     final errors = <double, List<Map<TreeNode, Matrix>>>{};
     final sortedRows = samples.sort((row) => row[splittingIdx], Axis.rows).rows;
     var prevValue = sortedRows.first[splittingIdx];
@@ -46,8 +46,8 @@ class GreedyTreeSplitter implements TreeSplitter {
       }
 
       final splittingValue = (prevValue + nextValue) / 2;
-      final split = _numericalSplitter
-          .split(samples, splittingIdx, splittingValue);
+      final split =
+          _numericalSplitter.split(samples, splittingIdx, splittingValue);
       final error = _assessor.getAggregatedError(split.values, targetId);
 
       errors.update(error, (splits) => splits..add(split),
@@ -56,8 +56,7 @@ class GreedyTreeSplitter implements TreeSplitter {
       prevValue = row[splittingIdx];
     }
 
-    final sorted = errors.keys.toList(growable: false)
-      ..sort();
+    final sorted = errors.keys.toList(growable: false)..sort();
     final minError = sorted.first;
 
     return errors[minError]!.first;
