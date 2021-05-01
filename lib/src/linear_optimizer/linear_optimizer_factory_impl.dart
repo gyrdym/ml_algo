@@ -17,36 +17,36 @@ import 'package:ml_linalg/matrix.dart';
 
 class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
   const LinearOptimizerFactoryImpl(
-      this._initialCoefficientsGeneratorFactory,
-      this._learningRateGeneratorFactory,
-      this._convergenceDetectorFactory,
-      this._randomizerFactory,
+    this._initialCoefficientsGeneratorFactory,
+    this._learningRateGeneratorFactory,
+    this._convergenceDetectorFactory,
+    this._randomizerFactory,
   );
 
-  final InitialCoefficientsGeneratorFactory _initialCoefficientsGeneratorFactory;
+  final InitialCoefficientsGeneratorFactory
+      _initialCoefficientsGeneratorFactory;
   final LearningRateGeneratorFactory _learningRateGeneratorFactory;
   final ConvergenceDetectorFactory _convergenceDetectorFactory;
   final RandomizerFactory _randomizerFactory;
 
   @override
   LinearOptimizer createByType(
-      LinearOptimizerType optimizerType,
-      Matrix fittingPoints,
-      Matrix fittingLabels, {
-        DType dtype = DType.float32,
-        required CostFunction costFunction,
-        LearningRateType learningRateType = LearningRateType.decreasingAdaptive,
-        InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
-        double initialLearningRate = 1e-3,
-        double minCoefficientsUpdate = 1e-12,
-        int iterationLimit = 100,
-        required double lambda,
-        RegularizationType? regularizationType,
-        required int batchSize,
-        int? randomSeed,
-        required bool isFittingDataNormalized,
-      }) {
-
+    LinearOptimizerType optimizerType,
+    Matrix fittingPoints,
+    Matrix fittingLabels, {
+    DType dtype = DType.float32,
+    required CostFunction costFunction,
+    required LearningRateType learningRateType,
+    required InitialCoefficientsType initialCoefficientsType,
+    required double initialLearningRate,
+    required double minCoefficientsUpdate,
+    required int iterationLimit,
+    required double lambda,
+    required int batchSize,
+    RegularizationType? regularizationType,
+    int? randomSeed,
+    required bool isFittingDataNormalized,
+  }) {
     if (regularizationType != null &&
         !optimizerToRegularization[optimizerType]!
             .contains(regularizationType)) {
@@ -55,7 +55,6 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
     }
 
     switch (optimizerType) {
-
       case LinearOptimizerType.gradient:
         return GradientOptimizer(
           fittingPoints,
@@ -65,12 +64,12 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           lambda: lambda,
           batchSize: batchSize,
           dtype: dtype,
-          learningRateGenerator: _learningRateGeneratorFactory
-              .fromType(learningRateType),
+          learningRateGenerator:
+              _learningRateGeneratorFactory.fromType(learningRateType),
           initialCoefficientsGenerator: _initialCoefficientsGeneratorFactory
               .fromType(initialCoefficientsType, dtype),
-          convergenceDetector: _convergenceDetectorFactory
-              .create(minCoefficientsUpdate, iterationLimit),
+          convergenceDetector: _convergenceDetectorFactory.create(
+              minCoefficientsUpdate, iterationLimit),
           randomizer: _randomizerFactory.create(randomSeed),
         );
 
@@ -83,8 +82,8 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           lambda: lambda,
           initialCoefficientsGenerator: _initialCoefficientsGeneratorFactory
               .fromType(initialCoefficientsType, dtype),
-          convergenceDetector: _convergenceDetectorFactory
-              .create(minCoefficientsUpdate, iterationLimit),
+          convergenceDetector: _convergenceDetectorFactory.create(
+              minCoefficientsUpdate, iterationLimit),
           isFittingDataNormalized: isFittingDataNormalized,
         );
 

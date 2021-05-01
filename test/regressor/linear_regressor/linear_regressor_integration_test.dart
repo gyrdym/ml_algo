@@ -106,7 +106,7 @@ void main() {
           learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive],
         linearRegressorInitialCoefficientsTypeJsonKey:
           zeroesInitialCoefficientsTypeJsonEncodedValue,
-        linearRegressorInitialLearningRateTypeJsonKey: initialLearningRate,
+        linearRegressorInitialLearningRateJsonKey: initialLearningRate,
         linearRegressorMinCoefficientsUpdateJsonKey: minCoefficientsUpdate,
         linearRegressorLambdaJsonKey: lambda,
         linearRegressorRegularizationTypeJsonKey:

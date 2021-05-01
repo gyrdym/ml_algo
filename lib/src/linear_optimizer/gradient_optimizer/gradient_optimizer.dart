@@ -9,7 +9,9 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/xrange.dart';
 
 class GradientOptimizer implements LinearOptimizer {
-  GradientOptimizer(Matrix points, Matrix labels, {
+  GradientOptimizer(
+    Matrix points,
+    Matrix labels, {
     DType dtype = DType.float32,
     required InitialCoefficientsGenerator initialCoefficientsGenerator,
     required CostFunction costFunction,
@@ -19,8 +21,7 @@ class GradientOptimizer implements LinearOptimizer {
     double initialLearningRate = 1e-3,
     double? lambda,
     required int batchSize,
-  })  :
-        _points = points,
+  })   : _points = points,
         _labels = labels,
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
@@ -30,9 +31,12 @@ class GradientOptimizer implements LinearOptimizer {
         _learningRateGenerator = learningRateGenerator,
         _convergenceDetector = convergenceDetector,
         _randomizer = randomizer {
-
     if (batchSize < 1 || batchSize > points.rowsNum) {
-      throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '
+      throw RangeError.range(
+          batchSize,
+          1,
+          points.rowsNum,
+          'Invalid batch size '
           'value');
     }
 
@@ -98,17 +102,14 @@ class GradientOptimizer implements LinearOptimizer {
   Matrix _generateCoefficients(
     Matrix coefficients,
     double learningRate, {
-      bool isMinimization = true,
-      bool collectLearningData = false,
-    }) {
-
+    bool isMinimization = true,
+    bool collectLearningData = false,
+  }) {
     final range = _getBatchRange();
     final start = range.first;
     final end = range.last;
-    final pointsBatch = _points
-        .sample(rowIndices: integers(start, end));
-    final labelsBatch = _labels
-        .sample(rowIndices: integers(start, end));
+    final pointsBatch = _points.sample(rowIndices: integers(start, end));
+    final labelsBatch = _labels.sample(rowIndices: integers(start, end));
 
     return _makeGradientStep(
       coefficients,
@@ -128,15 +129,13 @@ class GradientOptimizer implements LinearOptimizer {
   ///
   /// [labels] columns of labels
   Matrix _makeGradientStep(
-      Matrix coefficients,
-      Matrix points,
-      Matrix labels,
-      double learningRate,
-      {
-        bool isMinimization = true,
-        bool collectLearningData = false,
-      }) {
-
+    Matrix coefficients,
+    Matrix points,
+    Matrix labels,
+    double learningRate, {
+    bool isMinimization = true,
+    bool collectLearningData = false,
+  }) {
     if (collectLearningData) {
       final error = _costFunction.getCost(points, coefficients, labels);
 

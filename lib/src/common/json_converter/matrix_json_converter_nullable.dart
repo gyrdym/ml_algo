@@ -7,7 +7,9 @@ class MatrixJsonConverterNullable implements JsonConverter<Matrix?, Map<String, 
   const MatrixJsonConverterNullable();
 
   @override
-  Matrix? fromJson(Map<String, dynamic>? json) => fromMatrixJson(json);
+  Matrix? fromJson(Map<String, dynamic>? json) => json?.isNotEmpty == true
+      ? fromMatrixJson(json)
+      : null;
 
   @override
   Map<String, dynamic>? toJson(Matrix? matrix) => matrixToJson(matrix);

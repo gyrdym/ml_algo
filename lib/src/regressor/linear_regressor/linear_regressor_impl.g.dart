@@ -101,6 +101,11 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
     'IL': instance.iterationsLimit,
     'LRT':
         const LearningRateTypeJsonConverter().toJson(instance.learningRateType),
+    'ICT': const InitialCoefficientsTypeJsonConverter()
+        .toJson(instance.initialCoefficientsType),
+    'ILT': instance.initialLearningRate,
+    'MCU': instance.minCoefficientsUpdate,
+    'L': instance.lambda,
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -109,13 +114,6 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
     }
   }
 
-  writeNotNull(
-      'ICT',
-      const InitialCoefficientsTypeJsonConverter()
-          .toJson(instance.initialCoefficientsType));
-  val['ILT'] = instance.initialLearningRate;
-  val['MCU'] = instance.minCoefficientsUpdate;
-  val['L'] = instance.lambda;
   writeNotNull('RT', _$RegularizationTypeEnumMap[instance.regularizationType]);
   writeNotNull('RS', instance.randomSeed);
   val['BS'] = instance.batchSize;

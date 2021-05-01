@@ -21,6 +21,7 @@ import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/linalg.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -34,13 +35,11 @@ part 'linear_regressor_impl.g.dart';
 @LearningRateTypeJsonConverter()
 @InitialCoefficientsTypeJsonConverter()
 class LinearRegressorImpl
-    with
-        AssessableRegressorMixin,
-        SerializableMixin
-    implements
-        LinearRegressor {
-
-  LinearRegressorImpl(this.coefficients, this.targetName, {
+    with AssessableRegressorMixin, SerializableMixin
+    implements LinearRegressor {
+  LinearRegressorImpl(
+    this.coefficients,
+    this.targetName, {
     required this.optimizerType,
     required this.iterationsLimit,
     required this.learningRateType,
@@ -58,11 +57,10 @@ class LinearRegressorImpl
     this.randomSeed,
     this.initialCoefficients,
     this.costPerIteration,
-  }) :
-    fitIntercept = fitIntercept,
-    interceptScale = interceptScale;
+  })  : fitIntercept = fitIntercept,
+        interceptScale = interceptScale;
 
-  factory LinearRegressorImpl.fromJson(Map<String, dynamic> json) =>
+  factory LinearRegressorImpl.fromJson(Map<String, dynamic?> json) =>
       _$LinearRegressorImplFromJson(json);
 
   @override
@@ -84,28 +82,19 @@ class LinearRegressorImpl
   final LearningRateType learningRateType;
 
   @override
-  @JsonKey(
-    name: linearRegressorInitialCoefficientsTypeJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorInitialCoefficientsTypeJsonKey)
   final InitialCoefficientsType initialCoefficientsType;
 
   @override
-  @JsonKey(name: linearRegressorInitialLearningRateTypeJsonKey)
+  @JsonKey(name: linearRegressorInitialLearningRateJsonKey)
   final num initialLearningRate;
 
   @override
-  @JsonKey(
-    name: linearRegressorMinCoefficientsUpdateJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorMinCoefficientsUpdateJsonKey)
   final num minCoefficientsUpdate;
 
   @override
-  @JsonKey(
-    name: linearRegressorLambdaJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorLambdaJsonKey)
   final num lambda;
 
   @override
@@ -176,15 +165,16 @@ class LinearRegressorImpl
   @override
   DataFrame predict(DataFrame features) {
     final prediction = addInterceptIf(
-      fitIntercept,
-      features.toMatrix(dtype),
-      interceptScale,
-      dtype,
-    ) * coefficients;
+          fitIntercept,
+          features.toMatrix(dtype),
+          interceptScale,
+          dtype,
+        ) *
+        coefficients;
 
     return DataFrame.fromMatrix(
-        prediction,
-        header: targetNames,
+      prediction,
+      header: targetNames,
     );
   }
 
@@ -194,27 +184,25 @@ class LinearRegressorImpl
       throw OutdatedJsonSchemaException();
     }
 
-    return linearRegressorInjector
-        .get<LinearRegressorFactory>()
-        .create(
-      fittingData: data,
-      targetName: targetName,
-      optimizerType: optimizerType,
-      iterationsLimit: iterationsLimit,
-      learningRateType: learningRateType,
-      initialCoefficientsType: initialCoefficientsType,
-      initialLearningRate: initialLearningRate.toDouble(),
-      minCoefficientsUpdate: minCoefficientsUpdate.toDouble(),
-      lambda: lambda.toDouble(),
-      regularizationType: regularizationType,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      randomSeed: randomSeed,
-      batchSize: batchSize,
-      initialCoefficients: initialCoefficients,
-      isFittingDataNormalized: isFittingDataNormalized,
-      collectLearningData: false,
-      dtype: dtype,
-    );
+    return linearRegressorInjector.get<LinearRegressorFactory>().create(
+          fittingData: data,
+          targetName: targetName,
+          optimizerType: optimizerType,
+          iterationsLimit: iterationsLimit,
+          learningRateType: learningRateType,
+          initialCoefficientsType: initialCoefficientsType,
+          initialLearningRate: initialLearningRate.toDouble(),
+          minCoefficientsUpdate: minCoefficientsUpdate.toDouble(),
+          lambda: lambda.toDouble(),
+          regularizationType: regularizationType,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale,
+          randomSeed: randomSeed,
+          batchSize: batchSize,
+          initialCoefficients: initialCoefficients,
+          isFittingDataNormalized: isFittingDataNormalized,
+          collectLearningData: false,
+          dtype: dtype,
+        );
   }
 }
