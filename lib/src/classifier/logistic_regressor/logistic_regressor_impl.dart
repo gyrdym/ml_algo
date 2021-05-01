@@ -10,7 +10,6 @@ import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
-import 'package:ml_algo/src/common/json_converter/matrix_json_converter_nullable.dart';
 import 'package:ml_algo/src/common/json_converter/vector_json_converter_nullable.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
@@ -38,7 +37,6 @@ part 'logistic_regressor_impl.g.dart';
 @LinearOptimizerTypeJsonConverter()
 @DTypeJsonConverter()
 @MatrixJsonConverter()
-@MatrixJsonConverterNullable()
 @VectorJsonConverterNullable()
 @RegularizationTypeJsonConverterNullable()
 @LearningRateTypeJsonConverter()
@@ -142,10 +140,7 @@ class LogisticRegressorImpl
   final InitialCoefficientsType initialCoefficientsType;
 
   @override
-  @JsonKey(
-    name: logisticRegressorInitCoefficientsJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: logisticRegressorInitCoefficientsJsonKey)
   final Vector? initialCoefficients;
 
   /// N x 1 matrix, where N - number of features. It has only one column since

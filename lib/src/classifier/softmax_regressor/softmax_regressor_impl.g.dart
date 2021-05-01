@@ -137,8 +137,8 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
       'ICT',
       const InitialCoefficientsTypeJsonConverter()
           .toJson(instance.initialCoefficientsType));
-  writeNotNull('IC',
-      const MatrixJsonConverterNullable().toJson(instance.initialCoefficients));
+  val['IC'] =
+      const MatrixJsonConverterNullable().toJson(instance.initialCoefficients);
   val['CN'] = instance.targetNames.toList();
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;

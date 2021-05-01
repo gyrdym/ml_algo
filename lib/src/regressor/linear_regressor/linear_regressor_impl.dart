@@ -116,10 +116,7 @@ class LinearRegressorImpl
   final int batchSize;
 
   @override
-  @JsonKey(
-    name: linearRegressorInitialCoefficientsJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorInitialCoefficientsJsonKey)
   final Matrix? initialCoefficients;
 
   @override

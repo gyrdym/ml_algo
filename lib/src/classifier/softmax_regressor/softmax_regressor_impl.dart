@@ -155,10 +155,7 @@ class SoftmaxRegressorImpl
   final InitialCoefficientsType initialCoefficientsType;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorInitialCoefsJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorInitialCoefsJsonKey)
   final Matrix? initialCoefficients;
 
   @override

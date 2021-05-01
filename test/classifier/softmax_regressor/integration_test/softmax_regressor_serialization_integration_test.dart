@@ -243,8 +243,7 @@ void main() {
           initialCoefficients: null);
       final serialized = classifier.toJson();
 
-      expect(serialized.containsKey(softmaxRegressorInitialCoefsJsonKey),
-          false);
+      expect(serialized[softmaxRegressorInitialCoefsJsonKey], {});
     });
 
     test('should serialize classNames field', () {

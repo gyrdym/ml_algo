@@ -139,8 +139,8 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
       const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
   val['ICT'] = const InitialCoefficientsTypeJsonConverter()
       .toJson(instance.initialCoefficientsType);
-  writeNotNull('IC',
-      const VectorJsonConverterNullable().toJson(instance.initialCoefficients));
+  val['IC'] =
+      const VectorJsonConverterNullable().toJson(instance.initialCoefficients);
   val['CBC'] =
       const MatrixJsonConverter().toJson(instance.coefficientsByClasses);
   val['CN'] = instance.targetNames.toList();

@@ -117,8 +117,8 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
   writeNotNull('RT', _$RegularizationTypeEnumMap[instance.regularizationType]);
   writeNotNull('RS', instance.randomSeed);
   val['BS'] = instance.batchSize;
-  writeNotNull('IC',
-      const MatrixJsonConverterNullable().toJson(instance.initialCoefficients));
+  val['IC'] =
+      const MatrixJsonConverterNullable().toJson(instance.initialCoefficients);
   val['FDN'] = instance.isFittingDataNormalized;
   val['TN'] = instance.targetName;
   val['FI'] = instance.fitIntercept;

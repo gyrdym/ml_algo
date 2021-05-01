@@ -12,5 +12,5 @@ class VectorJsonConverterNullable
       json?.isNotEmpty == true ? fromVectorJson(json) : null;
 
   @override
-  Map<String, dynamic>? toJson(Vector? vector) => vectorToJson(vector);
+  Map<String, dynamic>? toJson(Vector? vector) => vectorToJson(vector) ?? {};
 }
