@@ -83,9 +83,5 @@ Map<String, dynamic> migrateSoftmaxRegressorSchemaV2toV3(
     migratedJson[softmaxRegressorFittingDataNormalizedFlagJsonKey] = false;
   }
 
-  if (migratedJson[softmaxRegressorInitialCoefsJsonKey] == null) {
-    migratedJson[softmaxRegressorInitialCoefsJsonKey] = <String, dynamic>{};
-  }
-
   return migratedJson;
 }

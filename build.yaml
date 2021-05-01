@@ -7,7 +7,7 @@ targets:
           checked: true
           create_to_json: true
           disallow_unrecognized_keys: true
-          explicit_to_json: false
+          explicit_to_json: true
           field_rename: none
-          ignore_unannotated: false
-          include_if_null: true
+          ignore_unannotated: true
+          include_if_null: false

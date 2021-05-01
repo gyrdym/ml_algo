@@ -7,10 +7,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_con
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
-import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
-import 'package:ml_algo/src/common/json_converter/vector_json_converter_nullable.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
@@ -36,8 +33,6 @@ part 'logistic_regressor_impl.g.dart';
 @JsonSerializable()
 @LinearOptimizerTypeJsonConverter()
 @DTypeJsonConverter()
-@MatrixJsonConverter()
-@VectorJsonConverterNullable()
 @RegularizationTypeJsonConverterNullable()
 @LearningRateTypeJsonConverter()
 @InitialCoefficientsTypeJsonConverter()
@@ -110,17 +105,11 @@ class LogisticRegressorImpl
   final double lambda;
 
   @override
-  @JsonKey(
-    name: logisticRegressorRegularizationTypeJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: logisticRegressorRegularizationTypeJsonKey)
   final RegularizationType? regularizationType;
 
   @override
-  @JsonKey(
-    name: logisticRegressorRandomSeedJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: logisticRegressorRandomSeedJsonKey)
   final int? randomSeed;
 
   @override
@@ -196,8 +185,6 @@ class LogisticRegressorImpl
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final schemaVersion;
 
-  final _outdatedSchemaVersions = [null];
-
   @override
   DataFrame predict(DataFrame testFeatures) {
     final predictedLabels = getProbabilitiesMatrix(testFeatures).mapColumns(
@@ -215,10 +202,6 @@ class LogisticRegressorImpl
 
   @override
   LogisticRegressor retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return logisticRegressorInjector.get<LogisticRegressorFactory>().create(
           trainData: data,
           targetName: targetNames.first,

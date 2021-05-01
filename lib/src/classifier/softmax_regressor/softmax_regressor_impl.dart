@@ -7,10 +7,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_const
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
-import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
-import 'package:ml_algo/src/common/json_converter/matrix_json_converter_nullable.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
@@ -38,8 +35,6 @@ part 'softmax_regressor_impl.g.dart';
 @RegularizationTypeJsonConverterNullable()
 @LearningRateTypeJsonConverter()
 @InitialCoefficientsTypeJsonConverter()
-@MatrixJsonConverter()
-@MatrixJsonConverterNullable()
 class SoftmaxRegressorImpl
     with
         LinearClassifierMixin,
@@ -97,10 +92,7 @@ class SoftmaxRegressorImpl
   final LinearOptimizerType optimizerType;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorIterationsLimitJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorIterationsLimitJsonKey)
   final int iterationsLimit;
 
   @override
@@ -108,31 +100,19 @@ class SoftmaxRegressorImpl
   final double initialLearningRate;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorMinCoefsUpdateJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorMinCoefsUpdateJsonKey)
   final double minCoefficientsUpdate;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorLambdaJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorLambdaJsonKey)
   final double lambda;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorRegularizationTypeJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorRegularizationTypeJsonKey)
   final RegularizationType? regularizationType;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorRandomSeedJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorRandomSeedJsonKey)
   final int? randomSeed;
 
   @override
@@ -148,10 +128,7 @@ class SoftmaxRegressorImpl
   final LearningRateType learningRateType;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorInitialCoefsTypeJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorInitialCoefsTypeJsonKey)
   final InitialCoefficientsType initialCoefficientsType;
 
   @override
@@ -195,17 +172,12 @@ class SoftmaxRegressorImpl
   final num negativeLabel;
 
   @override
-  @JsonKey(
-    name: softmaxRegressorCostPerIterationJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: softmaxRegressorCostPerIterationJsonKey)
   final List<num>? costPerIteration;
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final schemaVersion;
-
-  final _outdatedSchemaVersions = [null];
 
   @override
   DataFrame predict(DataFrame testFeatures) {
@@ -232,10 +204,6 @@ class SoftmaxRegressorImpl
 
   @override
   SoftmaxRegressor retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return softmaxRegressorInjector
         .get<SoftmaxRegressorFactory>()
         .create(

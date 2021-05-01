@@ -117,5 +117,11 @@ void main() {
       expect(restored.value, labelValue);
       expect(restored.probability, probability);
     });
+
+    test('should return a proper schema version', () {
+      final leafLabel = TreeLeafLabel(1, probability: 0.5);
+
+      expect(leafLabel.schemaVersion, 1);
+    });
   });
 }

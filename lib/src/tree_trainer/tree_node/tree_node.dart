@@ -13,7 +13,7 @@ import 'package:ml_linalg/vector.dart';
 
 part 'tree_node.g.dart';
 
-@JsonSerializable(includeIfNull: false)
+@JsonSerializable()
 class TreeNode {
   TreeNode(
       this.predicateType,
@@ -38,11 +38,7 @@ class TreeNode {
   )
   final List<TreeNode>? children;
 
-  @JsonKey(
-    name: labelJsonKey,
-    toJson: leafLabelToJson,
-    fromJson: fromLeafLabelJson,
-  )
+  @JsonKey(name: labelJsonKey)
   final TreeLeafLabel? label;
 
   @JsonKey(

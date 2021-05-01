@@ -37,13 +37,22 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
   });
 }
 
-Map<String, dynamic> _$KnnClassifierImplToJson(KnnClassifierImpl instance) =>
-    <String, dynamic>{
-      'T': instance.targetColumnName,
-      'D': const DTypeJsonConverter().toJson(instance.dtype),
-      'C': instance.classLabels,
-      'K': const KernelJsonConverter().toJson(instance.kernel),
-      'S': const KnnSolverJsonConverter().toJson(instance.solver),
-      'P': instance.classLabelPrefix,
-      r'$V': instance.schemaVersion,
-    };
+Map<String, dynamic> _$KnnClassifierImplToJson(KnnClassifierImpl instance) {
+  final val = <String, dynamic>{
+    'T': instance.targetColumnName,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('D', const DTypeJsonConverter().toJson(instance.dtype));
+  val['C'] = instance.classLabels;
+  writeNotNull('K', const KernelJsonConverter().toJson(instance.kernel));
+  writeNotNull('S', const KnnSolverJsonConverter().toJson(instance.solver));
+  val['P'] = instance.classLabelPrefix;
+  writeNotNull(r'$V', instance.schemaVersion);
+  return val;
+}

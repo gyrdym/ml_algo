@@ -81,8 +81,6 @@ class KnnRegressorImpl
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final schemaVersion;
 
-  final _outdatedSchemaVersions = [null];
-
   Vector get _zeroVector => dtype == DType.float32
       ? _float32zeroVector
       : _float64zeroVector;
@@ -105,10 +103,6 @@ class KnnRegressorImpl
 
   @override
   KnnRegressor retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return knnRegressorInjector
         .get<KnnRegressorFactory>()
         .create(

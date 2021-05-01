@@ -16,7 +16,11 @@ TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'SI', (v) => v as int?),
       $checkedConvert(json, 'CN', (v) => fromTreeNodesJson(v as List?)),
       $checkedConvert(
-          json, 'LB', (v) => fromLeafLabelJson(v as Map<String, dynamic>?)),
+          json,
+          'LB',
+          (v) => v == null
+              ? null
+              : TreeLeafLabel.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'LV', (v) => v as int),
     );
     return val;
@@ -40,7 +44,7 @@ Map<String, dynamic> _$TreeNodeToJson(TreeNode instance) {
   }
 
   writeNotNull('CN', treeNodesToJson(instance.children));
-  writeNotNull('LB', leafLabelToJson(instance.label));
+  writeNotNull('LB', instance.label?.toJson());
   writeNotNull('PT', splittingPredicateTypeToJson(instance.predicateType));
   writeNotNull('SV', instance.splittingValue);
   writeNotNull('SI', instance.splittingIndex);

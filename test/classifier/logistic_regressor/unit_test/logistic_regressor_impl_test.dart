@@ -324,38 +324,6 @@ void main() {
         expect(retrainedModel, isNot(same(regressor)));
       });
 
-      test('should throw exception if the model schema is outdated or '
-          'null', () {
-        final model = LogisticRegressorImpl(
-          defaultOptimizerType,
-          defaultIterationsLimit,
-          defaultInitialLearningRate,
-          defaultMinCoefficientsUpdate,
-          defaultLambda,
-          defaultRegularizationType,
-          defaultRandomSeed,
-          defaultBatchSize,
-          defaultIsFittingDataNormalizedFlag,
-          defaultLearningRateType,
-          defaultInitialCoefficientsType,
-          defaultInitialCoefficients,
-          [className],
-          linkFunctionMock,
-          defaultFitIntercept,
-          defaultInterceptScale,
-          defaultCoefficients,
-          defaultProbabilityThreshold,
-          defaultNegativeLabel,
-          defaultPositiveLabel,
-          defaultCostPerIteration,
-          defaultDType,
-          schemaVersion: null,
-        );
-
-        expect(() => model.retrain(retrainingData),
-            throwsA(isA<OutdatedJsonSchemaException>()));
-      });
-
       test('should have a proper json schema version', () {
         expect(createRegressor().schemaVersion, 3);
       });

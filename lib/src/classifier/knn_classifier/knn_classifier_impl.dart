@@ -96,8 +96,6 @@ class KnnClassifierImpl
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final schemaVersion;
 
-  final List<num?> _outdatedSchemaVersions = [null];
-
   @override
   DataFrame predict(DataFrame features) {
     validateTestFeatures(features, dtype);
@@ -149,10 +147,6 @@ class KnnClassifierImpl
 
   @override
   KnnClassifier retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return knnClassifierInjector
         .get<KnnClassifierFactory>()
         .create(

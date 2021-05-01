@@ -328,22 +328,6 @@ void main() {
       expect(retrainedModel, isNot(same(classifier32)));
     });
 
-    test('should throw exception if the model schema is outdated, '
-        'schemaVersion is null', () {
-      final model = DecisionTreeClassifierImpl(
-        minError,
-        minSamplesCount,
-        maxDepth,
-        treeRootMock,
-        targetColumnName,
-        DType.float64,
-        schemaVersion: null,
-      );
-
-      expect(() => model.retrain(retrainingDataFrame),
-          throwsA(isA<OutdatedJsonSchemaException>()));
-    });
-
     test('should return a proper schema version', () {
       expect(classifier32.schemaVersion, 1);
     });

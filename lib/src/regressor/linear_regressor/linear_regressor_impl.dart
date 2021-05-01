@@ -1,9 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
-import 'package:ml_algo/src/common/json_converter/matrix_json_converter_nullable.dart';
-import 'package:ml_algo/src/common/json_converter/vector_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
@@ -13,6 +10,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
+import 'package:ml_algo/src/linear_optimizer/regularization_type_json_converter_nullable.dart';
 import 'package:ml_algo/src/regressor/_mixins/assessable_regressor_mixin.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
@@ -29,11 +27,10 @@ part 'linear_regressor_impl.g.dart';
 
 @JsonSerializable()
 @DTypeJsonConverter()
-@VectorJsonConverter()
-@MatrixJsonConverterNullable()
 @LinearOptimizerTypeJsonConverter()
 @LearningRateTypeJsonConverter()
 @InitialCoefficientsTypeJsonConverter()
+@RegularizationTypeJsonConverterNullable()
 class LinearRegressorImpl
     with AssessableRegressorMixin, SerializableMixin
     implements LinearRegressor {
@@ -71,10 +68,7 @@ class LinearRegressorImpl
   final LinearOptimizerType optimizerType;
 
   @override
-  @JsonKey(
-    name: linearRegressorIterationsLimitJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorIterationsLimitJsonKey)
   final int iterationsLimit;
 
   @override
@@ -98,17 +92,11 @@ class LinearRegressorImpl
   final num lambda;
 
   @override
-  @JsonKey(
-    name: linearRegressorRegularizationTypeJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorRegularizationTypeJsonKey)
   final RegularizationType? regularizationType;
 
   @override
-  @JsonKey(
-    name: linearRegressorRandomSeedJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorRandomSeedJsonKey)
   final int? randomSeed;
 
   @override
@@ -140,10 +128,7 @@ class LinearRegressorImpl
   final Vector coefficients;
 
   @override
-  @JsonKey(
-    name: linearRegressorCostPerIterationJsonKey,
-    includeIfNull: false,
-  )
+  @JsonKey(name: linearRegressorCostPerIterationJsonKey)
   final List<num>? costPerIteration;
 
   @override
@@ -156,8 +141,6 @@ class LinearRegressorImpl
 
   @override
   Iterable<String> get targetNames => [targetName];
-
-  final _outdatedSchemaVersions = [null];
 
   @override
   DataFrame predict(DataFrame features) {
@@ -177,10 +160,6 @@ class LinearRegressorImpl
 
   @override
   LinearRegressor retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return linearRegressorInjector.get<LinearRegressorFactory>().create(
           fittingData: data,
           targetName: targetName,

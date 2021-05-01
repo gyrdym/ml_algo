@@ -82,10 +82,5 @@ Map<String, dynamic> migrateLinearRegressorSchemaV1toV2(
     migratedJson[linearRegressorFittingDataNormalizedFlagJsonKey] = false;
   }
 
-  if (migratedJson[linearRegressorInitialCoefficientsJsonKey] == null) {
-    migratedJson[linearRegressorInitialCoefficientsJsonKey] =
-        <String, dynamic>{};
-  }
-
   return migratedJson;
 }

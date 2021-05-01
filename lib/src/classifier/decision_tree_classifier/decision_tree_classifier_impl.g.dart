@@ -15,11 +15,11 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
       $checkedConvert(json, 'S', (v) => v as int),
       $checkedConvert(json, 'D', (v) => v as int),
       $checkedConvert(
-          json, 'R', (v) => fromTreeNodeJson(v as Map<String, dynamic>)),
+          json, 'R', (v) => TreeNode.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'T', (v) => v as String),
       $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
   }, fieldKeyMap: const {
@@ -34,13 +34,22 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
 }
 
 Map<String, dynamic> _$DecisionTreeClassifierImplToJson(
-        DecisionTreeClassifierImpl instance) =>
-    <String, dynamic>{
-      'E': instance.minError,
-      'S': instance.minSamplesCount,
-      'D': instance.maxDepth,
-      'DT': const DTypeJsonConverter().toJson(instance.dtype),
-      'T': instance.targetColumnName,
-      'R': treeNodeToJson(instance.treeRootNode),
-      r'$V': instance.schemaVersion,
-    };
+    DecisionTreeClassifierImpl instance) {
+  final val = <String, dynamic>{
+    'E': instance.minError,
+    'S': instance.minSamplesCount,
+    'D': instance.maxDepth,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('DT', const DTypeJsonConverter().toJson(instance.dtype));
+  val['T'] = instance.targetColumnName;
+  val['R'] = instance.treeRootNode.toJson();
+  val[r'$V'] = instance.schemaVersion;
+  return val;
+}

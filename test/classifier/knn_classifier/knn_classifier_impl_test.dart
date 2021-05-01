@@ -614,22 +614,6 @@ void main() {
         expect(retrainedModel, same(retrainedModelMock));
         expect(retrainedModel, isNot(same(classifier)));
       });
-
-      test('should throw exception if the model schema is outdated, '
-          'schemaVersion is null', () {
-        final model = KnnClassifierImpl(
-          targetColumnName,
-          classLabels,
-          kernelMock,
-          solverMock,
-          classLabelPrefix,
-          dtype,
-          schemaVersion: null,
-        );
-
-        expect(() => model.retrain(retrainingData),
-            throwsA(isA<OutdatedJsonSchemaException>()));
-      });
     });
   });
 }

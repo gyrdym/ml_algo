@@ -6,12 +6,9 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_node_json.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_node_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -71,11 +68,7 @@ class DecisionTreeClassifierImpl
   @override
   Iterable<String> get targetNames => [targetColumnName];
 
-  @JsonKey(
-    name: decisionTreeClassifierTreeRootNodeJsonKey,
-    toJson: treeNodeToJson,
-    fromJson: fromTreeNodeJson,
-  )
+  @JsonKey(name: decisionTreeClassifierTreeRootNodeJsonKey)
   final TreeNode treeRootNode;
 
   @override
@@ -86,9 +79,7 @@ class DecisionTreeClassifierImpl
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final int? schemaVersion;
-
-  final _outdatedSchemaVersions = [null];
+  final int schemaVersion;
 
   @override
   DataFrame predict(DataFrame features) {
@@ -151,10 +142,6 @@ class DecisionTreeClassifierImpl
 
   @override
   DecisionTreeClassifier retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return decisionTreeInjector
         .get<DecisionTreeClassifierFactory>()
         .create(

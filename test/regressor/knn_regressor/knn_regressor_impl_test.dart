@@ -195,20 +195,6 @@ void main() {
         expect(retrainedModel, isNot(same(regressor)));
       });
 
-      test('should throw exception if the model schema is outdated, '
-          'schemaVersion is null', () {
-        final model = KnnRegressorImpl(
-          targetName,
-          solver,
-          kernel,
-          dtype,
-          schemaVersion: null,
-        );
-
-        expect(() => model.retrain(retrainingData),
-            throwsA(isA<OutdatedJsonSchemaException>()));
-      });
-
       test('should return a proper schema version', () {
         expect(regressor.schemaVersion, 1);
       });
