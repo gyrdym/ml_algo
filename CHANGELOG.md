@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.0.0
+- Null-safety stable release
+
 ## 15.6.7
 - `README`: important notes on data handling added
 
