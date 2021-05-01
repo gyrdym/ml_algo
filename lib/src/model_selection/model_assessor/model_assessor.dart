@@ -4,8 +4,8 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 abstract class ModelAssessor<T extends Predictor> {
   double assess(
-      T predictor,
-      MetricType metricType,
-      DataFrame samples,
+    T predictor,
+    MetricType metricType,
+    DataFrame samples,
   );
 }

@@ -27,12 +27,7 @@ import 'package:ml_linalg/matrix.dart';
 /// Also it is worth to mention that the algorithm is a generalization of
 /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression))
 abstract class SoftmaxRegressor
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        LinearClassifier {
-
+    implements Assessable, Serializable, Retrainable, LinearClassifier {
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations which are used by the
@@ -120,54 +115,50 @@ abstract class SoftmaxRegressor
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
   factory SoftmaxRegressor(
-      DataFrame trainData,
-      List<String> targetNames,
-      {
-        LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
-        int iterationsLimit = 100,
-        double initialLearningRate = 1e-3,
-        double minCoefficientsUpdate = 1e-12,
-        double lambda = 0,
-        int batchSize = 1,
-        bool fitIntercept = false,
-        double interceptScale = 1.0,
-        LearningRateType learningRateType = LearningRateType.constant,
-        bool isFittingDataNormalized = false,
-        InitialCoefficientsType initialCoefficientsType =
-            InitialCoefficientsType.zeroes,
-        num positiveLabel = 1,
-        num negativeLabel = 0,
-        bool collectLearningData = false,
-        DType dtype = DType.float32,
-        RegularizationType? regularizationType,
-        Matrix? initialCoefficients,
-        int? randomSeed,
-      }
-  ) =>
-    initSoftmaxRegressorModule()
-        .get<SoftmaxRegressorFactory>()
-        .create(
-      trainData: trainData,
-      targetNames: targetNames,
-      optimizerType: optimizerType,
-      iterationsLimit: iterationsLimit,
-      initialLearningRate: initialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate,
-      lambda: lambda,
-      regularizationType: regularizationType,
-      randomSeed: randomSeed,
-      batchSize: batchSize,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      learningRateType: learningRateType,
-      isFittingDataNormalized: isFittingDataNormalized,
-      initialCoefficientsType: initialCoefficientsType,
-      initialCoefficients: initialCoefficients,
-      positiveLabel: positiveLabel,
-      negativeLabel: negativeLabel,
-      collectLearningData: collectLearningData,
-      dtype: dtype,
-    );
+    DataFrame trainData,
+    List<String> targetNames, {
+    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
+    int iterationsLimit = 100,
+    double initialLearningRate = 1e-3,
+    double minCoefficientsUpdate = 1e-12,
+    double lambda = 0,
+    int batchSize = 1,
+    bool fitIntercept = false,
+    double interceptScale = 1.0,
+    LearningRateType learningRateType = LearningRateType.constant,
+    bool isFittingDataNormalized = false,
+    InitialCoefficientsType initialCoefficientsType =
+        InitialCoefficientsType.zeroes,
+    num positiveLabel = 1,
+    num negativeLabel = 0,
+    bool collectLearningData = false,
+    DType dtype = DType.float32,
+    RegularizationType? regularizationType,
+    Matrix? initialCoefficients,
+    int? randomSeed,
+  }) =>
+      initSoftmaxRegressorModule().get<SoftmaxRegressorFactory>().create(
+            trainData: trainData,
+            targetNames: targetNames,
+            optimizerType: optimizerType,
+            iterationsLimit: iterationsLimit,
+            initialLearningRate: initialLearningRate,
+            minCoefficientsUpdate: minCoefficientsUpdate,
+            lambda: lambda,
+            regularizationType: regularizationType,
+            randomSeed: randomSeed,
+            batchSize: batchSize,
+            fitIntercept: fitIntercept,
+            interceptScale: interceptScale,
+            learningRateType: learningRateType,
+            isFittingDataNormalized: isFittingDataNormalized,
+            initialCoefficientsType: initialCoefficientsType,
+            initialCoefficients: initialCoefficients,
+            positiveLabel: positiveLabel,
+            negativeLabel: negativeLabel,
+            collectLearningData: collectLearningData,
+            dtype: dtype,
+          );
 
   /// Restores previously fitted classifier instance from the [json]
   ///
@@ -206,10 +197,9 @@ abstract class SoftmaxRegressor
   /// // here you can use previously fitted restored classifier to make
   /// // some prediction, e.g. via `restoredClassifier.predict(...)`;
   /// ````
-  factory SoftmaxRegressor.fromJson(String json) =>
-      initSoftmaxRegressorModule()
-          .get<SoftmaxRegressorFactory>()
-          .fromJson(json);
+  factory SoftmaxRegressor.fromJson(String json) => initSoftmaxRegressorModule()
+      .get<SoftmaxRegressorFactory>()
+      .fromJson(json);
 
   /// A linear optimization algorithm that was used
   /// to find the best coefficients of log-likelihood cost function. Also

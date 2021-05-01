@@ -12,8 +12,8 @@ class TreeLeafDetectorImpl implements TreeLeafDetector {
   final int _maxDepth;
 
   @override
-  bool isLeaf(Matrix samples, int targetIdx,
-      Iterable<num> featureColumnIdxs, int treeDepth) {
+  bool isLeaf(Matrix samples, int targetIdx, Iterable<num> featureColumnIdxs,
+      int treeDepth) {
     if (_maxDepth <= treeDepth) {
       return true;
     }

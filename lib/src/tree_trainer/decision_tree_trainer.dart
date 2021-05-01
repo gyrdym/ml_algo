@@ -8,14 +8,14 @@ import 'package:ml_linalg/matrix.dart';
 
 class DecisionTreeTrainer implements TreeTrainer {
   DecisionTreeTrainer(
-      this._featureIndices,
-      this._targetIdx,
-      this._featureToUniqueValues,
-      this._leafDetector,
-      this._leafLabelFactory,
-      this._splitSelector,
+    this._featureIndices,
+    this._targetIdx,
+    this._featureToUniqueValues,
+    this._leafDetector,
+    this._leafLabelFactory,
+    this._splitSelector,
   );
-  
+
   final Iterable<int> _featureIndices;
   final int _targetIdx;
   final Map<int, List<num>> _featureToUniqueValues;
@@ -28,12 +28,12 @@ class DecisionTreeTrainer implements TreeTrainer {
       _train(samples, null, null, null, _featureIndices, 0);
 
   TreeNode _train(
-      Matrix samples,
-      num? splittingValue,
-      int? splittingIdx,
-      TreeNodeSplittingPredicateType? splittingPredicateType,
-      Iterable<int> featuresColumnIdxs,
-      int level,
+    Matrix samples,
+    num? splittingValue,
+    int? splittingIdx,
+    TreeNodeSplittingPredicateType? splittingPredicateType,
+    Iterable<int> featuresColumnIdxs,
+    int level,
   ) {
     final isLeaf = _leafDetector.isLeaf(
       samples,
@@ -59,10 +59,10 @@ class DecisionTreeTrainer implements TreeTrainer {
     }
 
     final bestSplit = _splitSelector.select(
-        samples,
-        _targetIdx,
-        featuresColumnIdxs,
-        _featureToUniqueValues,
+      samples,
+      _targetIdx,
+      featuresColumnIdxs,
+      _featureToUniqueValues,
     );
 
     final newLevel = level + 1;
@@ -70,11 +70,11 @@ class DecisionTreeTrainer implements TreeTrainer {
     final childNodes = bestSplit.entries.map((entry) {
       final splitNode = entry.key;
       final splitSamples = entry.value;
-      final isSplitByNominalValue = _featureToUniqueValues
-          .containsKey(splitNode.splittingIndex);
+      final isSplitByNominalValue =
+          _featureToUniqueValues.containsKey(splitNode.splittingIndex);
       final updatedColumnRanges = isSplitByNominalValue
           ? (Set<int>.from(featuresColumnIdxs)
-              ..remove(splitNode.splittingIndex))
+            ..remove(splitNode.splittingIndex))
           : featuresColumnIdxs;
 
       return _train(

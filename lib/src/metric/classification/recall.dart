@@ -6,13 +6,14 @@ class RecallMetric implements Metric {
   const RecallMetric();
 
   @override
+
   /// Accepts [predictedLabels] and [origLabels] with entries with `1` as
   /// positive label and `0` as negative one
   double getScore(Matrix predictedLabels, Matrix origLabels) {
-    final originalTrueCounts = origLabels
-        .reduceRows((counts, row) => counts + row);
+    final originalTrueCounts =
+        origLabels.reduceRows((counts, row) => counts + row);
 
-    return divideTruePositiveBy(originalTrueCounts, origLabels,
-        predictedLabels);
+    return divideTruePositiveBy(
+        originalTrueCounts, origLabels, predictedLabels);
   }
 }

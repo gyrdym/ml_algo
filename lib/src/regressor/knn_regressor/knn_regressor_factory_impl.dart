@@ -12,24 +12,22 @@ import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 
 class KnnRegressorFactoryImpl implements KnnRegressorFactory {
-  const KnnRegressorFactoryImpl(
-    this._kernelFnFactory,
-    this._solverFactory
-  );
+  const KnnRegressorFactoryImpl(this._kernelFnFactory, this._solverFactory);
 
   final KernelFactory _kernelFnFactory;
   final KnnSolverFactory _solverFactory;
 
   @override
   KnnRegressor create(
-      DataFrame fittingData,
-      String targetName,
-      int k,
-      KernelType kernelType,
-      Distance distance,
-      DType dtype,
+    DataFrame fittingData,
+    String targetName,
+    int k,
+    KernelType kernelType,
+    Distance distance,
+    DType dtype,
   ) {
-    final splits = featuresTargetSplit(fittingData,
+    final splits = featuresTargetSplit(
+      fittingData,
       targetNames: [targetName],
     ).toList();
 

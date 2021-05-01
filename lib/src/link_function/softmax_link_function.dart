@@ -19,21 +19,15 @@ class SoftmaxLinkFunction implements LinkFunction {
   @override
   Matrix link(Matrix scores) {
     final maxValues = Vector.fromList(
-      scores
-          .rows
-          .map((row) => row.max())
-          .toList(),
+      scores.rows.map((row) => row.max()).toList(),
       dtype: scores.dtype,
     );
 
-    final rescaledScores = scores
-        .mapColumns((column) => column - maxValues);
-    final numerator = rescaledScores
-        .mapElements(math.exp);
+    final rescaledScores = scores.mapColumns((column) => column - maxValues);
+    final numerator = rescaledScores.mapElements(math.exp);
     final denominator = numerator
         .reduceColumns((resultColumn, column) => resultColumn + column);
 
-    return numerator
-        .mapColumns((column) => column / denominator);
+    return numerator.mapColumns((column) => column / denominator);
   }
 }

@@ -63,8 +63,8 @@ in your dependencies:
 
 ````
 dependencies:
-  ml_dataframe: ^0.4.0
-  ml_preprocessing: ^5.2.2
+  ml_dataframe: ^0.5.1
+  ml_preprocessing: ^6.0.0
 ````
 
 We need these repos to parse raw data in order to use it further. For more details, please
@@ -97,14 +97,14 @@ final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv');
 
 #### For a flutter application:
 
-Be sure that you have ml_dataframe package version at least 0.4.0 and ml_algo package version at least 15.6.3 
+Be sure that you have ml_dataframe package version at least 0.5.1 and ml_algo package version at least 16.0.0 
 in your pubspec.yaml:
 
 ````
 dependencies:
   ...
-  ml_algo: ^15.6.3
-  ml_dataframe: ^0.4.0
+  ml_algo: ^16.0.0
+  ml_dataframe: ^0.5.1
   ...
 ````
 

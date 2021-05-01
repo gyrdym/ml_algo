@@ -17,12 +17,7 @@ import 'package:ml_linalg/dtype.dart';
 /// classify new samples with the same features that were used to learn the
 /// tree.
 abstract class DecisionTreeClassifier
-    implements
-        Assessable,
-        Serializable,
-        Retrainable,
-        Classifier {
-
+    implements Assessable, Serializable, Retrainable, Classifier {
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations that will be used by the
@@ -44,23 +39,21 @@ abstract class DecisionTreeClassifier
   ///
   /// [maxDepth] A maximum number of decision tree levels.
   factory DecisionTreeClassifier(
-      DataFrame trainData,
-      String targetName, {
+    DataFrame trainData,
+    String targetName, {
     num minError = 0.5,
     int minSamplesCount = 1,
     int maxDepth = 10,
     DType dtype = DType.float32,
   }) =>
-    initDecisionTreeModule()
-        .get<DecisionTreeClassifierFactory>()
-        .create(
-      trainData,
-      targetName,
-      dtype,
-      minError,
-      minSamplesCount,
-      maxDepth,
-    );
+      initDecisionTreeModule().get<DecisionTreeClassifierFactory>().create(
+            trainData,
+            targetName,
+            dtype,
+            minError,
+            minSamplesCount,
+            maxDepth,
+          );
 
   /// Restores previously fitted classifier instance from the given [json]
   ///

@@ -11,9 +11,9 @@ import 'package:quiver/iterables.dart';
 
 class CrossValidatorImpl implements CrossValidator {
   CrossValidatorImpl(
-      this.samples,
-      this._splitter,
-      this.dtype,
+    this.samples,
+    this._splitter,
+    this.dtype,
   );
 
   final DataFrame samples;
@@ -22,51 +22,47 @@ class CrossValidatorImpl implements CrossValidator {
 
   @override
   Future<Vector> evaluate(
-      PredictorFactory predictorFactory,
-      MetricType metricType,
-      {
-        DataPreprocessFn? onDataSplit,
-      }
-  ) {
+    PredictorFactory predictorFactory,
+    MetricType metricType, {
+    DataPreprocessFn? onDataSplit,
+  }) {
     final samplesAsMatrix = samples.toMatrix(dtype);
     final sourceColumnsNum = samplesAsMatrix.columnsNum;
     final discreteColumns = enumerate(samples.series)
         .where((indexedSeries) => indexedSeries.value.isDiscrete)
         .map((indexedSeries) => indexedSeries.index);
     final allIndicesGroups = _splitter.getIndices(samplesAsMatrix.rowsNum);
-    final scores = allIndicesGroups
-        .map((testRowsIndices) {
-          final split = _makeSplit(testRowsIndices, discreteColumns);
-          final trainDataFrame = split[0];
-          final testDataFrame = split[1];
-          final splits = onDataSplit != null
-              ? onDataSplit(trainDataFrame, testDataFrame)
-              : [trainDataFrame, testDataFrame];
-          final transformedTrainData = splits[0];
-          final transformedTestData = splits[1];
-          final transformedTrainDataColumnsNum = transformedTrainData.header.length;
-          final transformedTestDataColumnsNum = transformedTestData.header.length;
+    final scores = allIndicesGroups.map((testRowsIndices) {
+      final split = _makeSplit(testRowsIndices, discreteColumns);
+      final trainDataFrame = split[0];
+      final testDataFrame = split[1];
+      final splits = onDataSplit != null
+          ? onDataSplit(trainDataFrame, testDataFrame)
+          : [trainDataFrame, testDataFrame];
+      final transformedTrainData = splits[0];
+      final transformedTestData = splits[1];
+      final transformedTrainDataColumnsNum = transformedTrainData.header.length;
+      final transformedTestDataColumnsNum = transformedTestData.header.length;
 
-          if (transformedTrainDataColumnsNum != sourceColumnsNum) {
-            throw InvalidTrainDataColumnsNumberException(sourceColumnsNum,
-                transformedTrainDataColumnsNum);
-          }
+      if (transformedTrainDataColumnsNum != sourceColumnsNum) {
+        throw InvalidTrainDataColumnsNumberException(
+            sourceColumnsNum, transformedTrainDataColumnsNum);
+      }
 
-          if (transformedTestDataColumnsNum != sourceColumnsNum) {
-            throw InvalidTestDataColumnsNumberException(sourceColumnsNum,
-                transformedTestDataColumnsNum);
-          }
+      if (transformedTestDataColumnsNum != sourceColumnsNum) {
+        throw InvalidTestDataColumnsNumberException(
+            sourceColumnsNum, transformedTestDataColumnsNum);
+      }
 
-          return predictorFactory(transformedTrainData)
-              .assess(transformedTestData, metricType);
-        })
-        .toList();
+      return predictorFactory(transformedTrainData)
+          .assess(transformedTestData, metricType);
+    }).toList();
 
     return Future.value(Vector.fromList(scores, dtype: dtype));
   }
 
-  List<DataFrame> _makeSplit(Iterable<int> testRowsIndices,
-      Iterable<int> discreteColumns) {
+  List<DataFrame> _makeSplit(
+      Iterable<int> testRowsIndices, Iterable<int> discreteColumns) {
     final samplesAsMatrix = samples.toMatrix(dtype);
     final testRowsIndicesAsSet = Set<int>.from(testRowsIndices);
     final trainSamples = List<Vector>.filled(

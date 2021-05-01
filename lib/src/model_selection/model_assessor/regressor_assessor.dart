@@ -10,8 +10,8 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 class RegressorAssessor implements ModelAssessor<Predictor> {
   RegressorAssessor(
-      this._metricFactory,
-      this._featuresTargetSplit,
+    this._metricFactory,
+    this._featuresTargetSplit,
   );
 
   final MetricFactory _metricFactory;
@@ -19,13 +19,12 @@ class RegressorAssessor implements ModelAssessor<Predictor> {
 
   @override
   double assess(
-      Predictor regressor,
-      MetricType metricType,
-      DataFrame samples,
+    Predictor regressor,
+    MetricType metricType,
+    DataFrame samples,
   ) {
     if (!regressionMetrics.contains(metricType)) {
-      throw InvalidMetricTypeException(
-          metricType, regressionMetrics);
+      throw InvalidMetricTypeException(metricType, regressionMetrics);
     }
 
     final splits = _featuresTargetSplit(
@@ -34,15 +33,11 @@ class RegressorAssessor implements ModelAssessor<Predictor> {
     ).toList();
     final featuresFrame = splits[0];
     final originalLabelsFrame = splits[1];
-    final metric = _metricFactory
-        .createByType(metricType);
-    final predictedLabels = regressor
-        .predict(featuresFrame)
-        .toMatrix(regressor.dtype);
-    final originalLabels = originalLabelsFrame
-        .toMatrix(regressor.dtype);
+    final metric = _metricFactory.createByType(metricType);
+    final predictedLabels =
+        regressor.predict(featuresFrame).toMatrix(regressor.dtype);
+    final originalLabels = originalLabelsFrame.toMatrix(regressor.dtype);
 
-    return metric
-        .getScore(predictedLabels, originalLabels);
+    return metric.getScore(predictedLabels, originalLabels);
   }
 }

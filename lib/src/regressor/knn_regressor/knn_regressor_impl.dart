@@ -30,20 +30,15 @@ final _float64zeroVector = Vector.zero(1, dtype: DType.float64);
 @KernelJsonConverter()
 @DTypeJsonConverter()
 class KnnRegressorImpl
-    with
-        AssessableRegressorMixin,
-        SerializableMixin
-    implements
-        KnnRegressor {
+    with AssessableRegressorMixin, SerializableMixin
+    implements KnnRegressor {
   KnnRegressorImpl(
-      this.targetName,
-      this.solver,
-      this.kernel,
-      this.dtype,
-      {
-        this.schemaVersion = knnRegressorJsonSchemaVersion,
-      }
-  );
+    this.targetName,
+    this.solver,
+    this.kernel,
+    this.dtype, {
+    this.schemaVersion = knnRegressorJsonSchemaVersion,
+  });
 
   factory KnnRegressorImpl.fromJson(Map<String, dynamic> json) =>
       _$KnnRegressorImplFromJson(json);
@@ -80,18 +75,16 @@ class KnnRegressorImpl
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final schemaVersion;
 
-  Vector get _zeroVector => dtype == DType.float32
-      ? _float32zeroVector
-      : _float64zeroVector;
+  Vector get _zeroVector =>
+      dtype == DType.float32 ? _float32zeroVector : _float64zeroVector;
 
   @override
   DataFrame predict(DataFrame testFeatures) {
     validateTestFeatures(testFeatures, dtype);
 
     final prediction = Matrix.fromRows(
-        _predictOutcomes(testFeatures.toMatrix(dtype))
-            .toList(growable: false),
-        dtype: dtype,
+      _predictOutcomes(testFeatures.toMatrix(dtype)).toList(growable: false),
+      dtype: dtype,
     );
 
     return DataFrame.fromMatrix(
@@ -102,33 +95,32 @@ class KnnRegressorImpl
 
   @override
   KnnRegressor retrain(DataFrame data) {
-    return knnRegressorInjector
-        .get<KnnRegressorFactory>()
-        .create(
-      data,
-      targetName,
-      k,
-      kernelType,
-      distanceType,
-      dtype,
-    );
+    return knnRegressorInjector.get<KnnRegressorFactory>().create(
+          data,
+          targetName,
+          k,
+          kernelType,
+          distanceType,
+          dtype,
+        );
   }
 
   Iterable<Vector> _predictOutcomes(Matrix features) {
     final neighbours = solver.findKNeighbours(features);
 
     return neighbours.map((kNeighbours) {
-      final weightedLabels = kNeighbours.fold<Vector>(_zeroVector,
-              (weightedSum, neighbour) {
+      final weightedLabels =
+          kNeighbours.fold<Vector>(_zeroVector, (weightedSum, neighbour) {
         final weight = kernel.getWeightByDistance(neighbour.distance);
         final weightedLabel = neighbour.label * weight;
 
         return weightedSum + weightedLabel;
       });
 
-      final weightsSum = kNeighbours.fold<num>(0,
-              (sum, neighbour) => sum + kernel
-                  .getWeightByDistance(neighbour.distance));
+      final weightsSum = kNeighbours.fold<num>(
+          0,
+          (sum, neighbour) =>
+              sum + kernel.getWeightByDistance(neighbour.distance));
 
       return weightedLabels / weightsSum;
     });

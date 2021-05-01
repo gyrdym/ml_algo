@@ -13,8 +13,8 @@ import 'package:ml_linalg/dtype.dart';
 
 class KnnClassifierFactoryImpl implements KnnClassifierFactory {
   const KnnClassifierFactoryImpl(
-      this._kernelFactory,
-      this._solverFactory,
+    this._kernelFactory,
+    this._solverFactory,
   );
 
   final KernelFactory _kernelFactory;
@@ -22,37 +22,34 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
 
   @override
   KnnClassifier create(
-      DataFrame trainData,
-      String targetName,
-      int k,
-      KernelType kernelType,
-      Distance distance,
-      String columnPrefix,
-      DType dtype,
+    DataFrame trainData,
+    String targetName,
+    int k,
+    KernelType kernelType,
+    Distance distance,
+    String columnPrefix,
+    DType dtype,
   ) {
-    final splits = featuresTargetSplit(trainData,
+    final splits = featuresTargetSplit(
+      trainData,
       targetNames: [targetName],
     ).toList();
     final featuresSplit = splits[0];
     final targetSplit = splits[1];
-    final trainFeatures = featuresSplit
-        .toMatrix(dtype);
-    final trainLabels = targetSplit
-        .toMatrix(dtype);
+    final trainFeatures = featuresSplit.toMatrix(dtype);
+    final trainLabels = targetSplit.toMatrix(dtype);
     final classLabels = targetSplit[targetName].isDiscrete
         ? targetSplit[targetName]
-        .discreteValues
-        .map((dynamic value) => value as num)
-        .toList(growable: false)
+            .discreteValues
+            .map((dynamic value) => value as num)
+            .toList(growable: false)
         : targetSplit
-        .toMatrix(dtype)
-        .getColumn(0)
-        .unique()
-        .toList(growable: false);
-    final kernel = _kernelFactory
-        .createByType(kernelType);
-    final solver = _solverFactory
-        .create(
+            .toMatrix(dtype)
+            .getColumn(0)
+            .unique()
+            .toList(growable: false);
+    final kernel = _kernelFactory.createByType(kernelType);
+    final solver = _solverFactory.create(
       trainFeatures,
       trainLabels,
       k,

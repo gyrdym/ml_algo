@@ -15,22 +15,15 @@ part 'knn_solver_impl.g.dart';
 
 @JsonSerializable()
 @DistanceTypeJsonConverter()
-class KnnSolverImpl
-    with
-        SerializableMixin
-    implements
-        KnnSolver {
-
+class KnnSolverImpl with SerializableMixin implements KnnSolver {
   KnnSolverImpl(
-      this.trainFeatures,
-      this.trainOutcomes,
-      this.k,
-      this.distanceType,
-      this.standardize,
-      {
-        this.schemaVersion = knnSolverJsonSchemaVersion,
-      }
-  ) {
+    this.trainFeatures,
+    this.trainOutcomes,
+    this.k,
+    this.distanceType,
+    this.standardize, {
+    this.schemaVersion = knnSolverJsonSchemaVersion,
+  }) {
     if (!trainFeatures.hasData) {
       throw Exception('Empty features matrix provided');
     }
@@ -51,7 +44,9 @@ class KnnSolverImpl
     }
 
     if (k <= 0 || k > trainFeatures.rowsNum) {
-      throw RangeError.value(k, 'Parameter k should be within the range '
+      throw RangeError.value(
+          k,
+          'Parameter k should be within the range '
           '1..${trainFeatures.rowsNum} (both inclusive)');
     }
   }
@@ -101,19 +96,20 @@ class KnnSolverImpl
 
     return features.rows.map((observation) {
       final sortedKNeighbors = firstKNeighbours
-          .map((pair) => Neighbour(pair.first
-          .distanceTo(observation, distance: distanceType), pair.last))
+          .map((pair) => Neighbour(
+              pair.first.distanceTo(observation, distance: distanceType),
+              pair.last))
           .toList(growable: false)
-        ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
+            ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
 
       restNeighbours.forEach((pair) {
-        final newKNeighbour = Neighbour(observation.distanceTo(pair.first),
-            pair.last);
-        final newNeighbourIdx = _findNewNeighbourIdx(newKNeighbour.distance,
-            sortedKNeighbors);
+        final newKNeighbour =
+            Neighbour(observation.distanceTo(pair.first), pair.last);
+        final newNeighbourIdx =
+            _findNewNeighbourIdx(newKNeighbour.distance, sortedKNeighbors);
         if (newNeighbourIdx != -1) {
-          sortedKNeighbors.setRange(newNeighbourIdx + 1, k, sortedKNeighbors,
-              newNeighbourIdx);
+          sortedKNeighbors.setRange(
+              newNeighbourIdx + 1, k, sortedKNeighbors, newNeighbourIdx);
           sortedKNeighbors[newNeighbourIdx] = newKNeighbour;
         }
       });
@@ -128,8 +124,8 @@ class KnnSolverImpl
     });
   }
 
-  int _findNewNeighbourIdx(double newNeighbourDist,
-      List<Neighbour> sortedNeighbors) {
+  int _findNewNeighbourIdx(
+      double newNeighbourDist, List<Neighbour> sortedNeighbors) {
     var i = -1;
 
     for (final neighbour in sortedNeighbors) {

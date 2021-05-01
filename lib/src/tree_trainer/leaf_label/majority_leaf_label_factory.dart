@@ -7,7 +7,6 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:quiver/iterables.dart' as quiver_iterables;
 
 class MajorityTreeLeafLabelFactory implements TreeLeafLabelFactory {
-
   MajorityTreeLeafLabelFactory(this.distributionCalculator);
 
   final DistributionCalculator distributionCalculator;
@@ -25,30 +24,31 @@ class MajorityTreeLeafLabelFactory implements TreeLeafLabelFactory {
   }
 
   _LabelData<T> _getLabelData<T>(Iterable<T> values, int totalCount) {
-    final distribution = distributionCalculator
-        .calculate<T>(values, totalCount);
+    final distribution =
+        distributionCalculator.calculate<T>(values, totalCount);
     final targetLabelEntry = _findEntryWithMaxProbability(distribution);
 
     return _LabelData<T>(targetLabelEntry.key, targetLabelEntry.value);
   }
 
   MapEntry<T, double> _findEntryWithMaxProbability<T>(
-      HashMap<T, double> distribution) =>
-    quiver_iterables.max<MapEntry<T, double>>(
-      distribution.entries, (first, second) {
-        final diff = first.value - second.value;
+          HashMap<T, double> distribution) =>
+      quiver_iterables.max<MapEntry<T, double>>(
+        distribution.entries,
+        (first, second) {
+          final diff = first.value - second.value;
 
-        if (diff < 0) {
-          return -1;
-        }
+          if (diff < 0) {
+            return -1;
+          }
 
-        if (diff > 0) {
-          return 1;
-        }
+          if (diff > 0) {
+            return 1;
+          }
 
-        return 0;
-      },
-    )!;
+          return 0;
+        },
+      )!;
 }
 
 class _LabelData<T> {

@@ -26,10 +26,9 @@ mixin LinearClassifierMixin implements LinearClassifier {
       dtype,
     );
 
-    validateCoefficientsMatrix(coefficientsByClasses,
-        processedFeatures.columnsNum);
+    validateCoefficientsMatrix(
+        coefficientsByClasses, processedFeatures.columnsNum);
 
-    return linkFunction
-        .link(processedFeatures * coefficientsByClasses);
+    return linkFunction.link(processedFeatures * coefficientsByClasses);
   }
 }

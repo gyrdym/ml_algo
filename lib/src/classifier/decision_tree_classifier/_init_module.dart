@@ -28,50 +28,38 @@ Injector initDecisionTreeModule() {
 
   return decisionTreeInjector
     ..registerSingletonIf<DistributionCalculatorFactory>(
-            () => const DistributionCalculatorFactoryImpl())
-
+        () => const DistributionCalculatorFactoryImpl())
     ..registerSingletonIf<NominalTreeSplitterFactory>(
-            () => const NominalTreeSplitterFactoryImpl())
-
+        () => const NominalTreeSplitterFactoryImpl())
     ..registerSingletonIf<NumericalTreeSplitterFactory>(
-            () => const NumericalTreeSplitterFactoryImpl())
-
+        () => const NumericalTreeSplitterFactoryImpl())
     ..registerSingletonIf<TreeSplitAssessorFactory>(
-            () => const TreeSplitAssessorFactoryImpl())
-
-    ..registerSingletonIf<TreeSplitterFactory>(
-            () => TreeSplitterFactoryImpl(
+        () => const TreeSplitAssessorFactoryImpl())
+    ..registerSingletonIf<TreeSplitterFactory>(() => TreeSplitterFactoryImpl(
           decisionTreeInjector.get<TreeSplitAssessorFactory>(),
           decisionTreeInjector.get<NominalTreeSplitterFactory>(),
           decisionTreeInjector.get<NumericalTreeSplitterFactory>(),
         ))
-
     ..registerSingletonIf<TreeSplitSelectorFactory>(
-            () => TreeSplitSelectorFactoryImpl(
-          decisionTreeInjector.get<TreeSplitAssessorFactory>(),
-          decisionTreeInjector.get<TreeSplitterFactory>(),
-        ))
-
+        () => TreeSplitSelectorFactoryImpl(
+              decisionTreeInjector.get<TreeSplitAssessorFactory>(),
+              decisionTreeInjector.get<TreeSplitterFactory>(),
+            ))
     ..registerSingletonIf<TreeLeafDetectorFactory>(
-            () => TreeLeafDetectorFactoryImpl(
-          decisionTreeInjector.get<TreeSplitAssessorFactory>(),
-        ))
-
+        () => TreeLeafDetectorFactoryImpl(
+              decisionTreeInjector.get<TreeSplitAssessorFactory>(),
+            ))
     ..registerSingletonIf<TreeLeafLabelFactoryFactory>(
-            () => TreeLeafLabelFactoryFactoryImpl(
-          decisionTreeInjector
-              .get<DistributionCalculatorFactory>(),
-        ))
-
-    ..registerSingletonIf<TreeTrainerFactory>(
-            () => TreeTrainerFactoryImpl(
+        () => TreeLeafLabelFactoryFactoryImpl(
+              decisionTreeInjector.get<DistributionCalculatorFactory>(),
+            ))
+    ..registerSingletonIf<TreeTrainerFactory>(() => TreeTrainerFactoryImpl(
           decisionTreeInjector.get<TreeLeafDetectorFactory>(),
           decisionTreeInjector.get<TreeLeafLabelFactoryFactory>(),
           decisionTreeInjector.get<TreeSplitSelectorFactory>(),
         ))
-
     ..registerSingletonIf<DecisionTreeClassifierFactory>(
-            () => DecisionTreeClassifierFactoryImpl(
-                decisionTreeInjector.get<TreeTrainerFactory>(),
+        () => DecisionTreeClassifierFactoryImpl(
+              decisionTreeInjector.get<TreeTrainerFactory>(),
             ));
 }

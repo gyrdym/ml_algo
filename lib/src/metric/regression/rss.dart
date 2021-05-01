@@ -9,13 +9,9 @@ class RssMetric implements Metric {
   double getScore(Matrix predictedLabels, Matrix origLabels) {
     validateMatrixColumns([predictedLabels, origLabels]);
 
-    final predicted = predictedLabels
-        .toVector();
-    final original = origLabels
-        .toVector();
+    final predicted = predictedLabels.toVector();
+    final original = origLabels.toVector();
 
-    return (predicted - original)
-        .pow(2)
-        .sum();
+    return (predicted - original).pow(2).sum();
   }
 }
