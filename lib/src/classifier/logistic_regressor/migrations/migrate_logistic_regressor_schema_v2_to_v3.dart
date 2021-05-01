@@ -82,5 +82,7 @@ Map<String, dynamic> migrateLogisticRegressorSchemaV2toV3(
     migratedJson[logisticRegressorDataNormalizedFlagJsonKey] = false;
   }
 
+  migratedJson[jsonSchemaVersionJsonKey] = 3;
+
   return migratedJson;
 }

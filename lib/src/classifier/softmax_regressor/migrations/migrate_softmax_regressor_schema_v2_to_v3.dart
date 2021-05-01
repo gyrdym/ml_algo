@@ -83,5 +83,7 @@ Map<String, dynamic> migrateSoftmaxRegressorSchemaV2toV3(
     migratedJson[softmaxRegressorFittingDataNormalizedFlagJsonKey] = false;
   }
 
+  migratedJson[jsonSchemaVersionJsonKey] = 3;
+
   return migratedJson;
 }

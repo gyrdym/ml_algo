@@ -11,4 +11,4 @@ enum LearningRateType {
   constant,
 }
 
-const defaultLearningRateType = LearningRateType.decreasingAdaptive;
+const defaultLearningRateType = LearningRateType.constant;

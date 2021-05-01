@@ -128,8 +128,6 @@ abstract class SoftmaxRegressor
         double initialLearningRate = 1e-3,
         double minCoefficientsUpdate = 1e-12,
         double lambda = 0,
-        RegularizationType? regularizationType,
-        int? randomSeed,
         int batchSize = 1,
         bool fitIntercept = false,
         double interceptScale = 1.0,
@@ -137,11 +135,13 @@ abstract class SoftmaxRegressor
         bool isFittingDataNormalized = false,
         InitialCoefficientsType initialCoefficientsType =
             InitialCoefficientsType.zeroes,
-        Matrix? initialCoefficients,
         num positiveLabel = 1,
         num negativeLabel = 0,
         bool collectLearningData = false,
         DType dtype = DType.float32,
+        RegularizationType? regularizationType,
+        Matrix? initialCoefficients,
+        int? randomSeed,
       }
   ) =>
     initSoftmaxRegressorModule()

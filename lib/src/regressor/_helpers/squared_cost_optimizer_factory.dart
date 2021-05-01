@@ -19,7 +19,6 @@ LinearOptimizer createSquaredCostOptimizer(
       required int iterationsLimit,
       required double initialLearningRate,
       required double minCoefficientsUpdate,
-//      required double probabilityThreshold,
       required double lambda,
       required int batchSize,
       required bool fitIntercept,

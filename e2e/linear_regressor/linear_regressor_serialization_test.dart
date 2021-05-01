@@ -43,6 +43,7 @@ void main() {
         0.0738188698887825,
         -0.004393403884023428
       ]);
+      expect(regressor.schemaVersion, 2);
     });
   });
 }

@@ -7,12 +7,12 @@ import 'package:ml_linalg/linalg.dart';
 
 class CoordinateDescentOptimizer implements LinearOptimizer {
   CoordinateDescentOptimizer(Matrix fittingPoints, Matrix fittingLabels, {
-    required DType dtype, // = DType.float32,
+    required DType dtype,
     required CostFunction costFunction,
-    required ConvergenceDetector convergenceDetector, // = min update 1e-12, iter. limit 100
+    required ConvergenceDetector convergenceDetector,
     required double lambda,
-    required InitialCoefficientsGenerator initialCoefficientsGenerator, // = InitialCoefficientsType.zeroes,
-    required bool isFittingDataNormalized, // = false,
+    required InitialCoefficientsGenerator initialCoefficientsGenerator,
+    required bool isFittingDataNormalized,
   })  : _dtype = dtype,
         _points = fittingPoints,
         _labels = fittingLabels,

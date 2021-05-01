@@ -16,19 +16,19 @@ abstract class SoftmaxRegressorFactory {
     required double initialLearningRate,
     required double minCoefficientsUpdate,
     required double lambda,
-    RegularizationType? regularizationType,
-    int? randomSeed,
     required int batchSize,
     required bool fitIntercept,
     required double interceptScale,
     required LearningRateType learningRateType,
     required bool isFittingDataNormalized,
     required InitialCoefficientsType initialCoefficientsType,
-    Matrix? initialCoefficients,
     required num positiveLabel,
     required num negativeLabel,
     required bool collectLearningData,
     required DType dtype,
+    RegularizationType? regularizationType,
+    Matrix? initialCoefficients,
+    int? randomSeed,
   });
 
   SoftmaxRegressor fromJson(String json);

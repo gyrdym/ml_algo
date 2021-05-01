@@ -32,8 +32,6 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     double minCoefficientsUpdate = 1e-12,
     double probabilityThreshold = 0.5,
     double lambda = 0.0,
-    RegularizationType? regularizationType,
-    int? randomSeed,
     int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
@@ -41,11 +39,13 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
-    Vector? initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
     bool collectLearningData = false,
     DType dtype = DType.float32,
+    RegularizationType? regularizationType,
+    Vector? initialCoefficients,
+    int? randomSeed,
   }) {
     validateClassLabels(positiveLabel, negativeLabel);
 

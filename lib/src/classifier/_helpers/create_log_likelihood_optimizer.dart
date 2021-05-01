@@ -24,8 +24,6 @@ LinearOptimizer createLogLikelihoodOptimizer(
       required double initialLearningRate,
       required double minCoefficientsUpdate,
       required double lambda,
-      RegularizationType? regularizationType,
-      int? randomSeed,
       required int batchSize,
       required bool fitIntercept,
       required double interceptScale,
@@ -35,6 +33,8 @@ LinearOptimizer createLogLikelihoodOptimizer(
       required num positiveLabel,
       required num negativeLabel,
       required DType dtype,
+      RegularizationType? regularizationType,
+      int? randomSeed,
 }) {
   validateClassLabels(positiveLabel, negativeLabel);
 

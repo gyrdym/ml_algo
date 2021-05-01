@@ -33,6 +33,7 @@ void main() {
       expect(regressor.interceptScale, 1.0);
       expect(regressor.fitIntercept, false);
       expect(regressor.dtype, DType.float32);
+      expect(regressor.schemaVersion, 3);
     });
   });
 }

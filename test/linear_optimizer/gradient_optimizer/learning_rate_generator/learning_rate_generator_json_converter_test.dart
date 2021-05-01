@@ -26,7 +26,7 @@ void main() {
     test('should return LearningRateType.decreasingAdaptive for unknown encoded value', () {
       expect(
         const LearningRateTypeJsonConverter().fromJson('unknown_value'),
-        LearningRateType.decreasingAdaptive,
+        LearningRateType.constant,
       );
     });
 
