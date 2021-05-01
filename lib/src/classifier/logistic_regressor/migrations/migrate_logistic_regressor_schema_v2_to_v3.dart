@@ -5,10 +5,10 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_ge
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_values.dart';
 
-Map<String, dynamic> migrateLogisticRegressorSchemaV1toV2(
+Map<String, dynamic> migrateLogisticRegressorSchemaV2toV3(
     Map<String, dynamic> json) {
   if (json[jsonSchemaVersionJsonKey] != null &&
-      (json[jsonSchemaVersionJsonKey] as num) > 1) {
+      (json[jsonSchemaVersionJsonKey] as num) > 2) {
     return json;
   }
 

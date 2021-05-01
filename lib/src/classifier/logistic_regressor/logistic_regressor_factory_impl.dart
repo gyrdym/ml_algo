@@ -4,7 +4,7 @@ import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
-import 'package:ml_algo/src/classifier/logistic_regressor/migrations/migrate_logistic_regressor_schema_v1_to_v2.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/migrations/migrate_logistic_regressor_schema_v2_to_v3.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
@@ -114,9 +114,9 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
 
   @override
   LogisticRegressor fromJson(String json) {
-    final v1Schema = jsonDecode(json) as Map<String, dynamic>;
-    final v2Schema = migrateLogisticRegressorSchemaV1toV2(v1Schema);
+    final v2Schema = jsonDecode(json) as Map<String, dynamic>;
+    final v3Schema = migrateLogisticRegressorSchemaV2toV3(v2Schema);
 
-    return LogisticRegressorImpl.fromJson(v2Schema);
+    return LogisticRegressorImpl.fromJson(v3Schema);
   }
 }

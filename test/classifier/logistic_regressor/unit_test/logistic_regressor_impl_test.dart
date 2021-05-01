@@ -357,7 +357,7 @@ void main() {
       });
 
       test('should have a proper json schema version', () {
-        expect(createRegressor().schemaVersion, 2);
+        expect(createRegressor().schemaVersion, 3);
       });
     });
   });

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/migrations/migrate_softmax_regressor_schema_v2_to_v3.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
@@ -106,8 +107,9 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
 
   @override
   SoftmaxRegressor fromJson(String json) {
-    final decoded = jsonDecode(json) as Map<String, dynamic>;
+    final v2Schema = jsonDecode(json) as Map<String, dynamic>;
+    final v3Schema = migrateSoftmaxRegressorSchemaV2toV3(v2Schema);
 
-    return SoftmaxRegressorImpl.fromJson(decoded);
+    return SoftmaxRegressorImpl.fromJson(v3Schema);
   }
 }

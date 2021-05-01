@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:test/test.dart';
 
@@ -13,19 +13,19 @@ void main() {
 
       expect(regressor.targetNames,
           ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']);
-      expect(regressor.initialCoefficientsType, isNull);
+      expect(regressor.initialCoefficientsType, InitialCoefficientsType.zeroes);
       expect(regressor.positiveLabel, 1);
       expect(regressor.negativeLabel, 0);
-      expect(regressor.iterationsLimit, isNull);
+      expect(regressor.iterationsLimit, 100);
       expect(regressor.initialCoefficients, isNull);
-      expect(regressor.learningRateType, isNull);
-      expect(regressor.optimizerType, isNull);
-      expect(regressor.isFittingDataNormalized, isNull);
-      expect(regressor.batchSize, isNull);
+      expect(regressor.learningRateType, LearningRateType.constant);
+      expect(regressor.optimizerType, LinearOptimizerType.gradient);
+      expect(regressor.isFittingDataNormalized, false);
+      expect(regressor.batchSize, 1);
       expect(regressor.randomSeed, isNull);
-      expect(regressor.lambda, isNull);
-      expect(regressor.minCoefficientsUpdate, isNull);
-      expect(regressor.initialLearningRate, isNull);
+      expect(regressor.lambda, 0);
+      expect(regressor.minCoefficientsUpdate, 1e-12);
+      expect(regressor.initialLearningRate, 1e-3);
       expect(regressor.regularizationType, isNull);
       expect(regressor.interceptScale, 1.0);
       expect(regressor.fitIntercept, false);
