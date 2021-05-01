@@ -19,11 +19,5 @@ void main() {
 
       expect(encoded, softmaxLinkFunctionEncoded);
     });
-
-    test('should throw an error if null is passed as the argument', () {
-      final actual = () => linkFunctionToJson(null);
-
-      expect(actual, throwsUnsupportedError);
-    });
   });
 }

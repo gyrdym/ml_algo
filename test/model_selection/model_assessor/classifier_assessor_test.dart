@@ -5,20 +5,22 @@ import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('ClassifierAssessor', () {
     final generator = math.Random();
-    final metricFactoryMock = MetricFactoryMock();
-    final metricMock = MetricMock();
-    final encoderFactoryMock = EncoderFactoryMock();
-    final encoderMock = EncoderMock();
-    final featureTargetSplitterMock = FeatureTargetSplitterMock();
-    final classLabelsNormalizerMock = ClassLabelsNormalizerMock();
+    final metricFactoryMock = MockMetricFactory();
+    final metricMock = MockMetric();
+    final encoderFactoryMock = MockEncoderFactory();
+    final encoderMock = MockEncoder();
+    final featureTargetSplitterMock = MockFeatureTargetSplitter();
+    final classLabelsNormalizerMock = MockClassLabelsNormalizer();
     final assessor = ClassifierAssessor(
       metricFactoryMock,
       encoderFactoryMock.create,
@@ -26,7 +28,7 @@ void main() {
       classLabelsNormalizerMock.normalize,
     );
     final metricType = MetricType.precision;
-    final classifierMock = ClassifierMock();
+    final classifierMock = MockClassifier();
     final featuresNames = ['feature_1', 'feature_2', 'feature_3'];
     final targetNames = ['target_1', 'target_2', 'target_2'];
     final samplesHeader = [...featuresNames, ...targetNames];
@@ -56,39 +58,74 @@ void main() {
 
     setUp(() {
       when(
-          encoderFactoryMock.create(
-            argThat(anything),
-            argThat(anything),
-          )
+        encoderMock.process(
+          any,
+        ),
+      ).thenReturn(predictionMock);
+
+      when(
+        encoderFactoryMock.create(
+          any,
+          any,
+        ),
       ).thenReturn(encoderMock);
-      when(classifierMock.dtype).thenReturn(dtype);
+
+      when(
+        classifierMock.dtype,
+      ).thenReturn(dtype);
+
+      when(
+        classifierMock.negativeLabel,
+      ).thenReturn(negativeLabel);
+
+      when(
+        classifierMock.positiveLabel,
+      ).thenReturn(positiveLabel);
+
       when(
           classifierMock.targetNames,
       ).thenReturn(targetNames);
+
       when(
         classifierMock.dtype,
       ).thenReturn(DType.float64);
+
       when(
-          featureTargetSplitterMock.split(
-            argThat(anything),
-            targetNames: anyNamed('targetNames'),
-          )
+        featureTargetSplitterMock.split(
+          any,
+          targetNames: anyNamed('targetNames'),
+          targetIndices: anyNamed('targetIndices'),
+        ),
       ).thenReturn([featuresMock, targetMock]);
+
       when(
-          classifierMock.predict(
-            argThat(anything),
-          ),
+        classifierMock.predict(
+          any,
+        ),
       ).thenReturn(predictionMock);
-      when(
-          encoderMock.process(
-            argThat(anything),
-          ),
-      ).thenReturn(predictionMock);
+
       when(
           metricFactoryMock.createByType(
-            argThat(anything),
+            any,
           ),
       ).thenReturn(metricMock);
+
+      when(
+        classLabelsNormalizerMock.normalize(
+          any,
+          any,
+          any,
+        ),
+      ).thenReturn(
+        Matrix.empty(),
+      );
+
+      when(
+        metricMock.getScore(
+          any,
+          any,
+        ),
+      ).thenReturn(1.0);
     });
 
     tearDown(() {
@@ -146,34 +183,6 @@ void main() {
       ).called(1);
     });
 
-    test('should not normalize predicted class labels if predefined labels for '
-        'positive and negative classes do not exist', () {
-      when(classifierMock.positiveLabel).thenReturn(null);
-      when(classifierMock.negativeLabel).thenReturn(null);
-
-      assessor.assess(classifierMock, metricType, samples);
-
-      verifyNever(
-        classLabelsNormalizerMock.normalize(
-          predictionMock.toMatrix(dtype), positiveLabel, negativeLabel,
-        ),
-      );
-    });
-
-    test('should not normalize predicted class labels if at least one '
-        'predefined class label does not exist', () {
-      when(classifierMock.positiveLabel).thenReturn(positiveLabel);
-      when(classifierMock.negativeLabel).thenReturn(null);
-
-      assessor.assess(classifierMock, metricType, samples);
-
-      verifyNever(
-        classLabelsNormalizerMock.normalize(
-          predictionMock.toMatrix(dtype), positiveLabel, negativeLabel,
-        ),
-      );
-    });
-
     test('should normalize original class labels if predefined labels for '
         'positive and negative classes exist', () {
       when(classifierMock.positiveLabel).thenReturn(positiveLabel);
@@ -188,39 +197,14 @@ void main() {
       ).called(1);
     });
 
-    test('should not normalize original class labels if predefined labels for '
-        'positive and negative classes do not exist', () {
-      when(classifierMock.positiveLabel).thenReturn(null);
-      when(classifierMock.negativeLabel).thenReturn(null);
-
-      assessor.assess(classifierMock, metricType, samples);
-
-      verifyNever(
-        classLabelsNormalizerMock.normalize(
-          targetMock.toMatrix(dtype), positiveLabel, negativeLabel,
-        ),
-      );
-    });
-
-    test('should not normalize original class labels if at least one '
-        'predefined class label does not exist', () {
-      when(classifierMock.positiveLabel).thenReturn(null);
-      when(classifierMock.negativeLabel).thenReturn(negativeLabel);
-
-      assessor.assess(classifierMock, metricType, samples);
-
-      verifyNever(
-        classLabelsNormalizerMock.normalize(
-          targetMock.toMatrix(dtype), positiveLabel, negativeLabel,
-        ),
-      );
-    });
-
     test('should return score', () {
       final score = generator.nextDouble();
 
       when(
-          metricMock.getScore(argThat(anything), argThat(anything)),
+        metricMock.getScore(
+          any,
+          any,
+        ),
       ).thenReturn(score);
 
       final actual = assessor.assess(classifierMock, metricType, samples);

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/migrations/migrate_softmax_regressor_schema_v2_to_v3.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
-import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -21,23 +21,23 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
 
   @override
   SoftmaxRegressor create({
-    DataFrame trainData,
-    Iterable<String> targetNames,
+    required DataFrame trainData,
+    required Iterable<String> targetNames,
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
-    double lambda,
-    RegularizationType regularizationType,
-    int randomSeed,
+    double lambda = 0.0,
+    RegularizationType? regularizationType,
+    int? randomSeed,
     int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
     LearningRateType learningRateType = LearningRateType.constant,
-    bool isFittingDataNormalized,
+    bool isFittingDataNormalized = false,
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
-    Matrix initialCoefficients,
+    Matrix? initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
     bool collectLearningData = false,
@@ -47,8 +47,6 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       throw Exception('The target column should be encoded properly '
           '(e.g., via one-hot encoder)');
     }
-
-    validateTrainData(trainData, targetNames);
 
     final optimizer = createLogLikelihoodOptimizer(
       trainData,
@@ -63,7 +61,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       randomSeed: randomSeed,
       batchSize: batchSize,
       learningRateType: learningRateType,
-      initialWeightsType: initialCoefficientsType,
+      initialCoefficientsType: initialCoefficientsType,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
       isFittingDataNormalized: isFittingDataNormalized,
@@ -109,8 +107,9 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
 
   @override
   SoftmaxRegressor fromJson(String json) {
-    final decoded = jsonDecode(json) as Map<String, dynamic>;
+    final v2Schema = jsonDecode(json) as Map<String, dynamic>;
+    final v3Schema = migrateSoftmaxRegressorSchemaV2toV3(v2Schema);
 
-    return SoftmaxRegressorImpl.fromJson(decoded);
+    return SoftmaxRegressorImpl.fromJson(v3Schema);
   }
 }

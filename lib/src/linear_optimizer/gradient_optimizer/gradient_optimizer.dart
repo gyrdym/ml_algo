@@ -1,60 +1,46 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
-import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/xrange.dart';
 
 class GradientOptimizer implements LinearOptimizer {
-  GradientOptimizer(Matrix points, Matrix labels, {
+  GradientOptimizer(
+    Matrix points,
+    Matrix labels, {
     DType dtype = DType.float32,
-    CostFunction costFunction,
-    LearningRateType learningRateType = LearningRateType.decreasingAdaptive,
-    InitialCoefficientsType initialCoefficientsType = InitialCoefficientsType.zeroes,
+    required InitialCoefficientsGenerator initialCoefficientsGenerator,
+    required CostFunction costFunction,
+    required LearningRateGenerator learningRateGenerator,
+    required ConvergenceDetector convergenceDetector,
+    required Randomizer randomizer,
     double initialLearningRate = 1e-3,
-    double minCoefficientsUpdate = 1e-12,
-    int iterationLimit = 100,
-    double lambda,
-    int batchSize,
-    int randomSeed,
-  })  :
-        _points = points,
+    double? lambda,
+    required int batchSize,
+  })   : _points = points,
         _labels = labels,
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
         _costFunction = costFunction,
         _dtype = dtype,
-
-        _initialCoefficientsGenerator = injector
-            .get<InitialCoefficientsGeneratorFactory>()
-            .fromType(initialCoefficientsType, dtype),
-
-        _learningRateGenerator = injector
-            .get<LearningRateGeneratorFactory>()
-            .fromType(learningRateType),
-
-        _convergenceDetector = injector
-            .get<ConvergenceDetectorFactory>()
-            .create(minCoefficientsUpdate, iterationLimit),
-
-        _randomizer = injector
-            .get<RandomizerFactory>()
-            .create(randomSeed) {
+        _initialCoefficientsGenerator = initialCoefficientsGenerator,
+        _learningRateGenerator = learningRateGenerator,
+        _convergenceDetector = convergenceDetector,
+        _randomizer = randomizer {
     if (batchSize < 1 || batchSize > points.rowsNum) {
-      throw RangeError.range(batchSize, 1, points.rowsNum, 'Invalid batch size '
+      throw RangeError.range(
+          batchSize,
+          1,
+          points.rowsNum,
+          'Invalid batch size '
           'value');
     }
-    _learningRateGenerator.init(initialLearningRate ?? 1.0);
+
+    _learningRateGenerator.init(initialLearningRate);
   }
 
   final Matrix _points;
@@ -74,16 +60,20 @@ class GradientOptimizer implements LinearOptimizer {
 
   @override
   Matrix findExtrema({
-    Matrix initialCoefficients,
+    Matrix? initialCoefficients,
     bool isMinimizingObjective = true,
     bool collectLearningData = false,
   }) {
     _costPerIteration.clear();
 
     var coefficients = initialCoefficients ??
-        Matrix.fromColumns(List.generate(_labels.columnsNum,
-            (i) => _initialCoefficientsGenerator.generate(_points.columnsNum)),
-            dtype: _dtype);
+        Matrix.fromColumns(
+          List.generate(
+            _labels.columnsNum,
+            (i) => _initialCoefficientsGenerator.generate(_points.columnsNum),
+          ),
+          dtype: _dtype,
+        );
 
     var iteration = 0;
     var coefficientsDiff = double.maxFinite;
@@ -96,6 +86,7 @@ class GradientOptimizer implements LinearOptimizer {
         isMinimization: isMinimizingObjective,
         collectLearningData: collectLearningData,
       );
+
       coefficientsDiff = (newCoefficients - coefficients).norm();
       iteration++;
       coefficients = newCoefficients;
@@ -111,17 +102,14 @@ class GradientOptimizer implements LinearOptimizer {
   Matrix _generateCoefficients(
     Matrix coefficients,
     double learningRate, {
-      bool isMinimization = true,
-      bool collectLearningData = false,
-    }) {
-
+    bool isMinimization = true,
+    bool collectLearningData = false,
+  }) {
     final range = _getBatchRange();
     final start = range.first;
     final end = range.last;
-    final pointsBatch = _points
-        .sample(rowIndices: integers(start, end));
-    final labelsBatch = _labels
-        .sample(rowIndices: integers(start, end));
+    final pointsBatch = _points.sample(rowIndices: integers(start, end));
+    final labelsBatch = _labels.sample(rowIndices: integers(start, end));
 
     return _makeGradientStep(
       coefficients,
@@ -141,27 +129,33 @@ class GradientOptimizer implements LinearOptimizer {
   ///
   /// [labels] columns of labels
   Matrix _makeGradientStep(
-      Matrix coefficients,
-      Matrix points,
-      Matrix labels,
-      double eta,
-      {
-        bool isMinimization = true,
-        bool collectLearningData = false,
-      }) {
-
+    Matrix coefficients,
+    Matrix points,
+    Matrix labels,
+    double learningRate, {
+    bool isMinimization = true,
+    bool collectLearningData = false,
+  }) {
     if (collectLearningData) {
       final error = _costFunction.getCost(points, coefficients, labels);
 
       _costPerIteration.add(error);
     }
 
-    final gradient = _costFunction.getGradient(points, coefficients, labels);
-    final regularizedCoefficients = _regularize(eta, _lambda, coefficients);
+    final gradient = _costFunction.getGradient(
+      points,
+      coefficients,
+      labels,
+    );
+    final regularizedCoefficients = _regularize(
+      learningRate,
+      _lambda,
+      coefficients,
+    );
 
     return isMinimization
-        ? regularizedCoefficients - gradient * eta
-        : regularizedCoefficients + gradient * eta;
+        ? regularizedCoefficients - gradient * learningRate
+        : regularizedCoefficients + gradient * learningRate;
   }
 
   Matrix _regularize(double learningRate, double lambda, Matrix coefficients) {

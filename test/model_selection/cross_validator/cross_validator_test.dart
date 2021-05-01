@@ -8,6 +8,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('CrossValidator', () {
@@ -17,11 +18,11 @@ void main() {
       header: ['1', '2', '3', '4'],
     );
 
-    SplitIndicesProvider dataSplitter;
-    SplitIndicesProviderFactory dataSplitterFactory;
+    late SplitIndicesProvider dataSplitter;
+    late SplitIndicesProviderFactory dataSplitterFactory;
 
     setUp(() {
-      dataSplitter = DataSplitterMock();
+      dataSplitter = MockSplitIndicesProvider();
       dataSplitterFactory = createDataSplitterFactoryMock(dataSplitter);
 
       modelSelectionInjector

@@ -1,7 +1,6 @@
 import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_impl.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
@@ -12,7 +11,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../helpers.dart';
-import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnClassifierImpl', () {
@@ -20,8 +19,8 @@ void main() {
     final targetColumnName = 'target';
     final classLabels = [1, 2, 3];
     final dtype = DType.float32;
-    final solverMock = KnnSolverMock();
-    final kernelMock = KernelMock();
+    final solverMock = MockKnnSolver();
+    final kernelMock = MockKernel();
     final k = 10;
     final distanceType = Distance.hamming;
     final kernelType = KernelType.epanechnikov;
@@ -78,8 +77,8 @@ void main() {
     });
 
     group('predict', () {
-      final solverMock = KnnSolverMock();
-      final kernelMock = KernelMock();
+      final solverMock = MockKnnSolver();
+      final kernelMock = MockKernel();
 
       setUp(() => when(kernelMock.getWeightByDistance(any, any)).thenReturn(1));
 
@@ -290,10 +289,11 @@ void main() {
     });
 
     group('predictProbability', () {
-      final solverMock = KnnSolverMock();
-      final kernelMock = KernelMock();
+      final solverMock = MockKnnSolver();
+      final kernelMock = MockKernel();
 
-      setUp(() => when(kernelMock.getWeightByDistance(any, any)).thenReturn(1));
+      setUp(() => when(kernelMock.getWeightByDistance(any, any))
+          .thenReturn(1));
 
       tearDown(() {
         reset(solverMock);
@@ -556,8 +556,8 @@ void main() {
       final retrainingData = DataFrame([
         [1, 20, 300, 400],
       ]);
-      final classifierFactory = KnnClassifierFactoryMock();
-      final retrainedModelMock = KnnClassifierMock();
+      final classifierFactory = MockKnnClassifierFactory();
+      final retrainedModelMock = MockKnnClassifier();
       final classifier = KnnClassifierImpl(
         targetColumnName,
         classLabels,
@@ -571,8 +571,17 @@ void main() {
         when(solverMock.k).thenReturn(k);
         when(solverMock.distanceType).thenReturn(distanceType);
         when(kernelMock.type).thenReturn(kernelType);
-        when(classifierFactory.create(any, any, any, any, any, any, any))
-            .thenReturn(retrainedModelMock);
+        when(
+          classifierFactory.create(
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+          )
+        ).thenReturn(retrainedModelMock);
 
         knnClassifierInjector
             .registerSingleton<KnnClassifierFactory>(
@@ -603,22 +612,6 @@ void main() {
 
         expect(retrainedModel, same(retrainedModelMock));
         expect(retrainedModel, isNot(same(classifier)));
-      });
-
-      test('should throw exception if the model schema is outdated, '
-          'schemaVersion is null', () {
-        final model = KnnClassifierImpl(
-          targetColumnName,
-          classLabels,
-          kernelMock,
-          solverMock,
-          classLabelPrefix,
-          dtype,
-          schemaVersion: null,
-        );
-
-        expect(() => model.retrain(retrainingData),
-            throwsA(isA<OutdatedJsonSchemaException>()));
       });
     });
   });

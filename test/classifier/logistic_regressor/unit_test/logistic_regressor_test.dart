@@ -7,7 +7,6 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -21,6 +20,7 @@ import 'package:test/test.dart';
 
 import '../../../helpers.dart';
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('LogisticRegressor', () {
@@ -36,20 +36,20 @@ void main() {
     final targetColumnName = 'col_4';
     final errors = <num>[];
 
-    LinkFunction linkFunctionMock;
-    CostFunction costFunctionMock;
-    CostFunctionFactory costFunctionFactoryMock;
-    LinearOptimizer optimizerMock;
-    LinearOptimizerFactory optimizerFactoryMock;
+    late LinkFunction linkFunctionMock;
+    late CostFunction costFunctionMock;
+    late CostFunctionFactory costFunctionFactoryMock;
+    late MockLinearOptimizer optimizerMock;
+    late MockLinearOptimizerFactory optimizerFactoryMock;
 
     setUp(() {
       injector.clearAll();
       logisticRegressorInjector.clearAll();
 
-      linkFunctionMock = LinkFunctionMock();
-      costFunctionMock = CostFunctionMock();
+      linkFunctionMock = MockLinkFunction();
+      costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-      optimizerMock = LinearOptimizerMock();
+      optimizerMock = MockLinearOptimizer();
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
       injector
@@ -59,7 +59,7 @@ void main() {
                 () => optimizerFactoryMock);
 
       logisticRegressorInjector
-        ..registerSingleton<LinkFunction>(() => linkFunctionMock);
+        .registerSingleton<LinkFunction>(() => linkFunctionMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),

@@ -1,1 +1,1 @@
-const linearRegressorJsonSchemaVersion = 1;
+const linearRegressorJsonSchemaVersion = 2;

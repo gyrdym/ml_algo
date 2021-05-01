@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
@@ -14,6 +13,7 @@ import 'package:test/test.dart';
 
 import '../../helpers.dart';
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnRegressorImpl', () {
@@ -21,10 +21,10 @@ void main() {
     final kernelType = KernelType.epanechnikov;
     final distanceType = Distance.manhattan;
     final k = 3209;
-    final solver = KnnSolverMock();
-    final kernel = KernelMock();
+    final solver = MockKnnSolver();
+    final kernel = MockKernel();
     final dtype = DType.float32;
-    final retrainedModelMock = KnnRegressorMock();
+    final retrainedModelMock = MockKnnRegressor();
     final regressorFactory = createKnnRegressorFactoryMock(retrainedModelMock);
     final regressor = KnnRegressorImpl(
       targetName,
@@ -141,7 +141,12 @@ void main() {
           ],
         ]);
 
-        when(kernel.getWeightByDistance(any, any)).thenReturn(1);
+        when(
+          kernel.getWeightByDistance(
+            any,
+            any,
+          )
+        ).thenReturn(1);
 
         final data = DataFrame.fromMatrix(Matrix.fromList([
           [1, 2, 3],
@@ -189,18 +194,8 @@ void main() {
         expect(retrainedModel, isNot(same(regressor)));
       });
 
-      test('should throw exception if the model schema is outdated, '
-          'schemaVersion is null', () {
-        final model = KnnRegressorImpl(
-          targetName,
-          solver,
-          kernel,
-          dtype,
-          schemaVersion: null,
-        );
-
-        expect(() => model.retrain(retrainingData),
-            throwsA(isA<OutdatedJsonSchemaException>()));
+      test('should return a proper schema version', () {
+        expect(regressor.schemaVersion, 1);
       });
     });
   });

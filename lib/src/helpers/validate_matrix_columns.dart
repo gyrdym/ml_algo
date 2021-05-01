@@ -2,10 +2,11 @@ import 'package:ml_algo/src/common/exception/matrix_column_exception.dart';
 import 'package:ml_linalg/matrix.dart';
 
 void validateMatrixColumns(Iterable<Matrix> matrices) {
+  final matrixStub = Matrix.empty();
   final firstInvalidMatrix = matrices
-      .firstWhere((matrix) => matrix.columnsNum != 1, orElse: () => null);
+      .firstWhere((matrix) => matrix.columnsNum != 1, orElse: () => matrixStub);
 
-  if (firstInvalidMatrix == null) {
+  if (identical(firstInvalidMatrix, matrixStub)) {
     return;
   }
 

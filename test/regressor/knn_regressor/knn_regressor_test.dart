@@ -9,6 +9,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnRegressor', () {
@@ -23,7 +24,7 @@ void main() {
       header: ['first', 'second', 'third', 'fourth', 'fifth'],
     );
     final targetName = 'fifth';
-    final knnRegressor = KnnRegressorMock();
+    final knnRegressor = MockKnnRegressor();
     final knnRegressorFactory = createKnnRegressorFactoryMock(knnRegressor);
 
     setUp(() => knnRegressorInjector

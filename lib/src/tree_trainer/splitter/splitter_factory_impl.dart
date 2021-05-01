@@ -22,7 +22,6 @@ class TreeSplitterFactoryImpl implements TreeSplitterFactory {
   @override
   TreeSplitter createByType(TreeSplitterType type,
       TreeSplitAssessorType assessorType) {
-
     final assessor = _assessorFactory.createByType(assessorType);
     final numericalSplitter = _numericalSplitterFactory.create();
     final nominalSplitter = _nominalSplitterFactory.create();

@@ -14,7 +14,8 @@ class InitialCoefficientsTypeJsonConverter implements
         return InitialCoefficientsType.zeroes;
 
       default:
-        return null;
+        throw Exception('InitialCoefficientsTypeJsonConverter, fromJson: '
+            'unknown encoded value - $json');
     }
   }
 
@@ -23,9 +24,6 @@ class InitialCoefficientsTypeJsonConverter implements
     switch (type) {
       case InitialCoefficientsType.zeroes:
         return zeroesInitialCoefficientsTypeJsonEncodedValue;
-
-      default:
-        return null;
     }
   }
 

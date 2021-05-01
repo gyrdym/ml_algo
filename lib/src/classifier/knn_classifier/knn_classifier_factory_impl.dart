@@ -4,7 +4,6 @@ import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_impl.dart';
 import 'package:ml_algo/src/helpers/features_target_split.dart';
-import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_factory.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
@@ -31,8 +30,6 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
       String columnPrefix,
       DType dtype,
   ) {
-    validateTrainData(trainData, [targetName]);
-
     final splits = featuresTargetSplit(trainData,
       targetNames: [targetName],
     ).toList();

@@ -7,8 +7,8 @@ class DTypeJsonConverter implements JsonConverter<DType, String> {
   const DTypeJsonConverter();
 
   @override
-  DType fromJson(String json) => fromDTypeJson(json);
+  DType fromJson(String? json) => fromDTypeJson(json) ?? DType.float32;
 
   @override
-  String toJson(DType dtype) => dTypeToJson(dtype);
+  String toJson(DType dtype) => dTypeToJson(dtype)!;
 }

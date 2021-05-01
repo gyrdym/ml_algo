@@ -6,5 +6,5 @@ class RandomizerFactoryImpl implements RandomizerFactory {
   const RandomizerFactoryImpl();
 
   @override
-  Randomizer create([int seed]) => RandomizerImpl(seed: seed);
+  Randomizer create([int? seed]) => RandomizerImpl(seed: seed);
 }

@@ -47,10 +47,5 @@ void main() {
       expect(clause(sample, splittingIndex, 30), isFalse);
       expect(clause(sample, splittingIndex, 31), isFalse);
     });
-
-    test('should throw an error if null is passed as the type', () {
-      expect(() => getTreeNodeSplittingPredicateByType(null),
-          throwsUnsupportedError);
-    });
   });
 }

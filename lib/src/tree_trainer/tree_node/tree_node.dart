@@ -1,6 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/_helper/from_leaf_label_json.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/_helper/leaf_label_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_nodes_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_nodes_to_json.dart';
@@ -13,7 +11,7 @@ import 'package:ml_linalg/vector.dart';
 
 part 'tree_node.g.dart';
 
-@JsonSerializable(includeIfNull: false)
+@JsonSerializable()
 class TreeNode {
   TreeNode(
       this.predicateType,
@@ -36,37 +34,44 @@ class TreeNode {
     toJson: treeNodesToJson,
     fromJson: fromTreeNodesJson,
   )
-  final List<TreeNode> children;
+  final List<TreeNode>? children;
 
-  @JsonKey(
-    name: labelJsonKey,
-    toJson: leafLabelToJson,
-    fromJson: fromLeafLabelJson,
-  )
-  final TreeLeafLabel label;
+  @JsonKey(name: labelJsonKey)
+  final TreeLeafLabel? label;
 
   @JsonKey(
     name: predicateTypeJsonKey,
     toJson: splittingPredicateTypeToJson,
     fromJson: fromSplittingPredicateTypeJson,
   )
-  final TreeNodeSplittingPredicateType predicateType;
+  final TreeNodeSplittingPredicateType? predicateType;
 
   @JsonKey(name: splittingValueJsonKey)
-  final num splittingValue;
+  final num? splittingValue;
 
   @JsonKey(name: splittingIndexJsonKey)
-  final int splittingIndex;
+  final int? splittingIndex;
 
   @JsonKey(name: levelJsonKey)
   final int level;
 
-  bool get isLeaf => children == null || children.isEmpty;
+  bool get isLeaf => children == null || children!.isEmpty;
 
-  bool isSamplePassed(Vector sample) =>
-      getTreeNodeSplittingPredicateByType(predicateType)(
+  bool get isRoot => predicateType == null
+      || splittingIndex == null
+      || splittingValue == null;
+
+  bool isSamplePassed(Vector sample) {
+    if (isRoot) {
+      return true;
+    }
+
+    final isSamplePassedFn = getTreeNodeSplittingPredicateByType(predicateType!);
+
+    return isSamplePassedFn(
         sample,
-        splittingIndex,
-        splittingValue,
+        splittingIndex!,
+        splittingValue!,
       );
+  }
 }

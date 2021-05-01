@@ -6,12 +6,9 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_node_json.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_node_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -19,6 +16,8 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 part 'decision_tree_classifier_impl.g.dart';
+
+const classLabelsWarningMessage = 'There is no use in positive and negative class labels for decision tree classifier';
 
 @JsonSerializable()
 @DTypeJsonConverter()
@@ -69,26 +68,18 @@ class DecisionTreeClassifierImpl
   @override
   Iterable<String> get targetNames => [targetColumnName];
 
-  @JsonKey(
-    name: decisionTreeClassifierTreeRootNodeJsonKey,
-    toJson: treeNodeToJson,
-    fromJson: fromTreeNodeJson,
-  )
+  @JsonKey(name: decisionTreeClassifierTreeRootNodeJsonKey)
   final TreeNode treeRootNode;
 
   @override
-  @JsonKey(includeIfNull: false)
-  final num positiveLabel = null;
+  num get positiveLabel => double.nan;
 
   @override
-  @JsonKey(includeIfNull: false)
-  final num negativeLabel = null;
+  num get negativeLabel => double.nan;
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final schemaVersion;
-
-  final _outdatedSchemaVersions = [null];
+  final int schemaVersion;
 
   @override
   DataFrame predict(DataFrame features) {
@@ -137,10 +128,10 @@ class DecisionTreeClassifierImpl
 
   TreeLeafLabel _getLabelForSample(Vector sample, TreeNode node) {
     if (node.isLeaf) {
-      return node.label;
+      return node.label!;
     }
 
-    for (final childNode in node.children) {
+    for (final childNode in node.children!) {
       if (childNode.isSamplePassed(sample)) {
         return _getLabelForSample(sample, childNode);
       }
@@ -151,19 +142,15 @@ class DecisionTreeClassifierImpl
 
   @override
   DecisionTreeClassifier retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return decisionTreeInjector
         .get<DecisionTreeClassifierFactory>()
         .create(
       data,
+      targetColumnName,
+      dtype,
       minError,
       minSamplesCount,
       maxDepth,
-      targetColumnName,
-      dtype,
     );
   }
 }

@@ -9,5 +9,5 @@ abstract class Serializable {
   Future<File> saveAsJson(String filePath);
 
   /// Contains a version of the current json schema
-  int get schemaVersion;
+  int? get schemaVersion;
 }

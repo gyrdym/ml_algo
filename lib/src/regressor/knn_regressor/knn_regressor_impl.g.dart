@@ -20,7 +20,7 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
           json, 'K', (v) => const KernelJsonConverter().fromJson(v as String)),
       $checkedConvert(
           json, 'D', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
     );
     return val;
   }, fieldKeyMap: const {
@@ -32,11 +32,19 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
   });
 }
 
-Map<String, dynamic> _$KnnRegressorImplToJson(KnnRegressorImpl instance) =>
-    <String, dynamic>{
-      'D': const DTypeJsonConverter().toJson(instance.dtype),
-      'T': instance.targetName,
-      'S': const KnnSolverJsonConverter().toJson(instance.solver),
-      'K': const KernelJsonConverter().toJson(instance.kernel),
-      r'$V': instance.schemaVersion,
-    };
+Map<String, dynamic> _$KnnRegressorImplToJson(KnnRegressorImpl instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('D', const DTypeJsonConverter().toJson(instance.dtype));
+  val['T'] = instance.targetName;
+  writeNotNull('S', const KnnSolverJsonConverter().toJson(instance.solver));
+  writeNotNull('K', const KernelJsonConverter().toJson(instance.kernel));
+  writeNotNull(r'$V', instance.schemaVersion);
+  return val;
+}

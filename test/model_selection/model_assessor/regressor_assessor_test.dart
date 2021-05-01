@@ -9,19 +9,20 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('RegressorAssessor', () {
     final generator = math.Random();
-    final metricFactoryMock = MetricFactoryMock();
-    final metricMock = MetricMock();
-    final featureTargetSplitterMock = FeatureTargetSplitterMock();
+    final metricFactoryMock = MockMetricFactory();
+    final metricMock = MockMetric();
+    final featureTargetSplitterMock = MockFeatureTargetSplitter();
     final assessor = RegressorAssessor(
       metricFactoryMock,
       featureTargetSplitterMock.split,
     );
     final metricType = MetricType.mape;
-    final predictorMock = PredictorMock();
+    final predictorMock = MockPredictor();
     final featuresNames = ['feature_1', 'feature_2', 'feature_3'];
     final targetNames = ['target_1'];
     final samplesHeader = [...featuresNames, ...targetNames];
@@ -48,29 +49,43 @@ void main() {
     final dtype = DType.float64;
 
     setUp(() {
-      when(predictorMock.dtype).thenReturn(dtype);
+      when(
+        predictorMock.dtype,
+      ).thenReturn(dtype);
+
       when(
         predictorMock.targetNames,
       ).thenReturn(targetNames);
+
       when(
         predictorMock.dtype,
       ).thenReturn(DType.float64);
+
       when(
-          featureTargetSplitterMock.split(
-            argThat(anything),
-            targetNames: anyNamed('targetNames'),
-          )
+        featureTargetSplitterMock.split(
+          argThat(anything),
+          targetNames: anyNamed('targetNames'),
+        ),
       ).thenReturn([featuresMock, targetMock]);
+
       when(
         predictorMock.predict(
           argThat(anything),
         ),
       ).thenReturn(predictionMock);
+
       when(
         metricFactoryMock.createByType(
           argThat(anything),
         ),
       ).thenReturn(metricMock);
+
+      when(
+        metricMock.getScore(
+          any,
+          any,
+        ),
+      ).thenReturn(1.0);
     });
 
     tearDown(() {
@@ -106,7 +121,10 @@ void main() {
       final score = generator.nextDouble();
 
       when(
-        metricMock.getScore(argThat(anything), argThat(anything)),
+        metricMock.getScore(
+          argThat(anything),
+          argThat(anything),
+        ),
       ).thenReturn(score);
 
       final actual = assessor.assess(predictorMock, metricType, samples);

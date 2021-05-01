@@ -136,7 +136,7 @@ abstract class CrossValidator {
       PredictorFactory predictorFactory,
       MetricType metricType,
       {
-        DataPreprocessFn onDataSplit,
+        DataPreprocessFn? onDataSplit,
       }
   );
 }

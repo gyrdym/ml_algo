@@ -115,16 +115,16 @@ abstract class LinearRegressor
         InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
-    double lambda,
-    RegularizationType regularizationType,
+    double lambda = 0,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    int randomSeed,
     int batchSize = 1,
-    Matrix initialCoefficients,
     bool isFittingDataNormalized = false,
     bool collectLearningData = false,
     DType dtype = DType.float32,
+    RegularizationType? regularizationType,
+    int? randomSeed,
+    Matrix? initialCoefficients,
   }) =>
       initLinearRegressorModule()
           .get<LinearRegressorFactory>()
@@ -221,12 +221,12 @@ abstract class LinearRegressor
 
   /// A regularization strategy that was used to prevent overfitting of the
   /// model
-  RegularizationType get regularizationType;
+  RegularizationType? get regularizationType;
 
   /// A value that was used during the model's coefficients learning stage to
   /// init the randomizer for a stochastic optimizer (if the latter was chosen
   /// to learn the model's coefficients)
-  int get randomSeed;
+  int? get randomSeed;
 
   /// A size of a batch of data that was used in a single iteration of the
   /// optimization algorithm
@@ -234,7 +234,7 @@ abstract class LinearRegressor
 
   /// Coefficients that were used at the very first optimization iteration
   /// during the model's coefficients learning stage
-  Matrix get initialCoefficients;
+  Matrix? get initialCoefficients;
 
   /// Was the train data normalized or not prior to the model's coefficients
   /// learning stage
@@ -258,5 +258,5 @@ abstract class LinearRegressor
 
   /// Returns a list of cost values per each learning iteration. Returns null
   /// if the parameter `collectLearningData` of the default constructor is false
-  List<num> get costPerIteration;
+  List<num>? get costPerIteration;
 }

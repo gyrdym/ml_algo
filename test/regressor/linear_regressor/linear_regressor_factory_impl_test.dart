@@ -4,7 +4,6 @@ import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -17,6 +16,7 @@ import 'package:test/test.dart';
 
 import '../../helpers.dart';
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('LinearRegressorFactoryImpl', () {
@@ -33,17 +33,17 @@ void main() {
       headerExists: false,
     );
     final costPerIteration = [1, 2, 3, 100];
+    final defaultLambda = 1.0;
     final factory = const LinearRegressorFactoryImpl();
-
-    CostFunction costFunctionMock;
-    CostFunctionFactory costFunctionFactoryMock;
-    LinearOptimizer linearOptimizerMock;
-    LinearOptimizerFactory linearOptimizerFactoryMock;
+    late CostFunction costFunctionMock;
+    late CostFunctionFactory costFunctionFactoryMock;
+    late MockLinearOptimizer linearOptimizerMock;
+    late MockLinearOptimizerFactory linearOptimizerFactoryMock;
 
     setUp(() {
-      costFunctionMock = CostFunctionMock();
+      costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
-      linearOptimizerMock = LinearOptimizerMock();
+      linearOptimizerMock = MockLinearOptimizer();
       linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
           linearOptimizerMock);
 
@@ -69,6 +69,7 @@ void main() {
         () => factory.create(
           fittingData: observations,
           targetName: targetColumn,
+          lambda: defaultLambda,
         ),
         throwsException,
       );
@@ -79,6 +80,7 @@ void main() {
       factory.create(
         fittingData: observations,
         targetName: 'target',
+        lambda: defaultLambda,
       );
 
       verify(costFunctionFactoryMock.createByType(
@@ -138,6 +140,7 @@ void main() {
         fittingData: observations,
         targetName: 'target',
         initialCoefficients: initialCoefficients,
+        lambda: defaultLambda,
       );
 
       verify(linearOptimizerMock.findExtrema(
@@ -153,6 +156,7 @@ void main() {
         initialCoefficients: initialCoefficients,
         fitIntercept: true,
         interceptScale: 2.0,
+        lambda: defaultLambda,
       );
       final features = Matrix.fromList([
         [55, 44, 33, 22],
@@ -180,6 +184,7 @@ void main() {
         targetName: 'target',
         initialCoefficients: initialCoefficients,
         collectLearningData: true,
+        lambda: defaultLambda,
       );
 
       expect(regressor.costPerIteration, same(costPerIteration));
@@ -197,6 +202,7 @@ void main() {
         targetName: 'target',
         initialCoefficients: initialCoefficients,
         collectLearningData: false,
+        lambda: defaultLambda,
       );
 
       verify(linearOptimizerMock.findExtrema(

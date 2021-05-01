@@ -8,11 +8,12 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnRegressorFactoryImpl', () {
-    final solverMock = KnnSolverMock();
-    final kernelMock = KernelMock();
+    final solverMock = MockKnnSolver();
+    final kernelMock = MockKernel();
     final kernelFnFactory = createKernelFactoryMock(kernelMock);
     final solverFnFactory = createKnnSolverFactoryMock(solverMock);
 

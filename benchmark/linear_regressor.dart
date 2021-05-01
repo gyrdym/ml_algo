@@ -10,7 +10,7 @@ const featuresNum = 20;
 class LinearRegressorBenchmark extends BenchmarkBase {
   LinearRegressorBenchmark() : super('Linear regressor');
 
-  DataFrame fittingData;
+  late DataFrame fittingData;
 
   static void main() {
     LinearRegressorBenchmark().report();

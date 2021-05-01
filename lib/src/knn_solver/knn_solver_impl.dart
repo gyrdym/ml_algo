@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/distance_type_json_converter.dart';
-import 'package:ml_algo/src/common/json_converter/matrix_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_constants.dart';
@@ -15,7 +14,6 @@ import 'package:quiver/iterables.dart';
 part 'knn_solver_impl.g.dart';
 
 @JsonSerializable()
-@MatrixJsonConverter()
 @DistanceTypeJsonConverter()
 class KnnSolverImpl
     with
@@ -36,18 +34,22 @@ class KnnSolverImpl
     if (!trainFeatures.hasData) {
       throw Exception('Empty features matrix provided');
     }
+
     if (!trainOutcomes.hasData) {
       throw Exception('Empty outcomes matrix provided');
     }
+
     if (trainOutcomes.columnsNum > 1) {
       throw Exception('Invalid outcome matrix: it is expected to be a column '
           'vector, but a matrix of ${trainOutcomes.columnsNum} colums is '
           'given');
     }
+
     if (trainFeatures.rowsNum != trainOutcomes.rowsNum) {
       throw Exception('Number of feature records and number of associated '
           'outcomes must be equal');
     }
+
     if (k <= 0 || k > trainFeatures.rowsNum) {
       throw RangeError.value(k, 'Parameter k should be within the range '
           '1..${trainFeatures.rowsNum} (both inclusive)');
@@ -129,9 +131,13 @@ class KnnSolverImpl
   int _findNewNeighbourIdx(double newNeighbourDist,
       List<Neighbour> sortedNeighbors) {
     var i = -1;
+
     for (final neighbour in sortedNeighbors) {
-      if (newNeighbourDist < neighbour.distance) return ++i;
+      if (newNeighbourDist < neighbour.distance) {
+        return ++i;
+      }
     }
+
     return i;
   }
 }

@@ -133,8 +133,6 @@ abstract class LogisticRegressor
     double minCoefficientsUpdate = 1e-12,
     double probabilityThreshold = 0.5,
     double lambda = 0.0,
-    RegularizationType regularizationType,
-    int randomSeed,
     int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
@@ -142,11 +140,13 @@ abstract class LogisticRegressor
     LearningRateType learningRateType = LearningRateType.constant,
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
-    Vector initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
     bool collectLearningData = false,
     DType dtype = DType.float32,
+    RegularizationType? regularizationType,
+    Vector? initialCoefficients,
+    int? randomSeed,
   }) =>
       initLogisticRegressorModule()
           .get<LogisticRegressorFactory>()
@@ -223,26 +223,26 @@ abstract class LogisticRegressor
   /// coefficients.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final LinearOptimizerType optimizerType;
+  LinearOptimizerType get optimizerType;
 
   /// A number of fitting iterations that was used to learn the model\'s
   /// coefficients.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int iterationsLimit;
+  int get iterationsLimit;
 
   /// A value that was used for the initial value of learning rate of chosen
   /// optimization algorithm
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final double initialLearningRate;
+  double get initialLearningRate;
 
   /// A minimum distance between coefficient vectors in
   /// two contiguous iterations which was used to learn the model\'s
   /// coefficients.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final double minCoefficientsUpdate;
+  double get minCoefficientsUpdate;
 
   /// A probability, on the basis of which it is decided,
   /// whether an observation relates to a positive class label (see
@@ -250,55 +250,55 @@ abstract class LogisticRegressor
   /// parameter)
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final num probabilityThreshold;
+  num get probabilityThreshold;
 
   /// A coefficient of regularization
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final double lambda;
+  double get lambda;
 
   /// A way the coefficients of the classification were regularized during the
   /// model's coefficients learning process to prevent model overfitting.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final RegularizationType regularizationType;
+  RegularizationType? get regularizationType;
 
   /// A seed that was passed to a random value generator used by a stochastic
   /// optimizer.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int randomSeed;
+  int? get randomSeed;
 
   /// A size of data (in rows) that was used in a single iteration of
   /// coefficients learning process.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int batchSize;
+  int get batchSize;
 
   /// Whether the fitting data was normalized or not prior to the model's
   /// coefficients learning
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final bool isFittingDataNormalized;
+  bool get isFittingDataNormalized;
 
   /// A type of a learning rate behaviour update strategy.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final LearningRateType learningRateType;
+  LearningRateType get learningRateType;
 
   /// A coefficient set type that was used by the chosen optimizer at the very
   /// first iteration of coefficients learning algorithm.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final InitialCoefficientsType initialCoefficientsType;
+  InitialCoefficientsType get initialCoefficientsType;
 
   /// Coefficients which were used at the very first model's coefficients
   /// learning algorithm iteration.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final Vector initialCoefficients;
+  Vector? get initialCoefficients;
 
   /// Returns a list of cost values per each learning iteration. Returns null
   /// if the parameter `collectLearningData` of the default constructor is false
-  List<num> get costPerIteration;
+  List<num>? get costPerIteration;
 }

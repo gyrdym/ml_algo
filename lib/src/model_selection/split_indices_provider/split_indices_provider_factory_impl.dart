@@ -9,8 +9,8 @@ class SplitIndicesProviderFactoryImpl implements SplitIndicesProviderFactory {
 
   @override
   SplitIndicesProvider createByType(SplitIndicesProviderType splitterType, {
-    int numberOfFolds,
-    int p,
+    int? numberOfFolds,
+    int? p,
   }) {
     switch (splitterType) {
       case SplitIndicesProviderType.kFold:

@@ -1,2 +1,2 @@
-const valueJsonKey = 'V';
-const probabilityJsonKey = 'P';
+const leafLabelValueJsonKey = 'V';
+const leafLabelProbabilityJsonKey = 'P';

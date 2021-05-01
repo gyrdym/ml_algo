@@ -8,7 +8,7 @@ class DistributionCalculatorImpl implements DistributionCalculator {
 
   @override
   HashMap<T, double> calculate<T>(Iterable<T> sequence,
-      [int classLabelsLength]) {
+      [int? classLabelsLength]) {
 
     if (sequence.isEmpty || classLabelsLength == 0) {
       throw Exception('Empty value collection was provided');

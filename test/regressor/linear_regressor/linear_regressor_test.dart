@@ -11,6 +11,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('LinearRegressor', () {
@@ -48,10 +49,10 @@ void main() {
     final isFittingDataNormalized = true;
     final collectLearningDate = true;
     final dtype = DType.float32;
-    final regressorMock = LinearRegressorMock();
+    final regressorMock = MockLinearRegressor();
     final factoryMock = createLinearRegressorFactoryMock(regressorMock);
 
-    LinearRegressor regressor;
+    late LinearRegressor regressor;
 
     setUp(() {
       linearRegressorInjector
