@@ -1,6 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/_helper/from_leaf_label_json.dart';
-import 'package:ml_algo/src/tree_trainer/leaf_label/_helper/leaf_label_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_nodes_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_nodes_to_json.dart';
