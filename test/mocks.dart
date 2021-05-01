@@ -56,183 +56,99 @@ import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 
-class MetricFactoryMock extends Mock implements MetricFactory {}
+import './mocks.mocks.dart';
 
-class MetricMock extends Mock implements Metric {}
-
-class EncoderFactoryMock extends Mock {
-  Encoder create(DataFrame data, Iterable<String> targetNames);
+class MockEncoder extends Mock implements Encoder {
+  @override
+  DataFrame process(DataFrame? input) {
+    return super.noSuchMethod(
+      Invocation.method(#process, [input]),
+      returnValue: DataFrame([]),
+    ) as DataFrame;
+  }
 }
 
-class FeatureTargetSplitterMock extends Mock {
-  Iterable<DataFrame> split(DataFrame samples, {
-    Iterable<String> targetNames,
-    Iterable<int> targetIndices,
-  });
+class MockEncoderFactory extends Mock {
+  Encoder create(DataFrame? data, Iterable<String>? targetNames) {
+    return super.noSuchMethod(
+      Invocation.method(#create, [data, targetNames]),
+      returnValue: MockEncoder(),
+    ) as MockEncoder;
+  }
 }
 
-class ClassLabelsNormalizerMock extends Mock {
-  Matrix normalize(Matrix classLabels, num positiveLabel, num negativeLabel);
+class MockFeatureTargetSplitter extends Mock {
+  Iterable<DataFrame> split(DataFrame? samples, {
+    Iterable<String>? targetNames,
+    Iterable<int>? targetIndices,
+  }) {
+    return super.noSuchMethod(
+        Invocation.method(#split, [samples], {
+          #targetNames: targetNames,
+          #targetIndices: targetIndices,
+        }),
+      returnValue: <DataFrame>[],
+    ) as Iterable<DataFrame>;
+  }
 }
 
-class EncoderMock extends Mock implements Encoder {}
+class MockClassLabelsNormalizer extends Mock {
+  Matrix normalize(Matrix? classLabels, num? positiveLabel, num? negativeLabel) {
+    return super.noSuchMethod(
+      Invocation.method(#normalize, [classLabels, positiveLabel, negativeLabel]),
+      returnValue: Matrix.empty(),
+    ) as Matrix;
+  }
+}
 
-class RandomizerFactoryMock extends Mock implements RandomizerFactory {}
-
-class RandomizerMock extends Mock implements Randomizer {}
-
-class CostFunctionMock extends Mock implements CostFunction {}
-
-class CostFunctionFactoryMock extends Mock implements CostFunctionFactory {}
-
-class LearningRateGeneratorFactoryMock extends Mock
-    implements LearningRateGeneratorFactory {}
-
-class LearningRateGeneratorMock extends Mock implements
-    LearningRateGenerator {}
-
-class InitialWeightsGeneratorFactoryMock extends Mock
-    implements InitialCoefficientsGeneratorFactory {}
-
-class InitialWeightsGeneratorMock extends Mock
-    implements InitialCoefficientsGenerator {}
-
-class LinkFunctionMock extends Mock implements LinkFunction {}
-
-class LinearOptimizerFactoryMock extends Mock
-    implements LinearOptimizerFactory {}
-
-class LinearOptimizerMock extends Mock implements LinearOptimizer {}
-
-class ConvergenceDetectorFactoryMock extends Mock
-    implements ConvergenceDetectorFactory {}
-
-class ConvergenceDetectorMock extends Mock implements ConvergenceDetector {}
-
-class DataSplitterMock extends Mock implements SplitIndicesProvider {}
-
-class DataSplitterFactoryMock extends Mock implements SplitIndicesProviderFactory {}
-
-class AssessableMock extends Mock implements Assessable {}
-
-class TreeSplitAssessorMock extends Mock implements TreeSplitAssessor {}
-
-class TreeSplitAssessorFactoryMock extends Mock implements
-    TreeSplitAssessorFactory {}
-
-class TreeSplitterMock extends Mock implements TreeSplitter {}
-
-class TreeSplitterFactoryMock extends Mock implements TreeSplitterFactory {}
-
-class NumericalTreeSplitterMock extends Mock implements NumericalTreeSplitter {}
-
-class NumericalTreeSplitterFactoryMock extends Mock implements
-    NumericalTreeSplitterFactory {}
-
-class NominalTreeSplitterMock extends Mock implements NominalTreeSplitter {}
-
-class NominalTreeSplitterFactoryMock extends Mock implements
-    NominalTreeSplitterFactory {}
-
-class DistributionCalculatorMock extends Mock implements
-    DistributionCalculator {}
-
-class DistributionCalculatorFactoryMock extends Mock implements
-    DistributionCalculatorFactory {}
-
-class TreeLeafDetectorMock extends Mock implements TreeLeafDetector {}
-
-class TreeLeafDetectorFactoryMock extends Mock implements
-    TreeLeafDetectorFactory {}
-
-class TreeLeafLabelFactoryMock extends Mock implements TreeLeafLabelFactory {}
-
-class TreeLeafLabelFactoryFactoryMock extends Mock implements
-    TreeLeafLabelFactoryFactory {}
-
-class TreeSplitSelectorMock extends Mock implements TreeSplitSelector {}
-
-class TreeSplitSelectorFactoryMock extends Mock implements
-    TreeSplitSelectorFactory {}
-
-class TreeNodeMock extends Mock implements TreeNode {}
-
-class TreeSolverMock extends Mock implements DecisionTreeTrainer {}
-
-class KernelFunctionFactoryMock extends Mock implements KernelFactory {}
-
-class KnnSolverFactoryMock extends Mock implements KnnSolverFactory {}
-
-class KnnClassifierFactoryMock extends Mock implements KnnClassifierFactory {}
-
-class KnnClassifierMock extends Mock implements KnnClassifier {}
-
-class KnnRegressorFactoryMock extends Mock implements KnnRegressorFactory {}
-
-class KnnRegressorMock extends Mock implements KnnRegressor {}
-
-class KnnSolverMock extends Mock implements KnnSolver {}
-
-class KernelMock extends Mock implements Kernel {}
-
-class LogisticRegressorMock extends Mock implements LogisticRegressor {}
-
-class SoftmaxRegressorMock extends Mock implements SoftmaxRegressor {}
-
-class SoftmaxRegressorFactoryMock extends Mock implements
-    SoftmaxRegressorFactory {}
-
-class ClassifierMock extends Mock implements Classifier {}
-
-class PredictorMock extends Mock implements Predictor {}
-
-class ClassifierAssessorMock extends Mock implements ClassifierAssessor {}
-
-class LinearRegressorFactoryMock extends Mock
-    implements LinearRegressorFactory {}
-
-class LinearRegressorMock extends Mock implements LinearRegressor {}
-
-class DecisionTreeClassifierFactoryMock extends Mock
-    implements DecisionTreeClassifierFactory {}
-
-class DecisionTreeClassifierMock extends Mock
-    implements DecisionTreeClassifier {}
-
-class LogisticRegressorFactoryMock extends Mock
-    implements LogisticRegressorFactory {}
-
-LearningRateGeneratorFactoryMock createLearningRateGeneratorFactoryMock(
+MockLearningRateGeneratorFactory createLearningRateGeneratorFactoryMock(
     LearningRateGenerator generator) {
-  final factory = LearningRateGeneratorFactoryMock();
-  when(factory.fromType(any)).thenReturn(generator);
+  final factory = MockLearningRateGeneratorFactory();
+
+  when(
+    factory.fromType(any),
+  ).thenReturn(generator);
+
   return factory;
 }
 
 RandomizerFactory createRandomizerFactoryMock(Randomizer randomizer) {
-  final factory = RandomizerFactoryMock();
-  when(factory.create(any)).thenReturn(randomizer);
+  final factory = MockRandomizerFactory();
+
+  when(
+    factory.create(any),
+  ).thenReturn(randomizer);
+
   return factory;
 }
 
 InitialCoefficientsGeneratorFactory createInitialWeightsGeneratorFactoryMock(
     InitialCoefficientsGenerator generator) {
-  final factory = InitialWeightsGeneratorFactoryMock();
-  when(factory.fromType(any, any)).thenReturn(generator);
+  final factory = MockInitialCoefficientsGeneratorFactory();
+
+  when(
+    factory.fromType(
+      any,
+      any,
+    ),
+  ).thenReturn(generator);
+
   return factory;
 }
 
-CostFunctionFactory createCostFunctionFactoryMock(
+MockCostFunctionFactory createCostFunctionFactoryMock(
     CostFunction costFunctionMock) {
-  final costFunctionFactory = CostFunctionFactoryMock();
+  final costFunctionFactory = MockCostFunctionFactory();
 
-  when(costFunctionFactory.createByType(argThat(isNotNull),
+  when(
+    costFunctionFactory.createByType(
+      any,
       linkFunction: anyNamed('linkFunction'),
       positiveLabel: anyNamed('positiveLabel'),
-      negativeLabel: anyNamed('negativeLabel')
+      negativeLabel: anyNamed('negativeLabel'),
   )).thenReturn(costFunctionMock);
 
   return costFunctionFactory;
@@ -240,14 +156,21 @@ CostFunctionFactory createCostFunctionFactoryMock(
 
 ConvergenceDetectorFactory createConvergenceDetectorFactoryMock(
     ConvergenceDetector detector) {
-  final convergenceDetectorFactory = ConvergenceDetectorFactoryMock();
-  when(convergenceDetectorFactory.create(any, any)).thenReturn(detector);
+  final convergenceDetectorFactory = MockConvergenceDetectorFactory();
+
+  when(
+    convergenceDetectorFactory.create(
+      any,
+      any,
+    ),
+  ).thenReturn(detector);
+
   return convergenceDetectorFactory;
 }
 
-LinearOptimizerFactory createLinearOptimizerFactoryMock(
+MockLinearOptimizerFactory createLinearOptimizerFactoryMock(
     LinearOptimizer optimizer) {
-  final factory = LinearOptimizerFactoryMock();
+  final factory = MockLinearOptimizerFactory();
 
   when(factory.createByType(
     any,
@@ -264,186 +187,333 @@ LinearOptimizerFactory createLinearOptimizerFactoryMock(
     regularizationType: anyNamed('regularizationType'),
     batchSize: anyNamed('batchSize'),
     randomSeed: anyNamed('randomSeed'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized')
+    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
   )).thenReturn(optimizer);
 
   return factory;
 }
 
 SplitIndicesProviderFactory createDataSplitterFactoryMock(SplitIndicesProvider dataSplitter) {
-  final factory = DataSplitterFactoryMock();
-  when(factory.createByType(any,
+  final factory = MockSplitIndicesProviderFactory();
+
+  when(
+    factory.createByType(
+      any,
       numberOfFolds: anyNamed('numberOfFolds'),
-      p: anyNamed('p')),
-  ).thenReturn(dataSplitter);
+      p: anyNamed('p'),
+  )).thenReturn(dataSplitter);
+
   return factory;
 }
 
 KernelFactory createKernelFactoryMock(Kernel kernel) {
-  final factory = KernelFunctionFactoryMock();
-  when(factory.createByType(any)).thenReturn(kernel);
+  final factory = MockKernelFactory();
+
+  when(
+    factory.createByType(
+      any,
+    ),
+  ).thenReturn(kernel);
+
   return factory;
 }
 
-KnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
-  final factory = KnnSolverFactoryMock();
-  when(factory.create(any, any, any, any, any)).thenReturn(solver);
+MockKnnSolverFactory createKnnSolverFactoryMock(KnnSolver solver) {
+  final factory = MockKnnSolverFactory();
+
+  when(
+    factory.create(
+      any,
+      any,
+      any,
+      any,
+      any,
+    ),
+  ).thenReturn(solver);
+
   return factory;
 }
 
 KnnClassifierFactory createKnnClassifierFactoryMock(KnnClassifier classifier) {
-  final factory = KnnClassifierFactoryMock();
-  when(factory.create(any, any, any, any, any, any, any))
-      .thenReturn(classifier);
+  final factory = MockKnnClassifierFactory();
+
+  when(
+    factory.create(
+      any,
+      any,
+      any,
+      any,
+      any,
+      any,
+      any,
+    ),
+  ).thenReturn(classifier);
+
   return factory;
 }
 
 KnnRegressorFactory createKnnRegressorFactoryMock(KnnRegressor regressor) {
-  final factory = KnnRegressorFactoryMock();
-  when(factory.create(any, any, any, any, any, any)).thenReturn(regressor);
+  final factory = MockKnnRegressorFactory();
+
+  when(
+    factory.create(
+      any,
+      any,
+      any,
+      any,
+      any,
+      any,
+    ),
+  ).thenReturn(regressor);
+
   return factory;
 }
 
 LogisticRegressorFactory createLogisticRegressorFactoryMock(
     LogisticRegressor logisticRegressor) {
-  final factory = LogisticRegressorFactoryMock();
-  when(factory.create(
-    trainData: anyNamed('trainData'),
-    targetName: anyNamed('targetName'),
-    optimizerType: anyNamed('optimizerType'),
-    iterationsLimit: anyNamed('iterationsLimit'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    lambda: anyNamed('lambda'),
-    regularizationType: anyNamed('regularizationType'),
-    randomSeed: anyNamed('randomSeed'),
-    batchSize: anyNamed('batchSize'),
-    fitIntercept: anyNamed('fitIntercept'),
-    interceptScale: anyNamed('interceptScale'),
-    learningRateType: anyNamed('learningRateType'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
-    initialCoefficientsType: anyNamed('initialCoefficientsType'),
-    initialCoefficients: anyNamed('initialCoefficients'),
-    positiveLabel: anyNamed('positiveLabel'),
-    negativeLabel: anyNamed('negativeLabel'),
-    collectLearningData: anyNamed('collectLearningData'),
-    probabilityThreshold: anyNamed('probabilityThreshold'),
-    dtype: anyNamed('dtype'),
-  ))
-      .thenReturn(logisticRegressor);
+  final factory = MockLogisticRegressorFactory();
+
+  when(
+    factory.create(
+      trainData: anyNamed('trainData'),
+      targetName: anyNamed('targetName'),
+      optimizerType: anyNamed('optimizerType'),
+      iterationsLimit: anyNamed('iterationsLimit'),
+      initialLearningRate: anyNamed('initialLearningRate'),
+      minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+      lambda: anyNamed('lambda'),
+      regularizationType: anyNamed('regularizationType'),
+      randomSeed: anyNamed('randomSeed'),
+      batchSize: anyNamed('batchSize'),
+      fitIntercept: anyNamed('fitIntercept'),
+      interceptScale: anyNamed('interceptScale'),
+      learningRateType: anyNamed('learningRateType'),
+      isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
+      initialCoefficientsType: anyNamed('initialCoefficientsType'),
+      initialCoefficients: anyNamed('initialCoefficients'),
+      positiveLabel: anyNamed('positiveLabel'),
+      negativeLabel: anyNamed('negativeLabel'),
+      collectLearningData: anyNamed('collectLearningData'),
+      probabilityThreshold: anyNamed('probabilityThreshold'),
+      dtype: anyNamed('dtype'),
+    ),
+  ).thenReturn(logisticRegressor);
+
   return factory;
 }
 
 SoftmaxRegressorFactory createSoftmaxRegressorFactoryMock(
     SoftmaxRegressor softmaxRegressor) {
-  final factory = SoftmaxRegressorFactoryMock();
-  when(factory.create(
-    trainData: anyNamed('trainData'),
-    targetNames: anyNamed('targetNames'),
-    optimizerType: anyNamed('optimizerType'),
-    iterationsLimit: anyNamed('iterationsLimit'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    lambda: anyNamed('lambda'),
-    regularizationType: anyNamed('regularizationType'),
-    randomSeed: anyNamed('randomSeed'),
-    batchSize: anyNamed('batchSize'),
-    fitIntercept: anyNamed('fitIntercept'),
-    interceptScale: anyNamed('interceptScale'),
-    learningRateType: anyNamed('learningRateType'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
-    initialCoefficientsType: anyNamed('initialCoefficientsType'),
-    initialCoefficients: anyNamed('initialCoefficients'),
-    positiveLabel: anyNamed('positiveLabel'),
-    negativeLabel: anyNamed('negativeLabel'),
-    dtype: anyNamed('dtype'),
-  ))
-      .thenReturn(softmaxRegressor);
+  final factory = MockSoftmaxRegressorFactory();
+
+  when(
+    factory.create(
+      trainData: anyNamed('trainData'),
+      targetNames: anyNamed('targetNames'),
+      optimizerType: anyNamed('optimizerType'),
+      iterationsLimit: anyNamed('iterationsLimit'),
+      initialLearningRate: anyNamed('initialLearningRate'),
+      minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+      lambda: anyNamed('lambda'),
+      regularizationType: anyNamed('regularizationType'),
+      randomSeed: anyNamed('randomSeed'),
+      batchSize: anyNamed('batchSize'),
+      fitIntercept: anyNamed('fitIntercept'),
+      interceptScale: anyNamed('interceptScale'),
+      learningRateType: anyNamed('learningRateType'),
+      isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
+      initialCoefficientsType: anyNamed('initialCoefficientsType'),
+      initialCoefficients: anyNamed('initialCoefficients'),
+      positiveLabel: anyNamed('positiveLabel'),
+      negativeLabel: anyNamed('negativeLabel'),
+      collectLearningData: anyNamed('collectLearningData'),
+      dtype: anyNamed('dtype'),
+    ),
+  ).thenReturn(softmaxRegressor);
+
   return factory;
 }
 
 LinearRegressorFactory createLinearRegressorFactoryMock(
     LinearRegressor regressor) {
-  final factory = LinearRegressorFactoryMock();
-  when(factory.create(
-    fittingData: anyNamed('fittingData'),
-    targetName: anyNamed('targetName'),
-    optimizerType: anyNamed('optimizerType'),
-    iterationsLimit: anyNamed('iterationsLimit'),
-    initialLearningRate: anyNamed('initialLearningRate'),
-    minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
-    lambda: anyNamed('lambda'),
-    regularizationType: anyNamed('regularizationType'),
-    randomSeed: anyNamed('randomSeed'),
-    batchSize: anyNamed('batchSize'),
-    fitIntercept: anyNamed('fitIntercept'),
-    interceptScale: anyNamed('interceptScale'),
-    learningRateType: anyNamed('learningRateType'),
-    isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
-    initialCoefficientsType: anyNamed('initialCoefficientsType'),
-    initialCoefficients: anyNamed('initialCoefficients'),
-    collectLearningData: anyNamed('collectLearningData'),
-    dtype: anyNamed('dtype'),
-  ))
-      .thenReturn(regressor);
+  final factory = MockLinearRegressorFactory();
+
+  when(
+    factory.create(
+      fittingData: anyNamed('fittingData'),
+      targetName: anyNamed('targetName'),
+      optimizerType: anyNamed('optimizerType'),
+      iterationsLimit: anyNamed('iterationsLimit'),
+      initialLearningRate: anyNamed('initialLearningRate'),
+      minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
+      lambda: anyNamed('lambda'),
+      regularizationType: anyNamed('regularizationType'),
+      randomSeed: anyNamed('randomSeed'),
+      batchSize: anyNamed('batchSize'),
+      fitIntercept: anyNamed('fitIntercept'),
+      interceptScale: anyNamed('interceptScale'),
+      learningRateType: anyNamed('learningRateType'),
+      isFittingDataNormalized: anyNamed('isFittingDataNormalized'),
+      initialCoefficientsType: anyNamed('initialCoefficientsType'),
+      initialCoefficients: anyNamed('initialCoefficients'),
+      collectLearningData: anyNamed('collectLearningData'),
+      dtype: anyNamed('dtype'),
+    ),
+  ).thenReturn(regressor);
+
   return factory;
 }
 
-TreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
+MockTreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
     TreeSplitAssessor splitAssessor) {
-  final factory = TreeSplitAssessorFactoryMock();
-  when(factory.createByType(any)).thenReturn(splitAssessor);
+  final factory = MockTreeSplitAssessorFactory();
+
+  when(
+    factory.createByType(any),
+  ).thenReturn(splitAssessor);
+
   return factory;
 }
 
-TreeSplitterFactory createTreeSplitterFactoryMock(TreeSplitter splitter) {
-  final factory = TreeSplitterFactoryMock();
-  when(factory.createByType(any, any)).thenReturn(splitter);
+MockTreeSplitterFactory createTreeSplitterFactoryMock(TreeSplitter splitter) {
+  final factory = MockTreeSplitterFactory();
+
+  when(factory.createByType(
+    any,
+    any,
+  )).thenReturn(splitter);
+
   return factory;
 }
 
+@GenerateMocks([NumericalTreeSplitterFactory])
 NumericalTreeSplitterFactory createNumericalTreeSplitterFactoryMock(
   NumericalTreeSplitter splitter,
 ) {
-  final factory = NumericalTreeSplitterFactoryMock();
+  final factory = MockNumericalTreeSplitterFactory();
+
   when(factory.create()).thenReturn(splitter);
+
   return factory;
 }
 
+@GenerateMocks([NominalTreeSplitterFactory])
 NominalTreeSplitterFactory createNominalTreeSplitterFactoryMock(
   NominalTreeSplitter splitter,
 ) {
-  final factory = NominalTreeSplitterFactoryMock();
+  final factory = MockNominalTreeSplitterFactory();
+
   when(factory.create()).thenReturn(splitter);
+
   return factory;
 }
 
 TreeLeafDetectorFactory createTreeLeafDetectorFactoryMock(
     TreeLeafDetector leafDetector) {
-  final factory = TreeLeafDetectorFactoryMock();
-  when(factory.create(any, any, any, any)).thenReturn(leafDetector);
+  final factory = MockTreeLeafDetectorFactory();
+
+  when(factory.create(
+    any,
+    any,
+    any,
+    any,
+  )).thenReturn(leafDetector);
+
   return factory;
 }
 
 TreeLeafLabelFactoryFactory createTreeLeafLabelFactoryFactoryMock(
   TreeLeafLabelFactory leafLabelFactory,
 ) {
-  final factory = TreeLeafLabelFactoryFactoryMock();
-  when(factory.createByType(any)).thenReturn(leafLabelFactory);
+  final factory = MockTreeLeafLabelFactoryFactory();
+
+  when(
+    factory.createByType(
+      any,
+    ),
+  ).thenReturn(leafLabelFactory);
+
   return factory;
 }
 
 TreeSplitSelectorFactory createTreeSplitSelectorFactoryMock(
     TreeSplitSelector splitSelector) {
-  final factory = TreeSplitSelectorFactoryMock();
-  when(factory.createByType(any, any, any)).thenReturn(splitSelector);
+  final factory = MockTreeSplitSelectorFactory();
+
+  when(
+    factory.createByType(
+      any,
+      any,
+      any,
+    ),
+  ).thenReturn(splitSelector);
+
   return factory;
 }
 
-DistributionCalculatorFactory createDistributionCalculatorFactoryMock(
+MockDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
   DistributionCalculator calculator,
 ) {
-  final factory = DistributionCalculatorFactoryMock();
+  final factory = MockDistributionCalculatorFactory();
+
   when(factory.create()).thenReturn(calculator);
+
   return factory;
 }
+
+@GenerateMocks([
+  TreeSplitAssessor,
+  TreeSplitAssessorFactory,
+  NumericalTreeSplitter,
+  NominalTreeSplitter,
+  TreeSplitter,
+  TreeSplitterFactory,
+  MetricFactory,
+  Metric,
+  RandomizerFactory,
+  Randomizer,
+  CostFunction,
+  CostFunctionFactory,
+  DecisionTreeClassifierFactory,
+  LinkFunction,
+  InitialCoefficientsGenerator,
+  InitialCoefficientsGeneratorFactory,
+  ConvergenceDetector,
+  DistributionCalculator,
+  DistributionCalculatorFactory,
+  LearningRateGeneratorFactory,
+  TreeLeafDetector,
+  TreeLeafLabelFactory,
+  TreeLeafDetectorFactory,
+  ClassifierAssessor,
+  KnnSolver,
+  KnnSolverFactory,
+  Kernel,
+  KernelFactory,
+  KnnClassifierFactory,
+  Classifier,
+  LearningRateGenerator,
+  LinearOptimizerFactory,
+  LinearOptimizer,
+  ConvergenceDetectorFactory,
+  SplitIndicesProvider,
+  SplitIndicesProviderFactory,
+  Assessable,
+  TreeLeafLabelFactoryFactory,
+  TreeSplitSelector,
+  TreeSplitSelectorFactory,
+  TreeNode,
+  DecisionTreeTrainer,
+  KnnClassifier,
+  KnnRegressorFactory,
+  KnnRegressor,
+  LogisticRegressor,
+  SoftmaxRegressor,
+  SoftmaxRegressorFactory,
+  Predictor,
+  LinearRegressorFactory,
+  LinearRegressor,
+  DecisionTreeClassifier,
+  LogisticRegressorFactory,
+])
+void main() {}

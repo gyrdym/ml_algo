@@ -57,7 +57,7 @@ abstract class LinearOptimizer {
   /// such as errors from cost function, after every iteration. May affect
   /// performance.
   Matrix findExtrema({
-    Matrix initialCoefficients,
+    Matrix? initialCoefficients,
     bool isMinimizingObjective = true,
     bool collectLearningData = false,
   });

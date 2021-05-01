@@ -6,12 +6,12 @@ import 'package:test/test.dart';
 void testTreeNode(
     TreeNode node,
     {
-      bool shouldBeLeaf,
-      double expectedSplittingValue,
-      int expectedSplittingColumnIdx,
-      int expectedChildrenLength,
-      TreeLeafLabel expectedLabel,
-      Map<Vector, bool> samplesToCheck,
+      required bool shouldBeLeaf,
+      required double expectedSplittingValue,
+      required int expectedSplittingColumnIdx,
+      int? expectedChildrenLength,
+      TreeLeafLabel? expectedLabel,
+      Map<Vector, bool>? samplesToCheck,
     }
 ) {
   expect(node.isLeaf, equals(shouldBeLeaf),
@@ -26,9 +26,9 @@ void testTreeNode(
 
   expectedLabel == null
       ? expect(node.label, isNull)
-      : testLeafLabel(node.label, expectedLabel);
+      : testLeafLabel(node.label!, expectedLabel);
 
-  samplesToCheck?.entries?.forEach((entry) {
+  samplesToCheck?.entries.forEach((entry) {
     expect(node.isSamplePassed(entry.key), entry.value,
         reason: '`isSamplePassed` should return ${entry.value} for '
             'sampe ${entry.key}');

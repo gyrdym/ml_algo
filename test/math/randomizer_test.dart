@@ -10,21 +10,7 @@ class RandomMock extends Mock implements Random {}
 void main() {
   const maxEpoch = 400;
 
-  Random baseGenerator;
-  Randomizer randomizer;
-
-  group('Randomizer (with predefined generator)', () {
-    setUp(() {
-      baseGenerator = RandomMock();
-      randomizer = RandomizerImpl(generator: baseGenerator);
-    });
-
-    tearDown(() {
-      baseGenerator = null;
-    });
-
-    // tests to check proxy calls should be here...
-  });
+  late Randomizer randomizer;
 
   group('Randomizer (without predefined generator)', () {
     setUp(() {

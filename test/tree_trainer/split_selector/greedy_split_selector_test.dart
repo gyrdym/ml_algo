@@ -3,7 +3,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('GreedyTreeSplitSelector', () {
@@ -22,29 +22,29 @@ void main() {
       final bestSplitIdx = 1;
 
       final worstSplit = {
-        TreeNodeMock(): Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
-        TreeNodeMock(): Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
+        MockTreeNode(): Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
+        MockTreeNode(): Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
       };
 
       final worseSplit = {
-        TreeNodeMock(): Matrix.fromList([[5, 6, 7, 8, -1, -1, 0]]),
-        TreeNodeMock(): Matrix.fromList([[50, 60, 70, 80, -1, -1, 0]]),
+        MockTreeNode(): Matrix.fromList([[5, 6, 7, 8, -1, -1, 0]]),
+        MockTreeNode(): Matrix.fromList([[50, 60, 70, 80, -1, -1, 0]]),
       };
 
       final goodSplit = {
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [15, 16, 17, 18, -1, 0, 0],
         ]),
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [150, 160, 170, 180, -1, 0, 0],
         ]),
       };
 
       final bestSplit = {
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [125, 126, 127, 128, 0, 0, 0],
         ]),
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [1500, 1600, 1700, 1800, 0, 0, 0],
         ]),
       };
@@ -52,8 +52,8 @@ void main() {
       final featuresIdxs = [
         worstSplitIdx, bestSplitIdx, worseSplitIdx, goodSplitIdx,
       ];
-      final assessor = TreeSplitAssessorMock();
-      final splitter = TreeSplitterMock();
+      final assessor = MockTreeSplitAssessor();
+      final splitter = MockTreeSplitter();
 
       when(splitter.split(samples, worstSplitIdx, targetColIdx))
           .thenReturn(worstSplit);
@@ -96,27 +96,27 @@ void main() {
       final bestFeatureColIdx = 2;
 
       final goodSplit = {
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [1, 2, 3, 4, -1, -1, -1],
         ]),
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [10, 20, 30, 40, -1, -1, -1],
         ]),
       };
 
       final bestSplit = {
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [15, 16, 17, 18, -1, 0, 0],
         ]),
-        TreeNodeMock(): Matrix.fromList([
+        MockTreeNode(): Matrix.fromList([
           [150, 160, 170, 180, -1, 0, 0],
         ]),
       };
 
       final featuresIdxs = {goodFeatureColIdx, bestFeatureColIdx};
 
-      final assessor = TreeSplitAssessorMock();
-      final splitter = TreeSplitterMock();
+      final assessor = MockTreeSplitAssessor();
+      final splitter = MockTreeSplitter();
       final categoricalValues = [1.0, 2.0, 3.0];
       final colIdxToUniqueValues = {ignoredFeatureColIdx: categoricalValues};
 

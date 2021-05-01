@@ -8,6 +8,7 @@ import 'package:ml_algo/src/regressor/_helpers/squared_cost_optimizer_factory.da
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_impl.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/migrations/migrate_linear_regressor_schema_v1_to_v2.dart';
 import 'package:ml_dataframe/src/data_frame/data_frame.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -17,8 +18,8 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
 
   @override
   LinearRegressor create({
-    DataFrame fittingData,
-    String targetName,
+    required DataFrame fittingData,
+    required String targetName,
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     LearningRateType learningRateType = LearningRateType.constant,
@@ -26,16 +27,16 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
         InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
-    double lambda,
-    RegularizationType regularizationType,
+    double lambda = 0,
     bool fitIntercept = false,
     double interceptScale = 1.0,
-    int randomSeed,
     int batchSize = 1,
-    Matrix initialCoefficients,
     bool isFittingDataNormalized = false,
     bool collectLearningData = false,
     DType dtype = DType.float32,
+    RegularizationType? regularizationType,
+    int? randomSeed,
+    Matrix? initialCoefficients,
   }) {
     final optimizer = createSquaredCostOptimizer(
       fittingData,
@@ -87,9 +88,10 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
 
   @override
   LinearRegressor fromJson(String json) {
-    final decodedJson = jsonDecode(json) as Map<String, dynamic>;
+    final v1Schema = jsonDecode(json) as Map<String, dynamic>;
+    final v2Schema = migrateLinearRegressorSchemaV1toV2(v1Schema);
 
-    return LinearRegressorImpl.fromJson(decodedJson);
+    return LinearRegressorImpl.fromJson(v2Schema);
   }
 
 }

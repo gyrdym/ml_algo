@@ -58,15 +58,15 @@ void main() {
     int iterationsLimit = 2,
     double minCoefficientsUpdate = 1e-12,
     double initialLearningRate = 1.0,
-    double lambda,
-    RegularizationType regularizationType,
-    int randomSeed,
+    double lambda = 0.0,
+    RegularizationType? regularizationType,
+    int? randomSeed,
     int batchSize = 5,
     bool isFittingDataNormalized = false,
     LearningRateType learningRateType = LearningRateType.constant,
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
-    Vector initialCoefficients,
+    Vector? initialCoefficients,
     String targetName = 'col_3',
     bool fitIntercept = false,
     double interceptScale = 3.0,
@@ -144,19 +144,6 @@ void main() {
       expect(serialized[logisticRegressorIterationsLimitJsonKey], 100);
     });
 
-    test('should serialize iterationsLimit field, iterationsLimit=null', () {
-      final classifier = createClassifier(
-        iterationsLimit: null,
-        minCoefficientsUpdate: 100,
-      );
-      final serialized = classifier.toJson();
-
-      expect(
-          serialized.containsKey(logisticRegressorIterationsLimitJsonKey),
-          false,
-      );
-    });
-
     test('should serialize initialLearningRate field, initialLearningRate=10', () {
       final classifier = createClassifier(
         initialLearningRate: 10,
@@ -164,16 +151,6 @@ void main() {
       final serialized = classifier.toJson();
 
       expect(serialized[logisticRegressorInitialLearningRateJsonKey], 10);
-    });
-
-    test('should serialize initialLearningRate field, initialLearningRate=null', () {
-      final classifier = createClassifier(
-        initialLearningRate: null,
-      );
-      final serialized = classifier.toJson();
-
-      expect(serialized
-          .containsKey(logisticRegressorInitialLearningRateJsonKey), false);
     });
 
     test('should serialize minCoefficientsUpdate field, '
@@ -186,34 +163,13 @@ void main() {
       expect(serialized[logisticRegressorMinCoefsUpdateJsonKey], 100);
     });
 
-    test('should serialize minCoefficientsUpdate field, '
-        'minCoefficientsUpdate=null', () {
-      final classifier = createClassifier(
-        iterationsLimit: 5,
-        minCoefficientsUpdate: null,
-      );
-      final serialized = classifier.toJson();
-
-      expect(serialized
-          .containsKey(logisticRegressorMinCoefsUpdateJsonKey), false);
-    });
-
-    test('should serialize lambda field, lambda=199', () {
+    test('should serialize lambda field', () {
       final classifier = createClassifier(
         lambda: 199.0,
       );
       final serialized = classifier.toJson();
 
       expect(serialized[logisticRegressorLambdaJsonKey], 199.0);
-    });
-
-    test('should serialize lambda field, lambda=null', () {
-      final classifier = createClassifier(
-        lambda: null,
-      );
-      final serialized = classifier.toJson();
-
-      expect(serialized.containsKey(logisticRegressorLambdaJsonKey), false);
     });
 
     // coordinate optimization is not implemented yet for LogisticRegressor
@@ -268,7 +224,7 @@ void main() {
       expect(serialized.containsKey(logisticRegressorRandomSeedJsonKey), false);
     });
 
-    test('should serialize batchSize field, batchSize=4', () {
+    test('should serialize batchSize field', () {
       final classifier = createClassifier(
         batchSize: 4,
       );
@@ -306,7 +262,7 @@ void main() {
       final serialized = classifier.toJson();
 
       expect(serialized[logisticRegressorLearningRateTypeJsonKey],
-          decreasingAdaptiveLearningRateTypeJsonEncodedValue);
+          learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]);
     });
 
     test('should serialize learningRateType field, '
@@ -318,7 +274,7 @@ void main() {
       final serialized = classifier.toJson();
 
       expect(serialized[logisticRegressorLearningRateTypeJsonKey],
-          constantLearningRateTypeJsonEncodedValue);
+          learningRateTypeToEncodedValue[LearningRateType.constant]);
     });
 
     test('should serialize initialCoefficientsType field, '

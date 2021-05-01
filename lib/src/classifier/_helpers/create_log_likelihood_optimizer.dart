@@ -14,30 +14,27 @@ import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/matrix.dart';
 
 LinearOptimizer createLogLikelihoodOptimizer(
     DataFrame fittingData,
     Iterable<String> targetNames,
     LinkFunction linkFunction, {
-  LinearOptimizerType optimizerType,
-  int iterationsLimit,
-  double initialLearningRate,
-  double minCoefficientsUpdate,
-  double probabilityThreshold,
-  double lambda,
-  RegularizationType regularizationType,
-  int randomSeed,
-  int batchSize,
-  bool fitIntercept,
-  double interceptScale,
-  bool isFittingDataNormalized,
-  LearningRateType learningRateType,
-  InitialCoefficientsType initialWeightsType,
-  Matrix initialWeights,
-  num positiveLabel,
-  num negativeLabel,
-  DType dtype,
+      required LinearOptimizerType optimizerType,
+      required int iterationsLimit,
+      required double initialLearningRate,
+      required double minCoefficientsUpdate,
+      required double lambda,
+      required int batchSize,
+      required bool fitIntercept,
+      required double interceptScale,
+      required bool isFittingDataNormalized,
+      required LearningRateType learningRateType,
+      required InitialCoefficientsType initialCoefficientsType,
+      required num positiveLabel,
+      required num negativeLabel,
+      required DType dtype,
+      RegularizationType? regularizationType,
+      int? randomSeed,
 }) {
   validateClassLabels(positiveLabel, negativeLabel);
 
@@ -69,7 +66,7 @@ LinearOptimizer createLogLikelihoodOptimizer(
     randomSeed: randomSeed,
     batchSize: batchSize,
     learningRateType: learningRateType,
-    initialCoefficientsType: initialWeightsType,
+    initialCoefficientsType: initialCoefficientsType,
     dtype: dtype,
     isFittingDataNormalized: isFittingDataNormalized,
   );

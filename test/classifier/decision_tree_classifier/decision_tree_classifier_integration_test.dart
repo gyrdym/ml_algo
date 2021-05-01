@@ -31,14 +31,6 @@ void main() {
       expect(classifier, isA<DecisionTreeClassifierImpl>());
     });
 
-    test('should throw an exception if target column does not exist in train '
-        'data', () {
-      final actual = () => DecisionTreeClassifier(fakeDataSet, 'unknown_col',
-          minError: 0.3, minSamplesCount: 1, maxDepth: 3);
-
-      expect(actual, throwsException);
-    });
-
     test('should throw a range error if minimal error on node is less than 0',
             () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
@@ -168,7 +160,7 @@ void main() {
 
     group('saveAsJson', () {
       tearDown(() async {
-        final file = await File(testFileName);
+        final file = File(testFileName);
         if (!await file.exists()) {
           return;
         }
@@ -178,7 +170,7 @@ void main() {
       test('should save to file as json', () async {
         await classifier.saveAsJson(testFileName);
 
-        final file = await File(testFileName);
+        final file = File(testFileName);
         final fileExists = await file.exists();
 
         expect(fileExists, isTrue);
@@ -187,7 +179,7 @@ void main() {
       test('should save to a restorable json', () async {
         await classifier.saveAsJson(testFileName);
 
-        final file = await File(testFileName);
+        final file = File(testFileName);
         final json = await file.readAsString();
         final restoredClassifier = DecisionTreeClassifier.fromJson(json);
 

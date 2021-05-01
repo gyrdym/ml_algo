@@ -8,8 +8,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('KnnRegressor', () {
-    test('should deserialize v0 schema version', () async {
-      final file = File('e2e/knn_regressor/knn_regressor_v0.json');
+    test('should deserialize v1 schema version', () async {
+      final file = File('e2e/knn_regressor/knn_regressor_v1.json');
       final encodedData = await file.readAsString();
       final regressor = KnnRegressor.fromJson(encodedData);
 

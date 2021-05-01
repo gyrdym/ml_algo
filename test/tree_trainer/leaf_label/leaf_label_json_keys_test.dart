@@ -4,11 +4,11 @@ import 'package:test/test.dart';
 void main() {
   group('Leaf label json keys', () {
     test('should have a key for value field', () {
-      expect(valueJsonKey, 'V');
+      expect(leafLabelValueJsonKey, 'V');
     });
 
     test('should have a key for probability field', () {
-      expect(probabilityJsonKey, 'P');
+      expect(leafLabelProbabilityJsonKey, 'P');
     });
   });
 }

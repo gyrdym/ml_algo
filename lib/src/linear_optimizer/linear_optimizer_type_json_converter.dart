@@ -15,10 +15,10 @@ class LinearOptimizerTypeJsonConverter implements
 
       case coordinateLinearOptimizerTypeEncodedValue:
         return LinearOptimizerType.coordinate;
-
-      default:
-        return null;
     }
+
+    throw Exception('LinearOptimizerType, '
+        'fromJson: unknown encoded value - $json');
   }
 
   @override
@@ -29,9 +29,6 @@ class LinearOptimizerTypeJsonConverter implements
 
       case LinearOptimizerType.coordinate:
         return coordinateLinearOptimizerTypeEncodedValue;
-
-      default:
-        return null;
     }
   }
 }

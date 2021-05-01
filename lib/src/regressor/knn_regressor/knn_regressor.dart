@@ -110,16 +110,16 @@ abstract class KnnRegressor
   /// A number of nearest neighbours
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int k;
+  int get k;
 
   /// A kernel type
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final KernelType kernelType;
+  KernelType get kernelType;
 
   /// A distance type that is used to measure a distance between two
   /// observations
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final Distance distanceType;
+  Distance get distanceType;
 }

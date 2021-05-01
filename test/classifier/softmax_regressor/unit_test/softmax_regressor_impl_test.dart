@@ -1,7 +1,6 @@
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -16,10 +15,11 @@ import 'package:test/test.dart';
 
 import '../../../helpers.dart';
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('SoftmaxRegressorImpl', () {
-    final linkFunctionMock = LinkFunctionMock();
+    final linkFunctionMock = MockLinkFunction();
     final optimizerType = LinearOptimizerType.gradient;
     final iterationsLimit = 3;
     final initialLearningRate = 0.75;
@@ -38,10 +38,11 @@ void main() {
     final negativeLabel = -1.0;
     final costPerIteration = [10, -10, 20, 2.3];
     final retrainingData = DataFrame([[1, 2, -90, 100]]);
-    final retrainedModelMock = SoftmaxRegressorMock();
+    final retrainedModelMock = MockSoftmaxRegressor();
     final classifierFactory = createSoftmaxRegressorFactoryMock(
         retrainedModelMock);
     final dtype = DType.float32;
+    final collectLearningData = false;
 
     final coefficientsByClasses = Matrix.fromList([
       [-1, -3,   -5],
@@ -103,10 +104,12 @@ void main() {
       header: ['1', '2', '3', '4', '5', ...targetNames],
     );
 
-    SoftmaxRegressorImpl regressor;
+    late SoftmaxRegressorImpl regressor;
 
     setUp(() {
-      when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
+      when(
+        linkFunctionMock.link(any),
+      ).thenReturn(mockedProbabilities);
 
       softmaxRegressorInjector
           .registerSingleton<SoftmaxRegressorFactory>(() => classifierFactory);
@@ -291,9 +294,13 @@ void main() {
       test('should predict the first class if outcome is equiprobable', () {
         reset(linkFunctionMock);
 
-        when(linkFunctionMock.link(any)).thenReturn(Matrix.fromList([
-          [0.33, 0.33, 0.33],
-        ]));
+        when(
+          linkFunctionMock.link(any),
+        ).thenReturn(
+          Matrix.fromList([
+            [0.33, 0.33, 0.33],
+          ]),
+        );
         
         final actual = regressor.predict(testFeatures);
         final expectedOutcome = Matrix.fromList([
@@ -385,6 +392,7 @@ void main() {
           positiveLabel: positiveLabel,
           negativeLabel: negativeLabel,
           dtype: dtype,
+          collectLearningData: collectLearningData,
         )).called(1);
       });
 
@@ -393,37 +401,6 @@ void main() {
 
         expect(retrainedModel, same(retrainedModelMock));
         expect(retrainedModel, isNot(same(regressor)));
-      });
-
-      test('should throw exception if the model schema is outdated or '
-          ' null', () {
-        final model = SoftmaxRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          coefficientsByClasses,
-          targetNames,
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          positiveLabel,
-          negativeLabel,
-          costPerIteration,
-          dtype,
-          schemaVersion: null,
-        );
-
-        expect(() => model.retrain(retrainingData),
-            throwsA(isA<OutdatedJsonSchemaException>()));
       });
 
       test('should have a proper jsdon schema version', () {
@@ -451,7 +428,7 @@ void main() {
           dtype,
         );
 
-        expect(model.schemaVersion, 2);
+        expect(model.schemaVersion, 3);
       });
     });
   });

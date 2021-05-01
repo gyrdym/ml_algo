@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
 
 class ConstantLearningRateGenerator implements LearningRateGenerator {
-  double _initialValue;
+  late double _initialValue;
 
   @override
   void init(double initialValue) {

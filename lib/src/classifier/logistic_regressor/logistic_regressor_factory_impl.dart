@@ -4,9 +4,9 @@ import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/migrations/migrate_logistic_regressor_schema_v2_to_v3.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
-import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -24,16 +24,14 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
 
   @override
   LogisticRegressor create({
-    DataFrame trainData,
-    String targetName,
+    required DataFrame trainData,
+    required String targetName,
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     double probabilityThreshold = 0.5,
     double lambda = 0.0,
-    RegularizationType regularizationType,
-    int randomSeed,
     int batchSize = 1,
     bool fitIntercept = false,
     double interceptScale = 1.0,
@@ -41,17 +39,18 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     LearningRateType learningRateType = LearningRateType.constant,
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
-    Vector initialCoefficients,
     num positiveLabel = 1,
     num negativeLabel = 0,
     bool collectLearningData = false,
     DType dtype = DType.float32,
+    RegularizationType? regularizationType,
+    Vector? initialCoefficients,
+    int? randomSeed,
   }) {
-    validateTrainData(trainData, [targetName]);
     validateClassLabels(positiveLabel, negativeLabel);
 
-    if (initialCoefficients.isNotEmpty) {
-      validateInitialCoefficients(initialCoefficients, fitIntercept,
+    if (initialCoefficients?.isNotEmpty == true) {
+      validateInitialCoefficients(initialCoefficients!, fitIntercept,
           trainData.toMatrix(dtype).columnsNum - 1);
     }
 
@@ -68,7 +67,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       randomSeed: randomSeed,
       batchSize: batchSize,
       learningRateType: learningRateType,
-      initialWeightsType: initialCoefficientsType,
+      initialCoefficientsType: initialCoefficientsType,
       fitIntercept: fitIntercept,
       interceptScale: interceptScale,
       isFittingDataNormalized: isFittingDataNormalized,
@@ -77,8 +76,8 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       dtype: dtype,
     );
     final coefficientsByClasses = optimizer.findExtrema(
-      initialCoefficients: initialCoefficients.isNotEmpty
-          ? Matrix.fromColumns([initialCoefficients], dtype: dtype)
+      initialCoefficients: initialCoefficients?.isNotEmpty == true
+          ? Matrix.fromColumns([initialCoefficients!], dtype: dtype)
           : null,
       isMinimizingObjective: false,
       collectLearningData: collectLearningData,
@@ -115,9 +114,9 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
 
   @override
   LogisticRegressor fromJson(String json) {
-    final decoded = jsonDecode(json) as Map<String, dynamic>;
+    final v2Schema = jsonDecode(json) as Map<String, dynamic>;
+    final v3Schema = migrateLogisticRegressorSchemaV2toV3(v2Schema);
 
-    return LogisticRegressorImpl.fromJson(decoded);
+    return LogisticRegressorImpl.fromJson(v3Schema);
   }
-
 }

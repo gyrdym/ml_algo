@@ -70,11 +70,13 @@ void main() {
 
     test('should serialize (probability value is null)', () {
       final labelValue = 1000;
-      final leafLabel = TreeLeafLabel(labelValue);
+      final probability = 0.5;
+      final leafLabel = TreeLeafLabel(labelValue, probability: probability);
       final serialized = leafLabel.toJson();
 
       expect(serialized, equals({
-        valueJsonKey: labelValue,
+        leafLabelValueJsonKey: labelValue,
+        leafLabelProbabilityJsonKey: probability,
       }));
     });
 
@@ -85,31 +87,41 @@ void main() {
       final serialized = leafLabel.toJson();
 
       expect(serialized, equals({
-        valueJsonKey: labelValue,
-        probabilityJsonKey: probability,
+        leafLabelValueJsonKey: labelValue,
+        leafLabelProbabilityJsonKey: probability,
       }));
     });
 
     test('should restore from json (probability value is null)', () {
       final labelValue = 12345;
-      final json = {valueJsonKey: labelValue};
+      final probability = 0.7;
+      final json = {
+        leafLabelValueJsonKey: labelValue,
+        leafLabelProbabilityJsonKey: probability,
+      };
       final restored = TreeLeafLabel.fromJson(json);
 
       expect(restored.value, labelValue);
-      expect(restored.probability, isNull);
+      expect(restored.probability, probability);
     });
 
     test('should restore from json (probability value is not null)', () {
       final labelValue = 12345;
       final probability = 0.75;
       final json = {
-        valueJsonKey: labelValue,
-        probabilityJsonKey: probability,
+        leafLabelValueJsonKey: labelValue,
+        leafLabelProbabilityJsonKey: probability,
       };
       final restored = TreeLeafLabel.fromJson(json);
 
       expect(restored.value, labelValue);
       expect(restored.probability, probability);
+    });
+
+    test('should return a proper schema version', () {
+      final leafLabel = TreeLeafLabel(1, probability: 0.5);
+
+      expect(leafLabel.schemaVersion, 1);
     });
   });
 }

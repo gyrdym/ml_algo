@@ -3,7 +3,6 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_fac
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -16,6 +15,7 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../../mocks.dart';
+import '../../../mocks.mocks.dart';
 
 void main() {
   group('LogisticRegressorImpl', () {
@@ -31,7 +31,7 @@ void main() {
     final defaultLearningRateType = LearningRateType.decreasingAdaptive;
     final defaultInitialCoefficientsType = InitialCoefficientsType.zeroes;
     final defaultInitialCoefficients = Vector.fromList([1, 2, 3, 4, 5]);
-    final linkFunctionMock = LinkFunctionMock();
+    final linkFunctionMock = MockLinkFunction();
     final className = 'class 1';
     final defaultFitIntercept = true;
     final defaultInterceptScale = 10.0;
@@ -42,32 +42,32 @@ void main() {
     final defaultDType = DType.float32;
     final defaultCostPerIteration = [1.2, 233.01, 23, -10001];
     final retrainingData = DataFrame([[10, -10, 20, -20]]);
-    final retrainedModelMock = LogisticRegressorMock();
+    final retrainedModelMock = MockLogisticRegressor();
     final classifierFactory = createLogisticRegressorFactoryMock(
         retrainedModelMock);
     final createRegressor = ({
-      LinearOptimizerType optimizerType,
-      int iterationsLimit,
-      double initialLearningRate,
-      double minCoefficientsUpdate,
-      double lambda,
-      RegularizationType regularizationType,
-      int randomSeed,
-      int batchSize,
-      bool isFittingDataNormalized,
-      LearningRateType learningRateType,
-      InitialCoefficientsType initialCoefficientsType,
-      Vector initialCoefficients,
-      Iterable<String> targetNames,
-      LinkFunction linkFunction,
-      bool fitIntercept,
-      double interceptScale,
-      Matrix coefficients,
-      double probabilityThreshold,
-      num negativeLabel,
-      num positiveLabel,
-      List<num> costPerIteration,
-      DType dtype,
+      LinearOptimizerType? optimizerType,
+      int? iterationsLimit,
+      double? initialLearningRate,
+      double? minCoefficientsUpdate,
+      double? lambda,
+      RegularizationType? regularizationType,
+      int? randomSeed,
+      int? batchSize,
+      bool? isFittingDataNormalized,
+      LearningRateType? learningRateType,
+      InitialCoefficientsType? initialCoefficientsType,
+      Vector? initialCoefficients,
+      Iterable<String>? targetNames,
+      LinkFunction? linkFunction,
+      bool? fitIntercept,
+      double? interceptScale,
+      Matrix? coefficients,
+      double? probabilityThreshold,
+      num? negativeLabel,
+      num? positiveLabel,
+      List<num>? costPerIteration,
+      DType? dtype,
     }) => LogisticRegressorImpl(
       optimizerType ?? defaultOptimizerType,
       iterationsLimit ?? defaultIterationsLimit,
@@ -115,7 +115,9 @@ void main() {
       logisticRegressorInjector
           .registerSingleton<LogisticRegressorFactory>(() => classifierFactory);
 
-      when(linkFunctionMock.link(any)).thenReturn(mockedProbabilities);
+      when(
+        linkFunctionMock.link(any),
+      ).thenReturn(mockedProbabilities);
     });
 
     tearDown(() {
@@ -321,40 +323,8 @@ void main() {
         expect(retrainedModel, isNot(same(regressor)));
       });
 
-      test('should throw exception if the model schema is outdated or '
-          'null', () {
-        final model = LogisticRegressorImpl(
-          defaultOptimizerType,
-          defaultIterationsLimit,
-          defaultInitialLearningRate,
-          defaultMinCoefficientsUpdate,
-          defaultLambda,
-          defaultRegularizationType,
-          defaultRandomSeed,
-          defaultBatchSize,
-          defaultIsFittingDataNormalizedFlag,
-          defaultLearningRateType,
-          defaultInitialCoefficientsType,
-          defaultInitialCoefficients,
-          [className],
-          linkFunctionMock,
-          defaultFitIntercept,
-          defaultInterceptScale,
-          defaultCoefficients,
-          defaultProbabilityThreshold,
-          defaultNegativeLabel,
-          defaultPositiveLabel,
-          defaultCostPerIteration,
-          defaultDType,
-          schemaVersion: null,
-        );
-
-        expect(() => model.retrain(retrainingData),
-            throwsA(isA<OutdatedJsonSchemaException>()));
-      });
-
       test('should have a proper json schema version', () {
-        expect(createRegressor().schemaVersion, 2);
+        expect(createRegressor().schemaVersion, 3);
       });
     });
   });

@@ -3,7 +3,7 @@ import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices
 
 abstract class SplitIndicesProviderFactory {
   SplitIndicesProvider createByType(SplitIndicesProviderType splitterType, {
-    int numberOfFolds,
-    int p,
+    int? numberOfFolds,
+    int? p,
   });
 }

@@ -8,30 +8,11 @@ class LearningRateTypeJsonConverter implements
   const LearningRateTypeJsonConverter();
 
   @override
-  LearningRateType fromJson(String json) {
-    switch (json) {
-      case decreasingAdaptiveLearningRateTypeJsonEncodedValue:
-        return LearningRateType.decreasingAdaptive;
-
-      case constantLearningRateTypeJsonEncodedValue:
-        return LearningRateType.constant;
-
-      default:
-        return null;
-    }
-  }
+  LearningRateType fromJson(String json) =>
+      learningRateTypeToEncodedValue.inverse[json] ?? defaultLearningRateType;
 
   @override
-  String toJson(LearningRateType type) {
-    switch (type) {
-      case LearningRateType.decreasingAdaptive:
-        return decreasingAdaptiveLearningRateTypeJsonEncodedValue;
-
-      case LearningRateType.constant:
-        return constantLearningRateTypeJsonEncodedValue;
-
-      default:
-        return null;
-    }
-  }
+  String toJson(LearningRateType type) =>
+      learningRateTypeToEncodedValue[type]
+          ?? learningRateTypeToEncodedValue[defaultLearningRateType]!;
 }

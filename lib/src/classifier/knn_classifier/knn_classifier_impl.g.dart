@@ -12,7 +12,7 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
     final val = KnnClassifierImpl(
       $checkedConvert(json, 'T', (v) => v as String),
       $checkedConvert(
-          json, 'C', (v) => (v as List)?.map((e) => e as num)?.toList()),
+          json, 'C', (v) => (v as List<dynamic>).map((e) => e as num).toList()),
       $checkedConvert(
           json, 'K', (v) => const KernelJsonConverter().fromJson(v as String)),
       $checkedConvert(
@@ -23,7 +23,7 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'P', (v) => v as String),
       $checkedConvert(
           json, 'D', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
     );
     return val;
   }, fieldKeyMap: const {
@@ -37,13 +37,22 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
   });
 }
 
-Map<String, dynamic> _$KnnClassifierImplToJson(KnnClassifierImpl instance) =>
-    <String, dynamic>{
-      'T': instance.targetColumnName,
-      'D': const DTypeJsonConverter().toJson(instance.dtype),
-      'C': instance.classLabels,
-      'K': const KernelJsonConverter().toJson(instance.kernel),
-      'S': const KnnSolverJsonConverter().toJson(instance.solver),
-      'P': instance.classLabelPrefix,
-      r'$V': instance.schemaVersion,
-    };
+Map<String, dynamic> _$KnnClassifierImplToJson(KnnClassifierImpl instance) {
+  final val = <String, dynamic>{
+    'T': instance.targetColumnName,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('D', const DTypeJsonConverter().toJson(instance.dtype));
+  val['C'] = instance.classLabels;
+  writeNotNull('K', const KernelJsonConverter().toJson(instance.kernel));
+  writeNotNull('S', const KnnSolverJsonConverter().toJson(instance.solver));
+  val['P'] = instance.classLabelPrefix;
+  writeNotNull(r'$V', instance.schemaVersion);
+  return val;
+}

@@ -9,20 +9,20 @@ import 'package:ml_linalg/matrix.dart';
 
 abstract class LinearOptimizerFactory {
   LinearOptimizer createByType(
-      LinearOptimizerType optimizerType,
-      Matrix points,
-      Matrix labels, {
-        DType dtype,
-        CostFunction costFunction,
-        LearningRateType learningRateType,
-        InitialCoefficientsType initialCoefficientsType,
-        double initialLearningRate,
-        double minCoefficientsUpdate,
-        int iterationLimit,
-        double lambda,
-        RegularizationType regularizationType,
-        int batchSize,
-        int randomSeed,
-        bool isFittingDataNormalized,
-      });
+    LinearOptimizerType optimizerType,
+    Matrix points,
+    Matrix labels, {
+    required DType dtype,
+    required CostFunction costFunction,
+    required LearningRateType learningRateType,
+    required InitialCoefficientsType initialCoefficientsType,
+    required double initialLearningRate,
+    required double minCoefficientsUpdate,
+    required int iterationLimit,
+    required double lambda,
+    required int batchSize,
+    required bool isFittingDataNormalized,
+    RegularizationType? regularizationType,
+    int? randomSeed,
+  });
 }

@@ -10,7 +10,7 @@ const columnsNum = 21;
 class LogisticRegressorBenchmark extends BenchmarkBase {
   LogisticRegressorBenchmark() : super('Logistic regressor');
 
-  DataFrame _data;
+  late DataFrame _data;
 
   static void main() {
     LogisticRegressorBenchmark().report();
@@ -21,7 +21,7 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
     LogisticRegressor(
       _data,
       'col_20',
-      minCoefficientsUpdate: null,
+      minCoefficientsUpdate: 1e-100000,
       iterationsLimit: 200,
     );
   }

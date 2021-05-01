@@ -13,7 +13,7 @@ class InverseLogitLinkFunctionBenchmark extends BenchmarkBase {
 
   final linkFunction = const InverseLogitLinkFunction();
 
-  Matrix samples;
+  late Matrix samples;
 
   static void main() {
     InverseLogitLinkFunctionBenchmark().report();

@@ -13,9 +13,5 @@ void main() {
 
       expect(assessor, isA<MajorityTreeSplitAssessor>());
     });
-
-    test('should throw an error if null passed as a type', () {
-      expect(() => factory.createByType(null), throwsUnsupportedError);
-    });
   });
 }

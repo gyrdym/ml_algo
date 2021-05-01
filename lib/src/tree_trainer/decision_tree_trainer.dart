@@ -29,14 +29,25 @@ class DecisionTreeTrainer implements TreeTrainer {
 
   TreeNode _train(
       Matrix samples,
-      num splittingValue,
-      int splittingIdx,
-      TreeNodeSplittingPredicateType splittingPredicateType,
+      num? splittingValue,
+      int? splittingIdx,
+      TreeNodeSplittingPredicateType? splittingPredicateType,
       Iterable<int> featuresColumnIdxs,
       int level,
   ) {
-    if (_leafDetector.isLeaf(samples, _targetIdx, featuresColumnIdxs, level)) {
-      final label = _leafLabelFactory.create(samples, _targetIdx);
+    final isLeaf = _leafDetector.isLeaf(
+      samples,
+      _targetIdx,
+      featuresColumnIdxs,
+      level,
+    );
+
+    if (isLeaf) {
+      final label = _leafLabelFactory.create(
+        samples,
+        _targetIdx,
+      );
+
       return TreeNode(
         splittingPredicateType,
         splittingValue,
@@ -59,30 +70,30 @@ class DecisionTreeTrainer implements TreeTrainer {
     final childNodes = bestSplit.entries.map((entry) {
       final splitNode = entry.key;
       final splitSamples = entry.value;
-
       final isSplitByNominalValue = _featureToUniqueValues
           .containsKey(splitNode.splittingIndex);
-
       final updatedColumnRanges = isSplitByNominalValue
           ? (Set<int>.from(featuresColumnIdxs)
               ..remove(splitNode.splittingIndex))
           : featuresColumnIdxs;
 
       return _train(
-          splitSamples,
-          splitNode.splittingValue,
-          splitNode.splittingIndex,
-          splitNode.predicateType,
-          updatedColumnRanges,
-          newLevel);
+        splitSamples,
+        splitNode.splittingValue,
+        splitNode.splittingIndex,
+        splitNode.predicateType,
+        updatedColumnRanges,
+        newLevel,
+      );
     });
 
     return TreeNode(
-        splittingPredicateType,
-        splittingValue,
-        splittingIdx,
-        childNodes.toList(growable: false),
-        null,
-        level);
+      splittingPredicateType,
+      splittingValue,
+      splittingIdx,
+      childNodes.toList(growable: false),
+      null,
+      level,
+    );
   }
 }

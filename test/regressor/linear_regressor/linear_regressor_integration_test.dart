@@ -48,7 +48,7 @@ void main() {
     final dtype = DType.float64;
     final filePath = 'test/regressor/linear_regressor.json';
 
-    LinearRegressor regressor;
+    late LinearRegressor regressor;
 
     setUp(() {
       regressor = LinearRegressor(dataSet, targetName,
@@ -103,10 +103,10 @@ void main() {
         linearRegressorOptimizerTypeJsonKey:
           gradientLinearOptimizerTypeEncodedValue,
         linearRegressorLearningRateTypeJsonKey:
-          decreasingAdaptiveLearningRateTypeJsonEncodedValue,
+          learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive],
         linearRegressorInitialCoefficientsTypeJsonKey:
           zeroesInitialCoefficientsTypeJsonEncodedValue,
-        linearRegressorInitialLearningRateTypeJsonKey: initialLearningRate,
+        linearRegressorInitialLearningRateJsonKey: initialLearningRate,
         linearRegressorMinCoefficientsUpdateJsonKey: minCoefficientsUpdate,
         linearRegressorLambdaJsonKey: lambda,
         linearRegressorRegularizationTypeJsonKey:

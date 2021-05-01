@@ -8,11 +8,17 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 SplitIndicesProvider createSplitter(Iterable<Iterable<int>> indices) {
-  final splitter = DataSplitterMock();
-  when(splitter.getIndices(any)).thenReturn(indices);
+  final splitter = MockSplitIndicesProvider();
+
+  when(
+    splitter.getIndices(
+      any,
+    ),
+  ).thenReturn(indices);
+
   return splitter;
 }
 
@@ -33,11 +39,17 @@ void main() {
       ], header: ['first', 'second', 'third', 'target'], headerExists: false);
       final metric = MetricType.mape;
       final splitter = createSplitter([[0,2,4],[6, 8]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations, splitter,
           DType.float32);
       final score = 20.0;
-      when(predictor.assess(any, any)).thenReturn(score);
+
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(score);
 
       final actual = await validator.evaluate((_) => predictor, metric);
 
@@ -50,16 +62,22 @@ void main() {
         ));
       final firstAssessCallArgs = verificationResult.captured;
 
-      expect((firstAssessCallArgs[0] as DataFrame).rows, equals([
-        [330, 930, 130, 100],
-        [730, 730, 330, 300],
-        [930, 530, 530, 500],
-      ]));
+      expect(
+        (firstAssessCallArgs[0]).rows,
+        equals([
+          [330, 930, 130, 100],
+          [730, 730, 330, 300],
+          [930, 530, 530, 500],
+        ]),
+      );
 
-      expect((firstAssessCallArgs[1] as DataFrame).rows, equals([
-        [230, 330, 730, 700],
-        [530, 130, 930, 900],
-      ]));
+      expect(
+        firstAssessCallArgs[1].rows,
+        equals([
+          [230, 330, 730, 700],
+          [530, 130, 930, 900],
+        ]),
+      );
 
       verificationResult.called(2);
     });
@@ -77,11 +95,16 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations, splitter,
           DType.float32);
 
-      when(predictor.assess(any, any)).thenReturn(1);
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(1);
 
       var iterationCounter = 0;
 
@@ -114,13 +137,13 @@ void main() {
         (observations) {
           expect(
             observations.toMatrix(),
-            equals(iterationToResponse[iterationCounter++][0].toMatrix()),
+            equals(iterationToResponse[iterationCounter++]![0].toMatrix()),
           );
           return predictor;
         },
         metric,
         onDataSplit: (trainData, testData) =>
-          iterationToResponse[iterationCounter],
+          iterationToResponse[iterationCounter]!,
       );
     });
 
@@ -137,11 +160,16 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [0], [0]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations, splitter,
           DType.float32);
 
-      when(predictor.assess(any, any)).thenReturn(1);
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(1);
 
       var iterationCounter = 0;
 
@@ -173,19 +201,19 @@ void main() {
         (_) => predictor,
         metric,
         onDataSplit: (trainData, testData) =>
-          iterationToResponse[iterationCounter++],
+          iterationToResponse[iterationCounter++]!,
       );
 
       final verificationResult = verify(
           predictor.assess(captureThat(isNotNull), metric));
       final firstAssessCallArgs = verificationResult.captured;
 
-      expect((firstAssessCallArgs[0] as DataFrame).rows, equals([
+      expect(firstAssessCallArgs[0].rows, equals([
         [14, 50, 39, 24],
         [77, 38, 29, 70],
       ]));
 
-      expect((firstAssessCallArgs[1] as DataFrame).rows, equals([
+      expect(firstAssessCallArgs[1].rows, equals([
         [154, 550, 939, 124],
       ]));
 
@@ -216,11 +244,16 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(allObservations,
           splitter, DType.float32);
 
-      when(predictor.assess(any, any)).thenReturn(1);
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(1);
 
       var iterationCounter = 0;
 
@@ -284,11 +317,11 @@ void main() {
         onDataSplit: (trainData, testData) {
           final expectedSplits = iterationToSplits[iterationCounter++];
 
-          expect(trainData.header, expectedSplits['trainData'].header);
-          expect(trainData.rows, equals(expectedSplits['trainData'].rows));
+          expect(trainData.header, expectedSplits!['trainData']!.header);
+          expect(trainData.rows, equals(expectedSplits['trainData']!.rows));
 
-          expect(testData.header, expectedSplits['testData'].header);
-          expect(testData.rows, equals(expectedSplits['testData'].rows));
+          expect(testData.header, expectedSplits['testData']!.header);
+          expect(testData.rows, equals(expectedSplits['testData']!.rows));
 
           return [
             DataFrame([<num>[1, 2, 3, 4]], headerExists: false),
@@ -318,11 +351,16 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
-      when(predictor.assess(any, any)).thenReturn(1);
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2]],
           headerExists: false);
@@ -362,11 +400,16 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
-      when(predictor.assess(any, any)).thenReturn(1);
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2, 3, 4, 5]],
           headerExists: false);
@@ -405,11 +448,16 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
-      when(predictor.assess(any, any)).thenReturn(1);
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2, 3, 4]],
           headerExists: false);
@@ -448,11 +496,16 @@ void main() {
 
       final metric = MetricType.mape;
       final splitter = createSplitter([[0], [2], [4]]);
-      final predictor = AssessableMock();
+      final predictor = MockAssessable();
       final validator = CrossValidatorImpl(originalData, splitter,
           DType.float32);
 
-      when(predictor.assess(any, any)).thenReturn(1);
+      when(
+        predictor.assess(
+          any,
+          any,
+        ),
+      ).thenReturn(1);
 
       final transformedTrainData = DataFrame([<num>[1, 2, 3, 4]],
           headerExists: false);

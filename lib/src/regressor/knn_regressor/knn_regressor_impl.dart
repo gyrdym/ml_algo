@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_test_features.dart';
@@ -81,8 +80,6 @@ class KnnRegressorImpl
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final schemaVersion;
 
-  final _outdatedSchemaVersions = [null];
-
   Vector get _zeroVector => dtype == DType.float32
       ? _float32zeroVector
       : _float64zeroVector;
@@ -105,10 +102,6 @@ class KnnRegressorImpl
 
   @override
   KnnRegressor retrain(DataFrame data) {
-    if (_outdatedSchemaVersions.contains(schemaVersion)) {
-      throw OutdatedJsonSchemaException();
-    }
-
     return knnRegressorInjector
         .get<KnnRegressorFactory>()
         .create(

@@ -4,10 +4,11 @@ import 'package:ml_algo/src/tree_trainer/leaf_label/majority_leaf_label_factory.
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('TreeLeafLabelFactoryFactoryImpl', () {
-    final distributionCalculator = DistributionCalculatorMock();
+    final distributionCalculator = MockDistributionCalculator();
 
     final distributionCalculatorFactoryMock =
       createDistributionCalculatorFactoryMock(distributionCalculator);
@@ -20,10 +21,6 @@ void main() {
       final leafLabelFactory = factory.createByType(leafLabelFactoryType);
 
       expect(leafLabelFactory, isA<MajorityTreeLeafLabelFactory>());
-    });
-
-    test('should throw an error if null passed as a factory type', () {
-      expect(() => factory.createByType(null), throwsUnsupportedError);
     });
   });
 }

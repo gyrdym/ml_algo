@@ -14,8 +14,8 @@ const featuresNum = 100;
 class KnnSolverBenchmark extends BenchmarkBase {
   KnnSolverBenchmark() : super('KnnSolver benchmark');
 
-  KnnSolver solver;
-  Matrix features;
+  late KnnSolver solver;
+  late Matrix features;
 
   static void main() {
     KnnSolverBenchmark().report();

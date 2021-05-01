@@ -11,7 +11,7 @@ const columnsNum = 21;
 class CrossValidatorBenchmark extends BenchmarkBase {
   CrossValidatorBenchmark() : super('Cross validator benchmark');
 
-  CrossValidator crossValidator;
+  late CrossValidator crossValidator;
 
   static void main() {
     CrossValidatorBenchmark().report();

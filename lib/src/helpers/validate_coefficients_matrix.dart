@@ -8,14 +8,14 @@ import 'package:ml_linalg/matrix.dart';
 ///
 /// [featuresNum] Number of features. The number of rows of [coefficients]
 /// matrix should be equal to [featuresNum]
-void validateCoefficientsMatrix(Matrix coefficients, [num featuresNum]) {
+void validateCoefficientsMatrix(Matrix coefficients, [num? featuresNum]) {
   if (!coefficients.hasData) {
     throw Exception('No coefficients provided');
   }
 
   if (featuresNum != null && coefficients.rowsNum != featuresNum) {
     throw Exception('Wrong features number provided: expected '
-        '${coefficients.rowsNum}, but ${featuresNum} given. '
+        '${coefficients.rowsNum}, but $featuresNum given. '
         'Please, recheck columns number of the passed feature matrix');
   }
 }

@@ -31,10 +31,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
     ]);
     final val = LinearRegressorImpl(
       $checkedConvert(
-          json,
-          'CS',
-          (v) =>
-              const VectorJsonConverter().fromJson(v as Map<String, dynamic>)),
+          json, 'CS', (v) => Vector.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'TN', (v) => v as String),
       optimizerType: $checkedConvert(
           json,
@@ -52,24 +49,23 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       initialLearningRate: $checkedConvert(json, 'ILT', (v) => v as num),
       minCoefficientsUpdate: $checkedConvert(json, 'MCU', (v) => v as num),
       lambda: $checkedConvert(json, 'L', (v) => v as num),
-      regularizationType: $checkedConvert(json, 'RT',
-          (v) => _$enumDecodeNullable(_$RegularizationTypeEnumMap, v)),
-      randomSeed: $checkedConvert(json, 'RS', (v) => v as int),
       batchSize: $checkedConvert(json, 'BS', (v) => v as int),
-      initialCoefficients: $checkedConvert(
-          json,
-          'IC',
-          (v) =>
-              const MatrixJsonConverter().fromJson(v as Map<String, dynamic>)),
       isFittingDataNormalized: $checkedConvert(json, 'FDN', (v) => v as bool),
       fitIntercept: $checkedConvert(json, 'FI', (v) => v as bool),
-      interceptScale:
-          $checkedConvert(json, 'IS', (v) => (v as num)?.toDouble()),
-      costPerIteration: $checkedConvert(
-          json, 'CPI', (v) => (v as List)?.map((e) => e as num)?.toList()),
+      interceptScale: $checkedConvert(json, 'IS', (v) => (v as num).toDouble()),
       dtype: $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
+      regularizationType: $checkedConvert(
+          json,
+          'RT',
+          (v) => const RegularizationTypeJsonConverterNullable()
+              .fromJson(v as String?)),
+      randomSeed: $checkedConvert(json, 'RS', (v) => v as int?),
+      initialCoefficients: $checkedConvert(json, 'IC',
+          (v) => v == null ? null : Matrix.fromJson(v as Map<String, dynamic>)),
+      costPerIteration: $checkedConvert(json, 'CPI',
+          (v) => (v as List<dynamic>?)?.map((e) => e as num).toList()),
     );
     return val;
   }, fieldKeyMap: const {
@@ -82,24 +78,21 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
     'initialLearningRate': 'ILT',
     'minCoefficientsUpdate': 'MCU',
     'lambda': 'L',
-    'regularizationType': 'RT',
-    'randomSeed': 'RS',
     'batchSize': 'BS',
-    'initialCoefficients': 'IC',
     'isFittingDataNormalized': 'FDN',
     'fitIntercept': 'FI',
     'interceptScale': 'IS',
-    'costPerIteration': 'CPI',
     'dtype': 'DT',
-    'schemaVersion': r'$V'
+    'schemaVersion': r'$V',
+    'regularizationType': 'RT',
+    'randomSeed': 'RS',
+    'initialCoefficients': 'IC',
+    'costPerIteration': 'CPI'
   });
 }
 
 Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
-  final val = <String, dynamic>{
-    'OT':
-        const LinearOptimizerTypeJsonConverter().toJson(instance.optimizerType),
-  };
+  final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -107,65 +100,32 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
     }
   }
 
-  writeNotNull('IL', instance.iterationsLimit);
-  val['LRT'] =
-      const LearningRateTypeJsonConverter().toJson(instance.learningRateType);
+  writeNotNull('OT',
+      const LinearOptimizerTypeJsonConverter().toJson(instance.optimizerType));
+  val['IL'] = instance.iterationsLimit;
+  writeNotNull('LRT',
+      const LearningRateTypeJsonConverter().toJson(instance.learningRateType));
   writeNotNull(
       'ICT',
       const InitialCoefficientsTypeJsonConverter()
           .toJson(instance.initialCoefficientsType));
   val['ILT'] = instance.initialLearningRate;
-  writeNotNull('MCU', instance.minCoefficientsUpdate);
-  writeNotNull('L', instance.lambda);
-  writeNotNull('RT', _$RegularizationTypeEnumMap[instance.regularizationType]);
+  val['MCU'] = instance.minCoefficientsUpdate;
+  val['L'] = instance.lambda;
+  writeNotNull(
+      'RT',
+      const RegularizationTypeJsonConverterNullable()
+          .toJson(instance.regularizationType));
   writeNotNull('RS', instance.randomSeed);
   val['BS'] = instance.batchSize;
-  writeNotNull(
-      'IC', const MatrixJsonConverter().toJson(instance.initialCoefficients));
+  writeNotNull('IC', instance.initialCoefficients?.toJson());
   val['FDN'] = instance.isFittingDataNormalized;
   val['TN'] = instance.targetName;
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;
-  val['CS'] = const VectorJsonConverter().toJson(instance.coefficients);
+  val['CS'] = instance.coefficients.toJson();
   writeNotNull('CPI', instance.costPerIteration);
-  val['DT'] = const DTypeJsonConverter().toJson(instance.dtype);
-  val[r'$V'] = instance.schemaVersion;
+  writeNotNull('DT', const DTypeJsonConverter().toJson(instance.dtype));
+  writeNotNull(r'$V', instance.schemaVersion);
   return val;
 }
-
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
-}
-
-const _$RegularizationTypeEnumMap = {
-  RegularizationType.L1: 'L1',
-  RegularizationType.L2: 'L2',
-};

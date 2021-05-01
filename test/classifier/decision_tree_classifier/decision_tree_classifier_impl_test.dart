@@ -6,7 +6,6 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/di/dependency_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
@@ -25,13 +24,14 @@ import 'package:test/test.dart';
 
 import '../../helpers.dart';
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('DecisionTreeClassifierImpl', () {
     final minError = 0.2;
     final minSamplesCount = 3;
     final maxDepth = 5;
-    final classifierAssessorMock = ClassifierAssessorMock();
+    final classifierAssessorMock = MockClassifierAssessor();
     final sample1 = Vector.fromList([1, 2, 3]);
     final sample2 = Vector.fromList([10, 20, 30]);
     final sample3 = Vector.fromList([100, 200, 300]);
@@ -81,6 +81,7 @@ void main() {
         headerExists: false, header: [targetColumnName]);
     final rootNodeJson = {
       childrenJsonKey: <Map<String, dynamic>>[],
+      levelJsonKey: 1,
     };
     final classifier32Json = {
       decisionTreeClassifierMinErrorJsonKey: minError,
@@ -105,10 +106,10 @@ void main() {
       sample2: learnedLeafLabel2,
       sample3: learnedLeafLabel3,
     }, rootNodeJson);
-    final metricFactoryMock = MetricFactoryMock();
-    final metricMock = MetricMock();
-    final encoderFactoryMock = EncoderFactoryMock();
-    final encoderMock = EncoderMock();
+    final metricFactoryMock = MockMetricFactory();
+    final metricMock = MockMetric();
+    final encoderFactoryMock = MockEncoderFactory();
+    final encoderMock = MockEncoder();
     final encodedLabelsFrames = [
       predictedBinarizedLabelsFrame,
       originalBinarizedLabelsFrame,
@@ -116,21 +117,55 @@ void main() {
     final retrainingDataFrame = DataFrame([
       [1, 2, 3, 4],
     ]);
-    final classifierFactoryMock = DecisionTreeClassifierFactoryMock();
-    final retrainedClassifier = DecisionTreeClassifierMock();
+    final classifierFactoryMock = MockDecisionTreeClassifierFactory();
+    final retrainedClassifier = MockDecisionTreeClassifier();
     var encoderCallIteration = 0;
 
-    DecisionTreeClassifierImpl classifier32;
-    DecisionTreeClassifierImpl classifier64;
+    late DecisionTreeClassifierImpl classifier32;
+    late DecisionTreeClassifierImpl classifier64;
 
     setUp(() {
-      when(metricFactoryMock.createByType(argThat(isA<MetricType>())))
-          .thenReturn(metricMock);
-      when(encoderFactoryMock.create(any, any)).thenReturn(encoderMock);
-      when(encoderMock.process(any))
-          .thenAnswer((_) => encodedLabelsFrames[encoderCallIteration++]);
-      when(classifierFactoryMock.create(any, any, any, any, any, any))
-          .thenReturn(retrainedClassifier);
+      when(
+        metricFactoryMock.createByType(
+          argThat(
+            isA<MetricType>(),
+          ),
+        ),
+      ).thenReturn(metricMock);
+
+      when(
+        encoderFactoryMock.create(
+          any,
+          any,
+        ),
+      ).thenReturn(encoderMock);
+
+      when(
+        encoderMock.process(
+          any,
+        ),
+      ).thenAnswer(
+            (_) => encodedLabelsFrames[encoderCallIteration++],
+      );
+
+      when(
+        classifierFactoryMock.create(
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+        ),
+      ).thenReturn(retrainedClassifier);
+
+      when(
+        classifierAssessorMock.assess(
+          any,
+          any,
+          any,
+        ),
+      ).thenReturn(1.0);
 
       injector
         ..registerDependency<ModelAssessor<Classifier>>(
@@ -139,7 +174,7 @@ void main() {
             dependencyName: oneHotEncoderFactoryKey)
         ..registerSingleton<MetricFactory>(() => metricFactoryMock);
       decisionTreeInjector
-        ..registerSingleton<DecisionTreeClassifierFactory>(
+        .registerSingleton<DecisionTreeClassifierFactory>(
                 () => classifierFactoryMock);
 
       classifier32 = DecisionTreeClassifierImpl(
@@ -227,28 +262,33 @@ void main() {
 
     test('should serialize (dtype is float32)', () {
       final data = classifier32.toJson();
+
       expect(data, equals(classifier32Json));
       verify(treeRootMock.toJson()).called(1);
     });
 
     test('should serialize (dtype is float64)', () {
       final data = classifier64.toJson();
+
       expect(data, equals(classifier64Json));
       verify(treeRootMock.toJson()).called(1);
     });
 
     test('should restore dtype field from json (dtype is float32)', () {
       final classifier = DecisionTreeClassifierImpl.fromJson(classifier32Json);
+
       expect(classifier.dtype, equals(DType.float32));
     });
 
     test('should restore dtype field from json (dtype is float64)', () {
       final classifier = DecisionTreeClassifierImpl.fromJson(classifier64Json);
+
       expect(classifier.dtype, equals(DType.float64));
     });
 
     test('should be restored from json', () {
       final classifier = DecisionTreeClassifierImpl.fromJson(classifier32Json);
+
       expect(classifier.targetColumnName, equals(targetColumnName));
       expect(classifier.treeRootNode, isNotNull);
     });
@@ -257,11 +297,14 @@ void main() {
       final metricType = MetricType.precision;
 
       classifier32.assess(labelledFeaturesFrame, metricType);
-      verify(classifierAssessorMock.assess(
-        classifier32,
-        metricType,
-        labelledFeaturesFrame,
-      )).called(1);
+
+      verify(
+        classifierAssessorMock.assess(
+          classifier32,
+          metricType,
+          labelledFeaturesFrame,
+        ),
+      ).called(1);
     });
 
     test('should call classifier factory while retraining the model', () {
@@ -269,11 +312,11 @@ void main() {
 
       verify(classifierFactoryMock.create(
         retrainingDataFrame,
+        targetColumnName,
+        DType.float32,
         minError,
         minSamplesCount,
         maxDepth,
-        targetColumnName,
-        DType.float32,
       )).called(1);
     });
 
@@ -284,33 +327,21 @@ void main() {
       expect(retrainedModel, isNot(same(classifier32)));
     });
 
-    test('should throw exception if the model schema is outdated, '
-        'schemaVersion is null', () {
-      final model = DecisionTreeClassifierImpl(
-        minError,
-        minSamplesCount,
-        maxDepth,
-        treeRootMock,
-        targetColumnName,
-        DType.float64,
-        schemaVersion: null,
-      );
-
-      expect(() => model.retrain(retrainingDataFrame),
-          throwsA(isA<OutdatedJsonSchemaException>()));
+    test('should return a proper schema version', () {
+      expect(classifier32.schemaVersion, 1);
     });
   });
 }
 
 TreeNode createRootNodeMock(Map<Vector, TreeLeafLabel> samplesByLabel,
     [Map<String, dynamic> jsonMock = const <String, dynamic>{}]) {
-  final rootMock = TreeNodeMock();
+  final rootMock = MockTreeNode();
   final children = <TreeNode>[];
 
   when(rootMock.isLeaf).thenReturn(false);
 
   samplesByLabel.forEach((sample, leafLabel) {
-    final node = TreeNodeMock();
+    final node = MockTreeNode();
 
     when(node.label).thenReturn(leafLabel);
     when(node.isLeaf).thenReturn(true);

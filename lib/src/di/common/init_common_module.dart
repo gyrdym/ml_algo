@@ -48,9 +48,6 @@ void initCommonModule() {
     ..registerSingletonIf<NormalizeClassLabels>(
             () => normalizeClassLabels)
 
-    ..registerSingletonIf<LinearOptimizerFactory>(
-            () => const LinearOptimizerFactoryImpl())
-
     ..registerSingletonIf<LearningRateGeneratorFactory>(
             () => const LearningRateGeneratorFactoryImpl())
 
@@ -62,6 +59,14 @@ void initCommonModule() {
 
     ..registerSingletonIf<CostFunctionFactory>(
             () => const CostFunctionFactoryImpl())
+
+    ..registerSingletonIf<LinearOptimizerFactory>(
+            () => LinearOptimizerFactoryImpl(
+          injector.get<InitialCoefficientsGeneratorFactory>(),
+          injector.get<LearningRateGeneratorFactory>(),
+          injector.get<ConvergenceDetectorFactory>(),
+          injector.get<RandomizerFactory>(),
+        ))
       
     ..registerSingletonIf<ModelAssessor<Classifier>>(() =>
         ClassifierAssessor(

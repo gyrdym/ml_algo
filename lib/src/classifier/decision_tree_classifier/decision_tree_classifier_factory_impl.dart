@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
-import 'package:ml_algo/src/helpers/validate_train_data.dart';
 import 'package:ml_algo/src/helpers/validate_tree_solver_max_depth.dart';
 import 'package:ml_algo/src/helpers/validate_tree_solver_min_error.dart';
 import 'package:ml_algo/src/helpers/validate_tree_solver_min_samples_count.dart';
@@ -26,13 +25,12 @@ class DecisionTreeClassifierFactoryImpl implements
   @override
   DecisionTreeClassifier create(
       DataFrame trainData,
+      String targetName,
+      DType dtype,
       num minError,
       int minSamplesCount,
       int maxDepth,
-      String targetName,
-      DType dtype,
   ) {
-    validateTrainData(trainData, [targetName]);
     validateTreeSolverMinError(minError);
     validateTreeSolversMinSamplesCount(minSamplesCount);
     validateTreeSolverMaxDepth(maxDepth);

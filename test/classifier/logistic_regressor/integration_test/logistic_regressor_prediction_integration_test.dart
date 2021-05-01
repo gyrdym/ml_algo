@@ -19,7 +19,7 @@ void main() {
     ];
     final targetName = 'col_3';
     final samples = DataFrame(data, headerExists: false);
-    LogisticRegressor classifier;
+    late LogisticRegressor classifier;
 
     setUp(() {
       injector.clearAll();

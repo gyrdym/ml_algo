@@ -1,1 +1,1 @@
-const softmaxRegressorJsonSchemaVersion = 2;
+const softmaxRegressorJsonSchemaVersion = 3;

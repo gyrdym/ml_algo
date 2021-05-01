@@ -46,20 +46,20 @@ abstract class DecisionTreeClassifier
   factory DecisionTreeClassifier(
       DataFrame trainData,
       String targetName, {
-    num minError,
-    int minSamplesCount,
-    int maxDepth,
+    num minError = 0.5,
+    int minSamplesCount = 1,
+    int maxDepth = 10,
     DType dtype = DType.float32,
   }) =>
     initDecisionTreeModule()
         .get<DecisionTreeClassifierFactory>()
         .create(
       trainData,
+      targetName,
+      dtype,
       minError,
       minSamplesCount,
       maxDepth,
-      targetName,
-      dtype,
     );
 
   /// Restores previously fitted classifier instance from the given [json]
@@ -110,7 +110,7 @@ abstract class DecisionTreeClassifier
   /// The value is within the range 0..1 (both inclusive).
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final num minError;
+  num get minError;
 
   /// A minimal number of samples (observations) on the
   /// decision's tree node. The value is used as a stop criteria to avoid
@@ -118,10 +118,10 @@ abstract class DecisionTreeClassifier
   /// equal to [minSamplesCount] observations, the node is considered a leaf.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int minSamplesCount;
+  int get minSamplesCount;
 
   /// A maximum number of decision tree levels.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int maxDepth;
+  int get maxDepth;
 }

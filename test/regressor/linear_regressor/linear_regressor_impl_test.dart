@@ -1,5 +1,4 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/common/exception/outdated_json_schema_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -16,10 +15,11 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('LinearRegressorImpl', () {
-    LinearRegressorFactory regressorFactory;
+    late LinearRegressorFactory regressorFactory;
 
     final coefficients = Vector.fromList([1, 2, 3, 4, 5]);
     final targetName = 'Target';
@@ -40,7 +40,7 @@ void main() {
     final costPerIteration = [23, 34, 12];
     final dtype = DType.float32;
     final retrainingData = DataFrame([[12, 34, -45.66]]);
-    final retrainedModelMock = LinearRegressorMock();
+    final retrainedModelMock = MockLinearRegressor();
     final createRegressor = ({
       int schemaVersion = linearRegressorJsonSchemaVersion,
     }) => LinearRegressorImpl(
@@ -112,12 +112,10 @@ void main() {
       expect(retrainedModel, isNot(same(regressor)));
     });
 
-    test('should throw exception if the model schema is outdated, '
-        'schemaVersion is null', () {
-      final model = createRegressor(schemaVersion: null);
+    test('should return a proper schema version', () {
+      final regressor = createRegressor();
 
-      expect(() => model.retrain(retrainingData),
-          throwsA(isA<OutdatedJsonSchemaException>()));
+      expect(regressor.schemaVersion, 2);
     });
   });
 }

@@ -1,4 +1,3 @@
-import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
@@ -16,19 +15,17 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 import '../mocks.dart';
+import '../mocks.mocks.dart';
 
 void main() {
   group('TreeTrainerFactoryImpl', () {
-    TreeLeafDetector leafDetectorMock;
-    TreeLeafDetectorFactory leafDetectorFactoryMock;
-
-    TreeLeafLabelFactory leafLabelFactoryMock;
-    TreeLeafLabelFactoryFactory leafLabelFactoryFactoryMock;
-
-    TreeSplitSelector splitSelectorMock;
-    TreeSplitSelectorFactory splitSelectorFactoryMock;
-
-    TreeTrainerFactory factory;
+    late MockTreeLeafDetector leafDetectorMock;
+    late TreeLeafDetectorFactory leafDetectorFactoryMock;
+    late TreeLeafLabelFactory leafLabelFactoryMock;
+    late TreeLeafLabelFactoryFactory leafLabelFactoryFactoryMock;
+    late TreeSplitSelector splitSelectorMock;
+    late TreeSplitSelectorFactory splitSelectorFactoryMock;
+    late TreeTrainerFactory factory;
 
     final type = TreeTrainerType.decision;
     final targetName = 'target';
@@ -48,17 +45,24 @@ void main() {
     final splitterType = TreeSplitterType.greedy;
 
     setUp(() {
-      leafDetectorMock = TreeLeafDetectorMock();
+      leafDetectorMock = MockTreeLeafDetector();
       leafDetectorFactoryMock = createTreeLeafDetectorFactoryMock(
           leafDetectorMock);
 
-      when(leafDetectorMock.isLeaf(any, any, any, any)).thenReturn(true);
+      when(
+        leafDetectorMock.isLeaf(
+          any,
+          any,
+          any,
+          any,
+        ),
+      ).thenReturn(true);
 
-      leafLabelFactoryMock = TreeLeafLabelFactoryMock();
+      leafLabelFactoryMock = MockTreeLeafLabelFactory();
       leafLabelFactoryFactoryMock = createTreeLeafLabelFactoryFactoryMock(
           leafLabelFactoryMock);
 
-      splitSelectorMock = TreeSplitSelectorMock();
+      splitSelectorMock = MockTreeSplitSelector();
       splitSelectorFactoryMock = createTreeSplitSelectorFactoryMock(
           splitSelectorMock);
 

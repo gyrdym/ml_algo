@@ -1,14 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'dart:math' as math;
 
-import '../mocks.dart';
+import '../mocks.mocks.dart';
 
 void main() {
   group('LogLikelihoodCostFunction', () {
-    final mockedLinkFn = LinkFunctionMock();
+    final mockedLinkFn = MockLinkFunction();
     final positiveLabel = 10.0;
     final negativeLabel = -10.0;
     final logLikelihoodCost = LogLikelihoodCostFunction(
@@ -30,7 +31,11 @@ void main() {
     ]);
 
     setUp(() {
-      when(mockedLinkFn.link(any)).thenReturn(Matrix.column([1, 1, 1]));
+      when(
+        mockedLinkFn.link(any),
+      ).thenReturn(
+        Matrix.column([1, 1, 1]),
+      );
     });
 
     tearDown(resetMockitoState);
@@ -49,14 +54,23 @@ void main() {
 
     test('should return a subgradient vector', () {
       expect(
-        () => logLikelihoodCost.getSubGradient(null, null, null, null),
+        () => logLikelihoodCost.getSubGradient(
+            1,
+            Matrix.empty(),
+            Matrix.empty(),
+            Matrix.empty(),
+        ),
         throwsUnimplementedError,
       );
     });
 
     test('should return log likelihood cost', () {
       reset(mockedLinkFn);
-      when(mockedLinkFn.link(any)).thenReturn(Matrix.column([0.3, 0.7, 0.2]));
+      when(
+        mockedLinkFn.link(any),
+      ).thenReturn(
+        Matrix.column([0.3, 0.7, 0.2]),
+      );
 
       final cost = logLikelihoodCost.getCost(x, w, y);
 

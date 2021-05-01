@@ -28,7 +28,7 @@ Future<Vector> evaluateSoftmaxRegressor(MetricType metricType,
         classNames,
         initialLearningRate: 0.035,
         iterationsLimit: 5000,
-        minCoefficientsUpdate: null,
+        minCoefficientsUpdate: 1e-1000000,
         learningRateType: LearningRateType.constant,
         dtype: dtype,
       );

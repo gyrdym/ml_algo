@@ -127,21 +127,21 @@ abstract class SoftmaxRegressor
         int iterationsLimit = 100,
         double initialLearningRate = 1e-3,
         double minCoefficientsUpdate = 1e-12,
-        double lambda,
-        RegularizationType regularizationType,
-        int randomSeed,
+        double lambda = 0,
         int batchSize = 1,
         bool fitIntercept = false,
         double interceptScale = 1.0,
         LearningRateType learningRateType = LearningRateType.constant,
-        bool isFittingDataNormalized,
+        bool isFittingDataNormalized = false,
         InitialCoefficientsType initialCoefficientsType =
             InitialCoefficientsType.zeroes,
-        Matrix initialCoefficients,
         num positiveLabel = 1,
         num negativeLabel = 0,
         bool collectLearningData = false,
         DType dtype = DType.float32,
+        RegularizationType? regularizationType,
+        Matrix? initialCoefficients,
+        int? randomSeed,
       }
   ) =>
     initSoftmaxRegressorModule()
@@ -217,73 +217,73 @@ abstract class SoftmaxRegressor
   /// coefficients.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final LinearOptimizerType optimizerType;
+  LinearOptimizerType get optimizerType;
 
   /// A number of fitting iterations that was used to learn the model's
   /// coefficients.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int iterationsLimit;
+  int get iterationsLimit;
 
   /// A value that was used for the initial value of learning rate of the chosen
   /// optimization algorithm
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final double initialLearningRate;
+  double get initialLearningRate;
 
   /// A minimum distance between coefficient vectors in
   /// two contiguous iterations which was used to learn the model's
   /// coefficients.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final double minCoefficientsUpdate;
+  double get minCoefficientsUpdate;
 
   /// A coefficient of regularization
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final double lambda;
+  double get lambda;
 
   /// A way the coefficients of the classification were regularized during the
   /// model's coefficients learning process to prevent model overfitting.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final RegularizationType regularizationType;
+  RegularizationType? get regularizationType;
 
   /// A seed that was passed to a random value generator used by a stochastic
   /// optimizer.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int randomSeed;
+  int? get randomSeed;
 
   /// A size of a batch of data (in rows) that was used in a single iteration
   /// of learning model's coefficients algorithm
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final int batchSize;
+  int get batchSize;
 
   /// Whether the fitting data was normalized or not prior to the model's
   /// coefficients learning
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final bool isFittingDataNormalized;
+  bool get isFittingDataNormalized;
 
   /// A type of a learning rate behaviour update strategy.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final LearningRateType learningRateType;
+  LearningRateType get learningRateType;
 
   /// A coefficients generator type that was used by the chosen optimizer at
   /// the very first iteration of the model's coefficients learning algorithm.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final InitialCoefficientsType initialCoefficientsType;
+  InitialCoefficientsType get initialCoefficientsType;
 
   /// Coefficients which were used at the very first learning iteration.
   ///
   /// The value is read-only, it's a hyperparameter of the model
-  final Matrix initialCoefficients;
+  Matrix? get initialCoefficients;
 
   /// Returns a list of cost values per each learning iteration. Returns null
   /// if the parameter `collectLearningData` of the default constructor is false
-  List<num> get costPerIteration;
+  List<num>? get costPerIteration;
 }

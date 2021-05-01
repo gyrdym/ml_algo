@@ -10,9 +10,9 @@ class CostFunctionFactoryImpl implements CostFunctionFactory {
 
   @override
   CostFunction createByType(CostFunctionType type, {
-    LinkFunction linkFunction,
-    num positiveLabel,
-    num negativeLabel,
+    LinkFunction? linkFunction,
+    num? positiveLabel,
+    num? negativeLabel,
   }) {
     switch (type) {
       case CostFunctionType.logLikelihood:

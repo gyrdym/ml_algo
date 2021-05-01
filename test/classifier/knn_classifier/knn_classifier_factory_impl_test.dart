@@ -7,14 +7,14 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-import '../../mocks.dart';
+import '../../mocks.mocks.dart';
 
 void main() {
   group('KnnClassifierFactoryImpl', () {
-    final kernelFactoryMock = KernelFunctionFactoryMock();
-    final kernelMock = KernelMock();
-    final solverFactoryMock = KnnSolverFactoryMock();
-    final solverMock = KnnSolverMock();
+    final kernelFactoryMock = MockKernelFactory();
+    final kernelMock = MockKernel();
+    final solverFactoryMock = MockKnnSolverFactory();
+    final solverMock = MockKnnSolver();
     final factory = KnnClassifierFactoryImpl(
       kernelFactoryMock,
       solverFactoryMock,
@@ -44,10 +44,18 @@ void main() {
     final dtype = DType.float32;
 
     setUp(() {
-      when(kernelFactoryMock.createByType(any))
-          .thenReturn(kernelMock);
-      when(solverFactoryMock.create(any, any, any, any, any))
-          .thenReturn(solverMock);
+      when(
+        kernelFactoryMock.createByType(any),
+      ).thenReturn(kernelMock);
+      when(
+        solverFactoryMock.create(
+          any,
+          any,
+          any,
+          any,
+          any,
+        ),
+      ).thenReturn(solverMock);
     });
 
     tearDown(() {
@@ -97,12 +105,13 @@ void main() {
         dtype,
       );
 
-      verify(solverFactoryMock.create(
-        argThat(equals(features)),
-        argThat(equals(outcomes)),
-        k,
-        distanceType,
-        true,
+      verify(
+        solverFactoryMock.create(
+          argThat(equals(features)),
+          argThat(equals(outcomes)),
+          k,
+          distanceType,
+          true,
       )).called(1);
     });
 
