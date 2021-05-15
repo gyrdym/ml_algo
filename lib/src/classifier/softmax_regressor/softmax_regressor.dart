@@ -27,7 +27,11 @@ import 'package:ml_linalg/matrix.dart';
 /// Also it is worth to mention that the algorithm is a generalization of
 /// [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression))
 abstract class SoftmaxRegressor
-    implements Assessable, Serializable, Retrainable, LinearClassifier {
+    implements
+        Assessable,
+        Serializable,
+        Retrainable<SoftmaxRegressor>,
+        LinearClassifier {
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations which are used by the

@@ -23,7 +23,7 @@ import 'package:ml_linalg/dtype.dart';
 /// the farther a found observation from the target one, the lower the weight of
 /// the observation is. To obtain these weights one may use a kernel function.
 abstract class KnnRegressor
-    implements Assessable, Serializable, Retrainable, Predictor {
+    implements Assessable, Serializable, Retrainable<KnnRegressor>, Predictor {
   /// Parameters:
   ///
   /// [fittingData] Labelled observations, among which will be searched [k]

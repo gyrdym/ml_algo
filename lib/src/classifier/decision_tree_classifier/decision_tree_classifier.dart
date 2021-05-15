@@ -17,7 +17,11 @@ import 'package:ml_linalg/dtype.dart';
 /// classify new samples with the same features that were used to learn the
 /// tree.
 abstract class DecisionTreeClassifier
-    implements Assessable, Serializable, Retrainable, Classifier {
+    implements
+        Assessable,
+        Serializable,
+        Retrainable<DecisionTreeClassifier>,
+        Classifier {
   /// Parameters:
   ///
   /// [trainData] A [DataFrame] with observations that will be used by the

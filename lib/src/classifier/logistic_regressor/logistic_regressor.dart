@@ -20,7 +20,11 @@ import 'package:ml_linalg/vector.dart';
 /// that makes combination of passed features and these coefficients most
 /// likely.
 abstract class LogisticRegressor
-    implements Assessable, Serializable, Retrainable, LinearClassifier {
+    implements
+        Assessable,
+        Serializable,
+        Retrainable<LogisticRegressor>,
+        LinearClassifier {
   /// Parameters:
   ///
   /// [trainData] Observations that will be used by the classifier to learn
