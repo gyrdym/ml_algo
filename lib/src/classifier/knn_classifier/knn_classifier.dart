@@ -22,7 +22,11 @@ import 'package:ml_linalg/dtype.dart';
 /// classifier. To get weight of a particular observation one may use a kernel
 /// function.
 abstract class KnnClassifier
-    implements Assessable, Serializable, Retrainable, Classifier {
+    implements
+        Assessable,
+        Serializable,
+        Retrainable<KnnClassifier>,
+        Classifier {
   /// Parameters:
   ///
   /// [trainData] Labelled observations. Must contain [targetName] column.

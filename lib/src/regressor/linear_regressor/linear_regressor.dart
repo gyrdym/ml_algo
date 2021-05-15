@@ -23,7 +23,11 @@ import 'package:ml_linalg/vector.dart';
 /// are the input for the algorithm), the regressor should find the best
 /// coefficients (weights) for each `x`-es to make a best prediction of `y` term.
 abstract class LinearRegressor
-    implements Assessable, Serializable, Retrainable, Predictor {
+    implements
+        Assessable,
+        Serializable,
+        Retrainable<LinearRegressor>,
+        Predictor {
   /// Parameters:
   ///
   /// [fittingData] A [DataFrame] with observations that is used by the
