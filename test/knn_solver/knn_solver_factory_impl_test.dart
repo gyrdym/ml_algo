@@ -8,19 +8,25 @@ void main() {
     test('should return a proper knn solver instance', () {
       final factory = const KnnSolverFactoryImpl();
 
-      final features = Matrix.fromList([[1, 1, 1, 1]]);
-      final outcomes = Matrix.fromList([[1]]);
+      final features = Matrix.fromList([
+        [1, 1, 1, 1]
+      ]);
+      final outcomes = Matrix.fromList([
+        [1]
+      ]);
       final k = 1;
       final distance = Distance.euclidean;
       final standardize = true;
 
-      expect(factory.create(
-        features,
-        outcomes,
-        k,
-        distance,
-        standardize,
-      ), isA<KnnSolverImpl>());
+      expect(
+          factory.create(
+            features,
+            outcomes,
+            k,
+            distance,
+            standardize,
+          ),
+          isA<KnnSolverImpl>());
     });
   });
 }

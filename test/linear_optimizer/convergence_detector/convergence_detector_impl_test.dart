@@ -3,7 +3,8 @@ import 'package:test/test.dart';
 
 void main() {
   group('ConvergenceDetectorImpl', () {
-    test('should not detect convergence if passed iteration number is less '
+    test(
+        'should not detect convergence if passed iteration number is less '
         'than iterations limit and minimal passed update is greater than the '
         'minimum update', () {
       final iterationsLimit = 100;
@@ -14,7 +15,8 @@ void main() {
       expect(detector.isConverged(update, 99), isFalse);
     });
 
-    test('should detect convergence if passed iteration number is greater than '
+    test(
+        'should detect convergence if passed iteration number is greater than '
         'iterations limit and minimal passed update is greater than the '
         'minimum update', () {
       final iterationsLimit = 100;
@@ -25,7 +27,8 @@ void main() {
       expect(detector.isConverged(update, 101), isTrue);
     });
 
-    test('should detect convergence if passed iteration number is equal to '
+    test(
+        'should detect convergence if passed iteration number is equal to '
         'iterations limit and minimal passed update is greater than the '
         'minimum update', () {
       final iterationsLimit = 100;
@@ -36,7 +39,8 @@ void main() {
       expect(detector.isConverged(update, 100), isTrue);
     });
 
-    test('should detect convergence if minimal passed update is less than the '
+    test(
+        'should detect convergence if minimal passed update is less than the '
         'minimum update', () {
       final iterationsLimit = 100;
       final minUpdate = 0.5;

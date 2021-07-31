@@ -31,15 +31,16 @@ void main() {
     final regularizationType = RegularizationType.L2;
     final randomSeed = 4001;
     final batchSize = 2;
-    final initialCoefficients = Matrix.column([1, 1, 1, 1], dtype: DType.float64);
+    final initialCoefficients =
+        Matrix.column([1, 1, 1, 1], dtype: DType.float64);
     final isFittingDataNormalized = true;
     final targetName = 'outcome';
     final dataSource = <Iterable>[
       <String>[...featureNames, targetName],
-      <num>[ 100.5,    45,     1, -1000.08],
-      <num>[  4301, -1708, 10001,        1],
-      <num>[-100.3,    -1, 10597,    10003],
-      <num>[  3003,     0,  1204,        0],
+      <num>[100.5, 45, 1, -1000.08],
+      <num>[4301, -1708, 10001, 1],
+      <num>[-100.3, -1, 10597, 10003],
+      <num>[3003, 0, 1204, 0],
     ];
     final dataSet = DataFrame(dataSource, headerExists: true);
     final fitIntercept = true;
@@ -51,7 +52,9 @@ void main() {
     late LinearRegressor regressor;
 
     setUp(() {
-      regressor = LinearRegressor(dataSet, targetName,
+      regressor = LinearRegressor(
+        dataSet,
+        targetName,
         optimizerType: optimizerType,
         learningRateType: learningRateType,
         initialCoefficientsType: initialCoefficientsType,
@@ -101,21 +104,21 @@ void main() {
 
       expect(encoded, {
         linearRegressorOptimizerTypeJsonKey:
-          gradientLinearOptimizerTypeEncodedValue,
+            gradientLinearOptimizerTypeEncodedValue,
         linearRegressorLearningRateTypeJsonKey:
-          learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive],
+            learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive],
         linearRegressorInitialCoefficientsTypeJsonKey:
-          zeroesInitialCoefficientsTypeJsonEncodedValue,
+            zeroesInitialCoefficientsTypeJsonEncodedValue,
         linearRegressorInitialLearningRateJsonKey: initialLearningRate,
         linearRegressorMinCoefficientsUpdateJsonKey: minCoefficientsUpdate,
         linearRegressorLambdaJsonKey: lambda,
         linearRegressorRegularizationTypeJsonKey:
-          l2RegularizationTypeJsonEncodedValue,
+            l2RegularizationTypeJsonEncodedValue,
         linearRegressorRandomSeedJsonKey: randomSeed,
         linearRegressorBatchSizeJsonKey: batchSize,
         linearRegressorInitialCoefficientsJsonKey: initialCoefficients.toJson(),
         linearRegressorFittingDataNormalizedFlagJsonKey:
-          isFittingDataNormalized,
+            isFittingDataNormalized,
         linearRegressorTargetNameJsonKey: targetName,
         linearRegressorFitInterceptJsonKey: fitIntercept,
         linearRegressorInterceptScaleJsonKey: interceptScale,
@@ -127,7 +130,8 @@ void main() {
       });
     });
 
-    test('should return a valid pointer to a file while saving as json', () async {
+    test('should return a valid pointer to a file while saving as json',
+        () async {
       final file = await regressor.saveAsJson(filePath);
 
       expect(await file.exists(), isTrue);

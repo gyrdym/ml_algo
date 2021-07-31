@@ -16,30 +16,32 @@ import '../../majority_tree_data_mock.dart';
 void main() {
   group('DecisionTreeClassifier', () {
     final featuresForPrediction = Matrix.fromList([
-      [200,  300, 1, 0, 0, 10, -40],
+      [200, 300, 1, 0, 0, 10, -40],
       [190, -500, 1, 0, 0, 11, -31],
-      [2563, 16,  0, 0, 1, 22,  50],
-      [5598, 14,  0, 1, 0, 99, 100],
+      [2563, 16, 0, 0, 1, 22, 50],
+      [5598, 14, 0, 1, 0, 99, 100],
     ]);
 
     final targetName = 'col_8';
     final classifier = DecisionTreeClassifier(fakeDataSet, targetName,
         minError: 0.3, minSamplesCount: 1, maxDepth: 3);
-    final testFileName = 'test/classifier/decision_tree_classifier/serialized_classifier.json';
+    final testFileName =
+        'test/classifier/decision_tree_classifier/serialized_classifier.json';
 
     test('should create classifier', () {
       expect(classifier, isA<DecisionTreeClassifierImpl>());
     });
 
     test('should throw a range error if minimal error on node is less than 0',
-            () {
+        () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: -0.001, minSamplesCount: 1, maxDepth: 3);
 
       expect(actual, throwsRangeError);
     });
 
-    test('should throw a range error if minimal error on node is greater '
+    test(
+        'should throw a range error if minimal error on node is greater '
         'than 1', () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 1.001, minSamplesCount: 1, maxDepth: 3);
@@ -61,7 +63,8 @@ void main() {
       expect(actual, isA<DecisionTreeClassifierImpl>());
     });
 
-    test('should throw an exception if minimal samples count on node is less '
+    test(
+        'should throw an exception if minimal samples count on node is less '
         'than zero', () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: -1, maxDepth: 3);
@@ -69,7 +72,8 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if minimal samples count on node is equal '
+    test(
+        'should throw an exception if minimal samples count on node is equal '
         'to zero', () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: 0, maxDepth: 3);
@@ -77,7 +81,8 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if maximal tree depth value is less '
+    test(
+        'should throw an exception if maximal tree depth value is less '
         'than zero', () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: 1, maxDepth: -13);
@@ -85,7 +90,8 @@ void main() {
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if maximal tree depth value is equal '
+    test(
+        'should throw an exception if maximal tree depth value is equal '
         'to zero', () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
           minError: 0.5, minSamplesCount: 1, maxDepth: 0);
@@ -99,7 +105,8 @@ void main() {
       );
 
       expect(prediction.header, equals(['col_8']));
-      expect(prediction.toMatrix(),
+      expect(
+          prediction.toMatrix(),
           equals([
             [0],
             [2],
@@ -114,7 +121,9 @@ void main() {
       );
 
       expect(probabilities.header, equals(['col_8']));
-      expect(probabilities.toMatrix(), equals([
+      expect(
+          probabilities.toMatrix(),
+          equals([
             [1],
             [1],
             [1],
@@ -139,7 +148,8 @@ void main() {
 
     test('should serialize dtype field', () {
       final json = classifier.toJson();
-      expect(json[decisionTreeClassifierDTypeJsonKey], dTypeToJson(DType.float32));
+      expect(
+          json[decisionTreeClassifierDTypeJsonKey], dTypeToJson(DType.float32));
     });
 
     test('should serialize target column name field', () {
@@ -149,7 +159,8 @@ void main() {
 
     test('should serialize root node', () {
       final json = classifier.toJson();
-      expect(json[decisionTreeClassifierTreeRootNodeJsonKey], majorityTreeDataMock);
+      expect(json[decisionTreeClassifierTreeRootNodeJsonKey],
+          majorityTreeDataMock);
     });
 
     test('should serialize schemaVersion field', () {

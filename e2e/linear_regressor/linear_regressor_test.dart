@@ -4,19 +4,18 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
-Future<Vector> evaluateLinearRegressor(MetricType metricType,
-    DType dtype) async {
+Future<Vector> evaluateLinearRegressor(
+    MetricType metricType, DType dtype) async {
   final samples = (await fromCsv('e2e/_datasets/housing.csv',
-      headerExists: false,
-      columnDelimiter: ' ')).shuffle();
+          headerExists: false, columnDelimiter: ' '))
+      .shuffle();
   final folds = 5;
   final targetName = 'col_13';
   final validator = CrossValidator.kFold(
     samples,
     numberOfFolds: folds,
   );
-  final createRegressor = (DataFrame trainSamples) =>
-      LinearRegressor(
+  final createRegressor = (DataFrame trainSamples) => LinearRegressor(
         trainSamples,
         targetName,
         optimizerType: LinearOptimizerType.gradient,
@@ -31,7 +30,8 @@ Future<Vector> evaluateLinearRegressor(MetricType metricType,
 
 void main() async {
   group('LinearRegressor', () {
-    test('should return adequate error on mape metric, '
+    test(
+        'should return adequate error on mape metric, '
         'dtype=DType.float32', () async {
       expect(
         (await evaluateLinearRegressor(MetricType.mape, DType.float32)).mean(),
@@ -39,7 +39,8 @@ void main() async {
       );
     });
 
-    test('should return adequate error on mape metric, '
+    test(
+        'should return adequate error on mape metric, '
         'dtype=DType.float64', () async {
       expect(
         (await evaluateLinearRegressor(MetricType.mape, DType.float64)).mean(),

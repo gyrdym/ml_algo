@@ -6,10 +6,12 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 
 Future<Vector> evaluateKnnRegressor(MetricType metricType, DType dtype) async {
-  final data = (await fromCsv('e2e/_datasets/housing.csv',
+  final data = (await fromCsv(
+    'e2e/_datasets/housing.csv',
     headerExists: false,
     columnDelimiter: ' ',
-  )).shuffle();
+  ))
+      .shuffle();
   final normalized = Normalizer().process(data);
   final folds = 5;
   final targetName = 'col_13';
@@ -19,20 +21,23 @@ Future<Vector> evaluateKnnRegressor(MetricType metricType, DType dtype) async {
     dtype: dtype,
   );
 
-  return validator.evaluate((trainSamples) =>
-      KnnRegressor(trainSamples, targetName, folds), metricType);
+  return validator.evaluate(
+      (trainSamples) => KnnRegressor(trainSamples, targetName, folds),
+      metricType);
 }
 
 void main() {
   group('KnnRegressor', () {
-    test('should return adequate score on boston housing dataset using mape '
+    test(
+        'should return adequate score on boston housing dataset using mape '
         'metric, dtype=DType.float32', () async {
       final scores = await evaluateKnnRegressor(MetricType.mape, DType.float32);
 
       expect(scores.mean(), lessThan(50));
     });
 
-    test('should return adequate score on boston housing dataset using mape '
+    test(
+        'should return adequate score on boston housing dataset using mape '
         'metric, dtype=DType.float64', () async {
       final scores = await evaluateKnnRegressor(MetricType.mape, DType.float64);
 

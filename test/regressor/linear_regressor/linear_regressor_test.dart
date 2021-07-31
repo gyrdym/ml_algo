@@ -17,7 +17,7 @@ void main() {
   group('LinearRegressor', () {
     final features = [
       [23, 32, 33],
-      [11, -1,  0],
+      [11, -1, 0],
       [87, 77, 39],
     ];
     final outcomes = [
@@ -55,8 +55,7 @@ void main() {
     late LinearRegressor regressor;
 
     setUp(() {
-      linearRegressorInjector
-          .registerSingleton(() => factoryMock);
+      linearRegressorInjector.registerSingleton(() => factoryMock);
 
       regressor = LinearRegressor(
         fittingData,

@@ -11,11 +11,11 @@ void main() {
     final header = ['feature_1', 'feature_3', 'feature_3'];
     final source = [
       header,
-      [     100.00,        null,      200.33],
-      [      -2221,        1002,       70009],
-      [       9008,       10006,        null],
-      [       7888,       10002,      300918],
-      [     500981,       29918,     5008.55],
+      [100.00, null, 200.33],
+      [-2221, 1002, 70009],
+      [9008, 10006, null],
+      [7888, 10002, 300918],
+      [500981, 29918, 5008.55],
     ];
     final data = DataFrame(source);
 
@@ -24,7 +24,8 @@ void main() {
           throwsA(isA<EmptyRatioCollectionException>()));
     });
 
-    test('should throw an exception if at least one ratio value is negative', () {
+    test('should throw an exception if at least one ratio value is negative',
+        () {
       expect(() => splitData(data, [0.2, -0.3]),
           throwsA(isA<OutRangedRatioException>()));
     });
@@ -34,13 +35,15 @@ void main() {
           throwsA(isA<OutRangedRatioException>()));
     });
 
-    test('should throw an exception if at least one ratio value is equal '
+    test(
+        'should throw an exception if at least one ratio value is equal '
         'to 1', () {
       expect(() => splitData(data, [1, 0.3]),
           throwsA(isA<OutRangedRatioException>()));
     });
 
-    test('should throw an exception if at least one ratio value is greater '
+    test(
+        'should throw an exception if at least one ratio value is greater '
         'than 1', () {
       expect(() => splitData(data, [100, 0.3]),
           throwsA(isA<OutRangedRatioException>()));
@@ -48,7 +51,7 @@ void main() {
 
     test('should split data', () {
       final splits = splitData(data, [0.2, 0.3]);
-      
+
       expect(splits, hasLength(3));
       expect(splits[0].header, header);
       expect(splits[0].rows, [
@@ -56,12 +59,12 @@ void main() {
       ]);
       expect(splits[1].header, header);
       expect(splits[1].rows, [
-        [-2221,  1002, 70009],
-        [ 9008, 10006,  null],
+        [-2221, 1002, 70009],
+        [9008, 10006, null],
       ]);
       expect(splits[2].header, header);
       expect(splits[2].rows, [
-        [  7888, 10002,  300918],
+        [7888, 10002, 300918],
         [500981, 29918, 5008.55],
       ]);
     });
@@ -76,15 +79,15 @@ void main() {
       ]);
       expect(splits[1].header, header);
       expect(splits[1].rows, [
-        [-2221,  1002, 70009],
+        [-2221, 1002, 70009],
       ]);
       expect(splits[2].header, header);
       expect(splits[2].rows, [
-        [ 9008, 10006,  null],
+        [9008, 10006, null],
       ]);
       expect(splits[3].header, header);
       expect(splits[3].rows, [
-        [  7888, 10002,  300918],
+        [7888, 10002, 300918],
       ]);
       expect(splits[4].header, header);
       expect(splits[4].rows, [
@@ -102,7 +105,8 @@ void main() {
           throwsA(isA<TooSmallRatioException>()));
     });
 
-    test('should split data into two parts, first part is less than the '
+    test(
+        'should split data into two parts, first part is less than the '
         'second one', () {
       final splits = splitData(data, [0.2]);
 
@@ -113,14 +117,15 @@ void main() {
       ]);
       expect(splits[1].header, header);
       expect(splits[1].rows, [
-        [ -2221,  1002,   70009],
-        [  9008, 10006,    null],
-        [  7888, 10002,  300918],
+        [-2221, 1002, 70009],
+        [9008, 10006, null],
+        [7888, 10002, 300918],
         [500981, 29918, 5008.55],
       ]);
     });
 
-    test('should split data into two parts, first part is less than the '
+    test(
+        'should split data into two parts, first part is less than the '
         'second one, case 2', () {
       final splits = splitData(data, [0.25]);
 
@@ -128,27 +133,28 @@ void main() {
       expect(splits[0].header, header);
       expect(splits[0].rows, [
         [100.00, null, 200.33],
-        [-2221,  1002,  70009],
+        [-2221, 1002, 70009],
       ]);
       expect(splits[1].header, header);
       expect(splits[1].rows, [
-        [  9008, 10006,    null],
-        [  7888, 10002,  300918],
+        [9008, 10006, null],
+        [7888, 10002, 300918],
         [500981, 29918, 5008.55],
       ]);
     });
 
-    test('should split data into two parts, first part is greater than the '
+    test(
+        'should split data into two parts, first part is greater than the '
         'second one', () {
       final splits = splitData(data, [0.9]);
 
       expect(splits, hasLength(2));
       expect(splits[0].header, header);
       expect(splits[0].rows, [
-        [100.00,  null, 200.33],
-        [ -2221,  1002,  70009],
-        [  9008, 10006,   null],
-        [  7888, 10002, 300918],
+        [100.00, null, 200.33],
+        [-2221, 1002, 70009],
+        [9008, 10006, null],
+        [7888, 10002, 300918],
       ]);
       expect(splits[1].header, header);
       expect(splits[1].rows, [
@@ -156,17 +162,18 @@ void main() {
       ]);
     });
 
-    test('should split data into two parts, first part is greater than the '
+    test(
+        'should split data into two parts, first part is greater than the '
         'second one, case 2', () {
       final splits = splitData(data, [0.95]);
 
       expect(splits, hasLength(2));
       expect(splits[0].header, header);
       expect(splits[0].rows, [
-        [100.00,  null, 200.33],
-        [ -2221,  1002,  70009],
-        [  9008, 10006,   null],
-        [  7888, 10002, 300918],
+        [100.00, null, 200.33],
+        [-2221, 1002, 70009],
+        [9008, 10006, null],
+        [7888, 10002, 300918],
       ]);
       expect(splits[1].header, header);
       expect(splits[1].rows, [
@@ -174,25 +181,29 @@ void main() {
       ]);
     });
 
-    test('should throw exception if ratios sum is equal to 1, '
+    test(
+        'should throw exception if ratios sum is equal to 1, '
         '2 elements', () {
       expect(() => splitData(data, [0.5, 0.5]),
           throwsA(isA<InvalidRatioSumException>()));
     });
 
-    test('should throw exception if ratios sum is equal to 1, '
+    test(
+        'should throw exception if ratios sum is equal to 1, '
         '3 elements', () {
       expect(() => splitData(data, [0.3, 0.3, 0.4]),
           throwsA(isA<InvalidRatioSumException>()));
     });
 
-    test('should throw exception if ratios sum is greater than 1, '
+    test(
+        'should throw exception if ratios sum is greater than 1, '
         '2 elements', () {
       expect(() => splitData(data, [0.5, 0.6]),
           throwsA(isA<InvalidRatioSumException>()));
     });
 
-    test('should throw exception if ratios sum is greater than 1, '
+    test(
+        'should throw exception if ratios sum is greater than 1, '
         '3 elements', () {
       expect(() => splitData(data, [0.3, 0.5, 0.4]),
           throwsA(isA<InvalidRatioSumException>()));

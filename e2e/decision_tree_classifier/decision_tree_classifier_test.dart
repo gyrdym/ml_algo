@@ -20,8 +20,7 @@ Future<Vector> evaluateClassifier(MetricType metric, DType dtype) async {
     processed,
     numberOfFolds: numberOfFolds,
   );
-  final createClassifier = (DataFrame trainSamples) =>
-      DecisionTreeClassifier(
+  final createClassifier = (DataFrame trainSamples) => DecisionTreeClassifier(
         trainSamples,
         'Species',
         minError: 0.3,
@@ -38,50 +37,54 @@ Future<Vector> evaluateClassifier(MetricType metric, DType dtype) async {
 
 void main() async {
   group('DecisionTreeClassifier', () {
-    test('should return adequate score on iris dataset using accuracy '
+    test(
+        'should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateClassifier(
-          MetricType.accuracy, DType.float32);
+      final scores =
+          await evaluateClassifier(MetricType.accuracy, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using accuracy '
+    test(
+        'should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateClassifier(
-          MetricType.accuracy, DType.float64);
+      final scores =
+          await evaluateClassifier(MetricType.accuracy, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using precision '
+    test(
+        'should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateClassifier(
-          MetricType.precision, DType.float32);
+      final scores =
+          await evaluateClassifier(MetricType.precision, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using precision '
+    test(
+        'should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateClassifier(
-          MetricType.precision, DType.float64);
+      final scores =
+          await evaluateClassifier(MetricType.precision, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using recall '
+    test(
+        'should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateClassifier(
-          MetricType.recall, DType.float32);
+      final scores = await evaluateClassifier(MetricType.recall, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using recall '
+    test(
+        'should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateClassifier(
-          MetricType.recall, DType.float64);
+      final scores = await evaluateClassifier(MetricType.recall, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });

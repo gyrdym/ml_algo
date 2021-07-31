@@ -27,14 +27,14 @@ void main() {
     final targetNames = ['target_1'];
     final samplesHeader = [...featuresNames, ...targetNames];
     final samples = DataFrame([
-      <num>[     1,  33,   -199, 1, 0, 0],
+      <num>[1, 33, -199, 1, 0, 0],
       <num>[-90002, 232, 889.20, 1, 0, 0],
-      <num>[-12004,  19,    111, 0, 1, 0],
+      <num>[-12004, 19, 111, 0, 1, 0],
     ], headerExists: false, header: samplesHeader);
     final featuresMock = DataFrame([
-      <num>[     1,  33,   -199],
+      <num>[1, 33, -199],
       <num>[-90002, 232, 889.20],
-      <num>[-12004,  19,    111],
+      <num>[-12004, 19, 111],
     ], headerExists: false, header: featuresNames);
     final targetMock = DataFrame([
       <num>[100],
@@ -99,7 +99,8 @@ void main() {
       final metricTypes = [MetricType.accuracy, MetricType.precision];
 
       metricTypes.forEach((metricType) {
-        final actual = () => assessor.assess(predictorMock, metricType, samples);
+        final actual =
+            () => assessor.assess(predictorMock, metricType, samples);
 
         expect(actual, throwsA(isA<InvalidMetricTypeException>()));
       });

@@ -6,8 +6,8 @@ import 'package:test/test.dart';
 void main() {
   group('splittingPredicateTypeToJson', () {
     test('should encode `less than` type', () {
-      final encoded = splittingPredicateTypeToJson(
-          TreeNodeSplittingPredicateType.lessThan);
+      final encoded =
+          splittingPredicateTypeToJson(TreeNodeSplittingPredicateType.lessThan);
       expect(encoded, lessThanEncodedValue);
     });
 
@@ -18,8 +18,8 @@ void main() {
     });
 
     test('should encode `equal to` type', () {
-      final encoded = splittingPredicateTypeToJson(
-          TreeNodeSplittingPredicateType.equalTo);
+      final encoded =
+          splittingPredicateTypeToJson(TreeNodeSplittingPredicateType.equalTo);
       expect(encoded, equalToEncodedValue);
     });
 

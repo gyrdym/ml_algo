@@ -24,12 +24,12 @@ void main() {
     final header = ['feature_1', 'feature_2', 'feature_3', targetName];
     final trainData = DataFrame(
       [
-        [123,   321,  444, classLabel2],
-        [  2,    11,  -10, classLabel1],
-        [340, -1002,   93, classLabel3],
-        [ 17,  2219, 3019, classLabel1],
-        [  7,     0,   -1, classLabel2],
-        [ 13,    31,   44, classLabel3],
+        [123, 321, 444, classLabel2],
+        [2, 11, -10, classLabel1],
+        [340, -1002, 93, classLabel3],
+        [17, 2219, 3019, classLabel1],
+        [7, 0, -1, classLabel2],
+        [13, 31, 44, classLabel3],
       ],
       headerExists: false,
       header: header,
@@ -52,27 +52,31 @@ void main() {
         expect(classifier.toJson(), {
           knnClassifierTargetColumnNameJsonKey: targetName,
           knnClassifierDTypeJsonKey: dTypeToJson(DType.float64),
-          knnClassifierClassLabelsJsonKey: [classLabel2, classLabel1, classLabel3],
+          knnClassifierClassLabelsJsonKey: [
+            classLabel2,
+            classLabel1,
+            classLabel3
+          ],
           knnClassifierKernelJsonKey: cosineKernelEncodedValue,
           knnClassifierSolverJsonKey: {
-            knnSolverTrainFeaturesJsonKey:
-              Matrix.fromList([
-                [123,   321,  444],
-                [  2,    11,  -10],
-                [340, -1002,   93],
-                [ 17,  2219, 3019],
-                [  7,     0,   -1],
-                [ 13,    31,   44],
-              ], dtype: DType.float64).toJson(),
-            knnSolverTrainOutcomesJsonKey:
-                Matrix.fromList([
-                  [classLabel2],
-                  [classLabel1],
-                  [classLabel3],
-                  [classLabel1],
-                  [classLabel2],
-                  [classLabel3],
-                ], dtype: DType.float64).toJson(),
+            knnSolverTrainFeaturesJsonKey: Matrix.fromList([
+              [123, 321, 444],
+              [2, 11, -10],
+              [340, -1002, 93],
+              [17, 2219, 3019],
+              [7, 0, -1],
+              [13, 31, 44],
+            ], dtype: DType.float64)
+                .toJson(),
+            knnSolverTrainOutcomesJsonKey: Matrix.fromList([
+              [classLabel2],
+              [classLabel1],
+              [classLabel3],
+              [classLabel1],
+              [classLabel2],
+              [classLabel3],
+            ], dtype: DType.float64)
+                .toJson(),
             knnSolverKJsonKey: k,
             knnSolverDistanceTypeJsonKey: distanceTypeToJson(Distance.hamming),
             knnSolverStandardizeJsonKey: true,
@@ -85,7 +89,8 @@ void main() {
     });
 
     group('saveAsJson', () {
-      final testFileName = 'test/classifier/knn_classifier/serialized_classifier.json';
+      final testFileName =
+          'test/classifier/knn_classifier/serialized_classifier.json';
       final classifier = KnnClassifier(
         trainData,
         targetName,

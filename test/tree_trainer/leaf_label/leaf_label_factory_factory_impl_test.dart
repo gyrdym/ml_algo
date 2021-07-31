@@ -11,10 +11,10 @@ void main() {
     final distributionCalculator = MockDistributionCalculator();
 
     final distributionCalculatorFactoryMock =
-      createDistributionCalculatorFactoryMock(distributionCalculator);
+        createDistributionCalculatorFactoryMock(distributionCalculator);
 
-    final factory = TreeLeafLabelFactoryFactoryImpl(
-        distributionCalculatorFactoryMock);
+    final factory =
+        TreeLeafLabelFactoryFactoryImpl(distributionCalculatorFactoryMock);
 
     test('should create a MajorityTreeLeafLabelFactory instance', () {
       final leafLabelFactoryType = TreeLeafLabelFactoryType.majority;
