@@ -3,6 +3,7 @@ import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
+import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -144,9 +145,12 @@ class LinearRegressorImpl
 
   @override
   DataFrame predict(DataFrame features) {
+    final splits =
+        featuresTargetSplit(features, targetNames: [targetName]).toList();
+    final points = splits[0].toMatrix(dtype);
     final prediction = addInterceptIf(
           fitIntercept,
-          features.toMatrix(dtype),
+          points,
           interceptScale,
           dtype,
         ) *
