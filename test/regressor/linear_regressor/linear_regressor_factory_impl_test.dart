@@ -44,14 +44,13 @@ void main() {
       costFunctionMock = MockCostFunction();
       costFunctionFactoryMock = createCostFunctionFactoryMock(costFunctionMock);
       linearOptimizerMock = MockLinearOptimizer();
-      linearOptimizerFactoryMock = createLinearOptimizerFactoryMock(
-          linearOptimizerMock);
+      linearOptimizerFactoryMock =
+          createLinearOptimizerFactoryMock(linearOptimizerMock);
 
       injector
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
+        ..registerDependency<CostFunctionFactory>(() => costFunctionFactoryMock)
         ..registerDependency<LinearOptimizerFactory>(
-                () => linearOptimizerFactoryMock);
+            () => linearOptimizerFactoryMock);
 
       when(linearOptimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -75,7 +74,8 @@ void main() {
       );
     });
 
-    test('should call cost function factory in order to create '
+    test(
+        'should call cost function factory in order to create '
         'squared cost function instance', () {
       factory.create(
         fittingData: observations,
@@ -88,7 +88,8 @@ void main() {
       )).called(1);
     });
 
-    test('should call linear optimizer factory and consider intercept term '
+    test(
+        'should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
       factory.create(
         fittingData: observations,
@@ -134,7 +135,8 @@ void main() {
       )).called(1);
     });
 
-    test('should find the extrema for fitting observations while '
+    test(
+        'should find the extrema for fitting observations while '
         'instantiating', () {
       factory.create(
         fittingData: observations,
@@ -172,12 +174,15 @@ void main() {
       );
 
       expect(prediction.header, equals(['target']));
-      expect(prediction.toMatrix(), equals(
-        featuresWithIntercept * learnedCoefficients,
-      ));
+      expect(
+          prediction.toMatrix(),
+          equals(
+            featuresWithIntercept * learnedCoefficients,
+          ));
     });
 
-    test('should collect cost values per iteration if collectLearningData is '
+    test(
+        'should collect cost values per iteration if collectLearningData is '
         'true', () {
       final regressor = factory.create(
         fittingData: observations,
@@ -195,7 +200,8 @@ void main() {
       )).called(1);
     });
 
-    test('should not collect cost values per iteration if collectLearningData is '
+    test(
+        'should not collect cost values per iteration if collectLearningData is '
         'false', () {
       factory.create(
         fittingData: observations,

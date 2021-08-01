@@ -41,10 +41,12 @@ void main() {
     final defaultPositiveLabel = 1;
     final defaultDType = DType.float32;
     final defaultCostPerIteration = [1.2, 233.01, 23, -10001];
-    final retrainingData = DataFrame([[10, -10, 20, -20]]);
+    final retrainingData = DataFrame([
+      [10, -10, 20, -20]
+    ]);
     final retrainedModelMock = MockLogisticRegressor();
-    final classifierFactory = createLogisticRegressorFactoryMock(
-        retrainedModelMock);
+    final classifierFactory =
+        createLogisticRegressorFactoryMock(retrainedModelMock);
     final createRegressor = ({
       LinearOptimizerType? optimizerType,
       int? iterationsLimit,
@@ -68,30 +70,31 @@ void main() {
       num? positiveLabel,
       List<num>? costPerIteration,
       DType? dtype,
-    }) => LogisticRegressorImpl(
-      optimizerType ?? defaultOptimizerType,
-      iterationsLimit ?? defaultIterationsLimit,
-      initialLearningRate ?? defaultInitialLearningRate,
-      minCoefficientsUpdate ?? defaultMinCoefficientsUpdate,
-      lambda ?? defaultLambda,
-      regularizationType ?? defaultRegularizationType,
-      randomSeed ?? defaultRandomSeed,
-      batchSize ?? defaultBatchSize,
-      isFittingDataNormalized ?? defaultIsFittingDataNormalizedFlag,
-      learningRateType ?? defaultLearningRateType,
-      initialCoefficientsType ?? defaultInitialCoefficientsType,
-      initialCoefficients ?? defaultInitialCoefficients,
-      targetNames ?? [className],
-      linkFunction ?? linkFunctionMock,
-      fitIntercept ?? defaultFitIntercept,
-      interceptScale ?? defaultInterceptScale,
-      coefficients ?? defaultCoefficients,
-      probabilityThreshold ?? defaultProbabilityThreshold,
-      negativeLabel ?? defaultNegativeLabel,
-      positiveLabel ?? defaultPositiveLabel,
-      costPerIteration ?? defaultCostPerIteration,
-      dtype ?? defaultDType,
-    );
+    }) =>
+        LogisticRegressorImpl(
+          optimizerType ?? defaultOptimizerType,
+          iterationsLimit ?? defaultIterationsLimit,
+          initialLearningRate ?? defaultInitialLearningRate,
+          minCoefficientsUpdate ?? defaultMinCoefficientsUpdate,
+          lambda ?? defaultLambda,
+          regularizationType ?? defaultRegularizationType,
+          randomSeed ?? defaultRandomSeed,
+          batchSize ?? defaultBatchSize,
+          isFittingDataNormalized ?? defaultIsFittingDataNormalizedFlag,
+          learningRateType ?? defaultLearningRateType,
+          initialCoefficientsType ?? defaultInitialCoefficientsType,
+          initialCoefficients ?? defaultInitialCoefficients,
+          targetNames ?? [className],
+          linkFunction ?? linkFunctionMock,
+          fitIntercept ?? defaultFitIntercept,
+          interceptScale ?? defaultInterceptScale,
+          coefficients ?? defaultCoefficients,
+          probabilityThreshold ?? defaultProbabilityThreshold,
+          negativeLabel ?? defaultNegativeLabel,
+          positiveLabel ?? defaultPositiveLabel,
+          costPerIteration ?? defaultCostPerIteration,
+          dtype ?? defaultDType,
+        );
 
     final testFeatureMatrix = Matrix.fromList([
       [20, 30, 40],
@@ -127,59 +130,65 @@ void main() {
     });
 
     group('default constructor', () {
-      test('should create the instance with `classNames` list of just one '
+      test(
+          'should create the instance with `classNames` list of just one '
           'element', () {
         expect(createRegressor().targetNames, equals([className]));
       });
 
-      test('should throw an exception if probability threshold is less '
+      test(
+          'should throw an exception if probability threshold is less '
           'than 0', () {
         final probabilityThreshold = -0.1;
         final actual = () => createRegressor(
-            probabilityThreshold: probabilityThreshold,
-        );
+              probabilityThreshold: probabilityThreshold,
+            );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
       });
 
-      test('should throw an exception if probability threshold is less '
+      test(
+          'should throw an exception if probability threshold is less '
           'equal to 0', () {
         final probabilityThreshold = 0.0;
         final actual = () => createRegressor(
-          probabilityThreshold: probabilityThreshold,
-        );
+              probabilityThreshold: probabilityThreshold,
+            );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
       });
 
-      test('should throw an exception if probability threshold is equal '
+      test(
+          'should throw an exception if probability threshold is equal '
           'to 1', () {
         final probabilityThreshold = 1.0;
         final actual = () => createRegressor(
-          probabilityThreshold: probabilityThreshold,
-        );
+              probabilityThreshold: probabilityThreshold,
+            );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
       });
 
-      test('should throw an exception if probability threshold is greater '
+      test(
+          'should throw an exception if probability threshold is greater '
           'than 1', () {
         final probabilityThreshold = 1.2;
         final actual = () => createRegressor(
-          probabilityThreshold: probabilityThreshold,
-        );
+              probabilityThreshold: probabilityThreshold,
+            );
 
         expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
       });
 
-      test('should throw an exception if positive class label equals to '
+      test(
+          'should throw an exception if positive class label equals to '
           'negative class label', () {
         final negativeLabel = 1000;
         final positiveLabel = 1000;
         final actual = () => createRegressor(
-          negativeLabel: negativeLabel,
-          positiveLabel: positiveLabel,
-        );
+              negativeLabel: negativeLabel,
+              positiveLabel: positiveLabel,
+            );
 
         expect(actual, throwsA(isA<InvalidClassLabelsException>()));
       });
@@ -187,13 +196,14 @@ void main() {
       test('should throw an exception if no coefficients are provided', () {
         final coefficients = Matrix.empty();
         final actual = () => createRegressor(
-          coefficients: coefficients,
-        );
+              coefficients: coefficients,
+            );
 
         expect(actual, throwsException);
       });
 
-      test('should throw an exception if coefficients provided for more than '
+      test(
+          'should throw an exception if coefficients provided for more than '
           'one class', () {
         final coefficients = Matrix.fromList([
           [1, 2, 3],
@@ -202,8 +212,8 @@ void main() {
           [1, 3, 3],
         ]);
         final actual = () => createRegressor(
-          coefficients: coefficients,
-        );
+              coefficients: coefficients,
+            );
 
         expect(actual, throwsException);
       });
@@ -224,7 +234,8 @@ void main() {
         expect(model.regularizationType, defaultRegularizationType);
         expect(model.randomSeed, defaultRandomSeed);
         expect(model.batchSize, defaultBatchSize);
-        expect(model.isFittingDataNormalized, defaultIsFittingDataNormalizedFlag);
+        expect(
+            model.isFittingDataNormalized, defaultIsFittingDataNormalizedFlag);
         expect(model.learningRateType, defaultLearningRateType);
         expect(model.initialCoefficientsType, defaultInitialCoefficientsType);
         expect(model.initialCoefficients, defaultInitialCoefficients);
@@ -243,7 +254,8 @@ void main() {
 
         createRegressor().predict(testFeatures);
 
-        verify(linkFunctionMock.link(featuresWithIntercept * defaultCoefficients))
+        verify(linkFunctionMock
+                .link(featuresWithIntercept * defaultCoefficients))
             .called(1);
       });
 
@@ -265,17 +277,20 @@ void main() {
         expect(() => createRegressor().predict(testFeatures), throwsException);
       });
 
-      test('should predict class labels basing on calculated probabilities', () {
+      test('should predict class labels basing on calculated probabilities',
+          () {
         final testFeatures = DataFrame.fromMatrix(testFeatureMatrix);
         final prediction = createRegressor().predict(testFeatures);
 
-        expect(prediction.rows, equals([
-          [defaultPositiveLabel],
-          [defaultNegativeLabel],
-          [defaultPositiveLabel],
-          [defaultPositiveLabel],
-          [defaultNegativeLabel],
-        ]));
+        expect(
+            prediction.rows,
+            equals([
+              [defaultPositiveLabel],
+              [defaultNegativeLabel],
+              [defaultPositiveLabel],
+              [defaultPositiveLabel],
+              [defaultNegativeLabel],
+            ]));
       });
 
       test('should return a dataframe with a proper header', () {

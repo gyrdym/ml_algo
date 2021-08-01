@@ -118,9 +118,7 @@ void main() {
     /// (The test case explanation)[https://github.com/gyrdym/ml_algo/wiki/Coordinate-descent-optimizer-(regularized-case)-should-find-optimal-weights-for-the-given-data]
     test('should find optimal coefficients for the given data', () {
       // actually, points in this example are not normalized
-      final coefficients = optimizer
-          .findExtrema()
-          .getColumn(0);
+      final coefficients = optimizer.findExtrema().getColumn(0);
 
       expect(coefficients, equals([-4381770, -4493700, -4073630]));
     });

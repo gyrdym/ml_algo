@@ -5,8 +5,8 @@ import 'package:ml_linalg/vector.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 
-Future<Vector> evaluateSoftmaxRegressor(MetricType metricType,
-    DType dtype) async {
+Future<Vector> evaluateSoftmaxRegressor(
+    MetricType metricType, DType dtype) async {
   final samples = (await fromCsv('e2e/_datasets/iris.csv'))
       .shuffle()
       .dropSeries(seriesNames: ['Id']);
@@ -22,8 +22,7 @@ Future<Vector> evaluateSoftmaxRegressor(MetricType metricType,
     processed,
     numberOfFolds: numberOfFolds,
   );
-  final predictorFactory = (DataFrame trainingSamples) =>
-      SoftmaxRegressor(
+  final predictorFactory = (DataFrame trainingSamples) => SoftmaxRegressor(
         trainingSamples,
         classNames,
         initialLearningRate: 0.035,
@@ -41,50 +40,56 @@ Future<Vector> evaluateSoftmaxRegressor(MetricType metricType,
 
 Future main() async {
   group('SoftmaxRegressor', () {
-    test('should return adequate score on iris dataset using accuracy '
+    test(
+        'should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateSoftmaxRegressor(MetricType.accuracy,
-          DType.float32);
+      final scores =
+          await evaluateSoftmaxRegressor(MetricType.accuracy, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using accuracy '
+    test(
+        'should return adequate score on iris dataset using accuracy '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateSoftmaxRegressor(MetricType.accuracy,
-          DType.float64);
+      final scores =
+          await evaluateSoftmaxRegressor(MetricType.accuracy, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using precision '
+    test(
+        'should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateSoftmaxRegressor(MetricType.precision,
-          DType.float32);
+      final scores =
+          await evaluateSoftmaxRegressor(MetricType.precision, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using precision '
+    test(
+        'should return adequate score on iris dataset using precision '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateSoftmaxRegressor(MetricType.precision,
-          DType.float64);
+      final scores =
+          await evaluateSoftmaxRegressor(MetricType.precision, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using recall '
+    test(
+        'should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float32', () async {
-      final scores = await evaluateSoftmaxRegressor(MetricType.recall,
-          DType.float32);
+      final scores =
+          await evaluateSoftmaxRegressor(MetricType.recall, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
-    test('should return adequate score on iris dataset using recall '
+    test(
+        'should return adequate score on iris dataset using recall '
         'metric, dtype=DType.float64', () async {
-      final scores = await evaluateSoftmaxRegressor(MetricType.recall,
-          DType.float64);
+      final scores =
+          await evaluateSoftmaxRegressor(MetricType.recall, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });

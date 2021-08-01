@@ -27,9 +27,10 @@ void main() {
     final knnRegressor = MockKnnRegressor();
     final knnRegressorFactory = createKnnRegressorFactoryMock(knnRegressor);
 
-    setUp(() => knnRegressorInjector
-      ..clearAll()
-      ..registerSingleton<KnnRegressorFactory>(() => knnRegressorFactory),
+    setUp(
+      () => knnRegressorInjector
+        ..clearAll()
+        ..registerSingleton<KnnRegressorFactory>(() => knnRegressorFactory),
     );
 
     test('should call KnnRegressorFactory in order to create a regressor', () {
@@ -42,14 +43,9 @@ void main() {
         dtype: DType.float64,
       );
 
-      verify(knnRegressorFactory.create(
-          data,
-          targetName,
-          2,
-          KernelType.epanechnikov,
-          Distance.cosine,
-          DType.float64
-      )).called(1);
+      verify(knnRegressorFactory.create(data, targetName, 2,
+              KernelType.epanechnikov, Distance.cosine, DType.float64))
+          .called(1);
 
       expect(regressor, same(knnRegressor));
     });

@@ -51,7 +51,9 @@ void main() {
     final isFittingDataNormalized = true;
     final learningRateType = LearningRateType.decreasingAdaptive;
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
-    final initialCoefficients = Matrix.fromList([[13, 43, 55]]);
+    final initialCoefficients = Matrix.fromList([
+      [13, 43, 55]
+    ]);
     final fitIntercept = false;
     final interceptScale = 1.0;
     final dtype = DType.float32;
@@ -59,31 +61,31 @@ void main() {
     final factoryMock = MockSoftmaxRegressorFactory();
     final regressorMock = MockSoftmaxRegressor();
     final createRegressor = () => SoftmaxRegressor(
-      observations,
-      targetNames,
-      optimizerType: optimizerType,
-      iterationsLimit: iterationsLimit,
-      initialLearningRate: initialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate,
-      lambda: lambda,
-      regularizationType: regularizationType,
-      randomSeed: randomSeed,
-      batchSize: batchSize,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      learningRateType: learningRateType,
-      isFittingDataNormalized: isFittingDataNormalized,
-      initialCoefficientsType: initialCoefficientsType,
-      initialCoefficients: initialCoefficients,
-      positiveLabel: positiveLabel,
-      negativeLabel: negativeLabel,
-      collectLearningData: collectLearningData,
-      dtype: dtype,
-    );
+          observations,
+          targetNames,
+          optimizerType: optimizerType,
+          iterationsLimit: iterationsLimit,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minCoefficientsUpdate,
+          lambda: lambda,
+          regularizationType: regularizationType,
+          randomSeed: randomSeed,
+          batchSize: batchSize,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale,
+          learningRateType: learningRateType,
+          isFittingDataNormalized: isFittingDataNormalized,
+          initialCoefficientsType: initialCoefficientsType,
+          initialCoefficients: initialCoefficients,
+          positiveLabel: positiveLabel,
+          negativeLabel: negativeLabel,
+          collectLearningData: collectLearningData,
+          dtype: dtype,
+        );
 
     setUp(() {
       softmaxRegressorInjector
-        .registerSingleton<SoftmaxRegressorFactory>(() => factoryMock);
+          .registerSingleton<SoftmaxRegressorFactory>(() => factoryMock);
 
       when(factoryMock.create(
         trainData: observations,
@@ -110,10 +112,8 @@ void main() {
     });
 
     tearDown(() {
-      injector
-        .clearAll();
-      softmaxRegressorInjector
-        .clearAll();
+      injector.clearAll();
+      softmaxRegressorInjector.clearAll();
     });
 
     test('should pass all the arguments to the softmax regressor factory', () {

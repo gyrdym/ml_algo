@@ -704,7 +704,8 @@ class MockKnnSolver extends _i1.Mock implements _i18.KnnSolver {
   Iterable<Iterable<_i55.Neighbour<_i9.Vector>>> findKNeighbours(
           _i8.Matrix? features) =>
       (super.noSuchMethod(Invocation.method(#findKNeighbours, [features]),
-          returnValue: <Iterable<_i55.Neighbour<_i9.Vector>>>[]) as Iterable<Iterable<_i55.Neighbour<_i9.Vector>>>);
+              returnValue: <Iterable<_i55.Neighbour<_i9.Vector>>>[])
+          as Iterable<Iterable<_i55.Neighbour<_i9.Vector>>>);
 }
 
 /// A class which mocks [KnnSolverFactory].
@@ -813,8 +814,8 @@ class MockClassifier extends _i1.Mock implements _i53.Classifier {
           as num);
   @override
   Iterable<String> get targetNames =>
-      (super.noSuchMethod(Invocation.getter(#targetNames), returnValue: <String>[])
-          as Iterable<String>);
+      (super.noSuchMethod(Invocation.getter(#targetNames),
+          returnValue: <String>[]) as Iterable<String>);
   @override
   _i45.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i45.DType.float32) as _i45.DType);
@@ -1333,8 +1334,8 @@ class MockPredictor extends _i1.Mock implements _i74.Predictor {
 
   @override
   Iterable<String> get targetNames =>
-      (super.noSuchMethod(Invocation.getter(#targetNames), returnValue: <String>[])
-          as Iterable<String>);
+      (super.noSuchMethod(Invocation.getter(#targetNames),
+          returnValue: <String>[]) as Iterable<String>);
   @override
   _i45.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i45.DType.float32) as _i45.DType);

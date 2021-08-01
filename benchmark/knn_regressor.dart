@@ -14,7 +14,6 @@ class KnnRegressorBenchmark extends BenchmarkBase {
   late DataFrame testFeatures;
   late KnnRegressor regressor;
 
-
   static void main() {
     KnnRegressorBenchmark().report();
   }
@@ -26,11 +25,11 @@ class KnnRegressorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    final featureMatrix = Matrix.fromRows(List.generate(observationsNum * 2,
-            (i) => Vector.randomFilled(featuresNum)));
+    final featureMatrix = Matrix.fromRows(List.generate(
+        observationsNum * 2, (i) => Vector.randomFilled(featuresNum)));
 
-    final labelMatrix = Matrix
-        .fromColumns([Vector.randomFilled(observationsNum * 2)]);
+    final labelMatrix =
+        Matrix.fromColumns([Vector.randomFilled(observationsNum * 2)]);
 
     final observations = DataFrame.fromMatrix(Matrix.fromColumns([
       ...featureMatrix.columns,
@@ -38,12 +37,12 @@ class KnnRegressorBenchmark extends BenchmarkBase {
     ]));
 
     testFeatures = DataFrame.fromMatrix(
-        Matrix.fromRows(
-            List.generate(
-                observationsNum,
-                (i) => Vector.randomFilled(featuresNum),
-            ),
+      Matrix.fromRows(
+        List.generate(
+          observationsNum,
+          (i) => Vector.randomFilled(featuresNum),
         ),
+      ),
     );
 
     regressor = KnnRegressor(observations, observations.header.last, 7);

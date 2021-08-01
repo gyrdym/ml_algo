@@ -145,7 +145,7 @@ void main() {
           any,
         ),
       ).thenAnswer(
-            (_) => encodedLabelsFrames[encoderCallIteration++],
+        (_) => encodedLabelsFrames[encoderCallIteration++],
       );
 
       when(
@@ -173,9 +173,8 @@ void main() {
         ..registerDependency<EncoderFactory>(() => encoderFactoryMock.create,
             dependencyName: oneHotEncoderFactoryKey)
         ..registerSingleton<MetricFactory>(() => metricFactoryMock);
-      decisionTreeInjector
-        .registerSingleton<DecisionTreeClassifierFactory>(
-                () => classifierFactoryMock);
+      decisionTreeInjector.registerSingleton<DecisionTreeClassifierFactory>(
+          () => classifierFactoryMock);
 
       classifier32 = DecisionTreeClassifierImpl(
         minError,
@@ -231,21 +230,24 @@ void main() {
       expect(actual.header, classifier32.targetNames);
     });
 
-    test('should return data frame with empty header if input matrix is '
+    test(
+        'should return data frame with empty header if input matrix is '
         'empty', () {
       final predictedClasses = classifier32.predict(DataFrame([<num>[]]));
 
       expect(predictedClasses.header, isEmpty);
     });
 
-    test('should return data frame with empty matrix if input feature matrix '
+    test(
+        'should return data frame with empty matrix if input feature matrix '
         'is empty', () {
       final predictedClasses = classifier32.predict(DataFrame([<num>[]]));
 
       expect(predictedClasses.toMatrix(), isEmpty);
     });
 
-    test('should return data frame with probabilities for each class '
+    test(
+        'should return data frame with probabilities for each class '
         'label', () {
       final predictedLabels =
           classifier32.predictProbabilities(unlabelledFeaturesFrame);

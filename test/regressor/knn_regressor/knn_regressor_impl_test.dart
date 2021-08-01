@@ -50,14 +50,15 @@ void main() {
         expect(() => regressor.predict(data), throwsException);
       });
 
-      test('should return weighted average of outcomes of found k neighbours as '
+      test(
+          'should return weighted average of outcomes of found k neighbours as '
           'a prediction for each test feature record', () {
         final testFeatureMatrix = Matrix.fromList([
-          [10, 20, 30, 50,  10],
-          [22, 20, 27, 50,  34],
-          [44, 20, 92, 54,  51],
-          [44, 18, 09, 50,  00],
-          [10, 20, 30, 51,  00],
+          [10, 20, 30, 50, 10],
+          [22, 20, 27, 50, 34],
+          [44, 20, 92, 54, 51],
+          [44, 18, 09, 50, 00],
+          [10, 20, 30, 51, 00],
           [43, 95, 10, 33, -60],
         ]);
 
@@ -123,12 +124,12 @@ void main() {
         final actual = regressor.predict(testFeatures);
 
         final expected = [
-          [ 11.379],
-          [ 70.000],
-          [ 40.000],
+          [11.379],
+          [70.000],
+          [40.000],
           [569.619],
-          [  1.000],
-          [  0.000],
+          [1.000],
+          [0.000],
         ];
 
         expect(actual.rows, iterable2dAlmostEqualTo(expected, 1e-3));
@@ -141,12 +142,10 @@ void main() {
           ],
         ]);
 
-        when(
-          kernel.getWeightByDistance(
-            any,
-            any,
-          )
-        ).thenReturn(1);
+        when(kernel.getWeightByDistance(
+          any,
+          any,
+        )).thenReturn(1);
 
         final data = DataFrame.fromMatrix(Matrix.fromList([
           [1, 2, 3],
@@ -157,7 +156,9 @@ void main() {
     });
 
     group('retrain', () {
-      final retrainingData = DataFrame([[100, -200, 300, 444.55]]);
+      final retrainingData = DataFrame([
+        [100, -200, 300, 444.55]
+      ]);
 
       setUp(() {
         when(solver.distanceType).thenReturn(distanceType);
@@ -165,8 +166,7 @@ void main() {
         when(kernel.type).thenReturn(kernelType);
 
         knnRegressorInjector
-            .registerSingleton<KnnRegressorFactory>(
-                () => regressorFactory);
+            .registerSingleton<KnnRegressorFactory>(() => regressorFactory);
       });
 
       tearDown(() {

@@ -13,7 +13,9 @@ import '../../mocks.mocks.dart';
 void main() {
   group('CrossValidator', () {
     final data = DataFrame(
-      [<num>[1, 2, 3, 4]],
+      [
+        <num>[1, 2, 3, 4]
+      ],
       headerExists: false,
       header: ['1', '2', '3', '4'],
     );
@@ -27,33 +29,39 @@ void main() {
 
       modelSelectionInjector
         ..clearAll()
-        ..registerDependency<SplitIndicesProviderFactory>(() => dataSplitterFactory);
+        ..registerDependency<SplitIndicesProviderFactory>(
+            () => dataSplitterFactory);
     });
 
-    test('should create k-fold cross validator and pass number of folds '
+    test(
+        'should create k-fold cross validator and pass number of folds '
         'parameter into data splitter factory', () {
       CrossValidator.kFold(data, numberOfFolds: 10);
 
-      verify(dataSplitterFactory
-          .createByType(SplitIndicesProviderType.kFold, numberOfFolds: 10),
+      verify(
+        dataSplitterFactory.createByType(SplitIndicesProviderType.kFold,
+            numberOfFolds: 10),
       ).called(1);
     });
 
-    test('should create k-fold cross validator and pass 5 as default value for '
+    test(
+        'should create k-fold cross validator and pass 5 as default value for '
         'number of folds parameter into data splitter factory', () {
       CrossValidator.kFold(data);
 
-      verify(dataSplitterFactory
-          .createByType(SplitIndicesProviderType.kFold, numberOfFolds: 5),
+      verify(
+        dataSplitterFactory.createByType(SplitIndicesProviderType.kFold,
+            numberOfFolds: 5),
       ).called(1);
     });
 
-    test('should create leave-p-out cross validator and pass `p` parameter '
+    test(
+        'should create leave-p-out cross validator and pass `p` parameter '
         'into data splitter factory', () {
       CrossValidator.lpo(data, 30);
 
-      verify(dataSplitterFactory
-          .createByType(SplitIndicesProviderType.lpo, p: 30),
+      verify(
+        dataSplitterFactory.createByType(SplitIndicesProviderType.lpo, p: 30),
       ).called(1);
     });
   });

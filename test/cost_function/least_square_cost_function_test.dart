@@ -44,11 +44,10 @@ void main() {
     group('LeastSquareCostFunction.getCost', () {
       test('should return residual sum of squares', () {
         final actual = squaredCost.getCost(x, w, y);
-        final expected =
-              math.pow(x11 * w1 + x12 * w2 + x13 * w3 - y1, 2)
-            + math.pow(x21 * w1 + x22 * w2 + x23 * w3 - y2, 2)
-            + math.pow(x31 * w1 + x32 * w2 + x33 * w3 - y3, 2)
-            + math.pow(x41 * w1 + x42 * w2 + x43 * w3 - y4, 2);
+        final expected = math.pow(x11 * w1 + x12 * w2 + x13 * w3 - y1, 2) +
+            math.pow(x21 * w1 + x22 * w2 + x23 * w3 - y2, 2) +
+            math.pow(x31 * w1 + x32 * w2 + x33 * w3 - y3, 2) +
+            math.pow(x41 * w1 + x42 * w2 + x43 * w3 - y4, 2);
 
         expect(actual, closeTo(expected, 1e-3));
       });
@@ -63,24 +62,27 @@ void main() {
         // w - coefficients matrix (vector-column)
         final actual = squaredCost.getGradient(x, w, y);
         final expected = [
-          [-2.0 * (
-                x11 * (y1 - (x11 * w1 + x12 * w2 + x13 * w3))
-              + x21 * (y2 - (x21 * w1 + x22 * w2 + x23 * w3))
-              + x31 * (y3 - (x31 * w1 + x32 * w2 + x33 * w3))
-              + x41 * (y4 - (x41 * w1 + x42 * w2 + x43 * w3))
-          )],
-          [-2.0 * (
-                x12 * (y1 - (x11 * w1 + x12 * w2 + x13 * w3))
-              + x22 * (y2 - (x21 * w1 + x22 * w2 + x23 * w3))
-              + x32 * (y3 - (x31 * w1 + x32 * w2 + x33 * w3))
-              + x42 * (y4 - (x41 * w1 + x42 * w2 + x43 * w3))
-          )],
-          [-2.0 * (
-                x13 * (y1 - (x11 * w1 + x12 * w2 + x13 * w3))
-              + x23 * (y2 - (x21 * w1 + x22 * w2 + x23 * w3))
-              + x33 * (y3 - (x31 * w1 + x32 * w2 + x33 * w3))
-              + x43 * (y4 - (x41 * w1 + x42 * w2 + x43 * w3))
-          )],
+          [
+            -2.0 *
+                (x11 * (y1 - (x11 * w1 + x12 * w2 + x13 * w3)) +
+                    x21 * (y2 - (x21 * w1 + x22 * w2 + x23 * w3)) +
+                    x31 * (y3 - (x31 * w1 + x32 * w2 + x33 * w3)) +
+                    x41 * (y4 - (x41 * w1 + x42 * w2 + x43 * w3)))
+          ],
+          [
+            -2.0 *
+                (x12 * (y1 - (x11 * w1 + x12 * w2 + x13 * w3)) +
+                    x22 * (y2 - (x21 * w1 + x22 * w2 + x23 * w3)) +
+                    x32 * (y3 - (x31 * w1 + x32 * w2 + x33 * w3)) +
+                    x42 * (y4 - (x41 * w1 + x42 * w2 + x43 * w3)))
+          ],
+          [
+            -2.0 *
+                (x13 * (y1 - (x11 * w1 + x12 * w2 + x13 * w3)) +
+                    x23 * (y2 - (x21 * w1 + x22 * w2 + x23 * w3)) +
+                    x33 * (y3 - (x31 * w1 + x32 * w2 + x33 * w3)) +
+                    x43 * (y4 - (x41 * w1 + x42 * w2 + x43 * w3)))
+          ],
         ];
 
         expect(actual, iterable2dAlmostEqualTo(expected, 1e-3));

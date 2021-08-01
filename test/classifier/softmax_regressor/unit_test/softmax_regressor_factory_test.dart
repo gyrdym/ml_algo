@@ -92,28 +92,32 @@ void main() {
       bool collectLearningData = false,
       DType dtype = DType.float32,
       int? batchSize,
-    }) => factory.create(
-      trainData: trainData ?? defaultTrainData,
-      targetNames: targetColumnNames,
-      optimizerType: optimizerType ?? LinearOptimizerType.gradient,
-      learningRateType: learningRateType ?? LearningRateType.constant,
-      initialCoefficientsType: initialCoefficientsType ?? InitialCoefficientsType.zeroes,
-      iterationsLimit: iterationsLimit,
-      initialLearningRate: initialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate,
-      lambda: lambda,
-      regularizationType: regularizationType,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      initialCoefficients: initialCoefficients ?? defaultInitialCoefficients,
-      randomSeed: randomSeed,
-      positiveLabel: positiveLabel ?? defaultPositiveLabel,
-      negativeLabel: negativeLabel ?? defaultNegativeLabel,
-      isFittingDataNormalized: isFittingDataNormalized ?? defaultNormalizedFlag,
-      collectLearningData: collectLearningData,
-      dtype: dtype,
-      batchSize: batchSize ?? ((trainData ?? defaultTrainData).rows.length),
-    );
+    }) =>
+        factory.create(
+          trainData: trainData ?? defaultTrainData,
+          targetNames: targetColumnNames,
+          optimizerType: optimizerType ?? LinearOptimizerType.gradient,
+          learningRateType: learningRateType ?? LearningRateType.constant,
+          initialCoefficientsType:
+              initialCoefficientsType ?? InitialCoefficientsType.zeroes,
+          iterationsLimit: iterationsLimit,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minCoefficientsUpdate,
+          lambda: lambda,
+          regularizationType: regularizationType,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale,
+          initialCoefficients:
+              initialCoefficients ?? defaultInitialCoefficients,
+          randomSeed: randomSeed,
+          positiveLabel: positiveLabel ?? defaultPositiveLabel,
+          negativeLabel: negativeLabel ?? defaultNegativeLabel,
+          isFittingDataNormalized:
+              isFittingDataNormalized ?? defaultNormalizedFlag,
+          collectLearningData: collectLearningData,
+          dtype: dtype,
+          batchSize: batchSize ?? ((trainData ?? defaultTrainData).rows.length),
+        );
 
     setUp(() {
       linkFunctionMock = MockLinkFunction();
@@ -124,8 +128,7 @@ void main() {
 
       injector
         ..clearAll()
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
+        ..registerDependency<CostFunctionFactory>(() => costFunctionFactoryMock)
         ..registerSingleton<LinearOptimizerFactory>(() => optimizerFactoryMock);
 
       when(optimizerMock.findExtrema(
@@ -146,27 +149,28 @@ void main() {
     test('should throw an exception if some target columns do not exist', () {
       final targetColumnNames = ['target_1', 'some', 'unknown', 'columns'];
 
-      final actual = () => createRegressor(targetColumnNames: targetColumnNames);
+      final actual =
+          () => createRegressor(targetColumnNames: targetColumnNames);
 
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if target columns number is less than '
+    test(
+        'should throw an exception if target columns number is less than '
         'two, since the SoftmaxRegressor supports only multiclass '
         'classification with one-hot (or other similar method) encoded '
         'features', () {
-
-      final targetColumnNames =
-        ['target_1'];
+      final targetColumnNames = ['target_1'];
 
       final actual = () => createRegressor(
-        targetColumnNames: targetColumnNames,
-      );
+            targetColumnNames: targetColumnNames,
+          );
 
       expect(actual, throwsException);
     });
 
-    test('should call cost function factory in order to create '
+    test(
+        'should call cost function factory in order to create '
         'loglikelihood cost function', () {
       createRegressor(
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
@@ -180,7 +184,8 @@ void main() {
       )).called(1);
     });
 
-    test('should call linear optimizer factory and consider intercept term '
+    test(
+        'should call linear optimizer factory and consider intercept term '
         'while calling the factory', () {
       createRegressor(
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
@@ -235,7 +240,8 @@ void main() {
       )).called(1);
     });
 
-    test('should find the extrema for fitting observations while '
+    test(
+        'should find the extrema for fitting observations while '
         'instantiating', () {
       createRegressor(
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
@@ -249,7 +255,8 @@ void main() {
       )).called(1);
     });
 
-    test('should pass collectLearningData to the optimizer mock\'s findExtrema '
+    test(
+        'should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=true', () {
       createRegressor(
         targetColumnNames: ['target_1', 'target_2', 'target_3'],
@@ -264,7 +271,8 @@ void main() {
       )).called(1);
     });
 
-    test('should pass collectLearningData to the optimizer mock\'s findExtrema '
+    test(
+        'should pass collectLearningData to the optimizer mock\'s findExtrema '
         'method, collectLearningData=false', () {
       createRegressor(
         targetColumnNames: ['target_1', 'target_2', 'target_3'],

@@ -4,16 +4,14 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 void testTreeNode(
-    TreeNode node,
-    {
-      required bool shouldBeLeaf,
-      required double expectedSplittingValue,
-      required int expectedSplittingColumnIdx,
-      int? expectedChildrenLength,
-      TreeLeafLabel? expectedLabel,
-      Map<Vector, bool>? samplesToCheck,
-    }
-) {
+  TreeNode node, {
+  required bool shouldBeLeaf,
+  required double expectedSplittingValue,
+  required int expectedSplittingColumnIdx,
+  int? expectedChildrenLength,
+  TreeLeafLabel? expectedLabel,
+  Map<Vector, bool>? samplesToCheck,
+}) {
   expect(node.isLeaf, equals(shouldBeLeaf),
       reason: 'node.isLeaf should be $shouldBeLeaf');
 
@@ -35,8 +33,7 @@ void testTreeNode(
   });
 }
 
-void testLeafLabel(TreeLeafLabel label,
-    TreeLeafLabel expectedLabel) {
+void testLeafLabel(TreeLeafLabel label, TreeLeafLabel expectedLabel) {
   expect(label.value, equals(expectedLabel.value));
   expect(label.probability, equals(expectedLabel.probability));
 }

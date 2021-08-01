@@ -31,35 +31,39 @@ void main() {
     final isFittingDataNormalized = true;
     final learningRateType = LearningRateType.decreasingAdaptive;
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
-    final initialCoefficients = Matrix.fromList([[13, 43, 55]]);
+    final initialCoefficients = Matrix.fromList([
+      [13, 43, 55]
+    ]);
     final fitIntercept = true;
     final interceptScale = 10.0;
     final positiveLabel = 1.0;
     final negativeLabel = -1.0;
     final costPerIteration = [10, -10, 20, 2.3];
-    final retrainingData = DataFrame([[1, 2, -90, 100]]);
+    final retrainingData = DataFrame([
+      [1, 2, -90, 100]
+    ]);
     final retrainedModelMock = MockSoftmaxRegressor();
-    final classifierFactory = createSoftmaxRegressorFactoryMock(
-        retrainedModelMock);
+    final classifierFactory =
+        createSoftmaxRegressorFactoryMock(retrainedModelMock);
     final dtype = DType.float32;
     final collectLearningData = false;
 
     final coefficientsByClasses = Matrix.fromList([
-      [-1, -3,   -5],
-      [ 2, 10,  200],
-      [ 1, 40,  300],
-      [ 3, 44, -120],
-      [ 3, 22,   10],
-      [ 4,  0,    1],
+      [-1, -3, -5],
+      [2, 10, 200],
+      [1, 40, 300],
+      [3, 44, -120],
+      [3, 22, 10],
+      [4, 0, 1],
     ]);
 
     final testFeatureMatrix = Matrix.fromList([
-      [ 10, 20,  30,   40,   50],
-      [ 11, 22,  33,   44,   55],
-      [ 31, 32,  93,   34,   35],
-      [ 91, 72,  83,   74,   65],
-      [ 55, 11,  99,   33,   12],
-      [-11,  0, 123, 1000, 1e-4],
+      [10, 20, 30, 40, 50],
+      [11, 22, 33, 44, 55],
+      [31, 32, 93, 34, 35],
+      [91, 72, 83, 74, 65],
+      [55, 11, 99, 33, 12],
+      [-11, 0, 123, 1000, 1e-4],
     ]);
 
     final interceptColumn = Vector.fromList([
@@ -77,12 +81,12 @@ void main() {
     ]);
 
     final mockedProbabilities = Matrix.fromList([
-      [ 0.6,  0.2,  0.2],
-      [ 0.1,  0.8,  0.1],
-      [ 0.1,  0.7,  0.2],
-      [0.05, 0.05,  0.9],
-      [ 0.5,  0.4,  0.1],
-      [0.05,  0.8, 0.15],
+      [0.6, 0.2, 0.2],
+      [0.1, 0.8, 0.1],
+      [0.1, 0.7, 0.2],
+      [0.05, 0.05, 0.9],
+      [0.5, 0.4, 0.1],
+      [0.05, 0.8, 0.15],
     ]);
 
     final expectedOutcomeMatrix = Matrix.fromList([
@@ -148,61 +152,62 @@ void main() {
     group('default constructor', () {
       test('should throw an exception if no coefficients are provided', () {
         final actual = () => SoftmaxRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          Matrix.empty(),
-          targetNames,
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          positiveLabel,
-          negativeLabel,
-          costPerIteration,
-          dtype,
-        );
+              optimizerType,
+              iterationsLimit,
+              initialLearningRate,
+              minCoefficientsUpdate,
+              lambda,
+              regularizationType,
+              randomSeed,
+              batchSize,
+              isFittingDataNormalized,
+              learningRateType,
+              initialCoefficientsType,
+              initialCoefficients,
+              Matrix.empty(),
+              targetNames,
+              linkFunctionMock,
+              fitIntercept,
+              interceptScale,
+              positiveLabel,
+              negativeLabel,
+              costPerIteration,
+              dtype,
+            );
 
         expect(actual, throwsException);
       });
 
-      test('should throw an exception if coefficients for too few number of '
+      test(
+          'should throw an exception if coefficients for too few number of '
           'classes are provided', () {
         final actual = () => SoftmaxRegressorImpl(
-          optimizerType,
-          iterationsLimit,
-          initialLearningRate,
-          minCoefficientsUpdate,
-          lambda,
-          regularizationType,
-          randomSeed,
-          batchSize,
-          isFittingDataNormalized,
-          learningRateType,
-          initialCoefficientsType,
-          initialCoefficients,
-          Matrix.fromList([
-            [1],
-            [2],
-            [3],
-          ]),
-          targetNames,
-          linkFunctionMock,
-          fitIntercept,
-          interceptScale,
-          positiveLabel,
-          negativeLabel,
-          costPerIteration,
-          dtype,
-        );
+              optimizerType,
+              iterationsLimit,
+              initialLearningRate,
+              minCoefficientsUpdate,
+              lambda,
+              regularizationType,
+              randomSeed,
+              batchSize,
+              isFittingDataNormalized,
+              learningRateType,
+              initialCoefficientsType,
+              initialCoefficients,
+              Matrix.fromList([
+                [1],
+                [2],
+                [3],
+              ]),
+              targetNames,
+              linkFunctionMock,
+              fitIntercept,
+              interceptScale,
+              positiveLabel,
+              negativeLabel,
+              costPerIteration,
+              dtype,
+            );
 
         expect(actual, throwsException);
       });
@@ -279,8 +284,9 @@ void main() {
         regressor.predict(testFeatures);
 
         verify(linkFunctionMock.link(
-          argThat(iterable2dAlmostEqualTo(
-              testFeaturesMatrixWithIntercept * coefficientsByClasses),
+          argThat(
+            iterable2dAlmostEqualTo(
+                testFeaturesMatrixWithIntercept * coefficientsByClasses),
           ),
         )).called(1);
       });
@@ -301,7 +307,7 @@ void main() {
             [0.33, 0.33, 0.33],
           ]),
         );
-        
+
         final actual = regressor.predict(testFeatures);
         final expectedOutcome = Matrix.fromList([
           [positiveLabel, negativeLabel, negativeLabel],
@@ -346,9 +352,9 @@ void main() {
       test('should consider intercept term', () {
         regressor.predictProbabilities(testFeatures);
 
-        verify(linkFunctionMock.link(
-            testFeaturesMatrixWithIntercept * coefficientsByClasses)
-        ).called(1);
+        verify(linkFunctionMock
+                .link(testFeaturesMatrixWithIntercept * coefficientsByClasses))
+            .called(1);
       });
 
       test('should return probabilities as dataframe', () {

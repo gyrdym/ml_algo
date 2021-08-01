@@ -6,34 +6,38 @@ import 'package:test/test.dart';
 void main() {
   group('LinearOptimizerTypeJsonConverter', () {
     test('should decode ${LinearOptimizerType.gradient} type', () {
-      expect(const LinearOptimizerTypeJsonConverter()
-          .fromJson(gradientLinearOptimizerTypeEncodedValue),
+      expect(
+          const LinearOptimizerTypeJsonConverter()
+              .fromJson(gradientLinearOptimizerTypeEncodedValue),
           LinearOptimizerType.gradient);
     });
 
     test('should decode ${LinearOptimizerType.coordinate} type', () {
-      expect(const LinearOptimizerTypeJsonConverter()
-          .fromJson(coordinateLinearOptimizerTypeEncodedValue),
+      expect(
+          const LinearOptimizerTypeJsonConverter()
+              .fromJson(coordinateLinearOptimizerTypeEncodedValue),
           LinearOptimizerType.coordinate);
     });
 
     test('should throw exception if unknown value is provided', () {
       expect(
-            () => const LinearOptimizerTypeJsonConverter()
-                .fromJson('unknown_value'),
-          throwsException,
+        () =>
+            const LinearOptimizerTypeJsonConverter().fromJson('unknown_value'),
+        throwsException,
       );
     });
 
     test('should encode ${LinearOptimizerType.gradient} type', () {
-      expect(const LinearOptimizerTypeJsonConverter()
-          .toJson(LinearOptimizerType.gradient),
+      expect(
+          const LinearOptimizerTypeJsonConverter()
+              .toJson(LinearOptimizerType.gradient),
           gradientLinearOptimizerTypeEncodedValue);
     });
 
     test('should encode ${LinearOptimizerType.coordinate} type', () {
-      expect(const LinearOptimizerTypeJsonConverter()
-          .toJson(LinearOptimizerType.coordinate),
+      expect(
+          const LinearOptimizerTypeJsonConverter()
+              .toJson(LinearOptimizerType.coordinate),
           coordinateLinearOptimizerTypeEncodedValue);
     });
   });

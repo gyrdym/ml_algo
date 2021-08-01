@@ -33,14 +33,14 @@ void main() {
     final targetNames = ['target_1', 'target_2', 'target_2'];
     final samplesHeader = [...featuresNames, ...targetNames];
     final samples = DataFrame([
-      <num>[     1,  33,   -199, 1, 0, 0],
+      <num>[1, 33, -199, 1, 0, 0],
       <num>[-90002, 232, 889.20, 1, 0, 0],
-      <num>[-12004,  19,    111, 0, 1, 0],
+      <num>[-12004, 19, 111, 0, 1, 0],
     ], headerExists: false, header: samplesHeader);
     final featuresMock = DataFrame([
-      <num>[     1,  33,   -199],
+      <num>[1, 33, -199],
       <num>[-90002, 232, 889.20],
-      <num>[-12004,  19,    111],
+      <num>[-12004, 19, 111],
     ], headerExists: false, header: featuresNames);
     final targetMock = DataFrame([
       <num>[1, 0, 0],
@@ -83,7 +83,7 @@ void main() {
       ).thenReturn(positiveLabel);
 
       when(
-          classifierMock.targetNames,
+        classifierMock.targetNames,
       ).thenReturn(targetNames);
 
       when(
@@ -105,9 +105,9 @@ void main() {
       ).thenReturn(predictionMock);
 
       when(
-          metricFactoryMock.createByType(
-            any,
-          ),
+        metricFactoryMock.createByType(
+          any,
+        ),
       ).thenReturn(metricMock);
 
       when(
@@ -141,7 +141,8 @@ void main() {
       final metricTypes = [MetricType.mape, MetricType.rmse];
 
       metricTypes.forEach((metricType) {
-        final actual = () => assessor.assess(classifierMock, metricType, samples);
+        final actual =
+            () => assessor.assess(classifierMock, metricType, samples);
 
         expect(actual, throwsA(isA<InvalidMetricTypeException>()));
       });
@@ -169,7 +170,8 @@ void main() {
       verify(encoderMock.process(targetMock)).called(1);
     });
 
-    test('should normalize predicted class labels if predefined labels for '
+    test(
+        'should normalize predicted class labels if predefined labels for '
         'positive and negative classes exist', () {
       when(classifierMock.positiveLabel).thenReturn(positiveLabel);
       when(classifierMock.negativeLabel).thenReturn(negativeLabel);
@@ -178,12 +180,15 @@ void main() {
 
       verify(
         classLabelsNormalizerMock.normalize(
-          predictionMock.toMatrix(dtype), positiveLabel, negativeLabel,
+          predictionMock.toMatrix(dtype),
+          positiveLabel,
+          negativeLabel,
         ),
       ).called(1);
     });
 
-    test('should normalize original class labels if predefined labels for '
+    test(
+        'should normalize original class labels if predefined labels for '
         'positive and negative classes exist', () {
       when(classifierMock.positiveLabel).thenReturn(positiveLabel);
       when(classifierMock.negativeLabel).thenReturn(negativeLabel);
@@ -192,7 +197,9 @@ void main() {
 
       verify(
         classLabelsNormalizerMock.normalize(
-          targetMock.toMatrix(dtype), positiveLabel, negativeLabel,
+          targetMock.toMatrix(dtype),
+          positiveLabel,
+          negativeLabel,
         ),
       ).called(1);
     });

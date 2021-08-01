@@ -93,7 +93,8 @@ void main() {
       verify(kernelFactoryMock.createByType(kernelType)).called(1);
     });
 
-    test('should call solver factory with proper train features, train labels, '
+    test(
+        'should call solver factory with proper train features, train labels, '
         'k parameter, distance type and standardization flag', () {
       factory.create(
         trainData,
@@ -105,22 +106,22 @@ void main() {
         dtype,
       );
 
-      verify(
-        solverFactoryMock.create(
-          argThat(equals(features)),
-          argThat(equals(outcomes)),
-          k,
-          distanceType,
-          true,
+      verify(solverFactoryMock.create(
+        argThat(equals(features)),
+        argThat(equals(outcomes)),
+        k,
+        distanceType,
+        true,
       )).called(1);
     });
 
-    test('should extract class label list from target column even if the '
+    test(
+        'should extract class label list from target column even if the '
         'latter is not marked as discrete', () {
       final trainData = DataFrame.fromSeries(
         [
-          Series('first' , <num>[1, 1, 1, 1, 1, 1, 1, 1]),
-          Series(targetName , <num>[1, 3, 2, 1, 3, 3, 2, 1]),
+          Series('first', <num>[1, 1, 1, 1, 1, 1, 1, 1]),
+          Series(targetName, <num>[1, 3, 2, 1, 3, 3, 2, 1]),
         ],
       );
 
@@ -137,17 +138,18 @@ void main() {
       expect(classifier.classLabels, [1, 3, 2]);
     });
 
-    test('should throw an exception if target column does not exist in the '
+    test(
+        'should throw an exception if target column does not exist in the '
         'train data', () {
       final actual = () => factory.create(
-        trainData,
-        'some_unknown_column_name',
-        k,
-        kernelType,
-        distanceType,
-        classLabelPrefix,
-        dtype,
-      );
+            trainData,
+            'some_unknown_column_name',
+            k,
+            kernelType,
+            distanceType,
+            classLabelPrefix,
+            dtype,
+          );
 
       expect(actual, throwsException);
     });

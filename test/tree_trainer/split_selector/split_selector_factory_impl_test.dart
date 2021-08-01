@@ -40,23 +40,22 @@ void main() {
       final assessorType = TreeSplitAssessorType.majority;
       final splitterType = TreeSplitterType.greedy;
 
-      final splitSelector = factory.createByType(type, assessorType,
-          splitterType);
+      final splitSelector =
+          factory.createByType(type, assessorType, splitterType);
 
       expect(splitSelector, isA<GreedyTreeSplitSelector>());
     });
 
-    test('should call split assessor factory while creating the '
+    test(
+        'should call split assessor factory while creating the '
         'instance', () {
-
       final type = TreeSplitSelectorType.greedy;
       final assessorType = TreeSplitAssessorType.majority;
       final splitterType = TreeSplitterType.greedy;
 
       factory.createByType(type, assessorType, splitterType);
 
-      verify(splitAssessorFactoryMock.createByType(assessorType))
-          .called(1);
+      verify(splitAssessorFactoryMock.createByType(assessorType)).called(1);
     });
 
     test('should call splitter factory while creating the instance', () {

@@ -11,12 +11,14 @@ void main() {
       expect(v1_float64InverseLogitLinkFunctionEncoded, 'F64IL');
     });
 
-    test('should contain a proper encoded value for float32 softmax link '
+    test(
+        'should contain a proper encoded value for float32 softmax link '
         'function', () {
       expect(v1_float32SoftmaxLinkFunctionEncoded, 'F32SM');
     });
 
-    test('should contain a proper encoded value for float64 softmax link '
+    test(
+        'should contain a proper encoded value for float64 softmax link '
         'function', () {
       expect(v1_float64SoftmaxLinkFunctionEncoded, 'F64SM');
     });

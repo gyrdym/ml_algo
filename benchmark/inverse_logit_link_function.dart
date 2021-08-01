@@ -8,8 +8,8 @@ import 'package:ml_linalg/vector.dart';
 const scoresCount = 100000;
 
 class InverseLogitLinkFunctionBenchmark extends BenchmarkBase {
-  InverseLogitLinkFunctionBenchmark() :
-        super('InverseLogitLinkFunctionBenchmark benchmark');
+  InverseLogitLinkFunctionBenchmark()
+      : super('InverseLogitLinkFunctionBenchmark benchmark');
 
   final linkFunction = const InverseLogitLinkFunction();
 

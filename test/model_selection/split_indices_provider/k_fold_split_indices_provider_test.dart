@@ -5,19 +5,22 @@ void main() {
   group('KFoldIndicesProvider', () {
     void testKFoldSplitter(int numOfFold, int numOfObservations,
         Iterable<Iterable<int>> expected) {
-      test('should return proper groups of indices if number of folds is '
+      test(
+          'should return proper groups of indices if number of folds is '
           '$numOfFold and number of observations is $numOfObservations', () {
         final splitter = KFoldIndicesProvider(numOfFold);
         expect(splitter.getIndices(numOfObservations), equals(expected));
       });
     }
 
-    test('should throw an exception if passed number of folds is equal to '
+    test(
+        'should throw an exception if passed number of folds is equal to '
         '0', () {
       expect(() => KFoldIndicesProvider(0), throwsRangeError);
     });
 
-    test('should throw an exception if passed number of folds is equal to '
+    test(
+        'should throw an exception if passed number of folds is equal to '
         '1', () {
       expect(() => KFoldIndicesProvider(1), throwsRangeError);
     });
@@ -44,7 +47,18 @@ void main() {
     ]);
 
     testKFoldSplitter(12, 12, [
-      [0], [1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11],
+      [0],
+      [1],
+      [2],
+      [3],
+      [4],
+      [5],
+      [6],
+      [7],
+      [8],
+      [9],
+      [10],
+      [11],
     ]);
 
     testKFoldSplitter(5, 37, [
@@ -60,7 +74,8 @@ void main() {
       expect(() => splitter.getIndices(0), throwsRangeError);
     });
 
-    test('should throws a range error if number of observations is less than'
+    test(
+        'should throws a range error if number of observations is less than'
         'number of folds', () {
       final splitter = KFoldIndicesProvider(9);
       expect(() => splitter.getIndices(8), throwsRangeError);

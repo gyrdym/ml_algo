@@ -9,48 +9,56 @@ void main() {
     group('constructor', () {
       test('should throw an exception if empty feature matrix is provided', () {
         final actual = () => KnnSolverImpl(
-          Matrix.empty(dtype: DType.float32),
-          Matrix.fromList([[1]]),
-          2,
-          Distance.cosine,
-          true,
-        );
+              Matrix.empty(dtype: DType.float32),
+              Matrix.fromList([
+                [1]
+              ]),
+              2,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsException);
       });
 
       test('should throw an exception if empty outcome matrix is provided', () {
         final actual = () => KnnSolverImpl(
-          Matrix.fromList([[1, 1, 1]]),
-          Matrix.empty(dtype: DType.float32),
-          1,
-          Distance.cosine,
-          true,
-        );
+              Matrix.fromList([
+                [1, 1, 1]
+              ]),
+              Matrix.empty(dtype: DType.float32),
+              1,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsException);
       });
 
-      test('should throw an exception if rows number of outcome '
+      test(
+          'should throw an exception if rows number of outcome '
           'matrix is greater than the rows number of feature matrix', () {
-        final featureMatrix = Matrix.fromList([[1, 1, 1]]);
+        final featureMatrix = Matrix.fromList([
+          [1, 1, 1]
+        ]);
         final outcomeMatrix = Matrix.fromList([
           [1],
           [2],
         ]);
 
         final actual = () => KnnSolverImpl(
-          featureMatrix,
-          outcomeMatrix,
-          1,
-          Distance.cosine,
-          true,
-        );
+              featureMatrix,
+              outcomeMatrix,
+              1,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsException);
       });
 
-      test('should throw an exception if rows number of outcome '
+      test(
+          'should throw an exception if rows number of outcome '
           'matrix is less than the rows number of feature matrix', () {
         final featureMatrix = Matrix.fromList([
           [1, 1, 1],
@@ -61,17 +69,18 @@ void main() {
         ]);
 
         final actual = () => KnnSolverImpl(
-          featureMatrix,
-          outcomeMatrix,
-          1,
-          Distance.cosine,
-          true,
-        );
+              featureMatrix,
+              outcomeMatrix,
+              1,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsException);
       });
 
-      test('should throw an exception if outcome matrix is not a column '
+      test(
+          'should throw an exception if outcome matrix is not a column '
           'matrix', () {
         final featureMatrix = Matrix.fromList([
           [1, 1, 1],
@@ -83,56 +92,70 @@ void main() {
         ]);
 
         final actual = () => KnnSolverImpl(
-          featureMatrix,
-          outcomeMatrix,
-          1,
-          Distance.cosine,
-          true,
-        );
+              featureMatrix,
+              outcomeMatrix,
+              1,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsException);
       });
 
-      test('should throw an exception if k parameter is greater than the number '
+      test(
+          'should throw an exception if k parameter is greater than the number '
           'of rows of provided matrices', () {
         final actual = () => KnnSolverImpl(
-          Matrix.fromList([[1, 1, 1, 1]]),
-          Matrix.fromList([[1]]),
-          2,
-          Distance.cosine,
-          true,
-        );
+              Matrix.fromList([
+                [1, 1, 1, 1]
+              ]),
+              Matrix.fromList([
+                [1]
+              ]),
+              2,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsRangeError);
       });
 
       test('should throw an exception if k parameter is less than 0', () {
         final actual = () => KnnSolverImpl(
-          Matrix.fromList([[1, 1, 1, 1]]),
-          Matrix.fromList([[1]]),
-          -1,
-          Distance.cosine,
-          true,
-        );
+              Matrix.fromList([
+                [1, 1, 1, 1]
+              ]),
+              Matrix.fromList([
+                [1]
+              ]),
+              -1,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsRangeError);
       });
 
       test('should throw an exception if k parameter is equal to 0', () {
         final actual = () => KnnSolverImpl(
-          Matrix.fromList([[1, 1, 1, 1]]),
-          Matrix.fromList([[1]]),
-          0,
-          Distance.cosine,
-          true,
-        );
+              Matrix.fromList([
+                [1, 1, 1, 1]
+              ]),
+              Matrix.fromList([
+                [1]
+              ]),
+              0,
+              Distance.cosine,
+              true,
+            );
 
         expect(actual, throwsRangeError);
       });
     });
 
     group('findKNeighbours method', () {
-      test('should throw an exception if the number of provided test feature '
+      test(
+          'should throw an exception if the number of provided test feature '
           'matrix columns is less than the number of columns of train  feature '
           'matrix', () {
         final solver = KnnSolverImpl(
@@ -149,12 +172,15 @@ void main() {
           true,
         );
 
-        final testFeatures = Matrix.fromList([[10, 10, 10]]);
+        final testFeatures = Matrix.fromList([
+          [10, 10, 10]
+        ]);
 
         expect(() => solver.findKNeighbours(testFeatures), throwsException);
       });
 
-      test('should throw an exception if the number of provided test feature '
+      test(
+          'should throw an exception if the number of provided test feature '
           'matrix columns is greater than the number of columns of train '
           'feature matrix', () {
         final solver = KnnSolverImpl(
@@ -171,14 +197,16 @@ void main() {
           true,
         );
 
-        final testFeatures = Matrix.fromList([[10, 10, 10, 100, 100]]);
+        final testFeatures = Matrix.fromList([
+          [10, 10, 10, 100, 100]
+        ]);
 
         expect(() => solver.findKNeighbours(testFeatures), throwsException);
       });
 
-      test('should find k neighbours for each of N passed observations, '
+      test(
+          'should find k neighbours for each of N passed observations, '
           '0 < k < N', () {
-
         final k = 3;
 
         final y1 = [100.0];
@@ -208,8 +236,8 @@ void main() {
           [3, 3, 3, 3, 3],
         ]);
 
-        final solver = KnnSolverImpl(trainFeatures, trainOutcomes, k,
-            Distance.euclidean, true);
+        final solver = KnnSolverImpl(
+            trainFeatures, trainOutcomes, k, Distance.euclidean, true);
 
         final actual = solver.findKNeighbours(testFeatures).toList();
 
@@ -225,9 +253,9 @@ void main() {
         );
       });
 
-      test('should find k neighbours for each of N passed observations, '
+      test(
+          'should find k neighbours for each of N passed observations, '
           'k = N', () {
-
         final k = 5;
 
         final y1 = [100.0];
@@ -251,8 +279,8 @@ void main() {
           [3, 3, 3, 3, 3],
         ]);
 
-        final solver = KnnSolverImpl(trainFeatures, trainOutcomes, k,
-            Distance.euclidean, true);
+        final solver = KnnSolverImpl(
+            trainFeatures, trainOutcomes, k, Distance.euclidean, true);
 
         final actual = solver.findKNeighbours(testFeatures).toList();
 

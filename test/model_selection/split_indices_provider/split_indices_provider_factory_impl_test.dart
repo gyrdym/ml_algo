@@ -15,7 +15,8 @@ void main() {
       );
     });
 
-    test('should throw an exception if number of folds is not provided for '
+    test(
+        'should throw an exception if number of folds is not provided for '
         'k fold indices provider', () {
       expect(
         () => factory.createByType(SplitIndicesProviderType.kFold),
@@ -30,10 +31,11 @@ void main() {
       );
     });
 
-    test('should throw an exception if `p` parameter is not provided for '
+    test(
+        'should throw an exception if `p` parameter is not provided for '
         'leave p out indices provider', () {
       expect(
-            () => factory.createByType(SplitIndicesProviderType.lpo),
+        () => factory.createByType(SplitIndicesProviderType.lpo),
         throwsException,
       );
     });

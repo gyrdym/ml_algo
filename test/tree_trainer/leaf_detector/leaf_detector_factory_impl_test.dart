@@ -15,8 +15,8 @@ void main() {
 
     setUp(() {
       splitAssessorMock = MockTreeSplitAssessor();
-      splitAssessorFactoryMock = createTreeSplitAssessorFactoryMock(
-          splitAssessorMock);
+      splitAssessorFactoryMock =
+          createTreeSplitAssessorFactoryMock(splitAssessorMock);
       factory = TreeLeafDetectorFactoryImpl(splitAssessorFactoryMock);
     });
 

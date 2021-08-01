@@ -39,31 +39,34 @@ void main() {
     final interceptScale = 109.23;
     final costPerIteration = [23, 34, 12];
     final dtype = DType.float32;
-    final retrainingData = DataFrame([[12, 34, -45.66]]);
+    final retrainingData = DataFrame([
+      [12, 34, -45.66]
+    ]);
     final retrainedModelMock = MockLinearRegressor();
     final createRegressor = ({
       int schemaVersion = linearRegressorJsonSchemaVersion,
-    }) => LinearRegressorImpl(
-      coefficients,
-      targetName,
-      optimizerType: optimizerType,
-      iterationsLimit: iterationsLimit,
-      learningRateType: learningRateType,
-      initialCoefficientsType: initialCoefficientsType,
-      initialLearningRate: initialLearningRate,
-      minCoefficientsUpdate: minCoefficientsUpdate,
-      lambda: lambda,
-      regularizationType: regularizationType,
-      randomSeed: randomSeed,
-      batchSize: batchSize,
-      initialCoefficients: initialCoefficients,
-      isFittingDataNormalized: isFittingDataNormalized,
-      fitIntercept: fitIntercept,
-      interceptScale: interceptScale,
-      costPerIteration: costPerIteration,
-      dtype: dtype,
-      schemaVersion: schemaVersion,
-    );
+    }) =>
+        LinearRegressorImpl(
+          coefficients,
+          targetName,
+          optimizerType: optimizerType,
+          iterationsLimit: iterationsLimit,
+          learningRateType: learningRateType,
+          initialCoefficientsType: initialCoefficientsType,
+          initialLearningRate: initialLearningRate,
+          minCoefficientsUpdate: minCoefficientsUpdate,
+          lambda: lambda,
+          regularizationType: regularizationType,
+          randomSeed: randomSeed,
+          batchSize: batchSize,
+          initialCoefficients: initialCoefficients,
+          isFittingDataNormalized: isFittingDataNormalized,
+          fitIntercept: fitIntercept,
+          interceptScale: interceptScale,
+          costPerIteration: costPerIteration,
+          dtype: dtype,
+          schemaVersion: schemaVersion,
+        );
 
     setUp(() {
       regressorFactory = createLinearRegressorFactoryMock(retrainedModelMock);

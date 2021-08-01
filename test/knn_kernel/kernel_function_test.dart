@@ -10,9 +10,9 @@ void main() {
     test('uniform should return 1/2 if |lambda| <= 1', () {
       const kernel = UniformKernel();
 
-      expect(kernel.getWeightByDistance(0), 1/2);
-      expect(kernel.getWeightByDistance(0.5), 1/2);
-      expect(kernel.getWeightByDistance(1), 1/2);
+      expect(kernel.getWeightByDistance(0), 1 / 2);
+      expect(kernel.getWeightByDistance(0.5), 1 / 2);
+      expect(kernel.getWeightByDistance(1), 1 / 2);
     });
 
     test('uniform should return 0 if |lambda| > 1', () {

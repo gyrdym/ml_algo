@@ -28,7 +28,8 @@ void main() {
           throwsRangeError);
     });
 
-    test('should allow probability to be greater than 1 with small penalty', () {
+    test('should allow probability to be greater than 1 with small penalty',
+        () {
       final labelValue = 5;
       final probability = 1 + 1e-5;
       final label = TreeLeafLabel(labelValue, probability: probability);
@@ -74,10 +75,12 @@ void main() {
       final leafLabel = TreeLeafLabel(labelValue, probability: probability);
       final serialized = leafLabel.toJson();
 
-      expect(serialized, equals({
-        leafLabelValueJsonKey: labelValue,
-        leafLabelProbabilityJsonKey: probability,
-      }));
+      expect(
+          serialized,
+          equals({
+            leafLabelValueJsonKey: labelValue,
+            leafLabelProbabilityJsonKey: probability,
+          }));
     });
 
     test('should serialize (probability value is not null)', () {
@@ -86,10 +89,12 @@ void main() {
       final leafLabel = TreeLeafLabel(labelValue, probability: probability);
       final serialized = leafLabel.toJson();
 
-      expect(serialized, equals({
-        leafLabelValueJsonKey: labelValue,
-        leafLabelProbabilityJsonKey: probability,
-      }));
+      expect(
+          serialized,
+          equals({
+            leafLabelValueJsonKey: labelValue,
+            leafLabelProbabilityJsonKey: probability,
+          }));
     });
 
     test('should restore from json (probability value is null)', () {

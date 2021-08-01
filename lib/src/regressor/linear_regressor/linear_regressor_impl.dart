@@ -57,7 +57,7 @@ class LinearRegressorImpl
   })  : fitIntercept = fitIntercept,
         interceptScale = interceptScale;
 
-  factory LinearRegressorImpl.fromJson(Map<String, dynamic?> json) =>
+  factory LinearRegressorImpl.fromJson(Map<String, dynamic> json) =>
       _$LinearRegressorImplFromJson(json);
 
   @override

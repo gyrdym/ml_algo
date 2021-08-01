@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.0.3
+- `dartfmt` applied to the project files
+
 ## 16.0.2
 - `Retrainable`: returning type was fixed
 

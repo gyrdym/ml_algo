@@ -81,24 +81,29 @@ class MockEncoderFactory extends Mock {
 }
 
 class MockFeatureTargetSplitter extends Mock {
-  Iterable<DataFrame> split(DataFrame? samples, {
+  Iterable<DataFrame> split(
+    DataFrame? samples, {
     Iterable<String>? targetNames,
     Iterable<int>? targetIndices,
   }) {
     return super.noSuchMethod(
-        Invocation.method(#split, [samples], {
-          #targetNames: targetNames,
-          #targetIndices: targetIndices,
-        }),
+      Invocation.method(#split, [
+        samples
+      ], {
+        #targetNames: targetNames,
+        #targetIndices: targetIndices,
+      }),
       returnValue: <DataFrame>[],
     ) as Iterable<DataFrame>;
   }
 }
 
 class MockClassLabelsNormalizer extends Mock {
-  Matrix normalize(Matrix? classLabels, num? positiveLabel, num? negativeLabel) {
+  Matrix normalize(
+      Matrix? classLabels, num? positiveLabel, num? negativeLabel) {
     return super.noSuchMethod(
-      Invocation.method(#normalize, [classLabels, positiveLabel, negativeLabel]),
+      Invocation.method(
+          #normalize, [classLabels, positiveLabel, negativeLabel]),
       returnValue: Matrix.empty(),
     ) as Matrix;
   }
@@ -143,12 +148,11 @@ MockCostFunctionFactory createCostFunctionFactoryMock(
     CostFunction costFunctionMock) {
   final costFunctionFactory = MockCostFunctionFactory();
 
-  when(
-    costFunctionFactory.createByType(
-      any,
-      linkFunction: anyNamed('linkFunction'),
-      positiveLabel: anyNamed('positiveLabel'),
-      negativeLabel: anyNamed('negativeLabel'),
+  when(costFunctionFactory.createByType(
+    any,
+    linkFunction: anyNamed('linkFunction'),
+    positiveLabel: anyNamed('positiveLabel'),
+    negativeLabel: anyNamed('negativeLabel'),
   )).thenReturn(costFunctionMock);
 
   return costFunctionFactory;
@@ -193,14 +197,14 @@ MockLinearOptimizerFactory createLinearOptimizerFactoryMock(
   return factory;
 }
 
-SplitIndicesProviderFactory createDataSplitterFactoryMock(SplitIndicesProvider dataSplitter) {
+SplitIndicesProviderFactory createDataSplitterFactoryMock(
+    SplitIndicesProvider dataSplitter) {
   final factory = MockSplitIndicesProviderFactory();
 
-  when(
-    factory.createByType(
-      any,
-      numberOfFolds: anyNamed('numberOfFolds'),
-      p: anyNamed('p'),
+  when(factory.createByType(
+    any,
+    numberOfFolds: anyNamed('numberOfFolds'),
+    p: anyNamed('p'),
   )).thenReturn(dataSplitter);
 
   return factory;

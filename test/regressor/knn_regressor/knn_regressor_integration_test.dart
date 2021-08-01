@@ -51,31 +51,33 @@ void main() {
         );
 
         expect(actual.header, equals(['target']));
-        expect(actual.toMatrix(), equals([[4.0]]));
+        expect(
+            actual.toMatrix(),
+            equals([
+              [4.0]
+            ]));
       });
 
       test('should predict values using epanechnikov kernel', () {
-        final regressor = KnnRegressor(
-            data,
-            targetName,
-            k,
-            kernel: KernelType.epanechnikov);
+        final regressor =
+            KnnRegressor(data, targetName, k, kernel: KernelType.epanechnikov);
 
         final actual = regressor.predict(
           DataFrame.fromMatrix(testFeatures),
         );
 
         expect(actual.header, equals(['target']));
-        expect(actual.toMatrix(), iterable2dAlmostEqualTo([[5.0]]));
+        expect(
+            actual.toMatrix(),
+            iterable2dAlmostEqualTo([
+              [5.0]
+            ]));
       });
     });
 
     group('toJson', () {
       test('should return json-encoded object', () {
-        final regressor = KnnRegressor(
-            data,
-            targetName,
-            k,
+        final regressor = KnnRegressor(data, targetName, k,
             distance: Distance.manhattan,
             dtype: DType.float64,
             kernel: KernelType.gaussian);
@@ -93,17 +95,16 @@ void main() {
                 [10, 10, 10, 10, 10],
               ], dtype: DType.float64),
             ),
-            knnSolverTrainOutcomesJsonKey: matrixToJson(
-              Matrix.fromList([
-                [1],
-                [2],
-                [3],
-                [4],
-                [5],
-              ], dtype: DType.float64)
-            ),
+            knnSolverTrainOutcomesJsonKey: matrixToJson(Matrix.fromList([
+              [1],
+              [2],
+              [3],
+              [4],
+              [5],
+            ], dtype: DType.float64)),
             knnSolverKJsonKey: k,
-            knnSolverDistanceTypeJsonKey: distanceTypeToJson(Distance.manhattan),
+            knnSolverDistanceTypeJsonKey:
+                distanceTypeToJson(Distance.manhattan),
             knnSolverStandardizeJsonKey: true,
             jsonSchemaVersionJsonKey: knnSolverJsonSchemaVersion,
           },
@@ -114,7 +115,8 @@ void main() {
     });
 
     group('saveAsJson', () {
-      final testFileName = 'test/regressor/knn_regressor/serialized_regressor.json';
+      final testFileName =
+          'test/regressor/knn_regressor/serialized_regressor.json';
       final regressor = KnnRegressor(
         data,
         targetName,

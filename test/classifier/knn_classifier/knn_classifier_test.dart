@@ -17,13 +17,13 @@ void main() {
   group('KnnClassifier', () {
     final classLabelPrefix = 'class label';
     final data = DataFrame.fromSeries(
-        [
-          Series('first' , <num>[1, 1, 1, 1]),
-          Series('second', <num>[2, 2, 2, 2]),
-          Series('third' , <num>[2, 2, 2, 2]),
-          Series('fourth', <num>[4, 4, 4, 4]),
-          Series('fifth' , <num>[1, 3, 2, 1], isDiscrete: true),
-        ],
+      [
+        Series('first', <num>[1, 1, 1, 1]),
+        Series('second', <num>[2, 2, 2, 2]),
+        Series('third', <num>[2, 2, 2, 2]),
+        Series('fourth', <num>[4, 4, 4, 4]),
+        Series('fifth', <num>[1, 3, 2, 1], isDiscrete: true),
+      ],
     );
 
     final targetName = 'fifth';
@@ -33,12 +33,13 @@ void main() {
 
     setUp(() {
       knnClassifierMock = MockKnnClassifier();
-      knnClassifierFactoryMock = createKnnClassifierFactoryMock(
-          knnClassifierMock);
+      knnClassifierFactoryMock =
+          createKnnClassifierFactoryMock(knnClassifierMock);
 
       knnClassifierInjector
         ..clearAll()
-        ..registerSingleton<KnnClassifierFactory>(() => knnClassifierFactoryMock);
+        ..registerSingleton<KnnClassifierFactory>(
+            () => knnClassifierFactoryMock);
     });
 
     tearDown(() {
@@ -49,7 +50,8 @@ void main() {
       knnClassifierInjector.clearAll();
     });
 
-    test('should call KnnClassifierFactory in order to create a classifier', () {
+    test('should call KnnClassifierFactory in order to create a classifier',
+        () {
       final classifier = KnnClassifier(
         data,
         targetName,

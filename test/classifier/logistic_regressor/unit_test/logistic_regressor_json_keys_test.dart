@@ -23,7 +23,8 @@ void main() {
       expect(logisticRegressorDTypeJsonKey, 'DT');
     });
 
-    test('should have a proper json key for probability threshold json '
+    test(
+        'should have a proper json key for probability threshold json '
         'field', () {
       expect(logisticRegressorProbabilityThresholdJsonKey, 'PT');
     });

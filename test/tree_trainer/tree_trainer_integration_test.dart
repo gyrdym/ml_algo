@@ -29,21 +29,20 @@ void main() {
       });
 
       test('should build a decision tree', () {
-        final trainer = decisionTreeInjector
-            .get<TreeTrainerFactory>()
-            .createByType(
-          TreeTrainerType.decision,
-          fakeDataSet,
-          targetName,
-          minErrorOnNode,
-          minSamplesCountOnNode,
-          maxDepth,
-          TreeSplitAssessorType.majority,
-          TreeLeafLabelFactoryType.majority,
-          TreeSplitSelectorType.greedy,
-          TreeSplitAssessorType.majority,
-          TreeSplitterType.greedy,
-        );
+        final trainer =
+            decisionTreeInjector.get<TreeTrainerFactory>().createByType(
+                  TreeTrainerType.decision,
+                  fakeDataSet,
+                  targetName,
+                  minErrorOnNode,
+                  minSamplesCountOnNode,
+                  maxDepth,
+                  TreeSplitAssessorType.majority,
+                  TreeLeafLabelFactoryType.majority,
+                  TreeSplitSelectorType.greedy,
+                  TreeSplitAssessorType.majority,
+                  TreeSplitterType.greedy,
+                );
         final rootNode = trainer.train(fakeDataSet.toMatrix(DType.float32));
         final actual = rootNode.toJson();
 

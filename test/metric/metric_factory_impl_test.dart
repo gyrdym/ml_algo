@@ -24,7 +24,8 @@ void main() {
     });
 
     test('should create PrecisionMetric instance', () {
-      expect(factory.createByType(MetricType.precision), isA<PrecisionMetric>());
+      expect(
+          factory.createByType(MetricType.precision), isA<PrecisionMetric>());
     });
 
     test('should create RecallMetric instance', () {
