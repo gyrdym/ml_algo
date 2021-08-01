@@ -3,12 +3,14 @@ import 'package:test/test.dart';
 
 void main() {
   group('LpoIndicesProvider', () {
-    void testLpoSplitter(int p, int numOfObservations,
-        Iterable<Iterable<int>> expected) {
-      test('should return proper groups of indices if p is $p and number of '
+    void testLpoSplitter(
+        int p, int numOfObservations, Iterable<Iterable<int>> expected) {
+      test(
+          'should return proper groups of indices if p is $p and number of '
           'observations is $numOfObservations', () {
         final splitter = LpoIndicesProvider(p);
-        expect(splitter.getIndices(numOfObservations).toSet(), equals(expected));
+        expect(
+            splitter.getIndices(numOfObservations).toSet(), equals(expected));
       });
     }
 

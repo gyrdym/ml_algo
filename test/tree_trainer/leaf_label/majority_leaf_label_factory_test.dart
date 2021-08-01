@@ -10,9 +10,9 @@ import '../../mocks.mocks.dart';
 
 void main() {
   group('MajorityTreeLeafLabelFactory', () {
-    test('should create decision tree leaf label - label should be a majority '
+    test(
+        'should create decision tree leaf label - label should be a majority '
         'class label among the whole observation matrix', () {
-
       final observations = Matrix.fromList([
         [10, 20, 30, 0],
       ]);
@@ -32,8 +32,8 @@ void main() {
         thirdClassLabel: thirdClassProbability,
       });
       final distributionCalculator = createDistributionCalculator(
-          observations.getColumn(3),
-          distribution,
+        observations.getColumn(3),
+        distribution,
       );
       final labelFactory = MajorityTreeLeafLabelFactory(distributionCalculator);
       final label = labelFactory.create(observations, 3);
@@ -42,7 +42,8 @@ void main() {
       expect(label.probability, equals(firstClassProbability));
     });
 
-    test('should create decision tree leaf label if the observations contain '
+    test(
+        'should create decision tree leaf label if the observations contain '
         'only one class label', () {
       final observations = Matrix.fromList([
         [10, 20, 30, 3],
@@ -62,7 +63,10 @@ void main() {
         distribution,
       );
       final labelFactory = MajorityTreeLeafLabelFactory(distributionCalculator);
-      final label = labelFactory.create(observations, 3,);
+      final label = labelFactory.create(
+        observations,
+        3,
+      );
 
       expect(label.value, equals(classLabel));
       expect(label.probability, equals(classProbability));
@@ -74,12 +78,10 @@ DistributionCalculator createDistributionCalculator(
     Iterable<num> values, HashMap<double, double> distribution) {
   final distributionCalculator = MockDistributionCalculator();
 
-  when(
-      distributionCalculator.calculate<double>(
-        argThat(equals(values)),
-        any,
-      )
-  ).thenReturn(distribution);
+  when(distributionCalculator.calculate<double>(
+    argThat(equals(values)),
+    any,
+  )).thenReturn(distribution);
 
   return distributionCalculator;
 }

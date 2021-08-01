@@ -23,11 +23,13 @@ void main() {
     });
 
     test('should encode Epanechnikov kernel', () {
-      expect(converter.toJson(epanechnikovKernel), epanechnikovKernelEncodedValue);
+      expect(
+          converter.toJson(epanechnikovKernel), epanechnikovKernelEncodedValue);
     });
 
     test('should decode Epanechnikov kernel', () {
-      expect(converter.fromJson(epanechnikovKernelEncodedValue), epanechnikovKernel);
+      expect(converter.fromJson(epanechnikovKernelEncodedValue),
+          epanechnikovKernel);
     });
 
     test('should encode Gaussian kernel', () {

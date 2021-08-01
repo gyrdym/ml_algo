@@ -49,13 +49,13 @@ void main() {
       test('should throw an exception if no class labels are provided', () {
         final classLabels = <num>[];
         final actual = () => KnnClassifierImpl(
-          targetColumnName,
-          classLabels,
-          kernelMock,
-          solverMock,
-          classLabelPrefix,
-          dtype,
-        );
+              targetColumnName,
+              classLabels,
+              kernelMock,
+              solverMock,
+              classLabelPrefix,
+              dtype,
+            );
 
         expect(actual, throwsException);
       });
@@ -102,7 +102,8 @@ void main() {
         expect(() => classifier.predict(features), throwsException);
       });
 
-      test('should return a dataframe with just one column, consisting of '
+      test(
+          'should return a dataframe with just one column, consisting of '
           'weighted majority-based outcomes of closest observations of provided '
           'features', () {
         final classifier = KnnClassifierImpl(
@@ -168,7 +169,8 @@ void main() {
         expect(actual.rows, equals(expectedOutcomes));
       });
 
-      test('should return a dataframe, consisting of just one column with '
+      test(
+          'should return a dataframe, consisting of just one column with '
           'a proper name', () {
         final classLabels = [1, 2];
 
@@ -205,7 +207,8 @@ void main() {
         expect(actual.header, equals([targetColumnName]));
       });
 
-      test('should return a label of first neighbour among found k neighbours '
+      test(
+          'should return a label of first neighbour among found k neighbours '
           'if there is no major class', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
@@ -244,7 +247,8 @@ void main() {
         expect(actual.rows, equals(expectedOutcomes));
       });
 
-      test('should return a label of neighbours with bigger weights even if '
+      test(
+          'should return a label of neighbours with bigger weights even if '
           'they are not the majority', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
@@ -292,15 +296,15 @@ void main() {
       final solverMock = MockKnnSolver();
       final kernelMock = MockKernel();
 
-      setUp(() => when(kernelMock.getWeightByDistance(any, any))
-          .thenReturn(1));
+      setUp(() => when(kernelMock.getWeightByDistance(any, any)).thenReturn(1));
 
       tearDown(() {
         reset(solverMock);
         reset(kernelMock);
       });
 
-      test('should return probability distribution of classes for each feature '
+      test(
+          'should return probability distribution of classes for each feature '
           'row', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
@@ -357,15 +361,16 @@ void main() {
         final actual = classifier.predictProbabilities(testFeatures);
 
         final expectedProbabilities = [
-          [ 10 / 35,  15 / 35,  10 / 35 ],
-          [ 11 / 41,  15 / 41,  15 / 41 ],
-          [  5 / 11,   5 / 11,   1 / 11 ],
+          [10 / 35, 15 / 35, 10 / 35],
+          [11 / 41, 15 / 41, 15 / 41],
+          [5 / 11, 5 / 11, 1 / 11],
         ];
 
         expect(actual.rows, iterable2dAlmostEqualTo(expectedProbabilities));
       });
 
-      test('should return probability distribution of classes where '
+      test(
+          'should return probability distribution of classes where '
           'probabilities of absent class labels are 0.0', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
@@ -409,14 +414,15 @@ void main() {
         final actual = classifier.predictProbabilities(testFeatures);
 
         final expectedProbabilities = [
-          [ 10 / 35,  25 / 35,  0.0 ],
-          [     0.0,      0.0,  1.0 ],
+          [10 / 35, 25 / 35, 0.0],
+          [0.0, 0.0, 1.0],
         ];
 
         expect(actual.rows, iterable2dAlmostEqualTo(expectedProbabilities));
       });
 
-      test('should return a dataframe with a header, containing proper column '
+      test(
+          'should return a dataframe with a header, containing proper column '
           'names', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
@@ -446,7 +452,8 @@ void main() {
 
         final actual = classifier.predictProbabilities(testFeatures);
 
-        expect(actual.header,
+        expect(
+          actual.header,
           equals([
             '$classLabelPrefix 1',
             '$classLabelPrefix 2',
@@ -460,7 +467,11 @@ void main() {
         final secondClassLabel = 2;
         final thirdClassLabel = 3;
 
-        final classLabels = [thirdClassLabel, firstClassLabel, secondClassLabel];
+        final classLabels = [
+          thirdClassLabel,
+          firstClassLabel,
+          secondClassLabel
+        ];
 
         final classifier = KnnClassifierImpl(
           targetColumnName,
@@ -501,25 +512,37 @@ void main() {
         final actual = classifier.predictProbabilities(testFeatures);
         final predictedProbabilities = actual.rows;
 
-        expect(actual.header,
-            equals([
-              '$classLabelPrefix 3',
-              '$classLabelPrefix 1',
-              '$classLabelPrefix 2',
-            ]),
+        expect(
+          actual.header,
+          equals([
+            '$classLabelPrefix 3',
+            '$classLabelPrefix 1',
+            '$classLabelPrefix 2',
+          ]),
         );
-        expect(predictedProbabilities, iterable2dAlmostEqualTo([
-          [thirdClassWeight / 260, firstClassWeight / 260, secondClassWeight / 260],
-        ]));
+        expect(
+            predictedProbabilities,
+            iterable2dAlmostEqualTo([
+              [
+                thirdClassWeight / 260,
+                firstClassWeight / 260,
+                secondClassWeight / 260
+              ],
+            ]));
       });
 
-      test('should throw an exception if provided knn solver learned on wrong '
+      test(
+          'should throw an exception if provided knn solver learned on wrong '
           'class labels', () {
         final firstClassLabel = 1;
         final secondClassLabel = 2;
         final thirdClassLabel = 3;
         final unexpectedClassLabel = 100;
-        final classLabels = [thirdClassLabel, firstClassLabel, secondClassLabel];
+        final classLabels = [
+          thirdClassLabel,
+          firstClassLabel,
+          secondClassLabel
+        ];
         final classifier = KnnClassifierImpl(
           targetColumnName,
           classLabels,
@@ -571,21 +594,18 @@ void main() {
         when(solverMock.k).thenReturn(k);
         when(solverMock.distanceType).thenReturn(distanceType);
         when(kernelMock.type).thenReturn(kernelType);
-        when(
-          classifierFactory.create(
-            any,
-            any,
-            any,
-            any,
-            any,
-            any,
-            any,
-          )
-        ).thenReturn(retrainedModelMock);
+        when(classifierFactory.create(
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+          any,
+        )).thenReturn(retrainedModelMock);
 
         knnClassifierInjector
-            .registerSingleton<KnnClassifierFactory>(
-                () => classifierFactory);
+            .registerSingleton<KnnClassifierFactory>(() => classifierFactory);
       });
 
       tearDown(() {

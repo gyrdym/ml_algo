@@ -22,13 +22,21 @@ void main() {
       final bestSplitIdx = 1;
 
       final worstSplit = {
-        MockTreeNode(): Matrix.fromList([[1, 2, 3, 4, -1, -1, -1]]),
-        MockTreeNode(): Matrix.fromList([[10, 20, 30, 40, -1, -1, -1]]),
+        MockTreeNode(): Matrix.fromList([
+          [1, 2, 3, 4, -1, -1, -1]
+        ]),
+        MockTreeNode(): Matrix.fromList([
+          [10, 20, 30, 40, -1, -1, -1]
+        ]),
       };
 
       final worseSplit = {
-        MockTreeNode(): Matrix.fromList([[5, 6, 7, 8, -1, -1, 0]]),
-        MockTreeNode(): Matrix.fromList([[50, 60, 70, 80, -1, -1, 0]]),
+        MockTreeNode(): Matrix.fromList([
+          [5, 6, 7, 8, -1, -1, 0]
+        ]),
+        MockTreeNode(): Matrix.fromList([
+          [50, 60, 70, 80, -1, -1, 0]
+        ]),
       };
 
       final goodSplit = {
@@ -50,7 +58,10 @@ void main() {
       };
 
       final featuresIdxs = [
-        worstSplitIdx, bestSplitIdx, worseSplitIdx, goodSplitIdx,
+        worstSplitIdx,
+        bestSplitIdx,
+        worseSplitIdx,
+        goodSplitIdx,
       ];
       final assessor = MockTreeSplitAssessor();
       final splitter = MockTreeSplitter();
@@ -64,24 +75,24 @@ void main() {
       when(splitter.split(samples, bestSplitIdx, targetColIdx))
           .thenReturn(bestSplit);
 
-      when(assessor.getAggregatedError(worstSplit.values,
-          targetColIdx)).thenReturn(0.999);
-      when(assessor.getAggregatedError(worseSplit.values,
-          targetColIdx)).thenReturn(0.8);
-      when(assessor.getAggregatedError(goodSplit.values,
-          targetColIdx)).thenReturn(0.4);
-      when(assessor.getAggregatedError(bestSplit.values,
-          targetColIdx)).thenReturn(0.1);
+      when(assessor.getAggregatedError(worstSplit.values, targetColIdx))
+          .thenReturn(0.999);
+      when(assessor.getAggregatedError(worseSplit.values, targetColIdx))
+          .thenReturn(0.8);
+      when(assessor.getAggregatedError(goodSplit.values, targetColIdx))
+          .thenReturn(0.4);
+      when(assessor.getAggregatedError(bestSplit.values, targetColIdx))
+          .thenReturn(0.1);
 
       final selector = GreedyTreeSplitSelector(assessor, splitter);
-      final actualSplit = selector
-          .select(samples, targetColIdx, featuresIdxs);
+      final actualSplit = selector.select(samples, targetColIdx, featuresIdxs);
 
       expect(actualSplit.keys, equals(bestSplit.keys));
       expect(actualSplit.values, equals(bestSplit.values));
     });
 
-    test('should select columns for splitting according to given feature '
+    test(
+        'should select columns for splitting according to given feature '
         'columns indices', () {
       final observations = Matrix.fromList([
         [10, 1, 50, 1],
@@ -125,20 +136,20 @@ void main() {
       when(splitter.split(observations, bestFeatureColIdx, targetColIdx))
           .thenReturn(bestSplit);
 
-      when(assessor.getAggregatedError(goodSplit.values,
-          targetColIdx)).thenReturn(0.51);
-      when(assessor.getAggregatedError(bestSplit.values,
-          targetColIdx)).thenReturn(0.1);
+      when(assessor.getAggregatedError(goodSplit.values, targetColIdx))
+          .thenReturn(0.51);
+      when(assessor.getAggregatedError(bestSplit.values, targetColIdx))
+          .thenReturn(0.1);
 
       final selector = GreedyTreeSplitSelector(assessor, splitter);
-      final stump = selector.select(observations, targetColIdx,
-          featuresIdxs, colIdxToUniqueValues);
+      final stump = selector.select(
+          observations, targetColIdx, featuresIdxs, colIdxToUniqueValues);
 
       expect(stump.keys, equals(bestSplit.keys));
       expect(stump.values, equals(bestSplit.values));
 
-      verifyNever(splitter.split(observations, ignoredFeatureColIdx,
-          targetColIdx));
+      verifyNever(
+          splitter.split(observations, ignoredFeatureColIdx, targetColIdx));
     });
   });
 }

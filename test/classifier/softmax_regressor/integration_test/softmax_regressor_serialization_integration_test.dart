@@ -64,11 +64,11 @@ void main() {
   }) {
     final sourceData = <Iterable<dynamic>>[
       <String>[...featureNames, ...targetNames],
-      <num>[   100,    200, 300.89, positiveLabel, negativeLabel, negativeLabel],
-      <num>[   444,   20.7, 300.89, negativeLabel, negativeLabel, positiveLabel],
-      <num>[   100, -20000, -0.003, negativeLabel, negativeLabel, positiveLabel],
-      <num>[   100,    200,    1e5, negativeLabel, positiveLabel, negativeLabel],
-      <num>[-0.874, 932.12,   0.98, positiveLabel, negativeLabel, negativeLabel],
+      <num>[100, 200, 300.89, positiveLabel, negativeLabel, negativeLabel],
+      <num>[444, 20.7, 300.89, negativeLabel, negativeLabel, positiveLabel],
+      <num>[100, -20000, -0.003, negativeLabel, negativeLabel, positiveLabel],
+      <num>[100, 200, 1e5, negativeLabel, positiveLabel, negativeLabel],
+      <num>[-0.874, 932.12, 0.98, positiveLabel, negativeLabel, negativeLabel],
     ];
     final dataFrame = DataFrame(sourceData, headerExists: true);
 
@@ -139,23 +139,22 @@ void main() {
     });
 
     test('should serialize regularizationType field', () {
-      final classifier = createClassifier(
-          regularizationType: RegularizationType.L2);
+      final classifier =
+          createClassifier(regularizationType: RegularizationType.L2);
       final serialized = classifier.toJson();
 
       expect(serialized[softmaxRegressorRegularizationTypeJsonKey],
           l2RegularizationTypeJsonEncodedValue);
     });
 
-    test('should serialize regularizationType field, '
+    test(
+        'should serialize regularizationType field, '
         'regularizationType=null', () {
-
-      final classifier = createClassifier(
-          regularizationType: null);
+      final classifier = createClassifier(regularizationType: null);
       final serialized = classifier.toJson();
 
-      expect(serialized
-          .containsKey(softmaxRegressorRegularizationTypeJsonKey), false);
+      expect(serialized.containsKey(softmaxRegressorRegularizationTypeJsonKey),
+          false);
     });
 
     test('should serialize randomSeed field', () {
@@ -179,27 +178,28 @@ void main() {
       expect(serialized[softmaxRegressorBatchSizeJsonKey], 2);
     });
 
-    test('should serialize isFittingDataNormalized field, '
+    test(
+        'should serialize isFittingDataNormalized field, '
         'isFittingDataNormalized=true', () {
-
       final classifier = createClassifier(isFittingDataNormalized: true);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorFittingDataNormalizedFlagJsonKey],
-          true);
+      expect(
+          serialized[softmaxRegressorFittingDataNormalizedFlagJsonKey], true);
     });
 
-    test('should serialize isFittingDataNormalized field, '
+    test(
+        'should serialize isFittingDataNormalized field, '
         'isFittingDataNormalized=false', () {
-
       final classifier = createClassifier(isFittingDataNormalized: false);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorFittingDataNormalizedFlagJsonKey],
-          false);
+      expect(
+          serialized[softmaxRegressorFittingDataNormalizedFlagJsonKey], false);
     });
 
-    test('should serialize learningRateType field, '
+    test(
+        'should serialize learningRateType field, '
         'decreasingAdaptive type', () {
       final classifier = createClassifier(
           learningRateType: LearningRateType.decreasingAdaptive);
@@ -209,17 +209,19 @@ void main() {
           learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]);
     });
 
-    test('should serialize learningRateType field, '
+    test(
+        'should serialize learningRateType field, '
         'constant type', () {
-      final classifier = createClassifier(
-          learningRateType: LearningRateType.constant);
+      final classifier =
+          createClassifier(learningRateType: LearningRateType.constant);
       final serialized = classifier.toJson();
 
       expect(serialized[softmaxRegressorLearningRateTypeJsonKey],
           learningRateTypeToEncodedValue[LearningRateType.constant]);
     });
 
-    test('should serialize initialCoefficientsType field, '
+    test(
+        'should serialize initialCoefficientsType field, '
         'initialCoefficientsType=InitialCoefficientsType.zeros', () {
       final classifier = createClassifier(
           initialCoefficientsType: InitialCoefficientsType.zeroes);
@@ -230,20 +232,21 @@ void main() {
     });
 
     test('should serialize initialCoefficients field', () {
-      final classifier = createClassifier(
-          initialCoefficients: initialCoeffs);
+      final classifier = createClassifier(initialCoefficients: initialCoeffs);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorInitialCoefsJsonKey], initialCoeffs.toJson());
+      expect(serialized[softmaxRegressorInitialCoefsJsonKey],
+          initialCoeffs.toJson());
     });
 
-    test('should serialize initialCoefficients field, '
+    test(
+        'should serialize initialCoefficients field, '
         'initialCoefficients=null', () {
-      final classifier = createClassifier(
-          initialCoefficients: null);
+      final classifier = createClassifier(initialCoefficients: null);
       final serialized = classifier.toJson();
 
-      expect(serialized.containsKey(softmaxRegressorInitialCoefsJsonKey), false);
+      expect(
+          serialized.containsKey(softmaxRegressorInitialCoefsJsonKey), false);
     });
 
     test('should serialize classNames field', () {
@@ -267,30 +270,36 @@ void main() {
       expect(serialized[softmaxRegressorFitInterceptJsonKey], false);
     });
 
-    test('should serialize interceptScale field, '
+    test(
+        'should serialize interceptScale field, '
         'interceptScale=$interceptScale1', () {
       final classifier = createClassifier(interceptScale: interceptScale1);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorInterceptScaleJsonKey], interceptScale1);
+      expect(
+          serialized[softmaxRegressorInterceptScaleJsonKey], interceptScale1);
     });
 
-    test('should serialize interceptScale field, '
+    test(
+        'should serialize interceptScale field, '
         'interceptScale=$interceptScale2', () {
       final classifier = createClassifier(interceptScale: interceptScale2);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorInterceptScaleJsonKey], interceptScale2);
+      expect(
+          serialized[softmaxRegressorInterceptScaleJsonKey], interceptScale2);
     });
 
-    test('should serialize interceptScale field, '
+    test(
+        'should serialize interceptScale field, '
         'interceptScale=$interceptScale3', () {
       final classifier = createClassifier(interceptScale: interceptScale3);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorInterceptScaleJsonKey], interceptScale3);
+      expect(
+          serialized[softmaxRegressorInterceptScaleJsonKey], interceptScale3);
     });
-    
+
     test('should serialize coefficientsByClasses field', () {
       final classifier = createClassifier();
       final serialized = classifier.toJson();
@@ -303,16 +312,16 @@ void main() {
       final classifier = createClassifier(dtype: DType.float32);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorDTypeJsonKey],
-          dTypeToJson(DType.float32));
+      expect(
+          serialized[softmaxRegressorDTypeJsonKey], dTypeToJson(DType.float32));
     });
 
     test('should serialize dtype field, dtype=DType.float64', () {
       final classifier = createClassifier(dtype: DType.float64);
       final serialized = classifier.toJson();
 
-      expect(serialized[softmaxRegressorDTypeJsonKey],
-          dTypeToJson(DType.float64));
+      expect(
+          serialized[softmaxRegressorDTypeJsonKey], dTypeToJson(DType.float64));
     });
 
     test('should serialize linkFunction field, dtype=DType.float32', () {
@@ -331,7 +340,8 @@ void main() {
           softmaxLinkFunctionEncoded);
     });
 
-    test('should serialize positiveLabel field, '
+    test(
+        'should serialize positiveLabel field, '
         'positiveLabel=$positiveLabel1', () {
       final classifier = createClassifier(positiveLabel: positiveLabel1);
       final serialized = classifier.toJson();
@@ -339,7 +349,8 @@ void main() {
       expect(serialized[softmaxRegressorPositiveLabelJsonKey], positiveLabel1);
     });
 
-    test('should serialize positiveLabel field, '
+    test(
+        'should serialize positiveLabel field, '
         'positiveLabel=$positiveLabel2', () {
       final classifier = createClassifier(positiveLabel: positiveLabel2);
       final serialized = classifier.toJson();
@@ -347,7 +358,8 @@ void main() {
       expect(serialized[softmaxRegressorPositiveLabelJsonKey], positiveLabel2);
     });
 
-    test('should serialize positiveLabel field, '
+    test(
+        'should serialize positiveLabel field, '
         'positiveLabel=$positiveLabel3', () {
       final classifier = createClassifier(positiveLabel: positiveLabel3);
       final serialized = classifier.toJson();
@@ -355,7 +367,8 @@ void main() {
       expect(serialized[softmaxRegressorPositiveLabelJsonKey], positiveLabel3);
     });
 
-    test('should serialize negativeLabel field, '
+    test(
+        'should serialize negativeLabel field, '
         'negativeLabel=$negativeLabel1', () {
       final classifier = createClassifier(negativeLabel: negativeLabel1);
       final serialized = classifier.toJson();
@@ -363,7 +376,8 @@ void main() {
       expect(serialized[softmaxRegressorNegativeLabelJsonKey], negativeLabel1);
     });
 
-    test('should serialize negativeLabel field, '
+    test(
+        'should serialize negativeLabel field, '
         'positiveLabel=$negativeLabel2', () {
       final classifier = createClassifier(negativeLabel: negativeLabel2);
       final serialized = classifier.toJson();
@@ -371,7 +385,8 @@ void main() {
       expect(serialized[softmaxRegressorNegativeLabelJsonKey], negativeLabel2);
     });
 
-    test('should serialize negativeLabel field, '
+    test(
+        'should serialize negativeLabel field, '
         'negativeLabel=$negativeLabel3', () {
       final classifier = createClassifier(negativeLabel: negativeLabel3);
       final serialized = classifier.toJson();
@@ -400,7 +415,8 @@ void main() {
       softmaxRegressorInjector.clearAll();
     });
 
-    test('should return a pointer to a file while saving the model into the '
+    test(
+        'should return a pointer to a file while saving the model into the '
         'file', () async {
       final classifier = createClassifier();
       final file = await classifier.saveAsJson(fileName);
@@ -409,7 +425,8 @@ void main() {
       expect(file.path, fileName);
     });
 
-    test('should save the model to a file as json, '
+    test(
+        'should save the model to a file as json, '
         'dtype=DType.float32', () async {
       final classifier = createClassifier(dtype: DType.float32);
       await classifier.saveAsJson(fileName);
@@ -428,7 +445,8 @@ void main() {
       expect(restoredClassifier.dtype, classifier.dtype);
     });
 
-    test('should save the model to a file as json, '
+    test(
+        'should save the model to a file as json, '
         'dtype=DType.float64', () async {
       final classifier = createClassifier(dtype: DType.float64);
       await classifier.saveAsJson(fileName);
@@ -447,7 +465,8 @@ void main() {
       expect(restoredClassifier.dtype, classifier.dtype);
     });
 
-    test('should save the model to a file as json, '
+    test(
+        'should save the model to a file as json, '
         'collectLearningData=false', () async {
       final classifier = createClassifier(
         dtype: DType.float32,
@@ -462,7 +481,8 @@ void main() {
       expect(restoredClassifier.costPerIteration, isNull);
     });
 
-    test('should save the model to a file as json, '
+    test(
+        'should save the model to a file as json, '
         'collectLearningData=true', () async {
       final classifier = createClassifier(
         dtype: DType.float32,

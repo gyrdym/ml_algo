@@ -29,8 +29,13 @@ void main() {
 
     final type = TreeTrainerType.decision;
     final targetName = 'target';
-    final header = ['feature_1', 'feature_2', 'feature_3', 'feature_4',
-      targetName];
+    final header = [
+      'feature_1',
+      'feature_2',
+      'feature_3',
+      'feature_4',
+      targetName
+    ];
     final data = DataFrame([
       header,
       [1, 2, 3, 4, 100],
@@ -46,8 +51,8 @@ void main() {
 
     setUp(() {
       leafDetectorMock = MockTreeLeafDetector();
-      leafDetectorFactoryMock = createTreeLeafDetectorFactoryMock(
-          leafDetectorMock);
+      leafDetectorFactoryMock =
+          createTreeLeafDetectorFactoryMock(leafDetectorMock);
 
       when(
         leafDetectorMock.isLeaf(
@@ -59,12 +64,12 @@ void main() {
       ).thenReturn(true);
 
       leafLabelFactoryMock = MockTreeLeafLabelFactory();
-      leafLabelFactoryFactoryMock = createTreeLeafLabelFactoryFactoryMock(
-          leafLabelFactoryMock);
+      leafLabelFactoryFactoryMock =
+          createTreeLeafLabelFactoryFactoryMock(leafLabelFactoryMock);
 
       splitSelectorMock = MockTreeSplitSelector();
-      splitSelectorFactoryMock = createTreeSplitSelectorFactoryMock(
-          splitSelectorMock);
+      splitSelectorFactoryMock =
+          createTreeSplitSelectorFactoryMock(splitSelectorMock);
 
       factory = TreeTrainerFactoryImpl(leafDetectorFactoryMock,
           leafLabelFactoryFactoryMock, splitSelectorFactoryMock);
@@ -94,18 +99,21 @@ void main() {
     });
 
     test('should call leaf detector factory while creating the instance', () {
-      verify(leafDetectorFactoryMock.create(assessorType, minErrorOnNode,
-          minSamplesCount, maxDepth)).called(1);
+      verify(leafDetectorFactoryMock.create(
+              assessorType, minErrorOnNode, minSamplesCount, maxDepth))
+          .called(1);
     });
 
-    test('should call leaf label factory factory while creating the instance', () {
+    test('should call leaf label factory factory while creating the instance',
+        () {
       verify(leafLabelFactoryFactoryMock.createByType(leafLabelFactoryType))
           .called(1);
     });
 
     test('should call split selector factory while creating the instance', () {
       verify(splitSelectorFactoryMock.createByType(
-          splitSelectorType, assessorType, splitterType)).called(1);
+              splitSelectorType, assessorType, splitterType))
+          .called(1);
     });
   });
 }

@@ -19,15 +19,13 @@ void main() {
 
     final factory = KnnRegressorFactoryImpl(kernelFnFactory, solverFnFactory);
 
-    final data = DataFrame.fromSeries(
-        [
-          Series('first' , <num>[1, 1, 1, 1]),
-          Series('second', <num>[2, 2, 2, 2]),
-          Series('third' , <num>[2, 2, 2, 2]),
-          Series('fourth', <num>[4, 4, 4, 4]),
-          Series('fifth' , <num>[50, 52, 53, 55]),
-        ]
-    );
+    final data = DataFrame.fromSeries([
+      Series('first', <num>[1, 1, 1, 1]),
+      Series('second', <num>[2, 2, 2, 2]),
+      Series('third', <num>[2, 2, 2, 2]),
+      Series('fourth', <num>[4, 4, 4, 4]),
+      Series('fifth', <num>[50, 52, 53, 55]),
+    ]);
 
     final targetName = 'fifth';
 
@@ -63,16 +61,17 @@ void main() {
       expect(regressor, isA<KnnRegressorImpl>());
     });
 
-    test('should throw an exception if target column does not exist in the '
+    test(
+        'should throw an exception if target column does not exist in the '
         'train data', () {
       final actual = () => factory.create(
-        data,
-        'unknown_column',
-        2,
-        KernelType.uniform,
-        Distance.hamming,
-        DType.float32,
-      );
+            data,
+            'unknown_column',
+            2,
+            KernelType.uniform,
+            Distance.hamming,
+            DType.float32,
+          );
 
       expect(actual, throwsException);
     });

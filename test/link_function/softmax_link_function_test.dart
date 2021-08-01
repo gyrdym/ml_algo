@@ -11,19 +11,19 @@ void main() {
     group('SoftmaxLinkFunction ($dtype)', () {
       test('should translate positive scores to probabilities', () {
         final scores = Matrix.fromList([
-          [ 2,  1, -3],
-          [ 7, 11,  0],
-          [-7,  4, -9],
-          [ 6,  1,  3],
+          [2, 1, -3],
+          [7, 11, 0],
+          [-7, 4, -9],
+          [6, 1, 3],
           [-1, -3, -2],
         ], dtype: dtype);
         final probabilities = linkFunction.link(scores);
         final expected = [
-          [0.727,   0.267, 0.004   ],
-          [0.017,   0.981, 0.00001 ],
+          [0.727, 0.267, 0.004],
+          [0.017, 0.981, 0.00001],
           [0.00001, 0.999, 0.000002],
-          [0.946,   0.006, 0.047   ],
-          [0.665,   0.09,  0.244   ],
+          [0.946, 0.006, 0.047],
+          [0.665, 0.09, 0.244],
         ];
 
         expect(probabilities, iterable2dAlmostEqualTo(expected, 1e-3));

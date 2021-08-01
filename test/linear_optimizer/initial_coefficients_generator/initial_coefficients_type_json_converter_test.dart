@@ -6,19 +6,23 @@ import 'package:test/test.dart';
 void main() {
   group('InitialCoefficientsTypeJsonConverter', () {
     test('should decode ${InitialCoefficientsType.zeroes} type', () {
-      expect(const InitialCoefficientsTypeJsonConverter()
-          .fromJson(zeroesInitialCoefficientsTypeJsonEncodedValue),
+      expect(
+          const InitialCoefficientsTypeJsonConverter()
+              .fromJson(zeroesInitialCoefficientsTypeJsonEncodedValue),
           InitialCoefficientsType.zeroes);
     });
 
     test('should throw exception in case of unknown encoded value', () {
-      expect(() => const InitialCoefficientsTypeJsonConverter()
-          .fromJson('unknown_value'), throwsException);
+      expect(
+          () => const InitialCoefficientsTypeJsonConverter()
+              .fromJson('unknown_value'),
+          throwsException);
     });
 
     test('should encode ${InitialCoefficientsType.zeroes} type', () {
-      expect(const InitialCoefficientsTypeJsonConverter()
-          .toJson(InitialCoefficientsType.zeroes),
+      expect(
+          const InitialCoefficientsTypeJsonConverter()
+              .toJson(InitialCoefficientsType.zeroes),
           zeroesInitialCoefficientsTypeJsonEncodedValue);
     });
   });

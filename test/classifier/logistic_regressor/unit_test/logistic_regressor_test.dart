@@ -28,7 +28,7 @@ void main() {
     final positiveLabel = 200;
     final observations = DataFrame([
       <num>[10.1, 10.2, 12.0, 13.4, positiveLabel],
-      <num>[ 3.1,  5.2,  6.0, 77.4, negativeLabel],
+      <num>[3.1, 5.2, 6.0, 77.4, negativeLabel],
     ], headerExists: false);
 
     final initialCoefficients = Vector.fromList([10, 20, 30, 40, 50]);
@@ -53,13 +53,11 @@ void main() {
       optimizerFactoryMock = createLinearOptimizerFactoryMock(optimizerMock);
 
       injector
-        ..registerDependency<CostFunctionFactory>(
-                () => costFunctionFactoryMock)
-        ..registerSingleton<LinearOptimizerFactory>(
-                () => optimizerFactoryMock);
+        ..registerDependency<CostFunctionFactory>(() => costFunctionFactoryMock)
+        ..registerSingleton<LinearOptimizerFactory>(() => optimizerFactoryMock);
 
       logisticRegressorInjector
-        .registerSingleton<LinkFunction>(() => linkFunctionMock);
+          .registerSingleton<LinkFunction>(() => linkFunctionMock);
 
       when(optimizerMock.findExtrema(
         initialCoefficients: anyNamed('initialCoefficients'),
@@ -74,54 +72,58 @@ void main() {
       logisticRegressorInjector.clearAll();
     });
 
-    test('should throw an exception if a probability threshold is less than '
+    test(
+        'should throw an exception if a probability threshold is less than '
         '0.0', () {
       final probabilityThreshold = -0.01;
       final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
-        probabilityThreshold: probabilityThreshold,
-        initialCoefficients: Vector.empty(),
-      );
+            observations,
+            targetColumnName,
+            probabilityThreshold: probabilityThreshold,
+            initialCoefficients: Vector.empty(),
+          );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
     });
 
-    test('should throw an exception if a probability threshold is equal to '
+    test(
+        'should throw an exception if a probability threshold is equal to '
         '0.0', () {
       final probabilityThreshold = 0.0;
       final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
-        probabilityThreshold: probabilityThreshold,
-        initialCoefficients: Vector.empty(),
-      );
+            observations,
+            targetColumnName,
+            probabilityThreshold: probabilityThreshold,
+            initialCoefficients: Vector.empty(),
+          );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
     });
 
-    test('should throw an exception if a probability threshold is equal to '
+    test(
+        'should throw an exception if a probability threshold is equal to '
         '1.0', () {
       final probabilityThreshold = 1.0;
       final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
-        probabilityThreshold: probabilityThreshold,
-        initialCoefficients: Vector.empty(),
-      );
+            observations,
+            targetColumnName,
+            probabilityThreshold: probabilityThreshold,
+            initialCoefficients: Vector.empty(),
+          );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
     });
 
-    test('should throw an exception if a probability threshold is greater than '
+    test(
+        'should throw an exception if a probability threshold is greater than '
         '1.0', () {
       final probabilityThreshold = 1.01;
       final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
-        probabilityThreshold: probabilityThreshold,
-        initialCoefficients: Vector.empty(),
-      );
+            observations,
+            targetColumnName,
+            probabilityThreshold: probabilityThreshold,
+            initialCoefficients: Vector.empty(),
+          );
 
       expect(actual, throwsA(isA<InvalidProbabilityThresholdException>()));
     });
@@ -130,40 +132,42 @@ void main() {
       final targetColumnName = 'col_10';
 
       final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
-        initialCoefficients: Vector.empty(),
-      );
+            observations,
+            targetColumnName,
+            initialCoefficients: Vector.empty(),
+          );
 
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if too few initial coefficients '
+    test(
+        'should throw an exception if too few initial coefficients '
         'provided', () {
       final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
-        initialCoefficients: Vector.fromList([1, 2]),
-      );
+            observations,
+            targetColumnName,
+            initialCoefficients: Vector.fromList([1, 2]),
+          );
 
       expect(actual, throwsException);
     });
 
-    test('should throw an exception if too many initial coefficients '
+    test(
+        'should throw an exception if too many initial coefficients '
         'provided', () {
-
       final targetColumnName = 'col_4';
 
       final actual = () => LogisticRegressor(
-        observations,
-        targetColumnName,
-        initialCoefficients: Vector.fromList([1, 2, 3, 4, 5, 6]),
-      );
+            observations,
+            targetColumnName,
+            initialCoefficients: Vector.fromList([1, 2, 3, 4, 5, 6]),
+          );
 
       expect(actual, throwsException);
     });
 
-    test('should call cost function factory in order to create '
+    test(
+        'should call cost function factory in order to create '
         'loglikelihood cost function', () {
       LogisticRegressor(
         observations,
@@ -181,7 +185,8 @@ void main() {
       )).called(1);
     });
 
-    test('should call linear optimizer factory and consider intercept term', () {
+    test('should call linear optimizer factory and consider intercept term',
+        () {
       LogisticRegressor(
         observations,
         'col_4',
@@ -227,7 +232,8 @@ void main() {
       )).called(1);
     });
 
-    test('should find the extrema for provided observations while '
+    test(
+        'should find the extrema for provided observations while '
         'instantiating', () {
       LogisticRegressor(
         observations,
@@ -237,11 +243,11 @@ void main() {
       );
 
       verify(optimizerMock.findExtrema(
-          initialCoefficients: argThat(
-            equals(Matrix.fromColumns([initialCoefficients])),
-            named: 'initialCoefficients',
-          ),
-          isMinimizingObjective: false,
+        initialCoefficients: argThat(
+          equals(Matrix.fromColumns([initialCoefficients])),
+          named: 'initialCoefficients',
+        ),
+        isMinimizingObjective: false,
       )).called(1);
     });
 

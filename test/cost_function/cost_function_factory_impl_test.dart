@@ -17,7 +17,8 @@ void main() {
       expect(costFn, isA<LeastSquareCostFunction>());
     });
 
-    test('should create a loglikelihood cost function considering passed '
+    test(
+        'should create a loglikelihood cost function considering passed '
         'link function, positive and negative labels', () {
       final costFn = factory.createByType(
         CostFunctionType.logLikelihood,
@@ -29,7 +30,8 @@ void main() {
       expect(costFn, isA<LogLikelihoodCostFunction>());
     });
 
-    test('should throw an exception if no link function provided for '
+    test(
+        'should throw an exception if no link function provided for '
         'loglikelihood function', () {
       expect(
         () => factory.createByType(
@@ -41,7 +43,8 @@ void main() {
       );
     });
 
-    test('should throw an exception if no positive label provided for '
+    test(
+        'should throw an exception if no positive label provided for '
         'loglikelihood function', () {
       expect(
         () => factory.createByType(
@@ -53,7 +56,8 @@ void main() {
       );
     });
 
-    test('should throw an exception if no negative label provided for '
+    test(
+        'should throw an exception if no negative label provided for '
         'loglikelihood function', () {
       expect(
         () => factory.createByType(

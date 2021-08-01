@@ -28,15 +28,16 @@ class KnnSolverBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    final trainFeatures = Matrix.fromRows(List.generate(trainObservationsNum,
-            (i) => Vector.randomFilled(featuresNum)));
-    final trainLabels = Matrix.fromColumns([Vector.randomFilled(trainObservationsNum)]);
+    final trainFeatures = Matrix.fromRows(List.generate(
+        trainObservationsNum, (i) => Vector.randomFilled(featuresNum)));
+    final trainLabels =
+        Matrix.fromColumns([Vector.randomFilled(trainObservationsNum)]);
 
-    solver = KnnSolverImpl(trainFeatures, trainLabels, k, Distance.euclidean,
-        false);
+    solver =
+        KnnSolverImpl(trainFeatures, trainLabels, k, Distance.euclidean, false);
 
-    features = Matrix.fromRows(List.generate(observationsNum,
-            (i) => Vector.randomFilled(featuresNum)));
+    features = Matrix.fromRows(List.generate(
+        observationsNum, (i) => Vector.randomFilled(featuresNum)));
   }
 }
 

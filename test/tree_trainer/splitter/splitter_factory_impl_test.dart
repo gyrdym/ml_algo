@@ -26,11 +26,11 @@ void main() {
     setUp(() {
       assessorFactoryMock = createTreeSplitAssessorFactoryMock(assessorMock);
 
-      nominalSplitterFactoryMock = createNominalTreeSplitterFactoryMock(
-          nominalSplitterMock);
+      nominalSplitterFactoryMock =
+          createNominalTreeSplitterFactoryMock(nominalSplitterMock);
 
-      numericalSplitterFactoryMock = createNumericalTreeSplitterFactoryMock(
-          numericalSplitterMock);
+      numericalSplitterFactoryMock =
+          createNumericalTreeSplitterFactoryMock(numericalSplitterMock);
 
       factory = TreeSplitterFactoryImpl(assessorFactoryMock,
           nominalSplitterFactoryMock, numericalSplitterFactoryMock);
@@ -64,7 +64,8 @@ void main() {
       ).called(1);
     });
 
-    test('should call nominal splitter factory while creating the '
+    test(
+        'should call nominal splitter factory while creating the '
         'instance', () {
       final type = TreeSplitterType.greedy;
       final assessorType = TreeSplitAssessorType.majority;
@@ -74,7 +75,8 @@ void main() {
       verify(nominalSplitterFactoryMock.create()).called(1);
     });
 
-    test('should call numerical splitter factory while creating the '
+    test(
+        'should call numerical splitter factory while creating the '
         'instance', () {
       final type = TreeSplitterType.greedy;
       final assessorType = TreeSplitAssessorType.majority;

@@ -8,7 +8,8 @@ import 'package:test/test.dart';
 import '../helpers.dart';
 
 void main() {
-  void testInverseLogitLinkFunction(LinkFunction inverseLogitLink, DType dtype) {
+  void testInverseLogitLinkFunction(
+      LinkFunction inverseLogitLink, DType dtype) {
     group('InverseLogitLinkFunction ($dtype)', () {
       test('should translate positive scores to probabilities', () {
         final scores = Matrix.fromList([
@@ -19,12 +20,14 @@ void main() {
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
-        expect(probabilities, iterable2dAlmostEqualTo([
-          [0.73105],
-          [0.88079],
-          [0.9525],
-          [0.98201]
-        ], 1e-4));
+        expect(
+            probabilities,
+            iterable2dAlmostEqualTo([
+              [0.73105],
+              [0.88079],
+              [0.9525],
+              [0.98201]
+            ], 1e-4));
         expect(probabilities.dtype, dtype);
       });
 
@@ -37,12 +40,14 @@ void main() {
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
-        expect(probabilities, iterable2dAlmostEqualTo([
-          [0.268],
-          [0.119],
-          [0.047],
-          [0.017]
-        ], 1e-2));
+        expect(
+            probabilities,
+            iterable2dAlmostEqualTo([
+              [0.268],
+              [0.119],
+              [0.047],
+              [0.017]
+            ], 1e-2));
         expect(probabilities.dtype, dtype);
       });
 
@@ -56,13 +61,15 @@ void main() {
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
-        expect(probabilities, equals([
-          [1.0],
-          [1.0],
-          [1.0],
-          [1.0],
-          [1.0],
-        ]));
+        expect(
+            probabilities,
+            equals([
+              [1.0],
+              [1.0],
+              [1.0],
+              [1.0],
+              [1.0],
+            ]));
         expect(probabilities.dtype, dtype);
       });
 
@@ -75,16 +82,19 @@ void main() {
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
-        expect(probabilities, equals([
-          [0.0],
-          [0.0],
-          [0.0],
-          [0.0]
-        ]));
+        expect(
+            probabilities,
+            equals([
+              [0.0],
+              [0.0],
+              [0.0],
+              [0.0]
+            ]));
         expect(probabilities.dtype, dtype);
       });
 
-      test('should translate mixed collection of positive and negative scores '
+      test(
+          'should translate mixed collection of positive and negative scores '
           'to probabilities', () {
         final scores = Matrix.fromList([
           [1.0],
@@ -94,12 +104,14 @@ void main() {
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
-        expect(probabilities, iterable2dAlmostEqualTo([
-          [0.731],
-          [0.119],
-          [0.952],
-          [0.017]
-        ], 1e-3));
+        expect(
+            probabilities,
+            iterable2dAlmostEqualTo([
+              [0.731],
+              [0.119],
+              [0.952],
+              [0.017]
+            ], 1e-3));
         expect(probabilities.dtype, dtype);
       });
 
@@ -112,22 +124,25 @@ void main() {
         ], dtype: dtype);
         final probabilities = inverseLogitLink.link(scores);
 
-        expect(probabilities, equals([
-          [0.5],
-          [0.5],
-          [0.5],
-          [0.5]
-        ]));
+        expect(
+            probabilities,
+            equals([
+              [0.5],
+              [0.5],
+              [0.5],
+              [0.5]
+            ]));
         expect(probabilities.dtype, dtype);
       });
 
-      test('should throw an exception if scores matrix has more than 1 '
+      test(
+          'should throw an exception if scores matrix has more than 1 '
           'column', () {
         final scores = Matrix.fromList([
-          [1.0,   10],
-          [0.0,  200],
+          [1.0, 10],
+          [0.0, 200],
           [0.0, -100],
-          [9.0,  1e7],
+          [9.0, 1e7],
         ], dtype: dtype);
         final actual = () => inverseLogitLink.link(scores);
 

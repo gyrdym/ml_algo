@@ -124,10 +124,7 @@ final _child11 = TreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   10,
   null,
-  [
-    _child21,
-    _child22
-  ],
+  [_child21, _child22],
   null,
   1,
 );

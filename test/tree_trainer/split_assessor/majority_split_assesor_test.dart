@@ -17,7 +17,8 @@ void main() {
       expect(error, 0.5);
     });
 
-    test('should return `0` majority-based error on node if the node '
+    test(
+        'should return `0` majority-based error on node if the node '
         'has only one class label', () {
       final node = Matrix.fromList([
         [10, 30, 0],
@@ -29,7 +30,8 @@ void main() {
       expect(error, 0);
     });
 
-    test('should return majority-based error on decision stump when all nodes'
+    test(
+        'should return majority-based error on decision stump when all nodes'
         'in the stump have distinct majority class', () {
       final node1 = Matrix.fromList([
         [10, 30, 0],
@@ -86,7 +88,8 @@ void main() {
       expect(error, 4 / 10);
     });
 
-    test('should return majority-based error, that is equal to 0, if all '
+    test(
+        'should return majority-based error, that is equal to 0, if all '
         'nodes in the stump have only one class', () {
       final node1 = Matrix.fromList([
         [10, 30, 0],
@@ -116,7 +119,8 @@ void main() {
       expect(error, 0);
     });
 
-    test('should return majority-based error, that is equal to 0, if all '
+    test(
+        'should return majority-based error, that is equal to 0, if all '
         'nodes in the stump have only one observation', () {
       final node1 = Matrix.fromList([
         [50, 70, 0],
@@ -137,7 +141,8 @@ void main() {
       expect(error, 0);
     });
 
-    test('should throw an error if at least one node in the stump does not '
+    test(
+        'should throw an error if at least one node in the stump does not '
         'have observations at all', () {
       final node1 = Matrix.fromList([]);
 
@@ -152,12 +157,13 @@ void main() {
       final stump = [node1, node2, node3];
 
       expect(
-          () => const MajorityTreeSplitAssessor().getAggregatedError(stump, 2),
-          throwsException,
+        () => const MajorityTreeSplitAssessor().getAggregatedError(stump, 2),
+        throwsException,
       );
     });
 
-    test('should return majority-based error, if some nodes of the stump '
+    test(
+        'should return majority-based error, if some nodes of the stump '
         'have equal quantity of class labels', () {
       final node1 = Matrix.fromList([
         [20, 30, 0],

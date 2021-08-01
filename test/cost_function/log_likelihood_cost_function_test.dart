@@ -12,8 +12,8 @@ void main() {
     final mockedLinkFn = MockLinkFunction();
     final positiveLabel = 10.0;
     final negativeLabel = -10.0;
-    final logLikelihoodCost = LogLikelihoodCostFunction(
-        mockedLinkFn, positiveLabel, negativeLabel);
+    final logLikelihoodCost =
+        LogLikelihoodCostFunction(mockedLinkFn, positiveLabel, negativeLabel);
     final x = Matrix.fromList([
       [1.0, 2.0, 3.0],
       [4.0, 5.0, 6.0],
@@ -21,7 +21,7 @@ void main() {
     ]);
     final w = Matrix.column([
       -1.0,
-       2.0,
+      2.0,
       -3.0,
     ]);
     final y = Matrix.column([
@@ -40,7 +40,8 @@ void main() {
 
     tearDown(resetMockitoState);
 
-    test('should return a gradient vector of log likelihood error '
+    test(
+        'should return a gradient vector of log likelihood error '
         'function', () {
       final expected = [
         [-7.0],
@@ -55,10 +56,10 @@ void main() {
     test('should return a subgradient vector', () {
       expect(
         () => logLikelihoodCost.getSubGradient(
-            1,
-            Matrix.empty(),
-            Matrix.empty(),
-            Matrix.empty(),
+          1,
+          Matrix.empty(),
+          Matrix.empty(),
+          Matrix.empty(),
         ),
         throwsUnimplementedError,
       );
@@ -75,19 +76,20 @@ void main() {
       final cost = logLikelihoodCost.getCost(x, w, y);
 
       verify(
-          mockedLinkFn.link(
-              argThat(
-                  equals(
-                      [
-                        [-6],
-                        [-12],
-                        [-18],
-                      ],
-                  ),
-              ),
+        mockedLinkFn.link(
+          argThat(
+            equals(
+              [
+                [-6],
+                [-12],
+                [-18],
+              ],
+            ),
           ),
+        ),
       );
-      expect(cost, closeTo(math.log(0.3) + math.log(0.7) + math.log(0.8), 1e-4));
+      expect(
+          cost, closeTo(math.log(0.3) + math.log(0.7) + math.log(0.8), 1e-4));
     });
   });
 }

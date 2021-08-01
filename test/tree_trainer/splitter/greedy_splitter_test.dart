@@ -14,7 +14,8 @@ void main() {
   final nominalTreeSplitterMock = MockNominalTreeSplitter();
 
   group('TreeSplitAssessorMock', () {
-    test('should sort observations (ASC-direction) by given column and '
+    test(
+        'should sort observations (ASC-direction) by given column and '
         'create split with minimal error if split by continuous value is '
         'happening', () {
       final inputObservations = Matrix.fromList([
@@ -28,22 +29,38 @@ void main() {
       final bestSplittingValue = 4.5;
       final splittingColumnIdx = 0;
       final mockedWorstSplit = {
-        MockTreeNode(): Matrix.fromList([[12.0, 22.0]]),
-        MockTreeNode(): Matrix.fromList([[19.0, 31.0]]),
+        MockTreeNode(): Matrix.fromList([
+          [12.0, 22.0]
+        ]),
+        MockTreeNode(): Matrix.fromList([
+          [19.0, 31.0]
+        ]),
       };
       final mockedWorseSplit = {
-        MockTreeNode(): Matrix.fromList([[13.0, 24.0]]),
-        MockTreeNode(): Matrix.fromList([[29.0, 53.0]]),
+        MockTreeNode(): Matrix.fromList([
+          [13.0, 24.0]
+        ]),
+        MockTreeNode(): Matrix.fromList([
+          [29.0, 53.0]
+        ]),
       };
       final mockedGoodSplit = {
-        MockTreeNode(): Matrix.fromList([[1.0, 2.0]]),
-        MockTreeNode(): Matrix.fromList([[9.0, 3.0]]),
+        MockTreeNode(): Matrix.fromList([
+          [1.0, 2.0]
+        ]),
+        MockTreeNode(): Matrix.fromList([
+          [9.0, 3.0]
+        ]),
       };
       final bestNodeLeft = MockTreeNode();
       final bestNodeRight = MockTreeNode();
       final mockedBestSplit = {
-        bestNodeLeft: Matrix.fromList([[100.0, 200.0]]),
-        bestNodeRight: Matrix.fromList([[300.0, 400.0]]),
+        bestNodeLeft: Matrix.fromList([
+          [100.0, 200.0]
+        ]),
+        bestNodeRight: Matrix.fromList([
+          [300.0, 400.0]
+        ]),
       };
       final mockedSplitDataToBeReturned = [
         {
@@ -65,24 +82,24 @@ void main() {
       ];
       final assessor = MockTreeSplitAssessor();
 
-      when(assessor.getAggregatedError(mockedWorstSplit.values,
-          targetIdx)).thenReturn(0.99);
-      when(assessor.getAggregatedError(mockedWorseSplit.values,
-          targetIdx)).thenReturn(0.8);
-      when(assessor.getAggregatedError(mockedGoodSplit.values,
-          targetIdx)).thenReturn(0.4);
-      when(assessor.getAggregatedError(mockedBestSplit.values,
-          targetIdx)).thenReturn(0.1);
+      when(assessor.getAggregatedError(mockedWorstSplit.values, targetIdx))
+          .thenReturn(0.99);
+      when(assessor.getAggregatedError(mockedWorseSplit.values, targetIdx))
+          .thenReturn(0.8);
+      when(assessor.getAggregatedError(mockedGoodSplit.values, targetIdx))
+          .thenReturn(0.4);
+      when(assessor.getAggregatedError(mockedBestSplit.values, targetIdx))
+          .thenReturn(0.1);
 
-      final numericalSplitter = createNumericalSplitter(
-          mockedSplitDataToBeReturned);
+      final numericalSplitter =
+          createNumericalSplitter(mockedSplitDataToBeReturned);
       final splitter = GreedyTreeSplitter(
         assessor,
         numericalSplitter,
         nominalTreeSplitterMock,
       );
-      final actualSplit = splitter.split(inputObservations,
-          splittingColumnIdx, targetIdx);
+      final actualSplit =
+          splitter.split(inputObservations, splittingColumnIdx, targetIdx);
 
       for (final splitInfo in mockedSplitDataToBeReturned) {
         final splittingValue = splitInfo['splittingValue'] as double;
@@ -101,7 +118,8 @@ void main() {
     });
   });
 
-  test('should create split, dividing the observations into parts by '
+  test(
+      'should create split, dividing the observations into parts by '
       'given splitting column index', () {
     final samples = Matrix.fromList([
       [11, 22, 1, 30],
@@ -141,11 +159,12 @@ void main() {
     expect(actualSplit.keys, equals(mockedSplit.keys));
     expect(actualSplit.values, equals(mockedSplit.values));
 
-    verify(splitter.split(samples, splittingColumnIdx,
-        splittingValues)).called(1);
+    verify(splitter.split(samples, splittingColumnIdx, splittingValues))
+        .called(1);
   });
 
-  test('should return an empty stum if splitting values collection is '
+  test(
+      'should return an empty stum if splitting values collection is '
       'empty', () {
     final samples = Matrix.fromList([
       [11, 22, 1, 30],
@@ -177,11 +196,12 @@ void main() {
       splittingValues,
     );
     expect(split.values, equals(<Matrix>[]));
-    verify(nominalSplitter.split(samples, splittingColumnIdx,
-        splittingValues)).called(1);
+    verify(nominalSplitter.split(samples, splittingColumnIdx, splittingValues))
+        .called(1);
   });
 
-  test('should skip the same values while iterating through the sorted '
+  test(
+      'should skip the same values while iterating through the sorted '
       'rows', () {
     final samples = Matrix.fromList([
       [11],
@@ -258,15 +278,16 @@ void main() {
       nominalTreeSplitterMock,
     );
     final actual = () => splitter.split(
-      samples,
-      splittingColumnIdx,
-      -1,
-      splittingValues,
-    );
+          samples,
+          splittingColumnIdx,
+          -1,
+          splittingValues,
+        );
     expect(actual, throwsException);
   });
 
-  test('should throw an error if splitting index is greater than the '
+  test(
+      'should throw an error if splitting index is greater than the '
       'number of columns', () {
     final samples = Matrix.fromList([
       [11, 22, 1, 30],
@@ -283,11 +304,11 @@ void main() {
       nominalTreeSplitterMock,
     );
     final actual = () => selector.split(
-      samples,
-      splittingColumnIdx,
-      -1,
-      splittingValues,
-    );
+          samples,
+          splittingColumnIdx,
+          -1,
+          splittingValues,
+        );
 
     expect(actual, throwsException);
   });
@@ -312,8 +333,8 @@ NumericalTreeSplitter createNumericalSplitter(
   return splitter;
 }
 
-NominalTreeSplitter createNominalSplitter(List<double> nominalValues,
-    Map<TreeNode, Matrix> split) {
+NominalTreeSplitter createNominalSplitter(
+    List<double> nominalValues, Map<TreeNode, Matrix> split) {
   final splitter = MockNominalTreeSplitter();
 
   when(splitter.split(

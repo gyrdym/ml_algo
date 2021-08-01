@@ -6,51 +6,55 @@ import 'package:test/test.dart';
 
 void main() {
   group('fromLinkFunctionJson', () {
-    test('should decode inverse logit link function, '
+    test(
+        'should decode inverse logit link function, '
         'v1_float32InverseLogitLinkFunctionEncoded', () {
       final logitFunction = const InverseLogitLinkFunction();
-      final decoded = fromLinkFunctionJson(
-          v1_float32InverseLogitLinkFunctionEncoded);
+      final decoded =
+          fromLinkFunctionJson(v1_float32InverseLogitLinkFunctionEncoded);
       expect(decoded, same(logitFunction));
     });
 
-    test('should decode inverse logit link function, '
+    test(
+        'should decode inverse logit link function, '
         'v1_float64InverseLogitLinkFunctionEncoded', () {
       final logitFunction = const InverseLogitLinkFunction();
-      final decoded = fromLinkFunctionJson(
-          v1_float64InverseLogitLinkFunctionEncoded);
+      final decoded =
+          fromLinkFunctionJson(v1_float64InverseLogitLinkFunctionEncoded);
       expect(decoded, same(logitFunction));
     });
 
-    test('should decode inverse logit link function, '
+    test(
+        'should decode inverse logit link function, '
         'inverseLogitLinkFunctionEncoded', () {
       final logitFunction = const InverseLogitLinkFunction();
-      final decoded = fromLinkFunctionJson(
-          inverseLogitLinkFunctionEncoded);
+      final decoded = fromLinkFunctionJson(inverseLogitLinkFunctionEncoded);
       expect(decoded, same(logitFunction));
     });
 
-    test('should decode softmax link function, '
+    test(
+        'should decode softmax link function, '
         'v1_float32SoftmaxLinkFunctionEncoded', () {
       final softmaxFunction = const SoftmaxLinkFunction();
-      final decoded = fromLinkFunctionJson(
-          v1_float32SoftmaxLinkFunctionEncoded);
+      final decoded =
+          fromLinkFunctionJson(v1_float32SoftmaxLinkFunctionEncoded);
       expect(decoded, same(softmaxFunction));
     });
 
-    test('should decode softmax link function, '
+    test(
+        'should decode softmax link function, '
         'v1_float64SoftmaxLinkFunctionEncoded', () {
       final softmaxFunction = const SoftmaxLinkFunction();
-      final decoded = fromLinkFunctionJson(
-          v1_float64SoftmaxLinkFunctionEncoded);
+      final decoded =
+          fromLinkFunctionJson(v1_float64SoftmaxLinkFunctionEncoded);
       expect(decoded, same(softmaxFunction));
     });
 
-    test('should decode softmax link function, '
+    test(
+        'should decode softmax link function, '
         'softmaxLinkFunctionEncoded', () {
       final softmaxFunction = const SoftmaxLinkFunction();
-      final decoded = fromLinkFunctionJson(
-          softmaxLinkFunctionEncoded);
+      final decoded = fromLinkFunctionJson(softmaxLinkFunctionEncoded);
       expect(decoded, same(softmaxFunction));
     });
 
