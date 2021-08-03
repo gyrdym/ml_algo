@@ -55,6 +55,7 @@ class DecisionTreeClassifierFactoryImpl
       maxDepth,
       treeRootNode,
       targetName,
+      [...trainData.header].indexOf(targetName),
       dtype,
     );
   }

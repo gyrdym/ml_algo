@@ -69,6 +69,7 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
     return LinearRegressorImpl(
       coefficients,
       targetName,
+      [...fittingData.header].indexOf(targetName),
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       learningRateType: learningRateType,

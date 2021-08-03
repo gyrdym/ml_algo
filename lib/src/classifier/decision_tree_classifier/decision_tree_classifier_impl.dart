@@ -8,6 +8,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_js
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
+import 'package:ml_algo/src/helpers/features_target_split.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -31,6 +32,7 @@ class DecisionTreeClassifierImpl
     this.maxDepth,
     this.treeRootNode,
     this.targetColumnName,
+    this.targetColumnIndex,
     this.dtype, {
     this.schemaVersion = decisionTreeClassifierJsonSchemaVersion,
   });
@@ -60,8 +62,14 @@ class DecisionTreeClassifierImpl
   @JsonKey(name: decisionTreeClassifierTargetColumnNameJsonKey)
   final String targetColumnName;
 
+  @JsonKey(name: decisionTreeClassifierTargetColumnIndexJsonKey)
+  final int targetColumnIndex;
+
   @override
   Iterable<String> get targetNames => [targetColumnName];
+
+  @override
+  Iterable<int> get targetIndices => [targetColumnIndex];
 
   @JsonKey(name: decisionTreeClassifierTreeRootNodeJsonKey)
   final TreeNode treeRootNode;
@@ -78,8 +86,9 @@ class DecisionTreeClassifierImpl
 
   @override
   DataFrame predict(DataFrame features) {
-    final predictedLabels = features
-        .toMatrix(dtype)
+    final splits = featuresTargetSplit(features, targetIndices: targetIndices).toList();
+    final points = splits[0].toMatrix(dtype);
+    final predictedLabels = points
         .rows
         .map((sample) => _getLabelForSample(sample, treeRootNode));
 

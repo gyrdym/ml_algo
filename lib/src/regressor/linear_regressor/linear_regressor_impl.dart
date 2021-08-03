@@ -37,7 +37,8 @@ class LinearRegressorImpl
     implements LinearRegressor {
   LinearRegressorImpl(
     this.coefficients,
-    this.targetName, {
+    this.targetName,
+    this.targetIndex, {
     required this.optimizerType,
     required this.iterationsLimit,
     required this.learningRateType,
@@ -117,6 +118,10 @@ class LinearRegressorImpl
   final String targetName;
 
   @override
+  @JsonKey(name: linearRegressorTargetIndexJsonKey)
+  final int targetIndex;
+
+  @override
   @JsonKey(name: linearRegressorFitInterceptJsonKey)
   final bool fitIntercept;
 
@@ -144,9 +149,12 @@ class LinearRegressorImpl
   Iterable<String> get targetNames => [targetName];
 
   @override
+  Iterable<int> get targetIndices => [targetIndex];
+
+  @override
   DataFrame predict(DataFrame features) {
     final splits =
-        featuresTargetSplit(features, targetNames: [targetName]).toList();
+        featuresTargetSplit(features, targetIndices: targetIndices).toList();
     final points = splits[0].toMatrix(dtype);
     final prediction = addInterceptIf(
           fitIntercept,

@@ -1,4 +1,5 @@
 const linearRegressorTargetNameJsonKey = 'TN';
+const linearRegressorTargetIndexJsonKey = 'TI';
 const linearRegressorFitInterceptJsonKey = 'FI';
 const linearRegressorInterceptScaleJsonKey = 'IS';
 const linearRegressorCoefficientsJsonKey = 'CS';

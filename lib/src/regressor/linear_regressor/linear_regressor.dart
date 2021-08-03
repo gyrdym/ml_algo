@@ -246,6 +246,10 @@ abstract class LinearRegressor
   /// method
   String get targetName;
 
+  /// A number that serves as an index of the target column containing
+  /// observation labels.
+  int get targetIndex;
+
   /// A flag denoting whether the intercept term is considered during
   /// learning of the regressor or not
   bool get fitIntercept;
