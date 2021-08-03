@@ -1,5 +1,6 @@
 const logisticRegressorCoefficientsByClassesJsonKey = 'CBC';
 const logisticRegressorClassNamesJsonKey = 'CN';
+const logisticRegressorTargetIndicesJsonKey = 'CI';
 const logisticRegressorFitInterceptJsonKey = 'FI';
 const logisticRegressorInterceptScaleJsonKey = 'IS';
 const logisticRegressorDTypeJsonKey = 'DT';

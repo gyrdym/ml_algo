@@ -85,6 +85,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     final costPerIteration = optimizer.costPerIteration.isNotEmpty
         ? optimizer.costPerIteration
         : null;
+    final targetIndex = [...trainData.header].indexOf(targetName);
 
     return LogisticRegressorImpl(
       optimizerType,
@@ -100,6 +101,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       initialCoefficientsType,
       initialCoefficients,
       [targetName],
+      [targetIndex],
       _linkFunction,
       fitIntercept,
       interceptScale,

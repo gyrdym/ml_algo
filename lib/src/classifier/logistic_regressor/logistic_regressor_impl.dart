@@ -53,6 +53,7 @@ class LogisticRegressorImpl
     this.initialCoefficientsType,
     this.initialCoefficients,
     this.targetNames,
+    this.targetIndices,
     this.linkFunction,
     this.fitIntercept,
     this.interceptScale,
@@ -141,6 +142,10 @@ class LogisticRegressorImpl
   @override
   @JsonKey(name: logisticRegressorClassNamesJsonKey)
   final Iterable<String> targetNames;
+
+  @override
+  @JsonKey(name: logisticRegressorTargetIndicesJsonKey)
+  final Iterable<int> targetIndices;
 
   @override
   @JsonKey(name: logisticRegressorFitInterceptJsonKey)

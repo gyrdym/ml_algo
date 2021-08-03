@@ -33,6 +33,7 @@ class KnnClassifierImpl
     implements KnnClassifier {
   KnnClassifierImpl(
     this.targetColumnName,
+    this.targetColumnIndex,
     this.classLabels,
     this.kernel,
     this.solver,
@@ -52,12 +53,18 @@ class KnnClassifierImpl
   @JsonKey(name: knnClassifierTargetColumnNameJsonKey)
   final String targetColumnName;
 
+  @JsonKey(name: knnClassifierTargetColumnIndexJsonKey)
+  final int targetColumnIndex;
+
   @override
   @JsonKey(name: knnClassifierDTypeJsonKey)
   final DType dtype;
 
   @override
   Iterable<String> get targetNames => [targetColumnName];
+
+  @override
+  Iterable<int> get targetIndices => [targetColumnIndex];
 
   @JsonKey(name: knnClassifierClassLabelsJsonKey)
   final List<num> classLabels;

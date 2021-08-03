@@ -56,9 +56,11 @@ class KnnClassifierFactoryImpl implements KnnClassifierFactory {
       distance,
       true,
     );
+    final targetIndex = [...trainData.header].indexOf(targetName);
 
     return KnnClassifierImpl(
       targetName,
+      targetIndex,
       classLabels,
       kernel,
       solver,

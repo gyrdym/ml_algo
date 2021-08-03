@@ -48,6 +48,7 @@ class DecisionTreeClassifierFactoryImpl
       TreeSplitterType.greedy,
     );
     final treeRootNode = trainer.train(trainData.toMatrix(dtype));
+    final targetIndex = [...trainData.header].indexOf(targetName);
 
     return DecisionTreeClassifierImpl(
       minError,
@@ -55,7 +56,7 @@ class DecisionTreeClassifierFactoryImpl
       maxDepth,
       treeRootNode,
       targetName,
-      [...trainData.header].indexOf(targetName),
+      targetIndex,
       dtype,
     );
   }
