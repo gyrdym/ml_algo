@@ -1,4 +1,5 @@
 const softmaxRegressorClassNamesJsonKey = 'CN';
+const softmaxRegressorTargetIndicesJsonKey = 'CI';
 const softmaxRegressorFitInterceptJsonKey = 'FI';
 const softmaxRegressorInterceptScaleJsonKey = 'IS';
 const softmaxRegressorCoefficientsByClassesJsonKey = 'CBC';

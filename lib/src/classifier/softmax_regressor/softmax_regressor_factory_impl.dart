@@ -13,6 +13,7 @@ import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
+import 'package:quiver/iterables.dart';
 
 class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
   const SoftmaxRegressorFactoryImpl(this._linkFunction);
@@ -77,6 +78,9 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
     final costPerIteration = optimizer.costPerIteration.isNotEmpty
         ? optimizer.costPerIteration
         : null;
+    final targetIndices = enumerate([...trainData.header])
+        .where((indexed) => targetNames.contains(indexed.value))
+        .map((indexed) => indexed.index);
 
     return SoftmaxRegressorImpl(
       optimizerType,
@@ -93,6 +97,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       initialCoefficients,
       coefficientsByClasses,
       targetNames,
+      targetIndices,
       _linkFunction,
       fitIntercept,
       interceptScale,

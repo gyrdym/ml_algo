@@ -53,6 +53,7 @@ class SoftmaxRegressorImpl
     this.initialCoefficients,
     this.coefficientsByClasses,
     this.targetNames,
+    this.targetIndices,
     this.linkFunction,
     this.fitIntercept,
     this.interceptScale,
@@ -131,6 +132,10 @@ class SoftmaxRegressorImpl
   @override
   @JsonKey(name: softmaxRegressorClassNamesJsonKey)
   final Iterable<String> targetNames;
+
+  @override
+  @JsonKey(name: softmaxRegressorTargetIndicesJsonKey)
+  final Iterable<int> targetIndices;
 
   @override
   @JsonKey(name: softmaxRegressorFitInterceptJsonKey)
