@@ -43,9 +43,11 @@ class KnnRegressorFactoryImpl implements KnnRegressorFactory {
     );
 
     final kernel = _kernelFnFactory.createByType(kernelType);
+    final targetIndex = [...fittingData.header].indexOf(targetName);
 
     return KnnRegressorImpl(
       targetName,
+      targetIndex,
       solver,
       kernel,
       dtype,

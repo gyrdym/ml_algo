@@ -65,11 +65,12 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
         )
         .getColumn(0);
     final costPerIteration = optimizer.costPerIteration;
+    final targetIndex = [...fittingData.header].indexOf(targetName);
 
     return LinearRegressorImpl(
       coefficients,
       targetName,
-      [...fittingData.header].indexOf(targetName),
+      targetIndex,
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       learningRateType: learningRateType,

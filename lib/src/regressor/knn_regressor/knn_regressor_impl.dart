@@ -34,6 +34,7 @@ class KnnRegressorImpl
     implements KnnRegressor {
   KnnRegressorImpl(
     this.targetName,
+    this.targetIndex,
     this.solver,
     this.kernel,
     this.dtype, {
@@ -62,6 +63,9 @@ class KnnRegressorImpl
   @JsonKey(name: knnRegressorTargetNameJsonKey)
   final String targetName;
 
+  @JsonKey(name: knnRegressorTargetIndexJsonKey)
+  final int targetIndex;
+
   @JsonKey(name: knnRegressorSolverJsonKey)
   final KnnSolver solver;
 
@@ -70,6 +74,9 @@ class KnnRegressorImpl
 
   @override
   Iterable<String> get targetNames => [targetName];
+
+  @override
+  Iterable<int> get targetIndices => [targetIndex];
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
