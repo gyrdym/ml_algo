@@ -22,6 +22,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       'IC',
       'FDN',
       'TN',
+      'TI',
       'FI',
       'IS',
       'CS',
@@ -33,6 +34,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(
           json, 'CS', (v) => Vector.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'TN', (v) => v as String),
+      $checkedConvert(json, 'TI', (v) => v as int),
       optimizerType: $checkedConvert(
           json,
           'OT',
@@ -71,6 +73,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
   }, fieldKeyMap: const {
     'coefficients': 'CS',
     'targetName': 'TN',
+    'targetIndex': 'TI',
     'optimizerType': 'OT',
     'iterationsLimit': 'IL',
     'learningRateType': 'LRT',
@@ -121,6 +124,7 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
   writeNotNull('IC', instance.initialCoefficients?.toJson());
   val['FDN'] = instance.isFittingDataNormalized;
   val['TN'] = instance.targetName;
+  val['TI'] = instance.targetIndex;
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;
   val['CS'] = instance.coefficients.toJson();

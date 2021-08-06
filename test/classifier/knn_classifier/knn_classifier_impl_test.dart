@@ -50,6 +50,7 @@ void main() {
         final classLabels = <num>[];
         final actual = () => KnnClassifierImpl(
               targetColumnName,
+              1,
               classLabels,
               kernelMock,
               solverMock,
@@ -63,6 +64,7 @@ void main() {
       test('should persist model hyperparameters', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -90,6 +92,7 @@ void main() {
       test('should throw an exception if no features are provided', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           [1],
           kernelMock,
           solverMock,
@@ -108,6 +111,7 @@ void main() {
           'features', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -176,6 +180,7 @@ void main() {
 
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -212,6 +217,7 @@ void main() {
           'if there is no major class', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -252,6 +258,7 @@ void main() {
           'they are not the majority', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -308,6 +315,7 @@ void main() {
           'row', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -374,6 +382,7 @@ void main() {
           'probabilities of absent class labels are 0.0', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -426,6 +435,7 @@ void main() {
           'names', () {
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -475,6 +485,7 @@ void main() {
 
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -545,6 +556,7 @@ void main() {
         ];
         final classifier = KnnClassifierImpl(
           targetColumnName,
+          1,
           classLabels,
           kernelMock,
           solverMock,
@@ -583,6 +595,7 @@ void main() {
       final retrainedModelMock = MockKnnClassifier();
       final classifier = KnnClassifierImpl(
         targetColumnName,
+        1,
         classLabels,
         kernelMock,
         solverMock,

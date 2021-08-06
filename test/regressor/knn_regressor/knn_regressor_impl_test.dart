@@ -28,6 +28,7 @@ void main() {
     final regressorFactory = createKnnRegressorFactoryMock(retrainedModelMock);
     final regressor = KnnRegressorImpl(
       targetName,
+      1,
       solver,
       kernel,
       dtype,

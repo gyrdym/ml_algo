@@ -49,6 +49,7 @@ void main() {
         LinearRegressorImpl(
           coefficients,
           targetName,
+          1,
           optimizerType: optimizerType,
           iterationsLimit: iterationsLimit,
           learningRateType: learningRateType,

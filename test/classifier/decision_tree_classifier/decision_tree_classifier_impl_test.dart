@@ -89,6 +89,7 @@ void main() {
       decisionTreeClassifierMinSamplesCountJsonKey: minSamplesCount,
       decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float32),
       decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
+      decisionTreeClassifierTargetColumnIndexJsonKey: 1,
       decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
       jsonSchemaVersionJsonKey: decisionTreeClassifierJsonSchemaVersion,
     };
@@ -98,6 +99,7 @@ void main() {
       decisionTreeClassifierMinSamplesCountJsonKey: minSamplesCount,
       decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float64),
       decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
+      decisionTreeClassifierTargetColumnIndexJsonKey: 1,
       decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
       jsonSchemaVersionJsonKey: decisionTreeClassifierJsonSchemaVersion,
     };
@@ -182,6 +184,7 @@ void main() {
         maxDepth,
         treeRootMock,
         targetColumnName,
+        1,
         DType.float32,
       );
 
@@ -191,6 +194,7 @@ void main() {
         maxDepth,
         treeRootMock,
         targetColumnName,
+        1,
         DType.float64,
       );
     });

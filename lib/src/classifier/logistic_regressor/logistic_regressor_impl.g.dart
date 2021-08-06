@@ -24,6 +24,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       'IC',
       'CBC',
       'CN',
+      'CI',
       'FI',
       'IS',
       'DT',
@@ -63,6 +64,8 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
           (v) => v == null ? null : Vector.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
           json, 'CN', (v) => (v as List<dynamic>).map((e) => e as String)),
+      $checkedConvert(
+          json, 'CI', (v) => (v as List<dynamic>).map((e) => e as int)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
       $checkedConvert(json, 'FI', (v) => v as bool),
       $checkedConvert(json, 'IS', (v) => v as num),
@@ -92,6 +95,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
     'initialCoefficientsType': 'ICT',
     'initialCoefficients': 'IC',
     'targetNames': 'CN',
+    'targetIndices': 'CI',
     'linkFunction': 'LF',
     'fitIntercept': 'FI',
     'interceptScale': 'IS',
@@ -137,6 +141,7 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
   writeNotNull('IC', instance.initialCoefficients?.toJson());
   val['CBC'] = instance.coefficientsByClasses.toJson();
   val['CN'] = instance.targetNames.toList();
+  val['CI'] = instance.targetIndices.toList();
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;
   writeNotNull('DT', const DTypeJsonConverter().toJson(instance.dtype));

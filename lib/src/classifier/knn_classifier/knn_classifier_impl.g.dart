@@ -8,9 +8,11 @@ part of 'knn_classifier_impl.dart';
 
 KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
   return $checkedNew('KnnClassifierImpl', json, () {
-    $checkKeys(json, allowedKeys: const ['T', 'D', 'C', 'K', 'S', 'P', r'$V']);
+    $checkKeys(json,
+        allowedKeys: const ['T', 'I', 'D', 'C', 'K', 'S', 'P', r'$V']);
     final val = KnnClassifierImpl(
       $checkedConvert(json, 'T', (v) => v as String),
+      $checkedConvert(json, 'I', (v) => v as int),
       $checkedConvert(
           json, 'C', (v) => (v as List<dynamic>).map((e) => e as num).toList()),
       $checkedConvert(
@@ -28,6 +30,7 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
     return val;
   }, fieldKeyMap: const {
     'targetColumnName': 'T',
+    'targetColumnIndex': 'I',
     'classLabels': 'C',
     'kernel': 'K',
     'solver': 'S',
@@ -40,6 +43,7 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$KnnClassifierImplToJson(KnnClassifierImpl instance) {
   final val = <String, dynamic>{
     'T': instance.targetColumnName,
+    'I': instance.targetColumnIndex,
   };
 
   void writeNotNull(String key, dynamic value) {

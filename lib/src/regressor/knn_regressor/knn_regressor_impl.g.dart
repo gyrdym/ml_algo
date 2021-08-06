@@ -8,9 +8,10 @@ part of 'knn_regressor_impl.dart';
 
 KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
   return $checkedNew('KnnRegressorImpl', json, () {
-    $checkKeys(json, allowedKeys: const ['D', 'T', 'S', 'K', r'$V']);
+    $checkKeys(json, allowedKeys: const ['D', 'T', 'TI', 'S', 'K', r'$V']);
     final val = KnnRegressorImpl(
       $checkedConvert(json, 'T', (v) => v as String),
+      $checkedConvert(json, 'TI', (v) => v as int),
       $checkedConvert(
           json,
           'S',
@@ -25,6 +26,7 @@ KnnRegressorImpl _$KnnRegressorImplFromJson(Map<String, dynamic> json) {
     return val;
   }, fieldKeyMap: const {
     'targetName': 'T',
+    'targetIndex': 'TI',
     'solver': 'S',
     'kernel': 'K',
     'dtype': 'D',
@@ -43,6 +45,7 @@ Map<String, dynamic> _$KnnRegressorImplToJson(KnnRegressorImpl instance) {
 
   writeNotNull('D', const DTypeJsonConverter().toJson(instance.dtype));
   val['T'] = instance.targetName;
+  val['TI'] = instance.targetIndex;
   writeNotNull('S', const KnnSolverJsonConverter().toJson(instance.solver));
   writeNotNull('K', const KernelJsonConverter().toJson(instance.kernel));
   writeNotNull(r'$V', instance.schemaVersion);

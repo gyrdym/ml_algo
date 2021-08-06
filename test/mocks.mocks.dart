@@ -814,8 +814,12 @@ class MockClassifier extends _i1.Mock implements _i53.Classifier {
           as num);
   @override
   Iterable<String> get targetNames =>
-      (super.noSuchMethod(Invocation.getter(#targetNames),
-          returnValue: <String>[]) as Iterable<String>);
+      (super.noSuchMethod(Invocation.getter(#targetNames), returnValue: <String>[])
+          as Iterable<String>);
+  @override
+  Iterable<int> get targetIndices =>
+      (super.noSuchMethod(Invocation.getter(#targetIndices), returnValue: <int>[])
+          as Iterable<int>);
   @override
   _i45.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i45.DType.float32) as _i45.DType);
@@ -1281,19 +1285,19 @@ class MockSoftmaxRegressorFactory extends _i1.Mock
           double? initialLearningRate,
           double? minCoefficientsUpdate,
           double? lambda,
-          _i62.RegularizationType? regularizationType,
-          int? randomSeed,
           int? batchSize,
           bool? fitIntercept,
           double? interceptScale,
           _i50.LearningRateType? learningRateType,
           bool? isFittingDataNormalized,
           _i47.InitialCoefficientsType? initialCoefficientsType,
-          _i8.Matrix? initialCoefficients,
           num? positiveLabel,
           num? negativeLabel,
           bool? collectLearningData,
-          _i45.DType? dtype}) =>
+          _i45.DType? dtype,
+          _i62.RegularizationType? regularizationType,
+          _i8.Matrix? initialCoefficients,
+          int? randomSeed}) =>
       (super.noSuchMethod(
           Invocation.method(#create, [], {
             #trainData: trainData,
@@ -1303,19 +1307,19 @@ class MockSoftmaxRegressorFactory extends _i1.Mock
             #initialLearningRate: initialLearningRate,
             #minCoefficientsUpdate: minCoefficientsUpdate,
             #lambda: lambda,
-            #regularizationType: regularizationType,
-            #randomSeed: randomSeed,
             #batchSize: batchSize,
             #fitIntercept: fitIntercept,
             #interceptScale: interceptScale,
             #learningRateType: learningRateType,
             #isFittingDataNormalized: isFittingDataNormalized,
             #initialCoefficientsType: initialCoefficientsType,
-            #initialCoefficients: initialCoefficients,
             #positiveLabel: positiveLabel,
             #negativeLabel: negativeLabel,
             #collectLearningData: collectLearningData,
-            #dtype: dtype
+            #dtype: dtype,
+            #regularizationType: regularizationType,
+            #initialCoefficients: initialCoefficients,
+            #randomSeed: randomSeed
           }),
           returnValue: _FakeSoftmaxRegressor()) as _i29.SoftmaxRegressor);
   @override
@@ -1334,8 +1338,12 @@ class MockPredictor extends _i1.Mock implements _i74.Predictor {
 
   @override
   Iterable<String> get targetNames =>
-      (super.noSuchMethod(Invocation.getter(#targetNames),
-          returnValue: <String>[]) as Iterable<String>);
+      (super.noSuchMethod(Invocation.getter(#targetNames), returnValue: <String>[])
+          as Iterable<String>);
+  @override
+  Iterable<int> get targetIndices =>
+      (super.noSuchMethod(Invocation.getter(#targetIndices), returnValue: <int>[])
+          as Iterable<int>);
   @override
   _i45.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i45.DType.float32) as _i45.DType);
@@ -1365,15 +1373,15 @@ class MockLinearRegressorFactory extends _i1.Mock
           double? initialLearningRate,
           double? minCoefficientsUpdate,
           double? lambda,
-          _i62.RegularizationType? regularizationType,
           bool? fitIntercept,
           double? interceptScale,
-          int? randomSeed,
           int? batchSize,
-          _i8.Matrix? initialCoefficients,
           bool? isFittingDataNormalized,
           bool? collectLearningData,
-          _i45.DType? dtype}) =>
+          _i45.DType? dtype,
+          _i62.RegularizationType? regularizationType,
+          int? randomSeed,
+          _i8.Matrix? initialCoefficients}) =>
       (super.noSuchMethod(
           Invocation.method(#create, [], {
             #fittingData: fittingData,
@@ -1385,15 +1393,15 @@ class MockLinearRegressorFactory extends _i1.Mock
             #initialLearningRate: initialLearningRate,
             #minCoefficientsUpdate: minCoefficientsUpdate,
             #lambda: lambda,
-            #regularizationType: regularizationType,
             #fitIntercept: fitIntercept,
             #interceptScale: interceptScale,
-            #randomSeed: randomSeed,
             #batchSize: batchSize,
-            #initialCoefficients: initialCoefficients,
             #isFittingDataNormalized: isFittingDataNormalized,
             #collectLearningData: collectLearningData,
-            #dtype: dtype
+            #dtype: dtype,
+            #regularizationType: regularizationType,
+            #randomSeed: randomSeed,
+            #initialCoefficients: initialCoefficients
           }),
           returnValue: _FakeLinearRegressor()) as _i30.LinearRegressor);
   @override
@@ -1457,6 +1465,10 @@ class MockLinearRegressor extends _i1.Mock implements _i30.LinearRegressor {
       (super.noSuchMethod(Invocation.getter(#targetName), returnValue: '')
           as String);
   @override
+  int get targetIndex =>
+      (super.noSuchMethod(Invocation.getter(#targetIndex), returnValue: 0)
+          as int);
+  @override
   bool get fitIntercept =>
       (super.noSuchMethod(Invocation.getter(#fitIntercept), returnValue: false)
           as bool);
@@ -1506,19 +1518,19 @@ class MockLogisticRegressorFactory extends _i1.Mock
           double? minCoefficientsUpdate,
           double? probabilityThreshold,
           double? lambda,
-          _i62.RegularizationType? regularizationType,
-          int? randomSeed,
           int? batchSize,
           bool? fitIntercept,
           double? interceptScale,
           bool? isFittingDataNormalized,
           _i50.LearningRateType? learningRateType,
           _i47.InitialCoefficientsType? initialCoefficientsType,
-          _i9.Vector? initialCoefficients,
           num? positiveLabel,
           num? negativeLabel,
           bool? collectLearningData,
-          _i45.DType? dtype}) =>
+          _i45.DType? dtype,
+          _i62.RegularizationType? regularizationType,
+          _i9.Vector? initialCoefficients,
+          int? randomSeed}) =>
       (super.noSuchMethod(
           Invocation.method(#create, [], {
             #trainData: trainData,
@@ -1529,19 +1541,19 @@ class MockLogisticRegressorFactory extends _i1.Mock
             #minCoefficientsUpdate: minCoefficientsUpdate,
             #probabilityThreshold: probabilityThreshold,
             #lambda: lambda,
-            #regularizationType: regularizationType,
-            #randomSeed: randomSeed,
             #batchSize: batchSize,
             #fitIntercept: fitIntercept,
             #interceptScale: interceptScale,
             #isFittingDataNormalized: isFittingDataNormalized,
             #learningRateType: learningRateType,
             #initialCoefficientsType: initialCoefficientsType,
-            #initialCoefficients: initialCoefficients,
             #positiveLabel: positiveLabel,
             #negativeLabel: negativeLabel,
             #collectLearningData: collectLearningData,
-            #dtype: dtype
+            #dtype: dtype,
+            #regularizationType: regularizationType,
+            #initialCoefficients: initialCoefficients,
+            #randomSeed: randomSeed
           }),
           returnValue: _FakeLogisticRegressor()) as _i31.LogisticRegressor);
   @override

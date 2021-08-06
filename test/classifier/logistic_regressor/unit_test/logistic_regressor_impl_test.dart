@@ -33,6 +33,7 @@ void main() {
     final defaultInitialCoefficients = Vector.fromList([1, 2, 3, 4, 5]);
     final linkFunctionMock = MockLinkFunction();
     final className = 'class 1';
+    final targetIndex = 1;
     final defaultFitIntercept = true;
     final defaultInterceptScale = 10.0;
     final defaultCoefficients = Matrix.column([1, 2, 3, 4]);
@@ -85,6 +86,7 @@ void main() {
           initialCoefficientsType ?? defaultInitialCoefficientsType,
           initialCoefficients ?? defaultInitialCoefficients,
           targetNames ?? [className],
+          [targetIndex],
           linkFunction ?? linkFunctionMock,
           fitIntercept ?? defaultFitIntercept,
           interceptScale ?? defaultInterceptScale,

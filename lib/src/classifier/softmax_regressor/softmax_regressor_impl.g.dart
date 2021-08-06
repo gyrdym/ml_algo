@@ -22,6 +22,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       'ICT',
       'IC',
       'CN',
+      'CI',
       'FI',
       'IS',
       'CBC',
@@ -63,6 +64,8 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
           json, 'CBC', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(
           json, 'CN', (v) => (v as List<dynamic>).map((e) => e as String)),
+      $checkedConvert(
+          json, 'CI', (v) => (v as List<dynamic>).map((e) => e as int)),
       $checkedConvert(json, 'LF', (v) => fromLinkFunctionJson(v as String)),
       $checkedConvert(json, 'FI', (v) => v as bool),
       $checkedConvert(json, 'IS', (v) => v as num),
@@ -90,6 +93,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     'initialCoefficients': 'IC',
     'coefficientsByClasses': 'CBC',
     'targetNames': 'CN',
+    'targetIndices': 'CI',
     'linkFunction': 'LF',
     'fitIntercept': 'FI',
     'interceptScale': 'IS',
@@ -132,6 +136,7 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
           .toJson(instance.initialCoefficientsType));
   writeNotNull('IC', instance.initialCoefficients?.toJson());
   val['CN'] = instance.targetNames.toList();
+  val['CI'] = instance.targetIndices.toList();
   val['FI'] = instance.fitIntercept;
   val['IS'] = instance.interceptScale;
   val['CBC'] = instance.coefficientsByClasses.toJson();

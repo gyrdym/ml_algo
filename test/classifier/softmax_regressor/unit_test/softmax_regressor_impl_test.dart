@@ -133,6 +133,7 @@ void main() {
         initialCoefficients,
         coefficientsByClasses,
         targetNames,
+        [1],
         linkFunctionMock,
         fitIntercept,
         interceptScale,
@@ -166,6 +167,7 @@ void main() {
               initialCoefficients,
               Matrix.empty(),
               targetNames,
+              [1],
               linkFunctionMock,
               fitIntercept,
               interceptScale,
@@ -200,6 +202,7 @@ void main() {
                 [3],
               ]),
               targetNames,
+              [1],
               linkFunctionMock,
               fitIntercept,
               interceptScale,
@@ -228,6 +231,7 @@ void main() {
           initialCoefficients,
           coefficientsByClasses,
           targetNames,
+          [1],
           linkFunctionMock,
           fitIntercept,
           interceptScale,
@@ -409,7 +413,7 @@ void main() {
         expect(retrainedModel, isNot(same(regressor)));
       });
 
-      test('should have a proper jsdon schema version', () {
+      test('should have proper json schema version', () {
         final model = SoftmaxRegressorImpl(
           optimizerType,
           iterationsLimit,
@@ -425,6 +429,7 @@ void main() {
           initialCoefficients,
           coefficientsByClasses,
           targetNames,
+          [1],
           linkFunctionMock,
           fitIntercept,
           interceptScale,
