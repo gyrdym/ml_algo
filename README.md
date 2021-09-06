@@ -8,8 +8,8 @@
 ## What is the ml_algo for?
 
 The main purpose of the library is to give native Dart implementation of machine learning algorithms to those who are 
-interested both in Dart language and data science. This library is aimed at Dart VM and Flutter, it's impossible to use 
-it in web applications.
+interested both in Dart language and data science. This library aims at Dart VM and Flutter, it's impossible to use 
+it in the web applications.
 
 ## The library's content
 
@@ -399,7 +399,23 @@ final retrainedClassifier = classifier.retrain(newData);
 ```
 
 The workflow with other predictors (SoftmaxRegressor, DecisionTreeClassifier and so on) is quite similar to the described
-above for LogisticRegressor, feel free to experiment with other models. 
+above for LogisticRegressor, feel free to experiment with other models.
+
+## A couple of words about linear models which use gradient optimisation methods
+
+Sometimes you may get NaN or Infinity as a value of your score, or it may be equal to some inconceivable value 
+(extremely big or extremely low). To prevent so, you need to find a proper value of the initial learning rate, and also 
+you may choose between two learning rate strategies, `decreasing adaptive` or `constant`:
+
+```dart
+final createClassifier = (DataFrame samples) =>
+    LogisticRegressor(
+      ...,
+      initialLearningRate: 1e-5, // The bigger the number of records in dataset, the lower should be the learning rate
+      learningRateType: LearningRateType.decreasingAdaptive,
+      ...,
+    );
+```
 
 ### Contacts
 If you have questions, feel free to write me on 
