@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.0.4
+- `README`: learning rate examples
+
 ## 16.0.3
 - `dartfmt` applied to the project files
 
