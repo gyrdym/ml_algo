@@ -2,7 +2,7 @@ import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_init_module.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -124,6 +124,7 @@ abstract class SoftmaxRegressor
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
+    double decay = 1,
     double minCoefficientsUpdate = 1e-12,
     double lambda = 0,
     int batchSize = 1,
@@ -147,6 +148,7 @@ abstract class SoftmaxRegressor
             optimizerType: optimizerType,
             iterationsLimit: iterationsLimit,
             initialLearningRate: initialLearningRate,
+            decay: decay,
             minCoefficientsUpdate: minCoefficientsUpdate,
             lambda: lambda,
             regularizationType: regularizationType,
@@ -224,6 +226,11 @@ abstract class SoftmaxRegressor
   ///
   /// The value is read-only, it's a hyperparameter of the model
   double get initialLearningRate;
+
+  /// A value that was used for the value of learning rate decay
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  double get decay;
 
   /// A minimum distance between coefficient vectors in
   /// two contiguous iterations which was used to learn the model's

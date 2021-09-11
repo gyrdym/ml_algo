@@ -14,6 +14,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
       'LRT',
       'ICT',
       'ILT',
+      'D',
       'MCU',
       'L',
       'RT',
@@ -47,6 +48,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
           (v) => const InitialCoefficientsTypeJsonConverter()
               .fromJson(v as String)),
       initialLearningRate: $checkedConvert(json, 'ILT', (v) => v as num),
+      decay: $checkedConvert(json, 'D', (v) => v as num),
       minCoefficientsUpdate: $checkedConvert(json, 'MCU', (v) => v as num),
       lambda: $checkedConvert(json, 'L', (v) => v as num),
       batchSize: $checkedConvert(json, 'BS', (v) => v as int),
@@ -76,6 +78,7 @@ LinearRegressorImpl _$LinearRegressorImplFromJson(Map<String, dynamic> json) {
     'learningRateType': 'LRT',
     'initialCoefficientsType': 'ICT',
     'initialLearningRate': 'ILT',
+    'decay': 'D',
     'minCoefficientsUpdate': 'MCU',
     'lambda': 'L',
     'batchSize': 'BS',
@@ -110,6 +113,7 @@ Map<String, dynamic> _$LinearRegressorImplToJson(LinearRegressorImpl instance) {
       const InitialCoefficientsTypeJsonConverter()
           .toJson(instance.initialCoefficientsType));
   val['ILT'] = instance.initialLearningRate;
+  val['D'] = instance.decay;
   val['MCU'] = instance.minCoefficientsUpdate;
   val['L'] = instance.lambda;
   writeNotNull(

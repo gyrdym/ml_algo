@@ -100,7 +100,7 @@ class KnnSolverImpl with SerializableMixin implements KnnSolver {
               pair.first.distanceTo(observation, distance: distanceType),
               pair.last))
           .toList(growable: false)
-            ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
+        ..sort((pair1, pair2) => (pair1.distance - pair2.distance) ~/ 1);
 
       restNeighbours.forEach((pair) {
         final newKNeighbour =

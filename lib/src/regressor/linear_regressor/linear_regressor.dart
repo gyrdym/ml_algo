@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/common/serializable/serializable.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -45,8 +45,10 @@ abstract class LinearRegressor
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the optimization algorithm. Default value is `100`.
   ///
-  /// [initialLearningRate] A value defining velocity of the convergence of
+  /// [initialLearningRate] The initial value defining velocity of the convergence of
   /// gradient descent-based optimizers. Default value is `1e-3`.
+  ///
+  /// [decay] The value meaning "speed" of learning rate decrease
   ///
   /// [minCoefficientsUpdate] A minimum distance between coefficient vectors in
   /// two contiguous iterations. Uses as a condition of convergence in the
@@ -116,6 +118,7 @@ abstract class LinearRegressor
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
+    double decay = 1,
     double minCoefficientsUpdate = 1e-12,
     double lambda = 0,
     bool fitIntercept = false,
@@ -136,6 +139,7 @@ abstract class LinearRegressor
             learningRateType: learningRateType,
             initialCoefficientsType: initialCoefficientsType,
             initialLearningRate: initialLearningRate,
+            decay: decay,
             minCoefficientsUpdate: minCoefficientsUpdate,
             lambda: lambda,
             regularizationType: regularizationType,
@@ -203,12 +207,16 @@ abstract class LinearRegressor
   LearningRateType get learningRateType;
 
   /// Coefficients generator type that was used at the very first optimization
-  /// iteration during the model's coefficients learning stage
+  /// iteration during the model's coefficients learning
   InitialCoefficientsType get initialCoefficientsType;
 
   /// A learning rate value that was used at the very first optimization
-  /// iteration during the model's coefficients learning stage
+  /// iteration during the model's coefficients learning
   num get initialLearningRate;
+
+  /// A decay value that was used at the very first optimization
+  /// iteration during the model's coefficients learning
+  num get decay;
 
   /// A coefficients update value that was used as a stop criteria during the
   /// model's coefficients learning process

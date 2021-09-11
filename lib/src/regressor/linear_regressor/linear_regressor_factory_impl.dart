@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -9,6 +9,7 @@ import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_impl.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/migrations/migrate_linear_regressor_schema_v1_to_v2.dart';
+import 'package:ml_algo/src/regressor/linear_regressor/migrations/migrate_linear_regressor_schema_v2_to_v3.dart';
 import 'package:ml_dataframe/src/data_frame/data_frame.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -26,6 +27,7 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
     InitialCoefficientsType initialCoefficientsType =
         InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
+    double decay = 1,
     double minCoefficientsUpdate = 1e-12,
     double lambda = 0,
     bool fitIntercept = false,
@@ -44,6 +46,7 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
+      decay: decay,
       minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
       regularizationType: regularizationType,
@@ -74,6 +77,7 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
       learningRateType: learningRateType,
       initialCoefficientsType: initialCoefficientsType,
       initialLearningRate: initialLearningRate,
+      decay: decay,
       minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
       regularizationType: regularizationType,
@@ -92,7 +96,8 @@ class LinearRegressorFactoryImpl implements LinearRegressorFactory {
   LinearRegressor fromJson(String json) {
     final v1Schema = jsonDecode(json) as Map<String, dynamic>;
     final v2Schema = migrateLinearRegressorSchemaV1toV2(v1Schema);
+    final v3Schema = migrateLinearRegressorSchemaV2toV3(v2Schema);
 
-    return LinearRegressorImpl.fromJson(v2Schema);
+    return LinearRegressorImpl.fromJson(v3Schema);
   }
 }

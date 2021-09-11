@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/migrations/migrate_softmax_regressor_schema_v2_to_v3.dart';
+import 'package:ml_algo/src/classifier/softmax_regressor/migrations/migrate_softmax_regressor_schema_v3_to_v4.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -26,6 +27,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
+    double decay = 1,
     double minCoefficientsUpdate = 1e-12,
     double lambda = 0.0,
     RegularizationType? regularizationType,
@@ -55,6 +57,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
+      decay: decay,
       minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
       regularizationType: regularizationType,
@@ -82,6 +85,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       optimizerType,
       iterationsLimit,
       initialLearningRate,
+      decay,
       minCoefficientsUpdate,
       lambda,
       regularizationType,
@@ -107,7 +111,8 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
   SoftmaxRegressor fromJson(String json) {
     final v2Schema = jsonDecode(json) as Map<String, dynamic>;
     final v3Schema = migrateSoftmaxRegressorSchemaV2toV3(v2Schema);
+    final v4Schema = migrateSoftmaxRegressorSchemaV3toV4(v3Schema);
 
-    return SoftmaxRegressorImpl.fromJson(v3Schema);
+    return SoftmaxRegressorImpl.fromJson(v4Schema);
   }
 }

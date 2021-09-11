@@ -4,7 +4,7 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_imp
 import 'package:ml_algo/src/common/exception/invalid_class_labels_exception.dart';
 import 'package:ml_algo/src/common/exception/invalid_probability_threshold_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -22,13 +22,14 @@ void main() {
     final defaultOptimizerType = LinearOptimizerType.gradient;
     final defaultIterationsLimit = 123;
     final defaultInitialLearningRate = 0.75;
+    final defaultDecay = 11.3;
     final defaultMinCoefficientsUpdate = 0.5;
     final defaultLambda = 11.0;
     final defaultRegularizationType = RegularizationType.L2;
     final defaultRandomSeed = 1234;
     final defaultBatchSize = 100;
     final defaultIsFittingDataNormalizedFlag = false;
-    final defaultLearningRateType = LearningRateType.decreasingAdaptive;
+    final defaultLearningRateType = LearningRateType.timeBased;
     final defaultInitialCoefficientsType = InitialCoefficientsType.zeroes;
     final defaultInitialCoefficients = Vector.fromList([1, 2, 3, 4, 5]);
     final linkFunctionMock = MockLinkFunction();
@@ -51,6 +52,7 @@ void main() {
       LinearOptimizerType? optimizerType,
       int? iterationsLimit,
       double? initialLearningRate,
+      double? decay,
       double? minCoefficientsUpdate,
       double? lambda,
       RegularizationType? regularizationType,
@@ -75,6 +77,7 @@ void main() {
           optimizerType ?? defaultOptimizerType,
           iterationsLimit ?? defaultIterationsLimit,
           initialLearningRate ?? defaultInitialLearningRate,
+          decay ?? defaultDecay,
           minCoefficientsUpdate ?? defaultMinCoefficientsUpdate,
           lambda ?? defaultLambda,
           regularizationType ?? defaultRegularizationType,
@@ -228,6 +231,7 @@ void main() {
         expect(model.optimizerType, defaultOptimizerType);
         expect(model.iterationsLimit, defaultIterationsLimit);
         expect(model.initialLearningRate, defaultInitialLearningRate);
+        expect(model.decay, defaultDecay);
         expect(model.minCoefficientsUpdate, defaultMinCoefficientsUpdate);
         expect(model.probabilityThreshold, defaultProbabilityThreshold);
         expect(model.lambda, defaultLambda);
@@ -311,6 +315,7 @@ void main() {
           optimizerType: defaultOptimizerType,
           iterationsLimit: defaultIterationsLimit,
           initialLearningRate: defaultInitialLearningRate,
+          decay: defaultDecay,
           minCoefficientsUpdate: defaultMinCoefficientsUpdate,
           lambda: defaultLambda,
           regularizationType: defaultRegularizationType,
@@ -339,7 +344,7 @@ void main() {
       });
 
       test('should have a proper json schema version', () {
-        expect(createRegressor().schemaVersion, 3);
+        expect(createRegressor().schemaVersion, 4);
       });
     });
   });

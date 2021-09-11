@@ -6,8 +6,8 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_con
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_encoded_values.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -264,14 +264,14 @@ void main() {
 
     test(
         'should serialize learningRateType field, '
-        'learningRateType=decreasingAdaptive', () {
+        'learningRateType=timeBased', () {
       final classifier = createClassifier(
-        learningRateType: LearningRateType.decreasingAdaptive,
+        learningRateType: LearningRateType.timeBased,
       );
       final serialized = classifier.toJson();
 
       expect(serialized[logisticRegressorLearningRateTypeJsonKey],
-          learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]);
+          learningRateTypeToEncodedValue[LearningRateType.timeBased]);
     });
 
     test(
