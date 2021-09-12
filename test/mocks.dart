@@ -17,8 +17,7 @@ import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_iterable_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
@@ -109,13 +108,18 @@ class MockClassLabelsNormalizer extends Mock {
   }
 }
 
-MockLearningRateGeneratorFactory createLearningRateGeneratorFactoryMock(
-    LearningRateGenerator generator) {
-  final factory = MockLearningRateGeneratorFactory();
+MockLearningRateIterableFactory createLearningRateGeneratorFactoryMock(
+    Iterable<double> iterable) {
+  final factory = MockLearningRateIterableFactory();
 
   when(
-    factory.fromType(any),
-  ).thenReturn(generator);
+    factory.fromType(
+      type: anyNamed('type'),
+      initialValue: anyNamed('initialValue'),
+      decay: anyNamed('decay'),
+      iterationLimit: anyNamed('iterationLimit'),
+    ),
+  ).thenReturn(iterable);
 
   return factory;
 }
@@ -184,6 +188,7 @@ MockLinearOptimizerFactory createLinearOptimizerFactoryMock(
     costFunction: anyNamed('costFunction'),
     learningRateType: anyNamed('learningRateType'),
     initialCoefficientsType: anyNamed('initialCoefficientsType'),
+    decay: anyNamed('decay'),
     initialLearningRate: anyNamed('initialLearningRate'),
     minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
     iterationLimit: anyNamed('iterationLimit'),
@@ -284,6 +289,7 @@ LogisticRegressorFactory createLogisticRegressorFactoryMock(
       optimizerType: anyNamed('optimizerType'),
       iterationsLimit: anyNamed('iterationsLimit'),
       initialLearningRate: anyNamed('initialLearningRate'),
+      decay: anyNamed('decay'),
       minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
       lambda: anyNamed('lambda'),
       regularizationType: anyNamed('regularizationType'),
@@ -317,6 +323,7 @@ SoftmaxRegressorFactory createSoftmaxRegressorFactoryMock(
       optimizerType: anyNamed('optimizerType'),
       iterationsLimit: anyNamed('iterationsLimit'),
       initialLearningRate: anyNamed('initialLearningRate'),
+      decay: anyNamed('decay'),
       minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
       lambda: anyNamed('lambda'),
       regularizationType: anyNamed('regularizationType'),
@@ -349,6 +356,7 @@ LinearRegressorFactory createLinearRegressorFactoryMock(
       optimizerType: anyNamed('optimizerType'),
       iterationsLimit: anyNamed('iterationsLimit'),
       initialLearningRate: anyNamed('initialLearningRate'),
+      decay: anyNamed('decay'),
       minCoefficientsUpdate: anyNamed('minCoefficientsUpdate'),
       lambda: anyNamed('lambda'),
       regularizationType: anyNamed('regularizationType'),
@@ -485,7 +493,7 @@ MockDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
   ConvergenceDetector,
   DistributionCalculator,
   DistributionCalculatorFactory,
-  LearningRateGeneratorFactory,
+  LearningRateIterableFactory,
   TreeLeafDetector,
   TreeLeafLabelFactory,
   TreeLeafDetectorFactory,
@@ -496,7 +504,6 @@ MockDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
   KernelFactory,
   KnnClassifierFactory,
   Classifier,
-  LearningRateGenerator,
   LinearOptimizerFactory,
   LinearOptimizer,
   ConvergenceDetectorFactory,

@@ -171,7 +171,7 @@ final createClassifier = (DataFrame samples) =>
     targetColumnName,
     optimizerType: LinearOptimizerType.gradient,
     iterationsLimit: 90,
-    learningRateType: LearningRateType.decreasingAdaptive,
+    learningRateType: LearningRateType.timeBased,
     batchSize: samples.rows.length,
     probabilityThreshold: 0.7,
   );
@@ -312,7 +312,7 @@ void main() async {
       targetColumnName,
       optimizerType: LinearOptimizerType.gradient,
       iterationsLimit: 90,
-      learningRateType: LearningRateType.decreasingAdaptive,
+      learningRateType: LearningRateType.timeBased,
       batchSize: samples.rows.length,
       probabilityThreshold: 0.7,
     );
@@ -355,7 +355,7 @@ void main() async {
       targetColumnName,
       optimizerType: LinearOptimizerType.gradient,
       iterationsLimit: 90,
-      learningRateType: LearningRateType.decreasingAdaptive,
+      learningRateType: LearningRateType.timeBased,
       batchSize: samples.rows.length,
       probabilityThreshold: 0.7,
     );
@@ -412,7 +412,7 @@ final createClassifier = (DataFrame samples) =>
     LogisticRegressor(
       ...,
       initialLearningRate: 1e-5, // The bigger the number of records in dataset, the lower should be the learning rate
-      learningRateType: LearningRateType.decreasingAdaptive,
+      learningRateType: LearningRateType.timeBased,
       ...,
     );
 ```

@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.1.0
+- `timeBased` and `exponential` learning rate strategies added
+- Dart formatting check added to CI pipeline
+
 ## 16.0.4
 - `README`: learning rate examples
 

@@ -5,9 +5,10 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dar
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/migrations/migrate_logistic_regressor_schema_v2_to_v3.dart';
+import 'package:ml_algo/src/classifier/logistic_regressor/migrations/migrate_logistic_regressor_schema_v3_to_v4.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -29,6 +30,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
+    double decay = 1e-3,
     double minCoefficientsUpdate = 1e-12,
     double probabilityThreshold = 0.5,
     double lambda = 0.0,
@@ -61,6 +63,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
+      decay: decay,
       minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
       regularizationType: regularizationType,
@@ -90,6 +93,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       optimizerType,
       iterationsLimit,
       initialLearningRate,
+      decay,
       minCoefficientsUpdate,
       lambda,
       regularizationType,
@@ -116,7 +120,8 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
   LogisticRegressor fromJson(String json) {
     final v2Schema = jsonDecode(json) as Map<String, dynamic>;
     final v3Schema = migrateLogisticRegressorSchemaV2toV3(v2Schema);
+    final v4Schema = migrateLogisticRegressorSchemaV3toV4(v3Schema);
 
-    return LogisticRegressorImpl.fromJson(v3Schema);
+    return LogisticRegressorImpl.fromJson(v4Schema);
   }
 }

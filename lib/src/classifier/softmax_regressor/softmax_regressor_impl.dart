@@ -11,8 +11,8 @@ import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -42,6 +42,7 @@ class SoftmaxRegressorImpl
     this.optimizerType,
     this.iterationsLimit,
     this.initialLearningRate,
+    this.decay,
     this.minCoefficientsUpdate,
     this.lambda,
     this.regularizationType,
@@ -91,6 +92,10 @@ class SoftmaxRegressorImpl
   @override
   @JsonKey(name: softmaxRegressorInitialLearningRateJsonKey)
   final double initialLearningRate;
+
+  @override
+  @JsonKey(name: softmaxRegressorDecayJsonKey)
+  final double decay;
 
   @override
   @JsonKey(name: softmaxRegressorMinCoefsUpdateJsonKey)
@@ -202,6 +207,7 @@ class SoftmaxRegressorImpl
           optimizerType: optimizerType,
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
+          decay: decay,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,

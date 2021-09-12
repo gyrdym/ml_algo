@@ -8,3 +8,5 @@ analyzer:
     missing_return: error
     dead_code: error
     duplicate_import: error
+    unused_import: error
+    deprecated_member_use_from_same_package: warning

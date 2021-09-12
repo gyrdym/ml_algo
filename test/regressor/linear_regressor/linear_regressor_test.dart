@@ -1,6 +1,6 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/_injector.dart';
@@ -38,6 +38,7 @@ void main() {
     final learningRateType = LearningRateType.constant;
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
     final initialLearningRate = 0.7;
+    final decay = 3.4;
     final minCoefficientsUpdate = 1.57;
     final lambda = 125.4;
     final regularizationType = RegularizationType.L1;
@@ -65,6 +66,7 @@ void main() {
         learningRateType: learningRateType,
         initialCoefficientsType: initialCoefficientsType,
         initialLearningRate: initialLearningRate,
+        decay: decay,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,
@@ -93,6 +95,7 @@ void main() {
         learningRateType: learningRateType,
         initialCoefficientsType: initialCoefficientsType,
         initialLearningRate: initialLearningRate,
+        decay: decay,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,

@@ -11,6 +11,7 @@ const logisticRegressorCostPerIterationJsonKey = 'CPI';
 const logisticRegressorLinearOptimizerTypeJsonKey = 'O';
 const logisticRegressorIterationsLimitJsonKey = 'I';
 const logisticRegressorInitialLearningRateJsonKey = 'LR';
+const logisticRegressorDecayJsonKey = 'D';
 const logisticRegressorMinCoefsUpdateJsonKey = 'U';
 const logisticRegressorLambdaJsonKey = 'L';
 const logisticRegressorRegularizationTypeJsonKey = 'R';

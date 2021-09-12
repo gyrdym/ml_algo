@@ -15,7 +15,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
     required double lambda,
     required InitialCoefficientsGenerator initialCoefficientsGenerator,
     required bool isFittingDataNormalized,
-  })   : _dtype = dtype,
+  })  : _dtype = dtype,
         _points = fittingPoints,
         _labels = fittingLabels,
         _lambda = lambda,

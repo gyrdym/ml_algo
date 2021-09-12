@@ -10,8 +10,8 @@ import 'package:ml_algo/src/helpers/normalize_class_labels.dart';
 import 'package:ml_algo/src/helpers/normalize_class_labels_interface.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory_impl.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator_factory_impl.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_iterable_factory.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_iterable_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory_impl.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
@@ -40,8 +40,8 @@ void initCommonModule() {
     ..registerSingletonIf<FeaturesTargetSplit>(() => featuresTargetSplit)
     ..registerSingletonIf<MetricFactory>(() => const MetricFactoryImpl())
     ..registerSingletonIf<NormalizeClassLabels>(() => normalizeClassLabels)
-    ..registerSingletonIf<LearningRateGeneratorFactory>(
-        () => const LearningRateGeneratorFactoryImpl())
+    ..registerSingletonIf<LearningRateIterableFactory>(
+        () => const LearningRateIterableFactoryImpl())
     ..registerSingletonIf<InitialCoefficientsGeneratorFactory>(
         () => const InitialCoefficientsGeneratorFactoryImpl())
     ..registerSingletonIf<ConvergenceDetectorFactory>(
@@ -51,7 +51,7 @@ void initCommonModule() {
     ..registerSingletonIf<LinearOptimizerFactory>(
         () => LinearOptimizerFactoryImpl(
               injector.get<InitialCoefficientsGeneratorFactory>(),
-              injector.get<LearningRateGeneratorFactory>(),
+              injector.get<LearningRateIterableFactory>(),
               injector.get<ConvergenceDetectorFactory>(),
               injector.get<RandomizerFactory>(),
             ))

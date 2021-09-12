@@ -2,7 +2,7 @@ import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -23,13 +23,14 @@ void main() {
     final optimizerType = LinearOptimizerType.gradient;
     final iterationsLimit = 3;
     final initialLearningRate = 0.75;
+    final decay = 1.95;
     final minCoefficientsUpdate = 0.3;
     final lambda = 12.5;
     final regularizationType = RegularizationType.L2;
     final randomSeed = 144;
     final batchSize = 2;
     final isFittingDataNormalized = true;
-    final learningRateType = LearningRateType.decreasingAdaptive;
+    final learningRateType = LearningRateType.timeBased;
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
     final initialCoefficients = Matrix.fromList([
       [13, 43, 55]
@@ -122,6 +123,7 @@ void main() {
         optimizerType,
         iterationsLimit,
         initialLearningRate,
+        decay,
         minCoefficientsUpdate,
         lambda,
         regularizationType,
@@ -155,6 +157,7 @@ void main() {
               optimizerType,
               iterationsLimit,
               initialLearningRate,
+              decay,
               minCoefficientsUpdate,
               lambda,
               regularizationType,
@@ -185,6 +188,7 @@ void main() {
               optimizerType,
               iterationsLimit,
               initialLearningRate,
+              decay,
               minCoefficientsUpdate,
               lambda,
               regularizationType,
@@ -217,6 +221,7 @@ void main() {
           optimizerType,
           iterationsLimit,
           initialLearningRate,
+          decay,
           minCoefficientsUpdate,
           lambda,
           regularizationType,
@@ -240,6 +245,7 @@ void main() {
         expect(classifier.optimizerType, optimizerType);
         expect(classifier.iterationsLimit, iterationsLimit);
         expect(classifier.initialLearningRate, initialLearningRate);
+        expect(classifier.decay, decay);
         expect(classifier.minCoefficientsUpdate, minCoefficientsUpdate);
         expect(classifier.lambda, lambda);
         expect(classifier.regularizationType, regularizationType);
@@ -384,6 +390,7 @@ void main() {
           optimizerType: optimizerType,
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
+          decay: decay,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,
@@ -414,6 +421,7 @@ void main() {
           optimizerType,
           iterationsLimit,
           initialLearningRate,
+          decay,
           minCoefficientsUpdate,
           lambda,
           regularizationType,
@@ -434,7 +442,7 @@ void main() {
           dtype,
         );
 
-        expect(model.schemaVersion, 3);
+        expect(model.schemaVersion, 4);
       });
     });
   });

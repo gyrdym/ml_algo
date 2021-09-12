@@ -13,6 +13,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
       'O',
       'I',
       'LR',
+      'D',
       'U',
       'L',
       'R',
@@ -42,6 +43,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
               const LinearOptimizerTypeJsonConverter().fromJson(v as String)),
       $checkedConvert(json, 'I', (v) => v as int),
       $checkedConvert(json, 'LR', (v) => (v as num).toDouble()),
+      $checkedConvert(json, 'D', (v) => (v as num).toDouble()),
       $checkedConvert(json, 'U', (v) => (v as num).toDouble()),
       $checkedConvert(json, 'L', (v) => (v as num).toDouble()),
       $checkedConvert(
@@ -82,6 +84,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
     'optimizerType': 'O',
     'iterationsLimit': 'I',
     'initialLearningRate': 'LR',
+    'decay': 'D',
     'minCoefficientsUpdate': 'U',
     'lambda': 'L',
     'regularizationType': 'R',
@@ -119,6 +122,7 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
       const LinearOptimizerTypeJsonConverter().toJson(instance.optimizerType));
   val['I'] = instance.iterationsLimit;
   val['LR'] = instance.initialLearningRate;
+  val['D'] = instance.decay;
   val['U'] = instance.minCoefficientsUpdate;
   val['L'] = instance.lambda;
   writeNotNull(

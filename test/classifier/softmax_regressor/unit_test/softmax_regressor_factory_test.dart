@@ -22,9 +22,10 @@ import '../../../mocks.mocks.dart';
 
 void main() {
   group('SoftmaxRegressorFactoryImpl', () {
-    final defaultNegativeLabel = 10.0;
-    final defaultPositiveLabel = 20.0;
-    final defaultNormalizedFlag = false;
+    const defaultNegativeLabel = 10.0;
+    const defaultPositiveLabel = 20.0;
+    const defaultNormalizedFlag = false;
+    const defaultDecay = 0.05;
     final features = Matrix.fromList([
       [10.1, 10.2, 12.0, 13.4],
       [13.1, 15.2, 61.0, 27.2],
@@ -79,6 +80,7 @@ void main() {
       required Iterable<String> targetColumnNames,
       int iterationsLimit = 100,
       double initialLearningRate = 0.01,
+      double decay = defaultDecay,
       double minCoefficientsUpdate = 0.001,
       double lambda = 0.1,
       RegularizationType? regularizationType,
@@ -102,6 +104,7 @@ void main() {
               initialCoefficientsType ?? InitialCoefficientsType.zeroes,
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
+          decay: decay,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,
@@ -230,6 +233,7 @@ void main() {
         learningRateType: LearningRateType.constant,
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 0.01,
+        decay: defaultDecay,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,
         lambda: 0.1,

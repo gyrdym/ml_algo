@@ -2,7 +2,7 @@ import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_init_module.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
@@ -43,8 +43,10 @@ abstract class LogisticRegressor
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the optimization algorithm. Default value is `100`.
   ///
-  /// [initialLearningRate] A value defining velocity of the convergence of the
+  /// [initialLearningRate] The initial value defining velocity of the convergence of the
   /// gradient descent optimizer. Default value is `1e-3`.
+  ///
+  /// [decay] The value meaning "speed" of learning rate decrease
   ///
   /// [minCoefficientsUpdate] A minimum distance between coefficient vectors in
   /// two contiguous iterations. Uses as a condition of convergence in the
@@ -129,6 +131,7 @@ abstract class LogisticRegressor
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
+    double decay = 1,
     double minCoefficientsUpdate = 1e-12,
     double probabilityThreshold = 0.5,
     double lambda = 0.0,
@@ -153,6 +156,7 @@ abstract class LogisticRegressor
             optimizerType: optimizerType,
             iterationsLimit: iterationsLimit,
             initialLearningRate: initialLearningRate,
+            decay: decay,
             minCoefficientsUpdate: minCoefficientsUpdate,
             probabilityThreshold: probabilityThreshold,
             lambda: lambda,
@@ -234,6 +238,11 @@ abstract class LogisticRegressor
   ///
   /// The value is read-only, it's a hyperparameter of the model
   double get initialLearningRate;
+
+  /// A value that was used for the value of learning rate decay
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  double get decay;
 
   /// A minimum distance between coefficient vectors in
   /// two contiguous iterations which was used to learn the model\'s

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:test/test.dart';
@@ -29,6 +29,7 @@ void main() {
       expect(regressor.lambda, 0);
       expect(regressor.minCoefficientsUpdate, 1e-12);
       expect(regressor.initialLearningRate, 1e-3);
+      expect(regressor.decay, 1);
       expect(regressor.regularizationType, isNull);
       expect(regressor.interceptScale, 1.0);
       expect(regressor.fitIntercept, false);

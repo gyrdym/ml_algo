@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_encoded_values.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -23,9 +23,10 @@ void main() {
   group('LinearRegressor', () {
     final featureNames = ['feature 1', 'feature 2', 'feature 3'];
     final optimizerType = LinearOptimizerType.gradient;
-    final learningRateType = LearningRateType.decreasingAdaptive;
+    final learningRateType = LearningRateType.timeBased;
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
     final initialLearningRate = 9.55;
+    final decay = 3.5;
     final minCoefficientsUpdate = 1.5;
     final lambda = 133.5;
     final regularizationType = RegularizationType.L2;
@@ -59,6 +60,7 @@ void main() {
         learningRateType: learningRateType,
         initialCoefficientsType: initialCoefficientsType,
         initialLearningRate: initialLearningRate,
+        decay: decay,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,
@@ -106,10 +108,11 @@ void main() {
         linearRegressorOptimizerTypeJsonKey:
             gradientLinearOptimizerTypeEncodedValue,
         linearRegressorLearningRateTypeJsonKey:
-            learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive],
+            learningRateTypeToEncodedValue[LearningRateType.timeBased],
         linearRegressorInitialCoefficientsTypeJsonKey:
             zeroesInitialCoefficientsTypeJsonEncodedValue,
         linearRegressorInitialLearningRateJsonKey: initialLearningRate,
+        linearRegressorDecayJsonKey: decay,
         linearRegressorMinCoefficientsUpdateJsonKey: minCoefficientsUpdate,
         linearRegressorLambdaJsonKey: lambda,
         linearRegressorRegularizationTypeJsonKey:
