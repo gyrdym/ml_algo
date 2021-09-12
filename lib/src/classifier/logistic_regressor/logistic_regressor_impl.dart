@@ -12,8 +12,8 @@ import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_coefficients_matrix.dart';
 import 'package:ml_algo/src/helpers/validate_probability_threshold.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -43,6 +43,7 @@ class LogisticRegressorImpl
     this.optimizerType,
     this.iterationsLimit,
     this.initialLearningRate,
+    this.decay,
     this.minCoefficientsUpdate,
     this.lambda,
     this.regularizationType,
@@ -95,6 +96,10 @@ class LogisticRegressorImpl
   @override
   @JsonKey(name: logisticRegressorInitialLearningRateJsonKey)
   final double initialLearningRate;
+
+  @override
+  @JsonKey(name: logisticRegressorDecayJsonKey)
+  final double decay;
 
   @override
   @JsonKey(name: logisticRegressorMinCoefsUpdateJsonKey)
@@ -208,6 +213,7 @@ class LogisticRegressorImpl
           optimizerType: optimizerType,
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
+          decay: decay,
           minCoefficientsUpdate: minCoefficientsUpdate,
           probabilityThreshold: probabilityThreshold.toDouble(),
           lambda: lambda,

@@ -21,7 +21,7 @@ Future<Vector> evaluateLinearRegressor(
         optimizerType: LinearOptimizerType.gradient,
         initialLearningRate: 0.00000385,
         randomSeed: 2,
-        learningRateType: LearningRateType.decreasingAdaptive,
+        learningRateType: LearningRateType.timeBased,
         dtype: dtype,
       );
 

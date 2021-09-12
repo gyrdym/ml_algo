@@ -12,6 +12,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
       'OT',
       'IL',
       'ILR',
+      'D',
       'MCU',
       'L',
       'RT',
@@ -40,6 +41,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
               const LinearOptimizerTypeJsonConverter().fromJson(v as String)),
       $checkedConvert(json, 'IL', (v) => v as int),
       $checkedConvert(json, 'ILR', (v) => (v as num).toDouble()),
+      $checkedConvert(json, 'D', (v) => (v as num).toDouble()),
       $checkedConvert(json, 'MCU', (v) => (v as num).toDouble()),
       $checkedConvert(json, 'L', (v) => (v as num).toDouble()),
       $checkedConvert(
@@ -79,6 +81,7 @@ SoftmaxRegressorImpl _$SoftmaxRegressorImplFromJson(Map<String, dynamic> json) {
     'optimizerType': 'OT',
     'iterationsLimit': 'IL',
     'initialLearningRate': 'ILR',
+    'decay': 'D',
     'minCoefficientsUpdate': 'MCU',
     'lambda': 'L',
     'regularizationType': 'RT',
@@ -115,6 +118,7 @@ Map<String, dynamic> _$SoftmaxRegressorImplToJson(
       const LinearOptimizerTypeJsonConverter().toJson(instance.optimizerType));
   val['IL'] = instance.iterationsLimit;
   val['ILR'] = instance.initialLearningRate;
+  val['D'] = instance.decay;
   val['MCU'] = instance.minCoefficientsUpdate;
   val['L'] = instance.lambda;
   writeNotNull(

@@ -49,7 +49,7 @@ void main() {
     final randomSeed = 144;
     final batchSize = 2;
     final isFittingDataNormalized = true;
-    final learningRateType = LearningRateType.decreasingAdaptive;
+    final learningRateType = LearningRateType.timeBased;
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
     final initialCoefficients = Matrix.fromList([
       [13, 43, 55]
@@ -58,6 +58,7 @@ void main() {
     final interceptScale = 1.0;
     final dtype = DType.float32;
     final collectLearningData = true;
+    final decay = 0.05;
     final factoryMock = MockSoftmaxRegressorFactory();
     final regressorMock = MockSoftmaxRegressor();
     final createRegressor = () => SoftmaxRegressor(
@@ -66,6 +67,7 @@ void main() {
           optimizerType: optimizerType,
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
+          decay: decay,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,
@@ -104,6 +106,7 @@ void main() {
         isFittingDataNormalized: isFittingDataNormalized,
         initialCoefficientsType: initialCoefficientsType,
         initialCoefficients: initialCoefficients,
+        decay: decay,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
         collectLearningData: collectLearningData,
@@ -125,6 +128,7 @@ void main() {
         optimizerType: optimizerType,
         iterationsLimit: iterationsLimit,
         initialLearningRate: initialLearningRate,
+        decay: decay,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,

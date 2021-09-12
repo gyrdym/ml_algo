@@ -3,8 +3,8 @@ import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_type_json_converter.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_converter.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -42,6 +42,7 @@ class LinearRegressorImpl
     required this.learningRateType,
     required this.initialCoefficientsType,
     required this.initialLearningRate,
+    required this.decay,
     required this.minCoefficientsUpdate,
     required this.lambda,
     required this.batchSize,
@@ -82,6 +83,10 @@ class LinearRegressorImpl
   @override
   @JsonKey(name: linearRegressorInitialLearningRateJsonKey)
   final num initialLearningRate;
+
+  @override
+  @JsonKey(name: linearRegressorDecayJsonKey)
+  final num decay;
 
   @override
   @JsonKey(name: linearRegressorMinCoefficientsUpdateJsonKey)
@@ -168,6 +173,7 @@ class LinearRegressorImpl
           learningRateType: learningRateType,
           initialCoefficientsType: initialCoefficientsType,
           initialLearningRate: initialLearningRate.toDouble(),
+          decay: decay.toDouble(),
           minCoefficientsUpdate: minCoefficientsUpdate.toDouble(),
           lambda: lambda.toDouble(),
           regularizationType: regularizationType,

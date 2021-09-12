@@ -1,6 +1,4 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate_generator/learning_rate_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer.dart';
@@ -15,21 +13,20 @@ class GradientOptimizer implements LinearOptimizer {
     DType dtype = DType.float32,
     required InitialCoefficientsGenerator initialCoefficientsGenerator,
     required CostFunction costFunction,
-    required LearningRateGenerator learningRateGenerator,
-    required ConvergenceDetector convergenceDetector,
+    required Iterable<double> learningRates,
+    required double minCoefficientsUpdate,
     required Randomizer randomizer,
-    double initialLearningRate = 1e-3,
-    double? lambda,
     required int batchSize,
-  })   : _points = points,
+    double? lambda,
+  })  : _points = points,
         _labels = labels,
         _lambda = lambda ?? 0.0,
         _batchSize = batchSize,
         _costFunction = costFunction,
         _dtype = dtype,
         _initialCoefficientsGenerator = initialCoefficientsGenerator,
-        _learningRateGenerator = learningRateGenerator,
-        _convergenceDetector = convergenceDetector,
+        _learningRates = learningRates,
+        _minCoefficientsUpdate = minCoefficientsUpdate,
         _randomizer = randomizer {
     if (batchSize < 1 || batchSize > points.rowsNum) {
       throw RangeError.range(
@@ -39,17 +36,15 @@ class GradientOptimizer implements LinearOptimizer {
           'Invalid batch size '
           'value');
     }
-
-    _learningRateGenerator.init(initialLearningRate);
   }
 
   final Matrix _points;
   final Matrix _labels;
   final Randomizer _randomizer;
   final CostFunction _costFunction;
-  final LearningRateGenerator _learningRateGenerator;
+  final Iterable<double> _learningRates;
   final InitialCoefficientsGenerator _initialCoefficientsGenerator;
-  final ConvergenceDetector _convergenceDetector;
+  final double _minCoefficientsUpdate;
   final DType _dtype;
   final double _lambda;
   final int _batchSize;
@@ -75,11 +70,13 @@ class GradientOptimizer implements LinearOptimizer {
           dtype: _dtype,
         );
 
-    var iteration = 0;
     var coefficientsDiff = double.maxFinite;
 
-    while (!_convergenceDetector.isConverged(coefficientsDiff, iteration)) {
-      final learningRate = _learningRateGenerator.getNextValue();
+    for (final learningRate in _learningRates) {
+      if (coefficientsDiff <= _minCoefficientsUpdate) {
+        break;
+      }
+
       final newCoefficients = _generateCoefficients(
         coefficients,
         learningRate,
@@ -88,11 +85,8 @@ class GradientOptimizer implements LinearOptimizer {
       );
 
       coefficientsDiff = (newCoefficients - coefficients).norm();
-      iteration++;
       coefficients = newCoefficients;
     }
-
-    _learningRateGenerator.stop();
 
     return coefficients;
   }
