@@ -5,6 +5,7 @@ abstract class LearningRateIterableFactory {
     required LearningRateType type,
     required double initialValue,
     required double decay,
+    required int dropRate,
     required int iterationLimit,
   });
 }

@@ -29,6 +29,14 @@ void main() {
           elements, iterableAlmostEqualTo([5.2, -10.4, 20.8, -41.6], 1e-2));
     });
 
+    test('should return a correct sequence, limit=4, decay=0.2, dropRate=1', () {
+      final elements =
+      StepBasedLearningRateIterable(initialValue: 1.3, decay: 0.2, dropRate: 1, limit: 4);
+
+      expect(
+          elements, iterableAlmostEqualTo([0.052, 0.0104, 0.002, 0.0004], 1e-4));
+    });
+
     test('should return a correct sequence, limit=3, dropRate=2', () {
       final elements =
       StepBasedLearningRateIterable(initialValue: 1.3, decay: 2, dropRate: 2, limit: 3);

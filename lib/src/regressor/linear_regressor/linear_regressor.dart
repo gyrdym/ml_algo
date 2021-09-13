@@ -119,6 +119,7 @@ abstract class LinearRegressor
         InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double decay = 1,
+    int dropRate = 10,
     double minCoefficientsUpdate = 1e-12,
     double lambda = 0,
     bool fitIntercept = false,
@@ -140,6 +141,7 @@ abstract class LinearRegressor
             initialCoefficientsType: initialCoefficientsType,
             initialLearningRate: initialLearningRate,
             decay: decay,
+            dropRate: dropRate,
             minCoefficientsUpdate: minCoefficientsUpdate,
             lambda: lambda,
             regularizationType: regularizationType,
@@ -217,6 +219,8 @@ abstract class LinearRegressor
   /// A decay value that was used at the very first optimization
   /// iteration during the model's coefficients learning
   num get decay;
+
+  int get dropRate;
 
   /// A coefficients update value that was used as a stop criteria during the
   /// model's coefficients learning process

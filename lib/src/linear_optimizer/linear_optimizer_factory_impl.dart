@@ -40,6 +40,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
     required InitialCoefficientsType initialCoefficientsType,
     required double initialLearningRate,
     required double decay,
+    required int dropRate,
     required double minCoefficientsUpdate,
     required int iterationLimit,
     required double lambda,
@@ -68,6 +69,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
             type: learningRateType,
             initialValue: initialLearningRate,
             decay: decay,
+            dropRate: dropRate,
             iterationLimit: iterationLimit,
           ),
           initialCoefficientsGenerator: _initialCoefficientsGeneratorFactory
