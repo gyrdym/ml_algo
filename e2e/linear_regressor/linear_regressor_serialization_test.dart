@@ -29,6 +29,7 @@ void main() {
       expect(regressor.interceptScale, 1.0);
       expect(regressor.fitIntercept, false);
       expect(regressor.decay, 1);
+      expect(regressor.dropRate, 10);
       expect(regressor.coefficients, [
         -0.0006385557935573161,
         0.002575760008767247,

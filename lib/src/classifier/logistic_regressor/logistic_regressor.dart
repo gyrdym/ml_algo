@@ -46,7 +46,14 @@ abstract class LogisticRegressor
   /// [initialLearningRate] The initial value defining velocity of the convergence of the
   /// gradient descent optimizer. Default value is `1e-3`.
   ///
-  /// [decay] The value meaning "speed" of learning rate decrease
+  /// [decay] The value meaning "speed" of learning rate decrease. Applicable only
+  /// for [LearningRateType.timeBased], [LearningRateType.stepBased], and
+  /// [LearningRateType.exponential] strategies
+  ///
+  /// [dropRate] The value that is used as a number of learning iterations after
+  /// which the learning rate will be decreased. The value is applicable only for
+  /// [LearningRateType.stepBased] learning rate; it will be omitted for other
+  /// learning rate strategies
   ///
   /// [minCoefficientsUpdate] A minimum distance between coefficient vectors in
   /// two contiguous iterations. Uses as a condition of convergence in the
@@ -132,6 +139,7 @@ abstract class LogisticRegressor
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
     double decay = 1,
+    int dropRate = 10,
     double minCoefficientsUpdate = 1e-12,
     double probabilityThreshold = 0.5,
     double lambda = 0.0,
@@ -157,6 +165,7 @@ abstract class LogisticRegressor
             iterationsLimit: iterationsLimit,
             initialLearningRate: initialLearningRate,
             decay: decay,
+            dropRate: dropRate,
             minCoefficientsUpdate: minCoefficientsUpdate,
             probabilityThreshold: probabilityThreshold,
             lambda: lambda,
@@ -233,16 +242,20 @@ abstract class LogisticRegressor
   /// The value is read-only, it's a hyperparameter of the model
   int get iterationsLimit;
 
-  /// A value that was used for the initial value of learning rate of chosen
-  /// optimization algorithm
+  /// Initial learning rate value of chosen optimization algorithm
   ///
   /// The value is read-only, it's a hyperparameter of the model
   double get initialLearningRate;
 
-  /// A value that was used for the value of learning rate decay
+  /// A value that was used for the learning rate decay
   ///
   /// The value is read-only, it's a hyperparameter of the model
   double get decay;
+
+  /// A value that was used for the learning rate drop rate
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  int get dropRate;
 
   /// A minimum distance between coefficient vectors in
   /// two contiguous iterations which was used to learn the model\'s

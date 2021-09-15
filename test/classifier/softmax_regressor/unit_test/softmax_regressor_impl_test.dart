@@ -24,6 +24,7 @@ void main() {
     final iterationsLimit = 3;
     final initialLearningRate = 0.75;
     final decay = 1.95;
+    final dropRate = 14;
     final minCoefficientsUpdate = 0.3;
     final lambda = 12.5;
     final regularizationType = RegularizationType.L2;
@@ -124,6 +125,7 @@ void main() {
         iterationsLimit,
         initialLearningRate,
         decay,
+        dropRate,
         minCoefficientsUpdate,
         lambda,
         regularizationType,
@@ -158,6 +160,7 @@ void main() {
               iterationsLimit,
               initialLearningRate,
               decay,
+              dropRate,
               minCoefficientsUpdate,
               lambda,
               regularizationType,
@@ -189,6 +192,7 @@ void main() {
               iterationsLimit,
               initialLearningRate,
               decay,
+              dropRate,
               minCoefficientsUpdate,
               lambda,
               regularizationType,
@@ -222,6 +226,7 @@ void main() {
           iterationsLimit,
           initialLearningRate,
           decay,
+          dropRate,
           minCoefficientsUpdate,
           lambda,
           regularizationType,
@@ -391,6 +396,7 @@ void main() {
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
           decay: decay,
+          dropRate: dropRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,
@@ -422,6 +428,7 @@ void main() {
           iterationsLimit,
           initialLearningRate,
           decay,
+          dropRate,
           minCoefficientsUpdate,
           lambda,
           regularizationType,

@@ -13,6 +13,13 @@ Map<String, dynamic> migrateLogisticRegressorSchemaV3toV4(
     migratedJson[logisticRegressorDecayJsonKey] = 1;
   }
 
+  if (migratedJson[logisticRegressorDropRateJsonKey] == null) {
+    print('WARNING. LogisticRegressor decoding, dropRate is null. '
+        'Setting it to 10');
+
+    migratedJson[logisticRegressorDropRateJsonKey] = 10;
+  }
+
   if (migratedJson[logisticRegressorLearningRateTypeJsonKey] ==
       learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]) {
     migratedJson[logisticRegressorLearningRateTypeJsonKey] =

@@ -20,9 +20,9 @@ class StepBasedLearningRateIterable with IterableMixin<double> {
 
   @override
   Iterator<double> get iterator => StepBasedLearningRateIterator(
-    initialValue: _initialValue,
-    decay: _decay,
-    dropRate: _dropRate,
-    limit: _limit,
-  );
+        initialValue: _initialValue,
+        decay: _decay,
+        dropRate: _dropRate,
+        limit: _limit,
+      );
 }

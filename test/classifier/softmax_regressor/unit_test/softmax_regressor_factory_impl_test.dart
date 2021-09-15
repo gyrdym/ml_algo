@@ -59,6 +59,7 @@ void main() {
     final dtype = DType.float32;
     final collectLearningData = true;
     final decay = 0.05;
+    final dropRate = 50;
     final factoryMock = MockSoftmaxRegressorFactory();
     final regressorMock = MockSoftmaxRegressor();
     final createRegressor = () => SoftmaxRegressor(
@@ -68,6 +69,7 @@ void main() {
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
           decay: decay,
+          dropRate: dropRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,
@@ -107,6 +109,7 @@ void main() {
         initialCoefficientsType: initialCoefficientsType,
         initialCoefficients: initialCoefficients,
         decay: decay,
+        dropRate: dropRate,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
         collectLearningData: collectLearningData,
@@ -129,6 +132,7 @@ void main() {
         iterationsLimit: iterationsLimit,
         initialLearningRate: initialLearningRate,
         decay: decay,
+        dropRate: dropRate,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,

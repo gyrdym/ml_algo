@@ -13,6 +13,13 @@ Map<String, dynamic> migrateLinearRegressorSchemaV2toV3(
     migratedJson[linearRegressorDecayJsonKey] = 1;
   }
 
+  if (migratedJson[linearRegressorDropRateJsonKey] == null) {
+    print('WARNING. LinearRegressor decoding, dropRate is null. '
+        'Setting it to 10');
+
+    migratedJson[linearRegressorDropRateJsonKey] = 10;
+  }
+
   if (migratedJson[linearRegressorLearningRateTypeJsonKey] ==
       learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]) {
     migratedJson[linearRegressorLearningRateTypeJsonKey] =

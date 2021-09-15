@@ -88,6 +88,7 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
       iterationsLimit,
       initialLearningRate,
       decay,
+      dropRate,
       minCoefficientsUpdate,
       lambda,
       regularizationType,

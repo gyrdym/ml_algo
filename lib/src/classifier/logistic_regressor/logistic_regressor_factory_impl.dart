@@ -96,6 +96,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
       iterationsLimit,
       initialLearningRate,
       decay,
+      dropRate,
       minCoefficientsUpdate,
       lambda,
       regularizationType,

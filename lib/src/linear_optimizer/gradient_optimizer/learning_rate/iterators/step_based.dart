@@ -25,7 +25,8 @@ class StepBasedLearningRateIterator implements Iterator<double> {
 
   @override
   bool moveNext() {
-    _currentValue = _initialValue * math.pow(_decay, ((1 + _iteration) / _dropRate).floor());
+    _currentValue = _initialValue *
+        math.pow(_decay, ((1 + _iteration) / _dropRate).floor());
 
     return _iteration++ <= _limit;
   }
