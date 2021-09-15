@@ -44,6 +44,7 @@ class LogisticRegressorImpl
     this.iterationsLimit,
     this.initialLearningRate,
     this.decay,
+    this.dropRate,
     this.minCoefficientsUpdate,
     this.lambda,
     this.regularizationType,
@@ -100,6 +101,10 @@ class LogisticRegressorImpl
   @override
   @JsonKey(name: logisticRegressorDecayJsonKey)
   final double decay;
+
+  @override
+  @JsonKey(name: logisticRegressorDropRateJsonKey)
+  final int dropRate;
 
   @override
   @JsonKey(name: logisticRegressorMinCoefsUpdateJsonKey)
@@ -214,6 +219,7 @@ class LogisticRegressorImpl
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
           decay: decay,
+          dropRate: dropRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           probabilityThreshold: probabilityThreshold.toDouble(),
           lambda: lambda,

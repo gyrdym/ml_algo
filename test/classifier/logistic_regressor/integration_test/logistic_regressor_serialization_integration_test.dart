@@ -58,6 +58,8 @@ void main() {
     int iterationsLimit = 2,
     double minCoefficientsUpdate = 1e-12,
     double initialLearningRate = 1.0,
+    double decay = 0.6,
+    int dropRate = 88,
     double lambda = 0.0,
     RegularizationType? regularizationType,
     int? randomSeed,
@@ -83,6 +85,8 @@ void main() {
         minCoefficientsUpdate: minCoefficientsUpdate,
         optimizerType: optimizerType,
         initialLearningRate: initialLearningRate,
+        decay: decay,
+        dropRate: dropRate,
         lambda: lambda,
         regularizationType: regularizationType,
         batchSize: batchSize,
@@ -154,6 +158,24 @@ void main() {
       final serialized = classifier.toJson();
 
       expect(serialized[logisticRegressorInitialLearningRateJsonKey], 10);
+    });
+
+    test('should serialize decay field', () {
+      final classifier = createClassifier(
+        decay: 13.5,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorDecayJsonKey], 13.5);
+    });
+
+    test('should serialize dropRate field', () {
+      final classifier = createClassifier(
+        dropRate: 44,
+      );
+      final serialized = classifier.toJson();
+
+      expect(serialized[logisticRegressorDropRateJsonKey], 44);
     });
 
     test(

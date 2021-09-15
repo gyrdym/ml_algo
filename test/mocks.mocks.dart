@@ -611,12 +611,14 @@ class MockLearningRateIterableFactory extends _i1.Mock
           {_i49.LearningRateType? type,
           double? initialValue,
           double? decay,
+          int? dropRate,
           int? iterationLimit}) =>
       (super.noSuchMethod(
           Invocation.method(#fromType, [], {
             #type: type,
             #initialValue: initialValue,
             #decay: decay,
+            #dropRate: dropRate,
             #iterationLimit: iterationLimit
           }),
           returnValue: <double>[]) as Iterable<double>);
@@ -851,6 +853,7 @@ class MockLinearOptimizerFactory extends _i1.Mock
           _i46.InitialCoefficientsType? initialCoefficientsType,
           double? initialLearningRate,
           double? decay,
+          int? dropRate,
           double? minCoefficientsUpdate,
           int? iterationLimit,
           double? lambda,
@@ -870,6 +873,7 @@ class MockLinearOptimizerFactory extends _i1.Mock
             #initialCoefficientsType: initialCoefficientsType,
             #initialLearningRate: initialLearningRate,
             #decay: decay,
+            #dropRate: dropRate,
             #minCoefficientsUpdate: minCoefficientsUpdate,
             #iterationLimit: iterationLimit,
             #lambda: lambda,
@@ -1171,6 +1175,9 @@ class MockLogisticRegressor extends _i1.Mock implements _i30.LogisticRegressor {
       (super.noSuchMethod(Invocation.getter(#decay), returnValue: 0.0)
           as double);
   @override
+  int get dropRate =>
+      (super.noSuchMethod(Invocation.getter(#dropRate), returnValue: 0) as int);
+  @override
   double get minCoefficientsUpdate =>
       (super.noSuchMethod(Invocation.getter(#minCoefficientsUpdate),
           returnValue: 0.0) as double);
@@ -1228,6 +1235,9 @@ class MockSoftmaxRegressor extends _i1.Mock implements _i28.SoftmaxRegressor {
       (super.noSuchMethod(Invocation.getter(#decay), returnValue: 0.0)
           as double);
   @override
+  int get dropRate =>
+      (super.noSuchMethod(Invocation.getter(#dropRate), returnValue: 0) as int);
+  @override
   double get minCoefficientsUpdate =>
       (super.noSuchMethod(Invocation.getter(#minCoefficientsUpdate),
           returnValue: 0.0) as double);
@@ -1272,6 +1282,7 @@ class MockSoftmaxRegressorFactory extends _i1.Mock
           int? iterationsLimit,
           double? initialLearningRate,
           double? decay,
+          int? dropRate,
           double? minCoefficientsUpdate,
           double? lambda,
           int? batchSize,
@@ -1295,6 +1306,7 @@ class MockSoftmaxRegressorFactory extends _i1.Mock
             #iterationsLimit: iterationsLimit,
             #initialLearningRate: initialLearningRate,
             #decay: decay,
+            #dropRate: dropRate,
             #minCoefficientsUpdate: minCoefficientsUpdate,
             #lambda: lambda,
             #batchSize: batchSize,
@@ -1358,6 +1370,7 @@ class MockLinearRegressorFactory extends _i1.Mock
           _i46.InitialCoefficientsType? initialCoefficientsType,
           double? initialLearningRate,
           double? decay,
+          int? dropRate,
           double? minCoefficientsUpdate,
           double? lambda,
           bool? fitIntercept,
@@ -1379,6 +1392,7 @@ class MockLinearRegressorFactory extends _i1.Mock
             #initialCoefficientsType: initialCoefficientsType,
             #initialLearningRate: initialLearningRate,
             #decay: decay,
+            #dropRate: dropRate,
             #minCoefficientsUpdate: minCoefficientsUpdate,
             #lambda: lambda,
             #fitIntercept: fitIntercept,
@@ -1432,6 +1446,9 @@ class MockLinearRegressor extends _i1.Mock implements _i29.LinearRegressor {
   @override
   num get decay =>
       (super.noSuchMethod(Invocation.getter(#decay), returnValue: 0) as num);
+  @override
+  int get dropRate =>
+      (super.noSuchMethod(Invocation.getter(#dropRate), returnValue: 0) as int);
   @override
   num get minCoefficientsUpdate =>
       (super.noSuchMethod(Invocation.getter(#minCoefficientsUpdate),
@@ -1503,6 +1520,7 @@ class MockLogisticRegressorFactory extends _i1.Mock
           int? iterationsLimit,
           double? initialLearningRate,
           double? decay,
+          int? dropRate,
           double? minCoefficientsUpdate,
           double? probabilityThreshold,
           double? lambda,
@@ -1527,6 +1545,7 @@ class MockLogisticRegressorFactory extends _i1.Mock
             #iterationsLimit: iterationsLimit,
             #initialLearningRate: initialLearningRate,
             #decay: decay,
+            #dropRate: dropRate,
             #minCoefficientsUpdate: minCoefficientsUpdate,
             #probabilityThreshold: probabilityThreshold,
             #lambda: lambda,

@@ -27,6 +27,7 @@ void main() {
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
     final initialLearningRate = 9.55;
     final decay = 3.5;
+    final dropRate = 33;
     final minCoefficientsUpdate = 1.5;
     final lambda = 133.5;
     final regularizationType = RegularizationType.L2;
@@ -61,6 +62,7 @@ void main() {
         initialCoefficientsType: initialCoefficientsType,
         initialLearningRate: initialLearningRate,
         decay: decay,
+        dropRate: dropRate,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,
@@ -113,6 +115,7 @@ void main() {
             zeroesInitialCoefficientsTypeJsonEncodedValue,
         linearRegressorInitialLearningRateJsonKey: initialLearningRate,
         linearRegressorDecayJsonKey: decay,
+        linearRegressorDropRateJsonKey: dropRate,
         linearRegressorMinCoefficientsUpdateJsonKey: minCoefficientsUpdate,
         linearRegressorLambdaJsonKey: lambda,
         linearRegressorRegularizationTypeJsonKey:

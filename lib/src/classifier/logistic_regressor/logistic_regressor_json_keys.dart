@@ -12,6 +12,7 @@ const logisticRegressorLinearOptimizerTypeJsonKey = 'O';
 const logisticRegressorIterationsLimitJsonKey = 'I';
 const logisticRegressorInitialLearningRateJsonKey = 'LR';
 const logisticRegressorDecayJsonKey = 'D';
+const logisticRegressorDropRateJsonKey = 'DR';
 const logisticRegressorMinCoefsUpdateJsonKey = 'U';
 const logisticRegressorLambdaJsonKey = 'L';
 const logisticRegressorRegularizationTypeJsonKey = 'R';

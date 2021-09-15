@@ -43,6 +43,7 @@ class LinearRegressorImpl
     required this.initialCoefficientsType,
     required this.initialLearningRate,
     required this.decay,
+    required this.dropRate,
     required this.minCoefficientsUpdate,
     required this.lambda,
     required this.batchSize,
@@ -87,6 +88,10 @@ class LinearRegressorImpl
   @override
   @JsonKey(name: linearRegressorDecayJsonKey)
   final num decay;
+
+  @override
+  @JsonKey(name: linearRegressorDropRateJsonKey)
+  final int dropRate;
 
   @override
   @JsonKey(name: linearRegressorMinCoefficientsUpdateJsonKey)
@@ -174,6 +179,7 @@ class LinearRegressorImpl
           initialCoefficientsType: initialCoefficientsType,
           initialLearningRate: initialLearningRate.toDouble(),
           decay: decay.toDouble(),
+          dropRate: dropRate,
           minCoefficientsUpdate: minCoefficientsUpdate.toDouble(),
           lambda: lambda.toDouble(),
           regularizationType: regularizationType,

@@ -11,6 +11,7 @@ const softmaxRegressorOptimizerTypeJsonKey = 'OT';
 const softmaxRegressorIterationsLimitJsonKey = 'IL';
 const softmaxRegressorInitialLearningRateJsonKey = 'ILR';
 const softmaxRegressorDecayJsonKey = 'D';
+const softmaxRegressorDropRateJsonKey = 'DR';
 const softmaxRegressorMinCoefsUpdateJsonKey = 'MCU';
 const softmaxRegressorLambdaJsonKey = 'L';
 const softmaxRegressorRegularizationTypeJsonKey = 'RT';

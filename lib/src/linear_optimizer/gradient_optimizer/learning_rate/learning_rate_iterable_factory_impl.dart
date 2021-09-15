@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/constants.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/exponential.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/step_based.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/time_based.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_iterable_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
@@ -12,6 +13,7 @@ class LearningRateIterableFactoryImpl implements LearningRateIterableFactory {
     required LearningRateType type,
     required double initialValue,
     required double decay,
+    required int dropRate,
     required int iterationLimit,
   }) {
     switch (type) {
@@ -30,6 +32,14 @@ class LearningRateIterableFactoryImpl implements LearningRateIterableFactory {
         return ExponentialLearningRateIterable(
           initialValue: initialValue,
           decay: decay,
+          limit: iterationLimit,
+        );
+
+      case LearningRateType.stepBased:
+        return StepBasedLearningRateIterable(
+          initialValue: initialValue,
+          decay: decay,
+          dropRate: dropRate,
           limit: iterationLimit,
         );
 
