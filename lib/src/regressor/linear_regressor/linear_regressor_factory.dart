@@ -17,6 +17,7 @@ abstract class LinearRegressorFactory {
     required InitialCoefficientsType initialCoefficientsType,
     required double initialLearningRate,
     required double decay,
+    required int dropRate,
     required double minCoefficientsUpdate,
     required double lambda,
     required bool fitIntercept,

@@ -26,6 +26,7 @@ void main() {
     const defaultPositiveLabel = 20.0;
     const defaultNormalizedFlag = false;
     const defaultDecay = 0.05;
+    const defaultDropRate = 1;
     final features = Matrix.fromList([
       [10.1, 10.2, 12.0, 13.4],
       [13.1, 15.2, 61.0, 27.2],
@@ -81,6 +82,7 @@ void main() {
       int iterationsLimit = 100,
       double initialLearningRate = 0.01,
       double decay = defaultDecay,
+      int dropRate = defaultDropRate,
       double minCoefficientsUpdate = 0.001,
       double lambda = 0.1,
       RegularizationType? regularizationType,
@@ -105,6 +107,7 @@ void main() {
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
           decay: decay,
+          dropRate: dropRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,
@@ -234,6 +237,7 @@ void main() {
         initialCoefficientsType: InitialCoefficientsType.zeroes,
         initialLearningRate: 0.01,
         decay: defaultDecay,
+        dropRate: defaultDropRate,
         minCoefficientsUpdate: 0.001,
         iterationLimit: 100,
         lambda: 0.1,

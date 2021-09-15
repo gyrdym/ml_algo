@@ -48,7 +48,14 @@ abstract class LinearRegressor
   /// [initialLearningRate] The initial value defining velocity of the convergence of
   /// gradient descent-based optimizers. Default value is `1e-3`.
   ///
-  /// [decay] The value meaning "speed" of learning rate decrease
+  /// [decay] The value meaning "speed" of learning rate decrease. Applicable only
+  /// for [LearningRateType.timeBased], [LearningRateType.stepBased], and
+  /// [LearningRateType.exponential] strategies
+  ///
+  /// [dropRate] The value that is used as a number of learning iterations after
+  /// which the learning rate will be decreased. The value is applicable only for
+  /// [LearningRateType.stepBased] learning rate; it will be omitted for other
+  /// learning rate strategies
   ///
   /// [minCoefficientsUpdate] A minimum distance between coefficient vectors in
   /// two contiguous iterations. Uses as a condition of convergence in the
@@ -119,6 +126,7 @@ abstract class LinearRegressor
         InitialCoefficientsType.zeroes,
     double initialLearningRate = 1e-3,
     double decay = 1,
+    int dropRate = 10,
     double minCoefficientsUpdate = 1e-12,
     double lambda = 0,
     bool fitIntercept = false,
@@ -140,6 +148,7 @@ abstract class LinearRegressor
             initialCoefficientsType: initialCoefficientsType,
             initialLearningRate: initialLearningRate,
             decay: decay,
+            dropRate: dropRate,
             minCoefficientsUpdate: minCoefficientsUpdate,
             lambda: lambda,
             regularizationType: regularizationType,
@@ -210,13 +219,20 @@ abstract class LinearRegressor
   /// iteration during the model's coefficients learning
   InitialCoefficientsType get initialCoefficientsType;
 
-  /// A learning rate value that was used at the very first optimization
-  /// iteration during the model's coefficients learning
+  /// Initial learning rate value of chosen optimization algorithm
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
   num get initialLearningRate;
 
-  /// A decay value that was used at the very first optimization
-  /// iteration during the model's coefficients learning
+  /// A value that was used for the learning rate decay
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
   num get decay;
+
+  /// A value that was used for the learning rate drop rate
+  ///
+  /// The value is read-only, it's a hyperparameter of the model
+  int get dropRate;
 
   /// A coefficients update value that was used as a stop criteria during the
   /// model's coefficients learning process

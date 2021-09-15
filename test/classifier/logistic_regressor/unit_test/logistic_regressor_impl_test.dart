@@ -23,6 +23,7 @@ void main() {
     final defaultIterationsLimit = 123;
     final defaultInitialLearningRate = 0.75;
     final defaultDecay = 11.3;
+    final defaultDropRate = 15;
     final defaultMinCoefficientsUpdate = 0.5;
     final defaultLambda = 11.0;
     final defaultRegularizationType = RegularizationType.L2;
@@ -53,6 +54,7 @@ void main() {
       int? iterationsLimit,
       double? initialLearningRate,
       double? decay,
+      int? dropRate,
       double? minCoefficientsUpdate,
       double? lambda,
       RegularizationType? regularizationType,
@@ -78,6 +80,7 @@ void main() {
           iterationsLimit ?? defaultIterationsLimit,
           initialLearningRate ?? defaultInitialLearningRate,
           decay ?? defaultDecay,
+          dropRate ?? defaultDropRate,
           minCoefficientsUpdate ?? defaultMinCoefficientsUpdate,
           lambda ?? defaultLambda,
           regularizationType ?? defaultRegularizationType,
@@ -316,6 +319,7 @@ void main() {
           iterationsLimit: defaultIterationsLimit,
           initialLearningRate: defaultInitialLearningRate,
           decay: defaultDecay,
+          dropRate: defaultDropRate,
           minCoefficientsUpdate: defaultMinCoefficientsUpdate,
           lambda: defaultLambda,
           regularizationType: defaultRegularizationType,

@@ -15,6 +15,7 @@ abstract class SoftmaxRegressorFactory {
     required int iterationsLimit,
     required double initialLearningRate,
     required double decay,
+    required int dropRate,
     required double minCoefficientsUpdate,
     required double lambda,
     required int batchSize,

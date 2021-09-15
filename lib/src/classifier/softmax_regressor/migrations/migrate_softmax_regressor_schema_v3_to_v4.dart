@@ -13,6 +13,13 @@ Map<String, dynamic> migrateSoftmaxRegressorSchemaV3toV4(
     migratedJson[softmaxRegressorDecayJsonKey] = 1;
   }
 
+  if (migratedJson[softmaxRegressorDropRateJsonKey] == null) {
+    print('WARNING. SoftmaxRegressor decoding, dropRate is null. '
+        'Setting it to 10');
+
+    migratedJson[softmaxRegressorDropRateJsonKey] = 10;
+  }
+
   if (migratedJson[softmaxRegressorLearningRateTypeJsonKey] ==
       learningRateTypeToEncodedValue[LearningRateType.decreasingAdaptive]) {
     migratedJson[softmaxRegressorLearningRateTypeJsonKey] =

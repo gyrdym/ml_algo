@@ -39,6 +39,7 @@ void main() {
     final initialCoefficientsType = InitialCoefficientsType.zeroes;
     final initialLearningRate = 0.7;
     final decay = 3.4;
+    final dropRate = 30;
     final minCoefficientsUpdate = 1.57;
     final lambda = 125.4;
     final regularizationType = RegularizationType.L1;
@@ -67,6 +68,7 @@ void main() {
         initialCoefficientsType: initialCoefficientsType,
         initialLearningRate: initialLearningRate,
         decay: decay,
+        dropRate: dropRate,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,
@@ -96,6 +98,7 @@ void main() {
         initialCoefficientsType: initialCoefficientsType,
         initialLearningRate: initialLearningRate,
         decay: decay,
+        dropRate: dropRate,
         minCoefficientsUpdate: minCoefficientsUpdate,
         lambda: lambda,
         regularizationType: regularizationType,

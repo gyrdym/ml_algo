@@ -10,6 +10,7 @@ const linearRegressorLearningRateTypeJsonKey = 'LRT';
 const linearRegressorInitialCoefficientsTypeJsonKey = 'ICT';
 const linearRegressorInitialLearningRateJsonKey = 'ILT';
 const linearRegressorDecayJsonKey = 'D';
+const linearRegressorDropRateJsonKey = 'DR';
 const linearRegressorMinCoefficientsUpdateJsonKey = 'MCU';
 const linearRegressorLambdaJsonKey = 'L';
 const linearRegressorRegularizationTypeJsonKey = 'RT';

@@ -43,6 +43,7 @@ class SoftmaxRegressorImpl
     this.iterationsLimit,
     this.initialLearningRate,
     this.decay,
+    this.dropRate,
     this.minCoefficientsUpdate,
     this.lambda,
     this.regularizationType,
@@ -96,6 +97,10 @@ class SoftmaxRegressorImpl
   @override
   @JsonKey(name: softmaxRegressorDecayJsonKey)
   final double decay;
+
+  @override
+  @JsonKey(name: softmaxRegressorDropRateJsonKey)
+  final int dropRate;
 
   @override
   @JsonKey(name: softmaxRegressorMinCoefsUpdateJsonKey)
@@ -208,6 +213,7 @@ class SoftmaxRegressorImpl
           iterationsLimit: iterationsLimit,
           initialLearningRate: initialLearningRate,
           decay: decay,
+          dropRate: dropRate,
           minCoefficientsUpdate: minCoefficientsUpdate,
           lambda: lambda,
           regularizationType: regularizationType,

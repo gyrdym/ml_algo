@@ -45,6 +45,8 @@ void main() {
     LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
     int iterationsLimit = 100,
     double initialLearningRate = 1e-3,
+    double decay = 1,
+    int dropRate = 10,
     double minCoefficientsUpdate = 1e-12,
     double lambda = 0,
     RegularizationType? regularizationType,
@@ -78,6 +80,8 @@ void main() {
       optimizerType: optimizerType,
       iterationsLimit: iterationsLimit,
       initialLearningRate: initialLearningRate,
+      decay: decay,
+      dropRate: dropRate,
       minCoefficientsUpdate: minCoefficientsUpdate,
       lambda: lambda,
       regularizationType: regularizationType,
@@ -122,6 +126,20 @@ void main() {
       final serialized = classifier.toJson();
 
       expect(serialized[softmaxRegressorInitialLearningRateJsonKey], 5.5);
+    });
+
+    test('should serialize decay field', () {
+      final classifier = createClassifier(decay: 15.5);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorDecayJsonKey], 15.5);
+    });
+
+    test('should serialize dropRate field', () {
+      final classifier = createClassifier(dropRate: 77);
+      final serialized = classifier.toJson();
+
+      expect(serialized[softmaxRegressorDropRateJsonKey], 77);
     });
 
     test('should serialize minCoefficientsUpdate field', () {

@@ -9,6 +9,8 @@ enum LearningRateType {
 
   timeBased,
 
+  stepBased,
+
   exponential,
 }
 

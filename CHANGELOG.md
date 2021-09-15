@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.2.0
+- `stepBased` learning rate strategy added
+
 ## 16.1.0
 - `timeBased` and `exponential` learning rate strategies added
 - Dart formatting check added to CI pipeline
