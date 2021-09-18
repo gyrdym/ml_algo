@@ -32,11 +32,26 @@ enum LearningRateType {
   ///
   /// ![\[\bg_white \eta_{0}\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20%5Ceta_%7B0%7D) is the initial learning rate value
   ///
+  /// ![\[\bg_white d\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20d) is the decay parameter (in context of step based strategy, it describes, how much the learning rate should change at each drop, e.g. 0.5 means a halving)
+  ///
   /// ![\[\bg_white n\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20n) is the iteration step
   ///
   /// ![\[\bg_white r\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20r) is the drop rate (how often the learning rate value should be dropped, r=5 means the rate will be dropped every 5 iterations)
   stepBased,
 
+  /// Learning rate value will be calculated according to the formula:
+  ///
+  /// ![\[\bg_white \eta_{n}=\eta_{0}e^{-dn}\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20%5Ceta_%7Bn%7D=%5Ceta_%7B0%7De%5E%7B-dn%7D)
+  ///
+  /// where:
+  ///
+  /// ![\[\bg_white \eta_{n}\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20%5Ceta_%7Bn%7D) is the new learning rate value
+  ///
+  /// ![\[\bg_white \eta_{0}\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20%5Ceta_%7B0%7D) is the initial learning rate value
+  ///
+  /// ![\[\bg_white d\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20d) is the decay parameter
+  ///
+  /// ![\[\bg_white n\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20n) is the iteration step
   exponential,
 }
 
