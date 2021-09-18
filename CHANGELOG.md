@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.2.1
+- Documentation for learning rate strategies added
+
 ## 16.2.0
 - `stepBased` learning rate strategy added
 
