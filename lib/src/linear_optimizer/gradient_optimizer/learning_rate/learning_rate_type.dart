@@ -32,7 +32,7 @@ enum LearningRateType {
   ///
   /// ![\[\bg_white \eta_{0}\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20%5Ceta_%7B0%7D) is the initial learning rate value
   ///
-  /// ![\[\bg_white d\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20d) is the decay parameter (in context of step based strategy, it describes, how much the learning rate should change at each drop, e.g. 0.5 means a halving)
+  /// ![\[\bg_white d\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20d) is the decay parameter (in the context of step-based strategy, it describes, how much the learning rate should change at each drop, e.g. 0.5 means a halving)
   ///
   /// ![\[\bg_white n\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20n) is the iteration step
   ///
