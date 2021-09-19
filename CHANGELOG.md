@@ -1,7 +1,7 @@
 # Changelog
 
 ## 16.2.2
-- Default parameters organised and extracted to separate files 
+- Linear optimization-based algorithms: default parameters organised and extracted to separate files 
 
 ## 16.2.1
 - Documentation for learning rate strategies added
