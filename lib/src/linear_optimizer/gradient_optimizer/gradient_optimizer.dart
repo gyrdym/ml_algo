@@ -1,3 +1,5 @@
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
@@ -10,7 +12,7 @@ class GradientOptimizer implements LinearOptimizer {
   GradientOptimizer(
     Matrix points,
     Matrix labels, {
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
     required InitialCoefficientsGenerator initialCoefficientsGenerator,
     required CostFunction costFunction,
     required Iterable<double> learningRates,
@@ -20,7 +22,7 @@ class GradientOptimizer implements LinearOptimizer {
     double? lambda,
   })  : _points = points,
         _labels = labels,
-        _lambda = lambda ?? 0.0,
+        _lambda = lambda ?? lambdaDefaultValue,
         _batchSize = batchSize,
         _costFunction = costFunction,
         _dtype = dtype,

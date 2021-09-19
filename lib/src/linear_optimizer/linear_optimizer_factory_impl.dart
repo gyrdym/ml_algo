@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
@@ -34,7 +35,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
     LinearOptimizerType optimizerType,
     Matrix fittingPoints,
     Matrix fittingLabels, {
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
     required CostFunction costFunction,
     required LearningRateType learningRateType,
     required InitialCoefficientsType initialCoefficientsType,

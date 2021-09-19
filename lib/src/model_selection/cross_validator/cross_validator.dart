@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/_init_module.dart';
 import 'package:ml_algo/src/model_selection/_injector.dart';
@@ -32,7 +33,7 @@ abstract class CrossValidator {
   factory CrossValidator.kFold(
     DataFrame samples, {
     int numberOfFolds = 5,
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
   }) {
     initModelSelectionModule();
 
@@ -65,7 +66,7 @@ abstract class CrossValidator {
   factory CrossValidator.lpo(
     DataFrame samples,
     int p, {
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
   }) {
     initModelSelectionModule();
 

@@ -26,7 +26,7 @@ void main() {
       expect(regressor.lambda, 0);
       expect(regressor.minCoefficientsUpdate, 1e-12);
       expect(regressor.initialLearningRate, 1e-3);
-      expect(regressor.decay, 1);
+      expect(regressor.decay, 0.9);
       expect(regressor.dropRate, 10);
       expect(regressor.regularizationType, isNull);
       expect(regressor.interceptScale, 1.0);

@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_encoded_values.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_json_keys.dart';
@@ -8,16 +9,16 @@ Map<String, dynamic> migrateLinearRegressorSchemaV2toV3(
 
   if (migratedJson[linearRegressorDecayJsonKey] == null) {
     print('WARNING. LinearRegressor decoding, decay is null. '
-        'Setting it to 1');
+        'Setting it to $decayDefaultValue');
 
-    migratedJson[linearRegressorDecayJsonKey] = 1;
+    migratedJson[linearRegressorDecayJsonKey] = decayDefaultValue;
   }
 
   if (migratedJson[linearRegressorDropRateJsonKey] == null) {
     print('WARNING. LinearRegressor decoding, dropRate is null. '
-        'Setting it to 10');
+        'Setting it to $dropRateDefaultValue');
 
-    migratedJson[linearRegressorDropRateJsonKey] = 10;
+    migratedJson[linearRegressorDropRateJsonKey] = dropRateDefaultValue;
   }
 
   if (migratedJson[linearRegressorLearningRateTypeJsonKey] ==

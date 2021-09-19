@@ -6,6 +6,11 @@ import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_fac
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/migrations/migrate_logistic_regressor_schema_v2_to_v3.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/migrations/migrate_logistic_regressor_schema_v3_to_v4.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/classification.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/coordinate_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/linear_optimization.dart';
 import 'package:ml_algo/src/helpers/validate_class_labels.dart';
 import 'package:ml_algo/src/helpers/validate_initial_coefficients.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
@@ -27,25 +32,25 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
   LogisticRegressor create({
     required DataFrame trainData,
     required String targetName,
-    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
-    int iterationsLimit = 100,
-    double initialLearningRate = 1e-3,
-    int dropRate = 10,
-    double decay = 1e-3,
-    double minCoefficientsUpdate = 1e-12,
-    double probabilityThreshold = 0.5,
-    double lambda = 0.0,
-    int batchSize = 1,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    bool isFittingDataNormalized = false,
-    LearningRateType learningRateType = LearningRateType.constant,
+    LinearOptimizerType optimizerType = linearOptimizerTypeDefaultValue,
+    int iterationsLimit = iterationLimitDefaultValue,
+    double initialLearningRate = initialLearningRateDefaultValue,
+    int dropRate = dropRateDefaultValue,
+    double decay = decayDefaultValue,
+    double minCoefficientsUpdate = minCoefficientsUpdateDefaultValue,
+    double probabilityThreshold = probabilityThresholdDefaultValue,
+    double lambda = lambdaDefaultValue,
+    int batchSize = batchSizeDefaultValue,
+    bool fitIntercept = fitInterceptDefaultValue,
+    double interceptScale = interceptScaleDefaultValue,
+    bool isFittingDataNormalized = isFittingDataNormalizedDefaultValue,
+    LearningRateType learningRateType = learningRateTypeDefaultValue,
     InitialCoefficientsType initialCoefficientsType =
-        InitialCoefficientsType.zeroes,
-    num positiveLabel = 1,
-    num negativeLabel = 0,
-    bool collectLearningData = false,
-    DType dtype = DType.float32,
+        initialCoefficientsTypeDefaultValue,
+    num positiveLabel = positiveLabelDefaultValue,
+    num negativeLabel = negativeLabelDefaultValue,
+    bool collectLearningData = collectLearningDataDefaultValue,
+    DType dtype = dTypeDefaultValue,
     RegularizationType? regularizationType,
     Vector? initialCoefficients,
     int? randomSeed,
