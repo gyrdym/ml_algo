@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/common/constants/default_parameters/coordinate_optimization.dart';
 import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
 import 'package:ml_algo/src/common/constants/default_parameters/linear_optimization.dart';

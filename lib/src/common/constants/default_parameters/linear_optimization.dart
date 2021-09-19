@@ -3,3 +3,5 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 
 const initialCoefficientsTypeDefaultValue = InitialCoefficientsType.zeroes;
 const linearOptimizerTypeDefaultValue = LinearOptimizerType.gradient;
+const fitInterceptDefaultValue = false;
+const interceptScaleDefaultValue = 1.0;
