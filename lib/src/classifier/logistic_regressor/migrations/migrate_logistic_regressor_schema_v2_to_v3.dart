@@ -1,9 +1,12 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/coordinate_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/linear_optimization.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_encoded_values.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_to_json_encoded_value.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_to_json_encoded_value.dart';
 
 Map<String, dynamic> migrateLogisticRegressorSchemaV2toV3(
     Map<String, dynamic> json) {
@@ -16,71 +19,76 @@ Map<String, dynamic> migrateLogisticRegressorSchemaV2toV3(
 
   if (migratedJson[logisticRegressorLinearOptimizerTypeJsonKey] == null) {
     print('WARNING. LogisticRegressor decoding, linear optimizer type is null. '
-        'Setting it to LinearOptimizerType.gradient');
+        'Setting it to $linearOptimizerTypeDefaultValue');
 
     migratedJson[logisticRegressorLinearOptimizerTypeJsonKey] =
-        gradientLinearOptimizerTypeEncodedValue;
+        linearOptimizerTypeToEncodedValue[linearOptimizerTypeDefaultValue];
   }
 
   if (migratedJson[logisticRegressorIterationsLimitJsonKey] == null) {
     print('WARNING. LogisticRegressor decoding, iterations limit is null. '
-        'Setting it to 100');
+        'Setting it to $iterationLimitDefaultValue');
 
-    migratedJson[logisticRegressorIterationsLimitJsonKey] = 100;
+    migratedJson[logisticRegressorIterationsLimitJsonKey] =
+        iterationLimitDefaultValue;
   }
 
   if (migratedJson[logisticRegressorLearningRateTypeJsonKey] == null) {
     print('WARNING. LogisticRegressor decoding, learning rate type is null. '
-        'Setting it to LearningRateType.constant');
+        'Setting it to $learningRateTypeDefaultValue');
 
     migratedJson[logisticRegressorLearningRateTypeJsonKey] =
-        learningRateTypeToEncodedValue[LearningRateType.constant];
+        learningRateTypeToEncodedValue[learningRateTypeDefaultValue];
   }
 
   if (migratedJson[logisticRegressorInitCoefficientsTypeJsonKey] == null) {
     print(
         'WARNING. LogisticRegressor decoding, initial coefficients type is null. '
-        'Setting it to InitialCoefficientsType.zeroes');
+        'Setting it to $initialCoefficientsTypeDefaultValue');
 
     migratedJson[logisticRegressorInitCoefficientsTypeJsonKey] =
-        zeroesInitialCoefficientsTypeJsonEncodedValue;
+        initialCoefficientsTypeToEncodedValue[
+            initialCoefficientsTypeDefaultValue];
   }
 
   if (migratedJson[logisticRegressorInitialLearningRateJsonKey] == null) {
     print('WARNING. LogisticRegressor decoding, initial learning rate is null. '
-        'Setting it to 1e-3');
+        'Setting it to $initialLearningRateDefaultValue');
 
-    migratedJson[logisticRegressorInitialLearningRateJsonKey] = 1e-3;
+    migratedJson[logisticRegressorInitialLearningRateJsonKey] =
+        initialLearningRateDefaultValue;
   }
 
   if (migratedJson[logisticRegressorMinCoefsUpdateJsonKey] == null) {
     print(
         'WARNING. LogisticRegressor decoding, min coefficients update is null. '
-        'Setting it to 1e-12');
+        'Setting it to $minCoefficientsUpdateDefaultValue');
 
-    migratedJson[logisticRegressorMinCoefsUpdateJsonKey] = 1e-12;
+    migratedJson[logisticRegressorMinCoefsUpdateJsonKey] =
+        minCoefficientsUpdateDefaultValue;
   }
 
   if (migratedJson[logisticRegressorLambdaJsonKey] == null) {
     print('WARNING. LogisticRegressor decoding, lambda is null. '
-        'Setting it to 0');
+        'Setting it to $lambdaDefaultValue');
 
-    migratedJson[logisticRegressorLambdaJsonKey] = 0;
+    migratedJson[logisticRegressorLambdaJsonKey] = lambdaDefaultValue;
   }
 
   if (migratedJson[logisticRegressorBatchSizeJsonKey] == null) {
     print('WARNING. LogisticRegressor decoding, batch size is null. '
-        'Setting it to 1');
+        'Setting it to $batchSizeDefaultValue');
 
-    migratedJson[logisticRegressorBatchSizeJsonKey] = 1;
+    migratedJson[logisticRegressorBatchSizeJsonKey] = batchSizeDefaultValue;
   }
 
   if (migratedJson[logisticRegressorDataNormalizedFlagJsonKey] == null) {
     print(
         'WARNING. LogisticRegressor decoding, fitting data normalized flag is null. '
-        'Setting it to false');
+        'Setting it to $isFittingDataNormalizedDefaultValue');
 
-    migratedJson[logisticRegressorDataNormalizedFlagJsonKey] = false;
+    migratedJson[logisticRegressorDataNormalizedFlagJsonKey] =
+        isFittingDataNormalizedDefaultValue;
   }
 
   migratedJson[jsonSchemaVersionJsonKey] = 3;

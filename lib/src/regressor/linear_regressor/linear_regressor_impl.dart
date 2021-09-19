@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/linear_optimization.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/helpers/add_intercept_if.dart';
@@ -48,9 +50,9 @@ class LinearRegressorImpl
     required this.lambda,
     required this.batchSize,
     required this.isFittingDataNormalized,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    this.dtype = DType.float32,
+    bool fitIntercept = fitInterceptDefaultValue,
+    double interceptScale = interceptScaleDefaultValue,
+    this.dtype = dTypeDefaultValue,
     this.schemaVersion = linearRegressorJsonSchemaVersion,
     this.regularizationType,
     this.randomSeed,

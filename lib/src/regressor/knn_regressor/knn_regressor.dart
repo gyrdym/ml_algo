@@ -1,3 +1,4 @@
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
@@ -43,14 +44,14 @@ abstract class KnnRegressor
   ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
-  /// [DType.float32]
+  /// [dTypeDefaultValue]
   factory KnnRegressor(
     DataFrame fittingData,
     String targetName,
     int k, {
     KernelType kernel = KernelType.gaussian,
     Distance distance = Distance.euclidean,
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
   }) =>
       initKnnRegressorModule().get<KnnRegressorFactory>().create(
             fittingData,
