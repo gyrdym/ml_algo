@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/constants.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/constant.dart';
 import 'package:test/test.dart';
 
 void main() {

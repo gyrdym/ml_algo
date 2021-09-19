@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/constants.dart';
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/constant.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/exponential.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/step_based.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/iterables/time_based.dart';

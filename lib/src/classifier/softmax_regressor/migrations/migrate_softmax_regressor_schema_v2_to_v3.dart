@@ -1,9 +1,11 @@
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/coordinate_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/linear_optimization.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type_json_encoded_values.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_json_encoded_values.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_json_encoded_values.dart';
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type_to_json_encoded_value.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type_to_json_encoded_value.dart';
 
 Map<String, dynamic> migrateSoftmaxRegressorSchemaV2toV3(
     Map<String, dynamic> json) {
@@ -16,71 +18,76 @@ Map<String, dynamic> migrateSoftmaxRegressorSchemaV2toV3(
 
   if (migratedJson[softmaxRegressorOptimizerTypeJsonKey] == null) {
     print('WARNING. SoftmaxRegressor decoding, linear optimizer type is null. '
-        'Setting it to LinearOptimizerType.gradient');
+        'Setting it to $linearOptimizerTypeDefaultValue');
 
     migratedJson[softmaxRegressorOptimizerTypeJsonKey] =
-        gradientLinearOptimizerTypeEncodedValue;
+        linearOptimizerTypeToEncodedValue[linearOptimizerTypeDefaultValue];
   }
 
   if (migratedJson[softmaxRegressorIterationsLimitJsonKey] == null) {
     print('WARNING. SoftmaxRegressor decoding, iterations limit is null. '
-        'Setting it to 100');
+        'Setting it to $iterationLimitDefaultValue');
 
-    migratedJson[softmaxRegressorIterationsLimitJsonKey] = 100;
+    migratedJson[softmaxRegressorIterationsLimitJsonKey] =
+        iterationLimitDefaultValue;
   }
 
   if (migratedJson[softmaxRegressorLearningRateTypeJsonKey] == null) {
     print('WARNING. SoftmaxRegressor decoding, learning rate type is null. '
-        'Setting it to LearningRateType.constant');
+        'Setting it to $learningRateTypeDefaultValue');
 
     migratedJson[softmaxRegressorLearningRateTypeJsonKey] =
-        learningRateTypeToEncodedValue[LearningRateType.constant];
+        learningRateTypeToEncodedValue[learningRateTypeDefaultValue];
   }
 
   if (migratedJson[softmaxRegressorInitialCoefsTypeJsonKey] == null) {
     print(
         'WARNING. SoftmaxRegressor decoding, initial coefficients type is null. '
-        'Setting it to InitialCoefficientsType.zeroes');
+        'Setting it to $initialCoefficientsTypeDefaultValue');
 
     migratedJson[softmaxRegressorInitialCoefsTypeJsonKey] =
-        zeroesInitialCoefficientsTypeJsonEncodedValue;
+        initialCoefficientsTypeToEncodedValue[
+            initialCoefficientsTypeDefaultValue];
   }
 
   if (migratedJson[softmaxRegressorInitialLearningRateJsonKey] == null) {
     print('WARNING. SoftmaxRegressor decoding, initial learning rate is null. '
-        'Setting it to 1e-3');
+        'Setting it to $initialLearningRateDefaultValue');
 
-    migratedJson[softmaxRegressorInitialLearningRateJsonKey] = 1e-3;
+    migratedJson[softmaxRegressorInitialLearningRateJsonKey] =
+        initialLearningRateDefaultValue;
   }
 
   if (migratedJson[softmaxRegressorMinCoefsUpdateJsonKey] == null) {
     print(
         'WARNING. SoftmaxRegressor decoding, min coefficients update is null. '
-        'Setting it to 1e-12');
+        'Setting it to $minCoefficientsUpdateDefaultValue');
 
-    migratedJson[softmaxRegressorMinCoefsUpdateJsonKey] = 1e-12;
+    migratedJson[softmaxRegressorMinCoefsUpdateJsonKey] =
+        minCoefficientsUpdateDefaultValue;
   }
 
   if (migratedJson[softmaxRegressorLambdaJsonKey] == null) {
     print('WARNING. SoftmaxRegressor decoding, lambda is null. '
-        'Setting it to 0');
+        'Setting it to $lambdaDefaultValue');
 
-    migratedJson[softmaxRegressorLambdaJsonKey] = 0;
+    migratedJson[softmaxRegressorLambdaJsonKey] = lambdaDefaultValue;
   }
 
   if (migratedJson[softmaxRegressorBatchSizeJsonKey] == null) {
     print('WARNING. SoftmaxRegressor decoding, batch size is null. '
-        'Setting it to 1');
+        'Setting it to $batchSizeDefaultValue');
 
-    migratedJson[softmaxRegressorBatchSizeJsonKey] = 1;
+    migratedJson[softmaxRegressorBatchSizeJsonKey] = batchSizeDefaultValue;
   }
 
   if (migratedJson[softmaxRegressorFittingDataNormalizedFlagJsonKey] == null) {
     print(
         'WARNING. SoftmaxRegressor decoding, fitting data normalized flag is null. '
-        'Setting it to false');
+        'Setting it to $isFittingDataNormalizedDefaultValue');
 
-    migratedJson[softmaxRegressorFittingDataNormalizedFlagJsonKey] = false;
+    migratedJson[softmaxRegressorFittingDataNormalizedFlagJsonKey] =
+        isFittingDataNormalizedDefaultValue;
   }
 
   migratedJson[jsonSchemaVersionJsonKey] = 3;

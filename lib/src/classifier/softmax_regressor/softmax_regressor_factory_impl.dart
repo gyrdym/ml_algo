@@ -6,6 +6,11 @@ import 'package:ml_algo/src/classifier/softmax_regressor/migrations/migrate_soft
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_impl.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/classification.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/coordinate_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/linear_optimization.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
@@ -24,27 +29,27 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
   SoftmaxRegressor create({
     required DataFrame trainData,
     required Iterable<String> targetNames,
-    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
-    int iterationsLimit = 100,
-    double initialLearningRate = 1e-3,
-    double decay = 1,
-    int dropRate = 10,
-    double minCoefficientsUpdate = 1e-12,
-    double lambda = 0.0,
+    LinearOptimizerType optimizerType = linearOptimizerTypeDefaultValue,
+    int iterationsLimit = iterationLimitDefaultValue,
+    double initialLearningRate = initialLearningRateDefaultValue,
+    double decay = decayDefaultValue,
+    int dropRate = dropRateDefaultValue,
+    double minCoefficientsUpdate = minCoefficientsUpdateDefaultValue,
+    double lambda = lambdaDefaultValue,
     RegularizationType? regularizationType,
     int? randomSeed,
-    int batchSize = 1,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    LearningRateType learningRateType = LearningRateType.constant,
-    bool isFittingDataNormalized = false,
+    int batchSize = batchSizeDefaultValue,
+    bool fitIntercept = fitInterceptDefaultValue,
+    double interceptScale = interceptScaleDefaultValue,
+    LearningRateType learningRateType = learningRateTypeDefaultValue,
+    bool isFittingDataNormalized = isFittingDataNormalizedDefaultValue,
     InitialCoefficientsType initialCoefficientsType =
-        InitialCoefficientsType.zeroes,
+        initialCoefficientsTypeDefaultValue,
     Matrix? initialCoefficients,
-    num positiveLabel = 1,
-    num negativeLabel = 0,
-    bool collectLearningData = false,
-    DType dtype = DType.float32,
+    num positiveLabel = positiveLabelDefaultValue,
+    num negativeLabel = negativeLabelDefaultValue,
+    bool collectLearningData = collectLearningDataDefaultValue,
+    DType dtype = dTypeDefaultValue,
   }) {
     if (targetNames.isNotEmpty && targetNames.length < 2) {
       throw Exception('The target column should be encoded properly '

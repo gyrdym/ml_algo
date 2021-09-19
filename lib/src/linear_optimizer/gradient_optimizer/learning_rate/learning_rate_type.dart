@@ -9,7 +9,7 @@ enum LearningRateType {
 
   /// Learning rate value will be calculated according to the formula:
   ///
-  /// ![\bg_white \[\eta_{n + 1}= \frac{\eta _{n}}{1+dn}\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20d%5Ceta_%7Bn%20&plus;%201%7D=%20%5Cfrac%7B%5Ceta%20_%7Bn%7D%7D%7B1&plus;dn%7D%5C)
+  /// ![\[\bg_white \eta_{n + 1}= \frac{\eta _{n}}{1+dn}\]](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D%20%5Cbg_white%20d%5Ceta_%7Bn%20&plus;%201%7D=%20%5Cfrac%7B%5Ceta%20_%7Bn%7D%7D%7B1&plus;dn%7D%5C)
   ///
   /// where:
   ///

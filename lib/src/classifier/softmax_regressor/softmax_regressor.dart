@@ -1,6 +1,11 @@
 import 'package:ml_algo/src/classifier/linear_classifier.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_init_module.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/classification.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/coordinate_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/gradient_optimization.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/linear_optimization.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
@@ -130,24 +135,24 @@ abstract class SoftmaxRegressor
   factory SoftmaxRegressor(
     DataFrame trainData,
     List<String> targetNames, {
-    LinearOptimizerType optimizerType = LinearOptimizerType.gradient,
-    int iterationsLimit = 100,
-    double initialLearningRate = 1e-3,
-    double decay = 1,
-    int dropRate = 10,
-    double minCoefficientsUpdate = 1e-12,
-    double lambda = 0,
-    int batchSize = 1,
-    bool fitIntercept = false,
-    double interceptScale = 1.0,
-    LearningRateType learningRateType = LearningRateType.constant,
-    bool isFittingDataNormalized = false,
+    LinearOptimizerType optimizerType = linearOptimizerTypeDefaultValue,
+    int iterationsLimit = iterationLimitDefaultValue,
+    double initialLearningRate = initialLearningRateDefaultValue,
+    double decay = decayDefaultValue,
+    int dropRate = dropRateDefaultValue,
+    double minCoefficientsUpdate = minCoefficientsUpdateDefaultValue,
+    double lambda = lambdaDefaultValue,
+    int batchSize = batchSizeDefaultValue,
+    bool fitIntercept = fitInterceptDefaultValue,
+    double interceptScale = interceptScaleDefaultValue,
+    LearningRateType learningRateType = learningRateTypeDefaultValue,
+    bool isFittingDataNormalized = isFittingDataNormalizedDefaultValue,
     InitialCoefficientsType initialCoefficientsType =
-        InitialCoefficientsType.zeroes,
-    num positiveLabel = 1,
-    num negativeLabel = 0,
-    bool collectLearningData = false,
-    DType dtype = DType.float32,
+        initialCoefficientsTypeDefaultValue,
+    num positiveLabel = positiveLabelDefaultValue,
+    num negativeLabel = negativeLabelDefaultValue,
+    bool collectLearningData = collectLearningDataDefaultValue,
+    DType dtype = dTypeDefaultValue,
     RegularizationType? regularizationType,
     Matrix? initialCoefficients,
     int? randomSeed,
