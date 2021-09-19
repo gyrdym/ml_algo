@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/retrainable.dart';
@@ -48,7 +49,7 @@ abstract class DecisionTreeClassifier
     num minError = 0.5,
     int minSamplesCount = 1,
     int maxDepth = 10,
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
   }) =>
       initDecisionTreeModule().get<DecisionTreeClassifierFactory>().create(
             trainData,

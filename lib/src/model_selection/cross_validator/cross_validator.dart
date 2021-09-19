@@ -66,7 +66,7 @@ abstract class CrossValidator {
   factory CrossValidator.lpo(
     DataFrame samples,
     int p, {
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
   }) {
     initModelSelectionModule();
 

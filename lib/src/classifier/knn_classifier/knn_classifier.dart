@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/_init_module.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
+import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
@@ -52,7 +53,7 @@ abstract class KnnClassifier
     KernelType kernel = KernelType.gaussian,
     Distance distance = Distance.euclidean,
     String classLabelPrefix = 'Class label',
-    DType dtype = DType.float32,
+    DType dtype = dTypeDefaultValue,
   }) =>
       initKnnClassifierModule().get<KnnClassifierFactory>().create(
             trainData,
