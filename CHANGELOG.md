@@ -1,5 +1,8 @@
 # Changelog
 
+# 16.2.3
+- e2e tests: linear regressor's config improved
+
 ## 16.2.2
 - Linear optimization-based algorithms: default parameters organised and extracted to separate files 
 
