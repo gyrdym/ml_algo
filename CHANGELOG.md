@@ -1,5 +1,8 @@
 # Changelog
 
+# 16.2.4
+- Corrected typos and mistakes in README and documentation
+
 # 16.2.3
 - e2e tests: linear regressor's config improved
 
