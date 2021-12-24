@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-/// An interface for a ML model's performance assessment
+/// An interface for the ML model's performance assessment
 abstract class Assessable {
   /// Assesses model performance according to provided [metricType]
   ///
