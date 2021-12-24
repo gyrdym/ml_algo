@@ -4,8 +4,8 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-const observationsNum = 200;
-const featuresNum = 20;
+const observationsNum = 20000;
+const featuresNum = 1000;
 
 class LinearRegressorBenchmark extends BenchmarkBase {
   LinearRegressorBenchmark() : super('Linear regressor');
