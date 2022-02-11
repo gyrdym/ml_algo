@@ -1,5 +1,8 @@
 # Changelog
 
+# 16.3.0
+- Added closed-form solution for linear regression
+
 # 16.2.4
 - Corrected typos and mistakes in README and documentation
 

@@ -12,7 +12,7 @@ enum LinearOptimizerType {
   /// applicable while optimizing a function using this method
   coordinate,
 
-  /// Closed form solution for finding coefficients, based on feature matrix
-  /// inversion
+  /// Analytical solution of linear regression problem. The solution based on
+  /// finding the inverse of the feature matrix using LU decomposition
   closedForm,
 }

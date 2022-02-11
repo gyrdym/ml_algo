@@ -15,7 +15,7 @@ class LinearOptimizerTypeJsonConverter
       case coordinateLinearOptimizerTypeEncodedValue:
         return LinearOptimizerType.coordinate;
 
-      case closedFormOptimizerTypeEncodedValue:
+      case closedFormLinearOptimizerTypeEncodedValue:
         return LinearOptimizerType.closedForm;
     }
 
@@ -33,7 +33,7 @@ class LinearOptimizerTypeJsonConverter
         return coordinateLinearOptimizerTypeEncodedValue;
 
       case LinearOptimizerType.closedForm:
-        return closedFormOptimizerTypeEncodedValue;
+        return closedFormLinearOptimizerTypeEncodedValue;
     }
   }
 }

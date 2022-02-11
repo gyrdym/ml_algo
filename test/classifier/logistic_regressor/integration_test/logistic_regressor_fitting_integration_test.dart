@@ -1,7 +1,9 @@
 import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
+import 'package:ml_algo/src/common/exception/unsupported_linear_optimizer_type_exception.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -332,6 +334,28 @@ void main() {
           closeTo(-2.0319, 1e-4),
           closeTo(-1.9884, 1e-4),
         ]);
+      });
+    });
+
+    group('default constructor (optimizerType=LinearOptimizerType.coordinate)', () {
+      final samples = DataFrame(<Iterable<dynamic>>[['col_1', 'col_2'], [1, 2]]);
+
+      test('should throw exception', () {
+        final createClassifier = () => LogisticRegressor(samples, 'col_1',
+            optimizerType: LinearOptimizerType.coordinate);
+
+        expect(createClassifier, throwsUnimplementedError);
+      });
+    });
+
+    group('default constructor (optimizerType=LinearOptimizerType.closedForm)', () {
+      final samples = DataFrame(<Iterable<dynamic>>[['col_1', 'col_2'], [1, 2]]);
+
+      test('should throw exception', () {
+        final createClassifier = () => LogisticRegressor(samples, 'col_1',
+            optimizerType: LinearOptimizerType.closedForm);
+
+        expect(createClassifier, throwsA(isA<UnsupportedLinearOptimizerTypeException>()));
       });
     });
   });

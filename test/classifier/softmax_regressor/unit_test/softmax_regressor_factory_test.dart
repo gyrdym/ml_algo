@@ -2,6 +2,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory_impl.dart';
+import 'package:ml_algo/src/common/exception/unsupported_linear_optimizer_type_exception.dart';
 import 'package:ml_algo/src/cost_function/cost_function_factory.dart';
 import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/di/injector.dart';
@@ -145,6 +146,15 @@ void main() {
     tearDown(() {
       injector.clearAll();
       softmaxRegressorInjector.clearAll();
+    });
+
+    test('should throw an exception if optimizer type is LinearOptimizerType.closedForm', () {
+      final targetColumnNames = ['target_1'];
+
+      final actual =
+          () => createRegressor(targetColumnNames: targetColumnNames, optimizerType: LinearOptimizerType.closedForm);
+
+      expect(actual, throwsA(isA<UnsupportedLinearOptimizerTypeException>()));
     });
 
     test('should throw an exception if some target columns do not exist', () {
