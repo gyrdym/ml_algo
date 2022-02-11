@@ -337,8 +337,12 @@ void main() {
       });
     });
 
-    group('default constructor (optimizerType=LinearOptimizerType.coordinate)', () {
-      final samples = DataFrame(<Iterable<dynamic>>[['col_1', 'col_2'], [1, 2]]);
+    group('default constructor (optimizerType=LinearOptimizerType.coordinate)',
+        () {
+      final samples = DataFrame(<Iterable<dynamic>>[
+        ['col_1', 'col_2'],
+        [1, 2]
+      ]);
 
       test('should throw exception', () {
         final createClassifier = () => LogisticRegressor(samples, 'col_1',
@@ -348,14 +352,19 @@ void main() {
       });
     });
 
-    group('default constructor (optimizerType=LinearOptimizerType.closedForm)', () {
-      final samples = DataFrame(<Iterable<dynamic>>[['col_1', 'col_2'], [1, 2]]);
+    group('default constructor (optimizerType=LinearOptimizerType.closedForm)',
+        () {
+      final samples = DataFrame(<Iterable<dynamic>>[
+        ['col_1', 'col_2'],
+        [1, 2]
+      ]);
 
       test('should throw exception', () {
         final createClassifier = () => LogisticRegressor(samples, 'col_1',
             optimizerType: LinearOptimizerType.closedForm);
 
-        expect(createClassifier, throwsA(isA<UnsupportedLinearOptimizerTypeException>()));
+        expect(createClassifier,
+            throwsA(isA<UnsupportedLinearOptimizerTypeException>()));
       });
     });
   });

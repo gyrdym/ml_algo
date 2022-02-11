@@ -148,11 +148,14 @@ void main() {
       softmaxRegressorInjector.clearAll();
     });
 
-    test('should throw an exception if optimizer type is LinearOptimizerType.closedForm', () {
+    test(
+        'should throw an exception if optimizer type is LinearOptimizerType.closedForm',
+        () {
       final targetColumnNames = ['target_1'];
 
-      final actual =
-          () => createRegressor(targetColumnNames: targetColumnNames, optimizerType: LinearOptimizerType.closedForm);
+      final actual = () => createRegressor(
+          targetColumnNames: targetColumnNames,
+          optimizerType: LinearOptimizerType.closedForm);
 
       expect(actual, throwsA(isA<UnsupportedLinearOptimizerTypeException>()));
     });
