@@ -4,8 +4,7 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 
 void validateLinearClassificationOptimizerType(
     LinearOptimizerType optimizerType) {
-  if (![LinearOptimizerType.gradient, LinearOptimizerType.coordinate]
-      .contains(optimizerType)) {
+  if (!supportedLinearOptimizerTypes.contains(optimizerType)) {
     throw UnsupportedLinearOptimizerTypeException(
         optimizerType, supportedLinearOptimizerTypes);
   }
