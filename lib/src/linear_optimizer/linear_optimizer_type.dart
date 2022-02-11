@@ -11,4 +11,8 @@ enum LinearOptimizerType {
   /// Original coordinate descent optimization, only L1 regularization is
   /// applicable while optimizing a function using this method
   coordinate,
+
+  /// Analytical solution of the linear regression problem. The solution based on
+  /// finding the inverse of the feature matrix using LU decomposition
+  closedForm,
 }

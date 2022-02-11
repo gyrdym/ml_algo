@@ -5,6 +5,8 @@ analyzer:
     implicit-casts: false
     implicit-dynamic: true
   errors:
+    unnecessary_import: error
+    unnecessary_type_check: error
     missing_return: error
     dead_code: error
     duplicate_import: error

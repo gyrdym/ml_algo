@@ -49,13 +49,14 @@ abstract class LinearOptimizer {
   /// Parameters:
   ///
   /// [initialCoefficients] initial coefficients that will be used in the first
-  /// optimization iteration
+  /// optimization iteration. Meaningless in case of closed-form solution.
   ///
-  /// [isMinimizingObjective] should the solver find a maxima or minima
+  /// [isMinimizingObjective] should the solver find a maxima or minima.
+  /// Meaningless in case of closed-form solution.
   ///
   /// [collectLearningData] whether or not to collect learning-related data,
   /// such as errors from cost function, after every iteration. May affect
-  /// performance.
+  /// performance. Meaningless in case of closed-form solution.
   Matrix findExtrema({
     Matrix? initialCoefficients,
     bool isMinimizingObjective = true,
