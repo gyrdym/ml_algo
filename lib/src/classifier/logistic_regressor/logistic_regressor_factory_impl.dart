@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
+import 'package:ml_algo/src/classifier/_helpers/validate_linear_classification_optimizer_type.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_impl.dart';
@@ -55,6 +56,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
     Vector? initialCoefficients,
     int? randomSeed,
   }) {
+    validateLinearClassificationOptimizerType(optimizerType);
     validateClassLabels(positiveLabel, negativeLabel);
 
     if (initialCoefficients?.isNotEmpty == true) {

@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
+import 'package:ml_algo/src/linear_optimizer/closed_form_optimizer/closed_form_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/gradient_optimizer.dart';
@@ -33,8 +34,8 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
   @override
   LinearOptimizer createByType(
     LinearOptimizerType optimizerType,
-    Matrix fittingPoints,
-    Matrix fittingLabels, {
+    Matrix features,
+    Matrix labels, {
     DType dtype = dTypeDefaultValue,
     required CostFunction costFunction,
     required LearningRateType learningRateType,
@@ -60,8 +61,8 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
     switch (optimizerType) {
       case LinearOptimizerType.gradient:
         return GradientOptimizer(
-          fittingPoints,
-          fittingLabels,
+          features,
+          labels,
           costFunction: costFunction,
           lambda: lambda,
           batchSize: batchSize,
@@ -81,8 +82,8 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
 
       case LinearOptimizerType.coordinate:
         return CoordinateDescentOptimizer(
-          fittingPoints,
-          fittingLabels,
+          features,
+          labels,
           dtype: dtype,
           costFunction: costFunction,
           lambda: lambda,
@@ -92,6 +93,9 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
               minCoefficientsUpdate, iterationLimit),
           isFittingDataNormalized: isFittingDataNormalized,
         );
+
+      case LinearOptimizerType.closedForm:
+        return ClosedFormOptimizer(features, labels);
 
       default:
         throw UnsupportedError(

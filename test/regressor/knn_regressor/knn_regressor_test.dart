@@ -1,5 +1,4 @@
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';

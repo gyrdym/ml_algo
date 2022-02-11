@@ -14,8 +14,6 @@ import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_constants.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/dtype_to_json.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
 

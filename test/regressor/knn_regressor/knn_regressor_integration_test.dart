@@ -8,11 +8,7 @@ import 'package:ml_algo/src/knn_solver/knn_solver_json_keys.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_constants.dart';
 import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/distance.dart';
-import 'package:ml_linalg/dtype.dart';
-import 'package:ml_linalg/dtype_to_json.dart';
 import 'package:ml_linalg/linalg.dart';
-import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 import '../../helpers.dart';

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ml_algo/src/classifier/_helpers/create_log_likelihood_optimizer.dart';
+import 'package:ml_algo/src/classifier/_helpers/validate_linear_classification_optimizer_type.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/migrations/migrate_softmax_regressor_schema_v2_to_v3.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/migrations/migrate_softmax_regressor_schema_v3_to_v4.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
@@ -51,6 +52,8 @@ class SoftmaxRegressorFactoryImpl implements SoftmaxRegressorFactory {
     bool collectLearningData = collectLearningDataDefaultValue,
     DType dtype = dTypeDefaultValue,
   }) {
+    validateLinearClassificationOptimizerType(optimizerType);
+
     if (targetNames.isNotEmpty && targetNames.length < 2) {
       throw Exception('The target column should be encoded properly '
           '(e.g., via one-hot encoder)');

@@ -19,6 +19,13 @@ void main() {
           LinearOptimizerType.coordinate);
     });
 
+    test('should decode ${LinearOptimizerType.closedForm} type', () {
+      expect(
+          const LinearOptimizerTypeJsonConverter()
+              .fromJson(closedFormLinearOptimizerTypeEncodedValue),
+          LinearOptimizerType.closedForm);
+    });
+
     test('should throw exception if unknown value is provided', () {
       expect(
         () =>
@@ -39,6 +46,13 @@ void main() {
           const LinearOptimizerTypeJsonConverter()
               .toJson(LinearOptimizerType.coordinate),
           coordinateLinearOptimizerTypeEncodedValue);
+    });
+
+    test('should encode ${LinearOptimizerType.closedForm} type', () {
+      expect(
+          const LinearOptimizerTypeJsonConverter()
+              .toJson(LinearOptimizerType.closedForm),
+          closedFormLinearOptimizerTypeEncodedValue);
     });
   });
 }

@@ -5,7 +5,6 @@ import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_algo/src/knn_solver/neigbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

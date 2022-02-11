@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:ml_algo/ml_algo.dart';
-import 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:test/test.dart';
