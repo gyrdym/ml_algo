@@ -11,4 +11,8 @@ enum LinearOptimizerType {
   /// Original coordinate descent optimization, only L1 regularization is
   /// applicable while optimizing a function using this method
   coordinate,
+
+  /// Closed form solution for finding coefficients, based on feature matrix
+  /// inversion
+  closedForm,
 }

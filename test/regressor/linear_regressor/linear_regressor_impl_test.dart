@@ -1,8 +1,5 @@
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/di/injector.dart';
-import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
-import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/_injector.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_constants.dart';
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart';
