@@ -1,5 +1,8 @@
 # Changelog
 
+# 16.3.1
+- `README`: Added example of linear regression
+
 # 16.3.0
 - Added closed-form solution for linear regression
 

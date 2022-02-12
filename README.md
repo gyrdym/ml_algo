@@ -5,10 +5,10 @@
 
 # Machine learning algorithms for Dart developers
 
-** Table of contents **
+**Table of contents**
 
-- [Inspiration](#what-is-ml_algo-for)
-- [The library's structure](#the-librarys-content)
+- [What is ml_algo for](#what-is-ml_algo-for)
+- [The library's content](#the-librarys-content)
 - [Examples](#examples)
     - [Logistic regression](#logistic-regression)
     - [Linear regression](#linear-regression)
@@ -484,7 +484,7 @@ final error = model.assess(testData, MetricType.mape);
 print(error);
 ``` 
 
-If we are fine with the error, we can save the model for future use:
+If we are fine with the error, we can save the model for the future use:
 
 ```dart
 await model.saveAsJson('housing_model.json');
@@ -598,6 +598,7 @@ final createClassifier = (DataFrame samples) =>
 ```
 
 ### Contacts
-If you have questions, feel free to write me on 
+If you have questions, feel free to write me on
+ - [Twitter](https://twitter.com/ilgyrd) 
  - [Facebook](https://www.facebook.com/ilya.gyrdymov)
  - [Linkedin](https://www.linkedin.com/in/gyrdym/)
