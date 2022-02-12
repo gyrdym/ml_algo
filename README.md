@@ -5,6 +5,18 @@
 
 # Machine learning algorithms for Dart developers
 
+** Table of contents **
+
+- [Inspiration](#what-is-ml_algo-for)
+- [The library's structure](#the-librarys-content)
+- [Examples](#examples)
+    - [Logistic regression](#logistic-regression)
+    - [Linear regression](#linear-regression)
+- [Models retraining](#models-retraining)
+- [Notes on gradient based optimisation algorithms](#a-couple-of-words-about-linear-models-which-use-gradient-optimisation-methods)
+
+
+
 ## What is ml_algo for?
 
 The main purpose of the library is to give native Dart implementation of machine learning algorithms to those who are 
@@ -47,6 +59,8 @@ For more information on the library's API, please visit [API reference](https://
 
 ## Examples
 
+### Logistic regression
+
 Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
 
@@ -54,7 +68,7 @@ via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/c
 
 Please pay attention to problems which classifiers and regressors exposed by the library solve. E.g. 
 [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
-solves only **binary classification** problem, and that means that you can't use this classifier to deal with dataset 
+solves only **binary classification** problem, and that means that you can't use this classifier with a dataset 
 with more than two classes, keep that in mind - in order to find out more about regresseors and classifiers, please refer to
 the [api documentation](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) of the package
 
@@ -84,7 +98,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 ### Read a dataset's file
 
-Download dataset from [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
+Download the dataset from [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
 
 #### For a desktop application: 
 
@@ -108,7 +122,7 @@ dependencies:
   ...
 ````
 
-Then it's needed to add a dataset to the flutter assets by adding the following config in the pubspec.yaml:
+Then it's needed to add the dataset to the flutter assets by adding the following config in the pubspec.yaml:
 
 ````
 flutter:
@@ -116,7 +130,7 @@ flutter:
     - assets/datasets/pima_indians_diabetes_database.csv
 ````
 
-Of course you need to create the assets directory in the file system and put the dataset's file there. After that you 
+You need to create the assets directory in the file system and put the dataset's file there. After that you 
 can access the dataset:
 
 ```dart
@@ -127,7 +141,7 @@ final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_
 final samples = DataFrame.fromRawCsv(rawCsvContent);
 ```
 
-### Prepare datasets for training and test
+### Prepare datasets for training and testing
 
 Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. The column's name is
@@ -292,7 +306,7 @@ print(classifier.probabilityThreshold);
 ``` 
 
 <details>
-<summary>All the code above all together for a desktop application:</summary>
+<summary>All the code for a desktop application:</summary>
 
 ````dart
 import 'package:ml_algo/ml_algo.dart';
@@ -333,7 +347,7 @@ void main() async {
 </details>
 
 <details>
-<summary>All the code above all together for a flutter application:</summary>
+<summary>All the code for a flutter application:</summary>
 
 ````dart
 import 'package:flutter/services.dart' show rootBundle;
@@ -371,6 +385,172 @@ void main() async {
   print(finalScore.toStringAsFixed(2));
 
   await classifier.saveAsJson('diabetes_classifier.json');
+}
+````
+</details>
+
+### Linear regression
+
+Let's try to predict house prices using linear regression and the famous [Boston Housing](https://www.kaggle.com/c/boston-housing) dataset.
+The dataset contains 13 independent variables and 1 dependent variable - `medv` which is the target one (you can find
+the dataset in [e2e/_datasets/housing.csv](https://github.com/gyrdym/ml_algo/blob/master/e2e/_datasets/housing.csv)).
+
+Again, first we need to download the file and create a dataframe. The dataset is headless, we may either use autoheader or provide our own header. 
+Let's use autoheader in our example:
+
+#### For a desktop application: 
+
+Just provide a proper path to your downloaded file and use a function-factory `fromCsv` from `ml_dataframe` package to 
+read the file:
+
+```dart
+final samples = await fromCsv('datasets/housing.csv', headerExists: false, columnDelimiter: ' ');
+``` 
+
+#### For a flutter application:
+
+It's needed to add the dataset to the flutter assets by adding the following config in the pubspec.yaml:
+
+````
+flutter:
+  assets:
+    - assets/datasets/housing.csv
+````
+
+You need to create the assets directory in the file system and put the dataset's file there. After that you 
+can access the dataset:
+
+```dart
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+final rawCsvContent = await rootBundle.loadString('assets/datasets/housing.csv');
+final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ');
+```
+
+### Prepare the dataset for training and testing
+
+Data in this file is represented by 505 records and 13 features. 14th column is a target. Since we use autoheader, the
+target's name is autogenerated and it is `col_13`. Let's store it in a variable:
+
+````dart
+final targetName = 'col_13';
+````
+
+then let's shuffle the data:
+
+```dart
+samples.shuffle();
+```
+
+Now it's the time to prepare data splits. Let's split the data into train and test subsets using the library's [splitData](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/split_data.dart) 
+function:
+
+```dart
+final splits = splitData(samples, [0.8]);
+final trainData = splits[0];
+final testData = splits[1];
+```
+
+`splitData` accepts `DataFrame` instance as the first argument and ratio list as the second one. Now we have 80% of our
+data as a train set and 20% as a test set.
+
+Let's train the model:
+
+```dart
+final model = LinearRegressor(trainData, targetName);
+```
+
+By default, `LinearRegressor` uses closed-form solution to train the model. It's possible to use a different solution type,
+e.g. one can use gradient-based algorithm: 
+
+```dart
+final model = LinearRegressor(
+  samples
+  targetName,
+  optimizerType: LinearOptimizerType.gradient,
+  iterationsLimit: 90,
+  learningRateType: LearningRateType.timeBased,
+);
+```
+
+As you may noticed, we have to provide a bunch of hyperparameters in case of gradient-based regression.
+
+Next, we should evaluate performance of our model:
+
+```dart
+final error = model.assess(testData, MetricType.mape);
+
+print(error);
+``` 
+
+If we are fine with the error, we can save the model for future use:
+
+```dart
+await model.saveAsJson('housing_model.json');
+```
+
+Later we may use our trained model for prediction:
+
+```dart
+import 'dart:io';
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+final file = File('housing_model.json');
+final encodedModel = await file.readAsString();
+final model = LinearRegressor.fromJson(encodedModel);
+final unlabelledData = await fromCsv('some_unlabelled_data.csv');
+final prediction = model.predict(unlabelledData);
+
+print(prediction.header);
+print(prediction.rows);
+```
+
+<details>
+<summary>All the code for a desktop application:</summary>
+
+````dart
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() async {
+  final samples = await fromCsv('datasets/housing.csv', headerExists: false, columnDelimiter: ' ');
+  final targetName = 'col_13';
+  final splits = splitData(samples, [0.8]);
+  final trainData = splits[0];
+  final testData = splits[1];
+  final model = LinearRegressor(trainData, targetName);
+  final error = model.assess(testData, MetricType.mape);
+  
+  print(error);
+
+  await classifier.saveAsJson('housing_model.json');
+}
+````
+</details>
+
+<details>
+<summary>All the code for a flutter application:</summary>
+
+````dart
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() async {
+  final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
+  final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ');
+  final targetName = 'col_13';
+  final splits = splitData(samples, [0.8]);
+  final trainData = splits[0];
+  final testData = splits[1];
+  final model = LinearRegressor(trainData, targetName);
+  final error = model.assess(testData, MetricType.mape);
+    
+  print(error);
+  
+  await classifier.saveAsJson('housing_model.json');
 }
 ````
 </details>
