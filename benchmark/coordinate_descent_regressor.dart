@@ -7,7 +7,8 @@ const observationsNum = 1000;
 const featuresNum = 100;
 
 class CoordinateDescentRegressorBenchmark extends BenchmarkBase {
-  CoordinateDescentRegressorBenchmark() : super('Linear regressor, coordinate descent');
+  CoordinateDescentRegressorBenchmark()
+      : super('Linear regressor, coordinate descent');
 
   late DataFrame fittingData;
 
@@ -17,7 +18,8 @@ class CoordinateDescentRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    LinearRegressor(fittingData, 'col_100', optimizerType: LinearOptimizerType.coordinate);
+    LinearRegressor(fittingData, 'col_100',
+        optimizerType: LinearOptimizerType.coordinate, iterationsLimit: 30);
   }
 
   @override

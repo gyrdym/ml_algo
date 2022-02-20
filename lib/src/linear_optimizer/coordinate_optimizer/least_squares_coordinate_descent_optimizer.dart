@@ -1,15 +1,13 @@
-import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_linalg/linalg.dart';
 
-class CoordinateDescentOptimizer implements LinearOptimizer {
-  CoordinateDescentOptimizer(
+class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
+  LeastSquaresCoordinateDescentOptimizer(
     Matrix fittingPoints,
     Matrix fittingLabels, {
     required DType dtype,
-    required CostFunction costFunction,
     required ConvergenceDetector convergenceDetector,
     required double lambda,
     required InitialCoefficientsGenerator initialCoefficientsGenerator,
@@ -18,6 +16,9 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
         _points = fittingPoints,
         _labels = fittingLabels,
         _lambda = lambda,
+        _pointsWithExcludedCol = fittingPoints.columnIndices
+            .map((j) => fittingPoints.filterColumns((_, idx) => idx != j))
+            .toList(),
         _initialCoefficientsGenerator = initialCoefficientsGenerator,
         _convergenceDetector = convergenceDetector,
         _normalizer = isFittingDataNormalized
@@ -33,6 +34,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
   final double _lambda;
   final Vector _normalizer;
   final List<num> _errors = [];
+  final List<Matrix> _pointsWithExcludedCol;
 
   @override
   List<num> get costPerIteration => _errors;
@@ -56,7 +58,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
         final newJCoef =
             _optimizeCoordinate(j, _points, labelsAsVector, coefficients);
 
-        diff = jCoef - newJCoef;
+        diff = (jCoef - newJCoef).abs();
 
         return newJCoef;
       });
@@ -70,7 +72,7 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
 
   double _optimizeCoordinate(int j, Matrix X, Vector y, Vector w) {
     final xj = X.getColumn(j);
-    final XWithoutJ = X.filterColumns((_, idx) => idx != j);
+    final XWithoutJ = _pointsWithExcludedCol[j];
     final wWithoutJ = w.filterElements((_, idx) => idx != j);
     final coef = (xj * (y - (XWithoutJ * wWithoutJ).toVector())).sum();
 

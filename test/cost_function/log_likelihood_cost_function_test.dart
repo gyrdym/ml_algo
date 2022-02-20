@@ -53,18 +53,6 @@ void main() {
       expect(actual, equals(expected));
     });
 
-    test('should return a subgradient vector', () {
-      expect(
-        () => logLikelihoodCost.getSubGradient(
-          1,
-          Matrix.empty(),
-          Matrix.empty(),
-          Matrix.empty(),
-        ),
-        throwsUnimplementedError,
-      );
-    });
-
     test('should return log likelihood cost', () {
       reset(mockedLinkFn);
       when(
