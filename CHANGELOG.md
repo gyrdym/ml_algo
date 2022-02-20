@@ -1,5 +1,9 @@
 # Changelog
 
+# 16.3.2
+- LinearRegressor:
+  - Coordinated descent optimizer speed up
+
 # 16.3.1
 - `README`: Added example of linear regression
 

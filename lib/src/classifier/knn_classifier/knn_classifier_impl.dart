@@ -88,7 +88,7 @@ class KnnClassifierImpl
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final schemaVersion;
+  final int schemaVersion;
 
   @override
   DataFrame predict(DataFrame features) {
