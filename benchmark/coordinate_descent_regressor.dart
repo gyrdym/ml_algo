@@ -1,16 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/matrix.dart';
 
 const observationsNum = 1000;
 const featuresNum = 100;
+late DataFrame fittingData;
 
 class CoordinateDescentRegressorBenchmark extends BenchmarkBase {
   CoordinateDescentRegressorBenchmark()
       : super('Linear regressor, coordinate descent');
-
-  late DataFrame fittingData;
 
   static void main() {
     CoordinateDescentRegressorBenchmark().report();
@@ -23,21 +24,17 @@ class CoordinateDescentRegressorBenchmark extends BenchmarkBase {
   }
 
   @override
-  void setup() {
-    final features = Matrix.random(observationsNum, featuresNum);
-    final labels = Matrix.random(observationsNum, 1);
-
-    fittingData = DataFrame.fromMatrix(
-      Matrix.fromColumns([
-        ...features.columns,
-        ...labels.columns,
-      ]),
-    );
-  }
+  void setup() {}
 
   void tearDown() {}
 }
 
 Future main() async {
+  final file = File('benchmark/data/sample_regression_data.json');
+  final dataAsString = await file.readAsString();
+  final decoded = jsonDecode(dataAsString) as Map<String, dynamic>;
+
+  fittingData = DataFrame.fromJson(decoded);
+
   CoordinateDescentRegressorBenchmark.main();
 }
