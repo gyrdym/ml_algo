@@ -20,7 +20,6 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
         _lambda = lambda,
         _initialCoefficientsGenerator = initialCoefficientsGenerator,
         _convergenceDetector = convergenceDetector,
-        _costFn = costFunction,
         _normalizer = isFittingDataNormalized
             ? Vector.filled(fittingPoints.columnsNum, 1.0, dtype: dtype)
             : fittingPoints
@@ -30,7 +29,6 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
   final Matrix _labels;
   final InitialCoefficientsGenerator _initialCoefficientsGenerator;
   final ConvergenceDetector _convergenceDetector;
-  final CostFunction _costFn;
   final DType _dtype;
   final double _lambda;
   final Vector _normalizer;
@@ -45,51 +43,38 @@ class CoordinateDescentOptimizer implements LinearOptimizer {
     bool isMinimizingObjective = true,
     bool collectLearningData = false,
   }) {
-    var coefficients = initialCoefficients ??
-        Matrix.fromRows(
-            List<Vector>.generate(
-                _labels.columnsNum,
-                (int i) =>
-                    _initialCoefficientsGenerator.generate(_points.columnsNum)),
-            dtype: _dtype);
+    var coefficients = initialCoefficients?.toVector() ??
+        _initialCoefficientsGenerator.generate(_points.columnsNum);
+    var labelsAsVector = _labels.toVector();
 
     var iteration = 0;
     var diff = double.infinity;
 
     while (!_convergenceDetector.isConverged(diff, iteration)) {
-      final newCoefsSource = List<Vector>.generate(_points.columnsNum, (j) {
-        final jCoeffs = coefficients.getColumn(j);
-        final newJCoeffs =
-            _optimizeCoordinate(j, _points, _labels, coefficients);
+      final newCoeffsSource = List.generate(_points.columnsNum, (j) {
+        final jCoef = coefficients[j];
+        final newJCoef =
+            _optimizeCoordinate(j, _points, labelsAsVector, coefficients);
 
-        // TODO improve diff calculation way
-        // Now we just get maximum diff throughout the whole coefficients
-        // vector and compare it with some limit (inside _convergenceDetector)
-        diff = (jCoeffs - newJCoeffs).abs().max();
+        diff = jCoef - newJCoef;
 
-        return newJCoeffs;
+        return newJCoef;
       });
 
-      // TODO: get rid of redundant matrix creation
-      coefficients = Matrix.fromColumns(newCoefsSource, dtype: _dtype);
+      coefficients = Vector.fromList(newCoeffsSource, dtype: _dtype);
       iteration++;
     }
 
-    return coefficients.transpose();
+    return Matrix.fromColumns([coefficients], dtype: _dtype);
   }
 
-  Vector _optimizeCoordinate(int j, Matrix x, Matrix y, Matrix w) {
-    // coefficients variable here contains coefficients on column j per each
-    // label
-    final coefficients = _costFn.getSubGradient(j, x, w, y);
+  double _optimizeCoordinate(int j, Matrix X, Vector y, Vector w) {
+    final xj = X.getColumn(j);
+    final XWithoutJ = X.filterColumns((_, idx) => idx != j);
+    final wWithoutJ = w.filterElements((_, idx) => idx != j);
+    final coef = (xj * (y - (XWithoutJ * wWithoutJ).toVector())).sum();
 
-    return Vector
-        // TODO Convert the logic into SIMD-way (SIMD way mapping)
-        .fromList(
-            coefficients
-                .map((coef) => _regularize(coef, _lambda, j))
-                .toList(growable: false),
-            dtype: _dtype);
+    return _regularize(coef, _lambda, j);
   }
 
   double _regularize(double coefficient, double lambda, int coefNum) {
