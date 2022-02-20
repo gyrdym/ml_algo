@@ -79,7 +79,7 @@ LogisticRegressorImpl _$LogisticRegressorImplFromJson(
           (v) => (v as List<dynamic>?)?.map((e) => e as num).toList()),
       $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
     );
     return val;
   }, fieldKeyMap: const {
@@ -153,6 +153,6 @@ Map<String, dynamic> _$LogisticRegressorImplToJson(
   val['NL'] = instance.negativeLabel;
   writeNotNull('LF', linkFunctionToJson(instance.linkFunction));
   writeNotNull('CPI', instance.costPerIteration);
-  val[r'$V'] = instance.schemaVersion;
+  writeNotNull(r'$V', instance.schemaVersion);
   return val;
 }
