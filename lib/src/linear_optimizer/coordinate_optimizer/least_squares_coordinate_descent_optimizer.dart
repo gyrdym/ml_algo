@@ -5,26 +5,26 @@ import 'package:ml_linalg/linalg.dart';
 
 class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
   LeastSquaresCoordinateDescentOptimizer(
-    Matrix fittingPoints,
-    Matrix fittingLabels, {
+    Matrix features,
+    Matrix labels, {
     required DType dtype,
     required ConvergenceDetector convergenceDetector,
     required double lambda,
     required InitialCoefficientsGenerator initialCoefficientsGenerator,
     required bool isFittingDataNormalized,
   })  : _dtype = dtype,
-        _features = fittingPoints,
-        _labels = fittingLabels,
+        _features = features,
+        _labels = labels,
         _lambda = lambda,
-        _featureMatrices = fittingPoints.columnIndices
-            .map((j) => fittingPoints.filterColumns((_, idx) => idx != j))
+        _featureMatrices = features.columnIndices
+            .map((j) => features.filterColumns((_, idx) => idx != j))
             .toList(growable: false),
-        _featureColumns = fittingPoints.columns.toList(growable: false),
+        _featureColumns = features.columns.toList(growable: false),
         _initialCoefficientsGenerator = initialCoefficientsGenerator,
         _convergenceDetector = convergenceDetector,
         _normalizer = isFittingDataNormalized
-            ? Vector.filled(fittingPoints.columnsNum, 1.0, dtype: dtype)
-            : fittingPoints
+            ? Vector.filled(features.columnsNum, 1.0, dtype: dtype)
+            : features
                 .reduceRows((combine, vector) => (combine + vector * vector));
 
   final Matrix _features;
