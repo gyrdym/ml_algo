@@ -348,7 +348,8 @@ void main() {
         final createClassifier = () => LogisticRegressor(samples, 'col_1',
             optimizerType: LinearOptimizerType.coordinate);
 
-        expect(createClassifier, throwsUnimplementedError);
+        expect(createClassifier,
+            throwsA(isA<UnsupportedLinearOptimizerTypeException>()));
       });
     });
 

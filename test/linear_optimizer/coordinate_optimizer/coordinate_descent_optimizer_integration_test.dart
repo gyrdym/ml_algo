@@ -1,8 +1,7 @@
-import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_impl.dart';
-import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/coordinate_descent_optimizer.dart';
+import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/least_squares_coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/zero_coefficients_generator.dart';
 import 'package:ml_linalg/linalg.dart';
@@ -29,7 +28,7 @@ void main() {
 
     late InitialCoefficientsGenerator initialCoefficientsGenerator;
     late ConvergenceDetector convergenceDetector;
-    late CoordinateDescentOptimizer optimizer;
+    late LeastSquaresCoordinateDescentOptimizer optimizer;
     late Matrix data;
     late Matrix labels;
 
@@ -47,11 +46,10 @@ void main() {
         minCoefficientsUpdate,
         iterationsCount,
       );
-      optimizer = CoordinateDescentOptimizer(
+      optimizer = LeastSquaresCoordinateDescentOptimizer(
         data,
         labels,
         initialCoefficientsGenerator: initialCoefficientsGenerator,
-        costFunction: const LeastSquareCostFunction(),
         convergenceDetector: convergenceDetector,
         lambda: lambda,
         dtype: dtype,
@@ -84,7 +82,7 @@ void main() {
 
     late InitialCoefficientsGenerator initialCoefficientsGenerator;
     late ConvergenceDetector convergenceDetector;
-    late CoordinateDescentOptimizer optimizer;
+    late LeastSquaresCoordinateDescentOptimizer optimizer;
     late Matrix data;
     late Matrix labels;
 
@@ -101,10 +99,9 @@ void main() {
         minCoefficientsUpdate,
         iterationsCount,
       );
-      optimizer = CoordinateDescentOptimizer(
+      optimizer = LeastSquaresCoordinateDescentOptimizer(
         data,
         labels,
-        costFunction: const LeastSquareCostFunction(),
         isFittingDataNormalized: true,
         initialCoefficientsGenerator: initialCoefficientsGenerator,
         convergenceDetector: convergenceDetector,

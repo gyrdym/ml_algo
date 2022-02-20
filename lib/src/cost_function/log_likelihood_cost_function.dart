@@ -35,9 +35,4 @@ class LogLikelihoodCostFunction implements CostFunction {
 
     return x.transpose() * (yNormalized - _linkFunction.link(x * w));
   }
-
-  @override
-  Vector getSubGradient(int wIdx, Matrix x, Matrix w, Matrix y) =>
-      throw UnimplementedError('Coordinate optimization is not implemented yet '
-          'for log likelihood cost function');
 }
