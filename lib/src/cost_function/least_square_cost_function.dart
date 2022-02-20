@@ -10,14 +10,4 @@ class LeastSquareCostFunction implements CostFunction {
   @override
   Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
       x.transpose() * -2 * (y - x * w);
-
-  @override
-  Vector getSubGradient(int j, Matrix X, Matrix W, Matrix Y) {
-    final xj = X.getColumn(j);
-    final XWithoutJ = X.filterColumns((column, idx) => idx != j);
-    final WWithoutJ = W.filterColumns((column, idx) => idx != j);
-    final predictionWithoutJ = XWithoutJ * WWithoutJ.toVector();
-
-    return Vector.fromList([(xj * (Y - predictionWithoutJ).toVector()).sum()]);
-  }
 }

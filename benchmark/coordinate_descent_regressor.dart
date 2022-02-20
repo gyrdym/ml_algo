@@ -22,11 +22,6 @@ class CoordinateDescentRegressorBenchmark extends BenchmarkBase {
     LinearRegressor(fittingData, 'col_100',
         optimizerType: LinearOptimizerType.coordinate, iterationsLimit: 30);
   }
-
-  @override
-  void setup() {}
-
-  void tearDown() {}
 }
 
 Future main() async {
