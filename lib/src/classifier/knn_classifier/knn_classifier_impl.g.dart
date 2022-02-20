@@ -23,7 +23,7 @@ KnnClassifierImpl _$KnnClassifierImplFromJson(Map<String, dynamic> json) {
       $checkedConvert(json, 'P', (v) => v as String),
       $checkedConvert(
           json, 'D', (v) => const DTypeJsonConverter().fromJson(v as String)),
-      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int?),
+      schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     return val;
   }, fieldKeyMap: const {
@@ -53,6 +53,6 @@ Map<String, dynamic> _$KnnClassifierImplToJson(KnnClassifierImpl instance) {
   writeNotNull('K', const KernelJsonConverter().toJson(instance.kernel));
   writeNotNull('S', const KnnSolverJsonConverter().toJson(instance.solver));
   val['P'] = instance.classLabelPrefix;
-  writeNotNull(r'$V', instance.schemaVersion);
+  val[r'$V'] = instance.schemaVersion;
   return val;
 }
