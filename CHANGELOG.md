@@ -1,19 +1,23 @@
 # Changelog
 
-# 16.3.2
+## 16.4.0
+- LinearRegressor:
+  - Added `LinearRegressor.lasso` constructor
+
+## 16.3.2
 - LinearRegressor:
   - Coordinated descent optimizer speed up
 
-# 16.3.1
+## 16.3.1
 - `README`: Added example of linear regression
 
-# 16.3.0
+## 16.3.0
 - Added closed-form solution for linear regression
 
-# 16.2.4
+## 16.2.4
 - Corrected typos and mistakes in README and documentation
 
-# 16.2.3
+## 16.2.3
 - e2e tests: linear regressor's config improved
 
 ## 16.2.2

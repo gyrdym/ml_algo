@@ -16,11 +16,10 @@ Future<Vector> evaluateLassoRegressor(
   );
 
   return validator.evaluate(
-      (trainSamples) => LinearRegressor(
+      (trainSamples) => LinearRegressor.lasso(
             trainSamples,
             targetName,
-            optimizerType: LinearOptimizerType.coordinate,
-            iterationsLimit: 100,
+            iterationLimit: 100,
             lambda: 50000.0,
             dtype: dtype,
           ),
@@ -28,7 +27,7 @@ Future<Vector> evaluateLassoRegressor(
 }
 
 void main() {
-  group('LinearRegressor', () {
+  group('LassoRegressor', () {
     test(
         'should return adequate error on mape metric, '
         'dtype=DType.float32', () async {
