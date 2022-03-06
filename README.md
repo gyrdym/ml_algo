@@ -52,7 +52,7 @@ it in the web applications.
     A general class for finding a linear pattern in training data and predicting outcome as real numbers.
     
     - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart)
-    Implementation of linear regression algorithm based on coordinate descent with lasso regularisation 
+    Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation 
      
 
     - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
