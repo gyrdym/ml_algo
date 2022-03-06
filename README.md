@@ -49,7 +49,11 @@ it in the web applications.
 
 - #### Regression algorithms
     - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). 
-    A class that finds a linear pattern in training data and predicts outcome as real numbers depending on the pattern. 
+    A general class for finding a linear pattern in training data and predicting outcome as real numbers.
+    
+    - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart)
+    Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation 
+     
 
     - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
     A class that makes prediction for each new observation basing on first `k` closest observations from 
@@ -585,20 +589,20 @@ above for LogisticRegressor, feel free to experiment with other models.
 
 Sometimes you may get NaN or Infinity as a value of your score, or it may be equal to some inconceivable value 
 (extremely big or extremely low). To prevent so, you need to find a proper value of the initial learning rate, and also 
-you may choose between two learning rate strategies, `decreasing adaptive` or `constant`:
+you may choose between the following learning rate strategies: `constant`, `timeBased`, `stepBased` and `exponential`:
 
 ```dart
 final createClassifier = (DataFrame samples) =>
     LogisticRegressor(
       ...,
-      initialLearningRate: 1e-5, // The bigger the number of records in dataset, the lower should be the learning rate
+      initialLearningRate: 1e-5,
       learningRateType: LearningRateType.timeBased,
       ...,
     );
 ```
 
 ### Contacts
-If you have questions, feel free to write me on
+If you have questions, feel free to text me on
  - [Twitter](https://twitter.com/ilgyrd) 
  - [Facebook](https://www.facebook.com/ilya.gyrdymov)
  - [Linkedin](https://www.linkedin.com/in/gyrdym/)

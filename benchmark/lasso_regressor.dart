@@ -7,20 +7,18 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 const observationsNum = 1000;
 const featuresNum = 100;
-late DataFrame fittingData;
+late DataFrame trainData;
 
-class CoordinateDescentRegressorBenchmark extends BenchmarkBase {
-  CoordinateDescentRegressorBenchmark()
-      : super('Linear regressor, coordinate descent');
+class LassoRegressorBenchmark extends BenchmarkBase {
+  LassoRegressorBenchmark() : super('Lasso regression, coordinate descent');
 
   static void main() {
-    CoordinateDescentRegressorBenchmark().report();
+    LassoRegressorBenchmark().report();
   }
 
   @override
   void run() {
-    LinearRegressor(fittingData, 'col_100',
-        optimizerType: LinearOptimizerType.coordinate, iterationsLimit: 30);
+    LinearRegressor.lasso(trainData, 'col_100', iterationLimit: 30);
   }
 }
 
@@ -29,7 +27,7 @@ Future main() async {
   final dataAsString = await file.readAsString();
   final decoded = jsonDecode(dataAsString) as Map<String, dynamic>;
 
-  fittingData = DataFrame.fromJson(decoded);
+  trainData = DataFrame.fromJson(decoded);
 
-  CoordinateDescentRegressorBenchmark.main();
+  LassoRegressorBenchmark.main();
 }
