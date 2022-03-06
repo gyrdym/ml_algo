@@ -23,7 +23,7 @@ import 'package:ml_linalg/vector.dart';
 /// space to make a prediction. Each `x` in the equation has its own dedicated
 /// coefficient (weight) and the combination of these `x`-es and its dedicated
 /// coefficients gives the `y` term (outcome). The latter is the value that the
-/// regressor should predict, and since all the `x` values are known (since they
+/// regressor should predict, and since all the `x` values are known (they
 /// are the input for the algorithm), the regressor should find the best
 /// coefficients (weights) for each `x`-es to make a best prediction of `y` term.
 abstract class LinearRegressor
@@ -162,6 +162,89 @@ abstract class LinearRegressor
             batchSize: batchSize,
             initialCoefficients: initialCoefficients,
             isFittingDataNormalized: isFittingDataNormalized,
+            collectLearningData: collectLearningData,
+            dtype: dtype,
+          );
+
+  /// Lasso regression
+  ///
+  /// Lasso regression is a kind of linear regression which uses L1 (Lasso)
+  /// regularization.
+  ///
+  /// Coordinate descent is used as an optimization algorithm for this particular
+  /// implementation of Lasso regression.
+  ///
+  /// [trainData] A [DataFrame] with observations that is used by the
+  /// regressor to learn coefficients of the predicting hyperplane. Must contain
+  /// [targetName] column.
+  ///
+  /// [targetName] A string that serves as a name of the target column
+  /// containing dependent variables
+  ///
+  /// [iterationLimit] A number of fitting iterations. Uses as a condition of
+  /// convergence in the optimization algorithm. Default value is `100`.
+  ///
+  /// [minCoefficientUpdate] A minimum distance between coefficient vectors in
+  /// two contiguous iterations. Uses as a condition of convergence in the
+  /// optimization algorithm. If difference between the two vectors is small
+  /// enough, there is no reason to continue fitting. Default value is `1e-12`
+  ///
+  /// [lambda] L1 (Lasso) regularization coefficient using for feature selection.
+  /// The greater the value of [lambda], the stricter feature selection is.
+  ///
+  /// [fitIntercept] Whether or not to fit intercept term. Default value is
+  /// `false`. Intercept in 2-dimensional space is a bias of the line (relative
+  /// to X-axis).
+  ///
+  /// [interceptScale] A value defining a size of the intercept.
+  ///
+  /// [isDataNormalized] Defines whether the [trainData] is normalized
+  /// or not. Normalization should be performed column-wise.
+  ///
+  /// [initialCoefficientType] Initial coefficients generation way.
+  /// If [initialCoefficients] are provided, the parameter will be ignored.
+  ///
+  /// [initialCoefficients] Coefficients to be used during the first iteration of
+  /// the optimization algorithm. [initialCoefficients] should have length that is
+  /// equal to the number of features in the [trainData].
+  ///
+  /// [collectLearningData] Whether or not to collect learning data, for
+  /// instance cost function value per each iteration. Affects performance much.
+  /// If [collectLearningData] is true, one may access [costPerIteration]
+  /// getter in order to evaluate learning process more thoroughly.
+  ///
+  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
+  /// affect performance or accuracy of the computations. Default value is
+  /// [DType.float32].
+  factory LinearRegressor.lasso(DataFrame trainData, String targetName,
+          {int iterationLimit = iterationLimitDefaultValue,
+          InitialCoefficientsType initialCoefficientType =
+              initialCoefficientsTypeDefaultValue,
+          double minCoefficientUpdate = minCoefficientsUpdateDefaultValue,
+          double lambda = lambdaDefaultValue,
+          bool fitIntercept = fitInterceptDefaultValue,
+          double interceptScale = interceptScaleDefaultValue,
+          bool isDataNormalized = isFittingDataNormalizedDefaultValue,
+          bool collectLearningData = collectLearningDataDefaultValue,
+          DType dtype = dTypeDefaultValue,
+          Matrix? initialCoefficients}) =>
+      initLinearRegressorModule().get<LinearRegressorFactory>().create(
+            fittingData: trainData,
+            targetName: targetName,
+            optimizerType: LinearOptimizerType.coordinate,
+            iterationsLimit: iterationLimit,
+            learningRateType: defaultLearningRateType,
+            initialCoefficientsType: initialCoefficientType,
+            initialLearningRate: initialLearningRateDefaultValue,
+            decay: decayDefaultValue,
+            dropRate: dropRateDefaultValue,
+            minCoefficientsUpdate: minCoefficientUpdate,
+            lambda: lambda,
+            fitIntercept: fitIntercept,
+            interceptScale: interceptScale,
+            batchSize: 0,
+            initialCoefficients: initialCoefficients,
+            isFittingDataNormalized: isDataNormalized,
             collectLearningData: collectLearningData,
             dtype: dtype,
           );
