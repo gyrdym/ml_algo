@@ -51,10 +51,12 @@ it in the web applications.
     - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). 
     A general class for finding a linear pattern in training data and predicting outcome as real numbers.
     
-    - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart)
-    Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation 
+    - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/85f1e2f19b946beb2b594a62e0e3c999d1c31608/lib/src/regressor/linear_regressor/linear_regressor.dart#L219)
+    Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation
+    
+    - [LinearRegressor.SGD](https://github.com/gyrdym/ml_algo/blob/85f1e2f19b946beb2b594a62e0e3c999d1c31608/lib/src/regressor/linear_regressor/linear_regressor.dart#L322)
+    Implementation of the linear regression algorithm based on stochastic gradient descent with L2 regularisation
      
-
     - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
     A class that makes prediction for each new observation basing on first `k` closest observations from 
     training data. It may catch non-linear pattern of the data.

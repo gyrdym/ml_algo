@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.5.0
+- LinearRegressor:
+    - Added `LinearRegressor.SGD` constructor
+
 ## 16.4.0
 - LinearRegressor:
   - Added `LinearRegressor.lasso` constructor

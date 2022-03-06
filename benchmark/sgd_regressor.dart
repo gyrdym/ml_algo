@@ -4,21 +4,21 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-const observationsNum = 4000;
+const observationsNum = 20000;
 const featuresNum = 100;
 
-class LinearRegressorBenchmark extends BenchmarkBase {
-  LinearRegressorBenchmark() : super('Linear regressor');
+class SGDRegressorBenchmark extends BenchmarkBase {
+  SGDRegressorBenchmark() : super('SGD regressor');
 
-  late DataFrame fittingData;
+  late DataFrame trainData;
 
   static void main() {
-    LinearRegressorBenchmark().report();
+    SGDRegressorBenchmark().report();
   }
 
   @override
   void run() {
-    LinearRegressor(fittingData, 'col_20');
+    LinearRegressor.SGD(trainData, 'col_100');
   }
 
   @override
@@ -28,7 +28,7 @@ class LinearRegressorBenchmark extends BenchmarkBase {
 
     final labels = Matrix.fromColumns([Vector.randomFilled(observationsNum)]);
 
-    fittingData = DataFrame.fromMatrix(
+    trainData = DataFrame.fromMatrix(
       Matrix.fromColumns([
         ...features.columns,
         ...labels.columns,
@@ -40,5 +40,5 @@ class LinearRegressorBenchmark extends BenchmarkBase {
 }
 
 Future main() async {
-  LinearRegressorBenchmark.main();
+  SGDRegressorBenchmark.main();
 }
