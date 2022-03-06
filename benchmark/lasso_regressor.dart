@@ -10,8 +10,7 @@ const featuresNum = 100;
 late DataFrame trainData;
 
 class LassoRegressorBenchmark extends BenchmarkBase {
-  LassoRegressorBenchmark()
-      : super('Lasso regression, coordinate descent');
+  LassoRegressorBenchmark() : super('Lasso regression, coordinate descent');
 
   static void main() {
     LassoRegressorBenchmark().report();
