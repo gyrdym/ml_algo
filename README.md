@@ -54,7 +54,7 @@ it in the web applications.
     - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/85f1e2f19b946beb2b594a62e0e3c999d1c31608/lib/src/regressor/linear_regressor/linear_regressor.dart#L219)
     Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation
     
-    - [LinearRegressor.SGD](https://github.com/gyrdym/ml_algo/blob/85f1e2f19b946beb2b594a62e0e3c999d1c31608/lib/src/regressor/linear_regressor/linear_regressor.dart#L322)
+    - [LinearRegressor.SGD](https://github.com/gyrdym/ml_algo/blob/c0ffc71676c1ad14927448fe9bbf984a425ce27a/lib/src/regressor/linear_regressor/linear_regressor.dart#L322)
     Implementation of the linear regression algorithm based on stochastic gradient descent with L2 regularisation
      
     - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
