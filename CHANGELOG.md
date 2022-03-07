@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.5.1
+- Added linear regression examples to `README.md`
+
 ## 16.5.0
 - LinearRegressor:
     - Added `LinearRegressor.SGD` constructor
