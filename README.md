@@ -467,20 +467,26 @@ Let's train the model:
 final model = LinearRegressor(trainData, targetName);
 ```
 
-By default, `LinearRegressor` uses closed-form solution to train the model. It's possible to use a different solution type,
-e.g. one can use gradient-based algorithm: 
+By default, `LinearRegressor` uses closed-form solution to train the model. One can also use a different solution type,
+e.g. stochastic gradient descent algorithm: 
 
 ```dart
-final model = LinearRegressor(
+final model = LinearRegressor.SGD(
   samples
   targetName,
-  optimizerType: LinearOptimizerType.gradient,
-  iterationsLimit: 90,
-  learningRateType: LearningRateType.timeBased,
+  iterationLimit: 90,
 );
 ```
 
-As you may noticed, we have to provide a bunch of hyperparameters in case of gradient-based regression.
+or linear regression based on coordinate descent with Lasso regularization:
+
+```dart
+final model = LinearRegressor.lasso(
+  samples
+  targetName,
+  iterationLimit: 90,
+);
+```
 
 Next, we should evaluate performance of our model:
 
@@ -521,7 +527,8 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
 void main() async {
-  final samples = await fromCsv('datasets/housing.csv', headerExists: false, columnDelimiter: ' ');
+  final samples = (await fromCsv('datasets/housing.csv', headerExists: false, columnDelimiter: ' '))
+    ..shuffle();
   final targetName = 'col_13';
   final splits = splitData(samples, [0.8]);
   final trainData = splits[0];
@@ -546,7 +553,8 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 void main() async {
   final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
-  final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ');
+  final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ')
+    ..shuffle();
   final targetName = 'col_13';
   final splits = splitData(samples, [0.8]);
   final trainData = splits[0];
