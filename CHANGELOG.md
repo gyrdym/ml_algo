@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.5.2
+- Add ecosystem notes to `README.md`
+
 ## 16.5.1
 - Added linear regression examples to `README.md`
 

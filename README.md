@@ -3,7 +3,14 @@
 [![pub package](https://img.shields.io/pub/v/ml_algo.svg)](https://pub.dartlang.org/packages/ml_algo)
 [![Gitter Chat](https://badges.gitter.im/gyrdym/gyrdym.svg)](https://gitter.im/gyrdym/)
 
-# Machine learning algorithms for Dart developers
+# Machine learning algorithms for Dart developers - ml_algo library
+
+The library is a part of ecosystem:
+
+- [ml_algo library](https://github.com/gyrdym/ml_algo) - implementation of popular machine learning algorithms 
+- [ml_preprocessing library](https://github.com/gyrdym/ml_preprocessing) - a library for data preprocessing
+- [ml_linalg library](https://github.com/gyrdym/ml_linalg) - a library for linear algebra 
+- [ml_dataframe library](https://github.com/gyrdym/ml_dataframe)- a library for storing and manipulating data 
 
 **Table of contents**
 
