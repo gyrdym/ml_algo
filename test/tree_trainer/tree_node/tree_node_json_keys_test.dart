@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/tree_node_json_keys.dart';
 import 'package:test/test.dart';
 
 void main() {

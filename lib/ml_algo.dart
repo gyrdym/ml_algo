@@ -2,6 +2,7 @@ export 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 export 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart';
 export 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 export 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart';
+export 'package:ml_algo/src/clustering/kd_tree/kd_tree.dart';
 export 'package:ml_algo/src/knn_kernel/kernel_type.dart';
 export 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart';
 export 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart';

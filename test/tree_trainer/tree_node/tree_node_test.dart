@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 import 'package:test/test.dart';
 
 import '../../helpers.dart';
@@ -12,11 +12,11 @@ void main() {
     final predicateType = TreeNodeSplittingPredicateType.equalTo;
     final splittingValue = 600;
     final splittingIndex = 2;
-    final children = <TreeNode>[];
+    final children = <DecisionTreeNode>[];
     final treeLabel = TreeLeafLabel(1000, probability: 0.75);
     final level = 3;
 
-    final node = TreeNode(
+    final node = DecisionTreeNode(
       predicateType,
       splittingValue,
       splittingIndex,
@@ -58,7 +58,7 @@ void main() {
 
     test('should restore from json', () async {
       final json = await readJSON(snapshotFileName);
-      final actual = TreeNode.fromJson(json);
+      final actual = DecisionTreeNode.fromJson(json);
 
       expect(actual.toJson(), tree.toJson());
     });

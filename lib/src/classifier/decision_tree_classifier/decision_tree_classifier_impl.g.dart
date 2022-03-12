@@ -14,8 +14,8 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
       $checkedConvert(json, 'E', (v) => v as num),
       $checkedConvert(json, 'S', (v) => v as int),
       $checkedConvert(json, 'D', (v) => v as int),
-      $checkedConvert(
-          json, 'R', (v) => TreeNode.fromJson(v as Map<String, dynamic>)),
+      $checkedConvert(json, 'R',
+          (v) => DecisionTreeNode.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'T', (v) => v as String),
       $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),

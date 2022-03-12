@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_impl.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
@@ -22,8 +23,8 @@ void main() {
       final splittingColumnIdx = 2;
       final splittingValues = [1.0];
 
-      final split =
-          splitter.split(samples, splittingColumnIdx, splittingValues);
+      final split = splitter.split<DecisionTreeNode>(
+          samples, splittingColumnIdx, splittingValues);
 
       expect(
           split.values,
@@ -59,8 +60,8 @@ void main() {
       final splittingColumnIdx = 2;
       final splittingValues = [1.0];
 
-      final split =
-          splitter.split(samples, splittingColumnIdx, splittingValues);
+      final split = splitter.split<DecisionTreeNode>(
+          samples, splittingColumnIdx, splittingValues);
 
       expect(
           split.values,
@@ -114,8 +115,8 @@ void main() {
       final splittingColumnIdx = 2;
       final splittingValues = [1.0, 3.0, 1000.0];
 
-      final split =
-          splitter.split(samples, splittingColumnIdx, splittingValues);
+      final split = splitter.split<DecisionTreeNode>(
+          samples, splittingColumnIdx, splittingValues);
 
       expect(
           split.values,

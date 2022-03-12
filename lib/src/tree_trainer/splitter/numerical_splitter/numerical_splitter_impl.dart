@@ -2,14 +2,17 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/_helper/get_tree_node_splitting_predicate_by_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/intermediate_tree_node_factory.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class NumericalTreeSplitterImpl implements NumericalTreeSplitter {
-  const NumericalTreeSplitterImpl();
+  const NumericalTreeSplitterImpl(this._treeNodeFactory);
+
+  final IntermediateTreeNodeFactory _treeNodeFactory;
 
   @override
-  Map<TreeNode, Matrix> split(
+  Map<T, Matrix> split<T extends TreeNode>(
       Matrix samples, int splittingIdx, double splittingValue) {
     final left = <Vector>[];
     final right = <Vector>[];
@@ -27,14 +30,12 @@ class NumericalTreeSplitterImpl implements NumericalTreeSplitter {
           : right.add(row),
     );
 
-    final createNode =
-        (TreeNodeSplittingPredicateType predicateType) => TreeNode(
-              predicateType,
-              splittingValue,
-              splittingIdx,
-              null,
-              null,
-            );
+    final createNode = (TreeNodeSplittingPredicateType predicateType) =>
+        _treeNodeFactory.create(
+          predicateType,
+          splittingValue,
+          splittingIdx,
+        ) as T;
 
     final leftNode = createNode(splittingPredicateType);
     final rightNode = createNode(oppositeSplittingPredicateType);

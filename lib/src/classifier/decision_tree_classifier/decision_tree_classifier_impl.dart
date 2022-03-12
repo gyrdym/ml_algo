@@ -9,7 +9,7 @@ import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -64,7 +64,7 @@ class DecisionTreeClassifierImpl
   Iterable<String> get targetNames => [targetColumnName];
 
   @JsonKey(name: decisionTreeClassifierTreeRootNodeJsonKey)
-  final TreeNode treeRootNode;
+  final DecisionTreeNode treeRootNode;
 
   @override
   num get positiveLabel => double.nan;
@@ -118,7 +118,7 @@ class DecisionTreeClassifierImpl
     );
   }
 
-  TreeLeafLabel _getLabelForSample(Vector sample, TreeNode node) {
+  TreeLeafLabel _getLabelForSample(Vector sample, DecisionTreeNode node) {
     if (node.isLeaf) {
       return node.label!;
     }

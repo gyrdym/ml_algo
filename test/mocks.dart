@@ -51,7 +51,8 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/intermediate_tree_node_factory.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
@@ -478,6 +479,7 @@ MockDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
 }
 
 @GenerateMocks([
+  IntermediateTreeNodeFactory,
   TreeSplitAssessor,
   TreeSplitAssessorFactory,
   NumericalTreeSplitter,
@@ -517,7 +519,7 @@ MockDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
   TreeLeafLabelFactoryFactory,
   TreeSplitSelector,
   TreeSplitSelectorFactory,
-  TreeNode,
+  DecisionTreeNode,
   DecisionTreeTrainer,
   KnnClassifier,
   KnnRegressorFactory,

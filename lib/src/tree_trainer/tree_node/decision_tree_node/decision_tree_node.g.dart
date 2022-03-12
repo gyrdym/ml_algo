@@ -1,15 +1,15 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tree_node.dart';
+part of 'decision_tree_node.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
-  return $checkedNew('TreeNode', json, () {
+DecisionTreeNode _$DecisionTreeNodeFromJson(Map<String, dynamic> json) {
+  return $checkedNew('DecisionTreeNode', json, () {
     $checkKeys(json, allowedKeys: const ['CN', 'LB', 'PT', 'SV', 'SI', 'LV']);
-    final val = TreeNode(
+    final val = DecisionTreeNode(
       $checkedConvert(
           json, 'PT', (v) => fromSplittingPredicateTypeJson(v as String?)),
       $checkedConvert(json, 'SV', (v) => v as num?),
@@ -34,7 +34,7 @@ TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
   });
 }
 
-Map<String, dynamic> _$TreeNodeToJson(TreeNode instance) {
+Map<String, dynamic> _$DecisionTreeNodeToJson(DecisionTreeNode instance) {
   final val = <String, dynamic>{};
 
   void writeNotNull(String key, dynamic value) {

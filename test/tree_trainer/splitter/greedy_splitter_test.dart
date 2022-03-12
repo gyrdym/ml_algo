@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/tree_trainer/splitter/greedy_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -29,31 +29,31 @@ void main() {
       final bestSplittingValue = 4.5;
       final splittingColumnIdx = 0;
       final mockedWorstSplit = {
-        MockTreeNode(): Matrix.fromList([
+        MockDecisionTreeNode(): Matrix.fromList([
           [12.0, 22.0]
         ]),
-        MockTreeNode(): Matrix.fromList([
+        MockDecisionTreeNode(): Matrix.fromList([
           [19.0, 31.0]
         ]),
       };
       final mockedWorseSplit = {
-        MockTreeNode(): Matrix.fromList([
+        MockDecisionTreeNode(): Matrix.fromList([
           [13.0, 24.0]
         ]),
-        MockTreeNode(): Matrix.fromList([
+        MockDecisionTreeNode(): Matrix.fromList([
           [29.0, 53.0]
         ]),
       };
       final mockedGoodSplit = {
-        MockTreeNode(): Matrix.fromList([
+        MockDecisionTreeNode(): Matrix.fromList([
           [1.0, 2.0]
         ]),
-        MockTreeNode(): Matrix.fromList([
+        MockDecisionTreeNode(): Matrix.fromList([
           [9.0, 3.0]
         ]),
       };
-      final bestNodeLeft = MockTreeNode();
-      final bestNodeRight = MockTreeNode();
+      final bestNodeLeft = MockDecisionTreeNode();
+      final bestNodeRight = MockDecisionTreeNode();
       final mockedBestSplit = {
         bestNodeLeft: Matrix.fromList([
           [100.0, 200.0]
@@ -131,14 +131,14 @@ void main() {
     final splittingColumnIdx = 2;
     final splittingValues = [1.0, 3.0, 2.0];
     final mockedSplit = {
-      MockTreeNode(): Matrix.fromList([
+      MockDecisionTreeNode(): Matrix.fromList([
         [11, 22, 1, 30],
         [60, 23, 1, 20],
       ]),
-      MockTreeNode(): Matrix.fromList([
+      MockDecisionTreeNode(): Matrix.fromList([
         [13, 99, 3, 30],
       ]),
-      MockTreeNode(): Matrix.fromList([
+      MockDecisionTreeNode(): Matrix.fromList([
         [20, 25, 2, 10],
         [17, 66, 2, 70],
       ]),
@@ -327,14 +327,14 @@ NumericalTreeSplitter createNumericalSplitter(
         any,
         splittingValue,
       ),
-    ).thenAnswer((_) => splitInfo['split'] as Map<TreeNode, Matrix>);
+    ).thenAnswer((_) => splitInfo['split'] as Map<DecisionTreeNode, Matrix>);
   }
 
   return splitter;
 }
 
 NominalTreeSplitter createNominalSplitter(
-    List<double> nominalValues, Map<TreeNode, Matrix> split) {
+    List<double> nominalValues, Map<DecisionTreeNode, Matrix> split) {
   final splitter = MockNominalTreeSplitter();
 
   when(splitter.split(

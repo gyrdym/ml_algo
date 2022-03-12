@@ -1,4 +1,6 @@
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_impl.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_intermediate_tree_node_factory.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
@@ -7,6 +9,8 @@ import '../../test_utils.dart';
 
 void main() {
   group('NumericalTreeSplitterImpl', () {
+    final nodeFactory = const DecisionIntermediateTreeNodeFactory();
+
     test(
         'should split given matrix into two parts: first part should contain '
         'values less than the splitting value, right part should contain '
@@ -20,8 +24,9 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 10.0;
-      final splitter = const NumericalTreeSplitterImpl();
-      final actual = splitter.split(samples, splittingIdx, splittingValue);
+      final splitter = NumericalTreeSplitterImpl(nodeFactory);
+      final actual = splitter.split<DecisionTreeNode>(
+          samples, splittingIdx, splittingValue);
 
       expect(
           actual.values,
@@ -69,8 +74,9 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 10.0;
-      final splitter = const NumericalTreeSplitterImpl();
-      final actual = splitter.split(samples, splittingIdx, splittingValue);
+      final splitter = NumericalTreeSplitterImpl(nodeFactory);
+      final actual = splitter.split<DecisionTreeNode>(
+          samples, splittingIdx, splittingValue);
 
       expect(
           actual.values,
@@ -116,8 +122,9 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 0.0;
-      final splitter = const NumericalTreeSplitterImpl();
-      final actual = splitter.split(samples, splittingIdx, splittingValue);
+      final splitter = NumericalTreeSplitterImpl(nodeFactory);
+      final actual = splitter.split<DecisionTreeNode>(
+          samples, splittingIdx, splittingValue);
 
       expect(
           actual.values,
@@ -164,8 +171,9 @@ void main() {
       ]);
       final splittingIdx = 2;
       final splittingValue = 1000.0;
-      final splitter = const NumericalTreeSplitterImpl();
-      final actual = splitter.split(samples, splittingIdx, splittingValue);
+      final splitter = NumericalTreeSplitterImpl(nodeFactory);
+      final actual = splitter.split<DecisionTreeNode>(
+          samples, splittingIdx, splittingValue);
 
       expect(
           actual.values,
@@ -212,8 +220,9 @@ void main() {
 
       final splittingIdx = 0;
       final splittingValue = 2.0;
-      final splitter = const NumericalTreeSplitterImpl();
-      final actual = splitter.split(samples, splittingIdx, splittingValue);
+      final splitter = NumericalTreeSplitterImpl(nodeFactory);
+      final actual = splitter.split<DecisionTreeNode>(
+          samples, splittingIdx, splittingValue);
 
       expect(
           actual.values,
@@ -261,8 +270,9 @@ void main() {
 
       final splittingIdx = 3;
       final splittingValue = 20.0;
-      final splitter = const NumericalTreeSplitterImpl();
-      final actual = splitter.split(samples, splittingIdx, splittingValue);
+      final splitter = NumericalTreeSplitterImpl(nodeFactory);
+      final actual = splitter.split<DecisionTreeNode>(
+          samples, splittingIdx, splittingValue);
 
       final leftNodeData = actual.values.first;
       final rightNodeData = actual.values.last;

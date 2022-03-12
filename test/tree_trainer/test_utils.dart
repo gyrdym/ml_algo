@@ -1,10 +1,10 @@
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 void testTreeNode(
-  TreeNode node, {
+  DecisionTreeNode node, {
   required bool shouldBeLeaf,
   required double expectedSplittingValue,
   required int expectedSplittingColumnIdx,

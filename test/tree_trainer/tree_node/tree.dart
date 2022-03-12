@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 
-final _child31 = TreeNode(
+final _child31 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   600,
   null,
@@ -10,7 +10,7 @@ final _child31 = TreeNode(
   3,
 );
 
-final _child32 = TreeNode(
+final _child32 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   700,
   null,
@@ -19,7 +19,7 @@ final _child32 = TreeNode(
   3,
 );
 
-final _child33 = TreeNode(
+final _child33 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   800,
   null,
@@ -28,7 +28,7 @@ final _child33 = TreeNode(
   3,
 );
 
-final _child34 = TreeNode(
+final _child34 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   900,
   null,
@@ -37,7 +37,7 @@ final _child34 = TreeNode(
   3,
 );
 
-final _child35 = TreeNode(
+final _child35 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   900,
   null,
@@ -46,7 +46,7 @@ final _child35 = TreeNode(
   3,
 );
 
-final _child36 = TreeNode(
+final _child36 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   901,
   null,
@@ -55,7 +55,7 @@ final _child36 = TreeNode(
   3,
 );
 
-final _child37 = TreeNode(
+final _child37 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   911,
   null,
@@ -64,7 +64,7 @@ final _child37 = TreeNode(
   3,
 );
 
-final _child21 = TreeNode(
+final _child21 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   100,
   null,
@@ -76,7 +76,7 @@ final _child21 = TreeNode(
   2,
 );
 
-final _child22 = TreeNode(
+final _child22 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   200,
   null,
@@ -88,7 +88,7 @@ final _child22 = TreeNode(
   2,
 );
 
-final _child23 = TreeNode(
+final _child23 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   300,
   null,
@@ -100,7 +100,7 @@ final _child23 = TreeNode(
   2,
 );
 
-final _child24 = TreeNode(
+final _child24 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   400,
   null,
@@ -111,7 +111,7 @@ final _child24 = TreeNode(
   2,
 );
 
-final _child25 = TreeNode(
+final _child25 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   500,
   null,
@@ -120,7 +120,7 @@ final _child25 = TreeNode(
   2,
 );
 
-final _child11 = TreeNode(
+final _child11 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   10,
   null,
@@ -129,7 +129,7 @@ final _child11 = TreeNode(
   1,
 );
 
-final _child12 = TreeNode(
+final _child12 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   12,
   null,
@@ -141,7 +141,7 @@ final _child12 = TreeNode(
   1,
 );
 
-final _child13 = TreeNode(
+final _child13 = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   13,
   null,
@@ -152,7 +152,7 @@ final _child13 = TreeNode(
   1,
 );
 
-final tree = TreeNode(
+final tree = DecisionTreeNode(
   TreeNodeSplittingPredicateType.equalTo,
   null,
   null,

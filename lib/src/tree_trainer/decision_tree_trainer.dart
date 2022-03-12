@@ -2,7 +2,7 @@ import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -24,10 +24,10 @@ class DecisionTreeTrainer implements TreeTrainer {
   final TreeSplitSelector _splitSelector;
 
   @override
-  TreeNode train(Matrix samples) =>
+  DecisionTreeNode train(Matrix samples) =>
       _train(samples, null, null, null, _featureIndices, 0);
 
-  TreeNode _train(
+  DecisionTreeNode _train(
     Matrix samples,
     num? splittingValue,
     int? splittingIdx,
@@ -48,7 +48,7 @@ class DecisionTreeTrainer implements TreeTrainer {
         _targetIdx,
       );
 
-      return TreeNode(
+      return DecisionTreeNode(
         splittingPredicateType,
         splittingValue,
         splittingIdx,
@@ -87,7 +87,7 @@ class DecisionTreeTrainer implements TreeTrainer {
       );
     });
 
-    return TreeNode(
+    return DecisionTreeNode(
       splittingPredicateType,
       splittingValue,
       splittingIdx,

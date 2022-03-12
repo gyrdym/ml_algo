@@ -12,8 +12,8 @@ import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/model_assessor.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/decision_tree_node.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/decision_tree_node/tree_node_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/dtype_to_json.dart';
@@ -335,15 +335,15 @@ void main() {
   });
 }
 
-TreeNode createRootNodeMock(Map<Vector, TreeLeafLabel> samplesByLabel,
+DecisionTreeNode createRootNodeMock(Map<Vector, TreeLeafLabel> samplesByLabel,
     [Map<String, dynamic> jsonMock = const <String, dynamic>{}]) {
-  final rootMock = MockTreeNode();
-  final children = <TreeNode>[];
+  final rootMock = MockDecisionTreeNode();
+  final children = <DecisionTreeNode>[];
 
   when(rootMock.isLeaf).thenReturn(false);
 
   samplesByLabel.forEach((sample, leafLabel) {
-    final node = MockTreeNode();
+    final node = MockDecisionTreeNode();
 
     when(node.label).thenReturn(leafLabel);
     when(node.isLeaf).thenReturn(true);
