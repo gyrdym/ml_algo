@@ -18,14 +18,16 @@ class KDTreeImpl implements KDTree {
 
   @override
   Iterable<Vector> query(Vector sample, int k) {
-    final neighbours = HeapPriorityQueue<Vector>((a, b) => (sample.distanceTo(b) - sample.distanceTo(a)).toInt());
+    final neighbours = HeapPriorityQueue<Vector>(
+        (a, b) => (sample.distanceTo(b) - sample.distanceTo(a)).toInt());
 
     _findKNNRecursively(root, sample, k, neighbours);
 
     return neighbours.toList().reversed;
   }
 
-  void _findKNNRecursively(KDTreeNode node, Vector sample, int k, HeapPriorityQueue<Vector> neighbours) {
+  void _findKNNRecursively(KDTreeNode node, Vector sample, int k,
+      HeapPriorityQueue<Vector> neighbours) {
     if (node.isLeaf) {
       node.samples!.rows.forEach((vector) {
         _knnSearch(sample, vector, neighbours, k);
@@ -45,7 +47,8 @@ class KDTreeImpl implements KDTree {
     }
   }
 
-  void _knnSearch(Vector sample, Vector neighbour, HeapPriorityQueue<Vector> neighbours, int k) {
+  void _knnSearch(Vector sample, Vector neighbour,
+      HeapPriorityQueue<Vector> neighbours, int k) {
     final currentDistance = neighbour.distanceTo(sample);
     final lastBestDistance = neighbours.first.distanceTo(sample);
 
