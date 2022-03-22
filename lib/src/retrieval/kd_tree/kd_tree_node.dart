@@ -11,8 +11,4 @@ class KDTreeNode {
   final Matrix? samples;
 
   bool get isLeaf => samples != null;
-
-  bool testLeft(Vector sample) {
-    return isLeaf || sample[index!] < value![index!];
-  }
 }
