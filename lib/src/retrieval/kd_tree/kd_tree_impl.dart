@@ -1,19 +1,33 @@
 import 'package:collection/collection.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_json_keys.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_node.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
 
-class KDTreeImpl implements KDTree {
+part 'kd_tree_impl.g.dart';
+
+@JsonSerializable()
+class KDTreeImpl with SerializableMixin implements KDTree {
   KDTreeImpl(this.leafSize, this.root, this.dtype);
 
+  factory KDTreeImpl.fromJson(Map<String, dynamic> json) => _$KDTreeImplFromJson(json);
+
   @override
+  Map<String, dynamic> toJson() => _$KDTreeImplToJson(this);
+
+  @override
+  @JsonKey(name: kdTreeLeafSizeJsonKey)
   final int leafSize;
 
   @override
+  @JsonKey(name: kdTreeRootJsonKey)
   final KDTreeNode root;
 
   @override
+  @JsonKey(name: kdTreeDTypeJsonKey)
   final DType dtype;
 
   @override
@@ -62,4 +76,8 @@ class KDTreeImpl implements KDTree {
       neighbours.removeFirst();
     }
   }
+
+  @override
+  // TODO: implement schemaVersion
+  int? get schemaVersion => throw UnimplementedError();
 }

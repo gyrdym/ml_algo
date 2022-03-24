@@ -55,7 +55,7 @@ class KDTreeBuilder {
   _Split _splitSamples(Matrix samples, int splittingIdx, num splittingValue) {
     final left = <Vector>[];
     final right = <Vector>[];
-    late Vector midSample;
+    Vector? midSample;
 
     for (var i = 0; i < samples.rowsNum; i++) {
       final row = samples[i];
@@ -73,6 +73,6 @@ class KDTreeBuilder {
     }
 
     return _Split(Matrix.fromRows(left, dtype: samples.dtype),
-        Matrix.fromRows(right, dtype: samples.dtype), midSample);
+        Matrix.fromRows(right, dtype: samples.dtype), midSample!);
   }
 }
