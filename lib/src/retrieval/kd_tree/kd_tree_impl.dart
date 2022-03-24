@@ -13,7 +13,8 @@ part 'kd_tree_impl.g.dart';
 class KDTreeImpl with SerializableMixin implements KDTree {
   KDTreeImpl(this.leafSize, this.root, this.dtype);
 
-  factory KDTreeImpl.fromJson(Map<String, dynamic> json) => _$KDTreeImplFromJson(json);
+  factory KDTreeImpl.fromJson(Map<String, dynamic> json) =>
+      _$KDTreeImplFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$KDTreeImplToJson(this);

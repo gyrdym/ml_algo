@@ -11,7 +11,8 @@ abstract class KDTree implements Serializable {
           {int leafSie = 10, DType dtype = DType.float32}) =>
       createKDTree(samples, leafSie, dtype);
 
-  factory KDTree.fromJson(Map<String, dynamic> json) => KDTreeImpl.fromJson(json);
+  factory KDTree.fromJson(Map<String, dynamic> json) =>
+      KDTreeImpl.fromJson(json);
 
   int get leafSize;
   KDTreeNode get root;
