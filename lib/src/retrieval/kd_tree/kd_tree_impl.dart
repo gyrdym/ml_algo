@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_json_keys.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_node.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
@@ -34,11 +35,11 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   int searchIterationCount = 0;
 
   @override
-  Iterable<Vector> query(Vector point, int k) {
+  Iterable<KDTreeNeighbour> query(Vector point, int k) {
     searchIterationCount = 0;
 
-    final neighbours = HeapPriorityQueue<Vector>(
-        (a, b) => (point.distanceTo(b) - point.distanceTo(a)).toInt());
+    final neighbours = HeapPriorityQueue<KDTreeNeighbour>(
+        (a, b) => (point.distanceTo(b.point) - point.distanceTo(a.point)).toInt());
 
     _findKNNRecursively(root, point, k, neighbours);
 
@@ -46,7 +47,7 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   }
 
   void _findKNNRecursively(KDTreeNode node, Vector point, int k,
-      HeapPriorityQueue<Vector> neighbours) {
+      HeapPriorityQueue<KDTreeNeighbour> neighbours) {
     searchIterationCount++;
 
     if (node.isLeaf) {
@@ -58,7 +59,7 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     }
 
     if (neighbours.length == k &&
-        point.distanceTo(node.value!) > point.distanceTo(neighbours.first)) {
+        point.distanceTo(node.value!) > neighbours.first.distance) {
       return;
     }
 
@@ -78,14 +79,14 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   }
 
   void _knnSearch(Vector point, Vector neighbourCandidate,
-      HeapPriorityQueue<Vector> neighbours, int k) {
-    final currentDistance = neighbourCandidate.distanceTo(point);
+      HeapPriorityQueue<KDTreeNeighbour> neighbours, int k) {
+    final candidateDistance = neighbourCandidate.distanceTo(point);
     final lastNeighbourDistance = neighbours.length > 0
-        ? neighbours.first.distanceTo(point)
-        : currentDistance;
+        ? neighbours.first.distance
+        : candidateDistance;
 
-    if (currentDistance < lastNeighbourDistance || neighbours.length < k) {
-      neighbours.add(neighbourCandidate);
+    if (candidateDistance < lastNeighbourDistance || neighbours.length < k) {
+      neighbours.add(KDTreeNeighbour(neighbourCandidate, candidateDistance));
 
       if (neighbours.length == k + 1) {
         neighbours.removeFirst();

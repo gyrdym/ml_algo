@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/_helpers/create_kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -18,5 +19,5 @@ abstract class KDTree implements Serializable {
   KDTreeNode get root;
   DType get dtype;
 
-  Iterable<Vector> query(Vector sample, int k);
+  Iterable<KDTreeNeighbour> query(Vector sample, int k);
 }
