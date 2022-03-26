@@ -8,11 +8,11 @@ part of 'kd_tree_node.dart';
 
 KDTreeNode _$KDTreeNodeFromJson(Map<String, dynamic> json) {
   return $checkedNew('KDTreeNode', json, () {
-    $checkKeys(json, allowedKeys: const ['V', 'I', 'L', 'R', 'S']);
+    $checkKeys(json, allowedKeys: const ['V', 'I', 'L', 'R', 'P']);
     final val = KDTreeNode(
       value: $checkedConvert(json, 'V',
           (v) => v == null ? null : Vector.fromJson(v as Map<String, dynamic>)),
-      index: $checkedConvert(json, 'I', (v) => v as int?),
+      splitIndex: $checkedConvert(json, 'I', (v) => v as int?),
       left: $checkedConvert(
           json,
           'L',
@@ -25,16 +25,16 @@ KDTreeNode _$KDTreeNodeFromJson(Map<String, dynamic> json) {
           (v) => v == null
               ? null
               : KDTreeNode.fromJson(v as Map<String, dynamic>)),
-      samples: $checkedConvert(json, 'S',
+      points: $checkedConvert(json, 'P',
           (v) => v == null ? null : Matrix.fromJson(v as Map<String, dynamic>)),
     );
     return val;
   }, fieldKeyMap: const {
     'value': 'V',
-    'index': 'I',
+    'splitIndex': 'I',
     'left': 'L',
     'right': 'R',
-    'samples': 'S'
+    'points': 'P'
   });
 }
 
@@ -48,9 +48,9 @@ Map<String, dynamic> _$KDTreeNodeToJson(KDTreeNode instance) {
   }
 
   writeNotNull('V', instance.value?.toJson());
-  writeNotNull('I', instance.index);
+  writeNotNull('I', instance.splitIndex);
   writeNotNull('L', instance.left?.toJson());
   writeNotNull('R', instance.right?.toJson());
-  writeNotNull('S', instance.samples?.toJson());
+  writeNotNull('P', instance.points?.toJson());
   return val;
 }

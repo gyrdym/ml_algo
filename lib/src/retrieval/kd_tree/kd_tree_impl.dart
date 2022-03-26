@@ -31,20 +31,26 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   @JsonKey(name: kdTreeDTypeJsonKey)
   final DType dtype;
 
-  @override
-  Iterable<Vector> query(Vector sample, int k) {
-    final neighbours = HeapPriorityQueue<Vector>(
-        (a, b) => (sample.distanceTo(b) - sample.distanceTo(a)).toInt());
+  int searchIterationCount = 0;
 
-    _findKNNRecursively(root, sample, k, neighbours);
+  @override
+  Iterable<Vector> query(Vector point, int k) {
+    searchIterationCount = 0;
+
+    final neighbours = HeapPriorityQueue<Vector>(
+        (a, b) => (point.distanceTo(b) - point.distanceTo(a)).toInt());
+
+    _findKNNRecursively(root, point, k, neighbours);
 
     return neighbours.toList().reversed;
   }
 
   void _findKNNRecursively(KDTreeNode node, Vector sample, int k,
       HeapPriorityQueue<Vector> neighbours) {
+    searchIterationCount++;
+
     if (node.isLeaf) {
-      node.samples!.rows.forEach((vector) {
+      node.points!.rows.forEach((vector) {
         _knnSearch(sample, vector, neighbours, k);
       });
 
@@ -53,25 +59,29 @@ class KDTreeImpl with SerializableMixin implements KDTree {
 
     _knnSearch(sample, node.value!, neighbours, k);
 
-    if (sample[node.index!] < node.value![node.index!]) {
-      _findKNNRecursively(node.left!, sample, k, neighbours);
+    if (node.left == null) {
       _findKNNRecursively(node.right!, sample, k, neighbours);
+    } else if (node.right == null) {
+      _findKNNRecursively(node.left!, sample, k, neighbours);
+    } else if (sample[node.splitIndex!] < node.value![node.splitIndex!]) {
+      _findKNNRecursively(node.left!, sample, k, neighbours);
     } else {
       _findKNNRecursively(node.right!, sample, k, neighbours);
-      _findKNNRecursively(node.left!, sample, k, neighbours);
     }
   }
 
-  void _knnSearch(Vector sample, Vector neighbour,
+  void _knnSearch(Vector point, Vector neighbourCandidate,
       HeapPriorityQueue<Vector> neighbours, int k) {
-    final currentDistance = neighbour.distanceTo(sample);
-    final lastBestDistance = neighbours.first.distanceTo(sample);
+    final currentDistance = neighbourCandidate.distanceTo(point);
+    final lastNeighbourDistance = neighbours.length > 0
+        ? neighbours.first.distanceTo(point)
+        : currentDistance;
 
-    if (currentDistance > lastBestDistance) {
+    if (currentDistance > lastNeighbourDistance) {
       return;
     }
 
-    neighbours.add(neighbour);
+    neighbours.add(neighbourCandidate);
 
     if (neighbours.length == k) {
       neighbours.removeFirst();

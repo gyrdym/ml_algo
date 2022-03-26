@@ -8,7 +8,7 @@ part 'kd_tree_node.g.dart';
 
 @JsonSerializable()
 class KDTreeNode {
-  KDTreeNode({this.value, this.index, this.left, this.right, this.samples});
+  KDTreeNode({this.value, this.splitIndex, this.left, this.right, this.points});
 
   factory KDTreeNode.fromJson(Map<String, dynamic> json) =>
       _$KDTreeNodeFromJson(json);
@@ -19,7 +19,7 @@ class KDTreeNode {
   final Vector? value;
 
   @JsonKey(name: kdTreeNodeIndexJsonKey)
-  final int? index;
+  final int? splitIndex;
 
   @JsonKey(name: kdTreeNodeLeftJsonKey)
   final KDTreeNode? left;
@@ -27,8 +27,8 @@ class KDTreeNode {
   @JsonKey(name: kdTreeNodeRightJsonKey)
   final KDTreeNode? right;
 
-  @JsonKey(name: kdTreeNodeSamplesJsonKey)
-  final Matrix? samples;
+  @JsonKey(name: kdTreeNodePointsJsonKey)
+  final Matrix? points;
 
-  bool get isLeaf => samples != null;
+  bool get isLeaf => points != null;
 }

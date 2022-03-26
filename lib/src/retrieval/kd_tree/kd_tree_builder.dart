@@ -3,11 +3,11 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 class _Split {
-  _Split(this.left, this.right, this.midVector);
+  _Split(this.left, this.right, this.midPoint);
 
   final Matrix left;
   final Matrix right;
-  final Vector midVector;
+  final Vector midPoint;
 }
 
 class KDTreeBuilder {
@@ -15,27 +15,27 @@ class KDTreeBuilder {
 
   final int _leafSize;
 
-  KDTreeNode train(Matrix samples) {
-    final isLeaf = samples.rowsNum <= _leafSize;
+  KDTreeNode train(Matrix points) {
+    final isLeaf = points.rowsNum <= _leafSize;
 
     if (isLeaf) {
-      return KDTreeNode(samples: samples);
+      return KDTreeNode(points: points);
     }
 
-    final splittingIdx = _getSplittingIdx(samples);
-    final splittingValue = samples.getColumn(splittingIdx).mean();
-    final split = _splitSamples(samples, splittingIdx, splittingValue);
+    final splitIdx = _getSplitIdx(points);
+    final splitValue = points.getColumn(splitIdx).mean();
+    final split = _splitPoints(points, splitIdx, splitValue);
 
     return KDTreeNode(
-      value: split.midVector,
-      index: splittingIdx,
+      value: split.midPoint,
+      splitIndex: splitIdx,
       left: train(split.left),
       right: train(split.right),
     );
   }
 
-  int _getSplittingIdx(Matrix samples) {
-    final variances = samples.variance();
+  int _getSplitIdx(Matrix points) {
+    final variances = points.variance();
 
     var colIdx = 0;
     var maxIdx = colIdx;
@@ -52,27 +52,27 @@ class KDTreeBuilder {
     return maxIdx;
   }
 
-  _Split _splitSamples(Matrix samples, int splittingIdx, num splittingValue) {
+  _Split _splitPoints(Matrix points, int splitIdx, num splitValue) {
     final left = <Vector>[];
     final right = <Vector>[];
-    Vector? midSample;
+    Vector? midPoint;
 
-    for (var i = 0; i < samples.rowsNum; i++) {
-      final row = samples[i];
+    for (var i = 0; i < points.rowsNum; i++) {
+      final point = points[i];
 
-      if (row[splittingIdx] < splittingValue) {
-        left.add(row);
+      if (point[splitIdx] < splitValue) {
+        left.add(point);
         continue;
       }
 
-      if (midSample == null || row[splittingIdx] < midSample[splittingIdx]) {
-        midSample = row;
+      if (midPoint == null || point[splitIdx] < midPoint[splitIdx]) {
+        midPoint = point;
       }
 
-      right.add(row);
+      right.add(point);
     }
 
-    return _Split(Matrix.fromRows(left, dtype: samples.dtype),
-        Matrix.fromRows(right, dtype: samples.dtype), midSample!);
+    return _Split(Matrix.fromRows(left, dtype: points.dtype),
+        Matrix.fromRows(right, dtype: points.dtype), midPoint!);
   }
 }
