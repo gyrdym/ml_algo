@@ -45,28 +45,35 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     return neighbours.toList().reversed;
   }
 
-  void _findKNNRecursively(KDTreeNode node, Vector sample, int k,
+  void _findKNNRecursively(KDTreeNode node, Vector point, int k,
       HeapPriorityQueue<Vector> neighbours) {
     searchIterationCount++;
 
     if (node.isLeaf) {
       node.points!.rows.forEach((vector) {
-        _knnSearch(sample, vector, neighbours, k);
+        _knnSearch(point, vector, neighbours, k);
       });
 
       return;
     }
 
-    _knnSearch(sample, node.value!, neighbours, k);
+    if (neighbours.length == k &&
+        point.distanceTo(node.value!) > point.distanceTo(neighbours.first)) {
+      return;
+    }
+
+    _knnSearch(point, node.value!, neighbours, k);
 
     if (node.left == null) {
-      _findKNNRecursively(node.right!, sample, k, neighbours);
+      _findKNNRecursively(node.right!, point, k, neighbours);
     } else if (node.right == null) {
-      _findKNNRecursively(node.left!, sample, k, neighbours);
-    } else if (sample[node.splitIndex!] < node.value![node.splitIndex!]) {
-      _findKNNRecursively(node.left!, sample, k, neighbours);
+      _findKNNRecursively(node.left!, point, k, neighbours);
+    } else if (point[node.splitIndex!] < node.value![node.splitIndex!]) {
+      _findKNNRecursively(node.left!, point, k, neighbours);
+      _findKNNRecursively(node.right!, point, k, neighbours);
     } else {
-      _findKNNRecursively(node.right!, sample, k, neighbours);
+      _findKNNRecursively(node.left!, point, k, neighbours);
+      _findKNNRecursively(node.right!, point, k, neighbours);
     }
   }
 
@@ -77,14 +84,12 @@ class KDTreeImpl with SerializableMixin implements KDTree {
         ? neighbours.first.distanceTo(point)
         : currentDistance;
 
-    if (currentDistance > lastNeighbourDistance) {
-      return;
-    }
+    if (currentDistance < lastNeighbourDistance || neighbours.length < k) {
+      neighbours.add(neighbourCandidate);
 
-    neighbours.add(neighbourCandidate);
-
-    if (neighbours.length == k) {
-      neighbours.removeFirst();
+      if (neighbours.length == k + 1) {
+        neighbours.removeFirst();
+      }
     }
   }
 

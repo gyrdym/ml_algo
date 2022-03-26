@@ -23,7 +23,7 @@ class KDTreeBuilder {
     }
 
     final splitIdx = _getSplitIdx(points);
-    final splitValue = points.getColumn(splitIdx).mean();
+    final splitValue = points.getColumn(splitIdx).median();
     final split = _splitPoints(points, splitIdx, splitValue);
 
     return KDTreeNode(

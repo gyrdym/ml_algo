@@ -353,7 +353,7 @@ void main() {
       final sample = Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]);
       final result = kdTree.query(sample, 3).toList();
 
-      print(result);
+      print(result.length);
       print(
           'Search iteration count: ${(kdTree as KDTreeImpl).searchIterationCount}');
 
@@ -367,7 +367,7 @@ void main() {
       final sample = Vector.fromList([13.98, -8.21, 17.01, -5.14, 14.49]);
       final result = kdTree.query(sample, 4).toList();
 
-      print(result);
+      print(result.length);
       print(
           'Search iteration count: ${(kdTree as KDTreeImpl).searchIterationCount}');
 
@@ -381,7 +381,35 @@ void main() {
       final sample = Vector.fromList([-9.88, -5.66, -16.15, 4.46, 2.34]);
       final result = kdTree.query(sample, 4).toList();
 
-      print(result);
+      print(result.length);
+      print(
+          'Search iteration count: ${(kdTree as KDTreeImpl).searchIterationCount}');
+
+      expect(
+          result[0], iterableAlmostEqualTo([-9.88, -5.66, -16.15, 4.46, 2.34]));
+    });
+
+    test(
+        'should find the closest neighbours for [-9.88, -5.66, -16.15, 4.46, 2.34]',
+        () {
+      final sample = Vector.fromList([-9.88, -5.66, -16.15, 4.46, 2.34]);
+      final result = kdTree.query(sample, 20).toList();
+
+      print(result.length);
+      print(
+          'Search iteration count: ${(kdTree as KDTreeImpl).searchIterationCount}');
+
+      expect(
+          result[0], iterableAlmostEqualTo([-9.88, -5.66, -16.15, 4.46, 2.34]));
+    });
+
+    test(
+        'should find the closest neighbours for [-9.88, -5.66, -16.15, 4.46, 2.34]',
+        () {
+      final sample = Vector.fromList([-9.88, -5.66, -16.15, 4.46, 2.34]);
+      final result = kdTree.query(sample, 21).toList();
+
+      print(result.length);
       print(
           'Search iteration count: ${(kdTree as KDTreeImpl).searchIterationCount}');
 

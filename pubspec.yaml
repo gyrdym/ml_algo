@@ -11,7 +11,7 @@ dependencies:
   injector: ^2.0.0
   json_annotation: ^4.0.0
   ml_dataframe: ^0.5.1
-  ml_linalg: ^13.5.0
+  ml_linalg: ^13.7.0
   ml_preprocessing: ^6.0.1
   quiver: ^3.0.0
   xrange: ^2.0.0
