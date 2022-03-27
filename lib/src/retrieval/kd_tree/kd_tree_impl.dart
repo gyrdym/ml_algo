@@ -58,8 +58,9 @@ class KDTreeImpl with SerializableMixin implements KDTree {
       return;
     }
 
-    if (neighbours.length == k &&
-        point.distanceTo(node.value!) > neighbours.first.distance) {
+    final isNodeTooFar = point.distanceTo(node.value!) > neighbours.first.distance;
+
+    if (neighbours.length == k && isNodeTooFar) {
       return;
     }
 
@@ -73,8 +74,8 @@ class KDTreeImpl with SerializableMixin implements KDTree {
       _findKNNRecursively(node.left!, point, k, neighbours);
       _findKNNRecursively(node.right!, point, k, neighbours);
     } else {
-      _findKNNRecursively(node.left!, point, k, neighbours);
       _findKNNRecursively(node.right!, point, k, neighbours);
+      _findKNNRecursively(node.left!, point, k, neighbours);
     }
   }
 
