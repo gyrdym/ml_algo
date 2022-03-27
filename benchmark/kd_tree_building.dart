@@ -32,7 +32,8 @@ Future main() async {
 
   trainData = DataFrame.fromJson(decoded);
 
-  print('Data dimension: ${trainData.rows.length}x${trainData.rows.first.length}');
+  print(
+      'Data dimension: ${trainData.rows.length}x${trainData.rows.first.length}');
 
   KDTreeBenchmark.main();
 }
