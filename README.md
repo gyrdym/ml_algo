@@ -68,6 +68,9 @@ it in the web applications.
     A class that makes prediction for each new observation basing on first `k` closest observations from 
     training data. It may catch non-linear pattern of the data.
     
+- #### Clustering and retrieval algorithms
+    - [KDTree](https://github.com/gyrdym/ml_algo/blob/master/lib/src/retrieval/kd_tree/kd_tree.dart)
+    
 For more information on the library's API, please visit [API reference](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) 
 
 ## Examples
