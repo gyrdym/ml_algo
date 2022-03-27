@@ -6,8 +6,6 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-const observationsNum = 500;
-const featuresNum = 20;
 late DataFrame trainData;
 
 class KDTreeBenchmark extends BenchmarkBase {
