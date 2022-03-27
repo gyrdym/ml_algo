@@ -1,10 +1,17 @@
-import 'package:ml_linalg/vector.dart';
-
 class KDTreeNeighbour {
-  KDTreeNeighbour(this.point, this.distance);
+  KDTreeNeighbour(this.pointIndex, this.distance);
 
-  final Vector point;
+  final int pointIndex;
   final num distance;
+
+  @override
+  bool operator ==(Object other) {
+    if (other is KDTreeNeighbour) {
+      return pointIndex == other.pointIndex;
+    }
+
+    return false;
+  }
 
   @override
   String toString() => 'Distance: $distance';

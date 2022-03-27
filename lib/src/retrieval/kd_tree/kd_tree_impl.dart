@@ -43,7 +43,7 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     searchIterationCount = 0;
 
     final neighbours = HeapPriorityQueue<KDTreeNeighbour>((a, b) =>
-        (point.distanceTo(b.point) - point.distanceTo(a.point)).toInt());
+        (point.distanceTo(points[b.pointIndex]) - point.distanceTo(points[a.pointIndex])).toInt());
 
     _findKNNRecursively(root, point, k, neighbours);
 
@@ -93,7 +93,7 @@ class KDTreeImpl with SerializableMixin implements KDTree {
       final isQueueNotFilled = neighbours.length < k;
 
       if (isGoodCandidate || isQueueNotFilled) {
-        neighbours.add(KDTreeNeighbour(candidate, candidateDistance));
+        neighbours.add(KDTreeNeighbour(candidateIdx, candidateDistance));
 
         if (neighbours.length == k + 1) {
           neighbours.removeFirst();
