@@ -8,11 +8,11 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 late DataFrame trainData;
 
-class KDTreeBenchmark extends BenchmarkBase {
-  KDTreeBenchmark() : super('KDTree benchmark');
+class KDTreeBuildingBenchmark extends BenchmarkBase {
+  KDTreeBuildingBenchmark() : super('KDTree building benchmark');
 
   static void main() {
-    KDTreeBenchmark().report();
+    KDTreeBuildingBenchmark().report();
   }
 
   @override
@@ -24,7 +24,7 @@ class KDTreeBenchmark extends BenchmarkBase {
 }
 
 Future main() async {
-  final file = File('benchmark/data/sample_regression_data.json');
+  final file = File('benchmark/data/sample_data.json');
   final dataAsString = await file.readAsString();
   final decoded = jsonDecode(dataAsString) as Map<String, dynamic>;
 
@@ -33,5 +33,5 @@ Future main() async {
   print(
       'Data dimension: ${trainData.rows.length}x${trainData.rows.first.length}');
 
-  KDTreeBenchmark.main();
+  KDTreeBuildingBenchmark.main();
 }
