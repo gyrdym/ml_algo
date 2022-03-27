@@ -21,6 +21,7 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   @override
   Map<String, dynamic> toJson() => _$KDTreeImplToJson(this);
 
+  @override
   @JsonKey(name: kdTreePointsJsonKey)
   final Matrix points;
 
@@ -28,7 +29,6 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   @JsonKey(name: kdTreeLeafSizeJsonKey)
   final int leafSize;
 
-  @override
   @JsonKey(name: kdTreeRootJsonKey)
   final KDTreeNode root;
 
@@ -43,8 +43,8 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     searchIterationCount = 0;
 
     final neighbours = HeapPriorityQueue<KDTreeNeighbour>((a, b) =>
-        (point.distanceTo(points[b.pointIndex]) -
-                point.distanceTo(points[a.pointIndex]))
+        (point.distanceTo(points[b.index]) -
+                point.distanceTo(points[a.index]))
             .toInt());
 
     _findKNNRecursively(root, point, k, neighbours);

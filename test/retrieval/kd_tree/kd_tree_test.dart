@@ -68,9 +68,9 @@ void main() {
 
       expect(
           (kdTree as KDTreeImpl).searchIterationCount, lessThanOrEqualTo(15));
-      expect(result[0].pointIndex, 12);
-      expect(result[1].pointIndex, 4);
-      expect(result[2].pointIndex, 18);
+      expect(result[0].index, 12);
+      expect(result[1].index, 4);
+      expect(result[2].index, 18);
       expect(result, hasLength(3));
     });
 
@@ -82,10 +82,10 @@ void main() {
 
       expect(
           (kdTree as KDTreeImpl).searchIterationCount, lessThanOrEqualTo(15));
-      expect(result[0].pointIndex, 4);
-      expect(result[1].pointIndex, 12);
-      expect(result[2].pointIndex, 3);
-      expect(result[3].pointIndex, 18);
+      expect(result[0].index, 4);
+      expect(result[1].index, 12);
+      expect(result[2].index, 3);
+      expect(result[3].index, 18);
       expect(result, hasLength(4));
     });
 
@@ -95,26 +95,11 @@ void main() {
       final sample = Vector.fromList([-9.88, -5.66, -16.15, 4.46, 2.34]);
       final result = kdTree.query(sample, 20).toList();
 
-      expect(result[0].pointIndex, 19);
-      expect(result[1].pointIndex, 11);
-      expect(result[2].pointIndex, 6);
-      expect(result[3].pointIndex, 9);
-      expect(result[4].pointIndex, 18);
-//      expect(result[5].pointIndex, 2);
-//      expect(result[6].pointIndex, 14);
-//      expect(result[7].pointIndex, 10);
-//      expect(result[8].pointIndex, 15);
-//      expect(result[9].pointIndex, 5);
-//      expect(result[10].pointIndex, 7);
-//      expect(result[11].pointIndex, 13);
-//      expect(result[12].pointIndex, 3);
-//      expect(result[13].pointIndex, 12);
-//      expect(result[14].pointIndex, 17);
-//      expect(result[15].pointIndex, 1);
-//      expect(result[16].pointIndex, 0);
-//      expect(result[17].pointIndex, 16);
-//      expect(result[18].pointIndex, 4);
-//      expect(result[19].pointIndex, 8);
+      expect(result[0].index, 19);
+      expect(result[1].index, 11);
+      expect(result[2].index, 6);
+      expect(result[3].index, 9);
+      expect(result[4].index, 18);
       expect(result, hasLength(20));
     });
 
@@ -122,7 +107,7 @@ void main() {
       final sample = Vector.fromList([1, 2, 3, 4, 5]);
       final result = kdTree.query(sample, 1).toList();
 
-      expect(result[0].pointIndex, 18);
+      expect(result[0].index, 18);
       expect(result, hasLength(1));
     });
 
@@ -130,7 +115,15 @@ void main() {
       final sample = Vector.fromList([100, -222, 444, 0, 1]);
       final result = kdTree.query(sample, 1).toList();
 
-      expect(result[0].pointIndex, 4);
+      expect(result[0].index, 4);
+      expect(result, hasLength(1));
+    });
+
+    test('should find the closest neighbours for [100, -222, 444, 0, 1]', () {
+      final sample = Vector.fromList([100, -222, 444, 0, 1, 10]);
+      final result = kdTree.query(sample, 1).toList();
+
+      expect(result[0].index, 4);
       expect(result, hasLength(1));
     });
   });
