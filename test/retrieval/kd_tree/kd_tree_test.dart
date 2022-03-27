@@ -1,5 +1,4 @@
-//import 'dart:convert';
-
+import 'package:ml_algo/src/retrieval/kd_tree/exceptions/invalid_query_point_length.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -31,38 +30,11 @@ void main() {
       [-9.88, -5.66, -16.15, 4.46, 2.34],
     ];
 
-    final query = Vector.fromList([100, -222, 444, 0, 1]);
-
-    final distances = [
-      Vector.fromList([3.43, 10.91, 11.62, -12.93, -11.66]).distanceTo(query),
-      Vector.fromList([19.41, -4.96, 3.99, 16.35, 10.57]).distanceTo(query),
-      Vector.fromList([11.30, 8.89, -17.66, -5.17, 16.20]).distanceTo(query),
-      Vector.fromList([-8.13, -5.23, 18.01, 1.97, 9.08]).distanceTo(query),
-      Vector.fromList([13.98, -8.21, 17.01, -5.14, 14.49]).distanceTo(query),
-      Vector.fromList([-17.65, 13.10, 5.82, 8.61, 14.41]).distanceTo(query),
-      Vector.fromList([4.16, -4.72, -3.71, -2.32, -13.70]).distanceTo(query),
-      Vector.fromList([7.29, 11.16, -9.51, -1.89, -18.94]).distanceTo(query),
-      Vector.fromList([19.81, 3.17, 14.27, 0.05, -17.93]).distanceTo(query),
-      Vector.fromList([-9.63, 18.82, -14.40, -1.91, -6.58]).distanceTo(query),
-      Vector.fromList([-10.95, -19.58, 9.05, 17.39, 3.30]).distanceTo(query),
-      Vector.fromList([4.08, -13.19, -5.71, 18.56, -0.13]).distanceTo(query),
-      Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]).distanceTo(query),
-      Vector.fromList([-7.56, 11.97, 6.55, -7.54, 15.90]).distanceTo(query),
-      Vector.fromList([-15.97, -15.95, 7.71, 9.70, 16.94]).distanceTo(query),
-      Vector.fromList([-15.01, 16.12, -10.42, -17.61, 6.27]).distanceTo(query),
-      Vector.fromList([7.63, -10.70, 15.09, 10.25, -18.16]).distanceTo(query),
-      Vector.fromList([0.05, 9.74, 7.08, 15.49, -17.99]).distanceTo(query),
-      Vector.fromList([-6.48, 1.10, 9.28, 0.90, 6.09]).distanceTo(query),
-      Vector.fromList([-9.88, -5.66, -16.15, 4.46, 2.34]).distanceTo(query),
-    ];
-
     final kdTree = KDTree(DataFrame(data, headerExists: false), leafSie: 3);
 
     test(
         'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53]',
         () {
-      print(distances..sort());
-
       final sample = Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]);
       final result = kdTree.query(sample, 3).toList();
 
@@ -119,12 +91,12 @@ void main() {
       expect(result, hasLength(1));
     });
 
-    test('should find the closest neighbours for [100, -222, 444, 0, 1]', () {
-      final sample = Vector.fromList([100, -222, 444, 0, 1, 10]);
-      final result = kdTree.query(sample, 1).toList();
+    test('should throw an exception if the query point is of invalid length',
+        () {
+      final sample = Vector.fromList([1, 2, 3, 4, 5, 6]);
 
-      expect(result[0].index, 4);
-      expect(result, hasLength(1));
+      expect(() => kdTree.query(sample, 1),
+          throwsA(isA<InvalidQueryPointLength>()));
     });
   });
 }

@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.6.0
+- Added `KDTree` algorithm
+
 ## 16.5.2
 - Add ecosystem notes to `README.md`
 

@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/common/serializable/serializable.dart';
-import 'package:ml_algo/src/retrieval/kd_tree/_helpers/create_kd_tree.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/helpers/create_kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -34,5 +34,22 @@ abstract class KDTree implements Serializable {
   /// Data type for [points] matrix
   DType get dtype;
 
+  /// Returns [k] nearest neighbours for [point]
+  ///
+  /// The neighbour is represented by the index and distance between [point]
+  /// and the neighbour itself. The index is a zero-based index of a point in
+  /// the source [points] matrix. Example:
+  ///
+  /// ```dart
+  /// final data = DataFrame([
+  ///   [21, 34, 22, 11],
+  ///   [11, 33, 44, 55],
+  ///   ...,
+  /// ], headerExists: false);
+  /// final kdTree = KDTree(data);
+  /// final neighbours = kdTree.query([1, 2, 3, 4], 2);
+  ///
+  /// print(neighbours.index); // let's say, it outputs `3` which means that the nearest neighbour is data[3]
+  /// ```
   Iterable<KDTreeNeighbour> query(Vector point, int k);
 }

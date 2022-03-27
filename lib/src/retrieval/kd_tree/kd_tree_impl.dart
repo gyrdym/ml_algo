@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/exceptions/invalid_query_point_length.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_json_keys.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
@@ -40,11 +41,14 @@ class KDTreeImpl with SerializableMixin implements KDTree {
 
   @override
   Iterable<KDTreeNeighbour> query(Vector point, int k) {
+    if (point.length != points.columnsNum) {
+      throw InvalidQueryPointLength(point.length, points.columnsNum);
+    }
+
     searchIterationCount = 0;
 
     final neighbours = HeapPriorityQueue<KDTreeNeighbour>((a, b) =>
-        (point.distanceTo(points[b.index]) -
-                point.distanceTo(points[a.index]))
+        (point.distanceTo(points[b.index]) - point.distanceTo(points[a.index]))
             .toInt());
 
     _findKNNRecursively(root, point, k, neighbours);
