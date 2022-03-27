@@ -14,5 +14,5 @@ class KDTreeNeighbour {
   }
 
   @override
-  String toString() => 'Distance: $distance';
+  String toString() => 'Index: $index, Distance: $distance';
 }

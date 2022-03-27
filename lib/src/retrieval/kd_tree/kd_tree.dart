@@ -23,12 +23,11 @@ abstract class KDTree implements Serializable {
 
   /// A number of points on a leaf node.
   ///
-  /// The bigger the number, the less
-  /// effective search will be performed. If [leafSize] is equal to the number
-  /// of [points], a regular KNN-search will take place.
+  /// The bigger the number, the less effective search is. If [leafSize] is
+  /// equal to the number of [points], a regular KNN-search will take place.
   ///
   /// Extremely small [leafSize] leads to ineffective memory usage since in
-  /// this case will be allocated a lot of kd-tree nodes
+  /// this case a lot of kd-tree nodes will be allocated
   int get leafSize;
 
   /// Data type for [points] matrix
@@ -36,7 +35,7 @@ abstract class KDTree implements Serializable {
 
   /// Returns [k] nearest neighbours for [point]
   ///
-  /// The neighbour is represented by the index and distance between [point]
+  /// The neighbour is represented by an index and the distance between [point]
   /// and the neighbour itself. The index is a zero-based index of a point in
   /// the source [points] matrix. Example:
   ///
@@ -49,7 +48,7 @@ abstract class KDTree implements Serializable {
   /// final kdTree = KDTree(data);
   /// final neighbours = kdTree.query([1, 2, 3, 4], 2);
   ///
-  /// print(neighbours.index); // let's say, it outputs `3` which means that the nearest neighbour is data[3]
+  /// print(neighbours.index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
   /// ```
   Iterable<KDTreeNeighbour> query(Vector point, int k);
 }

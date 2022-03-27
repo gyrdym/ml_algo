@@ -14,7 +14,8 @@ part 'kd_tree_impl.g.dart';
 
 @JsonSerializable()
 class KDTreeImpl with SerializableMixin implements KDTree {
-  KDTreeImpl(this.points, this.leafSize, this.root, this.dtype);
+  KDTreeImpl(
+      this.points, this.leafSize, this.root, this.dtype, this.schemaVersion);
 
   factory KDTreeImpl.fromJson(Map<String, dynamic> json) =>
       _$KDTreeImplFromJson(json);
@@ -36,6 +37,10 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   @override
   @JsonKey(name: kdTreeDTypeJsonKey)
   final DType dtype;
+
+  @override
+  @JsonKey(name: kdTreeSchemaVersionJsonKey)
+  final int schemaVersion;
 
   int searchIterationCount = 0;
 
@@ -117,8 +122,4 @@ class KDTreeImpl with SerializableMixin implements KDTree {
 
     return Vector.fromList(boundarySrc, dtype: point.dtype);
   }
-
-  @override
-  // TODO: implement schemaVersion
-  int? get schemaVersion => throw UnimplementedError();
 }
