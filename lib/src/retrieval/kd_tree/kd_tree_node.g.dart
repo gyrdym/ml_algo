@@ -23,15 +23,15 @@ KDTreeNode _$KDTreeNodeFromJson(Map<String, dynamic> json) {
           (v) => v == null
               ? null
               : KDTreeNode.fromJson(v as Map<String, dynamic>)),
-      points: $checkedConvert(
-          json, 'P', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
+      pointIndices: $checkedConvert(
+          json, 'P', (v) => (v as List<dynamic>).map((e) => e as int).toList()),
     );
     return val;
   }, fieldKeyMap: const {
     'splitIndex': 'I',
     'left': 'L',
     'right': 'R',
-    'points': 'P'
+    'pointIndices': 'P'
   });
 }
 
@@ -47,6 +47,6 @@ Map<String, dynamic> _$KDTreeNodeToJson(KDTreeNode instance) {
   writeNotNull('I', instance.splitIndex);
   writeNotNull('L', instance.left?.toJson());
   writeNotNull('R', instance.right?.toJson());
-  val['P'] = instance.points.toJson();
+  val['P'] = instance.pointIndices;
   return val;
 }

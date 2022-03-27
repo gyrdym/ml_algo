@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:ml_linalg/matrix.dart';
 
 import 'kd_tree_node_json_keys.dart';
 
@@ -7,7 +6,8 @@ part 'kd_tree_node.g.dart';
 
 @JsonSerializable()
 class KDTreeNode {
-  KDTreeNode({this.splitIndex, this.left, this.right, required this.points});
+  KDTreeNode(
+      {this.splitIndex, this.left, this.right, required this.pointIndices});
 
   factory KDTreeNode.fromJson(Map<String, dynamic> json) =>
       _$KDTreeNodeFromJson(json);
@@ -24,7 +24,7 @@ class KDTreeNode {
   final KDTreeNode? right;
 
   @JsonKey(name: kdTreeNodePointsJsonKey)
-  final Matrix points;
+  final List<int> pointIndices;
 
   bool get isLeaf => left == null && right == null;
 }

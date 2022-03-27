@@ -13,13 +13,16 @@ part 'kd_tree_impl.g.dart';
 
 @JsonSerializable()
 class KDTreeImpl with SerializableMixin implements KDTree {
-  KDTreeImpl(this.leafSize, this.root, this.dtype);
+  KDTreeImpl(this.points, this.leafSize, this.root, this.dtype);
 
   factory KDTreeImpl.fromJson(Map<String, dynamic> json) =>
       _$KDTreeImplFromJson(json);
 
   @override
   Map<String, dynamic> toJson() => _$KDTreeImplToJson(this);
+
+  @JsonKey(name: kdTreePointsJsonKey)
+  final Matrix points;
 
   @override
   @JsonKey(name: kdTreeLeafSizeJsonKey)
@@ -51,15 +54,16 @@ class KDTreeImpl with SerializableMixin implements KDTree {
       HeapPriorityQueue<KDTreeNeighbour> neighbours) {
     searchIterationCount++;
 
+    final nodePoint = points[node.pointIndices[0]];
     final isNodeTooFar = neighbours.length > 0 &&
-        point.distanceTo(node.points[0]) > neighbours.first.distance;
+        point.distanceTo(nodePoint) > neighbours.first.distance;
     final isQueueFilled = neighbours.length == k;
 
     if (isQueueFilled && isNodeTooFar) {
       return;
     }
 
-    _knnSearch(point, node.points, neighbours, k);
+    _knnSearch(point, node.pointIndices, neighbours, k);
 
     if (node.isLeaf) {
       return;
@@ -69,7 +73,7 @@ class KDTreeImpl with SerializableMixin implements KDTree {
       _findKNNRecursively(node.right!, point, k, neighbours);
     } else if (node.right == null) {
       _findKNNRecursively(node.left!, point, k, neighbours);
-    } else if (point[node.splitIndex!] < node.points[0][node.splitIndex!]) {
+    } else if (point[node.splitIndex!] < nodePoint[node.splitIndex!]) {
       _findKNNRecursively(node.left!, point, k, neighbours);
       _findKNNRecursively(node.right!, point, k, neighbours);
     } else {
@@ -78,9 +82,10 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     }
   }
 
-  void _knnSearch(Vector point, Matrix points,
+  void _knnSearch(Vector point, List<int> pointIndices,
       HeapPriorityQueue<KDTreeNeighbour> neighbours, int k) {
-    points.rows.forEach((candidate) {
+    pointIndices.forEach((candidateIdx) {
+      final candidate = points[candidateIdx];
       final candidateDistance = candidate.distanceTo(point);
       final lastNeighbourDistance =
           neighbours.length > 0 ? neighbours.first.distance : candidateDistance;

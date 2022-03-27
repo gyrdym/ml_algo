@@ -8,19 +8,27 @@ part of 'kd_tree_impl.dart';
 
 KDTreeImpl _$KDTreeImplFromJson(Map<String, dynamic> json) {
   return $checkedNew('KDTreeImpl', json, () {
-    $checkKeys(json, allowedKeys: const ['L', 'R', 'D']);
+    $checkKeys(json, allowedKeys: const ['P', 'L', 'R', 'D']);
     final val = KDTreeImpl(
+      $checkedConvert(
+          json, 'P', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'L', (v) => v as int),
       $checkedConvert(
           json, 'R', (v) => KDTreeNode.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'D', (v) => _$enumDecode(_$DTypeEnumMap, v)),
     );
     return val;
-  }, fieldKeyMap: const {'leafSize': 'L', 'root': 'R', 'dtype': 'D'});
+  }, fieldKeyMap: const {
+    'points': 'P',
+    'leafSize': 'L',
+    'root': 'R',
+    'dtype': 'D'
+  });
 }
 
 Map<String, dynamic> _$KDTreeImplToJson(KDTreeImpl instance) =>
     <String, dynamic>{
+      'P': instance.points.toJson(),
       'L': instance.leafSize,
       'R': instance.root.toJson(),
       'D': _$DTypeEnumMap[instance.dtype],

@@ -4,8 +4,9 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 
 KDTreeImpl createKDTree(DataFrame samples, int leafSize, DType dtype) {
-  final builder = KDTreeBuilder(leafSize);
-  final root = builder.train(samples.toMatrix(dtype));
+  final points = samples.toMatrix(dtype);
+  final builder = KDTreeBuilder(leafSize, points);
+  final root = builder.train();
 
-  return KDTreeImpl(leafSize, root, dtype);
+  return KDTreeImpl(points, leafSize, root, dtype);
 }
