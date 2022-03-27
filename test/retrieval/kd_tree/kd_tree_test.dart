@@ -385,8 +385,8 @@ void main() {
       print(
           'Search iteration count: ${(kdTree as KDTreeImpl).searchIterationCount}');
 
-      expect(
-          result[0].point, iterableAlmostEqualTo([-9.88, -5.66, -16.15, 4.46, 2.34]));
+      expect(result[0].point,
+          iterableAlmostEqualTo([-9.88, -5.66, -16.15, 4.46, 2.34]));
     });
 
     test(
@@ -399,8 +399,8 @@ void main() {
       print(
           'Search iteration count: ${(kdTree as KDTreeImpl).searchIterationCount}');
 
-      expect(
-          result[0].point, iterableAlmostEqualTo([-9.88, -5.66, -16.15, 4.46, 2.34]));
+      expect(result[0].point,
+          iterableAlmostEqualTo([-9.88, -5.66, -16.15, 4.46, 2.34]));
     });
   });
 }

@@ -27,7 +27,7 @@ class KDTreeBuilder {
     final split = _splitPoints(points, splitIdx, splitValue);
 
     return KDTreeNode(
-      value: split.midPoint,
+      points: Matrix.fromRows([split.midPoint], dtype: split.midPoint.dtype),
       splitIndex: splitIdx,
       left: train(split.left),
       right: train(split.right),

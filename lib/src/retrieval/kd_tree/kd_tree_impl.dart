@@ -6,6 +6,7 @@ import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_json_keys.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_node.dart';
 import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 part 'kd_tree_impl.g.dart';
@@ -38,8 +39,8 @@ class KDTreeImpl with SerializableMixin implements KDTree {
   Iterable<KDTreeNeighbour> query(Vector point, int k) {
     searchIterationCount = 0;
 
-    final neighbours = HeapPriorityQueue<KDTreeNeighbour>(
-        (a, b) => (point.distanceTo(b.point) - point.distanceTo(a.point)).toInt());
+    final neighbours = HeapPriorityQueue<KDTreeNeighbour>((a, b) =>
+        (point.distanceTo(b.point) - point.distanceTo(a.point)).toInt());
 
     _findKNNRecursively(root, point, k, neighbours);
 
@@ -50,27 +51,25 @@ class KDTreeImpl with SerializableMixin implements KDTree {
       HeapPriorityQueue<KDTreeNeighbour> neighbours) {
     searchIterationCount++;
 
+    final isNodeTooFar = neighbours.length > 0 &&
+        point.distanceTo(node.points[0]) > neighbours.first.distance;
+    final isQueueFilled = neighbours.length == k;
+
+    if (isQueueFilled && isNodeTooFar) {
+      return;
+    }
+
+    _knnSearch(point, node.points, neighbours, k);
+
     if (node.isLeaf) {
-      node.points!.rows.forEach((vector) {
-        _knnSearch(point, vector, neighbours, k);
-      });
-
       return;
     }
-
-    final isNodeTooFar = point.distanceTo(node.value!) > neighbours.first.distance;
-
-    if (neighbours.length == k && isNodeTooFar) {
-      return;
-    }
-
-    _knnSearch(point, node.value!, neighbours, k);
 
     if (node.left == null) {
       _findKNNRecursively(node.right!, point, k, neighbours);
     } else if (node.right == null) {
       _findKNNRecursively(node.left!, point, k, neighbours);
-    } else if (point[node.splitIndex!] < node.value![node.splitIndex!]) {
+    } else if (point[node.splitIndex!] < node.points[0][node.splitIndex!]) {
       _findKNNRecursively(node.left!, point, k, neighbours);
       _findKNNRecursively(node.right!, point, k, neighbours);
     } else {
@@ -79,20 +78,23 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     }
   }
 
-  void _knnSearch(Vector point, Vector neighbourCandidate,
+  void _knnSearch(Vector point, Matrix points,
       HeapPriorityQueue<KDTreeNeighbour> neighbours, int k) {
-    final candidateDistance = neighbourCandidate.distanceTo(point);
-    final lastNeighbourDistance = neighbours.length > 0
-        ? neighbours.first.distance
-        : candidateDistance;
+    points.rows.forEach((candidate) {
+      final candidateDistance = candidate.distanceTo(point);
+      final lastNeighbourDistance =
+          neighbours.length > 0 ? neighbours.first.distance : candidateDistance;
+      final isGoodCandidate = candidateDistance < lastNeighbourDistance;
+      final isQueueNotFilled = neighbours.length < k;
 
-    if (candidateDistance < lastNeighbourDistance || neighbours.length < k) {
-      neighbours.add(KDTreeNeighbour(neighbourCandidate, candidateDistance));
+      if (isGoodCandidate || isQueueNotFilled) {
+        neighbours.add(KDTreeNeighbour(candidate, candidateDistance));
 
-      if (neighbours.length == k + 1) {
-        neighbours.removeFirst();
+        if (neighbours.length == k + 1) {
+          neighbours.removeFirst();
+        }
       }
-    }
+    });
   }
 
   @override
