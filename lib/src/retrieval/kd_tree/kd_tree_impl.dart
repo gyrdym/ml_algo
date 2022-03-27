@@ -43,7 +43,9 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     searchIterationCount = 0;
 
     final neighbours = HeapPriorityQueue<KDTreeNeighbour>((a, b) =>
-        (point.distanceTo(points[b.pointIndex]) - point.distanceTo(points[a.pointIndex])).toInt());
+        (point.distanceTo(points[b.pointIndex]) -
+                point.distanceTo(points[a.pointIndex]))
+            .toInt());
 
     _findKNNRecursively(root, point, k, neighbours);
 
@@ -54,18 +56,19 @@ class KDTreeImpl with SerializableMixin implements KDTree {
       HeapPriorityQueue<KDTreeNeighbour> neighbours) {
     searchIterationCount++;
 
-    final nodePoint = points[node.pointIndices[0]];
-    final isNodeTooFar = neighbours.length > 0 &&
-        point.distanceTo(nodePoint) > neighbours.first.distance;
-    final isQueueFilled = neighbours.length == k;
+    if (node.isLeaf) {
+      _knnSearch(point, node.pointIndices, neighbours, k);
 
-    if (isQueueFilled && isNodeTooFar) {
       return;
     }
 
-    _knnSearch(point, node.pointIndices, neighbours, k);
+    final nodePoint = points[node.pointIndices[0]];
+    final boundaryPoint = _getBoundary(point, node);
+    final isNodeTooFar = neighbours.length > 0 &&
+        boundaryPoint.distanceTo(nodePoint) > neighbours.first.distance;
+    final isQueueFilled = neighbours.length == k;
 
-    if (node.isLeaf) {
+    if (isQueueFilled && isNodeTooFar) {
       return;
     }
 
@@ -100,6 +103,15 @@ class KDTreeImpl with SerializableMixin implements KDTree {
         }
       }
     });
+  }
+
+  Vector _getBoundary(Vector point, KDTreeNode node) {
+    final nodePoint = points[node.pointIndices[0]];
+    final boundarySrc = [...nodePoint];
+
+    boundarySrc[node.splitIndex!] = point[node.splitIndex!];
+
+    return Vector.fromList(boundarySrc, dtype: point.dtype);
   }
 
   @override
