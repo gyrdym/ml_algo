@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.6.1
+- `KDTree` class added to library export file
+
 ## 16.6.0
 - Added `KDTree` algorithm
 
