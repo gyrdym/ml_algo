@@ -15,12 +15,12 @@ class KDTreeBuilder {
   final int _leafSize;
   final Matrix _points;
 
-  KDTreeNode train() => _train(_points.rowIndices.toList(), 0);
+  KDTreeNode train() => _train(_points.rowIndices.toList());
 
-  KDTreeNode _train(List<int> pointIndices, int depth) {
+  KDTreeNode _train(List<int> pointIndices) {
     final isLeaf = pointIndices.length <= _leafSize;
     final points = _points.sample(rowIndices: pointIndices);
-    final splitIdx = _getSplitIdx(points); //depth % _points.first.length;
+    final splitIdx = _getSplitIdx(points);
 
     if (isLeaf) {
       return KDTreeNode(splitIndex: splitIdx, pointIndices: pointIndices);
@@ -31,8 +31,8 @@ class KDTreeBuilder {
     return KDTreeNode(
       pointIndices: [split.midPoint],
       splitIndex: splitIdx,
-      left: _train(split.left, depth + 1),
-      right: _train(split.right, depth + 1),
+      left: _train(split.left),
+      right: _train(split.right),
     );
   }
 
