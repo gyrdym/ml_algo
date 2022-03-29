@@ -10,7 +10,7 @@ KDTreeNode _$KDTreeNodeFromJson(Map<String, dynamic> json) {
   return $checkedNew('KDTreeNode', json, () {
     $checkKeys(json, allowedKeys: const ['I', 'L', 'R', 'P']);
     final val = KDTreeNode(
-      splitIndex: $checkedConvert(json, 'I', (v) => v as int?),
+      splitIndex: $checkedConvert(json, 'I', (v) => v as int),
       left: $checkedConvert(
           json,
           'L',
@@ -36,7 +36,9 @@ KDTreeNode _$KDTreeNodeFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$KDTreeNodeToJson(KDTreeNode instance) {
-  final val = <String, dynamic>{};
+  final val = <String, dynamic>{
+    'I': instance.splitIndex,
+  };
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
@@ -44,7 +46,6 @@ Map<String, dynamic> _$KDTreeNodeToJson(KDTreeNode instance) {
     }
   }
 
-  writeNotNull('I', instance.splitIndex);
   writeNotNull('L', instance.left?.toJson());
   writeNotNull('R', instance.right?.toJson());
   val['P'] = instance.pointIndices;
