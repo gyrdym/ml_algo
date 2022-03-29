@@ -61,9 +61,11 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     return neighbours.toList().reversed;
   }
 
-  void _findKNNRecursively(KDTreeNode node, Vector point, int k,
+  void _findKNNRecursively(KDTreeNode? node, Vector point, int k,
       HeapPriorityQueue<KDTreeNeighbour> neighbours) {
-    searchIterationCount++;
+    if (node == null) {
+      return;
+    }
 
     if (node.isLeaf) {
       _knnSearch(point, node.pointIndices, neighbours, k);
@@ -72,31 +74,30 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     }
 
     final nodePoint = points[node.pointIndices[0]];
-    final boundaryPoint = _getBoundary(point, node);
     final isNodeTooFar = neighbours.length > 0 &&
-        boundaryPoint.distanceTo(nodePoint) > neighbours.first.distance;
+        (point[node.splitIndex] - nodePoint[node.splitIndex]).abs() >
+            neighbours.first.distance;
     final isQueueFilled = neighbours.length == k;
 
     if (isQueueFilled && isNodeTooFar) {
       return;
     }
 
-    if (node.left == null) {
-      _findKNNRecursively(node.right!, point, k, neighbours);
-    } else if (node.right == null) {
-      _findKNNRecursively(node.left!, point, k, neighbours);
-    } else if (point[node.splitIndex!] < nodePoint[node.splitIndex!]) {
-      _findKNNRecursively(node.left!, point, k, neighbours);
-      _findKNNRecursively(node.right!, point, k, neighbours);
+    _knnSearch(point, node.pointIndices, neighbours, k);
+
+    if (point[node.splitIndex] < nodePoint[node.splitIndex]) {
+      _findKNNRecursively(node.left, point, k, neighbours);
+      _findKNNRecursively(node.right, point, k, neighbours);
     } else {
-      _findKNNRecursively(node.right!, point, k, neighbours);
-      _findKNNRecursively(node.left!, point, k, neighbours);
+      _findKNNRecursively(node.right, point, k, neighbours);
+      _findKNNRecursively(node.left, point, k, neighbours);
     }
   }
 
   void _knnSearch(Vector point, List<int> pointIndices,
       HeapPriorityQueue<KDTreeNeighbour> neighbours, int k) {
     pointIndices.forEach((candidateIdx) {
+      searchIterationCount++;
       final candidate = points[candidateIdx];
       final candidateDistance = candidate.distanceTo(point);
       final lastNeighbourDistance =
@@ -112,14 +113,5 @@ class KDTreeImpl with SerializableMixin implements KDTree {
         }
       }
     });
-  }
-
-  Vector _getBoundary(Vector point, KDTreeNode node) {
-    final nodePoint = points[node.pointIndices[0]];
-    final boundarySrc = [...nodePoint];
-
-    boundarySrc[node.splitIndex!] = point[node.splitIndex!];
-
-    return Vector.fromList(boundarySrc, dtype: point.dtype);
   }
 }

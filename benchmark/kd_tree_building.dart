@@ -1,4 +1,4 @@
-// 0.5 sec (MacBook Air mid 2017)
+// 0.8 sec (MacBook Air mid 2017)
 import 'dart:convert';
 import 'dart:io';
 

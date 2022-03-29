@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.6.2
+- KDTree:
+    - KDTree build optimization: split algorithm changed
+
 ## 16.6.1
 - `KDTree` class added to library export file
 

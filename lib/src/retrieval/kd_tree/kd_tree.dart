@@ -40,13 +40,16 @@ abstract class KDTree implements Serializable {
   /// the source [points] matrix. Example:
   ///
   /// ```dart
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
+  /// import 'package:ml_linalg/vector.dart';
+  ///
   /// final data = DataFrame([
   ///   [21, 34, 22, 11],
   ///   [11, 33, 44, 55],
   ///   ...,
   /// ], headerExists: false);
   /// final kdTree = KDTree(data);
-  /// final neighbours = kdTree.query([1, 2, 3, 4], 2);
+  /// final neighbours = kdTree.query(Vector.fromList([1, 2, 3, 4]), 2);
   ///
   /// print(neighbours.index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
   /// ```
