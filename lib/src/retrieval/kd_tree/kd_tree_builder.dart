@@ -19,15 +19,14 @@ class KDTreeBuilder {
 
   KDTreeNode _train(List<int> pointIndices) {
     final isLeaf = pointIndices.length <= _leafSize;
-
-    if (isLeaf) {
-      return KDTreeNode(pointIndices: pointIndices);
-    }
-
     final points = _points.sample(rowIndices: pointIndices);
     final splitIdx = _getSplitIdx(points);
-    final splitValue = points.getColumn(splitIdx).median();
-    final split = _splitPoints(pointIndices, splitIdx, splitValue);
+
+    if (isLeaf) {
+      return KDTreeNode(splitIndex: splitIdx, pointIndices: pointIndices);
+    }
+
+    final split = _splitPoints(pointIndices, splitIdx);
 
     return KDTreeNode(
       pointIndices: [split.midPoint],
@@ -55,27 +54,15 @@ class KDTreeBuilder {
     return maxIdx;
   }
 
-  _Split _splitPoints(List<int> pointIndices, int splitIdx, num splitValue) {
-    final left = <int>[];
-    final right = <int>[];
-    int? midPoint;
+  _Split _splitPoints(List<int> pointIndices, int splitIdx) {
+    pointIndices.sort((firstIdx, secondIdx) =>
+        _points[firstIdx][splitIdx].compareTo(_points[secondIdx][splitIdx]));
 
-    for (var i = 0; i < pointIndices.length; i++) {
-      final pointIndex = pointIndices[i];
-      final point = _points[pointIndex];
+    final midPointIdx = (pointIndices.length / 2).floor();
+    final midPoint = pointIndices[midPointIdx];
+    final left = pointIndices.sublist(0, midPointIdx);
+    final right = pointIndices.sublist(midPointIdx + 1);
 
-      if (point[splitIdx] < splitValue) {
-        left.add(pointIndex);
-        continue;
-      }
-
-      if (midPoint == null || point[splitIdx] < _points[midPoint][splitIdx]) {
-        midPoint = pointIndex;
-      }
-
-      right.add(pointIndex);
-    }
-
-    return _Split(left, right, midPoint!);
+    return _Split(left, right, midPoint);
   }
 }

@@ -1,4 +1,4 @@
-// 0.04 sec (MacBook Air mid 2017)
+// 0.03 sec (MacBook Air mid 2017)
 import 'dart:convert';
 import 'dart:io';
 
@@ -35,7 +35,7 @@ Future main() async {
   final decodedPoints = jsonDecode(dataAsString) as Map<String, dynamic>;
 
   trainData = DataFrame.fromJson(decodedPoints);
-  tree = KDTree(trainData);
+  tree = KDTree(trainData, leafSie: 1);
   point = Vector.randomFilled(trainData.rows.first.length,
       seed: 10, min: -5000, max: 5000);
 
