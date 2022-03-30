@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/helpers/create_kd_tree.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/helpers/create_kd_tree_from_iterable.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -7,13 +8,17 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-/// KD-tree - an algorithm that provides efficient data retrieval. It splits
-/// the whole searching space into partitions in binary tree form which means
+/// KD-tree - an algorithm that provides efficient data retrieval by splitting
+/// the whole searching space into partitions in form of binary tree which means
 /// that data querying on average will take O(log(n)) time
 abstract class KDTree implements Serializable {
   factory KDTree(DataFrame points,
-          {int leafSie = 10, DType dtype = DType.float32}) =>
-      createKDTree(points, leafSie, dtype);
+          {int leafSize = 1, DType dtype = DType.float32}) =>
+      createKDTree(points, leafSize, dtype);
+
+  factory KDTree.fromIterable(Iterable<Iterable<num>> pointsSrc,
+          {int leafSize = 1, DType dtype = DType.float32}) =>
+      createKDTreeFromIterable(pointsSrc, leafSize, dtype);
 
   factory KDTree.fromJson(Map<String, dynamic> json) =>
       KDTreeImpl.fromJson(json);
