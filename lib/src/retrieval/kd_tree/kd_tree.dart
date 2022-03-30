@@ -3,6 +3,7 @@ import 'package:ml_algo/src/retrieval/kd_tree/helpers/create_kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/helpers/create_kd_tree_from_iterable.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -14,7 +15,7 @@ import 'package:ml_linalg/vector.dart';
 ///
 /// One can use this algorithm to perform KNN-search. It's recommended to use
 /// [KDTree] when the number of the input data columns is much less than the
-/// number of rows of the data - in this case the search will be more efficient
+/// number of rows of the data - in this case, the search will be more efficient
 abstract class KDTree implements Serializable {
   /// [points] Data points which will be used to build the tree.
   ///
@@ -28,25 +29,55 @@ abstract class KDTree implements Serializable {
   ///
   /// [dtype] A data type which will be used to convert raw data from [points]
   /// into internal numerical representation
+  ///
+  /// [splitStrategy] Describes how to choose a split dimension. Default value
+  /// is [KDTreeSplitStrategy.widestColumn]
+  ///
+  /// if [splitStrategy] is [KDTreeSplitStrategy.widestColumn], dimension with
+  /// the widest column (in terms of variance) will be chosen to split the data
+  ///
+  /// if [splitStrategy] is [KDTreeSplitStrategy.inOrder], dimension for data
+  /// splits will be chosen one by one in order
+  ///
+  /// [KDTreeSplitStrategy.widestColumn] provides more accurate KNN-search,
+  /// but this strategy takes much more time to build the tree than [KDTreeSplitStrategy.inOrder]
   factory KDTree(DataFrame points,
-          {int leafSize = 1, DType dtype = DType.float32}) =>
-      createKDTree(points, leafSize, dtype);
+          {int leafSize = 1,
+          DType dtype = DType.float32,
+          KDTreeSplitStrategy splitStrategy =
+              KDTreeSplitStrategy.widestColumn}) =>
+      createKDTree(points, leafSize, dtype, splitStrategy);
 
-  /// [points] Data points which will be used to build the tree.
+  /// [pointsSrc] Data points which will be used to build the tree.
   ///
   /// [leafSize] A number of points on a leaf node.
   ///
   /// The bigger the number, the less effective search is. If [leafSize] is
-  /// equal to the number of [points], a regular KNN-search will take place.
+  /// equal to the number of [pointsSrc], a regular KNN-search will take place.
   ///
   /// Extremely small [leafSize] leads to ineffective memory usage since in
   /// this case a lot of kd-tree nodes will be allocated
   ///
   /// [dtype] A data type which will be used to convert raw data from [points]
   /// into internal numerical representation
+  ///
+  /// [splitStrategy] Describes how to choose a split dimension. Default value
+  /// is [KDTreeSplitStrategy.widestColumn]
+  ///
+  /// if [splitStrategy] is [KDTreeSplitStrategy.widestColumn], dimension with
+  /// the widest column (in terms of variance) will be chosen to split the data
+  ///
+  /// if [splitStrategy] is [KDTreeSplitStrategy.inOrder], dimension for data
+  /// splits will be chosen one by one in order
+  ///
+  /// [KDTreeSplitStrategy.widestColumn] provides more accurate KNN-search,
+  /// but this strategy takes much more time to build the tree than [KDTreeSplitStrategy.inOrder]
   factory KDTree.fromIterable(Iterable<Iterable<num>> pointsSrc,
-          {int leafSize = 1, DType dtype = DType.float32}) =>
-      createKDTreeFromIterable(pointsSrc, leafSize, dtype);
+          {int leafSize = 1,
+          DType dtype = DType.float32,
+          KDTreeSplitStrategy splitStrategy =
+              KDTreeSplitStrategy.widestColumn}) =>
+      createKDTreeFromIterable(pointsSrc, leafSize, dtype, splitStrategy);
 
   factory KDTree.fromJson(Map<String, dynamic> json) =>
       KDTreeImpl.fromJson(json);

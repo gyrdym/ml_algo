@@ -1,4 +1,5 @@
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_node.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class _Split {
@@ -10,17 +11,20 @@ class _Split {
 }
 
 class KDTreeBuilder {
-  KDTreeBuilder(this._leafSize, this._points);
+  KDTreeBuilder(this._leafSize, this._points, this._splitStrategy);
 
   final int _leafSize;
   final Matrix _points;
+  final KDTreeSplitStrategy _splitStrategy;
 
-  KDTreeNode train() => _train(_points.rowIndices.toList());
+  KDTreeNode train() => _train(_points.rowIndices.toList(), 0);
 
-  KDTreeNode _train(List<int> pointIndices) {
+  KDTreeNode _train(List<int> pointIndices, int splitDim) {
     final isLeaf = pointIndices.length <= _leafSize;
     final points = _points.sample(rowIndices: pointIndices);
-    final splitIdx = _getSplitIdx(points);
+    final splitIdx = _splitStrategy == KDTreeSplitStrategy.widestColumn
+        ? _getSplitIdx(points)
+        : splitDim % _points.columnsNum;
 
     if (isLeaf) {
       return KDTreeNode(splitIndex: splitIdx, pointIndices: pointIndices);
@@ -31,8 +35,8 @@ class KDTreeBuilder {
     return KDTreeNode(
       pointIndices: [split.midPoint],
       splitIndex: splitIdx,
-      left: _train(split.left),
-      right: _train(split.right),
+      left: _train(split.left, splitDim + 1),
+      right: _train(split.right, splitDim + 1),
     );
   }
 
