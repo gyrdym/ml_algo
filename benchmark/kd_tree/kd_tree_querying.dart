@@ -1,12 +1,9 @@
-// 0.03 sec (MacBook Air mid 2017)
-import 'dart:convert';
-import 'dart:io';
-
+// 0.1 sec (MacBook Air mid 2017)
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
-import 'package:ml_linalg/vector.dart';
 
 final k = 10;
 
@@ -30,12 +27,10 @@ class KDTreeQueryingBenchmark extends BenchmarkBase {
 }
 
 Future main() async {
-  final file = File('benchmark/data/sample_data.json');
-  final dataAsString = await file.readAsString();
-  final decodedPoints = jsonDecode(dataAsString) as Map<String, dynamic>;
+  final points = Matrix.random(20000, 10, seed: 1, min: -5000, max: 5000);
 
-  trainData = DataFrame.fromJson(decodedPoints);
-  tree = KDTree(trainData, leafSie: 1);
+  trainData = DataFrame.fromMatrix(points);
+  tree = KDTree(trainData, leafSize: 1);
   point = Vector.randomFilled(trainData.rows.first.length,
       seed: 10, min: -5000, max: 5000);
 
@@ -44,4 +39,7 @@ Future main() async {
   print('Number of neighbours: $k');
 
   KDTreeQueryingBenchmark.main();
+
+  print(
+      'Amount of search iterations: ${(tree as KDTreeImpl).searchIterationCount}');
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 16.6.3
+- KDTree:
+    - `fromIterable` constructor added
+    - `splitStrategy` option added to all constructors
+
 ## 16.6.2
 - KDTree:
     - KDTree build optimization: split algorithm changed
