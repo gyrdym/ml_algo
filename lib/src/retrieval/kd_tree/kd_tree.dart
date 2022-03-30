@@ -31,21 +31,21 @@ abstract class KDTree implements Serializable {
   /// into internal numerical representation
   ///
   /// [splitStrategy] Describes how to choose a split dimension. Default value
-  /// is [KDTreeSplitStrategy.widestColumn]
+  /// is [KDTreeSplitStrategy.largestVariance]
   ///
-  /// if [splitStrategy] is [KDTreeSplitStrategy.widestColumn], dimension with
+  /// if [splitStrategy] is [KDTreeSplitStrategy.largestVariance], dimension with
   /// the widest column (in terms of variance) will be chosen to split the data
   ///
   /// if [splitStrategy] is [KDTreeSplitStrategy.inOrder], dimension for data
   /// splits will be chosen one by one in order
   ///
-  /// [KDTreeSplitStrategy.widestColumn] provides more accurate KNN-search,
+  /// [KDTreeSplitStrategy.largestVariance] provides more accurate KNN-search,
   /// but this strategy takes much more time to build the tree than [KDTreeSplitStrategy.inOrder]
   factory KDTree(DataFrame points,
           {int leafSize = 1,
           DType dtype = DType.float32,
           KDTreeSplitStrategy splitStrategy =
-              KDTreeSplitStrategy.widestColumn}) =>
+              KDTreeSplitStrategy.largestVariance}) =>
       createKDTree(points, leafSize, dtype, splitStrategy);
 
   /// [pointsSrc] Data points which will be used to build the tree.
@@ -62,21 +62,21 @@ abstract class KDTree implements Serializable {
   /// into internal numerical representation
   ///
   /// [splitStrategy] Describes how to choose a split dimension. Default value
-  /// is [KDTreeSplitStrategy.widestColumn]
+  /// is [KDTreeSplitStrategy.largestVariance]
   ///
-  /// if [splitStrategy] is [KDTreeSplitStrategy.widestColumn], dimension with
+  /// if [splitStrategy] is [KDTreeSplitStrategy.largestVariance], dimension with
   /// the widest column (in terms of variance) will be chosen to split the data
   ///
   /// if [splitStrategy] is [KDTreeSplitStrategy.inOrder], dimension for data
   /// splits will be chosen one by one in order
   ///
-  /// [KDTreeSplitStrategy.widestColumn] provides more accurate KNN-search,
+  /// [KDTreeSplitStrategy.largestVariance] provides more accurate KNN-search,
   /// but this strategy takes much more time to build the tree than [KDTreeSplitStrategy.inOrder]
   factory KDTree.fromIterable(Iterable<Iterable<num>> pointsSrc,
           {int leafSize = 1,
           DType dtype = DType.float32,
           KDTreeSplitStrategy splitStrategy =
-              KDTreeSplitStrategy.widestColumn}) =>
+              KDTreeSplitStrategy.largestVariance}) =>
       createKDTreeFromIterable(pointsSrc, leafSize, dtype, splitStrategy);
 
   factory KDTree.fromJson(Map<String, dynamic> json) =>

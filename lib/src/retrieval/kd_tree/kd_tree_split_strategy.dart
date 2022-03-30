@@ -1,4 +1,4 @@
 enum KDTreeSplitStrategy {
-  widestColumn,
+  largestVariance,
   inOrder,
 }

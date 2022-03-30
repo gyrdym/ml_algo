@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/retrieval/kd_tree/exceptions/invalid_query_point_length.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
+import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
@@ -50,6 +51,20 @@ void main() {
         'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=1',
         () {
       final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 1);
+      final sample = Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]);
+      final result = kdTree.query(sample, 3).toList();
+
+      expect(result[0].index, 12);
+      expect(result[1].index, 4);
+      expect(result[2].index, 18);
+      expect(result, hasLength(3));
+    });
+
+    test(
+        'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=3, splitStrategy=KDTreeSplitStrategy.inOrder',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false),
+          leafSize: 3, splitStrategy: KDTreeSplitStrategy.inOrder);
       final sample = Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]);
       final result = kdTree.query(sample, 3).toList();
 
