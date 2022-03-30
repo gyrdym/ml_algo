@@ -11,11 +11,39 @@ import 'package:ml_linalg/vector.dart';
 /// KD-tree - an algorithm that provides efficient data retrieval by splitting
 /// the whole searching space into partitions in form of binary tree which means
 /// that data querying on average will take O(log(n)) time
+///
+/// One can use this algorithm to perform KNN-search. It's recommended to use
+/// [KDTree] when the number of the input data columns is much less than the
+/// number of rows of the data - in this case the search will be more efficient
 abstract class KDTree implements Serializable {
+  /// [points] Data points which will be used to build the tree.
+  ///
+  /// [leafSize] A number of points on a leaf node.
+  ///
+  /// The bigger the number, the less effective search is. If [leafSize] is
+  /// equal to the number of [points], a regular KNN-search will take place.
+  ///
+  /// Extremely small [leafSize] leads to ineffective memory usage since in
+  /// this case a lot of kd-tree nodes will be allocated
+  ///
+  /// [dtype] A data type which will be used to convert raw data from [points]
+  /// into internal numerical representation
   factory KDTree(DataFrame points,
           {int leafSize = 1, DType dtype = DType.float32}) =>
       createKDTree(points, leafSize, dtype);
 
+  /// [points] Data points which will be used to build the tree.
+  ///
+  /// [leafSize] A number of points on a leaf node.
+  ///
+  /// The bigger the number, the less effective search is. If [leafSize] is
+  /// equal to the number of [points], a regular KNN-search will take place.
+  ///
+  /// Extremely small [leafSize] leads to ineffective memory usage since in
+  /// this case a lot of kd-tree nodes will be allocated
+  ///
+  /// [dtype] A data type which will be used to convert raw data from [points]
+  /// into internal numerical representation
   factory KDTree.fromIterable(Iterable<Iterable<num>> pointsSrc,
           {int leafSize = 1, DType dtype = DType.float32}) =>
       createKDTreeFromIterable(pointsSrc, leafSize, dtype);
@@ -35,7 +63,7 @@ abstract class KDTree implements Serializable {
   /// this case a lot of kd-tree nodes will be allocated
   int get leafSize;
 
-  /// Data type for [points] matrix
+  /// Data type for internal representation of [points]
   DType get dtype;
 
   /// Returns [k] nearest neighbours for [point]
