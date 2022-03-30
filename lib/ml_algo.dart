@@ -13,3 +13,4 @@ export 'package:ml_algo/src/model_selection/split_data.dart';
 export 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart';
 export 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart';
 export 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
+export 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
