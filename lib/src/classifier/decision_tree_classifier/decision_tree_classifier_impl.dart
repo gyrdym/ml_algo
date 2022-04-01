@@ -148,7 +148,7 @@ class DecisionTreeClassifierImpl
   }
 
   @override
-  Future<File> saveSvg(String filePath) async {
+  Future<File> saveAsSvg(String filePath) async {
     final markup = createSvgMarkupForNode(treeRootNode);
     final file = await File(filePath).create(recursive: true);
 

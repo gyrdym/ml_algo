@@ -125,5 +125,5 @@ abstract class DecisionTreeClassifier
   /// The value is read-only, it's a hyperparameter of the model
   int get maxDepth;
 
-  Future<File> saveSvg(String filePath);
+  Future<File> saveAsSvg(String filePath);
 }
