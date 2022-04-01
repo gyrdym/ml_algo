@@ -71,11 +71,12 @@ void main() {
         0: 3,
         1: 5,
         2: 7,
+        3: 0,
       });
     });
 
     test('should return correct shape of the tree in case of empty node', () {
-      expect(node.shape, {});
+      expect(node.shape, {0: 0});
     });
   });
 }

@@ -84,16 +84,16 @@ class TreeNode {
   void _collectShape(TreeNode node, Map<int, int> shape, int level) {
     final children = node.children;
 
-    if (children == null || children.isEmpty) {
-      return;
-    }
+//    if (children == null || children.isEmpty) {
+//      return;
+//    }
 
-    final childCount = children.length;
+    final childCount = children?.length ?? 0;
 
     shape.update(level, (count) => count + childCount,
         ifAbsent: () => childCount);
 
-    children.forEach((child) {
+    children?.forEach((child) {
       _collectShape(child, shape, level + 1);
     });
   }

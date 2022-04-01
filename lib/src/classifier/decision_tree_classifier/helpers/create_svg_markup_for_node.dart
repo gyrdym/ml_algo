@@ -16,26 +16,31 @@ const noValue = '-';
 String createSvgMarkupForNode(TreeNode node) {
   final shape = node.shape;
   final widestLevelLength = shape.values.reduce(math.max);
-  final totalWidth = widestLevelLength * (nodeWidth + nodeHorizontalMargin) -
-      nodeHorizontalMargin;
+  final totalWidth = widestLevelLength * (nodeWidth + nodeHorizontalMargin);
   final totalHeight = shape.length * (nodeHeight + nodeVerticalMargin);
   final rootX = (totalWidth / 2 - nodeWidth / 2).floor();
 
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_traverse(node, rootX, 20, 1)}</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_traverse(node, rootX, 20)}</svg>';
 }
 
-String _traverse(TreeNode node, int x, int y, int level) {
+String _traverse(TreeNode node, int x, int y) {
   final children = node.children;
 
   if (children == null) {
-    return '';
+    return _createNodeMarkup(node, x, y);
   }
 
-  final childLevel = level + 1;
-  final childY = childLevel * y + nodeVerticalMargin;
+  final childY = y + nodeHeight + nodeVerticalMargin;
+  final startChildX = (x + nodeWidth ~/ 2) -
+      (children.length ~/ 2) * (nodeWidth + nodeHorizontalMargin);
+  final getChildX = (int idx) =>
+      startChildX + idx == 0 ? 0 : (idx * nodeWidth + nodeHorizontalMargin);
   final nodeMarkup = _createNodeMarkup(node, x, y);
-  final childMarkup =
-      children.map((child) => _traverse(child, x, childY, childLevel)).join();
+
+  var childIdx = 0;
+  final childMarkup = children
+      .map((child) => _traverse(child, getChildX(childIdx++), childY))
+      .join();
 
   return '$nodeMarkup$childMarkup';
 }
@@ -74,19 +79,19 @@ String formatSplitIndex(int? index) {
 String formatPredicate(TreeNodeSplittingPredicateType? predicate) {
   switch (predicate) {
     case TreeNodeSplittingPredicateType.lessThan:
-      return '<';
+      return '&#60;';
 
     case TreeNodeSplittingPredicateType.lessThanOrEqualTo:
-      return '<=';
+      return '&#8804;';
 
     case TreeNodeSplittingPredicateType.equalTo:
       return '==';
 
     case TreeNodeSplittingPredicateType.greaterThan:
-      return '>';
+      return '&#62;';
 
     case TreeNodeSplittingPredicateType.greaterThanOrEqualTo:
-      return '>=';
+      return '&#8805;';
 
     default:
       return noValue;
