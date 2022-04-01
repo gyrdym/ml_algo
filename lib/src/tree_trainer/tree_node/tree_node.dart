@@ -72,4 +72,29 @@ class TreeNode {
       splittingValue!,
     );
   }
+
+  Map<int, int> get shape {
+    final _shape = <int, int>{};
+
+    _collectShape(this, _shape, 0);
+
+    return _shape;
+  }
+
+  void _collectShape(TreeNode node, Map<int, int> shape, int level) {
+    final children = node.children;
+
+    if (children == null || children.isEmpty) {
+      return;
+    }
+
+    final childCount = children.length;
+
+    shape.update(
+        level, (count) => count + childCount, ifAbsent: () => childCount);
+
+    children.forEach((child) {
+      _collectShape(child, shape, level + 1);
+    });
+  }
 }

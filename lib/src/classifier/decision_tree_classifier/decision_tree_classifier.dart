@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
@@ -122,4 +124,6 @@ abstract class DecisionTreeClassifier
   ///
   /// The value is read-only, it's a hyperparameter of the model
   int get maxDepth;
+
+  Future<File> saveSvg(String filePath);
 }
