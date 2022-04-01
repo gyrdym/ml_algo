@@ -14,7 +14,8 @@ const noValue = '-';
 String createSvgMarkupForNode(TreeNode node) {
   final shape = node.shape;
   final widestLevelLength = shape.values.reduce(math.max);
-  final totalWidth = widestLevelLength * (nodeWidth + nodeHorizontalMargin) - nodeHorizontalMargin;
+  final totalWidth = widestLevelLength * (nodeWidth + nodeHorizontalMargin) -
+      nodeHorizontalMargin;
   final totalHeight = shape.length * (nodeHeight + nodeVerticalMargin);
   final rootX = (totalWidth / 2 - nodeWidth / 2).floor();
 
@@ -32,10 +33,8 @@ String _createNodeMarkup(TreeNode node, int x, int y) {
   return '<rect x="$x" y="$y" width="$nodeWidth" height="$nodeHeight">'
       '<text x="$labelX" y="${getLabelHeight(1)}">Value:</text>'
       '<text x="${labelX + labelWidth}" y="${getLabelHeight(1)}">${node.splittingValue ?? noValue}</text>'
-
       '<text x="$labelX" y="${getLabelHeight(2)}">Split index:</text>'
       '<text x="${labelX + labelWidth}" y="${getLabelHeight(2)}">${node.splittingIndex ?? noValue}</text>'
-
       '<text x="$labelX" y="${getLabelHeight(3)}">Split predicate:</text>'
       '<text x="${labelX + labelWidth}" y="${getLabelHeight(3)}">${node.predicateType ?? noValue}</text>'
       '</rect>';

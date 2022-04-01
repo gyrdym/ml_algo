@@ -90,8 +90,8 @@ class TreeNode {
 
     final childCount = children.length;
 
-    shape.update(
-        level, (count) => count + childCount, ifAbsent: () => childCount);
+    shape.update(level, (count) => count + childCount,
+        ifAbsent: () => childCount);
 
     children.forEach((child) {
       _collectShape(child, shape, level + 1);
