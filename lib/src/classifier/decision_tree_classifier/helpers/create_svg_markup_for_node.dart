@@ -15,8 +15,9 @@ const noValue = '-';
 
 String createSvgMarkupForNode(TreeNode node) {
   final shape = node.shape;
-  final widestLevelLength = shape.values.reduce(math.max);
-  final totalWidth = widestLevelLength * (nodeWidth + nodeHorizontalMargin);
+  final widestLevelLength = shape.values.reduce(math.max) * shape.length;
+  final totalWidth = nodeHorizontalMargin +
+      widestLevelLength * (nodeWidth + nodeHorizontalMargin);
   final totalHeight = shape.length * (nodeHeight + nodeVerticalMargin);
   final rootX = (totalWidth / 2 - nodeWidth / 2).floor();
 
@@ -31,10 +32,10 @@ String _traverse(TreeNode node, int x, int y) {
   }
 
   final childY = y + nodeHeight + nodeVerticalMargin;
-  final startChildX = (x + nodeWidth ~/ 2) -
+  final startChildX = (nodeHorizontalMargin + x + nodeWidth ~/ 2) -
       (children.length ~/ 2) * (nodeWidth + nodeHorizontalMargin);
   final getChildX = (int idx) =>
-      startChildX + idx == 0 ? 0 : (idx * nodeWidth + nodeHorizontalMargin);
+      startChildX + (idx == 0 ? 0 : (idx * nodeWidth + nodeHorizontalMargin));
   final nodeMarkup = _createNodeMarkup(node, x, y);
 
   var childIdx = 0;
