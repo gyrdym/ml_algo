@@ -1,4 +1,5 @@
-import 'dart:math' as math;
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/get_dist_between_nodes.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/get_tree_levels.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 
@@ -15,38 +16,37 @@ const noValue = '-';
 
 String createSvgMarkupForNode(TreeNode node) {
   final shape = node.shape;
-  final widestLevelLength = shape.values.reduce(math.max) * shape.length;
-  final totalWidth = nodeHorizontalMargin +
-      widestLevelLength * (nodeWidth + nodeHorizontalMargin);
+  final levels = getTreeLevels(node, shape.length);
+  final distData = getDistBetweenNodes(levels, nodeWidth, nodeHorizontalMargin);
+  final totalWidth = distData.totalWidth;
   final totalHeight = shape.length * (nodeHeight + nodeVerticalMargin);
   final rootX = (totalWidth / 2 - nodeWidth / 2).floor();
 
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_traverse(node, rootX, 20)}</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_traverse(node, rootX, 20, distData.distByLevel, 0)}</svg>';
 }
 
-String _traverse(TreeNode node, int x, int y) {
+String _traverse(TreeNode node, num x, num y, Map<int, num> distByLevel, int level) {
   final children = node.children;
 
   if (children == null) {
     return _createNodeMarkup(node, x, y);
   }
 
-  final childY = y + nodeHeight + nodeVerticalMargin;
-  final startChildX = (nodeHorizontalMargin + x + nodeWidth ~/ 2) -
-      (children.length ~/ 2) * (nodeWidth + nodeHorizontalMargin);
-  final getChildX = (int idx) =>
-      startChildX + (idx == 0 ? 0 : (idx * nodeWidth + nodeHorizontalMargin));
   final nodeMarkup = _createNodeMarkup(node, x, y);
+
+  final childSpacing = distByLevel[level + 1]!;
+  final childY = y + nodeHeight + nodeVerticalMargin;
+  final getChildX = (int idx) => childSpacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
 
   var childIdx = 0;
   final childMarkup = children
-      .map((child) => _traverse(child, getChildX(childIdx++), childY))
+      .map((child) => _traverse(child, getChildX(childIdx++), childY, distByLevel, level + 1))
       .join();
 
   return '$nodeMarkup$childMarkup';
 }
 
-String _createNodeMarkup(TreeNode node, int x, int y) {
+String _createNodeMarkup(TreeNode node, num x, num y) {
   final labelX = x + labelMargin;
   final getLabelHeight = (int num) => y + labelHeight * num;
 
