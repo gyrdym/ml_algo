@@ -21,8 +21,8 @@ List<List<TreeNode>> getTreeLevels(TreeNode node, int depth) {
     final children = node.node.children?.isNotEmpty == true
         ? node.node.children!
         : node.level + 1 == depth
-          ? <TreeNode>[]
-          : [_createFakeNode(), _createFakeNode()];
+            ? <TreeNode>[]
+            : [_createFakeNode(), _createFakeNode()];
 
     if (currentLevel != node.level) {
       shape.add([node.node]);

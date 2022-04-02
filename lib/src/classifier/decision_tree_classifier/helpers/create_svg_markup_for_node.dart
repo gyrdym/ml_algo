@@ -22,31 +22,38 @@ String createSvgMarkupForNode(TreeNode node) {
   final totalHeight = shape.length * (nodeHeight + nodeVerticalMargin);
   final rootX = (totalWidth / 2 - nodeWidth / 2).floor();
 
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_traverse(node, rootX, 20, distData.distByLevel, 0)}</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_traverse(levels, node, distData.distByLevel)}</svg>';
 }
 
-String _traverse(TreeNode node, num x, num y, Map<int, num> distByLevel, int level) {
-  final children = node.children;
+String _traverse(
+    List<List<TreeNode>> levels, TreeNode node, Map<int, num> distByLevel) {
+  return levels.fold<Map<String, dynamic>>({'markup': '', 'y': 20, 'level': 0},
+      (data, nodes) {
+    final markup = data['markup'] as String;
+    final level = data['level'] as int;
+    final y = data['y'] as num;
+    final childSpacing = distByLevel[level]!;
+    final getX = (int idx) =>
+        childSpacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
 
-  if (children == null) {
-    return _createNodeMarkup(node, x, y);
-  }
+    var childIdx = 0;
+    final childMarkup = nodes
+        .map((child) => _createNodeMarkup(child, getX(childIdx++), y))
+        .join();
 
-  final nodeMarkup = _createNodeMarkup(node, x, y);
-
-  final childSpacing = distByLevel[level + 1]!;
-  final childY = y + nodeHeight + nodeVerticalMargin;
-  final getChildX = (int idx) => childSpacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
-
-  var childIdx = 0;
-  final childMarkup = children
-      .map((child) => _traverse(child, getChildX(childIdx++), childY, distByLevel, level + 1))
-      .join();
-
-  return '$nodeMarkup$childMarkup';
+    return {
+      'markup': '$markup$childMarkup',
+      'y': y + nodeHeight + nodeVerticalMargin,
+      'level': level + 1,
+    };
+  })['markup'] as String;
 }
 
 String _createNodeMarkup(TreeNode node, num x, num y) {
+  if (node.isFake) {
+    return '';
+  }
+
   final labelX = x + labelMargin;
   final getLabelHeight = (int num) => y + labelHeight * num;
 

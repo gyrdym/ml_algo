@@ -5,7 +5,8 @@ class _Return {
   final Map<int, num> distByLevel;
 }
 
-_Return getDistBetweenNodes<T>(List<List<T>> levels, num nodeWidth, num minDist) {
+_Return getDistBetweenNodes<T>(
+    List<List<T>> levels, num nodeWidth, num minDist) {
   if (levels.length == 1) {
     return _Return(nodeWidth + minDist, {0: minDist});
   }
@@ -16,7 +17,8 @@ _Return getDistBetweenNodes<T>(List<List<T>> levels, num nodeWidth, num minDist)
   final distByLevel = <int, num>{lastLevelIdx: minDist};
 
   for (var i = 0; i < levels.length - 1; i++) {
-    distByLevel[i] = (totalWidth - (levels[i].length * nodeWidth)) / levels[i].length;
+    distByLevel[i] =
+        (totalWidth - (levels[i].length * nodeWidth)) / levels[i].length;
   }
 
   return _Return(totalWidth, distByLevel);
