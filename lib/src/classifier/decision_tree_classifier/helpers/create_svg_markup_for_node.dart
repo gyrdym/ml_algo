@@ -20,36 +20,35 @@ String createSvgMarkupForNode(TreeNode node) {
   final distData = getDistBetweenNodes(levels, nodeWidth, nodeHorizontalMargin);
   final totalWidth = distData.totalWidth;
   final totalHeight = shape.length * (nodeHeight + nodeVerticalMargin);
-  final rootX = (totalWidth / 2 - nodeWidth / 2).floor();
 
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_traverse(levels, node, distData.distByLevel)}</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_generateMarkup(levels, node, distData.distByLevel)}</svg>';
 }
 
-String _traverse(
-    List<List<TreeNode>> levels, TreeNode node, Map<int, num> distByLevel) {
+String _generateMarkup(
+    List<List<TreeNode>> levels, TreeNode root, Map<int, num> distByLevel) {
   return levels.fold<Map<String, dynamic>>({'markup': '', 'y': 20, 'level': 0},
       (data, nodes) {
     final markup = data['markup'] as String;
     final level = data['level'] as int;
     final y = data['y'] as num;
-    final childSpacing = distByLevel[level]!;
-    final getX = (int idx) =>
-        childSpacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
+    final spacing = distByLevel[level]!;
+    final childSpacing = distByLevel.containsKey(level + 1) ? distByLevel[level + 1]! : null;
+    final getX = (int idx) => spacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + spacing));
 
     var childIdx = 0;
-    final childMarkup = nodes
-        .map((child) => _createNodeMarkup(child, getX(childIdx++), y))
+    final nodesMarkup = nodes
+        .map((node) => _createNodeMarkup(node, getX(childIdx++), y, childSpacing))
         .join();
 
     return {
-      'markup': '$markup$childMarkup',
+      'markup': '$markup$nodesMarkup',
       'y': y + nodeHeight + nodeVerticalMargin,
       'level': level + 1,
     };
   })['markup'] as String;
 }
 
-String _createNodeMarkup(TreeNode node, num x, num y) {
+String _createNodeMarkup(TreeNode node, num x, num y, num? childSpacing) {
   if (node.isFake) {
     return '';
   }
@@ -68,12 +67,32 @@ String _createNodeMarkup(TreeNode node, num x, num y) {
       '<text x="$labelX" y="${getLabelHeight(3)}">Split predicate:</text>'
       '<text x="${labelX + labelWidth}" y="${getLabelHeight(3)}">${formatPredicate(node.predicateType)}</text>';
 
+  final linesMarkup = _createLinesMarkup(node.children, x, y, childSpacing);
+
   return '<g>'
       '<rect rx="10" style="$nodeStyle" x="$x" y="$y" width="$nodeWidth" height="$nodeHeight"></rect>'
       '$valueMarkup'
       '$splitIndexMarkup'
       '$predicateMarkup'
+      '$linesMarkup'
       '</g>';
+}
+
+String _createLinesMarkup(List<TreeNode>? children, num x, num y, num? childSpacing) {
+  if (children == null || childSpacing == null) {
+    return '';
+  }
+
+  final x1 = x + nodeWidth / 2;
+  final y1 = y + nodeHeight;
+  final startX2 = x1 - (children.length / 2) * (nodeWidth / 2 + childSpacing / 2);
+  final getX2 = (int idx) => startX2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
+  final y2 = y + nodeHeight + nodeVerticalMargin;
+
+  var idx = 0;
+  return children.map((node) {
+    return '<line x1="$x1" y1="$y1" x2="${getX2(idx++)}" y2="$y2" style="stroke:rgb(255,0,0);stroke-width:2" />';
+  }).join('');
 }
 
 String formatValue(num? value) {
