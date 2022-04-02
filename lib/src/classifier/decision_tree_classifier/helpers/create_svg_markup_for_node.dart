@@ -32,12 +32,15 @@ String _generateMarkup(
     final level = data['level'] as int;
     final y = data['y'] as num;
     final spacing = distByLevel[level]!;
-    final childSpacing = distByLevel.containsKey(level + 1) ? distByLevel[level + 1]! : null;
-    final getX = (int idx) => spacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + spacing));
+    final childSpacing =
+        distByLevel.containsKey(level + 1) ? distByLevel[level + 1]! : null;
+    final getX =
+        (int idx) => spacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + spacing));
 
     var childIdx = 0;
     final nodesMarkup = nodes
-        .map((node) => _createNodeMarkup(node, getX(childIdx++), y, childSpacing))
+        .map((node) =>
+            _createNodeMarkup(node, getX(childIdx++), y, childSpacing))
         .join();
 
     return {
@@ -78,15 +81,18 @@ String _createNodeMarkup(TreeNode node, num x, num y, num? childSpacing) {
       '</g>';
 }
 
-String _createLinesMarkup(List<TreeNode>? children, num x, num y, num? childSpacing) {
+String _createLinesMarkup(
+    List<TreeNode>? children, num x, num y, num? childSpacing) {
   if (children == null || childSpacing == null) {
     return '';
   }
 
   final x1 = x + nodeWidth / 2;
   final y1 = y + nodeHeight;
-  final startX2 = x1 - (children.length / 2) * (nodeWidth / 2 + childSpacing / 2);
-  final getX2 = (int idx) => startX2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
+  final startX2 =
+      x1 - (children.length / 2) * (nodeWidth / 2 + childSpacing / 2);
+  final getX2 =
+      (int idx) => startX2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
   final y2 = y + nodeHeight + nodeVerticalMargin;
 
   var idx = 0;
