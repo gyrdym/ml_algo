@@ -58,6 +58,13 @@ class TreeNode {
   bool get isRoot =>
       predicateType == null || splittingIndex == null || splittingValue == null;
 
+  bool get isFake =>
+      predicateType == null &&
+      splittingIndex == null &&
+      splittingValue == null &&
+      label == null &&
+      children == null;
+
   bool isSamplePassed(Vector sample) {
     if (isRoot) {
       return true;
@@ -71,5 +78,27 @@ class TreeNode {
       splittingIndex!,
       splittingValue!,
     );
+  }
+
+  /// Returns a map where a key is a tree level number, and the value is a
+  /// number of nodes on the level
+  Map<int, int> get shape {
+    final _shape = <int, int>{};
+
+    _collectShape(this, _shape, 0);
+
+    return _shape;
+  }
+
+  void _collectShape(TreeNode node, Map<int, int> shape, int level) {
+    final children = node.children;
+    final childCount = children?.length ?? 0;
+
+    shape.update(level, (count) => count + childCount,
+        ifAbsent: () => childCount);
+
+    children?.forEach((child) {
+      _collectShape(child, shape, level + 1);
+    });
   }
 }

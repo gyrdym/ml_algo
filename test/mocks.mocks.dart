@@ -1136,6 +1136,14 @@ class MockTreeNode extends _i1.Mock implements _i26.TreeNode {
       (super.noSuchMethod(Invocation.getter(#isRoot), returnValue: false)
           as bool);
   @override
+  bool get isFake =>
+      (super.noSuchMethod(Invocation.getter(#isFake), returnValue: false)
+          as bool);
+  @override
+  Map<int, int> get shape =>
+      (super.noSuchMethod(Invocation.getter(#shape), returnValue: <int, int>{})
+          as Map<int, int>);
+  @override
   Map<String, dynamic> toJson() =>
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
@@ -1831,6 +1839,11 @@ class MockDecisionTreeClassifier extends _i1.Mock
   @override
   _i11.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i11.DType.float32) as _i11.DType);
+  @override
+  _i47.Future<_i17.File> saveAsSvg(String? filePath) =>
+      (super.noSuchMethod(Invocation.method(#saveAsSvg, [filePath]),
+              returnValue: Future<_i17.File>.value(_FakeFile_15()))
+          as _i47.Future<_i17.File>);
   @override
   String toString() => super.toString();
   @override

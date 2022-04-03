@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
@@ -122,4 +124,22 @@ abstract class DecisionTreeClassifier
   ///
   /// The value is read-only, it's a hyperparameter of the model
   int get maxDepth;
+
+  /// Saves tree as SVG-image. Example:
+  ///
+  /// ```dart
+  /// final samples = (await fromCsv('path/to/dataset.csv'));
+  /// final classifier = DecisionTreeClassifier(
+  ///   samples,
+  ///   'target',
+  ///   minError: 0.3,
+  ///   minSamplesCount: 5,
+  ///   maxDepth: 4,
+  /// );
+  //
+  //  await classifier.saveAsSvg('tree.svg');
+  /// ```
+  ///
+  /// The file 'tree.svg' now contains a graphical representation of the tree
+  Future<File> saveAsSvg(String filePath);
 }

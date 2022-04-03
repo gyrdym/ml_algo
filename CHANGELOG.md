@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.7.0
+- DecisionTreeClassifier:
+    - Added `saveAsSvg` method which returns '.svg' file with a graphical representation of a tree
+
 ## 16.6.3
 - KDTree:
     - `fromIterable` constructor added
