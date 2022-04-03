@@ -14,21 +14,20 @@ class _NodesMarkupData {
   final num y;
 }
 
-String createTreeSvgMarkup(TreeNode node, List<String> columnNames) {
+String createTreeSvgMarkup(TreeNode node) {
   final shape = node.shape;
   final levels = getTreeLevels(node, shape.length);
   final nodeDistanceByLevel =
       getTreeNodeDistanceByLevel(levels, nodeWidth, minNodeHorizontalDistance);
   final totalWidth = getTreeWidth(levels, nodeWidth, minNodeHorizontalDistance);
   final totalHeight = shape.length * (nodeHeight + nodeVerticalDistance);
-  final markup =
-      _generateMarkup(levels, node, nodeDistanceByLevel, columnNames);
+  final markup = _generateMarkup(levels, node, nodeDistanceByLevel);
 
   return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">$textStyles$markup</svg>';
 }
 
-String _generateMarkup(List<List<TreeNode>> levels, TreeNode root,
-    Map<int, num> distByLevel, List<String> columnNames) {
+String _generateMarkup(
+    List<List<TreeNode>> levels, TreeNode root, Map<int, num> distByLevel) {
   return levels.fold<_NodesMarkupData>(
       _NodesMarkupData(markup: '', level: 0, y: 20), (data, nodes) {
     final spacing = distByLevel[data.level]!;
@@ -40,8 +39,8 @@ String _generateMarkup(List<List<TreeNode>> levels, TreeNode root,
 
     var nodeIdx = 0;
     final nodesMarkup = nodes
-        .map((node) => getTreeNodeMarkup(
-            node, getX(nodeIdx++), data.y, childSpacing, columnNames))
+        .map((node) =>
+            getTreeNodeMarkup(node, getX(nodeIdx++), data.y, childSpacing))
         .join();
 
     return _NodesMarkupData(

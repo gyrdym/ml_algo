@@ -3,8 +3,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/form
 import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_node_lines_markup.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 
-String getTreeNodeMarkup(
-    TreeNode node, num x, num y, num? childSpacing, List<String> columnNames) {
+String getTreeNodeMarkup(TreeNode node, num x, num y, num? childSpacing) {
   if (node.isFake) {
     return '';
   }

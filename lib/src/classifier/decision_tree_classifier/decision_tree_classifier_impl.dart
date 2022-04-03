@@ -29,7 +29,6 @@ class DecisionTreeClassifierImpl
     with AssessableClassifierMixin, SerializableMixin
     implements DecisionTreeClassifier {
   DecisionTreeClassifierImpl(
-    this.columnNames,
     this.minError,
     this.minSamplesCount,
     this.maxDepth,
@@ -44,9 +43,6 @@ class DecisionTreeClassifierImpl
 
   @override
   Map<String, dynamic> toJson() => _$DecisionTreeClassifierImplToJson(this);
-
-  @JsonKey(name: decisionTreeClassifierColumnNamesJsonKey)
-  final List<String> columnNames;
 
   @override
   @JsonKey(name: decisionTreeClassifierMinErrorJsonKey)
@@ -153,7 +149,7 @@ class DecisionTreeClassifierImpl
 
   @override
   Future<File> saveAsSvg(String filePath) async {
-    final markup = createTreeSvgMarkup(treeRootNode, columnNames);
+    final markup = createTreeSvgMarkup(treeRootNode);
     final file = await File(filePath).create(recursive: true);
 
     return file.writeAsString(markup);

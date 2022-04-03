@@ -50,7 +50,6 @@ class DecisionTreeClassifierFactoryImpl
     final treeRootNode = trainer.train(trainData.toMatrix(dtype));
 
     return DecisionTreeClassifierImpl(
-      trainData.header.toList(),
       minError,
       minSamplesCount,
       maxDepth,
