@@ -27,8 +27,9 @@ void main() async {
     });
 
     test('should save graphical representation as svg image', () async {
-      final samples = (await fromCsv('e2e/_datasets/pima_indians_diabetes_database.csv'))
-          .shuffle();
+      final samples =
+          (await fromCsv('e2e/_datasets/pima_indians_diabetes_database.csv'))
+              .shuffle();
       final classifier = DecisionTreeClassifier(
         samples,
         'class variable (0 or 1)',
@@ -37,7 +38,8 @@ void main() async {
         maxDepth: 4,
       );
 
-      await classifier.saveAsSvg('e2e/decision_tree_classifier/pima_indians_tree.svg');
+      await classifier
+          .saveAsSvg('e2e/decision_tree_classifier/pima_indians_tree.svg');
     });
   });
 }
