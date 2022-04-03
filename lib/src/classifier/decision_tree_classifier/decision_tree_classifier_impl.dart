@@ -7,7 +7,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/create_tree_svg_markup.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';

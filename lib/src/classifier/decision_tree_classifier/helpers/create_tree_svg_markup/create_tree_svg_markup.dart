@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup_constants.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_levels.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_node_distance_by_level.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_node_markup.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_width.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/create_tree_svg_markup_constants.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/get_tree_levels.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/get_tree_node_distance_by_level.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/get_tree_node_markup.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/get_tree_width.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 
 class _NodesMarkupData {

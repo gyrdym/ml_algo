@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup_constants.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/create_tree_svg_markup_constants.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 
 String getTreeNodeLinesMarkup(

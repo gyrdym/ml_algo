@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_width.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/get_tree_width.dart';
 
 Map<int, num> getTreeNodeDistanceByLevel<T>(
     List<List<T>> levels, num nodeWidth, num minDist) {

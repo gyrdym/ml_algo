@@ -1,7 +1,7 @@
 const nodeWidth = 200;
 const nodeHeight = 80;
 const minNodeHorizontalDistance = 20;
-const nodeVerticalDistance = 50;
+const nodeVerticalDistance = 150;
 
 const textStyles = '<style>'
     '.label { font: 14px sans-serif; }'

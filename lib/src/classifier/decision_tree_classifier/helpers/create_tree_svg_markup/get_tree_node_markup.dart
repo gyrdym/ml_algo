@@ -1,6 +1,6 @@
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup_constants.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/format_predicate.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_node_lines_markup.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/create_tree_svg_markup_constants.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/format_predicate.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/get_tree_node_lines_markup.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 
 String getTreeNodeMarkup(TreeNode node, num x, num y, num? childSpacing) {
