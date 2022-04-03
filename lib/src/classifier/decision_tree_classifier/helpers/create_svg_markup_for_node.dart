@@ -1,12 +1,13 @@
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/get_dist_between_nodes.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/get_tree_levels.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_node_distance_by_level.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_levels.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/get_tree_width.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/svg/format_predicate.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 
 const nodeWidth = 150;
 const nodeHeight = 120;
-const nodeHorizontalMargin = 20;
-const nodeVerticalMargin = 50;
+const minNodeHorizontalDistance = 20;
+const nodeVerticalDistance = 50;
 const nodeStyle = 'fill:blue;fill-opacity:.8';
 
 const labelMargin = 20;
@@ -14,41 +15,49 @@ const labelWidth = 100;
 const labelHeight = 20;
 const noValue = '-';
 
+class _NodesMarkupData {
+  _NodesMarkupData(this.markup, this.level, this.y);
+
+  final String markup;
+  final int level;
+  final num y;
+}
+
 String createSvgMarkupForNode(TreeNode node) {
   final shape = node.shape;
   final levels = getTreeLevels(node, shape.length);
-  final distData = getDistBetweenNodes(levels, nodeWidth, nodeHorizontalMargin);
-  final totalWidth = distData.totalWidth;
-  final totalHeight = shape.length * (nodeHeight + nodeVerticalMargin);
+  final nodeDistanceByLevel =
+      getTreeNodeDistanceByLevel(levels, nodeWidth, minNodeHorizontalDistance);
+  final totalWidth = getTreeWidth(levels, nodeWidth, minNodeHorizontalDistance);
+  final totalHeight = shape.length * (nodeHeight + nodeVerticalDistance);
+  final markup = _generateMarkup(levels, node, nodeDistanceByLevel);
 
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">${_generateMarkup(levels, node, distData.distByLevel)}</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="$totalWidth" height="$totalHeight">$markup</svg>';
 }
 
 String _generateMarkup(
     List<List<TreeNode>> levels, TreeNode root, Map<int, num> distByLevel) {
-  return levels.fold<Map<String, dynamic>>({'markup': '', 'y': 20, 'level': 0},
+  return levels.fold<_NodesMarkupData>(_NodesMarkupData('', 0, 20),
       (data, nodes) {
-    final markup = data['markup'] as String;
-    final level = data['level'] as int;
-    final y = data['y'] as num;
-    final spacing = distByLevel[level]!;
-    final childSpacing =
-        distByLevel.containsKey(level + 1) ? distByLevel[level + 1]! : null;
+    final spacing = distByLevel[data.level]!;
+    final childSpacing = distByLevel.containsKey(data.level + 1)
+        ? distByLevel[data.level + 1]!
+        : null;
     final getX =
         (int idx) => spacing / 2 + (idx == 0 ? 0 : idx * (nodeWidth + spacing));
 
-    var childIdx = 0;
+    var nodeIdx = 0;
     final nodesMarkup = nodes
         .map((node) =>
-            _createNodeMarkup(node, getX(childIdx++), y, childSpacing))
+            _createNodeMarkup(node, getX(nodeIdx++), data.y, childSpacing))
         .join();
 
-    return {
-      'markup': '$markup$nodesMarkup',
-      'y': y + nodeHeight + nodeVerticalMargin,
-      'level': level + 1,
-    };
-  })['markup'] as String;
+    return _NodesMarkupData(
+      '${data.markup}$nodesMarkup',
+      data.level + 1,
+      data.y + nodeHeight + nodeVerticalDistance,
+    );
+  }).markup;
 }
 
 String _createNodeMarkup(TreeNode node, num x, num y, num? childSpacing) {
@@ -93,7 +102,7 @@ String _createLinesMarkup(
       x1 - (children.length / 2) * (nodeWidth / 2 + childSpacing / 2);
   final getX2 =
       (int idx) => startX2 + (idx == 0 ? 0 : idx * (nodeWidth + childSpacing));
-  final y2 = y + nodeHeight + nodeVerticalMargin;
+  final y2 = y + nodeHeight + nodeVerticalDistance;
 
   var idx = 0;
   return children.map((node) {
@@ -107,26 +116,4 @@ String formatValue(num? value) {
 
 String formatSplitIndex(int? index) {
   return index?.toString() ?? noValue;
-}
-
-String formatPredicate(TreeNodeSplittingPredicateType? predicate) {
-  switch (predicate) {
-    case TreeNodeSplittingPredicateType.lessThan:
-      return '&#60;';
-
-    case TreeNodeSplittingPredicateType.lessThanOrEqualTo:
-      return '&#8804;';
-
-    case TreeNodeSplittingPredicateType.equalTo:
-      return '==';
-
-    case TreeNodeSplittingPredicateType.greaterThan:
-      return '&#62;';
-
-    case TreeNodeSplittingPredicateType.greaterThanOrEqualTo:
-      return '&#8805;';
-
-    default:
-      return noValue;
-  }
 }

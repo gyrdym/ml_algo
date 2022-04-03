@@ -14,7 +14,7 @@ TreeNode _createFakeNode() {
 List<List<TreeNode>> getTreeLevels(TreeNode node, int depth) {
   var currentLevel = -1;
   final queue = [_LeveledNode(node, 0)];
-  final shape = <List<TreeNode>>[];
+  final levels = <List<TreeNode>>[];
 
   while (queue.isNotEmpty) {
     final node = queue.removeAt(0);
@@ -25,9 +25,9 @@ List<List<TreeNode>> getTreeLevels(TreeNode node, int depth) {
             : [_createFakeNode(), _createFakeNode()];
 
     if (currentLevel != node.level) {
-      shape.add([node.node]);
+      levels.add([node.node]);
     } else {
-      shape[currentLevel].add(node.node);
+      levels[currentLevel].add(node.node);
     }
 
     currentLevel = node.level;
@@ -35,5 +35,5 @@ List<List<TreeNode>> getTreeLevels(TreeNode node, int depth) {
     queue.addAll(children.map((child) => _LeveledNode(child, node.level + 1)));
   }
 
-  return shape;
+  return levels;
 }
