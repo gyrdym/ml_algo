@@ -5,7 +5,7 @@ import 'package:test/test.dart';
 
 void main() async {
   group('DecisionTreeClassifier', () {
-    test('should save graphical representation as svg image', () async {
+    test('should save graphical representation as svg image, iris dataset', () async {
       final samples = (await fromCsv('e2e/_datasets/iris.csv'))
           .shuffle()
           .dropSeries(seriesNames: ['Id']);
@@ -26,7 +26,7 @@ void main() async {
       await classifier.saveAsSvg('e2e/decision_tree_classifier/iris_tree.svg');
     });
 
-    test('should save graphical representation as svg image', () async {
+    test('should save graphical representation as svg image, pima indians diabetes dataset', () async {
       final samples =
           (await fromCsv('e2e/_datasets/pima_indians_diabetes_database.csv'))
               .shuffle();

@@ -80,6 +80,8 @@ class TreeNode {
     );
   }
 
+  /// Returns a map where a key is a tree level number, and the value is a
+  /// number of nodes on the level
   Map<int, int> get shape {
     final _shape = <int, int>{};
 
