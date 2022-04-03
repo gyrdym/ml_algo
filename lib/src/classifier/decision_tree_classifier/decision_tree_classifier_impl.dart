@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/classifier/_mixins/assessable_classifier_mixin.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
@@ -5,6 +7,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup/create_tree_svg_markup.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
@@ -142,5 +145,13 @@ class DecisionTreeClassifierImpl
           minSamplesCount,
           maxDepth,
         );
+  }
+
+  @override
+  Future<File> saveAsSvg(String filePath) async {
+    final markup = createTreeSvgMarkup(treeRootNode);
+    final file = await File(filePath).create(recursive: true);
+
+    return file.writeAsString(markup);
   }
 }

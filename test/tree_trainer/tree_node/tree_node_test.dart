@@ -62,5 +62,21 @@ void main() {
 
       expect(actual.toJson(), tree.toJson());
     });
+
+    test('should return correct shape of the tree', () async {
+      final json = await readJSON(snapshotFileName);
+      final node = TreeNode.fromJson(json);
+
+      expect(node.shape, {
+        0: 3,
+        1: 5,
+        2: 7,
+        3: 0,
+      });
+    });
+
+    test('should return correct shape of the tree in case of empty node', () {
+      expect(node.shape, {0: 0});
+    });
   });
 }
