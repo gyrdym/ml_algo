@@ -9,8 +9,11 @@ part of 'decision_tree_classifier_impl.dart';
 DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
     Map<String, dynamic> json) {
   return $checkedNew('DecisionTreeClassifierImpl', json, () {
-    $checkKeys(json, allowedKeys: const ['E', 'S', 'D', 'DT', 'T', 'R', r'$V']);
+    $checkKeys(json,
+        allowedKeys: const ['C', 'E', 'S', 'D', 'DT', 'T', 'R', r'$V']);
     final val = DecisionTreeClassifierImpl(
+      $checkedConvert(json, 'C',
+          (v) => (v as List<dynamic>).map((e) => e as String).toList()),
       $checkedConvert(json, 'E', (v) => v as num),
       $checkedConvert(json, 'S', (v) => v as int),
       $checkedConvert(json, 'D', (v) => v as int),
@@ -23,6 +26,7 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
     );
     return val;
   }, fieldKeyMap: const {
+    'columnNames': 'C',
     'minError': 'E',
     'minSamplesCount': 'S',
     'maxDepth': 'D',
@@ -36,6 +40,7 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
 Map<String, dynamic> _$DecisionTreeClassifierImplToJson(
     DecisionTreeClassifierImpl instance) {
   final val = <String, dynamic>{
+    'C': instance.columnNames,
     'E': instance.minError,
     'S': instance.minSamplesCount,
     'D': instance.maxDepth,

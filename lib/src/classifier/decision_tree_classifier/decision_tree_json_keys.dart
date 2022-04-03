@@ -4,3 +4,4 @@ const decisionTreeClassifierMaxDepthJsonKey = 'D';
 const decisionTreeClassifierDTypeJsonKey = 'DT';
 const decisionTreeClassifierTargetColumnNameJsonKey = 'T';
 const decisionTreeClassifierTreeRootNodeJsonKey = 'R';
+const decisionTreeClassifierColumnNamesJsonKey = 'C';

@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
 
-String formatPredicate(TreeNodeSplittingPredicateType? predicate) {
+String formatPredicate(TreeNodeSplittingPredicateType predicate) {
   switch (predicate) {
     case TreeNodeSplittingPredicateType.lessThan:
       return '&#60;';
@@ -16,8 +16,5 @@ String formatPredicate(TreeNodeSplittingPredicateType? predicate) {
 
     case TreeNodeSplittingPredicateType.greaterThanOrEqualTo:
       return '&#8805;';
-
-    default:
-      return '-';
   }
 }

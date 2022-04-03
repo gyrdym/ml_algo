@@ -177,6 +177,7 @@ void main() {
           () => classifierFactoryMock);
 
       classifier32 = DecisionTreeClassifierImpl(
+        [],
         minError,
         minSamplesCount,
         maxDepth,
@@ -186,6 +187,7 @@ void main() {
       );
 
       classifier64 = DecisionTreeClassifierImpl(
+        [],
         minError,
         minSamplesCount,
         maxDepth,

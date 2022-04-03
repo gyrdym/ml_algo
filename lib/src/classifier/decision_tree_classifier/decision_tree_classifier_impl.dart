@@ -7,7 +7,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
-import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_svg_markup_for_node.dart';
+import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_tree_svg_markup.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
@@ -29,6 +29,7 @@ class DecisionTreeClassifierImpl
     with AssessableClassifierMixin, SerializableMixin
     implements DecisionTreeClassifier {
   DecisionTreeClassifierImpl(
+    this.columnNames,
     this.minError,
     this.minSamplesCount,
     this.maxDepth,
@@ -43,6 +44,9 @@ class DecisionTreeClassifierImpl
 
   @override
   Map<String, dynamic> toJson() => _$DecisionTreeClassifierImplToJson(this);
+
+  @JsonKey(name: decisionTreeClassifierColumnNamesJsonKey)
+  final List<String> columnNames;
 
   @override
   @JsonKey(name: decisionTreeClassifierMinErrorJsonKey)
@@ -149,7 +153,7 @@ class DecisionTreeClassifierImpl
 
   @override
   Future<File> saveAsSvg(String filePath) async {
-    final markup = createSvgMarkupForNode(treeRootNode);
+    final markup = createTreeSvgMarkup(treeRootNode, columnNames);
     final file = await File(filePath).create(recursive: true);
 
     return file.writeAsString(markup);
