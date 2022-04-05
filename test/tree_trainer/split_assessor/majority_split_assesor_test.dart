@@ -120,7 +120,7 @@ void main() {
     });
 
     test(
-        'should return majority-based error, that is equal to 0, if all '
+        'should return majority-based error that is equal to 0, if all '
         'nodes in the stump have only one observation', () {
       final node1 = Matrix.fromList([
         [50, 70, 0],
@@ -141,9 +141,7 @@ void main() {
       expect(error, 0);
     });
 
-    test(
-        'should throw an error if at least one node in the stump does not '
-        'have observations at all', () {
+    test('should ignore empty split matrices', () {
       final node1 = Matrix.fromList([]);
 
       final node2 = Matrix.fromList([
@@ -156,10 +154,7 @@ void main() {
 
       final stump = [node1, node2, node3];
 
-      expect(
-        () => const MajorityTreeSplitAssessor().getAggregatedError(stump, 2),
-        throwsException,
-      );
+      expect(const MajorityTreeSplitAssessor().getAggregatedError(stump, 2), 0);
     });
 
     test(
