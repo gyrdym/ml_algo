@@ -36,9 +36,9 @@ void main() async {
       final classifier = DecisionTreeClassifier(
         samples,
         'class variable (0 or 1)',
-        minError: 0.1,
-        minSamplesCount: 2,
-        maxDepth: 4,
+        minError: 0.15,
+        minSamplesCount: 1,
+        maxDepth: 5,
       );
 
       await classifier

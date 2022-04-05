@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.7.1
+- DecisionTreeClassifier:
+    - Fixed greedy splitter in case of a split column consisting of the same values
+
 ## 16.7.0
 - DecisionTreeClassifier:
     - Added `saveAsSvg` method which returns '.svg' file with a graphical representation of a tree

@@ -12,10 +12,9 @@ class MajorityTreeSplitAssessor implements TreeSplitAssessor {
   double getAggregatedError(Iterable<Matrix> splitObservations, int targetId) {
     var errorCount = 0;
     var totalCount = 0;
-    for (final nodeObservations in splitObservations) {
-      if (nodeObservations.columnsNum == 0) {
-        throw Exception('Observations on the node are empty');
-      }
+
+    for (final nodeObservations in splitObservations
+        .where((observations) => observations.columnsNum > 0)) {
       if (targetId >= nodeObservations.columnsNum) {
         throw ArgumentError.value(
             targetId,
@@ -26,6 +25,7 @@ class MajorityTreeSplitAssessor implements TreeSplitAssessor {
       errorCount += _getErrorCount(nodeObservations.getColumn(targetId));
       totalCount += nodeObservations.rowsNum;
     }
+
     return errorCount / totalCount;
   }
 

@@ -13,7 +13,7 @@ void main() {
   final numericalTreeSplitterMock = MockNumericalTreeSplitter();
   final nominalTreeSplitterMock = MockNominalTreeSplitter();
 
-  group('TreeSplitAssessorMock', () {
+  group('GreedyTreeSplitter', () {
     test(
         'should sort observations (ASC-direction) by given column and '
         'create split with minimal error if split by continuous value is '
@@ -260,6 +260,66 @@ void main() {
     verificationResult.called(1);
 
     expect(verificationResult.captured[0], 15.5);
+  });
+
+  test('should process split column with the same values', () {
+    final samples = Matrix.fromList([
+      [11],
+      [11],
+      [11],
+      [11],
+    ]);
+    final splittingColumnIdx = 0;
+    final targetColumnIdx = 1;
+
+    final numericalSplitter = MockNumericalTreeSplitter();
+    final assessor = MockTreeSplitAssessor();
+
+    when(
+      numericalSplitter.split(
+        samples,
+        splittingColumnIdx,
+        any,
+      ),
+    ).thenReturn({});
+    when(
+      assessor.getError(
+        any,
+        targetColumnIdx,
+      ),
+    ).thenReturn(0.5);
+    when(
+      assessor.getAggregatedError(
+        any,
+        any,
+      ),
+    ).thenReturn(1.0);
+
+    final splitter = GreedyTreeSplitter(
+      assessor,
+      numericalSplitter,
+      nominalTreeSplitterMock,
+    );
+
+    final split = splitter.split(
+      samples,
+      splittingColumnIdx,
+      targetColumnIdx,
+      null,
+    );
+    expect(split.values, equals(<Matrix>[]));
+
+    final verificationResult = verify(
+      numericalSplitter.split(
+        samples,
+        splittingColumnIdx,
+        captureThat(isNotNull),
+      ),
+    );
+
+    verificationResult.called(1);
+
+    expect(verificationResult.captured[0], 11.0);
   });
 
   test('should throw an error if negative splitting index is given', () {

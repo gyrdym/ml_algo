@@ -35,13 +35,16 @@ class GreedyTreeSplitter implements TreeSplitter {
   Map<TreeNode, Matrix> _createByNumericalValue(
       Matrix samples, int splittingIdx, int targetId) {
     final errors = <double, List<Map<TreeNode, Matrix>>>{};
-    final sortedRows = samples.sort((row) => row[splittingIdx], Axis.rows).rows;
+    final sortedRows =
+        samples.sort((row) => row[splittingIdx], Axis.rows).rows.toList();
+    final rowsWithoutFirst = sortedRows.skip(1).toList();
     var prevValue = sortedRows.first[splittingIdx];
 
-    for (final row in sortedRows.skip(1)) {
+    for (var i = 0; i < rowsWithoutFirst.length; i++) {
+      final row = rowsWithoutFirst[i];
       final nextValue = row[splittingIdx];
 
-      if (prevValue == nextValue) {
+      if (prevValue == nextValue && i < sortedRows.length - 2) {
         continue;
       }
 
