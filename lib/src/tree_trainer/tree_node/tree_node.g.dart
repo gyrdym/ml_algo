@@ -10,8 +10,7 @@ TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
   return $checkedNew('TreeNode', json, () {
     $checkKeys(json, allowedKeys: const ['CN', 'LB', 'PT', 'SV', 'SI', 'LV']);
     final val = TreeNode(
-      $checkedConvert(
-          json, 'PT', (v) => fromSplittingPredicateTypeJson(v as String?)),
+      $checkedConvert(json, 'PT', (v) => fromPredicateTypeJson(v as String?)),
       $checkedConvert(json, 'SV', (v) => v as num?),
       $checkedConvert(json, 'SI', (v) => v as int?),
       $checkedConvert(json, 'CN', (v) => fromTreeNodesJson(v as List?)),
@@ -26,8 +25,8 @@ TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
     return val;
   }, fieldKeyMap: const {
     'predicateType': 'PT',
-    'splittingValue': 'SV',
-    'splittingIndex': 'SI',
+    'splitValue': 'SV',
+    'splitIndex': 'SI',
     'children': 'CN',
     'label': 'LB',
     'level': 'LV'
@@ -45,9 +44,9 @@ Map<String, dynamic> _$TreeNodeToJson(TreeNode instance) {
 
   writeNotNull('CN', treeNodesToJson(instance.children));
   writeNotNull('LB', instance.label?.toJson());
-  writeNotNull('PT', splittingPredicateTypeToJson(instance.predicateType));
-  writeNotNull('SV', instance.splittingValue);
-  writeNotNull('SI', instance.splittingIndex);
+  writeNotNull('PT', predicateTypeToJson(instance.predicateType));
+  writeNotNull('SV', instance.splitValue);
+  writeNotNull('SI', instance.splitIndex);
   val['LV'] = instance.level;
   return val;
 }

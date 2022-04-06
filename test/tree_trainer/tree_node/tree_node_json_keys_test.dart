@@ -16,11 +16,11 @@ void main() {
     });
 
     test('should contain json key for splitting value field', () {
-      expect(splittingValueJsonKey, 'SV');
+      expect(splitValueJsonKey, 'SV');
     });
 
     test('should contain json key for splitting index field', () {
-      expect(splittingIndexJsonKey, 'SI');
+      expect(splitIndexJsonKey, 'SI');
     });
 
     test('should contain json key for level field', () {

@@ -1,7 +1,7 @@
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -31,7 +31,7 @@ class DecisionTreeTrainer implements TreeTrainer {
     Matrix samples,
     num? splittingValue,
     int? splittingIdx,
-    TreeNodeSplittingPredicateType? splittingPredicateType,
+    PredicateType? splittingPredicateType,
     Iterable<int> featuresColumnIdxs,
     int level,
   ) {
@@ -71,16 +71,15 @@ class DecisionTreeTrainer implements TreeTrainer {
       final splitNode = entry.key;
       final splitSamples = entry.value;
       final isSplitByNominalValue =
-          _featureToUniqueValues.containsKey(splitNode.splittingIndex);
+          _featureToUniqueValues.containsKey(splitNode.splitIndex);
       final updatedColumnRanges = isSplitByNominalValue
-          ? (Set<int>.from(featuresColumnIdxs)
-            ..remove(splitNode.splittingIndex))
+          ? (Set<int>.from(featuresColumnIdxs)..remove(splitNode.splitIndex))
           : featuresColumnIdxs;
 
       return _train(
         splitSamples,
-        splitNode.splittingValue,
-        splitNode.splittingIndex,
+        splitNode.splitValue,
+        splitNode.splitIndex,
         splitNode.predicateType,
         updatedColumnRanges,
         newLevel,

@@ -1148,8 +1148,8 @@ class MockTreeNode extends _i1.Mock implements _i26.TreeNode {
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  bool isSamplePassed(_i11.Vector? sample) =>
-      (super.noSuchMethod(Invocation.method(#isSamplePassed, [sample]),
+  bool testSample(_i11.Vector? sample) =>
+      (super.noSuchMethod(Invocation.method(#testSample, [sample]),
           returnValue: false) as bool);
   @override
   String toString() => super.toString();

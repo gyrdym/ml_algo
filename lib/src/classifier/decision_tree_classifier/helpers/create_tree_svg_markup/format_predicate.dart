@@ -1,20 +1,20 @@
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type.dart';
 
-String formatPredicate(TreeNodeSplittingPredicateType predicate) {
+String formatPredicate(PredicateType predicate) {
   switch (predicate) {
-    case TreeNodeSplittingPredicateType.lessThan:
+    case PredicateType.lessThan:
       return '&#60;';
 
-    case TreeNodeSplittingPredicateType.lessThanOrEqualTo:
+    case PredicateType.lessThanOrEqualTo:
       return '&#8804;';
 
-    case TreeNodeSplittingPredicateType.equalTo:
+    case PredicateType.equalTo:
       return '==';
 
-    case TreeNodeSplittingPredicateType.greaterThan:
+    case PredicateType.greaterThan:
       return '&#62;';
 
-    case TreeNodeSplittingPredicateType.greaterThanOrEqualTo:
+    case PredicateType.greaterThanOrEqualTo:
       return '&#8805;';
   }
 }
