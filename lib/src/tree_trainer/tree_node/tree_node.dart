@@ -2,10 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_nodes_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_nodes_to_json.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/_helper/get_tree_node_splitting_predicate_by_type.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/from_tree_node_splitting_predicate_type_json.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type_to_json.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/_helper/get_split_predicate_by_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/from_predicate_type_json.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
 import 'package:ml_linalg/vector.dart';
 
@@ -15,8 +15,8 @@ part 'tree_node.g.dart';
 class TreeNode {
   TreeNode(
     this.predicateType,
-    this.splittingValue,
-    this.splittingIndex,
+    this.splitValue,
+    this.splitIndex,
     this.children,
     this.label, [
     this.level = 0,
@@ -39,16 +39,16 @@ class TreeNode {
 
   @JsonKey(
     name: predicateTypeJsonKey,
-    toJson: splittingPredicateTypeToJson,
-    fromJson: fromSplittingPredicateTypeJson,
+    toJson: predicateTypeToJson,
+    fromJson: fromPredicateTypeJson,
   )
-  final TreeNodeSplittingPredicateType? predicateType;
+  final PredicateType? predicateType;
 
-  @JsonKey(name: splittingValueJsonKey)
-  final num? splittingValue;
+  @JsonKey(name: splitValueJsonKey)
+  final num? splitValue;
 
-  @JsonKey(name: splittingIndexJsonKey)
-  final int? splittingIndex;
+  @JsonKey(name: splitIndexJsonKey)
+  final int? splitIndex;
 
   @JsonKey(name: levelJsonKey)
   final int level;
@@ -56,27 +56,26 @@ class TreeNode {
   bool get isLeaf => children == null || children!.isEmpty;
 
   bool get isRoot =>
-      predicateType == null || splittingIndex == null || splittingValue == null;
+      predicateType == null || splitIndex == null || splitValue == null;
 
   bool get isFake =>
       predicateType == null &&
-      splittingIndex == null &&
-      splittingValue == null &&
+      splitIndex == null &&
+      splitValue == null &&
       label == null &&
       children == null;
 
-  bool isSamplePassed(Vector sample) {
+  bool testSample(Vector sample) {
     if (isRoot) {
       return true;
     }
 
-    final isSamplePassedFn =
-        getTreeNodeSplittingPredicateByType(predicateType!);
+    final predicate = getSplitPredicateByType(predicateType!);
 
-    return isSamplePassedFn(
+    return predicate(
       sample,
-      splittingIndex!,
-      splittingValue!,
+      splitIndex!,
+      splitValue!,
     );
   }
 

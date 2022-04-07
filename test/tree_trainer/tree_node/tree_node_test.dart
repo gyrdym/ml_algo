@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:test/test.dart';
 
@@ -9,7 +9,7 @@ import 'tree.dart';
 void main() {
   group('TreeNode', () {
     final snapshotFileName = 'test/tree_trainer/tree_node/tree_node_test.json';
-    final predicateType = TreeNodeSplittingPredicateType.equalTo;
+    final predicateType = PredicateType.equalTo;
     final splittingValue = 600;
     final splittingIndex = 2;
     final children = <TreeNode>[];
@@ -30,11 +30,11 @@ void main() {
     });
 
     test('should hold splitting value', () {
-      expect(node.splittingValue, splittingValue);
+      expect(node.splitValue, splittingValue);
     });
 
     test('should hold splitting index', () {
-      expect(node.splittingIndex, splittingIndex);
+      expect(node.splitIndex, splittingIndex);
     });
 
     test('should hold child node list', () {

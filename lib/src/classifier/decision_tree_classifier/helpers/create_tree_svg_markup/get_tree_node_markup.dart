@@ -10,9 +10,9 @@ String getTreeNodeMarkup(TreeNode node, num x, num y, num? childSpacing) {
 
   final labelX = x + labelMargin;
 
-  final splitIndex = node.splittingIndex;
+  final splitIndex = node.splitIndex;
   final predicateType = node.predicateType;
-  final splitValue = node.splittingValue;
+  final splitValue = node.splitValue;
   final rectMarkup = _getRectMarkup(x, y);
   final linesMarkup = getTreeNodeLinesMarkup(node.children, x, y, childSpacing);
 
@@ -26,11 +26,11 @@ String getTreeNodeMarkup(TreeNode node, num x, num y, num? childSpacing) {
 
   final splitIndexMarkup =
       '<text class="label" x="$labelX" y="${getLabelY(1)}">Column index</text>'
-      '<text class="value" x="${labelX + labelWidth}" y="${getLabelY(1)}">${node.splittingIndex}</text>';
+      '<text class="value" x="${labelX + labelWidth + labelSpacing}" y="${getLabelY(1)}">${node.splitIndex}</text>';
 
   final predicateMarkup =
       '<text class="label" x="$labelX" y="${getLabelY(2)}">Split condition</text>'
-      '<text class="value" x="${labelX + labelWidth}" y="${getLabelY(2)}">$conditionLabel $valueLabel</text>';
+      '<text class="value" x="${labelX + labelWidth + labelSpacing}" y="${getLabelY(2)}">$conditionLabel $valueLabel</text>';
 
   return '<g>'
       '$rectMarkup'
