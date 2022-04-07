@@ -1,4 +1,4 @@
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type_encoded_values.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type_encoded_values.dart';
 import 'package:test/test.dart';
 
 void main() {

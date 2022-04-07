@@ -19,6 +19,7 @@ The library is a part of ecosystem:
 - [Examples](#examples)
     - [Logistic regression](#logistic-regression)
     - [Linear regression](#linear-regression)
+    - [Decision tree based classification](#decision-tree-based-classification)
 - [Models retraining](#models-retraining)
 - [Notes on gradient based optimisation algorithms](#a-couple-of-words-about-linear-models-which-use-gradient-optimisation-methods)
 
@@ -578,6 +579,75 @@ void main() async {
 }
 ````
 </details>
+
+## Decision tree based classification
+
+Let's try to classify data from a well-known [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset using a non-linear algorithm - [decision trees](https://en.wikipedia.org/wiki/Decision_tree)
+
+First, you need to download the data and place it in a proper place in your file system. To do so you should follow the
+instructions which are given in [Logistic regression](#logistic-regression) section.
+
+After loading the data, it's needed to preprocess it. We should drop `Id` column since the column doesn't make sense. 
+Also, we need to encode 'Species' column - originally, it contains 3 repeated string labels, to feed it to the classifier
+it's needed to convert the labels into numbers:
+
+```dart
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_preprocessing/ml_preprocessing.dart';
+
+void main() async {
+    final samples = (await fromCsv('path/to/iris/dataset.csv'))
+      .shuffle()
+      .dropSeries(seriesNames: ['Id']);
+    
+    final pipeline = Pipeline(samples, [
+      encodeAsIntegerLabels(
+        featureNames: ['Species'], // Here we convert strings from 'Species' column into numbers
+      ),
+    ]);
+}
+```
+
+Next, let's create a model:
+
+```dart
+final model = DecisionTreeClassifier(
+  processed,
+  'Species',
+  minError: 0.3,
+  minSamplesCount: 5,
+  maxDepth: 4,
+);
+``` 
+
+As you can see, we specified 3 hyperparameters: `minError`, `minSamplesCount` and `maxDepth`. Let's look at the 
+parameters in more detail:
+
+- `minError`. A minimum error on a tree node. If the error is less than or equal to the value, the node is considered a leaf.
+- `minSamplesCount`. A minimum number of samples on a node. If the number of samples is less than or equal to the value, the node is considered a leaf.
+- `maxDepth`. A maximum depth of the resulting decision tree. Once the tree reaches the `maxDepth`, all the level's nodes are considered leaves.
+
+All the parameters serve as stopping criteria for the tree building algorithm.
+
+Now we have a ready to use model. As usual, we can save the model to a JSON-file:
+
+```dart
+await model.saveAsJson('path/to/json/file.json');
+```
+
+Unlike other models, in case of decision tree we can visualise the algorithm result - we can save the model as SVG-file:
+
+```dart
+await model.saveAsSvg('path/to/svg/file.svg');
+```
+
+Once we saved it, we can open the file through any image viewer, e.g. through a web-browser. An example of the 
+resulting svg-image:
+
+<p align="center">
+    <img height="600" src="https://raw.github.com/gyrdym/ml_algo/master/e2e/decision_tree_classifier/iris_tree.svg?sanitize=true"> 
+</p>
 
 ## Models retraining
 

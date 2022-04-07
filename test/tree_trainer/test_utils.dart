@@ -15,8 +15,8 @@ void testTreeNode(
   expect(node.isLeaf, equals(shouldBeLeaf),
       reason: 'node.isLeaf should be $shouldBeLeaf');
 
-  expect(node.splittingValue, equals(expectedSplittingValue));
-  expect(node.splittingIndex, equals(expectedSplittingColumnIdx));
+  expect(node.splitValue, equals(expectedSplittingValue));
+  expect(node.splitIndex, equals(expectedSplittingColumnIdx));
 
   expectedChildrenLength == null
       ? expect(node.children, isNull)
@@ -27,7 +27,7 @@ void testTreeNode(
       : testLeafLabel(node.label!, expectedLabel);
 
   samplesToCheck?.entries.forEach((entry) {
-    expect(node.isSamplePassed(entry.key), entry.value,
+    expect(node.testSample(entry.key), entry.value,
         reason: '`isSamplePassed` should return ${entry.value} for '
             'sampe ${entry.key}');
   });

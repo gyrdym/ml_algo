@@ -1,25 +1,24 @@
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type.dart';
 import 'package:ml_linalg/vector.dart';
 
 typedef SplittingPredicate = bool Function(
     Vector sample, int splittingIdx, num value);
 
-SplittingPredicate getTreeNodeSplittingPredicateByType(
-    TreeNodeSplittingPredicateType type) {
+SplittingPredicate getSplitPredicateByType(PredicateType type) {
   switch (type) {
-    case TreeNodeSplittingPredicateType.lessThan:
+    case PredicateType.lessThan:
       return _lessThanClause;
 
-    case TreeNodeSplittingPredicateType.lessThanOrEqualTo:
+    case PredicateType.lessThanOrEqualTo:
       return _lessThanOrEqualToClause;
 
-    case TreeNodeSplittingPredicateType.equalTo:
+    case PredicateType.equalTo:
       return _equalToClause;
 
-    case TreeNodeSplittingPredicateType.greaterThanOrEqualTo:
+    case PredicateType.greaterThanOrEqualTo:
       return _greaterThanOrEqualToClause;
 
-    case TreeNodeSplittingPredicateType.greaterThan:
+    case PredicateType.greaterThan:
       return _greaterThanClause;
 
     default:

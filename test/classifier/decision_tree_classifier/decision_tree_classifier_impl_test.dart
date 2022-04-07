@@ -349,8 +349,7 @@ TreeNode createRootNodeMock(Map<Vector, TreeLeafLabel> samplesByLabel,
     when(node.isLeaf).thenReturn(true);
 
     samplesByLabel.forEach((otherSample, _) =>
-        when(node.isSamplePassed(otherSample))
-            .thenReturn(sample == otherSample));
+        when(node.testSample(otherSample)).thenReturn(sample == otherSample));
 
     children.add(node);
   });

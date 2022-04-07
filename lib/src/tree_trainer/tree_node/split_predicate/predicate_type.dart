@@ -1,4 +1,4 @@
-enum TreeNodeSplittingPredicateType {
+enum PredicateType {
   lessThan,
   lessThanOrEqualTo,
   equalTo,

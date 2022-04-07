@@ -1,5 +1,10 @@
 # Changelog
 
+## 16.7.2
+- DecisionTreeClassifier:
+    - TreeNode fields renamed
+    - Added example of DecisionTreeClassifier usage to `README.md`
+
 ## 16.7.1
 - DecisionTreeClassifier:
     - Fixed greedy splitter in case of a split column consisting of the same values

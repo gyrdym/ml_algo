@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/_helper/get_tree_node_splitting_predicate_by_type.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/splitting_predicate/tree_node_splitting_predicate_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/_helper/get_split_predicate_by_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_linalg/matrix.dart';
 
@@ -12,9 +12,9 @@ class NominalTreeSplitterImpl implements NominalTreeSplitter {
           Matrix samples, int splittingIdx, List<num> uniqueValues) =>
       Map.fromEntries(
         uniqueValues.map((value) {
-          final splittingClauseType = TreeNodeSplittingPredicateType.equalTo;
+          final splittingClauseType = PredicateType.equalTo;
           final splittingPredicate =
-              getTreeNodeSplittingPredicateByType(splittingClauseType);
+              getSplitPredicateByType(splittingClauseType);
 
           final foundRows = samples.rows
               .where((row) => splittingPredicate(row, splittingIdx, value))
