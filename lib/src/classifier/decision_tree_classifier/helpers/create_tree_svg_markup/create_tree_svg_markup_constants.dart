@@ -9,8 +9,7 @@ const textStyles = '<style>'
     '.root-node-label { font: 24px sans-serif; fill: #fff }'
     '</style>';
 
-const nodeStyle =
-    'fill:purple;fill-opacity:.6;stroke:purple;stroke-width:3';
+const nodeStyle = 'fill:purple;fill-opacity:.6;stroke:purple;stroke-width:3';
 const nodeLineStyle = 'stroke:purple;stroke-width:2';
 
 const labelMargin = 20;
