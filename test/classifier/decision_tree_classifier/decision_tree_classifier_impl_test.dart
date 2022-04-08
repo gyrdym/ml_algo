@@ -81,7 +81,6 @@ void main() {
         headerExists: false, header: [targetColumnName]);
     final rootNodeJson = {
       childrenJsonKey: <Map<String, dynamic>>[],
-      levelJsonKey: 1,
     };
     final classifier32Json = {
       decisionTreeClassifierMinErrorJsonKey: minError,

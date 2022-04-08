@@ -1125,9 +1125,6 @@ class MockTreeNode extends _i1.Mock implements _i26.TreeNode {
   }
 
   @override
-  int get level =>
-      (super.noSuchMethod(Invocation.getter(#level), returnValue: 0) as int);
-  @override
   bool get isLeaf =>
       (super.noSuchMethod(Invocation.getter(#isLeaf), returnValue: false)
           as bool);

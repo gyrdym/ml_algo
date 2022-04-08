@@ -54,7 +54,6 @@ class DecisionTreeTrainer implements TreeTrainer {
         splittingIdx,
         null,
         label,
-        level,
       );
     }
 
@@ -64,8 +63,6 @@ class DecisionTreeTrainer implements TreeTrainer {
       featuresColumnIdxs,
       _featureToUniqueValues,
     );
-
-    final newLevel = level + 1;
 
     final childNodes = bestSplit.entries.map((entry) {
       final splitNode = entry.key;
@@ -82,7 +79,7 @@ class DecisionTreeTrainer implements TreeTrainer {
         splitNode.splitIndex,
         splitNode.predicateType,
         updatedColumnRanges,
-        newLevel,
+        level + 1,
       );
     });
 
@@ -92,7 +89,6 @@ class DecisionTreeTrainer implements TreeTrainer {
       splittingIdx,
       childNodes.toList(growable: false),
       null,
-      level,
     );
   }
 }
