@@ -16,7 +16,7 @@ void main() {
     test(
         'should detect tree leaf if given depth is greater than the maximum '
         'allowed tree depth', () {
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
       when(
         assessor.getError(
           any,
@@ -43,7 +43,7 @@ void main() {
     test(
         'should detect tree leaf if given depth is equal to the maximum '
         'allowed tree depth value', () {
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(
@@ -71,7 +71,7 @@ void main() {
     test(
         'should detect tree leaf if given features column ranges collection '
         'is empty', () {
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(
@@ -99,7 +99,7 @@ void main() {
     test(
         'should detect tree leaf if given samples number is equal to minimum '
         'allowed samples number', () {
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(
@@ -125,7 +125,7 @@ void main() {
     test(
         'should detect tree leaf if given samples number is less than the '
         'minimum allowed number', () {
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(
@@ -156,7 +156,7 @@ void main() {
         [10, 20, 1],
       ]);
 
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(
@@ -179,7 +179,7 @@ void main() {
         [20, 3, 2],
         [20, 3, 1],
       ]);
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(
@@ -205,7 +205,7 @@ void main() {
         [40, 50, 1],
       ]);
 
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(
@@ -232,7 +232,7 @@ void main() {
         [20, 1],
       ]);
 
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(
         assessor.getError(

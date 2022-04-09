@@ -1,38 +1,40 @@
 import 'dart:collection';
 import 'dart:math' as math;
 
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class MajorityTreeSplitAssessor implements TreeSplitAssessor {
-  const MajorityTreeSplitAssessor();
+class MajorityTreeAssessor implements TreeAssessor {
+  const MajorityTreeAssessor();
 
   @override
-  double getAggregatedError(Iterable<Matrix> splitObservations, int targetId) {
+  double getAggregatedError(Iterable<Matrix> split, int targetId) {
     var errorCount = 0;
     var totalCount = 0;
 
-    for (final nodeObservations in splitObservations
-        .where((observations) => observations.columnsNum > 0)) {
-      if (targetId >= nodeObservations.columnsNum) {
+    for (final samples in split) {
+      if (samples.columnsNum == 0) {
+        continue;
+      }
+
+      if (targetId >= samples.columnsNum) {
         throw ArgumentError.value(
             targetId,
             'targetId',
-            'the value should be in [0..${nodeObservations.columnsNum - 1}] '
+            'the value should be in [0..${samples.columnsNum - 1}] '
                 'range, but given');
       }
-      errorCount += _getErrorCount(nodeObservations.getColumn(targetId));
-      totalCount += nodeObservations.rowsNum;
+      errorCount += _getErrorCount(samples.getColumn(targetId));
+      totalCount += samples.rowsNum;
     }
 
     return errorCount / totalCount;
   }
 
   @override
-  double getError(Matrix splitObservations, int targetId) =>
-      _getErrorCount(splitObservations.getColumn(targetId)) /
-      splitObservations.rowsNum;
+  double getError(Matrix samples, int targetId) =>
+      _getErrorCount(samples.getColumn(targetId)) / samples.rowsNum;
 
   int _getErrorCount(Vector outcomes) {
     if (outcomes.isEmpty) {
@@ -45,8 +47,10 @@ class MajorityTreeSplitAssessor implements TreeSplitAssessor {
 
   int _getMajorityCount<T>(Iterable<T> iterable) {
     final bins = HashMap<T, int>();
+
     iterable.forEach((value) =>
         bins.update(value, (existing) => existing + 1, ifAbsent: () => 1));
+
     return bins.values.reduce(math.max);
   }
 }

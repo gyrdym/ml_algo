@@ -2,103 +2,121 @@
 // in ml_algo/test/mocks.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i47;
+import 'dart:async' as _i54;
 import 'dart:collection' as _i13;
 import 'dart:io' as _i17;
 
-import 'package:ml_algo/ml_algo.dart' as _i10;
-import 'package:ml_algo/src/classifier/classifier.dart' as _i45;
+import 'package:ml_algo/src/classifier/classifier.dart' as _i52;
+import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier.dart'
+    as _i10;
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart'
-    as _i39;
+    as _i44;
+import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier.dart'
+    as _i20;
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart'
-    as _i50;
+    as _i58;
+import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart'
+    as _i30;
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor_factory.dart'
-    as _i65;
+    as _i75;
+import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor.dart'
+    as _i31;
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart'
-    as _i62;
+    as _i72;
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart'
     as _i14;
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart'
-    as _i41;
+    as _i47;
 import 'package:ml_algo/src/cost_function/cost_function.dart' as _i9;
-import 'package:ml_algo/src/cost_function/cost_function_factory.dart' as _i37;
-import 'package:ml_algo/src/cost_function/cost_function_type.dart' as _i38;
+import 'package:ml_algo/src/cost_function/cost_function_factory.dart' as _i42;
+import 'package:ml_algo/src/cost_function/cost_function_type.dart' as _i43;
 import 'package:ml_algo/src/knn_kernel/kernel.dart' as _i19;
-import 'package:ml_algo/src/knn_kernel/kernel_factory.dart' as _i49;
+import 'package:ml_algo/src/knn_kernel/kernel_factory.dart' as _i57;
+import 'package:ml_algo/src/knn_kernel/kernel_type.dart' as _i56;
 import 'package:ml_algo/src/knn_solver/knn_solver.dart' as _i18;
-import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart' as _i48;
-import 'package:ml_algo/src/knn_solver/neigbour.dart' as _i46;
+import 'package:ml_algo/src/knn_solver/knn_solver_factory.dart' as _i55;
+import 'package:ml_algo/src/knn_solver/neigbour.dart' as _i53;
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart'
-    as _i22;
+    as _i23;
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart'
-    as _i52;
+    as _i62;
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_iterable_factory.dart'
-    as _i42;
+    as _i48;
+import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/learning_rate_type.dart'
+    as _i49;
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart'
     as _i12;
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator_factory.dart'
-    as _i40;
-import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart' as _i21;
+    as _i45;
+import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_type.dart'
+    as _i46;
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart' as _i22;
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart'
-    as _i51;
-import 'package:ml_algo/src/link_function/link_function.dart' as _i27;
+    as _i59;
+import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart'
+    as _i60;
+import 'package:ml_algo/src/linear_optimizer/regularization_type.dart' as _i61;
+import 'package:ml_algo/src/link_function/link_function.dart' as _i29;
 import 'package:ml_algo/src/math/randomizer/randomizer.dart' as _i7;
-import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart' as _i36;
+import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart' as _i41;
 import 'package:ml_algo/src/metric/metric.dart' as _i6;
-import 'package:ml_algo/src/metric/metric_factory.dart' as _i34;
-import 'package:ml_algo/src/metric/metric_type.dart' as _i35;
-import 'package:ml_algo/src/model_selection/assessable.dart' as _i55;
+import 'package:ml_algo/src/metric/metric_factory.dart' as _i39;
+import 'package:ml_algo/src/metric/metric_type.dart' as _i40;
+import 'package:ml_algo/src/model_selection/assessable.dart' as _i65;
 import 'package:ml_algo/src/model_selection/model_assessor/classifier_assessor.dart'
-    as _i44;
+    as _i51;
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart'
-    as _i23;
+    as _i24;
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart'
-    as _i53;
+    as _i63;
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_type.dart'
-    as _i54;
-import 'package:ml_algo/src/predictor/predictor.dart' as _i63;
-import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart'
-    as _i61;
-import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart'
     as _i64;
-import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart' as _i60;
+import 'package:ml_algo/src/predictor/predictor.dart' as _i73;
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor.dart' as _i28;
+import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart'
+    as _i71;
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor.dart'
+    as _i32;
+import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart'
+    as _i74;
+import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart' as _i70;
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart'
     as _i16;
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart'
-    as _i43;
+    as _i50;
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart' as _i15;
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart'
-    as _i24;
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart'
-    as _i56;
-import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart'
-    as _i57;
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart'
-    as _i4;
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart'
-    as _i30;
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart'
-    as _i31;
-import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart'
     as _i25;
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart'
+    as _i66;
+import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart'
+    as _i67;
+import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart'
+    as _i26;
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart'
-    as _i58;
+    as _i68;
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart'
-    as _i59;
+    as _i69;
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter.dart'
     as _i3;
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory.dart'
-    as _i29;
+    as _i34;
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter.dart'
     as _i2;
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart'
-    as _i28;
+    as _i33;
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart' as _i5;
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart'
-    as _i32;
-import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart' as _i33;
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart' as _i26;
-import 'package:ml_dataframe/ml_dataframe.dart' as _i20;
+    as _i37;
+import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart' as _i38;
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart'
+    as _i4;
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_factory.dart'
+    as _i35;
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart'
+    as _i36;
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart' as _i27;
+import 'package:ml_dataframe/ml_dataframe.dart' as _i21;
 import 'package:ml_linalg/linalg.dart' as _i11;
 import 'package:ml_linalg/matrix.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i1;
@@ -117,8 +135,7 @@ class _FakeNumericalTreeSplitter_0 extends _i1.Fake
 class _FakeNominalTreeSplitter_1 extends _i1.Fake
     implements _i3.NominalTreeSplitter {}
 
-class _FakeTreeSplitAssessor_2 extends _i1.Fake
-    implements _i4.TreeSplitAssessor {}
+class _FakeTreeAssessor_2 extends _i1.Fake implements _i4.TreeAssessor {}
 
 class _FakeTreeSplitter_3 extends _i1.Fake implements _i5.TreeSplitter {}
 
@@ -154,45 +171,45 @@ class _FakeKnnSolver_16 extends _i1.Fake implements _i18.KnnSolver {}
 
 class _FakeKernel_17 extends _i1.Fake implements _i19.Kernel {}
 
-class _FakeKnnClassifier_18 extends _i1.Fake implements _i10.KnnClassifier {}
+class _FakeKnnClassifier_18 extends _i1.Fake implements _i20.KnnClassifier {}
 
-class _FakeDataFrame_19 extends _i1.Fake implements _i20.DataFrame {}
+class _FakeDataFrame_19 extends _i1.Fake implements _i21.DataFrame {}
 
-class _FakeLinearOptimizer_20 extends _i1.Fake implements _i21.LinearOptimizer {
+class _FakeLinearOptimizer_20 extends _i1.Fake implements _i22.LinearOptimizer {
 }
 
 class _FakeConvergenceDetector_21 extends _i1.Fake
-    implements _i22.ConvergenceDetector {}
+    implements _i23.ConvergenceDetector {}
 
 class _FakeSplitIndicesProvider_22 extends _i1.Fake
-    implements _i23.SplitIndicesProvider {}
+    implements _i24.SplitIndicesProvider {}
 
 class _FakeTreeLeafLabelFactory_23 extends _i1.Fake
-    implements _i24.TreeLeafLabelFactory {}
+    implements _i25.TreeLeafLabelFactory {}
 
 class _FakeTreeSplitSelector_24 extends _i1.Fake
-    implements _i25.TreeSplitSelector {}
+    implements _i26.TreeSplitSelector {}
 
-class _FakeTreeNode_25 extends _i1.Fake implements _i26.TreeNode {}
+class _FakeTreeNode_25 extends _i1.Fake implements _i27.TreeNode {}
 
-class _FakeKnnRegressor_26 extends _i1.Fake implements _i10.KnnRegressor {}
+class _FakeKnnRegressor_26 extends _i1.Fake implements _i28.KnnRegressor {}
 
-class _FakeLinkFunction_27 extends _i1.Fake implements _i27.LinkFunction {}
+class _FakeLinkFunction_27 extends _i1.Fake implements _i29.LinkFunction {}
 
 class _FakeLogisticRegressor_28 extends _i1.Fake
-    implements _i10.LogisticRegressor {}
+    implements _i30.LogisticRegressor {}
 
 class _FakeSoftmaxRegressor_29 extends _i1.Fake
-    implements _i10.SoftmaxRegressor {}
+    implements _i31.SoftmaxRegressor {}
 
-class _FakeLinearRegressor_30 extends _i1.Fake implements _i10.LinearRegressor {
+class _FakeLinearRegressor_30 extends _i1.Fake implements _i32.LinearRegressor {
 }
 
 /// A class which mocks [NumericalTreeSplitterFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNumericalTreeSplitterFactory extends _i1.Mock
-    implements _i28.NumericalTreeSplitterFactory {
+    implements _i33.NumericalTreeSplitterFactory {
   MockNumericalTreeSplitterFactory() {
     _i1.throwOnMissingStub(this);
   }
@@ -210,7 +227,7 @@ class MockNumericalTreeSplitterFactory extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNominalTreeSplitterFactory extends _i1.Mock
-    implements _i29.NominalTreeSplitterFactory {
+    implements _i34.NominalTreeSplitterFactory {
   MockNominalTreeSplitterFactory() {
     _i1.throwOnMissingStub(this);
   }
@@ -223,41 +240,40 @@ class MockNominalTreeSplitterFactory extends _i1.Mock
   String toString() => super.toString();
 }
 
-/// A class which mocks [TreeSplitAssessor].
+/// A class which mocks [TreeAssessor].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTreeSplitAssessor extends _i1.Mock implements _i4.TreeSplitAssessor {
-  MockTreeSplitAssessor() {
+class MockTreeAssessor extends _i1.Mock implements _i4.TreeAssessor {
+  MockTreeAssessor() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  double getAggregatedError(
-          Iterable<_i8.Matrix>? splitObservations, int? targetId) =>
+  double getAggregatedError(Iterable<_i8.Matrix>? split, int? targetIdx) =>
       (super.noSuchMethod(
-          Invocation.method(#getAggregatedError, [splitObservations, targetId]),
+          Invocation.method(#getAggregatedError, [split, targetIdx]),
           returnValue: 0.0) as double);
   @override
-  double getError(_i8.Matrix? splitObservations, int? targetId) => (super
-      .noSuchMethod(Invocation.method(#getError, [splitObservations, targetId]),
+  double getError(_i8.Matrix? samples, int? targetIdx) =>
+      (super.noSuchMethod(Invocation.method(#getError, [samples, targetIdx]),
           returnValue: 0.0) as double);
   @override
   String toString() => super.toString();
 }
 
-/// A class which mocks [TreeSplitAssessorFactory].
+/// A class which mocks [TreeAssessorFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTreeSplitAssessorFactory extends _i1.Mock
-    implements _i30.TreeSplitAssessorFactory {
-  MockTreeSplitAssessorFactory() {
+class MockTreeAssessorFactory extends _i1.Mock
+    implements _i35.TreeAssessorFactory {
+  MockTreeAssessorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.TreeSplitAssessor createByType(_i31.TreeSplitAssessorType? type) =>
+  _i4.TreeAssessor createByType(_i36.TreeAssessorType? type) =>
       (super.noSuchMethod(Invocation.method(#createByType, [type]),
-          returnValue: _FakeTreeSplitAssessor_2()) as _i4.TreeSplitAssessor);
+          returnValue: _FakeTreeAssessor_2()) as _i4.TreeAssessor);
   @override
   String toString() => super.toString();
 }
@@ -272,12 +288,12 @@ class MockNumericalTreeSplitter extends _i1.Mock
   }
 
   @override
-  Map<_i26.TreeNode, _i8.Matrix> split(
+  Map<_i27.TreeNode, _i8.Matrix> split(
           _i8.Matrix? samples, int? splittingIdx, double? splittingValue) =>
       (super.noSuchMethod(
           Invocation.method(#split, [samples, splittingIdx, splittingValue]),
-          returnValue: <_i26.TreeNode,
-              _i8.Matrix>{}) as Map<_i26.TreeNode, _i8.Matrix>);
+          returnValue: <_i27.TreeNode,
+              _i8.Matrix>{}) as Map<_i27.TreeNode, _i8.Matrix>);
   @override
   String toString() => super.toString();
 }
@@ -292,12 +308,12 @@ class MockNominalTreeSplitter extends _i1.Mock
   }
 
   @override
-  Map<_i26.TreeNode, _i8.Matrix> split(
+  Map<_i27.TreeNode, _i8.Matrix> split(
           _i8.Matrix? samples, int? splittingIdx, List<num>? uniqueValues) =>
       (super.noSuchMethod(
               Invocation.method(#split, [samples, splittingIdx, uniqueValues]),
-              returnValue: <_i26.TreeNode, _i8.Matrix>{})
-          as Map<_i26.TreeNode, _i8.Matrix>);
+              returnValue: <_i27.TreeNode, _i8.Matrix>{})
+          as Map<_i27.TreeNode, _i8.Matrix>);
   @override
   String toString() => super.toString();
 }
@@ -311,14 +327,14 @@ class MockTreeSplitter extends _i1.Mock implements _i5.TreeSplitter {
   }
 
   @override
-  Map<_i26.TreeNode, _i8.Matrix> split(
+  Map<_i27.TreeNode, _i8.Matrix> split(
           _i8.Matrix? samples, int? splittingIdx, int? targetId,
           [List<num>? uniqueValues]) =>
       (super.noSuchMethod(
               Invocation.method(
                   #split, [samples, splittingIdx, targetId, uniqueValues]),
-              returnValue: <_i26.TreeNode, _i8.Matrix>{})
-          as Map<_i26.TreeNode, _i8.Matrix>);
+              returnValue: <_i27.TreeNode, _i8.Matrix>{})
+          as Map<_i27.TreeNode, _i8.Matrix>);
   @override
   String toString() => super.toString();
 }
@@ -327,14 +343,14 @@ class MockTreeSplitter extends _i1.Mock implements _i5.TreeSplitter {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTreeSplitterFactory extends _i1.Mock
-    implements _i32.TreeSplitterFactory {
+    implements _i37.TreeSplitterFactory {
   MockTreeSplitterFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i5.TreeSplitter createByType(_i33.TreeSplitterType? type,
-          _i31.TreeSplitAssessorType? assessorType) =>
+  _i5.TreeSplitter createByType(
+          _i38.TreeSplitterType? type, _i36.TreeAssessorType? assessorType) =>
       (super.noSuchMethod(
           Invocation.method(#createByType, [type, assessorType]),
           returnValue: _FakeTreeSplitter_3()) as _i5.TreeSplitter);
@@ -345,13 +361,13 @@ class MockTreeSplitterFactory extends _i1.Mock
 /// A class which mocks [MetricFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMetricFactory extends _i1.Mock implements _i34.MetricFactory {
+class MockMetricFactory extends _i1.Mock implements _i39.MetricFactory {
   MockMetricFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Metric createByType(_i35.MetricType? metricType) =>
+  _i6.Metric createByType(_i40.MetricType? metricType) =>
       (super.noSuchMethod(Invocation.method(#createByType, [metricType]),
           returnValue: _FakeMetric_4()) as _i6.Metric);
   @override
@@ -377,7 +393,7 @@ class MockMetric extends _i1.Mock implements _i6.Metric {
 /// A class which mocks [RandomizerFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRandomizerFactory extends _i1.Mock implements _i36.RandomizerFactory {
+class MockRandomizerFactory extends _i1.Mock implements _i41.RandomizerFactory {
   MockRandomizerFactory() {
     _i1.throwOnMissingStub(this);
   }
@@ -446,14 +462,14 @@ class MockCostFunction extends _i1.Mock implements _i9.CostFunction {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCostFunctionFactory extends _i1.Mock
-    implements _i37.CostFunctionFactory {
+    implements _i42.CostFunctionFactory {
   MockCostFunctionFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i9.CostFunction createByType(_i38.CostFunctionType? type,
-          {_i27.LinkFunction? linkFunction,
+  _i9.CostFunction createByType(_i43.CostFunctionType? type,
+          {_i29.LinkFunction? linkFunction,
           num? positiveLabel,
           num? negativeLabel}) =>
       (super.noSuchMethod(
@@ -473,19 +489,20 @@ class MockCostFunctionFactory extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDecisionTreeClassifierFactory extends _i1.Mock
-    implements _i39.DecisionTreeClassifierFactory {
+    implements _i44.DecisionTreeClassifierFactory {
   MockDecisionTreeClassifierFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   _i10.DecisionTreeClassifier create(
-          _i20.DataFrame? trainData,
+          _i21.DataFrame? trainData,
           String? targetName,
           _i11.DType? dtype,
           num? minError,
           int? minSamplesCount,
-          int? maxDepth) =>
+          int? maxDepth,
+          _i36.TreeAssessorType? assessorType) =>
       (super.noSuchMethod(
               Invocation.method(#create, [
                 trainData,
@@ -493,7 +510,8 @@ class MockDecisionTreeClassifierFactory extends _i1.Mock
                 dtype,
                 minError,
                 minSamplesCount,
-                maxDepth
+                maxDepth,
+                assessorType
               ]),
               returnValue: _FakeDecisionTreeClassifier_8())
           as _i10.DecisionTreeClassifier);
@@ -509,7 +527,7 @@ class MockDecisionTreeClassifierFactory extends _i1.Mock
 /// A class which mocks [LinkFunction].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLinkFunction extends _i1.Mock implements _i27.LinkFunction {
+class MockLinkFunction extends _i1.Mock implements _i29.LinkFunction {
   MockLinkFunction() {
     _i1.throwOnMissingStub(this);
   }
@@ -543,7 +561,7 @@ class MockInitialCoefficientsGenerator extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockInitialCoefficientsGeneratorFactory extends _i1.Mock
-    implements _i40.InitialCoefficientsGeneratorFactory {
+    implements _i45.InitialCoefficientsGeneratorFactory {
   MockInitialCoefficientsGeneratorFactory() {
     _i1.throwOnMissingStub(this);
   }
@@ -555,7 +573,7 @@ class MockInitialCoefficientsGeneratorFactory extends _i1.Mock
           as _i12.InitialCoefficientsGenerator);
   @override
   _i12.InitialCoefficientsGenerator fromType(
-          _i10.InitialCoefficientsType? type, _i11.DType? dtype) =>
+          _i46.InitialCoefficientsType? type, _i11.DType? dtype) =>
       (super.noSuchMethod(Invocation.method(#fromType, [type, dtype]),
               returnValue: _FakeInitialCoefficientsGenerator_10())
           as _i12.InitialCoefficientsGenerator);
@@ -567,7 +585,7 @@ class MockInitialCoefficientsGeneratorFactory extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockConvergenceDetector extends _i1.Mock
-    implements _i22.ConvergenceDetector {
+    implements _i23.ConvergenceDetector {
   MockConvergenceDetector() {
     _i1.throwOnMissingStub(this);
   }
@@ -613,7 +631,7 @@ class MockDistributionCalculator extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDistributionCalculatorFactory extends _i1.Mock
-    implements _i41.DistributionCalculatorFactory {
+    implements _i47.DistributionCalculatorFactory {
   MockDistributionCalculatorFactory() {
     _i1.throwOnMissingStub(this);
   }
@@ -631,14 +649,14 @@ class MockDistributionCalculatorFactory extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLearningRateIterableFactory extends _i1.Mock
-    implements _i42.LearningRateIterableFactory {
+    implements _i48.LearningRateIterableFactory {
   MockLearningRateIterableFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   Iterable<double> fromType(
-          {_i10.LearningRateType? type,
+          {_i49.LearningRateType? type,
           double? initialValue,
           double? decay,
           int? dropRate,
@@ -679,7 +697,7 @@ class MockTreeLeafDetector extends _i1.Mock implements _i16.TreeLeafDetector {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTreeLeafLabelFactory extends _i1.Mock
-    implements _i24.TreeLeafLabelFactory {
+    implements _i25.TreeLeafLabelFactory {
   MockTreeLeafLabelFactory() {
     _i1.throwOnMissingStub(this);
   }
@@ -696,13 +714,13 @@ class MockTreeLeafLabelFactory extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTreeLeafDetectorFactory extends _i1.Mock
-    implements _i43.TreeLeafDetectorFactory {
+    implements _i50.TreeLeafDetectorFactory {
   MockTreeLeafDetectorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i16.TreeLeafDetector create(_i31.TreeSplitAssessorType? assessorType,
+  _i16.TreeLeafDetector create(_i36.TreeAssessorType? assessorType,
           num? minErrorOnNode, int? minSamplesCount, int? maxDepth) =>
       (super.noSuchMethod(
           Invocation.method(#create,
@@ -716,14 +734,14 @@ class MockTreeLeafDetectorFactory extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockClassifierAssessor extends _i1.Mock
-    implements _i44.ClassifierAssessor {
+    implements _i51.ClassifierAssessor {
   MockClassifierAssessor() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  double assess(_i45.Classifier? classifier, _i35.MetricType? metricType,
-          _i20.DataFrame? samples) =>
+  double assess(_i52.Classifier? classifier, _i40.MetricType? metricType,
+          _i21.DataFrame? samples) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [classifier, metricType, samples]),
           returnValue: 0.0) as double);
@@ -747,11 +765,11 @@ class MockKnnSolver extends _i1.Mock implements _i18.KnnSolver {
       (super.noSuchMethod(Invocation.getter(#distanceType),
           returnValue: _i11.Distance.euclidean) as _i11.Distance);
   @override
-  Iterable<Iterable<_i46.Neighbour<_i11.Vector>>> findKNeighbours(
+  Iterable<Iterable<_i53.Neighbour<_i11.Vector>>> findKNeighbours(
           _i8.Matrix? features) =>
       (super.noSuchMethod(Invocation.method(#findKNeighbours, [features]),
-              returnValue: <Iterable<_i46.Neighbour<_i11.Vector>>>[])
-          as Iterable<Iterable<_i46.Neighbour<_i11.Vector>>>);
+              returnValue: <Iterable<_i53.Neighbour<_i11.Vector>>>[])
+          as Iterable<Iterable<_i53.Neighbour<_i11.Vector>>>);
   @override
   String toString() => super.toString();
   @override
@@ -759,16 +777,16 @@ class MockKnnSolver extends _i1.Mock implements _i18.KnnSolver {
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i47.Future<_i17.File> saveAsJson(String? filePath) =>
+  _i54.Future<_i17.File> saveAsJson(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsJson, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
 }
 
 /// A class which mocks [KnnSolverFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockKnnSolverFactory extends _i1.Mock implements _i48.KnnSolverFactory {
+class MockKnnSolverFactory extends _i1.Mock implements _i55.KnnSolverFactory {
   MockKnnSolverFactory() {
     _i1.throwOnMissingStub(this);
   }
@@ -793,8 +811,8 @@ class MockKernel extends _i1.Mock implements _i19.Kernel {
   }
 
   @override
-  _i10.KernelType get type => (super.noSuchMethod(Invocation.getter(#type),
-      returnValue: _i10.KernelType.uniform) as _i10.KernelType);
+  _i56.KernelType get type => (super.noSuchMethod(Invocation.getter(#type),
+      returnValue: _i56.KernelType.uniform) as _i56.KernelType);
   @override
   num getWeightByDistance(num? distance, [num? bandwidth]) =>
       (super.noSuchMethod(
@@ -811,13 +829,13 @@ class MockKernel extends _i1.Mock implements _i19.Kernel {
 /// A class which mocks [KernelFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockKernelFactory extends _i1.Mock implements _i49.KernelFactory {
+class MockKernelFactory extends _i1.Mock implements _i57.KernelFactory {
   MockKernelFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i19.Kernel createByType(_i10.KernelType? type) =>
+  _i19.Kernel createByType(_i56.KernelType? type) =>
       (super.noSuchMethod(Invocation.method(#createByType, [type]),
           returnValue: _FakeKernel_17()) as _i19.Kernel);
   @override
@@ -828,17 +846,17 @@ class MockKernelFactory extends _i1.Mock implements _i49.KernelFactory {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockKnnClassifierFactory extends _i1.Mock
-    implements _i50.KnnClassifierFactory {
+    implements _i58.KnnClassifierFactory {
   MockKnnClassifierFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.KnnClassifier create(
-          _i20.DataFrame? trainData,
+  _i20.KnnClassifier create(
+          _i21.DataFrame? trainData,
           String? targetName,
           int? k,
-          _i10.KernelType? kernelType,
+          _i56.KernelType? kernelType,
           _i11.Distance? distance,
           String? columnPrefix,
           _i11.DType? dtype) =>
@@ -852,11 +870,11 @@ class MockKnnClassifierFactory extends _i1.Mock
             columnPrefix,
             dtype
           ]),
-          returnValue: _FakeKnnClassifier_18()) as _i10.KnnClassifier);
+          returnValue: _FakeKnnClassifier_18()) as _i20.KnnClassifier);
   @override
-  _i10.KnnClassifier fromJson(String? json) =>
+  _i20.KnnClassifier fromJson(String? json) =>
       (super.noSuchMethod(Invocation.method(#fromJson, [json]),
-          returnValue: _FakeKnnClassifier_18()) as _i10.KnnClassifier);
+          returnValue: _FakeKnnClassifier_18()) as _i20.KnnClassifier);
   @override
   String toString() => super.toString();
 }
@@ -864,7 +882,7 @@ class MockKnnClassifierFactory extends _i1.Mock
 /// A class which mocks [Classifier].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockClassifier extends _i1.Mock implements _i45.Classifier {
+class MockClassifier extends _i1.Mock implements _i52.Classifier {
   MockClassifier() {
     _i1.throwOnMissingStub(this);
   }
@@ -885,13 +903,13 @@ class MockClassifier extends _i1.Mock implements _i45.Classifier {
   _i11.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i11.DType.float32) as _i11.DType);
   @override
-  _i20.DataFrame predictProbabilities(_i20.DataFrame? testFeatures) => (super
+  _i21.DataFrame predictProbabilities(_i21.DataFrame? testFeatures) => (super
       .noSuchMethod(Invocation.method(#predictProbabilities, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
   @override
   String toString() => super.toString();
 }
@@ -900,18 +918,18 @@ class MockClassifier extends _i1.Mock implements _i45.Classifier {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLinearOptimizerFactory extends _i1.Mock
-    implements _i51.LinearOptimizerFactory {
+    implements _i59.LinearOptimizerFactory {
   MockLinearOptimizerFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i21.LinearOptimizer createByType(_i10.LinearOptimizerType? optimizerType,
+  _i22.LinearOptimizer createByType(_i60.LinearOptimizerType? optimizerType,
           _i8.Matrix? points, _i8.Matrix? labels,
           {_i11.DType? dtype,
           _i9.CostFunction? costFunction,
-          _i10.LearningRateType? learningRateType,
-          _i10.InitialCoefficientsType? initialCoefficientsType,
+          _i49.LearningRateType? learningRateType,
+          _i46.InitialCoefficientsType? initialCoefficientsType,
           double? initialLearningRate,
           double? decay,
           int? dropRate,
@@ -920,7 +938,7 @@ class MockLinearOptimizerFactory extends _i1.Mock
           double? lambda,
           int? batchSize,
           bool? isFittingDataNormalized,
-          _i10.RegularizationType? regularizationType,
+          _i61.RegularizationType? regularizationType,
           int? randomSeed}) =>
       (super.noSuchMethod(
           Invocation.method(#createByType, [
@@ -943,7 +961,7 @@ class MockLinearOptimizerFactory extends _i1.Mock
             #regularizationType: regularizationType,
             #randomSeed: randomSeed
           }),
-          returnValue: _FakeLinearOptimizer_20()) as _i21.LinearOptimizer);
+          returnValue: _FakeLinearOptimizer_20()) as _i22.LinearOptimizer);
   @override
   String toString() => super.toString();
 }
@@ -951,7 +969,7 @@ class MockLinearOptimizerFactory extends _i1.Mock
 /// A class which mocks [LinearOptimizer].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLinearOptimizer extends _i1.Mock implements _i21.LinearOptimizer {
+class MockLinearOptimizer extends _i1.Mock implements _i22.LinearOptimizer {
   MockLinearOptimizer() {
     _i1.throwOnMissingStub(this);
   }
@@ -980,17 +998,17 @@ class MockLinearOptimizer extends _i1.Mock implements _i21.LinearOptimizer {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockConvergenceDetectorFactory extends _i1.Mock
-    implements _i52.ConvergenceDetectorFactory {
+    implements _i62.ConvergenceDetectorFactory {
   MockConvergenceDetectorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i22.ConvergenceDetector create(double? minUpdate, int? iterationsLimit) =>
+  _i23.ConvergenceDetector create(double? minUpdate, int? iterationsLimit) =>
       (super.noSuchMethod(
               Invocation.method(#create, [minUpdate, iterationsLimit]),
               returnValue: _FakeConvergenceDetector_21())
-          as _i22.ConvergenceDetector);
+          as _i23.ConvergenceDetector);
   @override
   String toString() => super.toString();
 }
@@ -999,7 +1017,7 @@ class MockConvergenceDetectorFactory extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSplitIndicesProvider extends _i1.Mock
-    implements _i23.SplitIndicesProvider {
+    implements _i24.SplitIndicesProvider {
   MockSplitIndicesProvider() {
     _i1.throwOnMissingStub(this);
   }
@@ -1016,21 +1034,21 @@ class MockSplitIndicesProvider extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSplitIndicesProviderFactory extends _i1.Mock
-    implements _i53.SplitIndicesProviderFactory {
+    implements _i63.SplitIndicesProviderFactory {
   MockSplitIndicesProviderFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i23.SplitIndicesProvider createByType(
-          _i54.SplitIndicesProviderType? splitterType,
+  _i24.SplitIndicesProvider createByType(
+          _i64.SplitIndicesProviderType? splitterType,
           {int? numberOfFolds,
           int? p}) =>
       (super.noSuchMethod(
               Invocation.method(#createByType, [splitterType],
                   {#numberOfFolds: numberOfFolds, #p: p}),
               returnValue: _FakeSplitIndicesProvider_22())
-          as _i23.SplitIndicesProvider);
+          as _i24.SplitIndicesProvider);
   @override
   String toString() => super.toString();
 }
@@ -1038,13 +1056,13 @@ class MockSplitIndicesProviderFactory extends _i1.Mock
 /// A class which mocks [Assessable].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAssessable extends _i1.Mock implements _i55.Assessable {
+class MockAssessable extends _i1.Mock implements _i65.Assessable {
   MockAssessable() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  double assess(_i20.DataFrame? observations, _i35.MetricType? metricType) =>
+  double assess(_i21.DataFrame? observations, _i40.MetricType? metricType) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [observations, metricType]),
           returnValue: 0.0) as double);
@@ -1056,16 +1074,16 @@ class MockAssessable extends _i1.Mock implements _i55.Assessable {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTreeLeafLabelFactoryFactory extends _i1.Mock
-    implements _i56.TreeLeafLabelFactoryFactory {
+    implements _i66.TreeLeafLabelFactoryFactory {
   MockTreeLeafLabelFactoryFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i24.TreeLeafLabelFactory createByType(_i57.TreeLeafLabelFactoryType? type) =>
+  _i25.TreeLeafLabelFactory createByType(_i67.TreeLeafLabelFactoryType? type) =>
       (super.noSuchMethod(Invocation.method(#createByType, [type]),
               returnValue: _FakeTreeLeafLabelFactory_23())
-          as _i24.TreeLeafLabelFactory);
+          as _i25.TreeLeafLabelFactory);
   @override
   String toString() => super.toString();
 }
@@ -1073,13 +1091,13 @@ class MockTreeLeafLabelFactoryFactory extends _i1.Mock
 /// A class which mocks [TreeSplitSelector].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTreeSplitSelector extends _i1.Mock implements _i25.TreeSplitSelector {
+class MockTreeSplitSelector extends _i1.Mock implements _i26.TreeSplitSelector {
   MockTreeSplitSelector() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  Map<_i26.TreeNode, _i8.Matrix> select(
+  Map<_i27.TreeNode, _i8.Matrix> select(
           _i8.Matrix? samples, int? targetId, Iterable<int>? featuresColumnIdxs,
           [Map<int, List<num>>? columnIdToUniqueValues]) =>
       (super.noSuchMethod(
@@ -1089,8 +1107,8 @@ class MockTreeSplitSelector extends _i1.Mock implements _i25.TreeSplitSelector {
                 featuresColumnIdxs,
                 columnIdToUniqueValues
               ]),
-              returnValue: <_i26.TreeNode, _i8.Matrix>{})
-          as Map<_i26.TreeNode, _i8.Matrix>);
+              returnValue: <_i27.TreeNode, _i8.Matrix>{})
+          as Map<_i27.TreeNode, _i8.Matrix>);
   @override
   String toString() => super.toString();
 }
@@ -1099,19 +1117,19 @@ class MockTreeSplitSelector extends _i1.Mock implements _i25.TreeSplitSelector {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTreeSplitSelectorFactory extends _i1.Mock
-    implements _i58.TreeSplitSelectorFactory {
+    implements _i68.TreeSplitSelectorFactory {
   MockTreeSplitSelectorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i25.TreeSplitSelector createByType(
-          _i59.TreeSplitSelectorType? type,
-          _i31.TreeSplitAssessorType? assessorType,
-          _i33.TreeSplitterType? splitterType) =>
+  _i26.TreeSplitSelector createByType(
+          _i69.TreeSplitSelectorType? type,
+          _i36.TreeAssessorType? assessorType,
+          _i38.TreeSplitterType? splitterType) =>
       (super.noSuchMethod(
           Invocation.method(#createByType, [type, assessorType, splitterType]),
-          returnValue: _FakeTreeSplitSelector_24()) as _i25.TreeSplitSelector);
+          returnValue: _FakeTreeSplitSelector_24()) as _i26.TreeSplitSelector);
   @override
   String toString() => super.toString();
 }
@@ -1119,14 +1137,11 @@ class MockTreeSplitSelectorFactory extends _i1.Mock
 /// A class which mocks [TreeNode].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTreeNode extends _i1.Mock implements _i26.TreeNode {
+class MockTreeNode extends _i1.Mock implements _i27.TreeNode {
   MockTreeNode() {
     _i1.throwOnMissingStub(this);
   }
 
-  @override
-  int get level =>
-      (super.noSuchMethod(Invocation.getter(#level), returnValue: 0) as int);
   @override
   bool get isLeaf =>
       (super.noSuchMethod(Invocation.getter(#isLeaf), returnValue: false)
@@ -1159,15 +1174,15 @@ class MockTreeNode extends _i1.Mock implements _i26.TreeNode {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDecisionTreeTrainer extends _i1.Mock
-    implements _i60.DecisionTreeTrainer {
+    implements _i70.DecisionTreeTrainer {
   MockDecisionTreeTrainer() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i26.TreeNode train(_i8.Matrix? samples) =>
+  _i27.TreeNode train(_i8.Matrix? samples) =>
       (super.noSuchMethod(Invocation.method(#train, [samples]),
-          returnValue: _FakeTreeNode_25()) as _i26.TreeNode);
+          returnValue: _FakeTreeNode_25()) as _i27.TreeNode);
   @override
   String toString() => super.toString();
 }
@@ -1175,7 +1190,7 @@ class MockDecisionTreeTrainer extends _i1.Mock
 /// A class which mocks [KnnClassifier].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockKnnClassifier extends _i1.Mock implements _i10.KnnClassifier {
+class MockKnnClassifier extends _i1.Mock implements _i20.KnnClassifier {
   MockKnnClassifier() {
     _i1.throwOnMissingStub(this);
   }
@@ -1184,9 +1199,9 @@ class MockKnnClassifier extends _i1.Mock implements _i10.KnnClassifier {
   int get k =>
       (super.noSuchMethod(Invocation.getter(#k), returnValue: 0) as int);
   @override
-  _i10.KernelType get kernelType =>
+  _i56.KernelType get kernelType =>
       (super.noSuchMethod(Invocation.getter(#kernelType),
-          returnValue: _i10.KernelType.uniform) as _i10.KernelType);
+          returnValue: _i56.KernelType.uniform) as _i56.KernelType);
   @override
   _i11.Distance get distanceType =>
       (super.noSuchMethod(Invocation.getter(#distanceType),
@@ -1209,7 +1224,7 @@ class MockKnnClassifier extends _i1.Mock implements _i10.KnnClassifier {
   @override
   String toString() => super.toString();
   @override
-  double assess(_i20.DataFrame? observations, _i35.MetricType? metricType) =>
+  double assess(_i21.DataFrame? observations, _i40.MetricType? metricType) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [observations, metricType]),
           returnValue: 0.0) as double);
@@ -1218,49 +1233,49 @@ class MockKnnClassifier extends _i1.Mock implements _i10.KnnClassifier {
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i47.Future<_i17.File> saveAsJson(String? filePath) =>
+  _i54.Future<_i17.File> saveAsJson(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsJson, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
   @override
-  _i10.KnnClassifier retrain(_i20.DataFrame? data) =>
+  _i20.KnnClassifier retrain(_i21.DataFrame? data) =>
       (super.noSuchMethod(Invocation.method(#retrain, [data]),
-          returnValue: _FakeKnnClassifier_18()) as _i10.KnnClassifier);
+          returnValue: _FakeKnnClassifier_18()) as _i20.KnnClassifier);
   @override
-  _i20.DataFrame predictProbabilities(_i20.DataFrame? testFeatures) => (super
+  _i21.DataFrame predictProbabilities(_i21.DataFrame? testFeatures) => (super
       .noSuchMethod(Invocation.method(#predictProbabilities, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
 }
 
 /// A class which mocks [KnnRegressorFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockKnnRegressorFactory extends _i1.Mock
-    implements _i61.KnnRegressorFactory {
+    implements _i71.KnnRegressorFactory {
   MockKnnRegressorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.KnnRegressor create(
-          _i20.DataFrame? fittingData,
+  _i28.KnnRegressor create(
+          _i21.DataFrame? fittingData,
           String? targetName,
           int? k,
-          _i10.KernelType? kernelType,
+          _i56.KernelType? kernelType,
           _i11.Distance? distance,
           _i11.DType? dtype) =>
       (super.noSuchMethod(
           Invocation.method(#create,
               [fittingData, targetName, k, kernelType, distance, dtype]),
-          returnValue: _FakeKnnRegressor_26()) as _i10.KnnRegressor);
+          returnValue: _FakeKnnRegressor_26()) as _i28.KnnRegressor);
   @override
-  _i10.KnnRegressor fromJson(String? json) =>
+  _i28.KnnRegressor fromJson(String? json) =>
       (super.noSuchMethod(Invocation.method(#fromJson, [json]),
-          returnValue: _FakeKnnRegressor_26()) as _i10.KnnRegressor);
+          returnValue: _FakeKnnRegressor_26()) as _i28.KnnRegressor);
   @override
   String toString() => super.toString();
 }
@@ -1268,7 +1283,7 @@ class MockKnnRegressorFactory extends _i1.Mock
 /// A class which mocks [KnnRegressor].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockKnnRegressor extends _i1.Mock implements _i10.KnnRegressor {
+class MockKnnRegressor extends _i1.Mock implements _i28.KnnRegressor {
   MockKnnRegressor() {
     _i1.throwOnMissingStub(this);
   }
@@ -1277,9 +1292,9 @@ class MockKnnRegressor extends _i1.Mock implements _i10.KnnRegressor {
   int get k =>
       (super.noSuchMethod(Invocation.getter(#k), returnValue: 0) as int);
   @override
-  _i10.KernelType get kernelType =>
+  _i56.KernelType get kernelType =>
       (super.noSuchMethod(Invocation.getter(#kernelType),
-          returnValue: _i10.KernelType.uniform) as _i10.KernelType);
+          returnValue: _i56.KernelType.uniform) as _i56.KernelType);
   @override
   _i11.Distance get distanceType =>
       (super.noSuchMethod(Invocation.getter(#distanceType),
@@ -1294,7 +1309,7 @@ class MockKnnRegressor extends _i1.Mock implements _i10.KnnRegressor {
   @override
   String toString() => super.toString();
   @override
-  double assess(_i20.DataFrame? observations, _i35.MetricType? metricType) =>
+  double assess(_i21.DataFrame? observations, _i40.MetricType? metricType) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [observations, metricType]),
           returnValue: 0.0) as double);
@@ -1303,33 +1318,33 @@ class MockKnnRegressor extends _i1.Mock implements _i10.KnnRegressor {
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i47.Future<_i17.File> saveAsJson(String? filePath) =>
+  _i54.Future<_i17.File> saveAsJson(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsJson, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
   @override
-  _i10.KnnRegressor retrain(_i20.DataFrame? data) =>
+  _i28.KnnRegressor retrain(_i21.DataFrame? data) =>
       (super.noSuchMethod(Invocation.method(#retrain, [data]),
-          returnValue: _FakeKnnRegressor_26()) as _i10.KnnRegressor);
+          returnValue: _FakeKnnRegressor_26()) as _i28.KnnRegressor);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
 }
 
 /// A class which mocks [LogisticRegressor].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLogisticRegressor extends _i1.Mock implements _i10.LogisticRegressor {
+class MockLogisticRegressor extends _i1.Mock implements _i30.LogisticRegressor {
   MockLogisticRegressor() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.LinearOptimizerType get optimizerType =>
+  _i60.LinearOptimizerType get optimizerType =>
       (super.noSuchMethod(Invocation.getter(#optimizerType),
-              returnValue: _i10.LinearOptimizerType.gradient)
-          as _i10.LinearOptimizerType);
+              returnValue: _i60.LinearOptimizerType.gradient)
+          as _i60.LinearOptimizerType);
   @override
   int get iterationsLimit =>
       (super.noSuchMethod(Invocation.getter(#iterationsLimit), returnValue: 0)
@@ -1366,19 +1381,19 @@ class MockLogisticRegressor extends _i1.Mock implements _i10.LogisticRegressor {
       (super.noSuchMethod(Invocation.getter(#isFittingDataNormalized),
           returnValue: false) as bool);
   @override
-  _i10.LearningRateType get learningRateType =>
+  _i49.LearningRateType get learningRateType =>
       (super.noSuchMethod(Invocation.getter(#learningRateType),
-              returnValue: _i10.LearningRateType.decreasingAdaptive)
-          as _i10.LearningRateType);
+              returnValue: _i49.LearningRateType.decreasingAdaptive)
+          as _i49.LearningRateType);
   @override
-  _i10.InitialCoefficientsType get initialCoefficientsType =>
+  _i46.InitialCoefficientsType get initialCoefficientsType =>
       (super.noSuchMethod(Invocation.getter(#initialCoefficientsType),
-              returnValue: _i10.InitialCoefficientsType.zeroes)
-          as _i10.InitialCoefficientsType);
+              returnValue: _i46.InitialCoefficientsType.zeroes)
+          as _i46.InitialCoefficientsType);
   @override
-  _i27.LinkFunction get linkFunction =>
+  _i29.LinkFunction get linkFunction =>
       (super.noSuchMethod(Invocation.getter(#linkFunction),
-          returnValue: _FakeLinkFunction_27()) as _i27.LinkFunction);
+          returnValue: _FakeLinkFunction_27()) as _i29.LinkFunction);
   @override
   bool get fitIntercept =>
       (super.noSuchMethod(Invocation.getter(#fitIntercept), returnValue: false)
@@ -1409,7 +1424,7 @@ class MockLogisticRegressor extends _i1.Mock implements _i10.LogisticRegressor {
   @override
   String toString() => super.toString();
   @override
-  double assess(_i20.DataFrame? observations, _i35.MetricType? metricType) =>
+  double assess(_i21.DataFrame? observations, _i40.MetricType? metricType) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [observations, metricType]),
           returnValue: 0.0) as double);
@@ -1418,37 +1433,37 @@ class MockLogisticRegressor extends _i1.Mock implements _i10.LogisticRegressor {
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i47.Future<_i17.File> saveAsJson(String? filePath) =>
+  _i54.Future<_i17.File> saveAsJson(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsJson, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
   @override
-  _i10.LogisticRegressor retrain(_i20.DataFrame? data) =>
+  _i30.LogisticRegressor retrain(_i21.DataFrame? data) =>
       (super.noSuchMethod(Invocation.method(#retrain, [data]),
-          returnValue: _FakeLogisticRegressor_28()) as _i10.LogisticRegressor);
+          returnValue: _FakeLogisticRegressor_28()) as _i30.LogisticRegressor);
   @override
-  _i20.DataFrame predictProbabilities(_i20.DataFrame? testFeatures) => (super
+  _i21.DataFrame predictProbabilities(_i21.DataFrame? testFeatures) => (super
       .noSuchMethod(Invocation.method(#predictProbabilities, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
 }
 
 /// A class which mocks [SoftmaxRegressor].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSoftmaxRegressor extends _i1.Mock implements _i10.SoftmaxRegressor {
+class MockSoftmaxRegressor extends _i1.Mock implements _i31.SoftmaxRegressor {
   MockSoftmaxRegressor() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.LinearOptimizerType get optimizerType =>
+  _i60.LinearOptimizerType get optimizerType =>
       (super.noSuchMethod(Invocation.getter(#optimizerType),
-              returnValue: _i10.LinearOptimizerType.gradient)
-          as _i10.LinearOptimizerType);
+              returnValue: _i60.LinearOptimizerType.gradient)
+          as _i60.LinearOptimizerType);
   @override
   int get iterationsLimit =>
       (super.noSuchMethod(Invocation.getter(#iterationsLimit), returnValue: 0)
@@ -1481,19 +1496,19 @@ class MockSoftmaxRegressor extends _i1.Mock implements _i10.SoftmaxRegressor {
       (super.noSuchMethod(Invocation.getter(#isFittingDataNormalized),
           returnValue: false) as bool);
   @override
-  _i10.LearningRateType get learningRateType =>
+  _i49.LearningRateType get learningRateType =>
       (super.noSuchMethod(Invocation.getter(#learningRateType),
-              returnValue: _i10.LearningRateType.decreasingAdaptive)
-          as _i10.LearningRateType);
+              returnValue: _i49.LearningRateType.decreasingAdaptive)
+          as _i49.LearningRateType);
   @override
-  _i10.InitialCoefficientsType get initialCoefficientsType =>
+  _i46.InitialCoefficientsType get initialCoefficientsType =>
       (super.noSuchMethod(Invocation.getter(#initialCoefficientsType),
-              returnValue: _i10.InitialCoefficientsType.zeroes)
-          as _i10.InitialCoefficientsType);
+              returnValue: _i46.InitialCoefficientsType.zeroes)
+          as _i46.InitialCoefficientsType);
   @override
-  _i27.LinkFunction get linkFunction =>
+  _i29.LinkFunction get linkFunction =>
       (super.noSuchMethod(Invocation.getter(#linkFunction),
-          returnValue: _FakeLinkFunction_27()) as _i27.LinkFunction);
+          returnValue: _FakeLinkFunction_27()) as _i29.LinkFunction);
   @override
   bool get fitIntercept =>
       (super.noSuchMethod(Invocation.getter(#fitIntercept), returnValue: false)
@@ -1524,7 +1539,7 @@ class MockSoftmaxRegressor extends _i1.Mock implements _i10.SoftmaxRegressor {
   @override
   String toString() => super.toString();
   @override
-  double assess(_i20.DataFrame? observations, _i35.MetricType? metricType) =>
+  double assess(_i21.DataFrame? observations, _i40.MetricType? metricType) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [observations, metricType]),
           returnValue: 0.0) as double);
@@ -1533,38 +1548,38 @@ class MockSoftmaxRegressor extends _i1.Mock implements _i10.SoftmaxRegressor {
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i47.Future<_i17.File> saveAsJson(String? filePath) =>
+  _i54.Future<_i17.File> saveAsJson(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsJson, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
   @override
-  _i10.SoftmaxRegressor retrain(_i20.DataFrame? data) =>
+  _i31.SoftmaxRegressor retrain(_i21.DataFrame? data) =>
       (super.noSuchMethod(Invocation.method(#retrain, [data]),
-          returnValue: _FakeSoftmaxRegressor_29()) as _i10.SoftmaxRegressor);
+          returnValue: _FakeSoftmaxRegressor_29()) as _i31.SoftmaxRegressor);
   @override
-  _i20.DataFrame predictProbabilities(_i20.DataFrame? testFeatures) => (super
+  _i21.DataFrame predictProbabilities(_i21.DataFrame? testFeatures) => (super
       .noSuchMethod(Invocation.method(#predictProbabilities, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
 }
 
 /// A class which mocks [SoftmaxRegressorFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSoftmaxRegressorFactory extends _i1.Mock
-    implements _i62.SoftmaxRegressorFactory {
+    implements _i72.SoftmaxRegressorFactory {
   MockSoftmaxRegressorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.SoftmaxRegressor create(
-          {_i20.DataFrame? trainData,
+  _i31.SoftmaxRegressor create(
+          {_i21.DataFrame? trainData,
           Iterable<String>? targetNames,
-          _i10.LinearOptimizerType? optimizerType,
+          _i60.LinearOptimizerType? optimizerType,
           int? iterationsLimit,
           double? initialLearningRate,
           double? decay,
@@ -1574,14 +1589,14 @@ class MockSoftmaxRegressorFactory extends _i1.Mock
           int? batchSize,
           bool? fitIntercept,
           double? interceptScale,
-          _i10.LearningRateType? learningRateType,
+          _i49.LearningRateType? learningRateType,
           bool? isFittingDataNormalized,
-          _i10.InitialCoefficientsType? initialCoefficientsType,
+          _i46.InitialCoefficientsType? initialCoefficientsType,
           num? positiveLabel,
           num? negativeLabel,
           bool? collectLearningData,
           _i11.DType? dtype,
-          _i10.RegularizationType? regularizationType,
+          _i61.RegularizationType? regularizationType,
           _i8.Matrix? initialCoefficients,
           int? randomSeed}) =>
       (super.noSuchMethod(
@@ -1609,11 +1624,11 @@ class MockSoftmaxRegressorFactory extends _i1.Mock
             #initialCoefficients: initialCoefficients,
             #randomSeed: randomSeed
           }),
-          returnValue: _FakeSoftmaxRegressor_29()) as _i10.SoftmaxRegressor);
+          returnValue: _FakeSoftmaxRegressor_29()) as _i31.SoftmaxRegressor);
   @override
-  _i10.SoftmaxRegressor fromJson(String? json) =>
+  _i31.SoftmaxRegressor fromJson(String? json) =>
       (super.noSuchMethod(Invocation.method(#fromJson, [json]),
-          returnValue: _FakeSoftmaxRegressor_29()) as _i10.SoftmaxRegressor);
+          returnValue: _FakeSoftmaxRegressor_29()) as _i31.SoftmaxRegressor);
   @override
   String toString() => super.toString();
 }
@@ -1621,7 +1636,7 @@ class MockSoftmaxRegressorFactory extends _i1.Mock
 /// A class which mocks [Predictor].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPredictor extends _i1.Mock implements _i63.Predictor {
+class MockPredictor extends _i1.Mock implements _i73.Predictor {
   MockPredictor() {
     _i1.throwOnMissingStub(this);
   }
@@ -1634,9 +1649,9 @@ class MockPredictor extends _i1.Mock implements _i63.Predictor {
   _i11.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i11.DType.float32) as _i11.DType);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
   @override
   String toString() => super.toString();
 }
@@ -1645,19 +1660,19 @@ class MockPredictor extends _i1.Mock implements _i63.Predictor {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLinearRegressorFactory extends _i1.Mock
-    implements _i64.LinearRegressorFactory {
+    implements _i74.LinearRegressorFactory {
   MockLinearRegressorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.LinearRegressor create(
-          {_i20.DataFrame? fittingData,
+  _i32.LinearRegressor create(
+          {_i21.DataFrame? fittingData,
           String? targetName,
-          _i10.LinearOptimizerType? optimizerType,
+          _i60.LinearOptimizerType? optimizerType,
           int? iterationsLimit,
-          _i10.LearningRateType? learningRateType,
-          _i10.InitialCoefficientsType? initialCoefficientsType,
+          _i49.LearningRateType? learningRateType,
+          _i46.InitialCoefficientsType? initialCoefficientsType,
           double? initialLearningRate,
           double? decay,
           int? dropRate,
@@ -1669,7 +1684,7 @@ class MockLinearRegressorFactory extends _i1.Mock
           bool? isFittingDataNormalized,
           bool? collectLearningData,
           _i11.DType? dtype,
-          _i10.RegularizationType? regularizationType,
+          _i61.RegularizationType? regularizationType,
           int? randomSeed,
           _i8.Matrix? initialCoefficients}) =>
       (super.noSuchMethod(
@@ -1695,11 +1710,11 @@ class MockLinearRegressorFactory extends _i1.Mock
             #randomSeed: randomSeed,
             #initialCoefficients: initialCoefficients
           }),
-          returnValue: _FakeLinearRegressor_30()) as _i10.LinearRegressor);
+          returnValue: _FakeLinearRegressor_30()) as _i32.LinearRegressor);
   @override
-  _i10.LinearRegressor fromJson(String? json) =>
+  _i32.LinearRegressor fromJson(String? json) =>
       (super.noSuchMethod(Invocation.method(#fromJson, [json]),
-          returnValue: _FakeLinearRegressor_30()) as _i10.LinearRegressor);
+          returnValue: _FakeLinearRegressor_30()) as _i32.LinearRegressor);
   @override
   String toString() => super.toString();
 }
@@ -1707,30 +1722,30 @@ class MockLinearRegressorFactory extends _i1.Mock
 /// A class which mocks [LinearRegressor].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLinearRegressor extends _i1.Mock implements _i10.LinearRegressor {
+class MockLinearRegressor extends _i1.Mock implements _i32.LinearRegressor {
   MockLinearRegressor() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.LinearOptimizerType get optimizerType =>
+  _i60.LinearOptimizerType get optimizerType =>
       (super.noSuchMethod(Invocation.getter(#optimizerType),
-              returnValue: _i10.LinearOptimizerType.gradient)
-          as _i10.LinearOptimizerType);
+              returnValue: _i60.LinearOptimizerType.gradient)
+          as _i60.LinearOptimizerType);
   @override
   int get iterationsLimit =>
       (super.noSuchMethod(Invocation.getter(#iterationsLimit), returnValue: 0)
           as int);
   @override
-  _i10.LearningRateType get learningRateType =>
+  _i49.LearningRateType get learningRateType =>
       (super.noSuchMethod(Invocation.getter(#learningRateType),
-              returnValue: _i10.LearningRateType.decreasingAdaptive)
-          as _i10.LearningRateType);
+              returnValue: _i49.LearningRateType.decreasingAdaptive)
+          as _i49.LearningRateType);
   @override
-  _i10.InitialCoefficientsType get initialCoefficientsType =>
+  _i46.InitialCoefficientsType get initialCoefficientsType =>
       (super.noSuchMethod(Invocation.getter(#initialCoefficientsType),
-              returnValue: _i10.InitialCoefficientsType.zeroes)
-          as _i10.InitialCoefficientsType);
+              returnValue: _i46.InitialCoefficientsType.zeroes)
+          as _i46.InitialCoefficientsType);
   @override
   num get initialLearningRate => (super
           .noSuchMethod(Invocation.getter(#initialLearningRate), returnValue: 0)
@@ -1782,7 +1797,7 @@ class MockLinearRegressor extends _i1.Mock implements _i10.LinearRegressor {
   @override
   String toString() => super.toString();
   @override
-  double assess(_i20.DataFrame? observations, _i35.MetricType? metricType) =>
+  double assess(_i21.DataFrame? observations, _i40.MetricType? metricType) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [observations, metricType]),
           returnValue: 0.0) as double);
@@ -1791,18 +1806,18 @@ class MockLinearRegressor extends _i1.Mock implements _i10.LinearRegressor {
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i47.Future<_i17.File> saveAsJson(String? filePath) =>
+  _i54.Future<_i17.File> saveAsJson(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsJson, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
   @override
-  _i10.LinearRegressor retrain(_i20.DataFrame? data) =>
+  _i32.LinearRegressor retrain(_i21.DataFrame? data) =>
       (super.noSuchMethod(Invocation.method(#retrain, [data]),
-          returnValue: _FakeLinearRegressor_30()) as _i10.LinearRegressor);
+          returnValue: _FakeLinearRegressor_30()) as _i32.LinearRegressor);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
 }
 
 /// A class which mocks [DecisionTreeClassifier].
@@ -1825,6 +1840,10 @@ class MockDecisionTreeClassifier extends _i1.Mock
   int get maxDepth =>
       (super.noSuchMethod(Invocation.getter(#maxDepth), returnValue: 0) as int);
   @override
+  _i36.TreeAssessorType get assessorType => (super.noSuchMethod(
+      Invocation.getter(#assessorType),
+      returnValue: _i36.TreeAssessorType.majority) as _i36.TreeAssessorType);
+  @override
   num get positiveLabel =>
       (super.noSuchMethod(Invocation.getter(#positiveLabel), returnValue: 0)
           as num);
@@ -1840,14 +1859,14 @@ class MockDecisionTreeClassifier extends _i1.Mock
   _i11.DType get dtype => (super.noSuchMethod(Invocation.getter(#dtype),
       returnValue: _i11.DType.float32) as _i11.DType);
   @override
-  _i47.Future<_i17.File> saveAsSvg(String? filePath) =>
+  _i54.Future<_i17.File> saveAsSvg(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsSvg, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
   @override
   String toString() => super.toString();
   @override
-  double assess(_i20.DataFrame? observations, _i35.MetricType? metricType) =>
+  double assess(_i21.DataFrame? observations, _i40.MetricType? metricType) =>
       (super.noSuchMethod(
           Invocation.method(#assess, [observations, metricType]),
           returnValue: 0.0) as double);
@@ -1856,39 +1875,39 @@ class MockDecisionTreeClassifier extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#toJson, []),
           returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
-  _i47.Future<_i17.File> saveAsJson(String? filePath) =>
+  _i54.Future<_i17.File> saveAsJson(String? filePath) =>
       (super.noSuchMethod(Invocation.method(#saveAsJson, [filePath]),
               returnValue: Future<_i17.File>.value(_FakeFile_15()))
-          as _i47.Future<_i17.File>);
+          as _i54.Future<_i17.File>);
   @override
-  _i10.DecisionTreeClassifier retrain(_i20.DataFrame? data) =>
+  _i10.DecisionTreeClassifier retrain(_i21.DataFrame? data) =>
       (super.noSuchMethod(Invocation.method(#retrain, [data]),
               returnValue: _FakeDecisionTreeClassifier_8())
           as _i10.DecisionTreeClassifier);
   @override
-  _i20.DataFrame predictProbabilities(_i20.DataFrame? testFeatures) => (super
+  _i21.DataFrame predictProbabilities(_i21.DataFrame? testFeatures) => (super
       .noSuchMethod(Invocation.method(#predictProbabilities, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
   @override
-  _i20.DataFrame predict(_i20.DataFrame? testFeatures) =>
+  _i21.DataFrame predict(_i21.DataFrame? testFeatures) =>
       (super.noSuchMethod(Invocation.method(#predict, [testFeatures]),
-          returnValue: _FakeDataFrame_19()) as _i20.DataFrame);
+          returnValue: _FakeDataFrame_19()) as _i21.DataFrame);
 }
 
 /// A class which mocks [LogisticRegressorFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLogisticRegressorFactory extends _i1.Mock
-    implements _i65.LogisticRegressorFactory {
+    implements _i75.LogisticRegressorFactory {
   MockLogisticRegressorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i10.LogisticRegressor create(
-          {_i20.DataFrame? trainData,
+  _i30.LogisticRegressor create(
+          {_i21.DataFrame? trainData,
           String? targetName,
-          _i10.LinearOptimizerType? optimizerType,
+          _i60.LinearOptimizerType? optimizerType,
           int? iterationsLimit,
           double? initialLearningRate,
           double? decay,
@@ -1900,13 +1919,13 @@ class MockLogisticRegressorFactory extends _i1.Mock
           bool? fitIntercept,
           double? interceptScale,
           bool? isFittingDataNormalized,
-          _i10.LearningRateType? learningRateType,
-          _i10.InitialCoefficientsType? initialCoefficientsType,
+          _i49.LearningRateType? learningRateType,
+          _i46.InitialCoefficientsType? initialCoefficientsType,
           num? positiveLabel,
           num? negativeLabel,
           bool? collectLearningData,
           _i11.DType? dtype,
-          _i10.RegularizationType? regularizationType,
+          _i61.RegularizationType? regularizationType,
           _i11.Vector? initialCoefficients,
           int? randomSeed}) =>
       (super.noSuchMethod(
@@ -1935,11 +1954,11 @@ class MockLogisticRegressorFactory extends _i1.Mock
             #initialCoefficients: initialCoefficients,
             #randomSeed: randomSeed
           }),
-          returnValue: _FakeLogisticRegressor_28()) as _i10.LogisticRegressor);
+          returnValue: _FakeLogisticRegressor_28()) as _i30.LogisticRegressor);
   @override
-  _i10.LogisticRegressor fromJson(String? json) =>
+  _i30.LogisticRegressor fromJson(String? json) =>
       (super.noSuchMethod(Invocation.method(#fromJson, [json]),
-          returnValue: _FakeLogisticRegressor_28()) as _i10.LogisticRegressor);
+          returnValue: _FakeLogisticRegressor_28()) as _i30.LogisticRegressor);
   @override
   String toString() => super.toString();
 }

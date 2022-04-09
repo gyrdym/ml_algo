@@ -1,38 +1,42 @@
-import 'package:ml_algo/src/tree_trainer/split_assessor/majority_split_assessor.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_impl.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/gini_index_tree_assessor.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/majority_tree_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('MajorityTreeSplitAssessor', () {
-    test('should return majority-based error on node', () {
+  group('GiniIndexTreeAssessor', () {
+    final distributionCalculator = const DistributionCalculatorImpl();
+
+    test('should return gini index based error on node', () {
       final node = Matrix.fromList([
         [10, 30, 40, 0],
         [20, 30, 10, 1],
         [30, 20, 30, 1],
         [40, 10, 20, 2],
       ]);
-      final assessor = const MajorityTreeSplitAssessor();
+      final assessor = GiniIndexTreeAssessor(distributionCalculator);
       final error = assessor.getError(node, 3);
 
-      expect(error, 0.5);
+      expect(error,
+          1 / 4 * (1 - 1 / 4) + 1 / 2 * (1 - 1 / 2) + 1 / 4 * (1 - 1 / 4));
     });
 
     test(
-        'should return `0` majority-based error on node if the node '
+        'should return `0` gini index error on node if the node '
         'has only one class label', () {
       final node = Matrix.fromList([
         [10, 30, 0],
         [14, 20, 0],
       ]);
-      final assessor = const MajorityTreeSplitAssessor();
+      final assessor = GiniIndexTreeAssessor(distributionCalculator);
       final error = assessor.getError(node, 2);
 
       expect(error, 0);
     });
 
-    test(
-        'should return majority-based error on decision stump when all nodes'
-        'in the stump have distinct majority class', () {
+    test('should return correct aggregated gini index error on decision stump',
+        () {
       final node1 = Matrix.fromList([
         [10, 30, 0],
         [10, 30, 1],
@@ -55,10 +59,24 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajorityTreeSplitAssessor();
+      final assessor = GiniIndexTreeAssessor(distributionCalculator);
       final error = assessor.getAggregatedError(stump, 2);
 
-      expect(error, 5 / 12);
+      expect(
+          error,
+          closeTo(
+              (1 / 4 * (1 - 1 / 4) +
+                          1 / 2 * (1 - 1 / 2) +
+                          1 / 4 * (1 - 1 / 4)) *
+                      1 /
+                      3 +
+                  (3 / 4 * (1 - 3 / 4) + 1 / 4 * (1 - 1 / 4)) * 1 / 3 +
+                  (1 / 2 * (1 - 1 / 2) +
+                          1 / 4 * (1 - 1 / 4) +
+                          1 / 4 * (1 - 1 / 4)) *
+                      1 /
+                      3,
+              1e-5));
     });
 
     test('should return correct error if nodes have different length', () {
@@ -82,14 +100,20 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajorityTreeSplitAssessor();
+      final assessor = GiniIndexTreeAssessor(distributionCalculator);
       final error = assessor.getAggregatedError(stump, 2);
 
-      expect(error, 4 / 10);
+      expect(
+          error,
+          (1 / 4 * (1 - 1 / 4) + 1 / 2 * (1 - 1 / 2) + 1 / 4 * (1 - 1 / 4)) *
+                  2 /
+                  5 +
+              (3 / 5 * (1 - 3 / 5) + 2 / 5 * (1 - 2 / 5)) * 1 / 2 +
+              0);
     });
 
     test(
-        'should return majority-based error, that is equal to 0, if all '
+        'should return gini index based error, that is equal to 0, if all '
         'nodes in the stump have only one class', () {
       final node1 = Matrix.fromList([
         [10, 30, 0],
@@ -113,14 +137,14 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajorityTreeSplitAssessor();
+      final assessor = GiniIndexTreeAssessor(distributionCalculator);
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 0);
     });
 
     test(
-        'should return majority-based error that is equal to 0, if all '
+        'should return gini index error that is equal to 0, if all '
         'nodes in the stump have only one observation', () {
       final node1 = Matrix.fromList([
         [50, 70, 0],
@@ -135,7 +159,7 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajorityTreeSplitAssessor();
+      final assessor = GiniIndexTreeAssessor(distributionCalculator);
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 0);
@@ -154,11 +178,11 @@ void main() {
 
       final stump = [node1, node2, node3];
 
-      expect(const MajorityTreeSplitAssessor().getAggregatedError(stump, 2), 0);
+      expect(const MajorityTreeAssessor().getAggregatedError(stump, 2), 0);
     });
 
     test(
-        'should return majority-based error, if some nodes of the stump '
+        'should return gini index error, if some nodes of the stump '
         'have equal quantity of class labels', () {
       final node1 = Matrix.fromList([
         [20, 30, 0],
@@ -182,7 +206,7 @@ void main() {
       ]);
 
       final stump = [node1, node2, node3];
-      final assessor = const MajorityTreeSplitAssessor();
+      final assessor = GiniIndexTreeAssessor(distributionCalculator);
       final error = assessor.getAggregatedError(stump, 2);
 
       expect(error, 0.5);

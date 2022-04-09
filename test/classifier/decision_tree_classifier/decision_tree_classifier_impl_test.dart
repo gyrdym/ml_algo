@@ -1,4 +1,3 @@
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
@@ -10,8 +9,11 @@ import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/di/dependency_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/model_assessor.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type_json_keys.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node_json_keys.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -81,7 +83,6 @@ void main() {
         headerExists: false, header: [targetColumnName]);
     final rootNodeJson = {
       childrenJsonKey: <Map<String, dynamic>>[],
-      levelJsonKey: 1,
     };
     final classifier32Json = {
       decisionTreeClassifierMinErrorJsonKey: minError,
@@ -90,6 +91,8 @@ void main() {
       decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float32),
       decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
       decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
+      decisionTreeClassifierAssessorTypeJsonKey:
+          treeAssessorTypeMajorityJsonValue,
       jsonSchemaVersionJsonKey: decisionTreeClassifierJsonSchemaVersion,
     };
     final classifier64Json = {
@@ -99,6 +102,8 @@ void main() {
       decisionTreeClassifierDTypeJsonKey: dTypeToJson(DType.float64),
       decisionTreeClassifierTargetColumnNameJsonKey: targetColumnName,
       decisionTreeClassifierTreeRootNodeJsonKey: rootNodeJson,
+      decisionTreeClassifierAssessorTypeJsonKey:
+          treeAssessorTypeMajorityJsonValue,
       jsonSchemaVersionJsonKey: decisionTreeClassifierJsonSchemaVersion,
     };
     final treeRootMock = createRootNodeMock({
@@ -156,6 +161,7 @@ void main() {
           any,
           any,
           any,
+          any,
         ),
       ).thenReturn(retrainedClassifier);
 
@@ -182,6 +188,7 @@ void main() {
         maxDepth,
         treeRootMock,
         targetColumnName,
+        TreeAssessorType.majority,
         DType.float32,
       );
 
@@ -191,6 +198,7 @@ void main() {
         maxDepth,
         treeRootMock,
         targetColumnName,
+        TreeAssessorType.majority,
         DType.float64,
       );
     });
@@ -319,6 +327,7 @@ void main() {
         minError,
         minSamplesCount,
         maxDepth,
+        TreeAssessorType.majority,
       )).called(1);
     });
 
