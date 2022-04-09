@@ -22,9 +22,5 @@ void main() {
     test('should contain json key for splitting index field', () {
       expect(splitIndexJsonKey, 'SI');
     });
-
-    test('should contain json key for level field', () {
-      expect(levelJsonKey, 'LV');
-    });
   });
 }

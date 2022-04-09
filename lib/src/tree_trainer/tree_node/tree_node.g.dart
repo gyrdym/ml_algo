@@ -8,7 +8,7 @@ part of 'tree_node.dart';
 
 TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
   return $checkedNew('TreeNode', json, () {
-    $checkKeys(json, allowedKeys: const ['CN', 'LB', 'PT', 'SV', 'SI', 'LV']);
+    $checkKeys(json, allowedKeys: const ['CN', 'LB', 'PT', 'SV', 'SI']);
     final val = TreeNode(
       $checkedConvert(json, 'PT', (v) => fromPredicateTypeJson(v as String?)),
       $checkedConvert(json, 'SV', (v) => v as num?),
@@ -20,7 +20,6 @@ TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
           (v) => v == null
               ? null
               : TreeLeafLabel.fromJson(v as Map<String, dynamic>)),
-      $checkedConvert(json, 'LV', (v) => v as int),
     );
     return val;
   }, fieldKeyMap: const {
@@ -28,8 +27,7 @@ TreeNode _$TreeNodeFromJson(Map<String, dynamic> json) {
     'splitValue': 'SV',
     'splitIndex': 'SI',
     'children': 'CN',
-    'label': 'LB',
-    'level': 'LV'
+    'label': 'LB'
   });
 }
 
@@ -47,6 +45,5 @@ Map<String, dynamic> _$TreeNodeToJson(TreeNode instance) {
   writeNotNull('PT', predicateTypeToJson(instance.predicateType));
   writeNotNull('SV', instance.splitValue);
   writeNotNull('SI', instance.splitIndex);
-  val['LV'] = instance.level;
   return val;
 }

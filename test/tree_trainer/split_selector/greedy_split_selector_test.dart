@@ -63,7 +63,7 @@ void main() {
         worseSplitIdx,
         goodSplitIdx,
       ];
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
       final splitter = MockTreeSplitter();
 
       when(splitter.split(samples, worstSplitIdx, targetColIdx))
@@ -126,7 +126,7 @@ void main() {
 
       final featuresIdxs = {goodFeatureColIdx, bestFeatureColIdx};
 
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
       final splitter = MockTreeSplitter();
       final categoricalValues = [1.0, 2.0, 3.0];
       final colIdxToUniqueValues = {ignoredFeatureColIdx: categoricalValues};

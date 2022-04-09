@@ -2,13 +2,13 @@ import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer.dart';
-import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
+import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:quiver/iterables.dart';
 
@@ -31,10 +31,10 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
     num minErrorOnNode,
     int minSamplesCount,
     int maxDepth,
-    TreeSplitAssessorType assessorType,
+    TreeAssessorType leafAssessorType,
     TreeLeafLabelFactoryType leafLabelFactoryType,
     TreeSplitSelectorType splitSelectorType,
-    TreeSplitAssessorType splitAssessorType,
+    TreeAssessorType splitAssessorType,
     TreeSplitterType splitterType,
   ) {
     final targetIdx = enumerate(samples.header)
@@ -51,7 +51,7 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
                   .toList(growable: false))),
     );
     final leafDetector = _leafDetectorFactory.create(
-        assessorType, minErrorOnNode, minSamplesCount, maxDepth);
+        leafAssessorType, minErrorOnNode, minSamplesCount, maxDepth);
 
     final leafLabelFactory =
         _leafLabelFactoryFactory.createByType(leafLabelFactoryType);

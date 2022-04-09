@@ -1,12 +1,12 @@
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 
 class TreeLeafDetectorImpl implements TreeLeafDetector {
   TreeLeafDetectorImpl(this._assessor, this._minErrorOnNode,
       this._minSamplesCount, this._maxDepth);
 
-  final TreeSplitAssessor _assessor;
+  final TreeAssessor _assessor;
   final int _minSamplesCount;
   final num _minErrorOnNode;
   final int _maxDepth;

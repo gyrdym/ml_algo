@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_impl.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -9,23 +9,23 @@ import '../../mocks.mocks.dart';
 
 void main() {
   group('TreeLeafDetectorFactoryImpl', () {
-    late MockTreeSplitAssessor splitAssessorMock;
-    late MockTreeSplitAssessorFactory splitAssessorFactoryMock;
+    late MockTreeAssessor assessorMock;
+    late MockTreeAssessorFactory splitAssessorFactoryMock;
     late TreeLeafDetectorFactoryImpl factory;
 
     setUp(() {
-      splitAssessorMock = MockTreeSplitAssessor();
+      assessorMock = MockTreeAssessor();
       splitAssessorFactoryMock =
-          createTreeSplitAssessorFactoryMock(splitAssessorMock);
+          createTreeSplitAssessorFactoryMock(assessorMock);
       factory = TreeLeafDetectorFactoryImpl(splitAssessorFactoryMock);
     });
 
     tearDown(() {
-      reset(splitAssessorMock);
+      reset(assessorMock);
       reset(splitAssessorFactoryMock);
     });
 
-    final assessorType = TreeSplitAssessorType.majority;
+    final assessorType = TreeAssessorType.majority;
     final minErrorOnNode = 0.7;
     final minSamplesCount = 3;
     final maxDepth = 4;

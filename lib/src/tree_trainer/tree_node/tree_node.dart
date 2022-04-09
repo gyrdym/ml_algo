@@ -1,7 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/_helper/from_tree_nodes_json.dart';
-import 'package:ml_algo/src/tree_trainer/tree_node/_helper/tree_nodes_to_json.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/helpers/from_tree_nodes_json.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/helpers/migrate_tree_node_json_schema.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/helpers/tree_nodes_to_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/_helper/get_split_predicate_by_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/from_predicate_type_json.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/split_predicate/predicate_type.dart';
@@ -13,17 +14,14 @@ part 'tree_node.g.dart';
 
 @JsonSerializable()
 class TreeNode {
-  TreeNode(
-    this.predicateType,
-    this.splitValue,
-    this.splitIndex,
-    this.children,
-    this.label, [
-    this.level = 0,
-  ]);
+  TreeNode(this.predicateType, this.splitValue, this.splitIndex, this.children,
+      this.label);
 
-  factory TreeNode.fromJson(Map<String, dynamic> json) =>
-      _$TreeNodeFromJson(json);
+  factory TreeNode.fromJson(Map<String, dynamic> json) {
+    final migrated = migrateTreeNodeJsonSchema(json);
+
+    return _$TreeNodeFromJson(migrated);
+  }
 
   Map<String, dynamic> toJson() => _$TreeNodeToJson(this);
 
@@ -49,9 +47,6 @@ class TreeNode {
 
   @JsonKey(name: splitIndexJsonKey)
   final int? splitIndex;
-
-  @JsonKey(name: levelJsonKey)
-  final int level;
 
   bool get isLeaf => children == null || children!.isEmpty;
 

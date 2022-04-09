@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 import '../../mocks.mocks.dart';
 
 void main() {
-  final treeSplitAssessorMock = MockTreeSplitAssessor();
+  final treeSplitAssessorMock = MockTreeAssessor();
   final numericalTreeSplitterMock = MockNumericalTreeSplitter();
   final nominalTreeSplitterMock = MockNominalTreeSplitter();
 
@@ -80,7 +80,7 @@ void main() {
           'split': mockedWorstSplit,
         },
       ];
-      final assessor = MockTreeSplitAssessor();
+      final assessor = MockTreeAssessor();
 
       when(assessor.getAggregatedError(mockedWorstSplit.values, targetIdx))
           .thenReturn(0.99);
@@ -213,7 +213,7 @@ void main() {
     final targetColumnIdx = 1;
 
     final numericalSplitter = MockNumericalTreeSplitter();
-    final assessor = MockTreeSplitAssessor();
+    final assessor = MockTreeAssessor();
 
     when(
       numericalSplitter.split(
@@ -273,7 +273,7 @@ void main() {
     final targetColumnIdx = 1;
 
     final numericalSplitter = MockNumericalTreeSplitter();
-    final assessor = MockTreeSplitAssessor();
+    final assessor = MockTreeAssessor();
 
     when(
       numericalSplitter.split(

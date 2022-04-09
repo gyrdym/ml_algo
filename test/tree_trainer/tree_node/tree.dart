@@ -7,7 +7,6 @@ final _child31 = TreeNode(
   null,
   [],
   null,
-  3,
 );
 
 final _child32 = TreeNode(
@@ -16,7 +15,6 @@ final _child32 = TreeNode(
   null,
   [],
   null,
-  3,
 );
 
 final _child33 = TreeNode(
@@ -25,7 +23,6 @@ final _child33 = TreeNode(
   null,
   [],
   null,
-  3,
 );
 
 final _child34 = TreeNode(
@@ -34,7 +31,6 @@ final _child34 = TreeNode(
   null,
   [],
   null,
-  3,
 );
 
 final _child35 = TreeNode(
@@ -43,7 +39,6 @@ final _child35 = TreeNode(
   null,
   [],
   null,
-  3,
 );
 
 final _child36 = TreeNode(
@@ -52,7 +47,6 @@ final _child36 = TreeNode(
   null,
   [],
   null,
-  3,
 );
 
 final _child37 = TreeNode(
@@ -61,7 +55,6 @@ final _child37 = TreeNode(
   null,
   [],
   null,
-  3,
 );
 
 final _child21 = TreeNode(
@@ -73,7 +66,6 @@ final _child21 = TreeNode(
     _child32,
   ],
   null,
-  2,
 );
 
 final _child22 = TreeNode(
@@ -85,7 +77,6 @@ final _child22 = TreeNode(
     _child34,
   ],
   null,
-  2,
 );
 
 final _child23 = TreeNode(
@@ -97,7 +88,6 @@ final _child23 = TreeNode(
     _child36,
   ],
   null,
-  2,
 );
 
 final _child24 = TreeNode(
@@ -108,7 +98,6 @@ final _child24 = TreeNode(
     _child37,
   ],
   null,
-  2,
 );
 
 final _child25 = TreeNode(
@@ -117,7 +106,6 @@ final _child25 = TreeNode(
   null,
   [],
   null,
-  2,
 );
 
 final _child11 = TreeNode(
@@ -126,7 +114,6 @@ final _child11 = TreeNode(
   null,
   [_child21, _child22],
   null,
-  1,
 );
 
 final _child12 = TreeNode(
@@ -138,7 +125,6 @@ final _child12 = TreeNode(
     _child24,
   ],
   null,
-  1,
 );
 
 final _child13 = TreeNode(
@@ -149,7 +135,6 @@ final _child13 = TreeNode(
     _child25,
   ],
   null,
-  1,
 );
 
 final tree = TreeNode(

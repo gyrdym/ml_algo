@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.8.0
+- DecisionTreeClassifier:
+    - Added Gini index assessor type
+
 ## 16.7.2
 - DecisionTreeClassifier:
     - TreeNode fields renamed

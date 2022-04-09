@@ -1,8 +1,8 @@
-import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart';
+import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_linalg/axis.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/xrange.dart';
@@ -11,7 +11,7 @@ class GreedyTreeSplitter implements TreeSplitter {
   GreedyTreeSplitter(
       this._assessor, this._numericalSplitter, this._nominalSplitter);
 
-  final TreeSplitAssessor _assessor;
+  final TreeAssessor _assessor;
   final NumericalTreeSplitter _numericalSplitter;
   final NominalTreeSplitter _nominalSplitter;
 

@@ -14,7 +14,6 @@ void main() {
     final splittingIndex = 2;
     final children = <TreeNode>[];
     final treeLabel = TreeLeafLabel(1000, probability: 0.75);
-    final level = 3;
 
     final node = TreeNode(
       predicateType,
@@ -22,7 +21,6 @@ void main() {
       splittingIndex,
       children,
       treeLabel,
-      level,
     );
 
     test('should hold splitting predicate type', () {
@@ -43,10 +41,6 @@ void main() {
 
     test('should hold tree leaf label', () {
       expect(node.label, treeLabel);
-    });
-
-    test('should hold tree level', () {
-      expect(node.level, level);
     });
 
     test('should serialize', () async {
