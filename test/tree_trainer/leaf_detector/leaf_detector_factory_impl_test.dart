@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_impl.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -25,7 +25,7 @@ void main() {
       reset(splitAssessorFactoryMock);
     });
 
-    final assessorType = TreeSplitAssessorType.majority;
+    final assessorType = TreeAssessorType.majority;
     final minErrorOnNode = 0.7;
     final minSamplesCount = 3;
     final maxDepth = 4;

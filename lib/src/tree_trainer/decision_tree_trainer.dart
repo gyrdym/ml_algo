@@ -10,7 +10,7 @@ class DecisionTreeTrainer implements TreeTrainer {
   DecisionTreeTrainer(
     this._featureIndices,
     this._targetIdx,
-    this._featureToUniqueValues,
+    this._featureToValues,
     this._leafDetector,
     this._leafLabelFactory,
     this._splitSelector,
@@ -18,7 +18,7 @@ class DecisionTreeTrainer implements TreeTrainer {
 
   final Iterable<int> _featureIndices;
   final int _targetIdx;
-  final Map<int, List<num>> _featureToUniqueValues;
+  final Map<int, List<num>> _featureToValues;
   final TreeLeafDetector _leafDetector;
   final TreeLeafLabelFactory _leafLabelFactory;
   final TreeSplitSelector _splitSelector;
@@ -29,9 +29,9 @@ class DecisionTreeTrainer implements TreeTrainer {
 
   TreeNode _train(
     Matrix samples,
-    num? splittingValue,
-    int? splittingIdx,
-    PredicateType? splittingPredicateType,
+    num? splitValue,
+    int? splitIdx,
+    PredicateType? predicateType,
     Iterable<int> featuresColumnIdxs,
     int level,
   ) {
@@ -49,9 +49,9 @@ class DecisionTreeTrainer implements TreeTrainer {
       );
 
       return TreeNode(
-        splittingPredicateType,
-        splittingValue,
-        splittingIdx,
+        predicateType,
+        splitValue,
+        splitIdx,
         null,
         label,
       );
@@ -61,15 +61,15 @@ class DecisionTreeTrainer implements TreeTrainer {
       samples,
       _targetIdx,
       featuresColumnIdxs,
-      _featureToUniqueValues,
+      _featureToValues,
     );
 
     final childNodes = bestSplit.entries.map((entry) {
       final splitNode = entry.key;
       final splitSamples = entry.value;
       final isSplitByNominalValue =
-          _featureToUniqueValues.containsKey(splitNode.splitIndex);
-      final updatedColumnRanges = isSplitByNominalValue
+          _featureToValues.containsKey(splitNode.splitIndex);
+      final updatedColumnIdxs = isSplitByNominalValue
           ? (Set<int>.from(featuresColumnIdxs)..remove(splitNode.splitIndex))
           : featuresColumnIdxs;
 
@@ -78,15 +78,15 @@ class DecisionTreeTrainer implements TreeTrainer {
         splitNode.splitValue,
         splitNode.splitIndex,
         splitNode.predicateType,
-        updatedColumnRanges,
+        updatedColumnIdxs,
         level + 1,
       );
     });
 
     return TreeNode(
-      splittingPredicateType,
-      splittingValue,
-      splittingIdx,
+      predicateType,
+      splitValue,
+      splitIdx,
       childNodes.toList(growable: false),
       null,
     );

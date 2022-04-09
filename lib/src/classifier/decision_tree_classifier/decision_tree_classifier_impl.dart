@@ -11,7 +11,10 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/helpers/create_t
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/json_converter/dtype_json_converter.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/helpers/from_assessor_type_json.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/helpers/to_assessor_type_json.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -34,6 +37,7 @@ class DecisionTreeClassifierImpl
     this.maxDepth,
     this.treeRootNode,
     this.targetColumnName,
+    this.assessorType,
     this.dtype, {
     this.schemaVersion = decisionTreeClassifierJsonSchemaVersion,
   });
@@ -78,6 +82,13 @@ class DecisionTreeClassifierImpl
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
   final int schemaVersion;
+
+  @override
+  @JsonKey(
+      name: decisionTreeClassifierAssessorTypeJsonKey,
+      toJson: toAssessorTypeJson,
+      fromJson: fromAssessorTypeJson)
+  final TreeAssessorType assessorType;
 
   @override
   DataFrame predict(DataFrame features) {
@@ -144,6 +155,7 @@ class DecisionTreeClassifierImpl
           minError,
           minSamplesCount,
           maxDepth,
+          assessorType,
         );
   }
 

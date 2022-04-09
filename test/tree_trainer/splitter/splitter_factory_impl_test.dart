@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/greedy_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
@@ -47,7 +47,7 @@ void main() {
 
     test('should create a GreedyTreeSplitter instance', () {
       final type = TreeSplitterType.greedy;
-      final assessorType = TreeSplitAssessorType.majority;
+      final assessorType = TreeAssessorType.majority;
       final splitter = factory.createByType(type, assessorType);
 
       expect(splitter, isA<GreedyTreeSplitter>());
@@ -55,7 +55,7 @@ void main() {
 
     test('should call assessor factory while creating the instance', () {
       final type = TreeSplitterType.greedy;
-      final assessorType = TreeSplitAssessorType.majority;
+      final assessorType = TreeAssessorType.majority;
 
       factory.createByType(type, assessorType);
 
@@ -68,7 +68,7 @@ void main() {
         'should call nominal splitter factory while creating the '
         'instance', () {
       final type = TreeSplitterType.greedy;
-      final assessorType = TreeSplitAssessorType.majority;
+      final assessorType = TreeAssessorType.majority;
 
       factory.createByType(type, assessorType);
 
@@ -79,7 +79,7 @@ void main() {
         'should call numerical splitter factory while creating the '
         'instance', () {
       final type = TreeSplitterType.greedy;
-      final assessorType = TreeSplitAssessorType.majority;
+      final assessorType = TreeAssessorType.majority;
 
       factory.createByType(type, assessorType);
 

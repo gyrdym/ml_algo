@@ -2,7 +2,7 @@ import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
@@ -31,10 +31,10 @@ class TreeTrainerFactoryImpl implements TreeTrainerFactory {
     num minErrorOnNode,
     int minSamplesCount,
     int maxDepth,
-    TreeSplitAssessorType assessorType,
+    TreeAssessorType assessorType,
     TreeLeafLabelFactoryType leafLabelFactoryType,
     TreeSplitSelectorType splitSelectorType,
-    TreeSplitAssessorType splitAssessorType,
+    TreeAssessorType splitAssessorType,
     TreeSplitterType splitterType,
   ) {
     final targetIdx = enumerate(samples.header)

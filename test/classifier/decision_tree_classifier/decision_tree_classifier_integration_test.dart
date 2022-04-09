@@ -5,6 +5,7 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_cl
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_impl.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_json_keys.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 import 'package:test/test.dart';
@@ -23,7 +24,10 @@ void main() {
 
     final targetName = 'col_8';
     final classifier = DecisionTreeClassifier(fakeDataSet, targetName,
-        minError: 0.3, minSamplesCount: 1, maxDepth: 3);
+        minError: 0.3,
+        minSamplesCount: 1,
+        maxDepth: 3,
+        assessorType: TreeAssessorType.majority);
     final testFileName =
         'test/classifier/decision_tree_classifier/serialized_classifier.json';
 
@@ -93,7 +97,10 @@ void main() {
         'should throw an exception if maximal tree depth value is equal '
         'to zero', () {
       final actual = () => DecisionTreeClassifier(fakeDataSet, targetName,
-          minError: 0.5, minSamplesCount: 1, maxDepth: 0);
+          minError: 0.5,
+          minSamplesCount: 1,
+          maxDepth: 0,
+          assessorType: TreeAssessorType.majority);
 
       expect(actual, throwsException);
     });

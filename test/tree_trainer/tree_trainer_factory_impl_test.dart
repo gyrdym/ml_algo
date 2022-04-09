@@ -2,7 +2,7 @@ import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dar
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
@@ -43,10 +43,10 @@ void main() {
     final minErrorOnNode = 0.3;
     final minSamplesCount = 10;
     final maxDepth = 7;
-    final assessorType = TreeSplitAssessorType.majority;
+    final assessorType = TreeAssessorType.majority;
     final leafLabelFactoryType = TreeLeafLabelFactoryType.majority;
     final splitSelectorType = TreeSplitSelectorType.greedy;
-    final splitAssessorType = TreeSplitAssessorType.majority;
+    final splitAssessorType = TreeAssessorType.majority;
     final splitterType = TreeSplitterType.greedy;
 
     setUp(() {

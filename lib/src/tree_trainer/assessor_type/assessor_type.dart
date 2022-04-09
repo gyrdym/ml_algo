@@ -1,0 +1,4 @@
+enum TreeAssessorType {
+  majority,
+  gini,
+}

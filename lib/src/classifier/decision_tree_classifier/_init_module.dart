@@ -2,8 +2,10 @@ import 'package:injector/injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_factory_impl.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory.dart';
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_factory_impl.dart';
+import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator_impl.dart';
 import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/extensions/injector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
@@ -29,12 +31,15 @@ Injector initDecisionTreeModule() {
   return decisionTreeInjector
     ..registerSingletonIf<DistributionCalculatorFactory>(
         () => const DistributionCalculatorFactoryImpl())
+    ..registerSingletonIf<DistributionCalculator>(
+        () => const DistributionCalculatorImpl())
     ..registerSingletonIf<NominalTreeSplitterFactory>(
         () => const NominalTreeSplitterFactoryImpl())
     ..registerSingletonIf<NumericalTreeSplitterFactory>(
         () => const NumericalTreeSplitterFactoryImpl())
-    ..registerSingletonIf<TreeSplitAssessorFactory>(
-        () => const TreeSplitAssessorFactoryImpl())
+    ..registerSingletonIf<TreeSplitAssessorFactory>(() =>
+        TreeSplitAssessorFactoryImpl(
+            decisionTreeInjector.get<DistributionCalculator>()))
     ..registerSingletonIf<TreeSplitterFactory>(() => TreeSplitterFactoryImpl(
           decisionTreeInjector.get<TreeSplitAssessorFactory>(),
           decisionTreeInjector.get<NominalTreeSplitterFactory>(),

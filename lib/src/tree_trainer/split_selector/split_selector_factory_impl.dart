@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/greedy_split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
@@ -19,7 +19,7 @@ class TreeSplitSelectorFactoryImpl implements TreeSplitSelectorFactory {
   @override
   TreeSplitSelector createByType(
     TreeSplitSelectorType type,
-    TreeSplitAssessorType assessorType,
+    TreeAssessorType assessorType,
     TreeSplitterType splitterType,
   ) {
     final assessor = _assessorFactory.createByType(assessorType);

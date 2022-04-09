@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/greedy_split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
@@ -37,7 +37,7 @@ void main() {
 
     test('should create a GreedyTreeSplitSelector instance', () {
       final type = TreeSplitSelectorType.greedy;
-      final assessorType = TreeSplitAssessorType.majority;
+      final assessorType = TreeAssessorType.majority;
       final splitterType = TreeSplitterType.greedy;
 
       final splitSelector =
@@ -50,7 +50,7 @@ void main() {
         'should call split assessor factory while creating the '
         'instance', () {
       final type = TreeSplitSelectorType.greedy;
-      final assessorType = TreeSplitAssessorType.majority;
+      final assessorType = TreeAssessorType.majority;
       final splitterType = TreeSplitterType.greedy;
 
       factory.createByType(type, assessorType, splitterType);
@@ -60,7 +60,7 @@ void main() {
 
     test('should call splitter factory while creating the instance', () {
       final type = TreeSplitSelectorType.greedy;
-      final assessorType = TreeSplitAssessorType.majority;
+      final assessorType = TreeAssessorType.majority;
       final splitterType = TreeSplitterType.greedy;
 
       factory.createByType(type, assessorType, splitterType);
