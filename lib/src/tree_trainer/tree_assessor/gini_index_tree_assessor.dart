@@ -8,34 +8,34 @@ class GiniIndexTreeAssessor implements TreeAssessor {
   final DistributionCalculator distributionCalculator;
 
   @override
-  double getAggregatedError(Iterable<Matrix> splits, int targetId) {
+  double getAggregatedError(Iterable<Matrix> split, int targetId) {
     var aggregatedGini = 0.0;
     final totalCount =
-        splits.fold<int>(0, (total, split) => total + split.rowsNum);
+        split.fold<int>(0, (total, samples) => total + samples.rowsNum);
 
-    for (final split in splits) {
-      if (split.columnsNum == 0) {
+    for (final samples in split) {
+      if (samples.columnsNum == 0) {
         continue;
       }
 
-      if (targetId >= split.columnsNum) {
+      if (targetId >= samples.columnsNum) {
         throw ArgumentError.value(
             targetId,
             'targetId',
-            'the value should be in [0..${split.columnsNum - 1}] '
+            'the value should be in [0..${samples.columnsNum - 1}] '
                 'range, but given');
       }
 
       aggregatedGini +=
-          getError(split, targetId) * (split.rowsNum / totalCount);
+          getError(samples, targetId) * (samples.rowsNum / totalCount);
     }
 
-    return aggregatedGini / totalCount;
+    return aggregatedGini;
   }
 
   @override
-  double getError(Matrix split, int targetId) {
-    final target = split.getColumn(targetId);
+  double getError(Matrix samples, int targetId) {
+    final target = samples.getColumn(targetId);
     final distribution = distributionCalculator.calculate(target);
     var giniIndex = 0.0;
 

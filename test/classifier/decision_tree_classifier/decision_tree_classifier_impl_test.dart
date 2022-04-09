@@ -1,4 +1,3 @@
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/classifier.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_classifier_constants.dart';
@@ -10,6 +9,7 @@ import 'package:ml_algo/src/di/common/init_common_module.dart';
 import 'package:ml_algo/src/di/dependency_keys.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/metric/metric_factory.dart';
+import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/model_selection/model_assessor/model_assessor.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label.dart';
 import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';

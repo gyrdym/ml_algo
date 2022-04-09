@@ -9,33 +9,32 @@ class MajorityTreeAssessor implements TreeAssessor {
   const MajorityTreeAssessor();
 
   @override
-  double getAggregatedError(Iterable<Matrix> splits, int targetId) {
+  double getAggregatedError(Iterable<Matrix> split, int targetId) {
     var errorCount = 0;
     var totalCount = 0;
 
-    for (final split in splits) {
-      if (split.columnsNum == 0) {
+    for (final samples in split) {
+      if (samples.columnsNum == 0) {
         continue;
       }
 
-      if (targetId >= split.columnsNum) {
+      if (targetId >= samples.columnsNum) {
         throw ArgumentError.value(
             targetId,
             'targetId',
-            'the value should be in [0..${split.columnsNum - 1}] '
+            'the value should be in [0..${samples.columnsNum - 1}] '
                 'range, but given');
       }
-      errorCount += _getErrorCount(split.getColumn(targetId));
-      totalCount += split.rowsNum;
+      errorCount += _getErrorCount(samples.getColumn(targetId));
+      totalCount += samples.rowsNum;
     }
 
     return errorCount / totalCount;
   }
 
   @override
-  double getError(Matrix splitObservations, int targetId) =>
-      _getErrorCount(splitObservations.getColumn(targetId)) /
-      splitObservations.rowsNum;
+  double getError(Matrix samples, int targetId) =>
+      _getErrorCount(samples.getColumn(targetId)) / samples.rowsNum;
 
   int _getErrorCount(Vector outcomes) {
     if (outcomes.isEmpty) {

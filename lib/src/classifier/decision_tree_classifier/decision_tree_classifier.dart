@@ -46,6 +46,9 @@ abstract class DecisionTreeClassifier
   /// equal to [minSamplesCount] observations, the node turns into the leaf.
   ///
   /// [maxDepth] A maximum number of decision tree levels.
+  ///
+  /// [assessorType] Defines an assessment type that will be applied to a subset
+  /// of data in order to decide how to split the subset while building the tree
   factory DecisionTreeClassifier(
     DataFrame trainData,
     String targetName, {
@@ -128,6 +131,8 @@ abstract class DecisionTreeClassifier
   /// The value is read-only, it's a hyperparameter of the model
   int get maxDepth;
 
+  /// Defines an assessment type that was applied to a subset of data in
+  /// order to decide how to split the subset while building the tree
   TreeAssessorType get assessorType;
 
   /// Saves tree as SVG-image. Example:
