@@ -48,7 +48,16 @@ abstract class DecisionTreeClassifier
   /// [maxDepth] A maximum number of decision tree levels.
   ///
   /// [assessorType] Defines an assessment type that will be applied to a subset
-  /// of data in order to decide how to split the subset while building the tree
+  /// of data in order to decide how to split the subset while building the tree.
+  /// Default value is [TreeAssessorType.gini]
+  ///
+  /// Possible values of [assessorType]
+  ///
+  /// [TreeAssessorType.gini] The algorithm makes a decision on how to split a
+  /// subset of data based on the [Gini index](https://en.wikipedia.org/wiki/Gini_coefficient)
+  ///
+  /// [TreeAssessorType.majority] The algorithm makes a decision on how to split a
+  /// subset of data based on a major class.
   factory DecisionTreeClassifier(
     DataFrame trainData,
     String targetName, {
