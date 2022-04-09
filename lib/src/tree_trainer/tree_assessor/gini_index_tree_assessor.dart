@@ -1,9 +1,9 @@
 import 'package:ml_algo/src/common/distribution_calculator/distribution_calculator.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 
-class GiniIndexTreeSplitAssessor implements TreeSplitAssessor {
-  const GiniIndexTreeSplitAssessor(this.distributionCalculator);
+class GiniIndexTreeAssessor implements TreeAssessor {
+  const GiniIndexTreeAssessor(this.distributionCalculator);
 
   final DistributionCalculator distributionCalculator;
 

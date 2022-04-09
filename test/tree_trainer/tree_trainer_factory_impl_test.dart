@@ -2,11 +2,11 @@ import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dar
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
-import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
@@ -43,7 +43,7 @@ void main() {
     final minErrorOnNode = 0.3;
     final minSamplesCount = 10;
     final maxDepth = 7;
-    final assessorType = TreeAssessorType.majority;
+    final leafAssessorType = TreeAssessorType.majority;
     final leafLabelFactoryType = TreeLeafLabelFactoryType.majority;
     final splitSelectorType = TreeSplitSelectorType.greedy;
     final splitAssessorType = TreeAssessorType.majority;
@@ -81,7 +81,7 @@ void main() {
         minErrorOnNode,
         minSamplesCount,
         maxDepth,
-        assessorType,
+        leafAssessorType,
         leafLabelFactoryType,
         splitSelectorType,
         splitAssessorType,
@@ -100,7 +100,7 @@ void main() {
 
     test('should call leaf detector factory while creating the instance', () {
       verify(leafDetectorFactoryMock.create(
-              assessorType, minErrorOnNode, minSamplesCount, maxDepth))
+              leafAssessorType, minErrorOnNode, minSamplesCount, maxDepth))
           .called(1);
     });
 
@@ -112,7 +112,7 @@ void main() {
 
     test('should call split selector factory while creating the instance', () {
       verify(splitSelectorFactoryMock.createByType(
-              splitSelectorType, assessorType, splitterType))
+              splitSelectorType, leafAssessorType, splitterType))
           .called(1);
     });
   });

@@ -41,8 +41,6 @@ import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter.dart';
@@ -51,6 +49,8 @@ import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_s
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/matrix.dart';
@@ -380,9 +380,9 @@ LinearRegressorFactory createLinearRegressorFactoryMock(
   return factory;
 }
 
-MockTreeSplitAssessorFactory createTreeSplitAssessorFactoryMock(
-    TreeSplitAssessor splitAssessor) {
-  final factory = MockTreeSplitAssessorFactory();
+MockTreeAssessorFactory createTreeSplitAssessorFactoryMock(
+    TreeAssessor splitAssessor) {
+  final factory = MockTreeAssessorFactory();
 
   when(
     factory.createByType(any),
@@ -478,8 +478,8 @@ MockDistributionCalculatorFactory createDistributionCalculatorFactoryMock(
 }
 
 @GenerateMocks([
-  TreeSplitAssessor,
-  TreeSplitAssessorFactory,
+  TreeAssessor,
+  TreeAssessorFactory,
   NumericalTreeSplitter,
   NominalTreeSplitter,
   TreeSplitter,

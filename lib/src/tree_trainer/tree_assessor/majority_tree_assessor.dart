@@ -1,12 +1,12 @@
 import 'dart:collection';
 import 'dart:math' as math;
 
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-class MajorityTreeSplitAssessor implements TreeSplitAssessor {
-  const MajorityTreeSplitAssessor();
+class MajorityTreeAssessor implements TreeAssessor {
+  const MajorityTreeAssessor();
 
   @override
   double getAggregatedError(Iterable<Matrix> splits, int targetId) {

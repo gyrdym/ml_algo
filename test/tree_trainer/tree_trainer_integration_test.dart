@@ -2,9 +2,9 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/_init_module.dar
 import 'package:ml_algo/src/classifier/decision_tree_classifier/_injector.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart';
-import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_factory.dart';
 import 'package:ml_algo/src/tree_trainer/tree_trainer_type.dart';
 import 'package:ml_linalg/dtype.dart';

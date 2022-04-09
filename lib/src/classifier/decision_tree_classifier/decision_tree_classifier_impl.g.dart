@@ -18,7 +18,7 @@ DecisionTreeClassifierImpl _$DecisionTreeClassifierImplFromJson(
       $checkedConvert(
           json, 'R', (v) => TreeNode.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'T', (v) => v as String),
-      $checkedConvert(json, 'A', (v) => fromAssessorTypeJson(v as String?)),
+      $checkedConvert(json, 'A', (v) => fromTreeAssessorTypeJson(v as String?)),
       $checkedConvert(
           json, 'DT', (v) => const DTypeJsonConverter().fromJson(v as String)),
       schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
@@ -54,6 +54,6 @@ Map<String, dynamic> _$DecisionTreeClassifierImplToJson(
   val['T'] = instance.targetColumnName;
   val['R'] = instance.treeRootNode.toJson();
   val[r'$V'] = instance.schemaVersion;
-  writeNotNull('A', toAssessorTypeJson(instance.assessorType));
+  writeNotNull('A', toTreeAssessorTypeJson(instance.assessorType));
   return val;
 }

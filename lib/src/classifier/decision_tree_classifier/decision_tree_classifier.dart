@@ -7,7 +7,7 @@ import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/model_selection/assessable.dart';
 import 'package:ml_algo/src/predictor/retrainable.dart';
-import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/dtype.dart';
 

@@ -1,11 +1,11 @@
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
-import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/greedy_splitter.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/nominal_splitter/nominal_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/numerical_splitter/numerical_splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory_impl.dart';
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_factory.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -14,11 +14,11 @@ import '../../mocks.mocks.dart';
 
 void main() {
   group('TreeSplitterFactoryImpl', () {
-    final assessorMock = MockTreeSplitAssessor();
+    final assessorMock = MockTreeAssessor();
     final nominalSplitterMock = MockNominalTreeSplitter();
     final numericalSplitterMock = MockNumericalTreeSplitter();
 
-    late TreeSplitAssessorFactory assessorFactoryMock;
+    late TreeAssessorFactory assessorFactoryMock;
     late NominalTreeSplitterFactory nominalSplitterFactoryMock;
     late NumericalTreeSplitterFactory numericalSplitterFactoryMock;
     late TreeSplitterFactory factory;

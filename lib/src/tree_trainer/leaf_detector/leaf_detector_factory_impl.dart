@@ -1,13 +1,13 @@
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_factory.dart';
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector_impl.dart';
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart';
-import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_factory.dart';
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 
 class TreeLeafDetectorFactoryImpl implements TreeLeafDetectorFactory {
   TreeLeafDetectorFactoryImpl(this._splitAssessorFactory);
 
-  final TreeSplitAssessorFactory _splitAssessorFactory;
+  final TreeAssessorFactory _splitAssessorFactory;
 
   @override
   TreeLeafDetector create(

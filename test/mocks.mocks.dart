@@ -61,8 +61,6 @@ import 'package:ml_algo/src/regressor/knn_regressor/knn_regressor_factory.dart'
     as _i61;
 import 'package:ml_algo/src/regressor/linear_regressor/linear_regressor_factory.dart'
     as _i64;
-import 'package:ml_algo/src/tree_trainer/assessor_type/assessor_type.dart'
-    as _i31;
 import 'package:ml_algo/src/tree_trainer/decision_tree_trainer.dart' as _i60;
 import 'package:ml_algo/src/tree_trainer/leaf_detector/leaf_detector.dart'
     as _i16;
@@ -75,10 +73,6 @@ import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_factory.d
     as _i56;
 import 'package:ml_algo/src/tree_trainer/leaf_label/leaf_label_factory_type.dart'
     as _i57;
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor.dart'
-    as _i4;
-import 'package:ml_algo/src/tree_trainer/split_assessor/split_assessor_factory.dart'
-    as _i30;
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector.dart'
     as _i25;
 import 'package:ml_algo/src/tree_trainer/split_selector/split_selector_factory.dart'
@@ -97,6 +91,12 @@ import 'package:ml_algo/src/tree_trainer/splitter/splitter.dart' as _i5;
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_factory.dart'
     as _i32;
 import 'package:ml_algo/src/tree_trainer/splitter/splitter_type.dart' as _i33;
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor.dart'
+    as _i4;
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_factory.dart'
+    as _i30;
+import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart'
+    as _i31;
 import 'package:ml_algo/src/tree_trainer/tree_node/tree_node.dart' as _i26;
 import 'package:ml_dataframe/ml_dataframe.dart' as _i20;
 import 'package:ml_linalg/linalg.dart' as _i11;
@@ -117,8 +117,7 @@ class _FakeNumericalTreeSplitter_0 extends _i1.Fake
 class _FakeNominalTreeSplitter_1 extends _i1.Fake
     implements _i3.NominalTreeSplitter {}
 
-class _FakeTreeSplitAssessor_2 extends _i1.Fake
-    implements _i4.TreeSplitAssessor {}
+class _FakeTreeAssessor_2 extends _i1.Fake implements _i4.TreeAssessor {}
 
 class _FakeTreeSplitter_3 extends _i1.Fake implements _i5.TreeSplitter {}
 
@@ -223,41 +222,40 @@ class MockNominalTreeSplitterFactory extends _i1.Mock
   String toString() => super.toString();
 }
 
-/// A class which mocks [TreeSplitAssessor].
+/// A class which mocks [TreeAssessor].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTreeSplitAssessor extends _i1.Mock implements _i4.TreeSplitAssessor {
-  MockTreeSplitAssessor() {
+class MockTreeAssessor extends _i1.Mock implements _i4.TreeAssessor {
+  MockTreeAssessor() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  double getAggregatedError(
-          Iterable<_i8.Matrix>? splitObservations, int? targetId) =>
+  double getAggregatedError(Iterable<_i8.Matrix>? splits, int? targetIdx) =>
       (super.noSuchMethod(
-          Invocation.method(#getAggregatedError, [splitObservations, targetId]),
+          Invocation.method(#getAggregatedError, [splits, targetIdx]),
           returnValue: 0.0) as double);
   @override
-  double getError(_i8.Matrix? splitObservations, int? targetId) => (super
-      .noSuchMethod(Invocation.method(#getError, [splitObservations, targetId]),
+  double getError(_i8.Matrix? split, int? targetIdx) =>
+      (super.noSuchMethod(Invocation.method(#getError, [split, targetIdx]),
           returnValue: 0.0) as double);
   @override
   String toString() => super.toString();
 }
 
-/// A class which mocks [TreeSplitAssessorFactory].
+/// A class which mocks [TreeAssessorFactory].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTreeSplitAssessorFactory extends _i1.Mock
-    implements _i30.TreeSplitAssessorFactory {
-  MockTreeSplitAssessorFactory() {
+class MockTreeAssessorFactory extends _i1.Mock
+    implements _i30.TreeAssessorFactory {
+  MockTreeAssessorFactory() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.TreeSplitAssessor createByType(_i31.TreeAssessorType? type) =>
+  _i4.TreeAssessor createByType(_i31.TreeAssessorType? type) =>
       (super.noSuchMethod(Invocation.method(#createByType, [type]),
-          returnValue: _FakeTreeSplitAssessor_2()) as _i4.TreeSplitAssessor);
+          returnValue: _FakeTreeAssessor_2()) as _i4.TreeAssessor);
   @override
   String toString() => super.toString();
 }
@@ -486,7 +484,7 @@ class MockDecisionTreeClassifierFactory extends _i1.Mock
           num? minError,
           int? minSamplesCount,
           int? maxDepth,
-          _i31.TreeAssessorType? splitAssessorType) =>
+          _i31.TreeAssessorType? assessorType) =>
       (super.noSuchMethod(
               Invocation.method(#create, [
                 trainData,
@@ -495,7 +493,7 @@ class MockDecisionTreeClassifierFactory extends _i1.Mock
                 minError,
                 minSamplesCount,
                 maxDepth,
-                splitAssessorType
+                assessorType
               ]),
               returnValue: _FakeDecisionTreeClassifier_8())
           as _i10.DecisionTreeClassifier);
