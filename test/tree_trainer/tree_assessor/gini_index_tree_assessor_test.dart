@@ -23,7 +23,7 @@ void main() {
     });
 
     test(
-        'should return `0` gini index based error on node if the node '
+        'should return `0` gini index error on node if the node '
         'has only one class label', () {
       final node = Matrix.fromList([
         [10, 30, 0],
@@ -35,8 +35,7 @@ void main() {
       expect(error, 0);
     });
 
-    test(
-        'should return correct aggregated gini index based error on decision stump',
+    test('should return correct aggregated gini index error on decision stump',
         () {
       final node1 = Matrix.fromList([
         [10, 30, 0],
@@ -145,7 +144,7 @@ void main() {
     });
 
     test(
-        'should return gini index based error that is equal to 0, if all '
+        'should return gini index error that is equal to 0, if all '
         'nodes in the stump have only one observation', () {
       final node1 = Matrix.fromList([
         [50, 70, 0],
@@ -183,7 +182,7 @@ void main() {
     });
 
     test(
-        'should return gini index based error, if some nodes of the stump '
+        'should return gini index error, if some nodes of the stump '
         'have equal quantity of class labels', () {
       final node1 = Matrix.fromList([
         [20, 30, 0],
