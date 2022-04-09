@@ -51,7 +51,7 @@ abstract class DecisionTreeClassifier
   /// of data in order to decide how to split the subset while building the tree.
   /// Default value is [TreeAssessorType.gini]
   ///
-  /// Possible values of [assessorType]
+  /// Possible values of [assessorType] :
   ///
   /// [TreeAssessorType.gini] The algorithm makes a decision on how to split a
   /// subset of data based on the [Gini index](https://en.wikipedia.org/wiki/Gini_coefficient)
@@ -140,8 +140,8 @@ abstract class DecisionTreeClassifier
   /// The value is read-only, it's a hyperparameter of the model
   int get maxDepth;
 
-  /// Defines an assessment type that was applied to a subset of data in
-  /// order to decide how to split the subset while building the tree
+  /// An assessment type that was applied to a subset of data in order to
+  /// decide how to split the subset while building the tree
   TreeAssessorType get assessorType;
 
   /// Saves tree as SVG-image. Example:
