@@ -5,6 +5,7 @@ import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -117,5 +118,6 @@ abstract class KDTree implements Serializable {
   ///
   /// print(neighbours.index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
   /// ```
-  Iterable<KDTreeNeighbour> query(Vector point, int k);
+  Iterable<KDTreeNeighbour> query(Vector point, int k,
+      [Distance distance = Distance.euclidean]);
 }
