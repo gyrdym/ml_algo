@@ -30,7 +30,7 @@ Future main() async {
   final points = Matrix.random(20000, 10, seed: 1, min: -5000, max: 5000);
 
   trainData = DataFrame.fromMatrix(points);
-  tree = KDTree(trainData, leafSize: 1);
+  tree = KDTree(trainData);
   point = Vector.randomFilled(trainData.rows.first.length,
       seed: 10, min: -5000, max: 5000);
 
