@@ -3,6 +3,7 @@ import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
@@ -61,10 +62,10 @@ void main() {
     });
 
     test(
-        'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=3, splitStrategy=KDTreeSplitStrategy.inOrder',
+        'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=3, splitStrategy=KDTreeSplitStrategy.largestVariance',
         () {
       final kdTree = KDTree(DataFrame(data, headerExists: false),
-          leafSize: 3, splitStrategy: KDTreeSplitStrategy.inOrder);
+          leafSize: 3, splitStrategy: KDTreeSplitStrategy.largestVariance);
       final sample = Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]);
       final result = kdTree.query(sample, 3).toList();
 
@@ -84,7 +85,7 @@ void main() {
       expect(result[0].index, 4);
       expect(result[1].index, 12);
       expect(result[2].index, 3);
-      expect(result[3].index, 1);
+      expect(result[3].index, 18);
       expect(result, hasLength(4));
     });
 
@@ -98,7 +99,7 @@ void main() {
       expect(result[0].index, 4);
       expect(result[1].index, 12);
       expect(result[2].index, 3);
-      expect(result[3].index, 1);
+      expect(result[3].index, 18);
       expect(result, hasLength(4));
     }, skip: false);
 
@@ -112,8 +113,24 @@ void main() {
       expect(result[0].index, 19);
       expect(result[1].index, 11);
       expect(result[2].index, 6);
-      expect(result[4].index, 9);
-      expect(result[3].index, 18);
+      expect(result[3].index, 9);
+      expect(result[4].index, 18);
+      expect(result[5].index, 2);
+      expect(result[6].index, 14);
+      expect(result[7].index, 10);
+      expect(result[8].index, 15);
+      expect(result[9].index, 5);
+      expect(result[10].index, 7);
+      expect(result[10].index, 7);
+      expect(result[11].index, 13);
+      expect(result[12].index, 3);
+      expect(result[13].index, 12);
+      expect(result[14].index, 17);
+      expect(result[15].index, 1);
+      expect(result[16].index, 0);
+      expect(result[17].index, 16);
+      expect(result[18].index, 4);
+      expect(result[19].index, 8);
       expect(result, hasLength(20));
     });
 
@@ -143,7 +160,7 @@ void main() {
 
       kdTree.query(sample, 1).toList();
 
-      expect((kdTree as KDTreeImpl).searchIterationCount, 14);
+      expect((kdTree as KDTreeImpl).searchIterationCount, 4);
     });
 
     test(
@@ -154,7 +171,68 @@ void main() {
 
       kdTree.query(sample, 1).toList();
 
-      expect((kdTree as KDTreeImpl).searchIterationCount, 7);
+      expect((kdTree as KDTreeImpl).searchIterationCount, 6);
+    });
+
+    test(
+        'should find the closest neighbours for [12, 23, 22, 11, -20], k=1, leafSize=1, cosine distance',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 1);
+      final sample = Vector.fromList([12, 23, 22, 11, -20]);
+      final result = kdTree.query(sample, 1, Distance.cosine).toList();
+
+      expect(result, hasLength(1));
+      expect(result[0].index, 17);
+    });
+
+    test(
+        'should find the closest neighbours for [12, 23, 22, 11, -20], k=2, leafSize=1, cosine distance',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 1);
+      final sample = Vector.fromList([12, 23, 22, 11, -20]);
+      final result = kdTree.query(sample, 2, Distance.cosine).toList();
+
+      expect(result, hasLength(2));
+      expect(result[0].index, 17);
+      expect(result[1].index, 8);
+    });
+
+    test(
+        'should find the closest neighbours for [12, 23, 22, 11, -20], k=3, leafSize=1, cosine distance',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 1);
+      final sample = Vector.fromList([12, 23, 22, 11, -20]);
+      final result = kdTree.query(sample, 3, Distance.cosine).toList();
+
+      expect(result, hasLength(3));
+      expect(result[0].index, 17);
+      expect(result[1].index, 8);
+      expect(result[2].index, 0);
+    });
+
+    test(
+        'should find the closest neighbours for [12, 23, 22, 11, -20], k=3, leafSize=3, cosine distance',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 3);
+      final sample = Vector.fromList([12, 23, 22, 11, -20]);
+      final result = kdTree.query(sample, 3, Distance.cosine).toList();
+
+      expect(result, hasLength(3));
+      expect(result[0].index, 17);
+      expect(result[1].index, 8);
+      expect(result[2].index, 0);
+    });
+
+    test(
+        'should find the closest neighbours for [12, 23, 22, 11, -20], k=3, leafSize=3, cosine distance for conceivable amount of iterations',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false),
+          splitStrategy: KDTreeSplitStrategy.largestVariance, leafSize: 1);
+      final sample = Vector.fromList([12, 23, 22, 11, -20]);
+
+      kdTree.query(sample, 3, Distance.cosine).toList();
+
+      expect((kdTree as KDTreeImpl).searchIterationCount, 13);
     });
 
     test('should throw an exception if the query point is of invalid length',

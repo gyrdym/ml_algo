@@ -1,4 +1,4 @@
-// 0.5 sec (MacBook Air mid 2017)
+// 0.14 sec (MacBook Air mid 2017)
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';

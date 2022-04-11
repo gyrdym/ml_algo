@@ -11,3 +11,6 @@ doc/api/
 pubspec.lock
 
 test/.test_coverage.dart
+
+.DS_Store
+*/**/.DS_Store
