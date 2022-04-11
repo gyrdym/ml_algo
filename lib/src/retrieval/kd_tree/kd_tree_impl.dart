@@ -54,10 +54,7 @@ class KDTreeImpl with SerializableMixin implements KDTree {
 
     searchIterationCount = 0;
 
-    final neighbours = HeapPriorityQueue<KDTreeNeighbour>((a, b) =>
-        (point.distanceTo(points[b.index], distance: distanceType) -
-                point.distanceTo(points[a.index], distance: distanceType))
-            .toInt());
+    final neighbours = _createQueue(point, distanceType);
 
     _findKNNRecursively(root, point, k, neighbours, distanceType);
 
@@ -145,5 +142,25 @@ class KDTreeImpl with SerializableMixin implements KDTree {
         throw UnsupportedError(
             'Distance type $distanceType is not supported yet');
     }
+  }
+
+  HeapPriorityQueue<KDTreeNeighbour> _createQueue(
+      Vector point, Distance distanceType) {
+    return HeapPriorityQueue<KDTreeNeighbour>((a, b) {
+      final distanceA =
+          point.distanceTo(points[a.index], distance: distanceType);
+      final distanceB =
+          point.distanceTo(points[b.index], distance: distanceType);
+
+      if (distanceA < distanceB) {
+        return 1;
+      }
+
+      if (distanceA > distanceB) {
+        return -1;
+      }
+
+      return 0;
+    });
   }
 }
