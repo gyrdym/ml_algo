@@ -35,7 +35,7 @@ abstract class KDTree implements Serializable {
   /// is [KDTreeSplitStrategy.inOrder]
   ///
   /// if [splitStrategy] is [KDTreeSplitStrategy.inOrder], dimension for data
-  /// splits will be chosen one by one in order, in this case tree building is
+  /// splits will be chosen one by one in order, in this case, tree building is
   /// very fast
   ///
   /// if [splitStrategy] is [KDTreeSplitStrategy.largestVariance], dimension with
