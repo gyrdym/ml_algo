@@ -223,6 +223,17 @@ void main() {
       expect(result[2].index, 0);
     });
 
+    test(
+        'should find the closest neighbours for [12, 23, 22, 11, -20], k=3, leafSize=3, cosine distance for conceivable amount of iterations',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 3);
+      final sample = Vector.fromList([12, 23, 22, 11, -20]);
+
+      kdTree.query(sample, 3, Distance.cosine).toList();
+
+      expect((kdTree as KDTreeImpl).searchIterationCount, 15);
+    });
+
     test('should throw an exception if the query point is of invalid length',
         () {
       final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 3);

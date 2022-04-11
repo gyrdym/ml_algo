@@ -25,28 +25,28 @@ abstract class KDTree implements Serializable {
   /// The bigger the number, the less effective search is. If [leafSize] is
   /// equal to the number of [points], a regular KNN-search will take place.
   ///
-  /// Extremely small [leafSize] leads to ineffective memory usage since in
-  /// this case a lot of kd-tree nodes will be allocated
+  /// Small [leafSize] leads to an increasing amount of time for tree building,
+  /// but querying will be very fast
   ///
   /// [dtype] A data type which will be used to convert raw data from [points]
   /// into internal numerical representation
   ///
   /// [splitStrategy] Describes how to choose a split dimension. Default value
-  /// is [KDTreeSplitStrategy.largestVariance]
+  /// is [KDTreeSplitStrategy.inOrder]
+  ///
+  /// if [splitStrategy] is [KDTreeSplitStrategy.inOrder], dimension for data
+  /// splits will be chosen one by one in order, in this case tree building is
+  /// very fast
   ///
   /// if [splitStrategy] is [KDTreeSplitStrategy.largestVariance], dimension with
   /// the widest column (in terms of variance) will be chosen to split the data
   ///
-  /// if [splitStrategy] is [KDTreeSplitStrategy.inOrder], dimension for data
-  /// splits will be chosen one by one in order
-  ///
-  /// [KDTreeSplitStrategy.largestVariance] provides more accurate KNN-search,
+  /// [KDTreeSplitStrategy.largestVariance] results in more balanced tree,
   /// but this strategy takes much more time to build the tree than [KDTreeSplitStrategy.inOrder]
   factory KDTree(DataFrame points,
           {int leafSize = 1,
           DType dtype = DType.float32,
-          KDTreeSplitStrategy splitStrategy =
-              KDTreeSplitStrategy.largestVariance}) =>
+          KDTreeSplitStrategy splitStrategy = KDTreeSplitStrategy.inOrder}) =>
       createKDTree(points, leafSize, dtype, splitStrategy);
 
   /// [pointsSrc] Data points which will be used to build the tree.
@@ -116,7 +116,7 @@ abstract class KDTree implements Serializable {
   /// final kdTree = KDTree(data);
   /// final neighbours = kdTree.query(Vector.fromList([1, 2, 3, 4]), 2);
   ///
-  /// print(neighbours.index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
+  /// print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
   /// ```
   Iterable<KDTreeNeighbour> query(Vector point, int k,
       [Distance distance = Distance.euclidean]);
