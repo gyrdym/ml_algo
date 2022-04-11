@@ -160,7 +160,7 @@ void main() {
 
       kdTree.query(sample, 1).toList();
 
-      expect((kdTree as KDTreeImpl).searchIterationCount, 14);
+      expect((kdTree as KDTreeImpl).searchIterationCount, 4);
     });
 
     test(
@@ -171,7 +171,7 @@ void main() {
 
       kdTree.query(sample, 1).toList();
 
-      expect((kdTree as KDTreeImpl).searchIterationCount, 7);
+      expect((kdTree as KDTreeImpl).searchIterationCount, 6);
     });
 
     test(
@@ -226,12 +226,13 @@ void main() {
     test(
         'should find the closest neighbours for [12, 23, 22, 11, -20], k=3, leafSize=3, cosine distance for conceivable amount of iterations',
         () {
-      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 3);
+      final kdTree = KDTree(DataFrame(data, headerExists: false),
+          splitStrategy: KDTreeSplitStrategy.largestVariance, leafSize: 1);
       final sample = Vector.fromList([12, 23, 22, 11, -20]);
 
       kdTree.query(sample, 3, Distance.cosine).toList();
 
-      expect((kdTree as KDTreeImpl).searchIterationCount, 15);
+      expect((kdTree as KDTreeImpl).searchIterationCount, 13);
     });
 
     test('should throw an exception if the query point is of invalid length',
