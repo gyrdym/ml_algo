@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.9.0
+- KDTree:
+    - Supported `cosine`, `manhattan` and `hamming` distance
+
 ## 16.8.0
 - DecisionTreeClassifier:
     - Added Gini index assessor type
