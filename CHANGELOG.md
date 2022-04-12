@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.10.0
+- KDTree:
+    - Added `queryIterable` method
+
 ## 16.9.0
 - KDTree:
     - Supported `cosine`, `manhattan` and `hamming` distance
