@@ -105,6 +105,7 @@ abstract class KDTree implements Serializable {
   /// the source [points] matrix. Example:
   ///
   /// ```dart
+  /// import 'package:ml_algo/ml_algo.dart';
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   /// import 'package:ml_linalg/vector.dart';
   ///
@@ -132,8 +133,7 @@ abstract class KDTree implements Serializable {
   /// the source [points] matrix. Example:
   ///
   /// ```dart
-  /// import 'package:ml_dataframe/ml_dataframe.dart';
-  /// import 'package:ml_linalg/vector.dart';
+  /// import 'package:ml_algo/ml_algo.dart';
   ///
   /// final data = [
   ///   [21, 34, 22, 11],
