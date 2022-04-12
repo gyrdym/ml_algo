@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.10.2
+- KDTree:
+    - Corrected usage example
+
 ## 16.10.1
 - README.md:
     - Proofreading the texts
