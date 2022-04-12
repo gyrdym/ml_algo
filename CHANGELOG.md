@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.10.1
+- README.md:
+    - Proofreading the texts
+
 ## 16.10.0
 - KDTree:
     - Added `queryIterable` method

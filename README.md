@@ -5,7 +5,7 @@
 
 # Machine learning algorithms for Dart developers - ml_algo library
 
-The library is a part of ecosystem:
+The library is a part of the ecosystem:
 
 - [ml_algo library](https://github.com/gyrdym/ml_algo) - implementation of popular machine learning algorithms 
 - [ml_preprocessing library](https://github.com/gyrdym/ml_preprocessing) - a library for data preprocessing
@@ -19,9 +19,9 @@ The library is a part of ecosystem:
 - [Examples](#examples)
     - [Logistic regression](#logistic-regression)
     - [Linear regression](#linear-regression)
-    - [Decision tree based classification](#decision-tree-based-classification)
+    - [Decision tree-based classification](#decision-tree-based-classification)
 - [Models retraining](#models-retraining)
-- [Notes on gradient based optimisation algorithms](#a-couple-of-words-about-linear-models-which-use-gradient-optimisation-methods)
+- [Notes on gradient-based optimisation algorithms](#a-couple-of-words-about-linear-models-which-use-gradient-optimisation-methods)
 
 
 
@@ -29,13 +29,13 @@ The library is a part of ecosystem:
 
 The main purpose of the library is to give native Dart implementation of machine learning algorithms to those who are 
 interested both in Dart language and data science. This library aims at Dart VM and Flutter, it's impossible to use 
-it in the web applications.
+it in web applications.
 
 ## The library's content
 
 - #### Model selection
     - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
-    Factory that creates instances of cross validators. Cross validation allows researchers to fit different 
+    A factory that creates instances of cross validators. Cross-validation allows researchers to fit different 
     [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms 
     assessing prediction quality on different parts of a dataset. 
 
@@ -52,12 +52,12 @@ it in the web applications.
     A class that performs classification using decision trees. May work with data with non-linear patterns.
     
     - [KnnClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/knn_classifier/knn_classifier.dart)
-    A class that performs classification using `k nearest neighbours algorithm` - it makes prediction basing on 
+    A class that performs classification using `k nearest neighbours algorithm` - it makes predictions based on 
     the first `k` closest observations to the given one.
 
 - #### Regression algorithms
     - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). 
-    A general class for finding a linear pattern in training data and predicting outcome as real numbers.
+    A general class for finding a linear pattern in training data and predicting outcomes as real numbers.
     
     - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/85f1e2f19b946beb2b594a62e0e3c999d1c31608/lib/src/regressor/linear_regressor/linear_regressor.dart#L219)
     Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation
@@ -66,28 +66,28 @@ it in the web applications.
     Implementation of the linear regression algorithm based on stochastic gradient descent with L2 regularisation
      
     - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
-    A class that makes prediction for each new observation basing on first `k` closest observations from 
-    training data. It may catch non-linear pattern of the data.
+    A class that makes predictions for each new observation based on the first `k` closest observations from 
+    training data. It may catch non-linear patterns of the data.
     
 - #### Clustering and retrieval algorithms
     - [KDTree](https://github.com/gyrdym/ml_algo/blob/master/lib/src/retrieval/kd_tree/kd_tree.dart)
     
-For more information on the library's API, please visit [API reference](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) 
+For more information on the library's API, please visit the [API reference](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) 
 
 ## Examples
 
 ### Logistic regression
 
-Let's classify records from well-known dataset - [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
+Let's classify records from a well-known dataset - [Pima Indians Diabetes Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database)
 via [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
 
 **Important note:**
 
-Please pay attention to problems which classifiers and regressors exposed by the library solve. E.g. 
+Please pay attention to problems that classifiers and regressors exposed by the library solve. For e.g., 
 [Logistic regressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart)
-solves only **binary classification** problem, and that means that you can't use this classifier with a dataset 
-with more than two classes, keep that in mind - in order to find out more about regresseors and classifiers, please refer to
-the [api documentation](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) of the package
+solves only **binary classification** problems, and that means that you can't use this classifier with a dataset 
+with more than two classes, keep that in mind - in order to find out more about regressors and classifiers, please refer to
+the [API documentation](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) of the package
 
 Import all necessary packages. First, it's needed to ensure if you have `ml_preprocessing` and `ml_dataframe` packages 
 in your dependencies:
@@ -115,7 +115,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 ### Read a dataset's file
 
-Download the dataset from [Pima Indians Diabets Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
+Download the dataset from [Pima Indians Diabetes Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
 
 #### For a desktop application: 
 
@@ -160,7 +160,7 @@ final samples = DataFrame.fromRawCsv(rawCsvContent);
 
 ### Prepare datasets for training and testing
 
-Data in this file is represented by 768 records and 8 features. 9th column is a label column, it contains either 0 or 1 
+Data in this file is represented by 768 records and 8 features. The 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. The column's name is
 `class variable (0 or 1)`. Let's store it:
 
@@ -169,8 +169,8 @@ final targetColumnName = 'class variable (0 or 1)';
 ````
 
 Now it's the time to prepare data splits. Since we have a smallish dataset (only 768 records), we can't afford to
-split the data into just train and test sets and evaluate the model on them, the best approach in our case is Cross 
-Validation. According to this, let's split the data in the following way using the library's [splitData](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/split_data.dart) 
+split the data into just train and test sets and evaluate the model on them, the best approach in our case is Cross-Validation. 
+According to this, let's split the data in the following way using the library's [splitData](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/split_data.dart) 
 function:
 
 ```dart
@@ -179,12 +179,12 @@ final validationData = splits[0];
 final testData = splits[1];
 ```
 
-`splitData` accepts `DataFrame` instance as the first argument and ratio list as the second one. Now we have 70% of our
-data as a validation set and 30% as a test set for evaluating generalization error.
+`splitData` accepts a `DataFrame` instance as the first argument and ratio list as the second one. Now we have 70% of our
+data as a validation set and 30% as a test set for evaluating generalization errors.
 
 ### Set up a model selection algorithm 
 
-Then we may create an instance of `CrossValidator` class to fit [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
+Then we may create an instance of `CrossValidator` class to fit the [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning))
 of our model. We should pass validation data (our `validationData` variable), and a number of folds into CrossValidator 
 constructor.
  
@@ -192,8 +192,8 @@ constructor.
 final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
 ````
 
-Let's create a factory for the classifier with desired hyperparameters. We have to decide after the cross validation, 
-if the selected hyperparametrs are good enough or not:
+Let's create a factory for the classifier with desired hyperparameters. We have to decide after the cross-validation 
+if the selected hyperparameters are good enough or not:
 
 ```dart
 final createClassifier = (DataFrame samples) =>
@@ -209,13 +209,13 @@ final createClassifier = (DataFrame samples) =>
 ```
 
 Let's describe our hyperparameters:
-- `optimizerType` - type of optimization algorithm that will be used to learn coefficients of our model, this time we
-decided to use vanilla gradient ascent algorithm
-- `iterationsLimit` - number of learning iterations. Selected optimization algorithm (gradient ascent in our case) will 
-be run this amount of times
-- `learningRateType` - a strategy for learning rate update. In our case the learning rate will decrease after every 
+- `optimizerType` - a type of optimization algorithm that will be used to learn coefficients of our model, this time we
+decided to use a vanilla gradient ascent algorithm
+- `iterationsLimit` - number of learning iterations. The selected optimization algorithm (gradient ascent in our case) will 
+be cyclically run this amount of times
+- `learningRateType` - a strategy for learning rate update. In our case, the learning rate will decrease after every 
 iteration
-- `batchSize` - size of data (in rows) that will be used per each iteration. As we have a really small dataset we may use
+- `batchSize` - the size of data (in rows) that will be used per each iteration. As we have a really small dataset we may use
 full-batch gradient ascent, that's why we used `samples.rows.length` here - the total amount of data.
 - `probabilityThreshold` - lower bound for positive label probability
 
@@ -233,9 +233,9 @@ final createClassifier = (DataFrame samples) =>
 This argument activates collecting costs per each optimization iteration, and you can see the cost values right after 
 the model creation.
 
-### Evaluate performance of the model
+### Evaluate the performance of the model
 
-Assume, we chose really good hyperprameters. In order to validate this hypothesis let's use CrossValidator instance 
+Assume, we chose really good hyperparameters. In order to validate this hypothesis let's use CrossValidator instance 
 created before:
 
 ````dart
@@ -243,7 +243,7 @@ final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
 ````
 
 Since the CrossValidator instance returns a [Vector](https://github.com/gyrdym/ml_linalg/blob/master/lib/vector.dart) of scores as a result of our predictor evaluation, we may choose
-any way to reduce all the collected scores to a single number, for instance we may use Vector's `mean` method:
+any way to reduce all the collected scores to a single number, for instance, we may use Vector's `mean` method:
 
 ```dart
 final accuracy = scores.mean();
@@ -260,7 +260,7 @@ We can see something like this:
 accuracy on k fold validation: 0.65
 ````
 
-Let's assess our hyperparameters on test set in order to evaluate the model's generalization error:
+Let's assess our hyperparameters on the test set in order to evaluate the model's generalization error:
 
 ```dart
 final testSplits = splitData(testData, [0.8]);
@@ -284,7 +284,7 @@ print(classifier.costPerIteration);
 ### Write the model to a json file
 
 Seems, our model has a good generalization ability, and that means we may use it in the future.
-To do so we may store the model to a file as JSON:
+To do so we may store the model in a file as JSON:
 
 ```dart
 await classifier.saveAsJson('diabetes_classifier.json');
@@ -313,8 +313,8 @@ print(prediction.rows); // [
                         // ]
 ```
 
-Please note that all the hyperparameters that we used to generate the model are persisted as the model's readonly 
-fields, and we can access it anytime:
+Please note that all the hyperparameters that we used to generate the model are persisted as the model's read-only 
+fields, and we can access them anytime:
 
 ```dart
 print(classifier.iterationsLimit);
@@ -447,7 +447,7 @@ final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ');
 
 ### Prepare the dataset for training and testing
 
-Data in this file is represented by 505 records and 13 features. 14th column is a target. Since we use autoheader, the
+Data in this file is represented by 505 records and 13 features. The 14th column is a target. Since we use autoheader, the
 target's name is autogenerated and it is `col_13`. Let's store it in a variable:
 
 ````dart
@@ -469,7 +469,7 @@ final trainData = splits[0];
 final testData = splits[1];
 ```
 
-`splitData` accepts `DataFrame` instance as the first argument and ratio list as the second one. Now we have 80% of our
+`splitData` accepts a `DataFrame` instance as the first argument and ratio list as the second one. Now we have 80% of our
 data as a train set and 20% as a test set.
 
 Let's train the model:
@@ -478,7 +478,7 @@ Let's train the model:
 final model = LinearRegressor(trainData, targetName);
 ```
 
-By default, `LinearRegressor` uses closed-form solution to train the model. One can also use a different solution type,
+By default, `LinearRegressor` uses a closed-form solution to train the model. One can also use a different solution type,
 e.g. stochastic gradient descent algorithm: 
 
 ```dart
@@ -580,15 +580,15 @@ void main() async {
 ````
 </details>
 
-## Decision tree based classification
+## Decision tree-based classification
 
 Let's try to classify data from a well-known [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset using a non-linear algorithm - [decision trees](https://en.wikipedia.org/wiki/Decision_tree)
 
 First, you need to download the data and place it in a proper place in your file system. To do so you should follow the
-instructions which are given in [Logistic regression](#logistic-regression) section.
+instructions which are given in the [Logistic regression](#logistic-regression) section.
 
-After loading the data, it's needed to preprocess it. We should drop `Id` column since the column doesn't make sense. 
-Also, we need to encode 'Species' column - originally, it contains 3 repeated string labels, to feed it to the classifier
+After loading the data, it's needed to preprocess it. We should drop the `Id` column since the column doesn't make sense. 
+Also, we need to encode the 'Species' column - originally, it contains 3 repeated string labels, to feed it to the classifier
 it's needed to convert the labels into numbers:
 
 ```dart
@@ -630,20 +630,20 @@ parameters in more detail:
 
 All the parameters serve as stopping criteria for the tree building algorithm.
 
-Now we have a ready to use model. As usual, we can save the model to a JSON-file:
+Now we have a ready to use model. As usual, we can save the model to a JSON file:
 
 ```dart
 await model.saveAsJson('path/to/json/file.json');
 ```
 
-Unlike other models, in case of decision tree we can visualise the algorithm result - we can save the model as SVG-file:
+Unlike other models, in the case of a decision tree, we can visualise the algorithm result - we can save the model as an SVG file:
 
 ```dart
 await model.saveAsSvg('path/to/svg/file.svg');
 ```
 
-Once we saved it, we can open the file through any image viewer, e.g. through a web-browser. An example of the 
-resulting svg-image:
+Once we saved it, we can open the file through any image viewer, e.g. through a web browser. An example of the 
+resulting SVG image:
 
 <p align="center">
     <img height="600" src="https://raw.github.com/gyrdym/ml_algo/master/e2e/decision_tree_classifier/iris_tree.svg?sanitize=true"> 
@@ -651,7 +651,7 @@ resulting svg-image:
 
 ## Models retraining
 
-Someday our previously shining model can degrade in terms of prediction accuracy - in this case we can retrain it. 
+Someday our previously shining model can degrade in terms of prediction accuracy - in this case, we can retrain it. 
 Retraining means simply re-running the same learning algorithm that was used to generate our current model
 keeping the same hyperparameters but using a new data set with the same features:
 
