@@ -62,6 +62,19 @@ void main() {
     });
 
     test(
+        'should find the closest neighbours for Iterable [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=1',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 1);
+      final sample = [2.79, -9.15, 6.56, -18.59, 13.53];
+      final result = kdTree.queryIterable(sample, 3).toList();
+
+      expect(result[0].index, 12);
+      expect(result[1].index, 4);
+      expect(result[2].index, 18);
+      expect(result, hasLength(3));
+    });
+
+    test(
         'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=3, splitStrategy=KDTreeSplitStrategy.largestVariance',
         () {
       final kdTree = KDTree(DataFrame(data, headerExists: false),
@@ -233,6 +246,32 @@ void main() {
       kdTree.query(sample, 3, Distance.cosine).toList();
 
       expect((kdTree as KDTreeImpl).searchIterationCount, 13);
+    });
+
+    test(
+        'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=3,  manhatten distance',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 3);
+      final sample = Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]);
+      final result = kdTree.query(sample, 3, Distance.manhattan).toList();
+
+      expect(result[0].index, 12);
+      expect(result[1].index, 4);
+      expect(result[2].index, 13);
+      expect(result, hasLength(3));
+    });
+
+    test(
+        'should find the closest neighbours for [2.79, -9.15, 6.56, -18.59, 13.53], leafSize=1,  manhatten distance',
+        () {
+      final kdTree = KDTree(DataFrame(data, headerExists: false), leafSize: 1);
+      final sample = Vector.fromList([2.79, -9.15, 6.56, -18.59, 13.53]);
+      final result = kdTree.query(sample, 3, Distance.manhattan).toList();
+
+      expect(result[0].index, 12);
+      expect(result[1].index, 4);
+      expect(result[2].index, 13);
+      expect(result, hasLength(3));
     });
 
     test('should throw an exception if the query point is of invalid length',

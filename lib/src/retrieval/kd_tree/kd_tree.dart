@@ -120,4 +120,31 @@ abstract class KDTree implements Serializable {
   /// ```
   Iterable<KDTreeNeighbour> query(Vector point, int k,
       [Distance distance = Distance.euclidean]);
+
+  /// Returns [k] nearest neighbours for [point], [point] is [Iterable] unlike
+  /// [query] method where [point] is [Vector] from ml_linalg library
+  ///
+  /// One can use the method in the scenario apart from ml_algo ecosystem,
+  /// since the method doesn't require dependencies such as ml_linalg
+  ///
+  /// The neighbour is represented by an index and the distance between [point]
+  /// and the neighbour itself. The index is a zero-based index of a point in
+  /// the source [points] matrix. Example:
+  ///
+  /// ```dart
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
+  /// import 'package:ml_linalg/vector.dart';
+  ///
+  /// final data = [
+  ///   [21, 34, 22, 11],
+  ///   [11, 33, 44, 55],
+  ///   ...,
+  /// ];
+  /// final kdTree = KDTree.fromIterable(data);
+  /// final neighbours = kdTree.queryIterable([1, 2, 3, 4], 2);
+  ///
+  /// print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
+  /// ```
+  Iterable<KDTreeNeighbour> queryIterable(Iterable<num> point, int k,
+      [Distance distance = Distance.euclidean]);
 }
