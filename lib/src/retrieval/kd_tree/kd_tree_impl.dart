@@ -61,6 +61,11 @@ class KDTreeImpl with SerializableMixin implements KDTree {
     return neighbours.toList().reversed;
   }
 
+  @override
+  Iterable<KDTreeNeighbour> queryIterable(Iterable<num> point, int k,
+          [Distance distanceType = Distance.euclidean]) =>
+      query(Vector.fromList(point.toList(), dtype: dtype), k);
+
   void _findKNNRecursively(KDTreeNode? node, Vector point, int k,
       HeapPriorityQueue<KDTreeNeighbour> neighbours, Distance distanceType) {
     if (node == null) {
