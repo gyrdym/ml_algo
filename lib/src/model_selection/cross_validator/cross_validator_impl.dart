@@ -22,7 +22,7 @@ class CrossValidatorImpl implements CrossValidator {
 
   @override
   Future<Vector> evaluate(
-    PredictorFactory predictorFactory,
+    ModelFactory predictorFactory,
     MetricType metricType, {
     DataPreprocessFn? onDataSplit,
   }) {
