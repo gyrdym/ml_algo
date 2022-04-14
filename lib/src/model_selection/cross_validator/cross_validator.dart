@@ -9,26 +9,26 @@ import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/linalg.dart';
 
-typedef PredictorFactory = Assessable Function(DataFrame observations);
+typedef ModelFactory = Assessable Function(DataFrame observations);
 
 typedef DataPreprocessFn = List<DataFrame> Function(
     DataFrame trainData, DataFrame testData);
 
 /// A factory and an interface for all the cross validator types
 abstract class CrossValidator {
-  /// Creates k-fold validator to evaluate quality of a predictor.
+  /// Creates a k-fold validator to evaluate the quality of a ML model.
   ///
-  /// It splits a dataset into [numberOfFolds] test sets and subsequently
-  /// evaluates given predictor on each produced test set
+  /// It splits a dataset into [numberOfFolds] test sets and evaluates a model
+  /// on each produced test set
   ///
   /// Parameters:
   ///
-  /// [samples] A dataset to be split into parts to iteratively evaluate given
-  /// predictor's performance
+  /// [samples] A dataset that is going to be split into [numberOfFolds] parts
+  /// to iteratively evaluate on them a model's performance
   ///
-  /// [numberOfFolds] Number of splits of the [samples]
+  /// [numberOfFolds] A number of parts of the [samples]
   ///
-  /// [dtype] A type for all the numerical data
+  /// [dtype] A type for all numerical data
   factory CrossValidator.kFold(
     DataFrame samples, {
     int numberOfFolds = 5,
@@ -49,17 +49,17 @@ abstract class CrossValidator {
     );
   }
 
-  /// Creates LPO validator to evaluate performance of a predictor.
+  /// Creates a LPO validator to evaluate the quality of a ML model.
   ///
-  /// It splits a dataset into all possible test sets of size [p] and
-  /// subsequently evaluates quality of the predictor on each produced test set.
+  /// It splits a dataset into all possible test sets of size [p] and evaluates
+  /// the quality of a model on each produced test set.
   ///
   /// Parameters:
   ///
-  /// [samples] A dataset to be split into parts to iteratively
-  /// evaluate given predictor's performance
+  /// [samples] A dataset that is going to be split into parts to iteratively
+  /// evaluate on them a model's performance
   ///
-  /// [p] Size of a split of [samples].
+  /// [p] A size of a part of [samples] in rows.
   ///
   /// [dtype] A type for all the numerical data.
   factory CrossValidator.lpo(
@@ -81,29 +81,27 @@ abstract class CrossValidator {
     );
   }
 
-  /// Returns a future resolving with a vector of scores of quality of passed
-  /// predictor depending on given [metricType]
+  /// Returns a future that is resolved with a vector of scores of quality of a
+  /// model depending on given [metricType]
   ///
   /// Parameters:
   ///
-  /// [predictorFactory] A factory function that returns an evaluating predictor
+  /// [createModel] A function that returns a model to be evaluated
   ///
-  /// [metricType] Metric using to assess a predictor creating by
-  /// [predictorFactory]
+  /// [metricType] A metric used to assess a model created by [createModel]
   ///
   /// [onDataSplit] A callback that is called when a new train-test split is
-  /// ready to be passed into evaluating predictor. One may place some
-  /// additional data-dependent logic here, e.g., data preprocessing. The
-  /// callback accepts train and test data from a new split and returns
-  /// transformed split as list, where the first element is train data and
-  /// the second one - test data, both of [DataFrame] type. This new transformed
-  /// split will be passed into the predictor.
+  /// ready to be passed into a model. One may place some additional
+  /// data-dependent logic here, e.g., data preprocessing. The callback accepts
+  /// train and test data from a new split and returns a transformed split as a
+  /// list, where the first element is train data and the second one is test
+  /// data, both of [DataFrame] type. This new transformed split will be passed
+  /// into the model
   ///
   /// Example:
   ///
   /// ````dart
-  /// final data = DataFrame(
-  ///   <Iterable<num>>[
+  /// final data = DataFrame([
   ///     [ 1,  1,  1,   1],
   ///     [ 2,  3,  4,   5],
   ///     [18, 71, 15,  61],
@@ -113,7 +111,7 @@ abstract class CrossValidator {
   ///   header: header,
   ///   headerExists: false,
   /// );
-  /// final predictorFactory = (trainData) =>
+  /// final modelFactory = (trainData) =>
   ///   KnnRegressor(trainData, 'col_3', k: 4);
   /// final onDataSplit = (trainData, testData) {
   ///   final standardizer = Standardizer(trainData);
@@ -124,7 +122,7 @@ abstract class CrossValidator {
   /// }
   /// final validator = CrossValidator.kFold(data);
   /// final scores = await validator.evaluate(
-  ///   predictorFactory,
+  ///   modelFactory,
   ///   MetricType.mape,
   ///   onDataSplit: onDataSplit,
   /// );
@@ -133,7 +131,7 @@ abstract class CrossValidator {
   /// print(averageScore);
   /// ````
   Future<Vector> evaluate(
-    PredictorFactory predictorFactory,
+    ModelFactory createModel,
     MetricType metricType, {
     DataPreprocessFn? onDataSplit,
   });
