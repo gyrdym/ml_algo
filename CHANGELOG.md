@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.10.4
+- DecisionTreeClassifier:
+    - Proofreading the documentation
+
 ## 16.10.3
 - CrossValidator:
     - Proofreading the documentation
