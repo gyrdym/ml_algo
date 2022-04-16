@@ -10,18 +10,17 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 
-/// A class that performs classification basing on `k nearest neighbours` (KNN)
+/// A class that performs classification based on `k nearest neighbours` (KNN)
 /// algorithm
 ///
-/// K nearest neighbours algorithm is an algorithm that is targeted to search for
-/// the most similar labelled observations (number of these observations is equal
-/// to `k`) to the given unlabelled one.
+/// K nearest neighbours algorithm is an algorithm that is targeted to search
+/// for the most similar k observations to the given one.
 ///
-/// It is possible to use majority class among the `k` found observations as a
-/// prediction for the given unlabelled observation, but it may lead to the
-/// imprecise result. Thus the weighted version of KNN algorithm is used in the
-/// classifier. To get weight of a particular observation one may use a kernel
-/// function.
+/// It is possible to use the majority class among the `k` found observations
+/// as a prediction for the given unlabelled observation, but it may lead to an
+/// imprecise result. To overcome this, the weighted version of KNN algorithm
+/// is used in the classifier. To get the weight of a particular observation
+/// one may use a kernel function.
 abstract class KnnClassifier
     implements
         Assessable,
@@ -35,17 +34,15 @@ abstract class KnnClassifier
   /// [targetName] A string that serves as a name of the column containing
   /// outcomes.
   ///
-  /// [k] a number of nearest neighbours to be found among [trainData]
+  /// [k] A number of nearest neighbours to be found among [trainData]
   ///
-  /// [kernel] a type of a kernel function that is used to predict an
-  /// outcome for a new observation
+  /// [kernel] A kernel function that will be used to predict an outcome for a
+  /// new observation
   ///
-  /// [distance] a distance type that is used to measure a distance between two
-  /// observation vectors
+  /// [distance] A way to measure a distance between two observation vectors
   ///
-  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
-  /// affect performance or accuracy of the computations. Default value is
-  /// [DType.float32]
+  /// [dtype] A data type for all the numeric values, used by the algorithm.
+  /// Default value is [DType.float32]
   factory KnnClassifier(
     DataFrame trainData,
     String targetName,
@@ -95,8 +92,7 @@ abstract class KnnClassifier
   /// final json = await file.readAsString();
   /// final restoredClassifier = KnnClassifier.fromJson(json);
   ///
-  /// // here you can use previously fitted restored classifier to make
-  /// // some prediction, e.g. via `KnnClassifier.predict(...)`;
+  /// // here you can use previously fitted restored classifier
   /// ````
   factory KnnClassifier.fromJson(String json) =>
       initKnnClassifierModule().get<KnnClassifierFactory>().fromJson(json);
@@ -106,13 +102,12 @@ abstract class KnnClassifier
   /// The value is read-only, it's a hyperparameter of the model
   int get k;
 
-  /// A kernel type
+  /// A kernel function type
   ///
   /// The value is read-only, it's a hyperparameter of the model
   KernelType get kernelType;
 
-  /// A distance type that is used to measure a distance between two
-  /// observations
+  /// A distance type that is used to measure how far are observations from each other
   ///
   /// The value is read-only, it's a hyperparameter of the model
   Distance get distanceType;

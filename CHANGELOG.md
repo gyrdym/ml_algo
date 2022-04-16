@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.10.5
+- KnnClassifier:
+    - Proofreading the documentation
+
 ## 16.10.4
 - DecisionTreeClassifier:
     - Proofreading the documentation
