@@ -8,11 +8,11 @@ import 'package:test/test.dart';
 Future<Vector> evaluateKnnClassifier(MetricType metric, DType dtype) async {
   final samples = (await fromCsv('e2e/_datasets/iris.csv'))
       .shuffle()
-      .dropSeries(seriesNames: ['Id']);
+      .dropSeries(names: ['Id']);
   final targetName = 'Species';
   final pipeline = Pipeline(samples, [
-    encodeAsIntegerLabels(
-      featureNames: [targetName],
+    toIntegerLabels(
+      columnNames: [targetName],
     ),
   ]);
   final processed = pipeline.process(samples);

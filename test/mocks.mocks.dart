@@ -173,7 +173,10 @@ class _FakeKernel_17 extends _i1.Fake implements _i19.Kernel {}
 
 class _FakeKnnClassifier_18 extends _i1.Fake implements _i20.KnnClassifier {}
 
-class _FakeDataFrame_19 extends _i1.Fake implements _i21.DataFrame {}
+class _FakeDataFrame_19 extends _i1.Fake implements _i21.DataFrame {
+  @override
+  String toString({int? maxRows = 10, int? maxCols = 7}) => super.toString();
+}
 
 class _FakeLinearOptimizer_20 extends _i1.Fake implements _i22.LinearOptimizer {
 }

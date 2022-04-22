@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.11.0
+- `ml_preprocessing` version upgraded to 7.0.2
+- `ml_dataframe` version upgraded to 1.0.0
+
 ## 16.10.5
 - KnnClassifier:
     - Proofreading the documentation
