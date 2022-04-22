@@ -9,10 +9,10 @@ Future<Vector> evaluateSoftmaxRegressor(
     MetricType metricType, DType dtype) async {
   final samples = (await fromCsv('e2e/_datasets/iris.csv'))
       .shuffle()
-      .dropSeries(seriesNames: ['Id']);
+      .dropSeries(names: ['Id']);
   final pipeline = Pipeline(samples, [
-    encodeAsOneHotLabels(
-      featureNames: ['Species'],
+    toOneHotLabels(
+      columnNames: ['Species'],
     ),
   ]);
   final classNames = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica'];

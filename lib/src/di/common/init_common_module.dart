@@ -33,7 +33,7 @@ void initCommonModule() {
   injector
     ..registerSingletonIf<EncoderFactory>(
         () => (DataFrame data, Iterable<String> targetNames) =>
-            Encoder.oneHot(data, featureNames: targetNames),
+            Encoder.oneHot(data, columnNames: targetNames),
         dependencyName: oneHotEncoderFactoryKey)
     ..registerSingletonIf<RandomizerFactory>(
         () => const RandomizerFactoryImpl())

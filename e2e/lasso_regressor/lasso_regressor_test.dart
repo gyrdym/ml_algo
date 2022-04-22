@@ -8,7 +8,7 @@ Future<Vector> evaluateLassoRegressor(
     MetricType metricType, DType dtype) async {
   final samples = (await fromCsv('e2e/_datasets/advertising.csv'))
       .shuffle()
-      .dropSeries(seriesNames: ['Num']);
+      .dropSeries(names: ['Num']);
   final targetName = 'Sales';
   final validator = CrossValidator.kFold(
     samples,

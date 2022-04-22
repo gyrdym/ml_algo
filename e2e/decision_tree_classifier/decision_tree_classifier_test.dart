@@ -8,10 +8,10 @@ import 'package:test/test.dart';
 Future<Vector> evaluateClassifier(MetricType metric, DType dtype) async {
   final samples = (await fromCsv('e2e/_datasets/iris.csv'))
       .shuffle()
-      .dropSeries(seriesNames: ['Id']);
+      .dropSeries(names: ['Id']);
   final pipeline = Pipeline(samples, [
-    encodeAsIntegerLabels(
-      featureNames: ['Species'],
+    toIntegerLabels(
+      columnNames: ['Species'],
     ),
   ]);
   final numberOfFolds = 5;
