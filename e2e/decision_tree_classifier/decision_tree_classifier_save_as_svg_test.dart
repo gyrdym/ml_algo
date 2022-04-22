@@ -9,10 +9,10 @@ void main() async {
         () async {
       final samples = (await fromCsv('e2e/_datasets/iris.csv'))
           .shuffle()
-          .dropSeries(seriesNames: ['Id']);
+          .dropSeries(names: ['Id']);
       final pipeline = Pipeline(samples, [
-        encodeAsIntegerLabels(
-          featureNames: ['Species'],
+        toIntegerLabels(
+          columnNames: ['Species'],
         ),
       ]);
       final processed = pipeline.process(samples);
