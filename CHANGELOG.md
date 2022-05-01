@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.11.1
+- `KDTree` example added to README
+- `kd_tree` exported as a separate library
+
 ## 16.11.0
 - `ml_preprocessing` version upgraded to 7.0.2
 - `ml_dataframe` version upgraded to 1.0.0
