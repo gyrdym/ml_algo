@@ -20,7 +20,7 @@ The library is a part of the ecosystem:
     - [Logistic regression](#logistic-regression)
     - [Linear regression](#linear-regression)
     - [Decision tree-based classification](#decision-tree-based-classification)
-    - [KDTree-base data retrieval](#kdtree-based-data-retrieval)
+    - [KDTree-based data retrieval](#kdtree-based-data-retrieval)
 - [Models retraining](#models-retraining)
 - [Notes on gradient-based optimisation algorithms](#a-couple-of-words-about-linear-models-which-use-gradient-optimisation-methods)
 
