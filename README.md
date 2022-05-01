@@ -662,7 +662,7 @@ efficient to retrieve data.
 Let's retrieve some data points through a kd-tree built on the [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset.
 
 First, we need to prepare the data. To do so, it's needed to load the dataset. For this purpose, we may use 
-`loadIrisDataset` function from [ml_dataframe](https://pub.dev/packages/ml_dataframe). The function returns prefilled with the Iris data DataFrame instance:
+[loadIrisDataset](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/loadIrisDataset.html) function from [ml_dataframe](https://pub.dev/packages/ml_dataframe). The function returns prefilled with the Iris data DataFrame instance:
 
 ```dart
 import 'pacage:ml_algo/ml_algo.dart';
