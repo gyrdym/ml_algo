@@ -662,7 +662,7 @@ efficient to retrieve data.
 Let's retrieve some data points through a kd-tree built on the [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset.
 
 First, we need to prepare the data. To do so, it's needed to load the dataset. For this purpose, we may use 
-`loadIrisDataset` function from `ml_dataframe`. The function returns prefilled with the Iris data DataFrame instance:
+`loadIrisDataset` function from [ml_dataframe](https://pub.dev/packages/ml_dataframe). The function returns prefilled with the Iris data DataFrame instance:
 
 ```dart
 import 'pacage:ml_algo/ml_algo.dart';
@@ -724,7 +724,7 @@ The last instruction prints the following:
 (Index: 75, Distance: 0.17349341930302867), (Index: 51, Distance: 0.21470911402365767), (Index: 65, Distance: 0.26095956499211426), (Index: 86, Distance: 0.29681616124778537), (Index: 56, Distance: 0.4172527193942372))
 ```
 
-The nearest point has index 75 in the original data. Let's check a record at the index:
+The nearest point has an index 75 in the original data. Let's check a record at the index:
 
 ```dart
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -746,7 +746,7 @@ Remember, we dropped `Id` and `Species` columns which are the very first and the
 rest elements, `6.6, 3.0, 4.4, 1.4` look quite similar to our target point - `6.5, 3.01, 4.5, 1.5`, so the query result makes 
 sense. 
 
-If you want to use `KDTree` outside the ml_algo ecosystem, meaning you don't want to use `ml_linalg` and `ml_dataframe`
+If you want to use `KDTree` outside the ml_algo ecosystem, meaning you don't want to use [ml_linalg](https://pub.dev/packages/ml_linalg) and [ml_dataframe](https://pub.dev/packages/ml_dataframe)
 packages in your application, you may import only `KDTree` library and use `fromIterable` constructor and `queryIterable`
 method to perform the query: 
 
