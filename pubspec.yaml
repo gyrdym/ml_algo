@@ -10,7 +10,7 @@ dependencies:
   collection: ^1.16.0
   injector: ^2.0.0
   json_annotation: ^4.0.0
-  ml_dataframe: ^1.0.0
+  ml_dataframe: ^1.4.1
   ml_linalg: ^13.7.0
   ml_preprocessing: ^7.0.2
   quiver: ^3.0.0
@@ -23,3 +23,7 @@ dev_dependencies:
   mockito: ^5.0.10
   pedantic: ^1.11.0
   test: ^1.16.8
+
+dependency_overrides:
+  ml_dataframe:
+    path: ../ml_dataframe

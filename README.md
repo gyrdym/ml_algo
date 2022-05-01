@@ -20,6 +20,7 @@ The library is a part of the ecosystem:
     - [Logistic regression](#logistic-regression)
     - [Linear regression](#linear-regression)
     - [Decision tree-based classification](#decision-tree-based-classification)
+    - [KDTree-base data retrieval](#kdtree-based-data-retrieval)
 - [Models retraining](#models-retraining)
 - [Notes on gradient-based optimisation algorithms](#a-couple-of-words-about-linear-models-which-use-gradient-optimisation-methods)
 
@@ -31,7 +32,7 @@ The main purpose of the library is to give native Dart implementation of machine
 interested both in Dart language and data science. This library aims at Dart VM and Flutter, it's impossible to use 
 it in web applications.
 
-## The library's content
+## The library content
 
 - #### Model selection
     - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
@@ -70,7 +71,8 @@ it in web applications.
     training data. It may catch non-linear patterns of the data.
     
 - #### Clustering and retrieval algorithms
-    - [KDTree](https://github.com/gyrdym/ml_algo/blob/master/lib/src/retrieval/kd_tree/kd_tree.dart)
+    - [KDTree](https://github.com/gyrdym/ml_algo/blob/master/lib/src/retrieval/kd_tree/kd_tree.dart) An algorithm for
+    efficient data retrieval.
     
 For more information on the library's API, please visit the [API reference](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) 
 
@@ -580,7 +582,7 @@ void main() async {
 ````
 </details>
 
-## Decision tree-based classification
+### Decision tree-based classification
 
 Let's try to classify data from a well-known [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset using a non-linear algorithm - [decision trees](https://en.wikipedia.org/wiki/Decision_tree)
 
@@ -648,6 +650,119 @@ resulting SVG image:
 <p align="center">
     <img height="600" src="https://raw.github.com/gyrdym/ml_algo/master/e2e/decision_tree_classifier/iris_tree.svg?sanitize=true"> 
 </p>
+
+### KDTree-based data retrieval
+
+Let's take a look at another field of machine learning - data retrieval. The field is represented by a family of algorithms,
+one of them is `KDTree` which is exposed by the library.
+
+`KDTree` is an algorithm that divides the whole search space into partitions in form of the binary tree which makes it 
+efficient to retrieve data.
+
+Let's retrieve some data points through a kd-tree built on the [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset.
+
+First, we need to prepare the data. To do so, it's needed to load the dataset. For this purpose, we may use 
+`loadIrisDataset` function from `ml_dataframe`. The function returns prefilled with the Iris data DataFrame instance:
+
+```dart
+import 'pacage:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() async {
+  final originalData = await loadIrisDataset();
+}
+```
+
+Since the dataset contains `Id` column that doesn't make sense and `Species` column that contains text data, we need to
+drop these columns:
+
+```dart
+import 'pacage:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() async {
+  final originalData = await loadIrisDataset();
+  final data = originalData.dropSeries(names: ['Id', 'Species']);
+}
+```
+
+Next, we can build the tree:
+
+```dart
+import 'pacage:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() async {
+  final originalData = await loadIrisDataset();
+  final data = originalData.dropSeries(names: ['Id', 'Species']);
+  final tree = KDTree(data);
+}
+```
+
+And query nearest neighbours for an arbitrary point. Let's say, we want to find 5 nearest neighbours for the point `[6.5, 3.01, 4.5, 1.5]`:
+
+```dart
+import 'pacage:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/vector.dart';
+
+void main() async {
+  final originalData = await loadIrisDataset();
+  final data = originalData.dropSeries(names: ['Id', 'Species']);
+  final tree = KDTree(data);
+  final neighbourCount = 5;
+  final point = Vector.fromList([6.5, 3.01, 4.5, 1.5]);
+  final neighbours = tree.query(point, neighbourCount);
+ 
+  print(neighbours);
+}
+```
+
+The last instruction prints the following:
+
+```
+(Index: 75, Distance: 0.17349341930302867), (Index: 51, Distance: 0.21470911402365767), (Index: 65, Distance: 0.26095956499211426), (Index: 86, Distance: 0.29681616124778537), (Index: 56, Distance: 0.4172527193942372))
+```
+
+The nearest point has index 75 in the original data. Let's check a record at the index:
+
+```dart
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() async {
+  final originalData = await loadIrisDataset();
+ 
+  print(originalData.rows.elementAt(75));
+}
+```
+
+It prints the following:
+
+```
+(76, 6.6, 3.0, 4.4, 1.4, Iris-versicolor)
+```
+
+Remember, we dropped `Id` and `Species` columns which are the very first and the very last elements in the output, so the
+rest elements, `6.6, 3.0, 4.4, 1.4` look quite similar to our target point - `6.5, 3.01, 4.5, 1.5`, so the query result makes 
+sense. 
+
+If you want to use `KDTree` outside the ml_algo ecosystem, meaning you don't want to use `ml_linalg` and `ml_dataframe`
+packages in your application, you may import only `KDTree` library and use `fromIterable` constructor and `queryIterable`
+method to perform the query: 
+
+```dart
+import 'pacage:ml_algo/kd_tree.dart';
+
+void main() async {
+  final tree = KDTree.fromIterable([
+    // some data here
+  ]);
+  final neighbourCount = 5;
+  final neighbours = tree.queryIterable([/* some point here */], neighbourCount);
+ 
+  print(neighbours);
+}
+```
 
 ## Models retraining
 
