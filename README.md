@@ -15,7 +15,7 @@ The library is a part of the ecosystem:
 **Table of contents**
 
 - [What is ml_algo for](#what-is-ml_algo-for)
-- [The library's content](#the-librarys-content)
+- [The library content](#the-library-content)
 - [Examples](#examples)
     - [Logistic regression](#logistic-regression)
     - [Linear regression](#linear-regression)
@@ -747,7 +747,7 @@ rest elements, `6.6, 3.0, 4.4, 1.4` look quite similar to our target point - `6.
 sense. 
 
 If you want to use `KDTree` outside the ml_algo ecosystem, meaning you don't want to use [ml_linalg](https://pub.dev/packages/ml_linalg) and [ml_dataframe](https://pub.dev/packages/ml_dataframe)
-packages in your application, you may import only `KDTree` library and use `fromIterable` constructor and `queryIterable`
+packages in your application, you may import only [KDTree](https://pub.dev/documentation/ml_algo/latest/kd_tree/kd_tree-library.html) library and use [fromIterable](https://pub.dev/documentation/ml_algo/latest/kd_tree/KDTree/KDTree.fromIterable.html) constructor and [queryIterable](https://pub.dev/documentation/ml_algo/latest/kd_tree/KDTree/queryIterable.html)
 method to perform the query: 
 
 ```dart
@@ -761,6 +761,32 @@ void main() async {
   final neighbours = tree.queryIterable([/* some point here */], neighbourCount);
  
   print(neighbours);
+}
+```
+
+As usual, we can persist our tree by saving it to a JSON file:
+
+```dart
+import 'dart:io';
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() async {
+  final originalData = await loadIrisDataset();
+  final data = originalData.dropSeries(names: ['Id', 'Species']);
+  final tree = KDTree(data);
+ 
+  // ...
+
+  await tree.saveAsJson('path/to/json/file.json');
+ 
+  // ...
+
+  final file = await File('path/to/json/file.json').readAsString();
+  final encodedTree = jsonDecode(file) as Map<String, dynamic>;
+  final restoredTree = KDTree.fromJson(encodedTree);
+
+  print(restoredTree);
 }
 ```
 

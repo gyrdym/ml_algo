@@ -63,7 +63,7 @@ abstract class KDTree implements Serializable {
   /// into internal numerical representation
   ///
   /// [splitStrategy] Describes how to choose a split dimension. Default value
-  /// is [KDTreeSplitStrategy.largestVariance]
+  /// is [KDTreeSplitStrategy.inOrder]
   ///
   /// if [splitStrategy] is [KDTreeSplitStrategy.largestVariance], dimension with
   /// the widest column (in terms of variance) will be chosen to split the data
@@ -76,12 +76,42 @@ abstract class KDTree implements Serializable {
   factory KDTree.fromIterable(Iterable<Iterable<num>> pointsSrc,
           {int leafSize = 1,
           DType dtype = DType.float32,
-          KDTreeSplitStrategy splitStrategy =
-              KDTreeSplitStrategy.largestVariance}) =>
+          KDTreeSplitStrategy splitStrategy = KDTreeSplitStrategy.inOrder}) =>
       createKDTreeFromIterable(pointsSrc, leafSize, dtype, splitStrategy);
 
-  factory KDTree.fromJson(Map<String, dynamic> json) =>
-      KDTreeImpl.fromJson(json);
+  /// Creates a [KDTree] instance from a JSON serializable representation of the
+  /// tree. The constructor works in conjunction with [saveAsJson] method.
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// import 'dart:convert';
+  /// import 'dart:io';
+  /// import 'package:ml_algo/kd_tree.dart';
+  ///
+  /// void main() async {
+  ///   final tree = KDTree.fromIterable([
+  ///     [10, 30, 44, 55],
+  ///     [11, 70, 41, 75],
+  ///     [12, 80, 43, 15],
+  ///     [13, 90, 46, 65],
+  ///     [14, 11, 47, 95],
+  ///   ]);
+  ///
+  ///   // ...
+  ///
+  ///   await tree.saveAsJson('path/to/json/file.json');
+  ///
+  ///   // ...
+  ///
+  ///   final file = await File('path/to/json/file.json').readAsString();
+  ///   final encodedTree = jsonDecode(file) as Map<String, dynamic>;
+  ///   final restoredTree = KDTree.fromJson(encodedTree);
+  ///
+  ///   print(restoredTree);
+  /// }
+  /// ```
+  factory KDTree.fromJson(Map<String, dynamic> json) = KDTreeImpl.fromJson;
 
   /// Points which were used to build the kd-tree
   Matrix get points;
@@ -109,15 +139,17 @@ abstract class KDTree implements Serializable {
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   /// import 'package:ml_linalg/vector.dart';
   ///
-  /// final data = DataFrame([
-  ///   [21, 34, 22, 11],
-  ///   [11, 33, 44, 55],
-  ///   ...,
-  /// ], headerExists: false);
-  /// final kdTree = KDTree(data);
-  /// final neighbours = kdTree.query(Vector.fromList([1, 2, 3, 4]), 2);
+  /// void main() {
+  ///   final data = DataFrame([
+  ///     [21, 34, 22, 11],
+  ///     [11, 33, 44, 55],
+  ///     ...,
+  ///   ], headerExists: false);
+  ///   final kdTree = KDTree(data);
+  ///   final neighbours = kdTree.query(Vector.fromList([1, 2, 3, 4]), 2);
   ///
-  /// print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
+  ///   print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
+  /// }
   /// ```
   Iterable<KDTreeNeighbour> query(Vector point, int k,
       [Distance distance = Distance.euclidean]);
@@ -133,17 +165,19 @@ abstract class KDTree implements Serializable {
   /// the source [points] matrix. Example:
   ///
   /// ```dart
-  /// import 'package:ml_algo/ml_algo.dart';
+  /// import 'package:ml_algo/kd_tree.dart';
   ///
-  /// final data = [
-  ///   [21, 34, 22, 11],
-  ///   [11, 33, 44, 55],
-  ///   ...,
-  /// ];
-  /// final kdTree = KDTree.fromIterable(data);
-  /// final neighbours = kdTree.queryIterable([1, 2, 3, 4], 2);
+  /// void main() {
+  ///   final data = [
+  ///     [21, 34, 22, 11],
+  ///     [11, 33, 44, 55],
+  ///     ...,
+  ///   ];
+  ///   final kdTree = KDTree.fromIterable(data);
+  ///   final neighbours = kdTree.queryIterable([1, 2, 3, 4], 2);
   ///
-  /// print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
+  ///   print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
+  /// }
   /// ```
   Iterable<KDTreeNeighbour> queryIterable(Iterable<num> point, int k,
       [Distance distance = Distance.euclidean]);
