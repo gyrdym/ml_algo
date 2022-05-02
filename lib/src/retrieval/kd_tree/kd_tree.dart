@@ -63,7 +63,7 @@ abstract class KDTree implements Serializable {
   /// into internal numerical representation
   ///
   /// [splitStrategy] Describes how to choose a split dimension. Default value
-  /// is [KDTreeSplitStrategy.largestVariance]
+  /// is [KDTreeSplitStrategy.inOrder]
   ///
   /// if [splitStrategy] is [KDTreeSplitStrategy.largestVariance], dimension with
   /// the widest column (in terms of variance) will be chosen to split the data
@@ -77,11 +77,42 @@ abstract class KDTree implements Serializable {
           {int leafSize = 1,
           DType dtype = DType.float32,
           KDTreeSplitStrategy splitStrategy =
-              KDTreeSplitStrategy.largestVariance}) =>
+              KDTreeSplitStrategy.inOrder}) =>
       createKDTreeFromIterable(pointsSrc, leafSize, dtype, splitStrategy);
 
-  factory KDTree.fromJson(Map<String, dynamic> json) =>
-      KDTreeImpl.fromJson(json);
+  /// Creates a [KDTree] instance from a JSON serializable representation of the
+  /// tree. The constructor works in conjunction with [saveAsJson] method.
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// import 'dart:io';
+  /// import 'package:ml_algo/kd_tree.dart';
+  ///
+  /// void main() async {
+  ///   final data = await loadIrisDataset();
+  ///   final tree = KDTree.fromIterable([
+  ///     [10, 30, 44, 55],
+  ///     [11, 70, 41, 75],
+  ///     [12, 80, 43, 15],
+  ///     [13, 90, 46, 65],
+  ///     [14, 11, 47, 95],
+  ///   ]);
+  ///
+  ///   // ...
+  ///
+  ///   await tree.saveAsJson('path/to/json/file.json');
+  ///
+  ///   // ...
+  ///
+  ///   final file = File('path/to/json/file.json');
+  ///   final encodedTree = await file.readAsString();
+  ///   final restoredTree = KDTree.fromJson(encodedTree);
+  ///
+  ///   print(restoredTree);
+  /// }
+  /// ```
+  factory KDTree.fromJson(Map<String, dynamic> json) = KDTreeImpl.fromJson;
 
   /// Points which were used to build the kd-tree
   Matrix get points;
