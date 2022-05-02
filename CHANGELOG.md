@@ -1,5 +1,12 @@
 # Changelog
 
+## 16.11.2
+- `KDTree`:
+    - `fromIterable` constructor, default value for splitting strategy changed
+    - Serialization tests added
+- `README`:
+    - Example for KDTree persisting added
+
 ## 16.11.1
 - `KDTree` example added to README
 - `kd_tree` exported as a separate library
