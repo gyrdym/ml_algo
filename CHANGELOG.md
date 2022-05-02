@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.11.3
+- Toy datasets from `ml_dataframe` package used
+
 ## 16.11.2
 - `KDTree`:
     - `fromIterable` constructor, default value for splitting strategy changed
