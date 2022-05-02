@@ -96,7 +96,7 @@ in your dependencies:
 
 ````
 dependencies:
-  ml_dataframe: ^1.0.0
+  ml_dataframe: ^1.4.2
   ml_preprocessing: ^7.0.2
 ````
 
@@ -117,7 +117,15 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 ### Read a dataset's file
 
-Download the dataset from [Pima Indians Diabetes Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
+We have 2 options here:
+
+- Download the dataset from [Pima Indians Diabetes Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
+
+- Or we may simply use [loadPimaIndiansDiabetesDataset](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/loadPimaIndiansDiabetesDataset.html) function
+from [ml_dataframe](https://pub.dev/packages/ml_dataframe) package. The function returns a ready to use [DataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/DataFrame-class.html) instance
+filled with `Pima Indians Diabetes Database` data.
+
+If we chose the first option, we should do the following: 
 
 #### For a desktop application: 
 
@@ -136,8 +144,8 @@ in your pubspec.yaml:
 ````
 dependencies:
   ...
-  ml_algo: ^16.0.0
-  ml_dataframe: ^1.0.0
+  ml_algo: ^16.11.2
+  ml_dataframe: ^1.4.2
   ...
 ````
 
@@ -164,10 +172,10 @@ final samples = DataFrame.fromRawCsv(rawCsvContent);
 
 Data in this file is represented by 768 records and 8 features. The 9th column is a label column, it contains either 0 or 1 
 on each row. This column is our target - we should predict a class label for each observation. The column's name is
-`class variable (0 or 1)`. Let's store it:
+`Outcome`. Let's store it:
 
 ````dart
-final targetColumnName = 'class variable (0 or 1)';
+final targetColumnName = 'Outcome';
 ````
 
 Now it's the time to prepare data splits. Since we have a smallish dataset (only 768 records), we can't afford to
@@ -333,8 +341,10 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
+  // Another option - to use a toy dataset:
+  // final samples = await loadPimaIndiansDiabetesDataset();
   final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
-  final targetColumnName = 'class variable (0 or 1)';
+  final targetColumnName = 'Outcome';
   final splits = splitData(samples, [0.7]);
   final validationData = splits[0];
   final testData = splits[1];
@@ -376,8 +386,10 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
   final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
+  // Another option - to use a toy dataset:
+  // final samples = await loadPimaIndiansDiabetesDataset();
   final samples = DataFrame.fromRawCsv(rawCsvContent);
-  final targetColumnName = 'class variable (0 or 1)';
+  final targetColumnName = 'Outcome';
   final splits = splitData(samples, [0.7]);
   final validationData = splits[0];
   final testData = splits[1];
@@ -565,7 +577,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
 void main() async {
-  final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
+  final rawCsvContent = await rootBundle.loadString('assets/datasets/housing.csv');
   final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ')
     ..shuffle();
   final targetName = 'col_13';
@@ -587,7 +599,8 @@ void main() async {
 Let's try to classify data from a well-known [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset using a non-linear algorithm - [decision trees](https://en.wikipedia.org/wiki/Decision_tree)
 
 First, you need to download the data and place it in a proper place in your file system. To do so you should follow the
-instructions which are given in the [Logistic regression](#logistic-regression) section.
+instructions which are given in the [Logistic regression](#logistic-regression) section. Or you may use [loadIrisDataset](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/loadIrisDataset.html)
+function that returns ready to use [DataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/DataFrame-class.html) instance filled with `Iris`dataset. 
 
 After loading the data, it's needed to preprocess it. We should drop the `Id` column since the column doesn't make sense. 
 Also, we need to encode the 'Species' column - originally, it contains 3 repeated string labels, to feed it to the classifier
@@ -599,7 +612,7 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
-    final samples = (await fromCsv('path/to/iris/dataset.csv'))
+    final samples = (await loadIrisDataset())
       .shuffle()
       .dropSeries(seriesNames: ['Id']);
     

@@ -6,9 +6,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 
 Future<Vector> evaluateClassifier(MetricType metric, DType dtype) async {
-  final samples = (await fromCsv('e2e/_datasets/iris.csv'))
-      .shuffle()
-      .dropSeries(names: ['Id']);
+  final samples = (await loadIrisDataset()).shuffle().dropSeries(names: ['Id']);
   final pipeline = Pipeline(samples, [
     toIntegerLabels(
       columnNames: ['Species'],
