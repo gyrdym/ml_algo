@@ -76,8 +76,7 @@ abstract class KDTree implements Serializable {
   factory KDTree.fromIterable(Iterable<Iterable<num>> pointsSrc,
           {int leafSize = 1,
           DType dtype = DType.float32,
-          KDTreeSplitStrategy splitStrategy =
-              KDTreeSplitStrategy.inOrder}) =>
+          KDTreeSplitStrategy splitStrategy = KDTreeSplitStrategy.inOrder}) =>
       createKDTreeFromIterable(pointsSrc, leafSize, dtype, splitStrategy);
 
   /// Creates a [KDTree] instance from a JSON serializable representation of the
