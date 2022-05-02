@@ -782,8 +782,8 @@ void main() async {
  
   // ...
 
-  final file = File('path/to/json/file.json');
-  final encodedTree = await file.readAsString();
+  final file = await File('path/to/json/file.json').readAsString();
+  final encodedTree = jsonDecode(file) as Map<String, dynamic>;
   final restoredTree = KDTree.fromJson(encodedTree);
 
   print(restoredTree);

@@ -85,6 +85,7 @@ abstract class KDTree implements Serializable {
   /// Example:
   ///
   /// ```dart
+  /// import 'dart:convert';
   /// import 'dart:io';
   /// import 'package:ml_algo/kd_tree.dart';
   ///
@@ -103,8 +104,8 @@ abstract class KDTree implements Serializable {
   ///
   ///   // ...
   ///
-  ///   final file = File('path/to/json/file.json');
-  ///   final encodedTree = await file.readAsString();
+  ///   final file = await File('path/to/json/file.json').readAsString();
+  ///   final encodedTree = jsonDecode(file) as Map<String, dynamic>;
   ///   final restoredTree = KDTree.fromJson(encodedTree);
   ///
   ///   print(restoredTree);
