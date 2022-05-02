@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 
 void main() async {
   group('KDTree', () {
-    test('should return correct list of neighbours, dtype=DType.float32',
+    test('should restore from a JSON file, dtype=DType.float32',
         () async {
       final file =
           await File('e2e/kd_tree/kd_tree_float_32_v1.json').readAsString();
@@ -23,7 +23,7 @@ void main() async {
           '((Index: 75, Distance: 0.17349341930302867), (Index: 51, Distance: 0.21470911402365767), (Index: 65, Distance: 0.26095956499211426), (Index: 86, Distance: 0.29681616124778537), (Index: 56, Distance: 0.4172527193942372))');
     });
 
-    test('should return correct list of neighbours, dtype=DType.float64',
+    test('should restore from a JSON file, dtype=DType.float64',
         () async {
       final file =
           await File('e2e/kd_tree/kd_tree_float_64_v1.json').readAsString();
