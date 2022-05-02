@@ -32,7 +32,7 @@ void main() async {
       final samples = (await loadPimaIndiansDiabetesDataset()).shuffle();
       final classifier = DecisionTreeClassifier(
         samples,
-        'class variable (0 or 1)',
+        'Outcome',
         minError: 0.15,
         minSamplesCount: 1,
         maxDepth: 5,
