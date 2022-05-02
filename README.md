@@ -341,7 +341,9 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
-  final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true); // or await loadPimaIndiansDiabetesDataset();
+  // Another option - to use a toy dataset:
+  // final samples = await loadPimaIndiansDiabetesDataset();
+  final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
   final targetColumnName = 'Outcome';
   final splits = splitData(samples, [0.7]);
   final validationData = splits[0];
@@ -384,7 +386,9 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
   final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
-  final samples = DataFrame.fromRawCsv(rawCsvContent); // or await loadPimaIndiansDiabetesDataset();
+  // Another option - to use a toy dataset:
+  // final samples = await loadPimaIndiansDiabetesDataset();
+  final samples = DataFrame.fromRawCsv(rawCsvContent);
   final targetColumnName = 'Outcome';
   final splits = splitData(samples, [0.7]);
   final validationData = splits[0];
