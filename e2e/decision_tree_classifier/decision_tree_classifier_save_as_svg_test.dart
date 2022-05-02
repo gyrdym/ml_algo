@@ -7,9 +7,8 @@ void main() async {
   group('DecisionTreeClassifier', () {
     test('should save graphical representation as svg image, iris dataset',
         () async {
-      final samples = (await fromCsv('e2e/_datasets/iris.csv'))
-          .shuffle()
-          .dropSeries(names: ['Id']);
+      final samples =
+          (await loadIrisDataset()).shuffle().dropSeries(names: ['Id']);
       final pipeline = Pipeline(samples, [
         toIntegerLabels(
           columnNames: ['Species'],
@@ -30,9 +29,7 @@ void main() async {
     test(
         'should save graphical representation as svg image, pima indians diabetes dataset',
         () async {
-      final samples =
-          (await fromCsv('e2e/_datasets/pima_indians_diabetes_database.csv'))
-              .shuffle();
+      final samples = (await loadPimaIndiansDiabetesDataset()).shuffle();
       final classifier = DecisionTreeClassifier(
         samples,
         'class variable (0 or 1)',
