@@ -90,7 +90,6 @@ abstract class KDTree implements Serializable {
   /// import 'package:ml_algo/kd_tree.dart';
   ///
   /// void main() async {
-  ///   final data = await loadIrisDataset();
   ///   final tree = KDTree.fromIterable([
   ///     [10, 30, 44, 55],
   ///     [11, 70, 41, 75],
