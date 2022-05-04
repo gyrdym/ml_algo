@@ -7,8 +7,8 @@ import 'package:test/test.dart';
 void main() async {
   group('KDTree', () {
     test('should return correct list of neighbours, dtype=DType.float32',
-        () async {
-      final originalData = await loadIrisDataset();
+        () {
+      final originalData = getIrisDataFrame();
       final data = originalData.dropSeries(names: ['Id', 'Species']);
       final tree = KDTree(data);
       final neighbours = tree.query(Vector.fromList([6.5, 3.01, 4.5, 1.5]), 5);
@@ -19,8 +19,8 @@ void main() async {
     });
 
     test('should return correct list of neighbours, dtype=DType.float64',
-        () async {
-      final originalData = await loadIrisDataset();
+        () {
+      final originalData = getIrisDataFrame();
       final data = originalData.dropSeries(names: ['Id', 'Species']);
       final tree = KDTree(data, dtype: DType.float64);
       final neighbours = tree.query(
