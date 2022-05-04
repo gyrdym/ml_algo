@@ -121,7 +121,7 @@ We have 2 options here:
 
 - Download the dataset from [Pima Indians Diabetes Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
 
-- Or we may simply use [loadPimaIndiansDiabetesDataset](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/loadPimaIndiansDiabetesDataset.html) function
+- Or we may simply use [getPimaIndiansDiabetesDataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/getPimaIndiansDiabetesDataFrame.html) function
 from [ml_dataframe](https://pub.dev/packages/ml_dataframe) package. The function returns a ready to use [DataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/DataFrame-class.html) instance
 filled with `Pima Indians Diabetes Database` data.
 
@@ -342,7 +342,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
   // Another option - to use a toy dataset:
-  // final samples = await loadPimaIndiansDiabetesDataset();
+  // final samples = getPimaIndiansDiabetesDataFrame();
   final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv', headerExists: true);
   final targetColumnName = 'Outcome';
   final splits = splitData(samples, [0.7]);
@@ -387,7 +387,7 @@ import 'package:ml_preprocessing/ml_preprocessing.dart';
 void main() async {
   final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
   // Another option - to use a toy dataset:
-  // final samples = await loadPimaIndiansDiabetesDataset();
+  // final samples = getPimaIndiansDiabetesDataFrame();
   final samples = DataFrame.fromRawCsv(rawCsvContent);
   final targetColumnName = 'Outcome';
   final splits = splitData(samples, [0.7]);
@@ -599,7 +599,7 @@ void main() async {
 Let's try to classify data from a well-known [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset using a non-linear algorithm - [decision trees](https://en.wikipedia.org/wiki/Decision_tree)
 
 First, you need to download the data and place it in a proper place in your file system. To do so you should follow the
-instructions which are given in the [Logistic regression](#logistic-regression) section. Or you may use [loadIrisDataset](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/loadIrisDataset.html)
+instructions which are given in the [Logistic regression](#logistic-regression) section. Or you may use [getIrisDataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/getIrisDataFrame.html)
 function that returns ready to use [DataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/DataFrame-class.html) instance filled with `Iris`dataset. 
 
 After loading the data, it's needed to preprocess it. We should drop the `Id` column since the column doesn't make sense. 
@@ -612,7 +612,7 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
-    final samples = (await loadIrisDataset())
+    final samples = getIrisDataset()
       .shuffle()
       .dropSeries(seriesNames: ['Id']);
     
@@ -675,14 +675,14 @@ efficient to retrieve data.
 Let's retrieve some data points through a kd-tree built on the [Iris](https://www.kaggle.com/datasets/uciml/iris) dataset.
 
 First, we need to prepare the data. To do so, it's needed to load the dataset. For this purpose, we may use 
-[loadIrisDataset](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/loadIrisDataset.html) function from [ml_dataframe](https://pub.dev/packages/ml_dataframe). The function returns prefilled with the Iris data DataFrame instance:
+[getIrisDataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/getIrisDataFrame.html) function from [ml_dataframe](https://pub.dev/packages/ml_dataframe). The function returns prefilled with the Iris data DataFrame instance:
 
 ```dart
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-void main() async {
-  final originalData = await loadIrisDataset();
+void main() {
+  final originalData = getIrisDataFrame();
 }
 ```
 
@@ -693,8 +693,8 @@ drop these columns:
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-void main() async {
-  final originalData = await loadIrisDataset();
+void main() {
+  final originalData = getIrisDataFrame();
   final data = originalData.dropSeries(names: ['Id', 'Species']);
 }
 ```
@@ -705,8 +705,8 @@ Next, we can build the tree:
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-void main() async {
-  final originalData = await loadIrisDataset();
+void main() {
+  final originalData = getIrisDataFrame();
   final data = originalData.dropSeries(names: ['Id', 'Species']);
   final tree = KDTree(data);
 }
@@ -719,8 +719,8 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/vector.dart';
 
-void main() async {
-  final originalData = await loadIrisDataset();
+void main() {
+  final originalData = getIrisDataFrame();
   final data = originalData.dropSeries(names: ['Id', 'Species']);
   final tree = KDTree(data);
   final neighbourCount = 5;
@@ -742,8 +742,8 @@ The nearest point has an index 75 in the original data. Let's check a record at 
 ```dart
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-void main() async {
-  final originalData = await loadIrisDataset();
+void main() {
+  final originalData = getIrisDataFrame();
  
   print(originalData.rows.elementAt(75));
 }
@@ -784,8 +784,8 @@ import 'dart:io';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-void main() async {
-  final originalData = await loadIrisDataset();
+void main() {
+  final originalData = getIrisDataFrame();
   final data = originalData.dropSeries(names: ['Id', 'Species']);
   final tree = KDTree(data);
  

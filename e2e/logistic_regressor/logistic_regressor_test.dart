@@ -4,8 +4,8 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
-Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) async {
-  final samples = (await loadPimaIndiansDiabetesDataset()).shuffle();
+Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
+  final samples = getPimaIndiansDiabetesDataFrame().shuffle();
   final numberOfFolds = 5;
   final targetNames = ['Outcome'];
   final validator = CrossValidator.kFold(

@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.11.4
+- `getPimaIndiansDiabetesDataFrame`, `getIrisDataFrame` used
+
 ## 16.11.3
 - Toy datasets from `ml_dataframe` package used
 
