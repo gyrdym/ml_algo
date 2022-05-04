@@ -5,8 +5,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 import 'package:test/test.dart';
 
-Future<Vector> evaluateSoftmaxRegressor(
-    MetricType metricType, DType dtype) {
+Future<Vector> evaluateSoftmaxRegressor(MetricType metricType, DType dtype) {
   final samples = getIrisDataFrame().shuffle().dropSeries(names: ['Id']);
   final pipeline = Pipeline(samples, [
     toOneHotLabels(
