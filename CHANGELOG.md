@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.12.0
+- `LSH.randomBinaryProjection` algorithm added
+
 ## 16.11.4
 - `getPimaIndiansDiabetesDataFrame`, `getIrisDataFrame` used
 
