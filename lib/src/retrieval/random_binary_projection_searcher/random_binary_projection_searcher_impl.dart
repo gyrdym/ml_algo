@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:ml_algo/src/common/constants/common_json_keys.dart';
+import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/lpo_indices_provider.dart';
 import 'package:ml_algo/src/retrieval/mixins/knn_searcher.dart';
 import 'package:ml_algo/src/retrieval/neighbour.dart';
@@ -15,15 +17,23 @@ part 'random_binary_projection_searcher_impl.g.dart';
 
 @JsonSerializable()
 class RandomBinaryProjectionSearcherImpl
-    with KnnSearcherMixin
+    with SerializableMixin, KnnSearcherMixin
     implements RandomBinaryProjectionSearcher {
   RandomBinaryProjectionSearcherImpl(
       this.header, this.points, this.digitCapacity,
-      {int? seed}) {
+      {int? seed, this.schemaVersion = 1}) {
     randomVectors = Matrix.random(points.columnsNum, digitCapacity, seed: seed);
     bins = groupIndicesByBins(getBinIdsFromBinaryRepresentation(
         getBinaryRepresentation(points, randomVectors)));
   }
+
+  factory RandomBinaryProjectionSearcherImpl.fromJson(
+          Map<String, dynamic> json) =>
+      _$RandomBinaryProjectionSearcherImplFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() =>
+      _$RandomBinaryProjectionSearcherImplToJson(this);
 
   @override
   @JsonKey(name: randomBinaryProjectionDigitCapacityJsonKey)
@@ -42,6 +52,10 @@ class RandomBinaryProjectionSearcherImpl
 
   @JsonKey(name: randomBinaryProjectionBinsJsonKey)
   late Map<int, List<int>> bins;
+
+  @override
+  @JsonKey(name: jsonSchemaVersionJsonKey)
+  final int schemaVersion;
 
   @override
   Iterable<Neighbour> query(Vector point, int k, int searchRadius) {
