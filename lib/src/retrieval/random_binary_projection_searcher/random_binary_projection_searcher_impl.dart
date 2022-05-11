@@ -25,9 +25,11 @@ class RandomBinaryProjectionSearcherImpl
         getBinaryRepresentation(points, randomVectors)));
   }
 
+  @override
   @JsonKey(name: randomBinaryProjectionDigitCapacityJsonKey)
   final int digitCapacity;
 
+  @override
   @JsonKey(name: randomBinaryProjectionHeaderJsonKey)
   final Iterable<String> header;
 
