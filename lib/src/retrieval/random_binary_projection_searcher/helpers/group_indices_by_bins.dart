@@ -1,7 +1,7 @@
-Map<num, List<int>> groupIndicesByBins(Iterable<num> binIds) {
+Map<int, List<int>> groupIndicesByBins(Iterable<int> binIds) {
   var i = 0;
 
-  return binIds.fold<Map<num, List<int>>>(<num, List<int>>{},
+  return binIds.fold<Map<int, List<int>>>(<int, List<int>>{},
       (previousValue, binId) {
     previousValue.putIfAbsent(binId, () => []);
 

@@ -1,6 +1,5 @@
 import 'package:ml_algo/src/retrieval/random_binary_projection_searcher/random_binary_projection_searcher_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
@@ -15,8 +14,9 @@ void main() {
       [1, 10, 11],
     ], headerExists: false);
     final digitCapacity = 4;
-    final searcher =
-        RandomBinaryProjectionSearcherImpl(data, digitCapacity, seed: 10);
+    final searcher = RandomBinaryProjectionSearcherImpl(
+        data.header, data.toMatrix(), digitCapacity,
+        seed: 10);
 
     test('should build bin map', () {
       expect(searcher.bins, {
@@ -53,10 +53,6 @@ void main() {
 
     test('should persist digit capacity', () {
       expect(searcher.digitCapacity, digitCapacity);
-    });
-
-    test('should persist dtype', () {
-      expect(searcher.dtype, DType.float32);
     });
 
     test('should persist header', () {
