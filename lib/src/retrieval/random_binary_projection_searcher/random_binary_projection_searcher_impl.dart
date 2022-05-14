@@ -20,7 +20,7 @@ class RandomBinaryProjectionSearcherImpl
     with SerializableMixin, KnnSearcherMixin
     implements RandomBinaryProjectionSearcher {
   RandomBinaryProjectionSearcherImpl(
-      this.header, this.points, this.digitCapacity,
+      this.columns, this.points, this.digitCapacity,
       {this.seed, this.schemaVersion = 1}) {
     randomVectors = Matrix.random(points.columnsNum, digitCapacity,
         seed: seed, dtype: points.dtype);
@@ -46,7 +46,7 @@ class RandomBinaryProjectionSearcherImpl
 
   @override
   @JsonKey(name: randomBinaryProjectionHeaderJsonKey)
-  final Iterable<String> header;
+  final Iterable<String> columns;
 
   @override
   @JsonKey(name: randomBinaryProjectionPointsJsonKey)

@@ -22,7 +22,7 @@ void main() async {
           k,
           searchRadius);
 
-      expect(searcher.header, [
+      expect(searcher.columns, [
         'feature_1',
         'feature_2',
         'feature_3',
@@ -56,7 +56,7 @@ void main() async {
           k,
           searchRadius);
 
-      expect(searcher.header, [
+      expect(searcher.columns, [
         'feature_1',
         'feature_2',
         'feature_3',

@@ -30,7 +30,7 @@ RandomBinaryProjectionSearcherImpl _$RandomBinaryProjectionSearcherImplFromJson(
             ));
     return val;
   }, fieldKeyMap: const {
-    'header': 'H',
+    'columns': 'H',
     'points': 'P',
     'digitCapacity': 'D',
     'seed': 'S',
@@ -52,7 +52,7 @@ Map<String, dynamic> _$RandomBinaryProjectionSearcherImplToJson(
 
   writeNotNull('S', instance.seed);
   val['D'] = instance.digitCapacity;
-  val['H'] = instance.header.toList();
+  val['H'] = instance.columns.toList();
   val['P'] = instance.points.toJson();
   val['R'] = instance.randomVectors.toJson();
   val['B'] = instance.bins.map((k, e) => MapEntry(k.toString(), e));

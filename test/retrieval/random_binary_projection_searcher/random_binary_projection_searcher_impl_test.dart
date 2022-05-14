@@ -56,7 +56,7 @@ void main() {
     });
 
     test('should persist header', () {
-      expect(searcher.header, data.header);
+      expect(searcher.columns, data.header);
     });
 
     test('should perform knn search, k=4', () {
