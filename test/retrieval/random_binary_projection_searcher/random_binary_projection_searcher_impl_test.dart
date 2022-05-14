@@ -61,7 +61,9 @@ void main() {
 
     test('should perform knn search, k=4', () {
       final k = 4;
-      final result = searcher.query(Vector.fromList([-19, 2, -109]), k, 3);
+      final searchRadius = 3;
+      final result =
+          searcher.query(Vector.fromList([-19, 2, -109]), k, searchRadius);
 
       expect(result, hasLength(k));
       expect(result.elementAt(0).index, 2);
@@ -70,7 +72,9 @@ void main() {
 
     test('should perform knn search, k=3', () {
       final k = 3;
-      final result = searcher.query(Vector.fromList([1, 10, 11]), k, 3);
+      final searchRadius = 3;
+      final result =
+          searcher.query(Vector.fromList([1, 10, 11]), k, searchRadius);
 
       expect(result, hasLength(k));
       expect(result.elementAt(0).index, 5);
@@ -79,7 +83,9 @@ void main() {
 
     test('should perform knn search, k=2', () {
       final k = 2;
-      final result = searcher.query(Vector.fromList([101, -10, -34]), k, 3);
+      final searchRadius = 3;
+      final result =
+          searcher.query(Vector.fromList([101, -10, -34]), k, searchRadius);
 
       expect(result, hasLength(k));
       expect(result.elementAt(0).index, 4);
@@ -88,16 +94,53 @@ void main() {
 
     test('should perform knn search, k=1', () {
       final k = 1;
-      final result = searcher.query(Vector.fromList([23, 12, 34]), k, 3);
+      final searchRadius = 3;
+      final result =
+          searcher.query(Vector.fromList([23, 12, 34]), k, searchRadius);
 
       expect(result, hasLength(k));
       expect(result.elementAt(0).index, 0);
       expect(result.elementAt(0).distance, 0);
     });
 
+    test('should perform knn search, k=3, searchRadius=2', () {
+      final k = 3;
+      final searchRadius = 2;
+      final result =
+          searcher.query(Vector.fromList([1, 10, 11]), k, searchRadius);
+
+      expect(result, hasLength(k));
+      expect(result.elementAt(0).index, 5);
+      expect(result.elementAt(0).distance, 0);
+    });
+
+    test('should perform knn search, k=3, searchRadius=1', () {
+      final k = 3;
+      final searchRadius = 1;
+      final result =
+          searcher.query(Vector.fromList([1, 10, 11]), k, searchRadius);
+
+      expect(result, hasLength(3));
+      expect(result.elementAt(0).index, 5);
+      expect(result.elementAt(0).distance, 0);
+    });
+
+    test('should perform knn search, k=3, searchRadius=0', () {
+      final k = 3;
+      final searchRadius = 0;
+      final result =
+          searcher.query(Vector.fromList([1, 10, 11]), k, searchRadius);
+
+      expect(result, hasLength(1));
+      expect(result.elementAt(0).index, 5);
+      expect(result.elementAt(0).distance, 0);
+    });
+
     test('should perform knn search, k=0', () {
       final k = 0;
-      final result = searcher.query(Vector.fromList([23, 12, 34]), k, 3);
+      final searchRadius = 3;
+      final result =
+          searcher.query(Vector.fromList([23, 12, 34]), k, searchRadius);
 
       expect(result, hasLength(k));
     });

@@ -21,8 +21,9 @@ class RandomBinaryProjectionSearcherImpl
     implements RandomBinaryProjectionSearcher {
   RandomBinaryProjectionSearcherImpl(
       this.header, this.points, this.digitCapacity,
-      {int? seed, this.schemaVersion = 1}) {
-    randomVectors = Matrix.random(points.columnsNum, digitCapacity, seed: seed);
+      {this.seed, this.schemaVersion = 1}) {
+    randomVectors = Matrix.random(points.columnsNum, digitCapacity,
+        seed: seed, dtype: points.dtype);
     bins = groupIndicesByBins(getBinIdsFromBinaryRepresentation(
         getBinaryRepresentation(points, randomVectors)));
   }
@@ -34,6 +35,10 @@ class RandomBinaryProjectionSearcherImpl
   @override
   Map<String, dynamic> toJson() =>
       _$RandomBinaryProjectionSearcherImplToJson(this);
+
+  @override
+  @JsonKey(name: randomBinaryProjectionSeedJsonKey)
+  final int? seed;
 
   @override
   @JsonKey(name: randomBinaryProjectionDigitCapacityJsonKey)
@@ -64,7 +69,7 @@ class RandomBinaryProjectionSearcherImpl
         getBinaryRepresentation(pointAsMatrix, randomVectors).toVector();
     final candidateIndices = <int>[];
 
-    for (var i = 0; i < searchRadius; i++) {
+    for (var i = 0; i < searchRadius + 1; i++) {
       final indicesProvider = LpoIndicesProvider(i);
       final indexGroups = indicesProvider.getIndices(randomVectors.columnsNum);
 
@@ -75,7 +80,8 @@ class RandomBinaryProjectionSearcherImpl
           queryBitsFlipped[index] = queryBitsFlipped[index] == 1 ? 0 : 1;
         }
 
-        final flippedBitsAsMatrix = Matrix.fromList([queryBitsFlipped]);
+        final flippedBitsAsMatrix =
+            Matrix.fromList([queryBitsFlipped], dtype: points.dtype);
         final nearbyBinId =
             getBinIdsFromBinaryRepresentation(flippedBitsAsMatrix).first;
 

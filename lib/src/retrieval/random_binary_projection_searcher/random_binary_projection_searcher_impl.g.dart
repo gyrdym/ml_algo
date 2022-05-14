@@ -9,13 +9,14 @@ part of 'random_binary_projection_searcher_impl.dart';
 RandomBinaryProjectionSearcherImpl _$RandomBinaryProjectionSearcherImplFromJson(
     Map<String, dynamic> json) {
   return $checkedNew('RandomBinaryProjectionSearcherImpl', json, () {
-    $checkKeys(json, allowedKeys: const ['D', 'H', 'P', 'R', 'B', r'$V']);
+    $checkKeys(json, allowedKeys: const ['S', 'D', 'H', 'P', 'R', 'B', r'$V']);
     final val = RandomBinaryProjectionSearcherImpl(
       $checkedConvert(
           json, 'H', (v) => (v as List<dynamic>).map((e) => e as String)),
       $checkedConvert(
           json, 'P', (v) => Matrix.fromJson(v as Map<String, dynamic>)),
       $checkedConvert(json, 'D', (v) => v as int),
+      seed: $checkedConvert(json, 'S', (v) => v as int?),
       schemaVersion: $checkedConvert(json, r'$V', (v) => v as int),
     );
     $checkedConvert(json, 'R',
@@ -32,6 +33,7 @@ RandomBinaryProjectionSearcherImpl _$RandomBinaryProjectionSearcherImplFromJson(
     'header': 'H',
     'points': 'P',
     'digitCapacity': 'D',
+    'seed': 'S',
     'schemaVersion': r'$V',
     'randomVectors': 'R',
     'bins': 'B'
@@ -39,12 +41,21 @@ RandomBinaryProjectionSearcherImpl _$RandomBinaryProjectionSearcherImplFromJson(
 }
 
 Map<String, dynamic> _$RandomBinaryProjectionSearcherImplToJson(
-        RandomBinaryProjectionSearcherImpl instance) =>
-    <String, dynamic>{
-      'D': instance.digitCapacity,
-      'H': instance.header.toList(),
-      'P': instance.points.toJson(),
-      'R': instance.randomVectors.toJson(),
-      'B': instance.bins.map((k, e) => MapEntry(k.toString(), e)),
-      r'$V': instance.schemaVersion,
-    };
+    RandomBinaryProjectionSearcherImpl instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('S', instance.seed);
+  val['D'] = instance.digitCapacity;
+  val['H'] = instance.header.toList();
+  val['P'] = instance.points.toJson();
+  val['R'] = instance.randomVectors.toJson();
+  val['B'] = instance.bins.map((k, e) => MapEntry(k.toString(), e));
+  val[r'$V'] = instance.schemaVersion;
+  return val;
+}

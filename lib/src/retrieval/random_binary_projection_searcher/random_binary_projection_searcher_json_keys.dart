@@ -1,3 +1,4 @@
+const randomBinaryProjectionSeedJsonKey = 'S';
 const randomBinaryProjectionDigitCapacityJsonKey = 'D';
 const randomBinaryProjectionHeaderJsonKey = 'H';
 const randomBinaryProjectionPointsJsonKey = 'P';
