@@ -1,11 +1,7 @@
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 
 class LpoIndicesProvider implements SplitIndicesProvider {
-  LpoIndicesProvider([this._p = 2]) {
-    if (_p == 0) {
-      throw UnsupportedError('Value `$_p` for parameter `p` is unsupported');
-    }
-  }
+  LpoIndicesProvider([this._p = 2]);
 
   final int _p;
 

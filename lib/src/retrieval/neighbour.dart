@@ -1,12 +1,12 @@
-class KDTreeNeighbour {
-  KDTreeNeighbour(this.index, this.distance);
+class Neighbour {
+  Neighbour(this.index, this.distance);
 
   final int index;
   final num distance;
 
   @override
   bool operator ==(Object other) {
-    if (other is KDTreeNeighbour) {
+    if (other is Neighbour) {
       return index == other.index;
     }
 
