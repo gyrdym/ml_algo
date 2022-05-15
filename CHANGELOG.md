@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.12.0
+- `RandomBinaryProjectionSearcher` class added
+
 ## 16.11.4
 - `getPimaIndiansDiabetesDataFrame`, `getIrisDataFrame` used
 

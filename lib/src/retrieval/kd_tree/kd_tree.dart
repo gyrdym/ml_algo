@@ -2,8 +2,8 @@ import 'package:ml_algo/src/common/serializable/serializable.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/helpers/create_kd_tree.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/helpers/create_kd_tree_from_iterable.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_impl.dart';
-import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_neighbour.dart';
 import 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
+import 'package:ml_algo/src/retrieval/neighbour.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
@@ -151,7 +151,7 @@ abstract class KDTree implements Serializable {
   ///   print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
   /// }
   /// ```
-  Iterable<KDTreeNeighbour> query(Vector point, int k,
+  Iterable<Neighbour> query(Vector point, int k,
       [Distance distance = Distance.euclidean]);
 
   /// Returns [k] nearest neighbours for [point], [point] is [Iterable] unlike
@@ -179,6 +179,6 @@ abstract class KDTree implements Serializable {
   ///   print(neighbours[0].index); // let's say, it outputs `3` which means that the nearest neighbour is kdTree.points[3]
   /// }
   /// ```
-  Iterable<KDTreeNeighbour> queryIterable(Iterable<num> point, int k,
+  Iterable<Neighbour> queryIterable(Iterable<num> point, int k,
       [Distance distance = Distance.euclidean]);
 }

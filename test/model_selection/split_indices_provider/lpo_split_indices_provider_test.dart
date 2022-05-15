@@ -63,9 +63,5 @@ void main() {
       [1, 3, 4],
       [2, 3, 4],
     });
-
-    test('should throw an error, if p is equal to 0', () {
-      expect(() => LpoIndicesProvider(0), throwsUnsupportedError);
-    });
   });
 }
