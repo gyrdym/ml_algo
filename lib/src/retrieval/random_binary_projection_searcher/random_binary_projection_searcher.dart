@@ -187,12 +187,11 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   Matrix get points;
 
   /// Accepts a [point] and finds it's [k] nearest neighbours. The search is
-  /// performed along bins in [searchRadius] from the [point]'s bin. The greater
-  /// [searchRadius] is, the more bins will be examined by the algorithm.
+  /// performed along bins in [searchRadius] (in bits) from the [point]'s bin.
+  /// The greater [searchRadius] is, the more bins will be examined by the algorithm.
   ///
   /// A neighbour is represented by an index in the [points] matrix and the
   /// distance between the neighbour and the query [point]
-  ///
   ///
   /// Example:
   ///
