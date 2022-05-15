@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:ml_algo/ml_algo.dart';
@@ -9,11 +8,10 @@ import 'package:test/test.dart';
 void main() async {
   group('RandomBinaryProjectionSearcher', () {
     test('should restore from a JSON file, dtype=DType.float32', () async {
-      final file = await File(
+      final jsonSource = await File(
               'e2e/random_binary_projection_searcher/random_binary_projection_searcher_32_v1.json')
           .readAsString();
-      final json = jsonDecode(file) as Map<String, dynamic>;
-      final searcher = RandomBinaryProjectionSearcher.fromJson(json);
+      final searcher = RandomBinaryProjectionSearcher.fromJson(jsonSource);
       final k = 5;
       final searchRadius = 3;
       final neighbours = searcher.query(
@@ -42,11 +40,10 @@ void main() async {
     });
 
     test('should restore from a JSON file, dtype=DType.float64', () async {
-      final file = await File(
+      final jsonSource = await File(
               'e2e/random_binary_projection_searcher/random_binary_projection_searcher_64_v1.json')
           .readAsString();
-      final json = jsonDecode(file) as Map<String, dynamic>;
-      final searcher = RandomBinaryProjectionSearcher.fromJson(json);
+      final searcher = RandomBinaryProjectionSearcher.fromJson(jsonSource);
       final k = 5;
       final searchRadius = 3;
       final neighbours = searcher.query(

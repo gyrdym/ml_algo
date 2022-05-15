@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/common/serializable/serializable_mixin.dart';
@@ -28,9 +30,11 @@ class RandomBinaryProjectionSearcherImpl
         getBinaryRepresentation(points, randomVectors)));
   }
 
-  factory RandomBinaryProjectionSearcherImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$RandomBinaryProjectionSearcherImplFromJson(json);
+  factory RandomBinaryProjectionSearcherImpl.fromJson(String jsonSource) {
+    final serializable = jsonDecode(jsonSource) as Map<String, dynamic>;
+
+    return _$RandomBinaryProjectionSearcherImplFromJson(serializable);
+  }
 
   @override
   Map<String, dynamic> toJson() =>

@@ -7,17 +7,20 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
-/// Random Binary Projection is a Locality Sensitive Hashing algorithm that
-/// randomly partitions all reference data points into different bins, which makes it
-/// possible to perform efficient K Nearest Neighbours algorithm, since there
-/// is no need to search for neighbours through the entire data, it's needed to
-/// visit just a few bins and to look for the neighbours there.
+/// Random Binary Projection is a an algorithm that randomly partitions all
+/// reference data points into different bins, which makes it possible to
+/// perform efficient K Nearest Neighbours search, since there is no need to
+/// search for the neighbours through the entire data: it's needed to
+/// visit just a few bins to look for the neighbours.
 ///
 /// Internally, the bins are represented by a Hash Map, where the key is an integer
 /// index, and the value is a list of corresponding points. A record of the map
 /// is a bin. Usually, points in the same bin are quite similar.
 abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   /// Takes [data], trains the model on it and returns [RandomBinaryProjectionSearcher] instance.
+  ///
+  /// Training means to distribute all points from the reference [data] by bins.
+  /// A bin is
   ///
   /// Parameters:
   ///
@@ -29,7 +32,7 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   ///
   /// - [digitCapacity] equals 4, possible binary bin indices: 0000, 0001, 0010, ...
   ///
-  /// [seed] A seed value for the random generator which will be used to calculate bin indices
+  /// [seed] A seed value for the random generator which will be used to get bin indices
   ///
   /// [dtype] A data type for matrix representation of the [data]
   ///
@@ -65,15 +68,34 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   /// Example:
   ///
   /// ```dart
+  /// import 'dart:io';
   /// import 'package:ml_algo/ml_algo.dart';
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
   ///
-  /// void main() {
-  ///   final json = {"S":4,"D":3,"H":["col_0","col_1","col_2"],"P":{"DT":"F32","D":[[10.0,20.0,30.0],[11.0,19.0,31.0],[19.0,43.0,20.0],[89.0,97.0,11.0],[12.0,32.0,10.0]]},"R":{"DT":"F32","D":[[-426.0992431640625,867.06689453125,-766.1226196289062],[416.06402587890625,-791.7759399414062,122.97400665283203],[985.5552368164062,140.78659057617188,226.818359375]]},"B":{"5":[0,1],"1":[2,4],"3":[3]},"$V":1};
+  /// void main() async {
+  ///   final data = DataFrame([
+  ///     ['feature_1', 'feature_2', 'feature_3']
+  ///     [10, 20, 30],
+  ///     [11, 19, 31],
+  ///     [19, 43, 20],
+  ///     [89, 97, 11],
+  ///     [12, 32, 10],
+  ///   ]);
+  ///   final digitCapacity = 3;
   ///
-  ///   final searcher = RandomBinaryProjectionSearcher.fromJson(json);
+  ///   final searcher = RandomBinaryProjectionSearcher(data, digitCapacity, seed: 4);
+  ///
+  ///   await searcher.saveAsJson('path/to/json/file');
+  ///
+  ///   // ...
+  ///
+  ///   final file = File('path/to/json/file');
+  ///   final jsonSource = await file.readAsString();
+  ///
+  ///   final restoredSearcher = RandomBinaryProjectionSearcher.fromJson(jsonSource);
   ///
   ///   print(searcher.columns);
-  ///   // (col_0, col_1, col_2)
+  ///   // (feature_1, feature_2, feature_3)
   ///
   ///   print(searcher.points);
   ///   // Matrix 5 x 3:
@@ -90,7 +112,7 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   ///   // 3
   /// }
   /// ```
-  factory RandomBinaryProjectionSearcher.fromJson(Map<String, dynamic> json) =
+  factory RandomBinaryProjectionSearcher.fromJson(String jsonSource) =
       RandomBinaryProjectionSearcherImpl.fromJson;
 
   /// A seed value for the random generator which was used to calculate bin indices
@@ -168,6 +190,10 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   /// performed along bins in [searchRadius] from the [point]'s bin. The greater
   /// [searchRadius] is, the more bins will be examined by the algorithm.
   ///
+  /// A neighbour is represented by an index in the [points] matrix and the
+  /// distance between the neighbour and the query [point]
+  ///
+  ///
   /// Example:
   ///
   /// ```dart
@@ -195,6 +221,7 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   ///
   ///   print(neighbours);
   ///   // ((Index: 1, Distance: 0.0), (Index: 0, Distance: 1.7320508075688772), (Index: 4, Distance: 24.71841418861655))
+  ///   // To access a neighbour, refer to `searcher.points` by the neighbour index
   /// }
   /// ```
   Iterable<Neighbour> query(Vector point, int k, int searchRadius);
