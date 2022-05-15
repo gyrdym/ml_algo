@@ -19,8 +19,8 @@ import 'package:ml_linalg/vector.dart';
 abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   /// Takes [data], trains the model on it and returns [RandomBinaryProjectionSearcher] instance.
   ///
-  /// Training means to distribute all points from the reference [data] by bins.
-  /// A bin is
+  /// Training means distributing all points from the reference [data] by bins.
+  /// A bin is identified by an integer index that is generated as a binary number.
   ///
   /// Parameters:
   ///
