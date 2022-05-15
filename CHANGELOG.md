@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.12.1
+- Corrected link to `RandomBinaryProjectionSearcher` class in README.md
+
 ## 16.12.0
 - `RandomBinaryProjectionSearcher` class added
 

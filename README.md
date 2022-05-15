@@ -76,7 +76,7 @@ it in web applications.
     - **Locality sensitive hashing.** A family of algorithms that randomly partition all reference data points into 
     different bins, which makes it possible to perform efficient K Nearest Neighbours search, since there is no need 
     to search for the neighbours through the entire data. The family is represented by the following classes:
-        - [RandomBinaryProjectionSearcher](https://pub.dev/documentation/ml_algo/latest/random_binary_projection_searcher/RandomBinaryProjectionSearcher-class.html)
+        - [RandomBinaryProjectionSearcher](https://pub.dev/documentation/ml_algo/latest/ml_algo/RandomBinaryProjectionSearcher-class.html)
     
 For more information on the library's API, please visit the [API reference](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) 
 
