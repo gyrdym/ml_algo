@@ -35,44 +35,46 @@ it in web applications.
 ## The library content
 
 - #### Model selection
-    - [CrossValidator](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/cross_validator/cross_validator.dart). 
+    - [CrossValidator](https://pub.dev/documentation/ml_algo/latest/ml_algo/CrossValidator-class.html). 
     A factory that creates instances of cross validators. Cross-validation allows researchers to fit different 
     [hyperparameters](https://en.wikipedia.org/wiki/Hyperparameter_(machine_learning)) of machine learning algorithms 
     assessing prediction quality on different parts of a dataset. 
 
 - #### Classification algorithms
-    - [LogisticRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/logistic_regressor/logistic_regressor.dart). 
+    - [LogisticRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor-class.html). 
     A class that performs linear binary classification of data. To use this kind of classifier your data has to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
-    - [SoftmaxRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/softmax_regressor/softmax_regressor.dart). 
+    - [SoftmaxRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/SoftmaxRegressor-class.html). 
     A class that performs linear multiclass classification of data. To use this kind of classifier your data has to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
         
-    - [DecisionTreeClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/decision_tree_classifier/decision_tree_classifier.dart)
+    - [DecisionTreeClassifier](https://pub.dev/documentation/ml_algo/latest/ml_algo/DecisionTreeClassifier-class.html)
     A class that performs classification using decision trees. May work with data with non-linear patterns.
     
-    - [KnnClassifier](https://github.com/gyrdym/ml_algo/blob/master/lib/src/classifier/knn_classifier/knn_classifier.dart)
+    - [KnnClassifier](https://pub.dev/documentation/ml_algo/latest/ml_algo/KnnClassifier-class.html)
     A class that performs classification using `k nearest neighbours algorithm` - it makes predictions based on 
     the first `k` closest observations to the given one.
 
 - #### Regression algorithms
-    - [LinearRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/linear_regressor/linear_regressor.dart). 
+    - [LinearRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor-class.html). 
     A general class for finding a linear pattern in training data and predicting outcomes as real numbers.
     
-    - [LinearRegressor.lasso](https://github.com/gyrdym/ml_algo/blob/85f1e2f19b946beb2b594a62e0e3c999d1c31608/lib/src/regressor/linear_regressor/linear_regressor.dart#L219)
+    - [LinearRegressor.lasso](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.lasso.html)
     Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation
     
-    - [LinearRegressor.SGD](https://github.com/gyrdym/ml_algo/blob/c0ffc71676c1ad14927448fe9bbf984a425ce27a/lib/src/regressor/linear_regressor/linear_regressor.dart#L322)
+    - [LinearRegressor.SGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.SGD.html)
     Implementation of the linear regression algorithm based on stochastic gradient descent with L2 regularisation
      
-    - [KnnRegressor](https://github.com/gyrdym/ml_algo/blob/master/lib/src/regressor/knn_regressor/knn_regressor.dart)
+    - [KnnRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/KnnRegressor-class.html)
     A class that makes predictions for each new observation based on the first `k` closest observations from 
     training data. It may catch non-linear patterns of the data.
     
 - #### Clustering and retrieval algorithms
-    - [KDTree](https://github.com/gyrdym/ml_algo/blob/master/lib/src/retrieval/kd_tree/kd_tree.dart) An algorithm for
+    - [KDTree](https://pub.dev/documentation/ml_algo/latest/kd_tree/KDTree-class.html) An algorithm for
     efficient data retrieval.
+    - Locality sensitive hashing:
+        - [RandomBinaryProjectionSearcher](https://pub.dev/documentation/ml_algo/latest/random_binary_projection_searcher/RandomBinaryProjectionSearcher-class.html)
     
 For more information on the library's API, please visit the [API reference](https://pub.dev/documentation/ml_algo/latest/ml_algo/ml_algo-library.html) 
 
