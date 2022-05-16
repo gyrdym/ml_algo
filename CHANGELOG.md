@@ -1,5 +1,15 @@
 # Changelog
 
+## 16.13.0
+- `RandomBinaryProjectionSearcher`:
+    - Distance type considered
+- `ml_algo` export file:
+    - Distance type exported
+    - DType exported
+- `kd_tree` export file:
+    - Distance type exported
+    - DType exported
+
 ## 16.12.1
 - Corrected link to `RandomBinaryProjectionSearcher` class in README.md
 

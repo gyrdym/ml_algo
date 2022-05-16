@@ -1,3 +1,4 @@
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/retrieval/random_binary_projection_searcher/random_binary_projection_searcher_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_linalg/vector.dart';
@@ -143,6 +144,18 @@ void main() {
           searcher.query(Vector.fromList([23, 12, 34]), k, searchRadius);
 
       expect(result, hasLength(k));
+    });
+
+    test('should perform knn search, k=3, searchRadius=2, distance=cosine', () {
+      final k = 3;
+      final searchRadius = 2;
+      final result = searcher.query(
+          Vector.fromList([1, 10, 11]), k, searchRadius,
+          distance: Distance.cosine);
+
+      expect(result, hasLength(k));
+      expect(result.elementAt(0).index, 5);
+      expect(result.elementAt(0).distance, 0);
     });
   });
 }

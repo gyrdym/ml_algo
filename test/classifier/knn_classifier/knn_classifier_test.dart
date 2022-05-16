@@ -3,8 +3,6 @@ import 'package:ml_algo/src/classifier/knn_classifier/_injector.dart';
 import 'package:ml_algo/src/classifier/knn_classifier/knn_classifier_factory.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/distance.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 

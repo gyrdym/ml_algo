@@ -3,7 +3,6 @@ import 'package:ml_algo/src/classifier/softmax_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/softmax_regressor/softmax_regressor_factory.dart';
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

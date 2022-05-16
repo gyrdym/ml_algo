@@ -8,7 +8,6 @@ import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/link_function/link_function.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 import 'package:mockito/mockito.dart';
