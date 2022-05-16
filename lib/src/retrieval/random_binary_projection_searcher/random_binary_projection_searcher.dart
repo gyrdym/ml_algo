@@ -3,6 +3,7 @@ import 'package:ml_algo/src/retrieval/neighbour.dart';
 import 'package:ml_algo/src/retrieval/random_binary_projection_searcher/helpers/create_random_binary_projection_searcher.dart';
 import 'package:ml_algo/src/retrieval/random_binary_projection_searcher/random_binary_projection_searcher_impl.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:ml_linalg/distance.dart';
 import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
@@ -186,8 +187,18 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   /// ```
   Matrix get points;
 
-  /// Accepts a [point] and finds it's [k] nearest neighbours. The search is
-  /// performed along bins in [searchRadius] (in bits) from the [point]'s bin.
+  /// Accepts a [point] and finds it's [k] nearest neighbours using [distance]
+  /// type. The search is performed along all bins in [searchRadius] (in bits) from
+  /// the [point]'s bin index.
+  ///
+  /// For example, if [searchRadius] is 2, and the [point]'s bin index is 9
+  /// (1001 in binary), it means that all bins with indices in binary:
+  ///
+  /// - 0001, 1101, 1011, 1000 (1 altered bit on 1st, 2nd, 3rd and 4th position)
+  /// - 0101, 0010, 0110, 0000, 1100, 1011 (2 altered bits on positions (0,1), (0, 2), (1,2), (0,3), (1,3) and (2,3))
+  ///
+  /// will be examined (if such indices exists of course).
+  ///
   /// The greater [searchRadius] is, the more bins will be examined by the algorithm.
   ///
   /// A neighbour is represented by an index in the [points] matrix and the
@@ -223,5 +234,6 @@ abstract class RandomBinaryProjectionSearcher with SerializableMixin {
   ///   // To access a neighbour, refer to `searcher.points` by the neighbour index
   /// }
   /// ```
-  Iterable<Neighbour> query(Vector point, int k, int searchRadius);
+  Iterable<Neighbour> query(Vector point, int k, int searchRadius,
+      {Distance distance = Distance.euclidean});
 }
