@@ -16,3 +16,5 @@ export 'package:ml_algo/src/retrieval/kd_tree/kd_tree.dart';
 export 'package:ml_algo/src/retrieval/kd_tree/kd_tree_split_strategy.dart';
 export 'package:ml_algo/src/retrieval/random_binary_projection_searcher/random_binary_projection_searcher.dart';
 export 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
+export 'package:ml_linalg/distance.dart';
+export 'package:ml_linalg/dtype.dart';

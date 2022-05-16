@@ -67,7 +67,8 @@ class RandomBinaryProjectionSearcherImpl
   final int schemaVersion;
 
   @override
-  Iterable<Neighbour> query(Vector point, int k, int searchRadius) {
+  Iterable<Neighbour> query(Vector point, int k, int searchRadius,
+      {Distance distance = Distance.euclidean}) {
     final pointAsMatrix = Matrix.fromRows([point], dtype: points.dtype);
     final queryBits =
         getBinaryRepresentation(pointAsMatrix, randomVectors).toVector();
@@ -95,9 +96,9 @@ class RandomBinaryProjectionSearcherImpl
       }
     }
 
-    final queue = createQueue(point, Distance.euclidean);
+    final queue = createQueue(point, distance);
 
-    search(point, candidateIndices, queue, k, Distance.euclidean);
+    search(point, candidateIndices, queue, k, distance);
 
     return queue.toList().reversed;
   }
