@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.14.0
+- `LinearRegressor.SGD` constructor added
+
 ## 16.13.0
 - `RandomBinaryProjectionSearcher`:
     - Distance type considered
