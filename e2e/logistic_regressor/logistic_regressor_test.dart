@@ -4,21 +4,19 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
-  final samples = getPimaIndiansDiabetesDataFrame().shuffle();
+  final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
   final numberOfFolds = 5;
-  final targetNames = ['Outcome'];
   final validator = CrossValidator.kFold(
     samples,
     numberOfFolds: numberOfFolds,
   );
-  final createClassifier = (DataFrame trainSamples) => LogisticRegressor(
+  final createClassifier = (DataFrame trainSamples) => LogisticRegressor.SGD(
         trainSamples,
-        targetNames.first,
-        optimizerType: LinearOptimizerType.gradient,
-        iterationsLimit: 100,
-        learningRateType: LearningRateType.exponential,
-        batchSize: trainSamples.rows.length,
-        probabilityThreshold: 0.5,
+        'Outcome',
+        seed: 10,
+        iterationLimit: 50,
+        initialLearningRate: 1e-4,
+        learningRateType: LearningRateType.constant,
         dtype: dtype,
       );
 
