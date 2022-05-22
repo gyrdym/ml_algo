@@ -231,7 +231,8 @@ abstract class LogisticRegressor
   /// coefficients, that is also bad.
   ///
   /// [seed] A seed value that will be used to generate random indices to
-  /// select rows from [trainingData]
+  /// select rows from [trainingData]. If it's needed to get the same result
+  /// every time one trains the classifier, it's needed to specify this value
   ///
   /// [fitIntercept] Whether or not to fit intercept term. Default value is
   /// `false`. Intercept in 2-dimensional space is a bias of the line (relative
@@ -266,7 +267,8 @@ abstract class LogisticRegressor
   /// [collectLearningData] Whether or not to collect learning data, for
   /// instance cost function value per each iteration. Affects performance much.
   /// If [collectLearningData] is true, one may access [costPerIteration]
-  /// getter in order to evaluate learning process more thoroughly.
+  /// getter in order to evaluate learning process more thoroughly. Default value
+  /// is `false`
   ///
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
