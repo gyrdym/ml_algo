@@ -14,7 +14,7 @@ Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
         trainSamples,
         'Outcome',
         seed: 10,
-        iterationLimit: 50,
+        iterationsLimit: 50,
         initialLearningRate: 1e-4,
         learningRateType: LearningRateType.constant,
         dtype: dtype,

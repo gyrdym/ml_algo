@@ -197,7 +197,7 @@ abstract class LogisticRegressor
   /// column that contains class labels or outcomes for the associated
   /// features).
   ///
-  /// [iterationLimit] A number of fitting iterations. Uses as a condition of
+  /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the optimization algorithm. Default value is `100`.
   ///
   /// [initialLearningRate] The initial value defining velocity of the convergence of the
@@ -276,7 +276,7 @@ abstract class LogisticRegressor
   factory LogisticRegressor.SGD(
     DataFrame trainingData,
     String targetName, {
-    int iterationLimit = iterationLimitDefaultValue,
+    int iterationsLimit = iterationLimitDefaultValue,
     double initialLearningRate = initialLearningRateDefaultValue,
     double decay = decayDefaultValue,
     int dropRate = dropRateDefaultValue,
@@ -299,7 +299,7 @@ abstract class LogisticRegressor
             trainData: trainingData,
             targetName: targetName,
             optimizerType: LinearOptimizerType.gradient,
-            iterationsLimit: iterationLimit,
+            iterationsLimit: iterationsLimit,
             initialLearningRate: initialLearningRate,
             decay: decay,
             dropRate: dropRate,
