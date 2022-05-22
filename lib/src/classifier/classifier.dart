@@ -31,7 +31,7 @@ abstract class Classifier extends Predictor {
   ///    908    |    404    |    503    |     -100       |       100      |     -100
   ///
   /// If a prediction algorithm meets 100 in a target column, it will
-  /// interpret the value as a positive outcome for the appropriate class
+  /// interpret the value as a positive outcome for the corresponding class
   num get positiveLabel;
 
   /// A value using to encode negative class.
@@ -57,6 +57,6 @@ abstract class Classifier extends Predictor {
   ///    908    |    404    |    503    |     -100       |       100      |     -100
   ///
   /// If a prediction algorithm meets -100 in a target column, it will
-  /// interpret the value as a negative outcome for the appropriate class
+  /// interpret the value as a negative outcome for the corresponding class
   num get negativeLabel;
 }
