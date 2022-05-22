@@ -273,6 +273,30 @@ abstract class LogisticRegressor
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32]
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// import 'package:ml_algo/ml_algo.dart';
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
+  ///
+  /// void main() {
+  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
+  ///   final model = LogisticRegressor.SGD(
+  ///     samples,
+  ///     'Outcome',
+  ///     seed: 10,
+  ///     iterationsLimit: 50,
+  ///     initialLearningRate: 1e-4,
+  ///     learningRateType: LearningRateType.constant,
+  ///     dtype: dtype,
+  ///    );
+  /// }
+  /// ```
+  ///
+  /// Keep in mind that you need to select a proper learning rate strategy for
+  /// every particular model. For more details, refer to [LearningRateType],
+  /// also consider [decay] and [dropRate] parameters.
   factory LogisticRegressor.SGD(
     DataFrame trainingData,
     String targetName, {

@@ -44,6 +44,10 @@ it in web applications.
     - [LogisticRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor-class.html). 
     A class that performs linear binary classification of data. To use this kind of classifier your data has to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+    
+    - [LogisticRegressor.SGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor/LogisticRegressor.SGD.html). 
+    Implementation of the logistic regression algorithm based on stochastic gradient descent with L2 regularisation. 
+    To use this kind of classifier your data has to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
     - [SoftmaxRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/SoftmaxRegressor-class.html). 
     A class that performs linear multiclass classification of data. To use this kind of classifier your data has to be 
@@ -481,7 +485,7 @@ final targetName = 'col_13';
 then let's shuffle the data:
 
 ```dart
-samples.shuffle();
+final shuffledSamples = samples.shuffle();
 ```
 
 Now it's the time to prepare data splits. Let's split the data into train and test subsets using the library's [splitData](https://github.com/gyrdym/ml_algo/blob/master/lib/src/model_selection/split_data.dart) 
@@ -507,7 +511,7 @@ e.g. stochastic gradient descent algorithm:
 
 ```dart
 final model = LinearRegressor.SGD(
-  samples
+  shuffledSamples
   targetName,
   iterationLimit: 90,
 );
@@ -517,7 +521,7 @@ or linear regression based on coordinate descent with Lasso regularization:
 
 ```dart
 final model = LinearRegressor.lasso(
-  samples
+  shuffledSamples,
   targetName,
   iterationLimit: 90,
 );
@@ -544,14 +548,16 @@ import 'dart:io';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-final file = File('housing_model.json');
-final encodedModel = await file.readAsString();
-final model = LinearRegressor.fromJson(encodedModel);
-final unlabelledData = await fromCsv('some_unlabelled_data.csv');
-final prediction = model.predict(unlabelledData);
-
-print(prediction.header);
-print(prediction.rows);
+void main() async {
+  final file = File('housing_model.json');
+  final encodedModel = await file.readAsString();
+  final model = LinearRegressor.fromJson(encodedModel);
+  final unlabelledData = await fromCsv('some_unlabelled_data.csv');
+  final prediction = model.predict(unlabelledData);
+    
+  print(prediction.header);
+  print(prediction.rows);
+}
 ```
 
 <details>
@@ -562,8 +568,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
 void main() async {
-  final samples = (await fromCsv('datasets/housing.csv', headerExists: false, columnDelimiter: ' '))
-    ..shuffle();
+  final samples = (await fromCsv('datasets/housing.csv', headerExists: false, columnDelimiter: ' ')).shuffle();
   final targetName = 'col_13';
   final splits = splitData(samples, [0.8]);
   final trainData = splits[0];
@@ -588,8 +593,7 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 void main() async {
   final rawCsvContent = await rootBundle.loadString('assets/datasets/housing.csv');
-  final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ')
-    ..shuffle();
+  final samples = DataFrame.fromRawCsv(rawCsvContent, fieldDelimiter: ' ').shuffle();
   final targetName = 'col_13';
   final splits = splitData(samples, [0.8]);
   final trainData = splits[0];
