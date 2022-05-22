@@ -27,7 +27,7 @@ Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
 }
 
 Future main() async {
-  group('LogisticRegressor', () {
+  group('LogisticRegressor.SGD', () {
     test(
         'should return adequate score on pima indians diabetes dataset using '
         'accuracy metric, dtype=DType.float32', () async {

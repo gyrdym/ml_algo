@@ -100,7 +100,7 @@ in your dependencies:
 
 ````
 dependencies:
-  ml_dataframe: ^1.4.2
+  ml_dataframe: ^1.5.0
   ml_preprocessing: ^7.0.2
 ````
 
@@ -125,11 +125,8 @@ We have 2 options here:
 
 - Download the dataset from [Pima Indians Diabetes Database](https://www.kaggle.com/uciml/pima-indians-diabetes-database).
 
-- Or we may simply use [getPimaIndiansDiabetesDataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/getPimaIndiansDiabetesDataFrame.html) function
-from [ml_dataframe](https://pub.dev/packages/ml_dataframe) package. The function returns a ready to use [DataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/DataFrame-class.html) instance
-filled with `Pima Indians Diabetes Database` data.
-
-If we chose the first option, we should do the following: 
+<details>
+<summary>Instructions</summary>
 
 #### For a desktop application: 
 
@@ -142,18 +139,7 @@ final samples = await fromCsv('datasets/pima_indians_diabetes_database.csv');
 
 #### For a flutter application:
 
-Be sure that you have ml_dataframe package version at least 1.0.0 and ml_algo package version at least 16.0.0 
-in your pubspec.yaml:
-
-````
-dependencies:
-  ...
-  ml_algo: ^16.11.2
-  ml_dataframe: ^1.4.2
-  ...
-````
-
-Then it's needed to add the dataset to the flutter assets by adding the following config in the pubspec.yaml:
+It's needed to add the dataset to the flutter assets by adding the following config in the pubspec.yaml:
 
 ````
 flutter:
@@ -168,9 +154,29 @@ can access the dataset:
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:ml_dataframe/ml_dataframe.dart';
 
-final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
-final samples = DataFrame.fromRawCsv(rawCsvContent);
+void main() async {
+  final rawCsvContent = await rootBundle.loadString('assets/datasets/pima_indians_diabetes_database.csv');
+  final samples = DataFrame.fromRawCsv(rawCsvContent);
+}
 ```
+</details>
+
+- Or we may simply use [getPimaIndiansDiabetesDataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/getPimaIndiansDiabetesDataFrame.html) function
+from [ml_dataframe](https://pub.dev/packages/ml_dataframe) package. The function returns a ready to use [DataFrame](https://pub.dev/documentation/ml_dataframe/latest/ml_dataframe/DataFrame-class.html) instance
+filled with `Pima Indians Diabetes Database` data.
+
+<details>
+<summary>Instructions</summary>
+
+```dart
+import 'package:ml_dataframe/ml_dataframe.dart';
+
+void main() {
+  final samples = getPimaIndiansDiabetesDataFrame();
+}
+```
+
+</details>
 
 ### Prepare datasets for training and testing
 
