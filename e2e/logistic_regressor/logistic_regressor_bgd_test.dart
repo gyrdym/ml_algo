@@ -11,13 +11,13 @@ Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
     numberOfFolds: numberOfFolds,
   );
   final createClassifier = (DataFrame trainSamples) => LogisticRegressor.BGD(
-    trainSamples,
-    'Outcome',
-    iterationsLimit: 50,
-    initialLearningRate: 1e-4,
-    learningRateType: LearningRateType.constant,
-    dtype: dtype,
-  );
+        trainSamples,
+        'Outcome',
+        iterationsLimit: 50,
+        initialLearningRate: 1e-4,
+        learningRateType: LearningRateType.constant,
+        dtype: dtype,
+      );
 
   return validator.evaluate(
     createClassifier,
@@ -29,54 +29,54 @@ Future main() async {
   group('LogisticRegressor.BGD', () {
     test(
         'should return adequate score on pima indians diabetes dataset using '
-            'accuracy metric, dtype=DType.float32', () async {
+        'accuracy metric, dtype=DType.float32', () async {
       final scores =
-      await evaluateLogisticRegressor(MetricType.accuracy, DType.float32);
+          await evaluateLogisticRegressor(MetricType.accuracy, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test(
         'should return adequate score on pima indians diabetes dataset using '
-            'accuracy metric, dtype=DType.float64', () async {
+        'accuracy metric, dtype=DType.float64', () async {
       final scores =
-      await evaluateLogisticRegressor(MetricType.accuracy, DType.float32);
+          await evaluateLogisticRegressor(MetricType.accuracy, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test(
         'should return adequate score on pima indians diabetes dataset using '
-            'precision metric, dtype=DType.float32', () async {
+        'precision metric, dtype=DType.float32', () async {
       final scores =
-      await evaluateLogisticRegressor(MetricType.precision, DType.float32);
+          await evaluateLogisticRegressor(MetricType.precision, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test(
         'should return adequate score on pima indians diabetes dataset using '
-            'precision metric, dtype=DType.float64', () async {
+        'precision metric, dtype=DType.float64', () async {
       final scores =
-      await evaluateLogisticRegressor(MetricType.precision, DType.float32);
+          await evaluateLogisticRegressor(MetricType.precision, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test(
         'should return adequate score on pima indians diabetes dataset using '
-            'recall metric, dtype=DType.float32', () async {
+        'recall metric, dtype=DType.float32', () async {
       final scores =
-      await evaluateLogisticRegressor(MetricType.recall, DType.float32);
+          await evaluateLogisticRegressor(MetricType.recall, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
 
     test(
         'should return adequate score on pima indians diabetes dataset using '
-            'recall metric, dtype=DType.float64', () async {
+        'recall metric, dtype=DType.float64', () async {
       final scores =
-      await evaluateLogisticRegressor(MetricType.recall, DType.float32);
+          await evaluateLogisticRegressor(MetricType.recall, DType.float32);
 
       expect(scores.mean(), greaterThan(0.5));
     });
