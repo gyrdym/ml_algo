@@ -442,10 +442,9 @@ abstract class LogisticRegressor
   ///
   /// void main() {
   ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
-  ///   final model = LogisticRegressor.SGD(
+  ///   final model = LogisticRegressor.BGD(
   ///     samples,
   ///     'Outcome',
-  ///     seed: 10,
   ///     iterationsLimit: 50,
   ///     initialLearningRate: 1e-4,
   ///     learningRateType: LearningRateType.constant,
