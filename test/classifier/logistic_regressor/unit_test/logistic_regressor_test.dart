@@ -71,9 +71,10 @@ void main() {
         'should throw an exception if a probability threshold is less than '
         '0.0', () {
       final probabilityThreshold = -0.01;
-      final actual = () => LogisticRegressor(
+      final actual = () => LogisticRegressor.SGD(
             observations,
             targetColumnName,
+            learningRateType: LearningRateType.constant,
             probabilityThreshold: probabilityThreshold,
             initialCoefficients: Vector.empty(),
           );
@@ -85,9 +86,10 @@ void main() {
         'should throw an exception if a probability threshold is equal to '
         '0.0', () {
       final probabilityThreshold = 0.0;
-      final actual = () => LogisticRegressor(
+      final actual = () => LogisticRegressor.SGD(
             observations,
             targetColumnName,
+            learningRateType: LearningRateType.constant,
             probabilityThreshold: probabilityThreshold,
             initialCoefficients: Vector.empty(),
           );
@@ -99,9 +101,10 @@ void main() {
         'should throw an exception if a probability threshold is equal to '
         '1.0', () {
       final probabilityThreshold = 1.0;
-      final actual = () => LogisticRegressor(
+      final actual = () => LogisticRegressor.SGD(
             observations,
             targetColumnName,
+            learningRateType: LearningRateType.constant,
             probabilityThreshold: probabilityThreshold,
             initialCoefficients: Vector.empty(),
           );
@@ -113,9 +116,10 @@ void main() {
         'should throw an exception if a probability threshold is greater than '
         '1.0', () {
       final probabilityThreshold = 1.01;
-      final actual = () => LogisticRegressor(
+      final actual = () => LogisticRegressor.SGD(
             observations,
             targetColumnName,
+            learningRateType: LearningRateType.constant,
             probabilityThreshold: probabilityThreshold,
             initialCoefficients: Vector.empty(),
           );
@@ -126,9 +130,10 @@ void main() {
     test('should throw an exception if a target column does not exist', () {
       final targetColumnName = 'col_10';
 
-      final actual = () => LogisticRegressor(
+      final actual = () => LogisticRegressor.SGD(
             observations,
             targetColumnName,
+            learningRateType: LearningRateType.constant,
             initialCoefficients: Vector.empty(),
           );
 
@@ -138,9 +143,10 @@ void main() {
     test(
         'should throw an exception if too few initial coefficients '
         'provided', () {
-      final actual = () => LogisticRegressor(
+      final actual = () => LogisticRegressor.SGD(
             observations,
             targetColumnName,
+            learningRateType: LearningRateType.constant,
             initialCoefficients: Vector.fromList([1, 2]),
           );
 
@@ -152,9 +158,10 @@ void main() {
         'provided', () {
       final targetColumnName = 'col_4';
 
-      final actual = () => LogisticRegressor(
+      final actual = () => LogisticRegressor.SGD(
             observations,
             targetColumnName,
+            learningRateType: LearningRateType.constant,
             initialCoefficients: Vector.fromList([1, 2, 3, 4, 5, 6]),
           );
 
@@ -164,9 +171,10 @@ void main() {
     test(
         'should call cost function factory in order to create '
         'loglikelihood cost function', () {
-      LogisticRegressor(
+      LogisticRegressor.SGD(
         observations,
         'col_4',
+        learningRateType: LearningRateType.constant,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
         initialCoefficients: Vector.empty(),
@@ -182,7 +190,7 @@ void main() {
 
     test('should call linear optimizer factory and consider intercept term',
         () {
-      LogisticRegressor(
+      LogisticRegressor.SGD(
         observations,
         'col_4',
         learningRateType: LearningRateType.timeBased,
@@ -193,12 +201,10 @@ void main() {
         dropRate: 45,
         minCoefficientsUpdate: 0.001,
         lambda: 0.1,
-        regularizationType: RegularizationType.L2,
         initialCoefficients: initialCoefficients,
-        randomSeed: 123,
+        seed: 123,
         fitIntercept: true,
         interceptScale: 2.0,
-        isFittingDataNormalized: true,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
         dtype: DType.float32,
@@ -227,16 +233,17 @@ void main() {
         regularizationType: RegularizationType.L2,
         batchSize: 1,
         randomSeed: 123,
-        isFittingDataNormalized: true,
+        isFittingDataNormalized: false,
       )).called(1);
     });
 
     test(
         'should find the extrema for provided observations while '
         'instantiating', () {
-      LogisticRegressor(
+      LogisticRegressor.SGD(
         observations,
         'col_4',
+        learningRateType: LearningRateType.constant,
         initialCoefficients: initialCoefficients,
         fitIntercept: true,
       );
@@ -257,14 +264,14 @@ void main() {
       final interceptScale = -12.0;
       final dtype = DType.float32;
 
-      final classifier = LogisticRegressor(
+      final classifier = LogisticRegressor.SGD(
         observations,
         targetName,
+        learningRateType: LearningRateType.constant,
         probabilityThreshold: probabilityThreshold,
         fitIntercept: fitIntercept,
         initialCoefficients: Vector.empty(),
         interceptScale: interceptScale,
-        isFittingDataNormalized: true,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
         dtype: dtype,
