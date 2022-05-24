@@ -45,8 +45,12 @@ it in web applications.
     A class that performs linear binary classification of data. To use this kind of classifier your data has to be 
     [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
     
-    - [LogisticRegressor.SGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor/LogisticRegressor.SGD.html). 
+        - [LogisticRegressor.SGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor/LogisticRegressor.SGD.html). 
     Implementation of the logistic regression algorithm based on stochastic gradient descent with L2 regularisation. 
+    To use this kind of classifier your data has to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+    
+        - [LogisticRegressor.BGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor/LogisticRegressor.BGD.html). 
+    Implementation of the logistic regression algorithm based on batch gradient descent with L2 regularisation. 
     To use this kind of classifier your data has to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
     - [SoftmaxRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/SoftmaxRegressor-class.html). 
@@ -64,10 +68,10 @@ it in web applications.
     - [LinearRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor-class.html). 
     A general class for finding a linear pattern in training data and predicting outcomes as real numbers.
     
-    - [LinearRegressor.lasso](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.lasso.html)
+        - [LinearRegressor.lasso](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.lasso.html)
     Implementation of the linear regression algorithm based on coordinate descent with lasso regularisation
     
-    - [LinearRegressor.SGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.SGD.html)
+        - [LinearRegressor.SGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.SGD.html)
     Implementation of the linear regression algorithm based on stochastic gradient descent with L2 regularisation
      
     - [KnnRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/KnnRegressor-class.html)
