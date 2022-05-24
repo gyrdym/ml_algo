@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.15.0
+- `LinearRegressor.BGD` constructor added
+
 ## 16.14.0
 - `LinearRegressor.SGD` constructor added
 
