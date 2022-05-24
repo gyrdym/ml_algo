@@ -13,7 +13,6 @@ Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
   final createClassifier = (DataFrame trainSamples) => LogisticRegressor.BGD(
     trainSamples,
     'Outcome',
-    seed: 10,
     iterationsLimit: 50,
     initialLearningRate: 1e-4,
     learningRateType: LearningRateType.constant,

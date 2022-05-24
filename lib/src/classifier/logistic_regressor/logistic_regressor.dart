@@ -481,7 +481,6 @@ abstract class LogisticRegressor
     bool collectLearningData = collectLearningDataDefaultValue,
     DType dtype = dTypeDefaultValue,
     Vector? initialCoefficients,
-    int? seed,
   }) =>
       initLogisticRegressorModule().get<LogisticRegressorFactory>().create(
             trainData: trainingData,
@@ -495,7 +494,6 @@ abstract class LogisticRegressor
             probabilityThreshold: probabilityThreshold,
             lambda: lambda,
             regularizationType: RegularizationType.L2,
-            randomSeed: seed,
             batchSize: trainingData.shape.first,
             fitIntercept: fitIntercept,
             interceptScale: interceptScale,
