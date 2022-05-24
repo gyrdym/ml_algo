@@ -397,10 +397,6 @@ abstract class LogisticRegressor
   /// small [lambda] may be a cause of too large absolute values of the
   /// coefficients, that is also bad.
   ///
-  /// [seed] A seed value that will be used to generate random indices to
-  /// select rows from [trainingData]. If it's needed to get the same result
-  /// every time one trains the classifier, it's needed to specify this value
-  ///
   /// [fitIntercept] Whether or not to fit intercept term. Default value is
   /// `false`. Intercept in 2-dimensional space is a bias of the line (relative
   /// to X-axis).
