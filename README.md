@@ -226,7 +226,7 @@ if the selected hyperparameters are good enough or not:
 ```dart
 final createClassifier = (DataFrame samples) =>
   // BGD stands for "Batch Gradient Descent" that's meaning that the classifier will use the whole dataset on every 
-  // fitting iteration 
+  // training iteration 
   LogisticRegressor.BGD(
     samples
     targetColumnName,
