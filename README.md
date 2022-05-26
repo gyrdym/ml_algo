@@ -225,26 +225,22 @@ if the selected hyperparameters are good enough or not:
 
 ```dart
 final createClassifier = (DataFrame samples) =>
-  LogisticRegressor(
+  // BGD stands for "Batch Gradient Descent" that's meaning that the classifier will use the whole dataset on every 
+  // fitting iteration 
+  LogisticRegressor.BGD(
     samples
     targetColumnName,
-    optimizerType: LinearOptimizerType.gradient,
     iterationsLimit: 90,
     learningRateType: LearningRateType.timeBased,
-    batchSize: samples.rows.length,
     probabilityThreshold: 0.7,
   );
 ```
 
 Let's describe our hyperparameters:
-- `optimizerType` - a type of optimization algorithm that will be used to learn coefficients of our model, this time we
-decided to use a vanilla gradient ascent algorithm
 - `iterationsLimit` - number of learning iterations. The selected optimization algorithm (gradient ascent in our case) will 
 be cyclically run this amount of times
 - `learningRateType` - a strategy for learning rate update. In our case, the learning rate will decrease after every 
 iteration
-- `batchSize` - the size of data (in rows) that will be used per each iteration. As we have a really small dataset we may use
-full-batch gradient ascent, that's why we used `samples.rows.length` here - the total amount of data.
 - `probabilityThreshold` - lower bound for positive label probability
 
 If we want to evaluate the learning process more thoroughly, we may pass `collectLearningData` argument to the classifier
@@ -252,7 +248,7 @@ constructor:
 
 ```dart
 final createClassifier = (DataFrame samples) =>
-  LogisticRegressor(
+  LogisticRegressor.BGD(
     ...,
     collectLearningData: true,
   );
@@ -323,15 +319,17 @@ After that we can simply read the model from the file and make predictions:
 ```dart
 import 'dart:io';
 
-final fileName = 'diabetes_classifier.json';
-final file = File(fileName);
-final encodedModel = await file.readAsString();
-final classifier = LogisticRegressor.fromJson(encodedModel);
-final unlabelledData = await fromCsv('some_unlabelled_data.csv');
-final prediction = classifier.predict(unlabelledData);
+void main() {
+  // ...
+  final fileName = 'diabetes_classifier.json';
+  final file = File(fileName);
+  final encodedModel = await file.readAsString();
+  final classifier = LogisticRegressor.fromJson(encodedModel);
+  final unlabelledData = await fromCsv('some_unlabelled_data.csv');
+  final prediction = classifier.predict(unlabelledData);
 
-print(prediction.header); // ('class variable (0 or 1)')
-print(prediction.rows); // [ 
+  print(prediction.header); // ('class variable (0 or 1)')
+  print(prediction.rows); // [ 
                         //   (1),
                         //   (0),
                         //   (0),
@@ -339,6 +337,8 @@ print(prediction.rows); // [
                         //   ...,
                         //   (1),
                         // ]
+  // ...
+}
 ```
 
 Please note that all the hyperparameters that we used to generate the model are persisted as the model's read-only 
@@ -368,13 +368,11 @@ void main() async {
   final testData = splits[1];
   final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
   final createClassifier = (DataFrame samples) =>
-    LogisticRegressor(
+    LogisticRegressor.BGD(
       samples
       targetColumnName,
-      optimizerType: LinearOptimizerType.gradient,
       iterationsLimit: 90,
       learningRateType: LearningRateType.timeBased,
-      batchSize: samples.rows.length,
       probabilityThreshold: 0.7,
     );
   final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
@@ -413,13 +411,11 @@ void main() async {
   final testData = splits[1];
   final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
   final createClassifier = (DataFrame samples) =>
-    LogisticRegressor(
+    LogisticRegressor.BGD(
       samples
       targetColumnName,
-      optimizerType: LinearOptimizerType.gradient,
       iterationsLimit: 90,
       learningRateType: LearningRateType.timeBased,
-      batchSize: samples.rows.length,
       probabilityThreshold: 0.7,
     );
   final scores = await validator.evaluate(createClassifier, MetricType.accuracy);

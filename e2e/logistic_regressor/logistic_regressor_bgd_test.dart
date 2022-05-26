@@ -4,7 +4,7 @@ import 'package:ml_linalg/vector.dart';
 import 'package:test/test.dart';
 
 Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
-  final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
+  final samples = getPimaIndiansDiabetesDataFrame().shuffle();
   final numberOfFolds = 5;
   final validator = CrossValidator.kFold(
     samples,
@@ -14,8 +14,8 @@ Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
         trainSamples,
         'Outcome',
         iterationsLimit: 50,
-        initialLearningRate: 1e-4,
-        learningRateType: LearningRateType.constant,
+        decay: .1,
+        learningRateType: LearningRateType.timeBased,
         dtype: dtype,
       );
 
