@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.15.1
+- README: LogisticRegressor example corrected
+
 ## 16.15.0
 - `LinearRegressor.BGD` constructor added
 
