@@ -398,7 +398,7 @@ abstract class LogisticRegressor
   /// coefficients, that is also bad.
   ///
   /// [fitIntercept] Whether or not to fit intercept term. Default value is
-  /// `false`. Intercept in 2-dimensional space is a bias of the line (relative
+  /// `true`. Intercept in 2-dimensional space is a bias of the line (relative
   /// to X-axis).
   ///
   /// [interceptScale] A value, defining a size of the intercept.
