@@ -327,6 +327,7 @@ void main() {
             batchSize: 3,
             dtype: DType.float32,
             collectLearningData: true,
+            fitIntercept: false,
             iterationsLimit: 3);
 
         expect(classifier.costPerIteration, [

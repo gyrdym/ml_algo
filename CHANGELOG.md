@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.15.2
+- LinearRegressor, LogisticRegressor, SoftmaxRegressor:
+    - Set `fitIntercept` param to `true` by default
+
 ## 16.15.1
 - README: LogisticRegressor example corrected
 
