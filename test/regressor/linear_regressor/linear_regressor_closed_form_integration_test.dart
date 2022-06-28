@@ -11,7 +11,7 @@ void main() {
         [5.5, 5, 20],
         [5.25, 5, 22],
       ]);
-      final regressor = LinearRegressor(data, targetName);
+      final regressor = LinearRegressor(data, targetName, fitIntercept: false);
       final dataToPredict = [
         [5, 25.0]
       ];
