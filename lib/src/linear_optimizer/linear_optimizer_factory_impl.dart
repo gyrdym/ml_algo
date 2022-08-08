@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/common/constants/default_parameters/common.dart';
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_algo/src/linear_optimizer/closed_form_optimizer/closed_form_optimizer.dart';
+import 'package:ml_algo/src/linear_optimizer/closed_form_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/coordinate_optimizer/least_squares_coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/gradient_optimizer.dart';
@@ -11,6 +11,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
+import 'package:ml_algo/src/linear_optimizer/newton_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/optimizer_to_regularization_mapping.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
@@ -95,6 +96,9 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
 
       case LinearOptimizerType.closedForm:
         return ClosedFormOptimizer(features, labels);
+
+      case LinearOptimizerType.newton:
+        return NewtonOptimizer(features, labels, costFunction, iterationLimit);
 
       default:
         throw UnsupportedError(
