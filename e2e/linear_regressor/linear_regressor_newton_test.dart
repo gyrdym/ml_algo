@@ -9,7 +9,7 @@ num trainHousingModel(MetricType metricType, DType dtype) {
   final testSamples = samples.last;
   final targetName = 'MEDV';
 
-  final model = LinearRegressor.Newton(
+  final model = LinearRegressor.newton(
     trainSamples,
     targetName,
     dtype: dtype,
@@ -26,7 +26,7 @@ num trainWineModel(MetricType metricType, DType dtype) {
   final testSamples = samples.last;
   final targetName = 'quality';
 
-  final model = LinearRegressor.Newton(
+  final model = LinearRegressor.newton(
     trainSamples,
     targetName,
     dtype: dtype,
