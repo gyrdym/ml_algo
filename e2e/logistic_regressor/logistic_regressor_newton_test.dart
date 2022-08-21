@@ -33,7 +33,7 @@ Future main() async {
         'should return adequate score on pima indians diabetes dataset using '
         'accuracy metric, dtype=DType.float64', () {
       final score =
-          evaluateLogisticRegressor(MetricType.accuracy, DType.float32);
+          evaluateLogisticRegressor(MetricType.accuracy, DType.float64);
 
       print('float64, accuracy is $score');
 
@@ -55,7 +55,7 @@ Future main() async {
         'should return adequate score on pima indians diabetes dataset using '
         'precision metric, dtype=DType.float64', () {
       final score =
-          evaluateLogisticRegressor(MetricType.precision, DType.float32);
+          evaluateLogisticRegressor(MetricType.precision, DType.float64);
 
       print('float64, precision is $score');
 
@@ -75,7 +75,7 @@ Future main() async {
     test(
         'should return adequate score on pima indians diabetes dataset using '
         'recall metric, dtype=DType.float64', () {
-      final score = evaluateLogisticRegressor(MetricType.recall, DType.float32);
+      final score = evaluateLogisticRegressor(MetricType.recall, DType.float64);
 
       print('float64, recall is $score');
 
