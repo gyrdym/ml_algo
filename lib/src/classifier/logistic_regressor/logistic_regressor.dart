@@ -299,7 +299,7 @@ abstract class LogisticRegressor
   /// Keep in mind that you need to select a proper learning rate strategy for
   /// every particular model. For more details, refer to [LearningRateType],
   /// also consider [decay] and [dropRate] parameters.
-  factory LogisticRegressor.SGD(
+  factory LogisticRegressor.SGD( // ignore: non_constant_identifier_names
     DataFrame trainingData,
     String targetName, {
     required LearningRateType learningRateType,
@@ -454,7 +454,7 @@ abstract class LogisticRegressor
   /// Keep in mind that you need to select a proper learning rate strategy for
   /// every particular model. For more details, refer to [LearningRateType],
   /// also consider [decay] and [dropRate] parameters.
-  factory LogisticRegressor.BGD(
+  factory LogisticRegressor.BGD( // ignore: non_constant_identifier_names
     DataFrame trainingData,
     String targetName, {
     required LearningRateType learningRateType,
