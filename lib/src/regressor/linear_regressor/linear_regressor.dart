@@ -319,7 +319,7 @@ abstract class LinearRegressor
   /// [dtype] A data type for all the numeric values, used by the algorithm. Can
   /// affect performance or accuracy of the computations. Default value is
   /// [DType.float32].
-  factory LinearRegressor.SGD( // ignore: non_constant_identifier_names
+  factory LinearRegressor.SGD(
     DataFrame trainData,
     String targetName, {
     int iterationLimit = iterationLimitDefaultValue,
