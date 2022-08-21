@@ -13,7 +13,6 @@ num trainHousingModel(MetricType metricType, DType dtype) {
     trainSamples,
     targetName,
     dtype: dtype,
-    iterationLimit: 10,
   );
 
   return model.assess(testSamples, metricType);
@@ -30,7 +29,6 @@ num trainWineModel(MetricType metricType, DType dtype) {
     trainSamples,
     targetName,
     dtype: dtype,
-    iterationLimit: 10,
   );
 
   return model.assess(testSamples, metricType);
@@ -55,7 +53,7 @@ void main() {
 
       print('MAPE is $error');
 
-      expect(error, lessThan(0.5));
+      expect(error, lessThan(0.2));
     });
   });
 
@@ -67,7 +65,7 @@ void main() {
 
       print('MAPE is $error');
 
-      expect(error, lessThan(0.5));
+      expect(error, lessThan(0.2));
     });
 
     test(
