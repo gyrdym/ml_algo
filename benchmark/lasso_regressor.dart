@@ -20,7 +20,7 @@ class LassoRegressorBenchmark extends BenchmarkBase {
   }
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   final file = File('benchmark/data/sample_data.json');
   final dataAsString = await file.readAsString();
   final decoded = jsonDecode(dataAsString) as Map<String, dynamic>;

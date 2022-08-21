@@ -36,6 +36,6 @@ class InverseLogitLinkFunctionBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   InverseLogitLinkFunctionBenchmark.main();
 }

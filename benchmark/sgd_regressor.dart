@@ -39,6 +39,6 @@ class SGDRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   SGDRegressorBenchmark.main();
 }

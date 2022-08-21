@@ -26,7 +26,7 @@ class KDTreeQueryingBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   final points = Matrix.random(20000, 10, seed: 1, min: -5000, max: 5000);
 
   trainData = DataFrame.fromMatrix(points);

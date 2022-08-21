@@ -16,7 +16,7 @@ num evaluateLogisticRegressor(MetricType metric, DType dtype) {
   return model.assess(testSamples, metric);
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   group('LogisticRegressor.newton', () {
     test(
         'should return adequate score on pima indians diabetes dataset using '

@@ -51,6 +51,6 @@ class KnnRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   KnnRegressorBenchmark.main();
 }

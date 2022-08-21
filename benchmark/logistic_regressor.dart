@@ -37,6 +37,6 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   LogisticRegressorBenchmark.main();
 }

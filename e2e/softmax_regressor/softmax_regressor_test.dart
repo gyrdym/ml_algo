@@ -34,7 +34,7 @@ Future<Vector> evaluateSoftmaxRegressor(MetricType metricType, DType dtype) {
   );
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   group('SoftmaxRegressor', () {
     test(
         'should return adequate score on iris dataset using accuracy '

@@ -48,6 +48,6 @@ class DecisionTreeClassifierBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future<dynamic> main() async {
+Future<void> main() async {
   DecisionTreeClassifierBenchmark.main();
 }

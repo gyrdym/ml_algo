@@ -1,6 +1,7 @@
 /// A type of learning rate strategies
 enum LearningRateType {
-  @Deprecated('The type is deprecated, use [LearningRateType.timeBased] instead')
+  @Deprecated(
+      'The type is deprecated, use [LearningRateType.timeBased] instead')
   decreasingAdaptive,
 
   /// Learning rate value will be constant throughout the whole fitting process

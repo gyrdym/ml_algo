@@ -7,8 +7,7 @@ void main() async {
   group('DecisionTreeClassifier', () {
     test('should save graphical representation as svg image, iris dataset',
         () async {
-      final samples =
-          getIrisDataFrame().shuffle().dropSeries(names: ['Id']);
+      final samples = getIrisDataFrame().shuffle().dropSeries(names: ['Id']);
       final pipeline = Pipeline(samples, [
         toIntegerLabels(
           columnNames: ['Species'],
