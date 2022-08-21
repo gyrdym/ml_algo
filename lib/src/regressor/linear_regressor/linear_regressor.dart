@@ -372,9 +372,6 @@ abstract class LinearRegressor
   /// [targetName] A string that serves as a name of the target column
   /// containing observation labels.
   ///
-  /// [iterationLimit] A number of fitting iterations. Uses as a condition of
-  /// convergence in the optimization algorithm. Default value is `100`.
-  ///
   /// [lambda] L2 regularization coefficient. Uses to prevent the regressor's
   /// overfitting. The greater the value of [lambda], the more regular the
   /// coefficients are. Extremely large [lambda] may decrease the coefficients
@@ -402,7 +399,6 @@ abstract class LinearRegressor
   factory LinearRegressor.newton(
     DataFrame trainData,
     String targetName, {
-    int iterationLimit = iterationLimitDefaultValue,
     double lambda = lambdaDefaultValue,
     bool fitIntercept = fitInterceptDefaultValue,
     double interceptScale = interceptScaleDefaultValue,
@@ -414,7 +410,7 @@ abstract class LinearRegressor
             fittingData: trainData,
             targetName: targetName,
             optimizerType: LinearOptimizerType.newton,
-            iterationsLimit: iterationLimit,
+            iterationsLimit: 1,
             learningRateType: learningRateTypeDefaultValue,
             initialCoefficientsType: InitialCoefficientsType.zeroes,
             initialLearningRate: initialLearningRateDefaultValue,

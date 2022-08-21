@@ -11,7 +11,7 @@ import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/init
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_factory.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
-import 'package:ml_algo/src/linear_optimizer/least_squares_newton_optimizer.dart';
+import 'package:ml_algo/src/linear_optimizer/newton_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/optimizer_to_regularization_mapping.dart';
 import 'package:ml_algo/src/linear_optimizer/regularization_type.dart';
 import 'package:ml_algo/src/math/randomizer/randomizer_factory.dart';
@@ -95,7 +95,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
         );
 
       case LinearOptimizerType.newton:
-        return LeastSquaresNewtonOptimizer(
+        return NewtonOptimizer(
           features: features,
           labels: labels,
           costFunction: costFunction,
