@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.17.1
+- e2e tests:
+  - more stable tests for LinearRegressor
+
 ## 16.17.0
 - LogisticRegressor:
   - Newton method added
