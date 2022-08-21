@@ -10,4 +10,7 @@ class LeastSquareCostFunction implements CostFunction {
   @override
   Matrix getGradient(Matrix x, Matrix w, Matrix y) =>
       x.transpose() * -2 * (y - x * w);
+
+  @override
+  Matrix getHessian(Matrix x, Matrix w, Matrix y) => x.transpose() * x * 2;
 }

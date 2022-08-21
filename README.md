@@ -73,6 +73,12 @@ it in web applications.
     
         - [LinearRegressor.SGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.SGD.html)
     Implementation of the linear regression algorithm based on stochastic gradient descent with L2 regularisation
+    
+        - [LinearRegressor.BGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.BGD.html)
+        Implementation of the linear regression algorithm based on batch gradient descent with L2 regularisation
+    
+        - [LinearRegressor.newton](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.newton.html)
+        Implementation of the linear regression algorithm based on Newton method with L2 regularisation
      
     - [KnnRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/KnnRegressor-class.html)
     A class that makes predictions for each new observation based on the first `k` closest observations from 

@@ -249,7 +249,7 @@ abstract class LinearRegressor
             dtype: dtype,
           );
 
-  /// Linear regression with Stochastic Gradient Descent optimization with L2
+  /// Linear regression with Stochastic Gradient Descent optimization and L2
   /// regularization
   ///
   /// Parameters:
@@ -354,6 +354,78 @@ abstract class LinearRegressor
             fitIntercept: fitIntercept,
             interceptScale: interceptScale,
             randomSeed: randomSeed,
+            batchSize: 1,
+            initialCoefficients: initialCoefficients,
+            isFittingDataNormalized: false,
+            collectLearningData: collectLearningData,
+            dtype: dtype,
+          );
+
+  /// Linear regression with Newton optimization and L2 regularization
+  ///
+  /// Parameters:
+  ///
+  /// [trainData] A [DataFrame] with observations that is used by the
+  /// regressor to learn coefficients of the predicting hyperplane. Must contain
+  /// [targetName] column.
+  ///
+  /// [targetName] A string that serves as a name of the target column
+  /// containing observation labels.
+  ///
+  /// [iterationLimit] A number of fitting iterations. Uses as a condition of
+  /// convergence in the optimization algorithm. Default value is `100`.
+  ///
+  /// [lambda] L2 regularization coefficient. Uses to prevent the regressor's
+  /// overfitting. The greater the value of [lambda], the more regular the
+  /// coefficients are. Extremely large [lambda] may decrease the coefficients
+  /// to nothing, otherwise too small [lambda] may be a cause of too large
+  /// absolute values of the coefficients.
+  ///
+  /// [fitIntercept] Whether or not to fit intercept term. Default value is
+  /// `false`. Intercept in 2-dimensional space is a bias of the line (relative
+  /// to X-axis).
+  ///
+  /// [interceptScale] A value defining a size of the intercept.
+  ///
+  /// [initialCoefficients] Coefficients to be used during the first iteration of
+  /// optimization algorithm. [initialCoefficients] should have length that is
+  /// equal to the number of features in the [trainData].
+  ///
+  /// [collectLearningData] Whether or not to collect learning data, for
+  /// instance cost function value per each iteration. Affects performance much.
+  /// If [collectLearningData] is true, one may access [costPerIteration]
+  /// getter in order to evaluate learning process more thoroughly.
+  ///
+  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
+  /// affect performance or accuracy of the computations. Default value is
+  /// [DType.float32].
+  factory LinearRegressor.newton(
+    DataFrame trainData,
+    String targetName, {
+    int iterationLimit = iterationLimitDefaultValue,
+    double lambda = lambdaDefaultValue,
+    bool fitIntercept = fitInterceptDefaultValue,
+    double interceptScale = interceptScaleDefaultValue,
+    bool collectLearningData = collectLearningDataDefaultValue,
+    DType dtype = dTypeDefaultValue,
+    Matrix? initialCoefficients,
+  }) =>
+      initLinearRegressorModule().get<LinearRegressorFactory>().create(
+            fittingData: trainData,
+            targetName: targetName,
+            optimizerType: LinearOptimizerType.newton,
+            iterationsLimit: iterationLimit,
+            learningRateType: learningRateTypeDefaultValue,
+            initialCoefficientsType: InitialCoefficientsType.zeroes,
+            initialLearningRate: initialLearningRateDefaultValue,
+            decay: decayDefaultValue,
+            dropRate: dropRateDefaultValue,
+            minCoefficientsUpdate: minCoefficientsUpdateDefaultValue,
+            lambda: lambda,
+            regularizationType: RegularizationType.L2,
+            fitIntercept: fitIntercept,
+            interceptScale: interceptScale,
+            randomSeed: 1,
             batchSize: 1,
             initialCoefficients: initialCoefficients,
             isFittingDataNormalized: false,

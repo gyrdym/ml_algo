@@ -17,6 +17,9 @@ class LinearOptimizerTypeJsonConverter
 
       case closedFormLinearOptimizerTypeEncodedValue:
         return LinearOptimizerType.closedForm;
+
+      case newtonLinearOptimizerTypeEncodedValue:
+        return LinearOptimizerType.newton;
     }
 
     throw Exception('LinearOptimizerType, '
@@ -34,6 +37,9 @@ class LinearOptimizerTypeJsonConverter
 
       case LinearOptimizerType.closedForm:
         return closedFormLinearOptimizerTypeEncodedValue;
+
+      case LinearOptimizerType.newton:
+        return newtonLinearOptimizerTypeEncodedValue;
     }
   }
 }

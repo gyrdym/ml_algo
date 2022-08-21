@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.16.0
+- LinearRegressor:
+    - Newton method added
+
 ## 16.15.2
 - LinearRegressor, LogisticRegressor, SoftmaxRegressor:
     - Set `fitIntercept` param to `true` by default
