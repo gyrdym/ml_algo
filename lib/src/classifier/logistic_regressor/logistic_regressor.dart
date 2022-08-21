@@ -138,7 +138,7 @@ abstract class LogisticRegressor
   factory LogisticRegressor(
     DataFrame trainData,
     String targetName, {
-    LinearOptimizerType optimizerType = linearOptimizerTypeDefaultValue,
+    LinearOptimizerType optimizerType = LinearOptimizerType.newton,
     int iterationsLimit = iterationLimitDefaultValue,
     double initialLearningRate = initialLearningRateDefaultValue,
     double decay = decayDefaultValue,

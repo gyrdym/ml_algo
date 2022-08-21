@@ -1,3 +1,4 @@
+import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/_injector.dart';
 import 'package:ml_algo/src/classifier/logistic_regressor/logistic_regressor.dart';
 import 'package:ml_algo/src/di/injector.dart';
@@ -27,6 +28,7 @@ void main() {
       classifier = LogisticRegressor(
         samples,
         targetName,
+        optimizerType: LinearOptimizerType.gradient,
         iterationsLimit: 2,
         learningRateType: LearningRateType.constant,
         initialLearningRate: 1.0,
