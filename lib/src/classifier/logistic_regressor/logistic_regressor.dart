@@ -284,7 +284,7 @@ abstract class LogisticRegressor
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   ///
   /// void main() {
-  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
+  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle();
   ///   final model = LogisticRegressor.SGD(
   ///     samples,
   ///     'Outcome',
@@ -292,7 +292,6 @@ abstract class LogisticRegressor
   ///     iterationsLimit: 50,
   ///     initialLearningRate: 1e-4,
   ///     learningRateType: LearningRateType.constant,
-  ///     dtype: dtype,
   ///    );
   /// }
   /// ```
@@ -441,14 +440,13 @@ abstract class LogisticRegressor
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   ///
   /// void main() {
-  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
+  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle();
   ///   final model = LogisticRegressor.BGD(
   ///     samples,
   ///     'Outcome',
   ///     iterationsLimit: 50,
   ///     initialLearningRate: 1e-4,
   ///     learningRateType: LearningRateType.constant,
-  ///     dtype: dtype,
   ///    );
   /// }
   /// ```
@@ -574,21 +572,14 @@ abstract class LogisticRegressor
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   ///
   /// void main() {
-  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
-  ///   final model = LogisticRegressor.BGD(
+  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle();
+  ///   final model = LogisticRegressor.newton(
   ///     samples,
   ///     'Outcome',
   ///     iterationsLimit: 50,
-  ///     initialLearningRate: 1e-4,
-  ///     learningRateType: LearningRateType.constant,
-  ///     dtype: dtype,
   ///    );
   /// }
   /// ```
-  ///
-  /// Keep in mind that you need to select a proper learning rate strategy for
-  /// every particular model. For more details, refer to [LearningRateType],
-  /// also consider [decay] and [dropRate] parameters.
   factory LogisticRegressor.newton(
     DataFrame trainingData,
     String targetName, {

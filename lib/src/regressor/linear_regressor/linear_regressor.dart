@@ -44,7 +44,7 @@ abstract class LinearRegressor
   /// [optimizerType] Defines an algorithm of optimization that will be used
   /// to find the best coefficients. Also defines which regularization type
   /// (L1 or L2) one may use to learn a linear regressor. By default -
-  /// [LinearOptimizerType.closedForm].
+  /// [LinearOptimizerType.newton].
   ///
   /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
   /// convergence in the optimization algorithm. Default value is `100`.
@@ -123,7 +123,7 @@ abstract class LinearRegressor
   factory LinearRegressor(
     DataFrame fittingData,
     String targetName, {
-    LinearOptimizerType optimizerType = LinearOptimizerType.closedForm,
+    LinearOptimizerType optimizerType = LinearOptimizerType.newton,
     int iterationsLimit = iterationLimitDefaultValue,
     LearningRateType learningRateType = learningRateTypeDefaultValue,
     InitialCoefficientsType initialCoefficientsType =
@@ -361,7 +361,12 @@ abstract class LinearRegressor
             dtype: dtype,
           );
 
-  /// Linear regression with Newton optimization and L2 regularization
+  /// Linear regression with Newton-Raphson optimization and L2 regularization
+  ///
+  /// The application of Newton-Raphson method for Ordinary Least Squares
+  /// problem isn't iterative, it converges for one iteration and it's completely
+  /// equal to the Closed-Form solution ([LinearOptimizerType.closedForm]).
+  /// The only difference is the possibility to regularize the coefficients.
   ///
   /// Parameters:
   ///
