@@ -22,7 +22,7 @@ class RandomBinaryProjectionSearcherBuildingBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future main() async {
+Future<dynamic> main() async {
   final points = Matrix.random(1000, 10, seed: 1, min: -5000, max: 5000);
 
   trainData = DataFrame.fromMatrix(points);

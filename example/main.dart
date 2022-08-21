@@ -3,7 +3,7 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 
 /// A simple usage example using synthetic data. To see more complex examples,
 /// please, visit other directories in this folder
-Future main() async {
+Future<dynamic> main() async {
   // Let's create a dataframe with fitting data, let's assume, that the target
   // column is the fifth column (column with index 4)
   final dataFrame = DataFrame(<Iterable<num>>[

@@ -36,6 +36,6 @@ class CrossValidatorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future main() async {
+Future<dynamic> main() async {
   CrossValidatorBenchmark.main();
 }

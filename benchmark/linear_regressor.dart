@@ -39,6 +39,6 @@ class LinearRegressorBenchmark extends BenchmarkBase {
   void tearDown() {}
 }
 
-Future main() async {
+Future<dynamic> main() async {
   LinearRegressorBenchmark.main();
 }
