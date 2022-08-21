@@ -1,13 +1,16 @@
-include: package:pedantic/analysis_options.yaml
+include: package:lints/core.yaml
 
 linter:
   rules:
     non_constant_identifier_names: false
 
 analyzer:
-  strong-mode:
-    implicit-casts: false
-    implicit-dynamic: true
+  exclude:
+    - test/mocks.mocks.dart
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
   errors:
     unnecessary_import: error
     unnecessary_type_check: error
@@ -15,3 +18,4 @@ analyzer:
     dead_code: error
     duplicate_import: error
     unused_import: error
+    deprecated_member_use_from_same_package: false

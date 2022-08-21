@@ -180,7 +180,7 @@ class SoftmaxRegressorImpl
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final schemaVersion;
+  final int? schemaVersion;
 
   @override
   DataFrame predict(DataFrame testFeatures) {

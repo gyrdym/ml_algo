@@ -1,5 +1,10 @@
 # Changelog
 
+## 16.17.2
+- Code quality:
+  - Strict options turned on
+  - Pedantic dependency removed in favour of dart lints package
+
 ## 16.17.1
 - e2e tests:
   - more stable tests for LinearRegressor

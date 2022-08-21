@@ -76,7 +76,7 @@ class KnnSolverImpl with SerializableMixin implements KnnSolver {
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final schemaVersion;
+  final int? schemaVersion;
 
   @override
   Iterable<Iterable<Neighbour<Vector>>> findKNeighbours(Matrix features) {
@@ -125,7 +125,7 @@ class KnnSolverImpl with SerializableMixin implements KnnSolver {
   }
 
   int _findNewNeighbourIdx(
-      double newNeighbourDist, List<Neighbour> sortedNeighbors) {
+      double newNeighbourDist, List<Neighbour<Vector>> sortedNeighbors) {
     var i = -1;
 
     for (final neighbour in sortedNeighbors) {

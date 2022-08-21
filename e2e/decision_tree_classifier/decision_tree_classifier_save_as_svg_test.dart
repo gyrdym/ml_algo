@@ -7,8 +7,7 @@ void main() async {
   group('DecisionTreeClassifier', () {
     test('should save graphical representation as svg image, iris dataset',
         () async {
-      final samples =
-          (await loadIrisDataset()).shuffle().dropSeries(names: ['Id']);
+      final samples = getIrisDataFrame().shuffle().dropSeries(names: ['Id']);
       final pipeline = Pipeline(samples, [
         toIntegerLabels(
           columnNames: ['Species'],
@@ -29,7 +28,7 @@ void main() async {
     test(
         'should save graphical representation as svg image, pima indians diabetes dataset',
         () async {
-      final samples = (await loadPimaIndiansDiabetesDataset()).shuffle();
+      final samples = getPimaIndiansDiabetesDataFrame().shuffle();
       final classifier = DecisionTreeClassifier(
         samples,
         'Outcome',
