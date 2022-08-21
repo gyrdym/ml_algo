@@ -40,7 +40,7 @@ Future main() async {
         'should return adequate score on pima indians diabetes dataset using '
         'accuracy metric, dtype=DType.float64', () async {
       final scores =
-          await evaluateLogisticRegressor(MetricType.accuracy, DType.float32);
+          await evaluateLogisticRegressor(MetricType.accuracy, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
@@ -58,7 +58,7 @@ Future main() async {
         'should return adequate score on pima indians diabetes dataset using '
         'precision metric, dtype=DType.float64', () async {
       final scores =
-          await evaluateLogisticRegressor(MetricType.precision, DType.float32);
+          await evaluateLogisticRegressor(MetricType.precision, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });
@@ -76,7 +76,7 @@ Future main() async {
         'should return adequate score on pima indians diabetes dataset using '
         'recall metric, dtype=DType.float64', () async {
       final scores =
-          await evaluateLogisticRegressor(MetricType.recall, DType.float32);
+          await evaluateLogisticRegressor(MetricType.recall, DType.float64);
 
       expect(scores.mean(), greaterThan(0.5));
     });

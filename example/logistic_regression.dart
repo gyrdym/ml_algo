@@ -7,10 +7,6 @@ void main() {
   final model = LogisticRegressor(
     splits.first,
     'Outcome',
-    batchSize: splits.first.rows.length,
-    learningRateType: LearningRateType.exponential,
-    decay: 0.7,
-    collectLearningData: true,
   );
 
   print('ACURACY:');
@@ -22,8 +18,10 @@ void main() {
   print('PRECISION:');
   print(model.assess(splits.last, MetricType.precision));
 
-  print('LD: ');
-  print(splits.last['Outcome'].data.take(10));
+  print('Results (first row - actual values, second row - predicted values):');
+  print(splits.last['Outcome'].data
+      .take(10)
+      .map((val) => num.parse(val.toString()).toDouble()));
   print(model
       .predict(splits.last.dropSeries(names: ['Outcome']))
       .series

@@ -28,6 +28,7 @@ void main() {
         LogisticRegressor(
           samples,
           targetName,
+          optimizerType: LinearOptimizerType.gradient,
           iterationsLimit: iterationsLimit,
           learningRateType: learningRateType,
           initialLearningRate: initialLearningRate,
@@ -58,6 +59,7 @@ void main() {
         final classifier = LogisticRegressor(
           samples,
           targetName,
+          optimizerType: LinearOptimizerType.gradient,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -84,6 +86,7 @@ void main() {
         final classifier = LogisticRegressor(
           samples,
           targetName,
+          optimizerType: LinearOptimizerType.gradient,
           iterationsLimit: 2,
           learningRateType: LearningRateType.constant,
           initialLearningRate: 1.0,
@@ -324,6 +327,7 @@ void main() {
 
       test('should return cost per iteration list', () {
         final classifier = LogisticRegressor(samples, targetName,
+            optimizerType: LinearOptimizerType.gradient,
             batchSize: 3,
             dtype: DType.float32,
             collectLearningData: true,

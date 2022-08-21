@@ -1,8 +1,12 @@
 # Changelog
 
+## 16.17.0
+- LogisticRegressor:
+  - Newton method added
+
 ## 16.16.0
 - LinearRegressor:
-    - Newton method added
+  - Newton method added
 
 ## 16.15.2
 - LinearRegressor, LogisticRegressor, SoftmaxRegressor:
