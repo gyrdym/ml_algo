@@ -52,6 +52,10 @@ it in web applications.
         - [LogisticRegressor.BGD](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor/LogisticRegressor.BGD.html). 
     Implementation of the logistic regression algorithm based on batch gradient descent with L2 regularisation. 
     To use this kind of classifier your data has to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
+        
+        - [LogisticRegressor.newton](https://pub.dev/documentation/ml_algo/latest/ml_algo/LogisticRegressor/LogisticRegressor.newton.html). 
+    Implementation of the logistic regression algorithm based on Newton-Raphson method with L2 regularisation. 
+    To use this kind of classifier your data has to be [linearly separable](https://en.wikipedia.org/wiki/Linear_separability).
 
     - [SoftmaxRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/SoftmaxRegressor-class.html). 
     A class that performs linear multiclass classification of data. To use this kind of classifier your data has to be 
@@ -78,7 +82,7 @@ it in web applications.
         Implementation of the linear regression algorithm based on batch gradient descent with L2 regularisation
     
         - [LinearRegressor.newton](https://pub.dev/documentation/ml_algo/latest/ml_algo/LinearRegressor/LinearRegressor.newton.html)
-        Implementation of the linear regression algorithm based on Newton method with L2 regularisation
+        Implementation of the linear regression algorithm based on Newton-Raphson method with L2 regularisation
      
     - [KnnRegressor](https://pub.dev/documentation/ml_algo/latest/ml_algo/KnnRegressor-class.html)
     A class that makes predictions for each new observation based on the first `k` closest observations from 
@@ -231,30 +235,18 @@ if the selected hyperparameters are good enough or not:
 
 ```dart
 final createClassifier = (DataFrame samples) =>
-  // BGD stands for "Batch Gradient Descent" that's meaning that the classifier will use the whole dataset on every 
-  // training iteration 
-  LogisticRegressor.BGD(
+  LogisticRegressor(
     samples
     targetColumnName,
-    iterationsLimit: 90,
-    learningRateType: LearningRateType.timeBased,
-    probabilityThreshold: 0.7,
   );
 ```
-
-Let's describe our hyperparameters:
-- `iterationsLimit` - number of learning iterations. The selected optimization algorithm (gradient ascent in our case) will 
-be cyclically run this amount of times
-- `learningRateType` - a strategy for learning rate update. In our case, the learning rate will decrease after every 
-iteration
-- `probabilityThreshold` - lower bound for positive label probability
 
 If we want to evaluate the learning process more thoroughly, we may pass `collectLearningData` argument to the classifier
 constructor:
 
 ```dart
 final createClassifier = (DataFrame samples) =>
-  LogisticRegressor.BGD(
+  LogisticRegressor(
     ...,
     collectLearningData: true,
   );
@@ -265,7 +257,7 @@ the model creation.
 
 ### Evaluate the performance of the model
 
-Assume, we chose really good hyperparameters. In order to validate this hypothesis let's use CrossValidator instance 
+Assume, we chose perfect hyperparameters. In order to validate this hypothesis, let's use CrossValidator instance 
 created before:
 
 ````dart
@@ -287,7 +279,7 @@ print('accuracy on k fold validation: ${accuracy.toStringAsFixed(2)}');
 We can see something like this:
 
 ````
-accuracy on k fold validation: 0.65
+accuracy on k fold validation: 0.75
 ````
 
 Let's assess our hyperparameters on the test set in order to evaluate the model's generalization error:
@@ -374,12 +366,9 @@ void main() async {
   final testData = splits[1];
   final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
   final createClassifier = (DataFrame samples) =>
-    LogisticRegressor.BGD(
+    LogisticRegressor(
       samples
       targetColumnName,
-      iterationsLimit: 90,
-      learningRateType: LearningRateType.timeBased,
-      probabilityThreshold: 0.7,
     );
   final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
   final accuracy = scores.mean();
@@ -417,12 +406,9 @@ void main() async {
   final testData = splits[1];
   final validator = CrossValidator.kFold(validationData, numberOfFolds: 5);
   final createClassifier = (DataFrame samples) =>
-    LogisticRegressor.BGD(
+    LogisticRegressor(
       samples
       targetColumnName,
-      iterationsLimit: 90,
-      learningRateType: LearningRateType.timeBased,
-      probabilityThreshold: 0.7,
     );
   final scores = await validator.evaluate(createClassifier, MetricType.accuracy);
   final accuracy = scores.mean();

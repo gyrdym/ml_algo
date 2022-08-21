@@ -138,7 +138,7 @@ abstract class LogisticRegressor
   factory LogisticRegressor(
     DataFrame trainData,
     String targetName, {
-    LinearOptimizerType optimizerType = linearOptimizerTypeDefaultValue,
+    LinearOptimizerType optimizerType = LinearOptimizerType.newton,
     int iterationsLimit = iterationLimitDefaultValue,
     double initialLearningRate = initialLearningRateDefaultValue,
     double decay = decayDefaultValue,
@@ -284,7 +284,7 @@ abstract class LogisticRegressor
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   ///
   /// void main() {
-  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
+  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle();
   ///   final model = LogisticRegressor.SGD(
   ///     samples,
   ///     'Outcome',
@@ -292,7 +292,6 @@ abstract class LogisticRegressor
   ///     iterationsLimit: 50,
   ///     initialLearningRate: 1e-4,
   ///     learningRateType: LearningRateType.constant,
-  ///     dtype: dtype,
   ///    );
   /// }
   /// ```
@@ -441,14 +440,13 @@ abstract class LogisticRegressor
   /// import 'package:ml_dataframe/ml_dataframe.dart';
   ///
   /// void main() {
-  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 12);
+  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle();
   ///   final model = LogisticRegressor.BGD(
   ///     samples,
   ///     'Outcome',
   ///     iterationsLimit: 50,
   ///     initialLearningRate: 1e-4,
   ///     learningRateType: LearningRateType.constant,
-  ///     dtype: dtype,
   ///    );
   /// }
   /// ```
@@ -495,6 +493,126 @@ abstract class LogisticRegressor
             isFittingDataNormalized: false,
             learningRateType: learningRateType,
             initialCoefficientsType: initialCoefficientsType,
+            initialCoefficients:
+                initialCoefficients ?? Vector.empty(dtype: dtype),
+            positiveLabel: positiveLabel,
+            negativeLabel: negativeLabel,
+            collectLearningData: collectLearningData,
+            dtype: dtype,
+          );
+
+  /// Creates a [LogisticRegressor] instance based on Newton-Raphson method
+  ///
+  /// Parameters:
+  ///
+  /// [trainingData] Observations that will be used by the classifier to learn
+  /// the coefficients. Must contain [targetName] column.
+  ///
+  /// [targetName] A string that serves as a name of the target column (a
+  /// column that contains class labels or outcomes for the associated
+  /// features).
+  ///
+  /// [iterationsLimit] A number of fitting iterations. Uses as a condition of
+  /// convergence in the optimization algorithm. Default value is `100`.
+  ///
+  /// [minCoefficientsUpdate] A minimum distance between coefficient vectors in
+  /// two contiguous iterations. Uses as a condition of convergence in the
+  /// optimization algorithm. If a difference between the two vectors is small
+  /// enough, there is no reason to continue fitting. Default value is `1e-12`
+  ///
+  /// [probabilityThreshold] A probability on the basis of which it is decided,
+  /// whether an observation relates to positive class label (see
+  /// [positiveLabel] parameter) or to negative class label (see [negativeLabel]
+  /// parameter). The greater the probability, the more strict the classifier
+  /// is. Default value is `0.5`.
+  ///
+  /// [lambda] A coefficient of regularization. Uses to prevent the regressor's
+  /// overfitting. The more the value of [lambda], the more regular the
+  /// coefficients of the equation of the predicting hyperplane are. Extremely
+  /// large [lambda] may decrease the coefficients to nothing, otherwise too
+  /// small [lambda] may be a cause of too large absolute values of the
+  /// coefficients, that is also bad.
+  ///
+  /// [fitIntercept] Whether or not to fit intercept term. Default value is
+  /// `true`. Intercept in 2-dimensional space is a bias of the line (relative
+  /// to X-axis).
+  ///
+  /// [interceptScale] A value, defining a size of the intercept.
+  ///
+  /// [initialCoefficients] Coefficients to be used in the first iteration of
+  /// optimization algorithm. [initialCoefficients] is a vector, length of which
+  /// must be equal to the number of features in [trainingData] : in case of
+  /// logistic regression only one column from [trainingData] is used as a
+  /// prediction target column, thus the number of features is equal to
+  /// the number of columns in [trainingData] minus 1 (target column). Keep in
+  /// mind, that if your model considers intercept term, [initialCoefficients]
+  /// should contain an extra element in the beginning of the vector and it
+  /// denotes the intercept term coefficient
+  ///
+  /// [positiveLabel] A value that will be used for the positive class.
+  /// By default, `1`.
+  ///
+  /// [negativeLabel] A value that will be used for the negative class.
+  /// By default, `0`.
+  ///
+  /// [collectLearningData] Whether or not to collect learning data, for
+  /// instance cost function value per each iteration. Affects performance much.
+  /// If [collectLearningData] is true, one may access [costPerIteration]
+  /// getter in order to evaluate learning process more thoroughly. Default value
+  /// is `false`
+  ///
+  /// [dtype] A data type for all the numeric values, used by the algorithm. Can
+  /// affect performance or accuracy of the computations. Default value is
+  /// [DType.float32]
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// import 'package:ml_algo/ml_algo.dart';
+  /// import 'package:ml_dataframe/ml_dataframe.dart';
+  ///
+  /// void main() {
+  ///   final samples = getPimaIndiansDiabetesDataFrame().shuffle();
+  ///   final model = LogisticRegressor.newton(
+  ///     samples,
+  ///     'Outcome',
+  ///     iterationsLimit: 50,
+  ///    );
+  /// }
+  /// ```
+  factory LogisticRegressor.newton(
+    DataFrame trainingData,
+    String targetName, {
+    int iterationsLimit = iterationLimitDefaultValue,
+    double minCoefficientsUpdate = minCoefficientsUpdateDefaultValue,
+    double probabilityThreshold = probabilityThresholdDefaultValue,
+    double lambda = lambdaDefaultValue,
+    bool fitIntercept = fitInterceptDefaultValue,
+    double interceptScale = interceptScaleDefaultValue,
+    num positiveLabel = positiveLabelDefaultValue,
+    num negativeLabel = negativeLabelDefaultValue,
+    bool collectLearningData = collectLearningDataDefaultValue,
+    DType dtype = dTypeDefaultValue,
+    Vector? initialCoefficients,
+  }) =>
+      initLogisticRegressorModule().get<LogisticRegressorFactory>().create(
+            trainData: trainingData,
+            targetName: targetName,
+            optimizerType: LinearOptimizerType.newton,
+            iterationsLimit: iterationsLimit,
+            initialLearningRate: initialLearningRateDefaultValue,
+            decay: decayDefaultValue,
+            dropRate: dropRateDefaultValue,
+            minCoefficientsUpdate: minCoefficientsUpdate,
+            probabilityThreshold: probabilityThreshold,
+            lambda: lambda,
+            regularizationType: RegularizationType.L2,
+            batchSize: trainingData.shape.first,
+            fitIntercept: fitIntercept,
+            interceptScale: interceptScale,
+            isFittingDataNormalized: false,
+            learningRateType: defaultLearningRateType,
+            initialCoefficientsType: initialCoefficientsTypeDefaultValue,
             initialCoefficients:
                 initialCoefficients ?? Vector.empty(dtype: dtype),
             positiveLabel: positiveLabel,

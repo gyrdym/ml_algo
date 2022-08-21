@@ -38,7 +38,11 @@ class LogLikelihoodCostFunction implements CostFunction {
 
   @override
   Matrix getHessian(Matrix x, Matrix w, Matrix y) {
-    // TODO: implement getHessian
-    throw UnimplementedError();
+    final prediction = _linkFunction.link(x * w).toVector();
+    final ones = Vector.filled(x.rowsNum, 1.0, dtype: x.dtype);
+    final V = Matrix.diagonal((prediction * (ones - prediction)).toList(),
+        dtype: x.dtype);
+
+    return x.transpose() * V * x;
   }
 }

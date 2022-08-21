@@ -3,8 +3,8 @@ import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/xrange.dart';
 
-class LeastSquaresNewtonOptimizer implements LinearOptimizer {
-  LeastSquaresNewtonOptimizer(
+class NewtonOptimizer implements LinearOptimizer {
+  NewtonOptimizer(
       {required Matrix features,
       required Matrix labels,
       required CostFunction costFunction,
@@ -42,14 +42,6 @@ class LeastSquaresNewtonOptimizer implements LinearOptimizer {
 
     final regularizingTerm =
         Matrix.scalar(_lambda.toDouble(), _features.columnsNum, dtype: dtype);
-    // Since we perfectly know that Hessian matrix calculation of least squares
-    // function doesn't depend on coefficient vector, Hessian matrix will be
-    // constant throughout the entire optimization procedure, let's calculate it
-    // only once in the beginning of the procedure:
-    final hessian = _costFunction.getHessian(_features, coefficients, _labels);
-    final regularizedInverseHessian = _lambda == 0
-        ? hessian.inverse()
-        : (hessian + regularizingTerm).inverse();
 
     for (final _ in _iterations) {
       if (coefficientsUpdate.isNaN ||
@@ -59,8 +51,15 @@ class LeastSquaresNewtonOptimizer implements LinearOptimizer {
 
       final gradient =
           _costFunction.getGradient(_features, coefficients, _labels);
+      final hessian =
+          _costFunction.getHessian(_features, coefficients, _labels);
+      final regularizedInverseHessian = _lambda == 0
+          ? hessian.inverse()
+          : (hessian + regularizingTerm).inverse();
 
-      coefficients = coefficients - regularizedInverseHessian * gradient;
+      coefficients = isMinimizingObjective
+          ? coefficients - regularizedInverseHessian * gradient
+          : coefficients + regularizedInverseHessian * gradient;
       coefficientsUpdate = (coefficients - prevCoefficients).norm();
       prevCoefficients = coefficients;
 
