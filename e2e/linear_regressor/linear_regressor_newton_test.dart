@@ -3,7 +3,7 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:test/test.dart';
 
 num trainHousingModel(MetricType metricType, DType dtype) {
-  final data = getHousingDataFrame().shuffle();
+  final data = getHousingDataFrame().shuffle(seed: 10);
   final samples = splitData(data, [0.8]);
   final trainSamples = samples.first;
   final testSamples = samples.last;
@@ -19,7 +19,7 @@ num trainHousingModel(MetricType metricType, DType dtype) {
 }
 
 num trainWineModel(MetricType metricType, DType dtype) {
-  final data = getWineQualityDataFrame().shuffle();
+  final data = getWineQualityDataFrame().shuffle(seed: 10);
   final samples = splitData(data, [0.8]);
   final trainSamples = samples.first;
   final testSamples = samples.last;

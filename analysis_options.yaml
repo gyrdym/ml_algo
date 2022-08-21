@@ -1,5 +1,9 @@
 include: package:pedantic/analysis_options.yaml
 
+linter:
+  rules:
+    non_constant_identifier_names: false
+
 analyzer:
   strong-mode:
     implicit-casts: false
