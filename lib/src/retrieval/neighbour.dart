@@ -14,5 +14,8 @@ class Neighbour {
   }
 
   @override
+  int get hashCode => '$index:$distance'.hashCode;
+
+  @override
   String toString() => '(Index: $index, Distance: $distance)';
 }

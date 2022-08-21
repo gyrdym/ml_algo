@@ -25,7 +25,7 @@ Future<Vector> evaluateLogisticRegressor(MetricType metric, DType dtype) {
   );
 }
 
-Future main() async {
+Future<dynamic> main() async {
   group('LogisticRegressor.BGD', () {
     test(
         'should return adequate score on pima indians diabetes dataset using '

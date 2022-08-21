@@ -35,7 +35,7 @@ void main() {
         Matrix.column([1, 1, 1, 1], dtype: DType.float64);
     final isFittingDataNormalized = true;
     final targetName = 'outcome';
-    final dataSource = <Iterable>[
+    final dataSource = <Iterable<dynamic>>[
       <String>[...featureNames, targetName],
       <num>[100.5, 45, 1, -1000.08],
       <num>[4301, -1708, 10001, 1],

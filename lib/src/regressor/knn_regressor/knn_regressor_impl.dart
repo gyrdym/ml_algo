@@ -73,7 +73,7 @@ class KnnRegressorImpl
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final schemaVersion;
+  final int? schemaVersion;
 
   Vector get _zeroVector =>
       dtype == DType.float32 ? _float32zeroVector : _float64zeroVector;

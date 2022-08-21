@@ -146,7 +146,7 @@ class LinearRegressorImpl
 
   @override
   @JsonKey(name: jsonSchemaVersionJsonKey)
-  final schemaVersion;
+  final int? schemaVersion;
 
   @override
   Iterable<String> get targetNames => [targetName];

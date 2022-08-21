@@ -21,7 +21,7 @@ void main() {
       const iterationLimit = 0;
       final elements = ConstantLearningRateIterable(1.3, iterationLimit);
 
-      expect(elements, []);
+      expect(elements, <num>[]);
     });
   });
 }
