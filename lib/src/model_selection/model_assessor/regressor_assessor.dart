@@ -1,4 +1,3 @@
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/common/exception/invalid_metric_type_exception.dart';
 import 'package:ml_algo/src/helpers/features_target_split_interface.dart';
 import 'package:ml_algo/src/metric/metric_constants.dart';

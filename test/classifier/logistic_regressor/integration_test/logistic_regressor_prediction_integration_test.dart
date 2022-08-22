@@ -5,7 +5,8 @@ import 'package:ml_algo/src/linear_optimizer/gradient_optimizer/learning_rate/le
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer_type.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {

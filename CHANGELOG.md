@@ -1,5 +1,10 @@
 # Changelog
 
+## 16.17.3
+- Log Likelihood Cost function:
+  - `dtype` passed
+- Removed `package:ml_linalg/linalg.dart` and `package:ml_algo/ml_algo.dart` imports
+
 ## 16.17.2
 - Code quality:
   - Strict options turned on

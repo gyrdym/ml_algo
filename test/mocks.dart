@@ -157,6 +157,7 @@ MockCostFunctionFactory createCostFunctionFactoryMock(
     linkFunction: anyNamed('linkFunction'),
     positiveLabel: anyNamed('positiveLabel'),
     negativeLabel: anyNamed('negativeLabel'),
+    dtype: anyNamed('dtype'),
   )).thenReturn(costFunctionMock);
 
   return costFunctionFactory;

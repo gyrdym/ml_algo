@@ -1,7 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
@@ -12,8 +13,8 @@ void main() {
     final mockedLinkFn = MockLinkFunction();
     final positiveLabel = 10.0;
     final negativeLabel = -10.0;
-    final logLikelihoodCost =
-        LogLikelihoodCostFunction(mockedLinkFn, positiveLabel, negativeLabel);
+    final logLikelihoodCost = LogLikelihoodCostFunction(
+        mockedLinkFn, positiveLabel, negativeLabel, DType.float32);
     final x = Matrix.fromList([
       [1.0, 2.0, 3.0],
       [4.0, 5.0, 6.0],
