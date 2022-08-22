@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 import '../helpers.dart';

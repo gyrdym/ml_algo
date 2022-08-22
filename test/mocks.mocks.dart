@@ -458,6 +458,10 @@ class MockCostFunction extends _i1.Mock implements _i9.CostFunction {
       (super.noSuchMethod(Invocation.method(#getGradient, [x, w, y]),
           returnValue: _FakeMatrix_6()) as _i8.Matrix);
   @override
+  _i8.Matrix getHessian(_i8.Matrix? x, _i8.Matrix? w, _i8.Matrix? y) =>
+      (super.noSuchMethod(Invocation.method(#getHessian, [x, w, y]),
+          returnValue: _FakeMatrix_6()) as _i8.Matrix);
+  @override
   String toString() => super.toString();
 }
 
@@ -474,14 +478,16 @@ class MockCostFunctionFactory extends _i1.Mock
   _i9.CostFunction createByType(_i43.CostFunctionType? type,
           {_i29.LinkFunction? linkFunction,
           num? positiveLabel,
-          num? negativeLabel}) =>
+          num? negativeLabel,
+          _i11.DType? dtype}) =>
       (super.noSuchMethod(
           Invocation.method(#createByType, [
             type
           ], {
             #linkFunction: linkFunction,
             #positiveLabel: positiveLabel,
-            #negativeLabel: negativeLabel
+            #negativeLabel: negativeLabel,
+            #dtype: dtype
           }),
           returnValue: _FakeCostFunction_7()) as _i9.CostFunction);
   @override

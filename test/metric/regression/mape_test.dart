@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/common/exception/matrix_column_exception.dart';
 import 'package:ml_algo/src/metric/regression/mape.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {

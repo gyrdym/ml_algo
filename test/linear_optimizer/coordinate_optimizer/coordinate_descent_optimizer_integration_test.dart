@@ -1,10 +1,11 @@
 import 'package:ml_algo/src/di/injector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector.dart';
 import 'package:ml_algo/src/linear_optimizer/convergence_detector/convergence_detector_impl.dart';
-import 'package:ml_algo/src/linear_optimizer/least_squares_coordinate_descent_optimizer.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/initial_coefficients_generator.dart';
 import 'package:ml_algo/src/linear_optimizer/initial_coefficients_generator/zero_coefficients_generator.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_algo/src/linear_optimizer/least_squares_coordinate_descent_optimizer.dart';
+import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 import '../../helpers.dart';

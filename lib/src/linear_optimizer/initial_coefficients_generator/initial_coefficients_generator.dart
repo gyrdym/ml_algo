@@ -1,4 +1,4 @@
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/vector.dart';
 
 abstract class InitialCoefficientsGenerator {
   Vector generate(int length);

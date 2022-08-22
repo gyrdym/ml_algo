@@ -1,6 +1,6 @@
 import 'package:ml_algo/src/helpers/validate_matrix_columns.dart';
 import 'package:ml_algo/src/metric/metric.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
 
 class MapeMetric implements Metric {
   const MapeMetric();

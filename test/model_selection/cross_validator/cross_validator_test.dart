@@ -1,5 +1,5 @@
-import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_algo/src/model_selection/_injector.dart';
+import 'package:ml_algo/src/model_selection/cross_validator/cross_validator.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_type.dart';

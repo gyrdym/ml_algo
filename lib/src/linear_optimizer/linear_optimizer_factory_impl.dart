@@ -102,6 +102,7 @@ class LinearOptimizerFactoryImpl implements LinearOptimizerFactory {
           iterationLimit: iterationLimit,
           lambda: lambda,
           minCoefficientsUpdate: minCoefficientsUpdate,
+          dtype: dtype,
         );
 
       case LinearOptimizerType.closedForm:

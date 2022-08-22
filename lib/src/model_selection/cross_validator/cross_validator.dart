@@ -7,7 +7,8 @@ import 'package:ml_algo/src/model_selection/cross_validator/cross_validator_impl
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_factory.dart';
 import 'package:ml_algo/src/model_selection/split_indices_provider/split_indices_provider_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/vector.dart';
 
 typedef ModelFactory = Assessable Function(DataFrame observations);
 
