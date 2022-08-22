@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/metric/metric.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:quiver/iterables.dart';
 
 class AccuracyMetric implements Metric {

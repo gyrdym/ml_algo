@@ -3,6 +3,7 @@ import 'package:ml_algo/src/cost_function/cost_function_type.dart';
 import 'package:ml_algo/src/cost_function/least_square_cost_function.dart';
 import 'package:ml_algo/src/cost_function/log_likelihood_cost_function.dart';
 import 'package:ml_algo/src/link_function/inverse_logit_link_function.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -13,7 +14,8 @@ void main() {
     final negativeLabel = 0;
 
     test('should create a squared cost function', () {
-      final costFn = factory.createByType(CostFunctionType.leastSquare);
+      final costFn = factory.createByType(CostFunctionType.leastSquare,
+          dtype: DType.float32);
       expect(costFn, isA<LeastSquareCostFunction>());
     });
 
@@ -25,6 +27,7 @@ void main() {
         linkFunction: linkFn,
         positiveLabel: positiveLabel,
         negativeLabel: negativeLabel,
+        dtype: DType.float32,
       );
 
       expect(costFn, isA<LogLikelihoodCostFunction>());

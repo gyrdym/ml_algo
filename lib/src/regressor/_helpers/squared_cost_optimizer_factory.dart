@@ -42,6 +42,7 @@ LinearOptimizer createSquaredCostOptimizer(
   final costFunctionFactory = injector.get<CostFunctionFactory>();
   final costFunction = costFunctionFactory.createByType(
     CostFunctionType.leastSquare,
+    dtype: dtype,
   );
 
   return optimizerFactory.createByType(

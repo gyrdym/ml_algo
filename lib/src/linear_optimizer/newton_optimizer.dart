@@ -1,5 +1,6 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
 import 'package:ml_algo/src/linear_optimizer/linear_optimizer.dart';
+import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:xrange/xrange.dart';
 
@@ -10,13 +11,15 @@ class NewtonOptimizer implements LinearOptimizer {
       required CostFunction costFunction,
       required int iterationLimit,
       required num minCoefficientsUpdate,
-      num lambda = 0})
+      num lambda = 0,
+      DType dtype = DType.float32})
       : _features = features,
         _labels = labels,
         _costFunction = costFunction,
         _iterations = integers(0, iterationLimit),
         _minCoefficientsUpdate = minCoefficientsUpdate,
-        _lambda = lambda;
+        _lambda = lambda,
+        _dtype = dtype;
 
   final Matrix _features;
   final Matrix _labels;
@@ -25,6 +28,7 @@ class NewtonOptimizer implements LinearOptimizer {
   final List<num> _costPerIteration = [];
   final num _lambda;
   final num _minCoefficientsUpdate;
+  final DType _dtype;
 
   @override
   List<num> get costPerIteration => _costPerIteration;
@@ -34,14 +38,13 @@ class NewtonOptimizer implements LinearOptimizer {
       {Matrix? initialCoefficients,
       bool isMinimizingObjective = true,
       bool collectLearningData = false}) {
-    var dtype = _features.dtype;
     var coefficients = initialCoefficients ??
-        Matrix.column(List.filled(_features.first.length, 0), dtype: dtype);
+        Matrix.column(List.filled(_features.first.length, 0), dtype: _dtype);
     var prevCoefficients = coefficients;
     var coefficientsUpdate = double.maxFinite;
 
     final regularizingTerm =
-        Matrix.scalar(_lambda.toDouble(), _features.columnsNum, dtype: dtype);
+        Matrix.scalar(_lambda.toDouble(), _features.columnsNum, dtype: _dtype);
 
     for (final _ in _iterations) {
       if (coefficientsUpdate.isNaN ||

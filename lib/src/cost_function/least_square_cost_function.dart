@@ -1,5 +1,5 @@
 import 'package:ml_algo/src/cost_function/cost_function.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/matrix.dart';
 
 class LeastSquareCostFunction implements CostFunction {
   const LeastSquareCostFunction();

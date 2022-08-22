@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/knn_solver/knn_solver_factory_impl.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_impl.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/distance.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 void main() {

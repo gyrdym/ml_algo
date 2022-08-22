@@ -7,7 +7,9 @@ import 'package:ml_algo/src/classifier/decision_tree_classifier/decision_tree_js
 import 'package:ml_algo/src/common/constants/common_json_keys.dart';
 import 'package:ml_algo/src/tree_trainer/tree_assessor/tree_assessor_type.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
-import 'package:ml_linalg/linalg.dart';
+import 'package:ml_linalg/dtype.dart';
+import 'package:ml_linalg/dtype_to_json.dart';
+import 'package:ml_linalg/matrix.dart';
 import 'package:test/test.dart';
 
 import '../../fake_data_set.dart';

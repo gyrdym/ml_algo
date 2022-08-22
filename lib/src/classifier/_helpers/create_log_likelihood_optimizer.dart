@@ -51,6 +51,7 @@ LinearOptimizer createLogLikelihoodOptimizer(
     linkFunction: linkFunction,
     positiveLabel: positiveLabel,
     negativeLabel: negativeLabel,
+    dtype: dtype,
   );
   final normalizedLabels =
       normalizeClassLabels(labels, positiveLabel, negativeLabel);
