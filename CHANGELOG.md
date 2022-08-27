@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.18.0
+- SVM classification added
+
 ## 16.17.3
 - Log Likelihood Cost function:
   - `dtype` passed
