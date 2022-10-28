@@ -23,6 +23,8 @@ The library is a part of the ecosystem:
     - [KDTree-based data retrieval](#kdtree-based-data-retrieval)
 - [Models retraining](#models-retraining)
 - [Notes on gradient-based optimisation algorithms](#a-couple-of-words-about-linear-models-which-use-gradient-optimisation-methods)
+- [Helpful articles on algorithms standing behind the library](#helpful-articles-on-algorithms-standing-behind-the-library)
+- [Contacts](#contacts)
 
 
 
@@ -850,6 +852,13 @@ final createClassifier = (DataFrame samples) =>
       ...,
     );
 ```
+
+## Helpful articles on algorithms standing behind the library
+
+- [Linear Regression in Dart](https://medium.com/mlearning-ai/a-gentle-introduction-to-linear-regression-the-dart-way-9750214e6fa2?source=friends_link&sk=e199d8f5b0bb71c97525be2ee7f5819b)
+- [Ordinary Least Squares (OLS) problem](https://medium.com/mlearning-ai/linear-regression-ordinary-least-squares-in-a-nutshell-c2e0d7ed260f?source=friends_link&sk=5c8bc0228d29bc67ebe524a91d687619)
+- [Closed-Form solution for OLS in Dart](https://medium.com/mlearning-ai/ordinary-least-squares-closed-form-solution-the-dart-way-d7c0ee0e0d02?source=friends_link&sk=9ba5a9da7fd3160b28c450ff6dc446a4)
+- [Gradient Descent in Dart](https://medium.com/mlearning-ai/gradient-descent-the-dart-way-2d6c39416a8a?source=friends_link&sk=992b52c85a51ecea1c1e9e4afe2a8c1e)
 
 ### Contacts
 If you have questions, feel free to text me on

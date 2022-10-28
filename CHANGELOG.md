@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.17.4
+- Documentation:
+  - Added links to articles to README
+
 ## 16.17.3
 - Log Likelihood Cost function:
   - `dtype` passed

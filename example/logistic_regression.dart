@@ -9,7 +9,7 @@ void main() {
     'Outcome',
   );
 
-  print('ACURACY:');
+  print('ACСURACY:');
   print(model.assess(splits.last, MetricType.accuracy));
 
   print('RECALL:');
