@@ -1,0 +1,89 @@
+import 'package:ml_algo/ml_algo.dart';
+import 'package:ml_algo/src/classifier/svm_classifier/svm_classifier.dart';
+import 'package:ml_dataframe/ml_dataframe.dart';
+import 'package:test/test.dart';
+
+num evaluateSVMClassifier(MetricType metric, DType dtype) {
+  final data = getPimaIndiansDiabetesDataFrame().shuffle();
+  final samples = splitData(data, [0.8]);
+  final trainSamples = samples.first;
+  final testSamples = samples.last;
+  final model = SVMClassifier(
+    trainSamples,
+    'Outcome',
+    dtype: dtype,
+    iterationLimit: 10,
+  );
+
+  print('model: ${model.coefficientsByClasses}');
+
+  return model.assess(testSamples, metric);
+}
+
+Future<void> main() async {
+  group('SVM classifier', () {
+    test(
+        'should return adequate score on pima indians diabetes dataset using '
+            'accuracy metric, dtype=DType.float32', () {
+      final score =
+      evaluateSVMClassifier(MetricType.accuracy, DType.float32);
+
+      print('float32, accuracy is $score');
+
+      expect(score, greaterThan(0.7));
+    });
+
+    test(
+        'should return adequate score on pima indians diabetes dataset using '
+            'accuracy metric, dtype=DType.float64', () {
+      final score =
+      evaluateSVMClassifier(MetricType.accuracy, DType.float64);
+
+      print('float64, accuracy is $score');
+
+      expect(score, greaterThan(0.7));
+    });
+
+    test(
+        'should return adequate score on pima indians diabetes dataset using '
+            'precision metric, dtype=DType.float32', () {
+      final score =
+      evaluateSVMClassifier(MetricType.precision, DType.float32);
+
+      print('float32, precision is $score');
+
+      expect(score, greaterThan(0.65));
+    });
+
+    test(
+        'should return adequate score on pima indians diabetes dataset using '
+            'precision metric, dtype=DType.float64', () {
+      final score =
+      evaluateSVMClassifier(MetricType.precision, DType.float64);
+
+      print('float64, precision is $score');
+
+      expect(score, greaterThan(0.65));
+    });
+
+    test(
+        'should return adequate score on pima indians diabetes dataset using '
+            'recall metric, dtype=DType.float32', () {
+      final score = evaluateSVMClassifier(MetricType.recall, DType.float32);
+
+      print('float32, recall is $score');
+
+      expect(score, greaterThan(0.65));
+    });
+
+    test(
+        'should return adequate score on pima indians diabetes dataset using '
+            'recall metric, dtype=DType.float64', () {
+      final score = evaluateSVMClassifier(MetricType.recall, DType.float64);
+
+      print('float64, recall is $score');
+
+      expect(score, greaterThan(0.65));
+    });
+  });
+}
