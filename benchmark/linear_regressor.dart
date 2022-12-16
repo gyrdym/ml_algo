@@ -1,3 +1,5 @@
+// Approx. 5.5 second (MacBook Pro 2019), Dart version: 2.16.0
+
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';

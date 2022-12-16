@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.17.5
+- ml_linalg 13.11.1 used
+
 ## 16.17.4
 - Documentation:
   - Added links to articles to README
