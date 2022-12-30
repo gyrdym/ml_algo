@@ -26,7 +26,8 @@ class InverseLogitLinkFunctionBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    final scores = Vector.randomFilled(scoresCount, min: -20, max: 20, seed: 12);
+    final scores =
+        Vector.randomFilled(scoresCount, min: -20, max: 20, seed: 12);
 
     samples = Matrix.fromColumns([
       scores,

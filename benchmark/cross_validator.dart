@@ -27,8 +27,8 @@ class CrossValidatorBenchmark extends BenchmarkBase {
 
   @override
   void setup() {
-    final samples = Matrix.fromRows(
-        List.generate(observationsNum, (i) => Vector.randomFilled(columnsNum, seed: 12)));
+    final samples = Matrix.fromRows(List.generate(
+        observationsNum, (i) => Vector.randomFilled(columnsNum, seed: 12)));
     final dataFrame = DataFrame.fromMatrix(samples);
 
     crossValidator = CrossValidator.kFold(dataFrame, numberOfFolds: 5);

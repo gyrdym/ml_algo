@@ -28,7 +28,8 @@ class LinearRegressorBenchmark extends BenchmarkBase {
     final features = Matrix.fromRows(List.generate(
         observationsNum, (i) => Vector.randomFilled(featuresNum, seed: 12)));
 
-    final labels = Matrix.fromColumns([Vector.randomFilled(observationsNum, seed: 13)]);
+    final labels =
+        Matrix.fromColumns([Vector.randomFilled(observationsNum, seed: 13)]);
 
     fittingData = DataFrame.fromMatrix(
       Matrix.fromColumns([

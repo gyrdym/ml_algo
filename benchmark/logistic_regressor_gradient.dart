@@ -20,13 +20,10 @@ class LogisticRegressorBenchmark extends BenchmarkBase {
 
   @override
   void run() {
-    LogisticRegressor(
-      _data,
-      'col_20',
-      minCoefficientsUpdate: 1e-100000,
-      iterationsLimit: 200,
-      optimizerType: LinearOptimizerType.gradient
-    );
+    LogisticRegressor(_data, 'col_20',
+        minCoefficientsUpdate: 1e-100000,
+        iterationsLimit: 200,
+        optimizerType: LinearOptimizerType.gradient);
   }
 
   @override
