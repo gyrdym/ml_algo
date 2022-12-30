@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pub run test e2e -p vm
+dart test e2e -p vm
