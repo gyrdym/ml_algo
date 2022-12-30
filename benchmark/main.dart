@@ -1,5 +1,5 @@
 import 'linear_regressor.dart' as gradient_descent_regression_benchmark;
-import 'logistic_regressor.dart' as logistic_regression_benchmark;
+import 'logistic_regressor_gradient.dart' as logistic_regression_benchmark;
 import 'knn_solver.dart' as knn_regressor_benchmark;
 
 Future<void> main() async {

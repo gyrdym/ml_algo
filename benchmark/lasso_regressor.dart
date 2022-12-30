@@ -1,3 +1,5 @@
+// Approx. 4.5 sec (Macbook Pro 2019, Dart 2.16.0)
+
 import 'dart:convert';
 import 'dart:io';
 
