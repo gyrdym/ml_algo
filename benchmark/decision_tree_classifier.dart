@@ -1,4 +1,4 @@
-// MacBook Air 13.3 mid 2017: ~ 6.5 sec
+// Approx. 7.0 sec (Macbook Pro 2019, Dart 2.16.0)
 
 import 'dart:math';
 
