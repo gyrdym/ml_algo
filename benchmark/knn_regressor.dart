@@ -1,4 +1,5 @@
-// 6.0 sec (MacBook Air mid 2017)
+// Approx. 5.2 sec (Macbook Pro 2019, Dart 2.16.0)
+
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
@@ -26,10 +27,10 @@ class KnnRegressorBenchmark extends BenchmarkBase {
   @override
   void setup() {
     final featureMatrix = Matrix.fromRows(List.generate(
-        observationsNum * 2, (i) => Vector.randomFilled(featuresNum)));
+        observationsNum * 2, (i) => Vector.randomFilled(featuresNum, seed: 1)));
 
     final labelMatrix =
-        Matrix.fromColumns([Vector.randomFilled(observationsNum * 2)]);
+        Matrix.fromColumns([Vector.randomFilled(observationsNum * 2, seed: 2)]);
 
     final observations = DataFrame.fromMatrix(Matrix.fromColumns([
       ...featureMatrix.columns,
@@ -40,7 +41,7 @@ class KnnRegressorBenchmark extends BenchmarkBase {
       Matrix.fromRows(
         List.generate(
           observationsNum,
-          (i) => Vector.randomFilled(featuresNum),
+          (i) => Vector.randomFilled(featuresNum, seed: 3),
         ),
       ),
     );

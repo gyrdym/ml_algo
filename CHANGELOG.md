@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.17.6
+- ml_linalg version fixed (13.11.11)
+- benchmark info added
+
 ## 16.17.5
 - ml_linalg 13.11.1 used
 

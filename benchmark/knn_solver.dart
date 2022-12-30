@@ -1,4 +1,5 @@
-// MacBook Air 13.3 mid 2017: ~ 5 sec
+// Approx. 5.1 sec (Macbook Pro 2019, Dart 2.16.0)
+
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver_impl.dart';
@@ -29,15 +30,15 @@ class KnnSolverBenchmark extends BenchmarkBase {
   @override
   void setup() {
     final trainFeatures = Matrix.fromRows(List.generate(
-        trainObservationsNum, (i) => Vector.randomFilled(featuresNum)));
+        trainObservationsNum, (i) => Vector.randomFilled(featuresNum, seed: 1)));
     final trainLabels =
-        Matrix.fromColumns([Vector.randomFilled(trainObservationsNum)]);
+        Matrix.fromColumns([Vector.randomFilled(trainObservationsNum, seed: 2)]);
 
     solver =
         KnnSolverImpl(trainFeatures, trainLabels, k, Distance.euclidean, false);
 
     features = Matrix.fromRows(List.generate(
-        observationsNum, (i) => Vector.randomFilled(featuresNum)));
+        observationsNum, (i) => Vector.randomFilled(featuresNum, seed: 3)));
   }
 }
 
