@@ -28,7 +28,8 @@ class SGDRegressorBenchmark extends BenchmarkBase {
     final features = Matrix.fromRows(List.generate(
         observationsNum, (i) => Vector.randomFilled(featuresNum, seed: 23)));
 
-    final labels = Matrix.fromColumns([Vector.randomFilled(observationsNum, seed: 25)]);
+    final labels =
+        Matrix.fromColumns([Vector.randomFilled(observationsNum, seed: 25)]);
 
     trainData = DataFrame.fromMatrix(
       Matrix.fromColumns([
