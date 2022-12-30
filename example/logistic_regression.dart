@@ -2,7 +2,7 @@ import 'package:ml_algo/ml_algo.dart';
 import 'package:ml_dataframe/ml_dataframe.dart';
 
 void main() {
-  final samples = getPimaIndiansDiabetesDataFrame().shuffle();
+  final samples = getPimaIndiansDiabetesDataFrame().shuffle(seed: 4);
   final splits = splitData(samples, [0.8]);
   final model = LogisticRegressor(
     splits.first,
