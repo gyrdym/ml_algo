@@ -47,8 +47,8 @@ class KDTreeImpl with SerializableMixin, KnnSearcherMixin implements KDTree {
   @override
   Iterable<Neighbour> query(Vector point, int k,
       [Distance distanceType = Distance.euclidean]) {
-    if (point.length != points.columnsNum) {
-      throw InvalidQueryPointLength(point.length, points.columnsNum);
+    if (point.length != points.columnCount) {
+      throw InvalidQueryPointLength(point.length, points.columnCount);
     }
 
     final neighbours = createQueue(point, distanceType);

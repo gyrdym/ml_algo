@@ -42,7 +42,7 @@ class LogLikelihoodCostFunction implements CostFunction {
   @override
   Matrix getHessian(Matrix x, Matrix w, Matrix y) {
     final prediction = _linkFunction.link(x * w).toVector();
-    final ones = Vector.filled(x.rowsNum, 1.0, dtype: _dtype);
+    final ones = Vector.filled(x.rowCount, 1.0, dtype: _dtype);
     final V = Matrix.diagonal((prediction * (ones - prediction)).toList(),
         dtype: _dtype);
 

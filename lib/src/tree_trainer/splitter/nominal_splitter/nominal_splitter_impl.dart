@@ -32,6 +32,6 @@ class NominalTreeSplitterImpl implements NominalTreeSplitter {
             node,
             Matrix.fromRows(foundRows, dtype: samples.dtype),
           );
-        }).where((entry) => entry.value.rowsNum > 0),
+        }).where((entry) => entry.value.rowCount > 0),
       );
 }

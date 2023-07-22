@@ -61,7 +61,7 @@ class LogisticRegressorFactoryImpl implements LogisticRegressorFactory {
 
     if (initialCoefficients?.isNotEmpty == true) {
       validateInitialCoefficients(initialCoefficients!, fitIntercept,
-          trainData.toMatrix(dtype).columnsNum - 1);
+          trainData.toMatrix(dtype).columnCount - 1);
     }
 
     final optimizer = createLogLikelihoodOptimizer(

@@ -3,8 +3,9 @@ import 'package:ml_linalg/matrix.dart';
 
 void validateMatrixColumns(Iterable<Matrix> matrices) {
   final matrixStub = Matrix.empty();
-  final firstInvalidMatrix = matrices
-      .firstWhere((matrix) => matrix.columnsNum != 1, orElse: () => matrixStub);
+  final firstInvalidMatrix = matrices.firstWhere(
+      (matrix) => matrix.columnCount != 1,
+      orElse: () => matrixStub);
 
   if (identical(firstInvalidMatrix, matrixStub)) {
     return;
