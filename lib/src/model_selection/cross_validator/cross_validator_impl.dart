@@ -27,11 +27,11 @@ class CrossValidatorImpl implements CrossValidator {
     DataPreprocessFn? onDataSplit,
   }) {
     final samplesAsMatrix = samples.toMatrix(dtype);
-    final sourceColumnsNum = samplesAsMatrix.columnsNum;
+    final sourceColumnsNum = samplesAsMatrix.columnCount;
     final discreteColumns = enumerate(samples.series)
         .where((indexedSeries) => indexedSeries.value.isDiscrete)
         .map((indexedSeries) => indexedSeries.index);
-    final allIndicesGroups = _splitter.getIndices(samplesAsMatrix.rowsNum);
+    final allIndicesGroups = _splitter.getIndices(samplesAsMatrix.rowCount);
     final scores = allIndicesGroups.map((testRowsIndices) {
       final split = _makeSplit(testRowsIndices, discreteColumns);
       final trainDataFrame = split[0];
@@ -66,7 +66,7 @@ class CrossValidatorImpl implements CrossValidator {
     final samplesAsMatrix = samples.toMatrix(dtype);
     final testRowsIndicesAsSet = Set<int>.from(testRowsIndices);
     final trainSamples = List<Vector>.filled(
-      samplesAsMatrix.rowsNum - testRowsIndicesAsSet.length,
+      samplesAsMatrix.rowCount - testRowsIndicesAsSet.length,
       Vector.empty(dtype: dtype),
     );
     final testSamples = List<Vector>.filled(

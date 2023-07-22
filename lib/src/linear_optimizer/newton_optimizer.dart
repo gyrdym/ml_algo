@@ -44,7 +44,7 @@ class NewtonOptimizer implements LinearOptimizer {
     var coefficientsUpdate = double.maxFinite;
 
     final regularizingTerm =
-        Matrix.scalar(_lambda.toDouble(), _features.columnsNum, dtype: _dtype);
+        Matrix.scalar(_lambda.toDouble(), _features.columnCount, dtype: _dtype);
 
     for (final _ in _iterations) {
       if (coefficientsUpdate.isNaN ||

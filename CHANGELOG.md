@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.17.8
+- dart 3.0 migration (non-breaking changes)
+
 ## 16.17.7
 - ml_linalg ^13.11.15 used
 

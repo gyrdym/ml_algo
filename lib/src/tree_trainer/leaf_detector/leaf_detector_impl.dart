@@ -22,7 +22,7 @@ class TreeLeafDetectorImpl implements TreeLeafDetector {
       return true;
     }
 
-    if (samples.rowsNum <= _minSamplesCount) {
+    if (samples.rowCount <= _minSamplesCount) {
       return true;
     }
 

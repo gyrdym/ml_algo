@@ -7,8 +7,8 @@ class AccuracyMetric implements Metric {
 
   @override
   double getScore(Matrix predictedLabels, Matrix origLabels) {
-    if (predictedLabels.rowsNum != origLabels.rowsNum &&
-        predictedLabels.columnsNum != origLabels.columnsNum) {
+    if (predictedLabels.rowCount != origLabels.rowCount &&
+        predictedLabels.columnCount != origLabels.columnCount) {
       throw Exception('Predicted labels and original labels should have '
           'the same dimensions');
     }
@@ -17,6 +17,6 @@ class AccuracyMetric implements Metric {
         .where((rows) => rows.first == rows.last)
         .length;
 
-    return score / origLabels.rowsNum;
+    return score / origLabels.rowCount;
   }
 }

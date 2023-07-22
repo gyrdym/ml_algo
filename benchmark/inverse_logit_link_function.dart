@@ -1,4 +1,4 @@
-//  Approx. 2.5 sec (Macbook Pro 2019, Dart 2.16.0)
+//  Approx. 0.5 sec (Macbook Pro 2019, Dart 2.16.0)
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/src/link_function/inverse_logit_link_function.dart';

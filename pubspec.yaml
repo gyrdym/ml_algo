@@ -1,10 +1,10 @@
 name: ml_algo
 description: Machine learning algorithms, Machine learning models performance evaluation functionality
-version: 16.17.7
+version: 16.17.8
 homepage: https://github.com/gyrdym/ml_algo
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
 
 dependencies:
   collection: ^1.16.0
@@ -19,7 +19,7 @@ dependencies:
 dev_dependencies:
   benchmark_harness: ^2.0.0
   build_runner: ^2.0.0
-  json_serializable: ^4.1.1
-  lints: ^1.0.1
+  json_serializable: ^6.7.0
+  lints: ^2.1.0
   mockito: ^5.0.10
   test: ^1.16.8

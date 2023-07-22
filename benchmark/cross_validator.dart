@@ -7,7 +7,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 const observationsNum = 1000;
-const columnsNum = 21;
+const columnCount = 21;
 
 class CrossValidatorBenchmark extends BenchmarkBase {
   CrossValidatorBenchmark() : super('Cross validator benchmark');
@@ -28,7 +28,7 @@ class CrossValidatorBenchmark extends BenchmarkBase {
   @override
   void setup() {
     final samples = Matrix.fromRows(List.generate(
-        observationsNum, (i) => Vector.randomFilled(columnsNum, seed: 12)));
+        observationsNum, (i) => Vector.randomFilled(columnCount, seed: 12)));
     final dataFrame = DataFrame.fromMatrix(samples);
 
     crossValidator = CrossValidator.kFold(dataFrame, numberOfFolds: 5);

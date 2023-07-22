@@ -25,7 +25,7 @@ class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
         _initialCoefficientsGenerator = initialCoefficientsGenerator,
         _convergenceDetector = convergenceDetector,
         _normalizer = isFittingDataNormalized
-            ? Vector.filled(features.columnsNum, 1.0, dtype: dtype)
+            ? Vector.filled(features.columnCount, 1.0, dtype: dtype)
             : features
                 .reduceRows((combine, vector) => (combine + vector * vector));
 
@@ -51,14 +51,14 @@ class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
     bool collectLearningData = false,
   }) {
     var coefficients = initialCoefficients?.toVector() ??
-        _initialCoefficientsGenerator.generate(_features.columnsNum);
+        _initialCoefficientsGenerator.generate(_features.columnCount);
     var labelsAsVector = _labels.toVector();
 
     var iteration = 0;
     var diff = double.infinity;
 
     while (!_convergenceDetector.isConverged(diff, iteration)) {
-      final newCoeffsSource = List.generate(_features.columnsNum, (j) {
+      final newCoeffsSource = List.generate(_features.columnCount, (j) {
         final jCoef = coefficients[j];
         final newJCoef =
             _optimizeCoordinate(j, _features, labelsAsVector, coefficients);
