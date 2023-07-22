@@ -65,8 +65,8 @@ void main() {
       final coefficients = optimizer.findExtrema();
       final expected = [-81796400.0, -81295300.0, -85285400.0];
 
-      expect(coefficients.rowsNum, 3);
-      expect(coefficients.columnsNum, 1);
+      expect(coefficients.rowCount, 3);
+      expect(coefficients.columnCount, 1);
       expect(coefficients.getColumn(0), iterableAlmostEqualTo(expected, 5.0));
     });
   });

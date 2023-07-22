@@ -30,11 +30,11 @@ class GradientOptimizer implements LinearOptimizer {
         _learningRates = learningRates,
         _minCoefficientsUpdate = minCoefficientsUpdate,
         _randomizer = randomizer {
-    if (batchSize < 1 || batchSize > points.rowsNum) {
+    if (batchSize < 1 || batchSize > points.rowCount) {
       throw RangeError.range(
           batchSize,
           1,
-          points.rowsNum,
+          points.rowCount,
           'Invalid batch size '
           'value');
     }
@@ -66,8 +66,8 @@ class GradientOptimizer implements LinearOptimizer {
     var coefficients = initialCoefficients ??
         Matrix.fromColumns(
           List.generate(
-            _labels.columnsNum,
-            (i) => _initialCoefficientsGenerator.generate(_points.columnsNum),
+            _labels.columnCount,
+            (i) => _initialCoefficientsGenerator.generate(_points.columnCount),
           ),
           dtype: _dtype,
         );
@@ -118,7 +118,7 @@ class GradientOptimizer implements LinearOptimizer {
   }
 
   Iterable<int> _getBatchRange() => _randomizer
-      .getIntegerInterval(0, _points.rowsNum, intervalLength: _batchSize);
+      .getIntegerInterval(0, _points.rowCount, intervalLength: _batchSize);
 
   /// [coefficients] columns of coefficients (each label column from [labels]
   /// has its own dedicated column of coefficients)

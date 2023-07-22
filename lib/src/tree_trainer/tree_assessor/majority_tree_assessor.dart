@@ -14,19 +14,19 @@ class MajorityTreeAssessor implements TreeAssessor {
     var totalCount = 0;
 
     for (final samples in split) {
-      if (samples.columnsNum == 0) {
+      if (samples.columnCount == 0) {
         continue;
       }
 
-      if (targetId >= samples.columnsNum) {
+      if (targetId >= samples.columnCount) {
         throw ArgumentError.value(
             targetId,
             'targetId',
-            'the value should be in [0..${samples.columnsNum - 1}] '
+            'the value should be in [0..${samples.columnCount - 1}] '
                 'range, but given');
       }
       errorCount += _getErrorCount(samples.getColumn(targetId));
-      totalCount += samples.rowsNum;
+      totalCount += samples.rowCount;
     }
 
     return errorCount / totalCount;
@@ -34,7 +34,7 @@ class MajorityTreeAssessor implements TreeAssessor {
 
   @override
   double getError(Matrix samples, int targetId) =>
-      _getErrorCount(samples.getColumn(targetId)) / samples.rowsNum;
+      _getErrorCount(samples.getColumn(targetId)) / samples.rowCount;
 
   int _getErrorCount(Vector outcomes) {
     if (outcomes.isEmpty) {

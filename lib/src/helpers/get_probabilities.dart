@@ -3,9 +3,9 @@ import 'package:ml_linalg/matrix.dart';
 
 Matrix getProbabilities(
     Matrix features, Matrix coefficients, LinkFunction linkFunction) {
-  if (features.columnsNum != coefficients.rowsNum) {
+  if (features.columnCount != coefficients.rowCount) {
     throw Exception('Wrong features number provided: expected '
-        '${coefficients.rowsNum}, but ${features.columnsNum} given. '
+        '${coefficients.rowCount}, but ${features.columnCount} given. '
         'Please, recheck columns number of the passed feature matrix');
   }
   return linkFunction.link(features * coefficients);

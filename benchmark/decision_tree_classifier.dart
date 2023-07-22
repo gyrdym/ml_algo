@@ -9,7 +9,7 @@ import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
 const observationsNum = 300;
-const columnsNum = 11;
+const columnCount = 11;
 
 class DecisionTreeClassifierBenchmark extends BenchmarkBase {
   DecisionTreeClassifierBenchmark()
@@ -36,13 +36,13 @@ class DecisionTreeClassifierBenchmark extends BenchmarkBase {
   void setup() {
     final random = Random(1);
     final observations =
-        Matrix.random(observationsNum, columnsNum - 1, seed: 1);
+        Matrix.random(observationsNum, columnCount - 1, seed: 1);
     final outcomes = Vector.fromList([
       ...List.filled(observationsNum ~/ 2, 1),
       ...List.filled(observationsNum ~/ 2, 0)
     ]..shuffle(random));
 
-    _data = DataFrame(observations.insertColumns(columnsNum - 1, [outcomes]),
+    _data = DataFrame(observations.insertColumns(columnCount - 1, [outcomes]),
         headerExists: false);
   }
 

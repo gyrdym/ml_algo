@@ -24,7 +24,7 @@ class RandomBinaryProjectionSearcherImpl
   RandomBinaryProjectionSearcherImpl(
       this.columns, this.points, this.digitCapacity,
       {this.seed, this.schemaVersion = 1}) {
-    randomVectors = Matrix.random(points.columnsNum, digitCapacity,
+    randomVectors = Matrix.random(points.columnCount, digitCapacity,
         seed: seed, dtype: points.dtype);
     bins = groupIndicesByBins(getBinIdsFromBinaryRepresentation(
         getBinaryRepresentation(points, randomVectors)));
@@ -76,7 +76,7 @@ class RandomBinaryProjectionSearcherImpl
 
     for (var i = 0; i < searchRadius + 1; i++) {
       final indicesProvider = LpoIndicesProvider(i);
-      final indexGroups = indicesProvider.getIndices(randomVectors.columnsNum);
+      final indexGroups = indicesProvider.getIndices(randomVectors.columnCount);
 
       for (final indices in indexGroups) {
         final queryBitsFlipped = queryBits.toList();

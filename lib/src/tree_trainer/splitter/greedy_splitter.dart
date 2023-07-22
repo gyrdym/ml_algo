@@ -24,10 +24,10 @@ class GreedyTreeSplitter implements TreeSplitter {
 
   Map<TreeNode, Matrix> _createByNominalValues(
       Matrix samples, int splittingIdx, List<num> values) {
-    if (splittingIdx < 0 || splittingIdx > samples.columnsNum) {
-      throw Exception('Unappropriate range given: $splittingIdx, '
+    if (splittingIdx < 0 || splittingIdx > samples.columnCount) {
+      throw Exception('Inappropriate range given: $splittingIdx, '
           'expected a range within or equal '
-          '${integers(0, samples.columnsNum)}');
+          '${integers(0, samples.columnCount)}');
     }
     return _nominalSplitter.split(samples, splittingIdx, values);
   }

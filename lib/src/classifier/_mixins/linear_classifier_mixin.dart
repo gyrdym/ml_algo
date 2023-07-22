@@ -27,7 +27,7 @@ mixin LinearClassifierMixin implements LinearClassifier {
     );
 
     validateCoefficientsMatrix(
-        coefficientsByClasses, processedFeatures.columnsNum);
+        coefficientsByClasses, processedFeatures.columnCount);
 
     return linkFunction.link(processedFeatures * coefficientsByClasses);
   }

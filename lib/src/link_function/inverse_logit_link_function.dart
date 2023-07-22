@@ -21,8 +21,8 @@ class InverseLogitLinkFunction implements LinkFunction {
 
   @override
   Matrix link(Matrix scores) {
-    if (scores.columnsNum != 1) {
-      throw LogitScoresMatrixDimensionException(scores.columnsNum);
+    if (scores.columnCount != 1) {
+      throw LogitScoresMatrixDimensionException(scores.columnCount);
     }
 
     return scores.mapElements(scoreToProbability);

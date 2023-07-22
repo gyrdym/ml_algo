@@ -72,9 +72,9 @@ class LogisticRegressorImpl
 
     // Logistic regression specific check, it cannot be placed in
     // `validateCoefficientsMatrix`
-    if (coefficientsByClasses.columnsNum > 1) {
+    if (coefficientsByClasses.columnCount > 1) {
       throw Exception('Expected coefficients for a single class, but '
-          'coefficients for ${coefficientsByClasses.columnsNum} classes '
+          'coefficients for ${coefficientsByClasses.columnCount} classes '
           'provided. Please, check your linear optimizer implementation '
           '(Logistic Regression deals only with single class problem)');
     }

@@ -5,7 +5,7 @@ import 'package:ml_linalg/vector.dart';
 ///
 /// Bin IDs will be used as keys of a hash map, a value of the hash map is a bin itself.
 Iterable<int> getBinIdsFromBinaryRepresentation(Matrix binaryRepresentation) {
-  final dimension = binaryRepresentation.columnsNum;
+  final dimension = binaryRepresentation.columnCount;
   final dtype = binaryRepresentation.dtype;
   final powersOfTwo = Vector.fromList(
       List.generate(dimension, (index) => 1 << index),

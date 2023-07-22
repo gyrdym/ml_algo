@@ -13,9 +13,9 @@ void validateCoefficientsMatrix(Matrix coefficients, [num? featuresNum]) {
     throw Exception('No coefficients provided');
   }
 
-  if (featuresNum != null && coefficients.rowsNum != featuresNum) {
+  if (featuresNum != null && coefficients.rowCount != featuresNum) {
     throw Exception('Wrong features number provided: expected '
-        '${coefficients.rowsNum}, but $featuresNum given. '
+        '${coefficients.rowCount}, but $featuresNum given. '
         'Please, recheck columns number of the passed feature matrix');
   }
 }

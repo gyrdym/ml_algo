@@ -11,23 +11,23 @@ class GiniIndexTreeAssessor implements TreeAssessor {
   double getAggregatedError(Iterable<Matrix> split, int targetId) {
     var aggregatedGini = 0.0;
     final totalCount =
-        split.fold<int>(0, (total, samples) => total + samples.rowsNum);
+        split.fold<int>(0, (total, samples) => total + samples.rowCount);
 
     for (final samples in split) {
-      if (samples.columnsNum == 0) {
+      if (samples.columnCount == 0) {
         continue;
       }
 
-      if (targetId >= samples.columnsNum) {
+      if (targetId >= samples.columnCount) {
         throw ArgumentError.value(
             targetId,
             'targetId',
-            'the value should be in [0..${samples.columnsNum - 1}] '
+            'the value should be in [0..${samples.columnCount - 1}] '
                 'range, but given');
       }
 
       aggregatedGini +=
-          getError(samples, targetId) * (samples.rowsNum / totalCount);
+          getError(samples, targetId) * (samples.rowCount / totalCount);
     }
 
     return aggregatedGini;

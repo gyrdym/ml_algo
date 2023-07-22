@@ -32,22 +32,22 @@ class KnnSolverImpl with SerializableMixin implements KnnSolver {
       throw Exception('Empty outcomes matrix provided');
     }
 
-    if (trainOutcomes.columnsNum > 1) {
+    if (trainOutcomes.columnCount > 1) {
       throw Exception('Invalid outcome matrix: it is expected to be a column '
-          'vector, but a matrix of ${trainOutcomes.columnsNum} colums is '
+          'vector, but a matrix of ${trainOutcomes.columnCount} colums is '
           'given');
     }
 
-    if (trainFeatures.rowsNum != trainOutcomes.rowsNum) {
+    if (trainFeatures.rowCount != trainOutcomes.rowCount) {
       throw Exception('Number of feature records and number of associated '
           'outcomes must be equal');
     }
 
-    if (k <= 0 || k > trainFeatures.rowsNum) {
+    if (k <= 0 || k > trainFeatures.rowCount) {
       throw RangeError.value(
           k,
           'Parameter k should be within the range '
-          '1..${trainFeatures.rowsNum} (both inclusive)');
+          '1..${trainFeatures.rowCount} (both inclusive)');
     }
   }
 
@@ -84,10 +84,10 @@ class KnnSolverImpl with SerializableMixin implements KnnSolver {
       throw Exception('No features provided');
     }
 
-    if (features.columnsNum != trainFeatures.columnsNum) {
+    if (features.columnCount != trainFeatures.columnCount) {
       throw Exception('Invalid feature matrix: expected columns number: '
-          '${trainFeatures.columnsNum}, given: '
-          '${features.columnsNum}');
+          '${trainFeatures.columnCount}, given: '
+          '${features.columnCount}');
     }
 
     final allNeighbours = zip([trainFeatures.rows, trainOutcomes.rows]);

@@ -178,8 +178,8 @@ class _FakeDataFrame_19 extends _i1.Fake implements _i21.DataFrame {
   String toString({int? maxRows = 10, int? maxCols = 7}) => super.toString();
 }
 
-class _FakeLinearOptimizer_20 extends _i1.Fake implements _i22.LinearOptimizer {
-}
+class _FakeLinearOptimizer_20 extends _i1.Fake
+    implements _i22.LinearOptimizer {}
 
 class _FakeConvergenceDetector_21 extends _i1.Fake
     implements _i23.ConvergenceDetector {}
@@ -205,8 +205,8 @@ class _FakeLogisticRegressor_28 extends _i1.Fake
 class _FakeSoftmaxRegressor_29 extends _i1.Fake
     implements _i31.SoftmaxRegressor {}
 
-class _FakeLinearRegressor_30 extends _i1.Fake implements _i32.LinearRegressor {
-}
+class _FakeLinearRegressor_30 extends _i1.Fake
+    implements _i32.LinearRegressor {}
 
 /// A class which mocks [NumericalTreeSplitterFactory].
 ///

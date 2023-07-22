@@ -69,7 +69,7 @@ class SoftmaxRegressorImpl
 
     // Softmax regression specific check, it cannot be placed in
     // `validateCoefficientsMatrix`
-    if (coefficientsByClasses.columnsNum < 2) {
+    if (coefficientsByClasses.columnCount < 2) {
       throw Exception('Expected coefficients at least for two classes. '
           'Please, check your linear optimizer implementation or the way your '
           'data was encoded');
@@ -189,7 +189,7 @@ class SoftmaxRegressorImpl
       final positiveLabelIdx =
           probabilities.toList().indexOf(probabilities.max());
       final predictedRow = List.filled(
-        coefficientsByClasses.columnsNum,
+        coefficientsByClasses.columnCount,
         negativeLabel,
       );
 

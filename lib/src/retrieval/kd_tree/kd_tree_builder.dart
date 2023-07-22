@@ -24,7 +24,7 @@ class KDTreeBuilder {
     final points = _points.sample(rowIndices: pointIndices);
     final splitIdx = _splitStrategy == KDTreeSplitStrategy.largestVariance
         ? _getSplitIdx(points)
-        : splitDim % _points.columnsNum;
+        : splitDim % _points.columnCount;
 
     if (isLeaf) {
       return KDTreeNode(splitIndex: splitIdx, pointIndices: pointIndices);
