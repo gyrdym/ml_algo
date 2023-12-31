@@ -10,11 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    container:
-      image: dart:stable
-
     steps:
       - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
 
       - name: Print Dart SDK version
         run: dart --version
@@ -26,7 +24,7 @@ jobs:
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Analyze project source
-        run: dart analyze --no-fatal-warnings
+        run: dart analyze --fatal-infos
 
       - name: Run tests
         run: dart test
