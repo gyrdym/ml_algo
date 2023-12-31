@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.17.9
+- Gradient descent example added
+
 ## 16.17.8
 - dart 3.0 migration (non-breaking changes)
 
