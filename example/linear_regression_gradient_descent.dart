@@ -8,10 +8,12 @@ void main() async {
   final samples = encoder.process(sourceSamples).shuffle(seed: 13);
   final splits = splitData(samples, [0.8]);
   final targetColumn = 'Weight';
-  final model = LinearRegressor(splits.first, targetColumn,
-      optimizerType: LinearOptimizerType.gradient,
-      batchSize: splits.first.rows.length,
-      initialLearningRate: 1e-9,
+  final model = LinearRegressor(
+    splits.first,
+    targetColumn,
+    optimizerType: LinearOptimizerType.gradient,
+    batchSize: splits.first.rows.length,
+    initialLearningRate: 1e-9,
   );
 
   print('Error: ${model.assess(splits.last, MetricType.mape)}');
