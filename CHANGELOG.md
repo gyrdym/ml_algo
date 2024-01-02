@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.17.10
+- Upgrade injector dependency
+
 ## 16.17.9
 - Gradient descent example corrected
 

@@ -3,7 +3,7 @@ import 'package:injector/injector.dart';
 extension InjectorExtension on Injector {
   /// Registers a dependency only if it doesn't exist
   void registerSingletonIf<T>(
-    Builder<T> builder, {
+    DependencyBuilder<T> builder, {
     bool override = false,
     String dependencyName = '',
   }) {
