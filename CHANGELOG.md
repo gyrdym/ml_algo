@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.17.11
+- Update contacts in README
+
 ## 16.17.10
 - Upgrade injector dependency
 
