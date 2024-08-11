@@ -1,7 +1,5 @@
 [![Build Status](https://github.com/gyrdym/ml_algo/workflows/CI%20pipeline/badge.svg)](https://github.com/gyrdym/ml_algo/actions?query=branch%3Amaster+)
-[![Coverage Status](https://coveralls.io/repos/github/gyrdym/ml_algo/badge.svg?branch=master)](https://coveralls.io/github/gyrdym/ml_algo?branch=master)
 [![pub package](https://img.shields.io/pub/v/ml_algo.svg)](https://pub.dartlang.org/packages/ml_algo)
-[![Gitter Chat](https://badges.gitter.im/gyrdym/gyrdym.svg)](https://gitter.im/gyrdym/)
 
 # Machine learning algorithms for Dart developers - ml_algo library
 
@@ -862,6 +860,7 @@ final createClassifier = (DataFrame samples) =>
 
 ### Contacts
 If you have questions, feel free to text me on
- - [Twitter](https://twitter.com/ilgyrd) 
+ - [X](https://x.com/ilgyrd) 
+ - [Telegram](https://t.me/Gyrdym)
  - [Facebook](https://www.facebook.com/ilya.gyrdymov)
  - [Linkedin](https://www.linkedin.com/in/gyrdym/)
