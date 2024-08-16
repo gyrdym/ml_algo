@@ -1,5 +1,10 @@
 # Changelog
 
+## 16.17.12
+- update in README 
+    - mention that web is possible
+    - fix the getIrisDataFrame and Pipeline example
+
 ## 16.17.11
 - Update contacts in README
 
