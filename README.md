@@ -29,8 +29,8 @@ The library is a part of the ecosystem:
 ## What is ml_algo for?
 
 The main purpose of the library is to give native Dart implementation of machine learning algorithms to those who are 
-interested both in Dart language and data science. This library aims at Dart VM and Flutter, it's impossible to use 
-it in web applications.
+interested both in Dart language and data science. This library aims at Dart VM and Flutter. It is also possible to use 
+its core features in web applications using web assembly.
 
 ## The library content
 
@@ -618,13 +618,13 @@ import 'package:ml_dataframe/ml_dataframe.dart';
 import 'package:ml_preprocessing/ml_preprocessing.dart';
 
 void main() async {
-    final samples = getIrisDataset()
+    final samples = getIrisDataFrame()
       .shuffle()
-      .dropSeries(seriesNames: ['Id']);
+      .dropSeries(names: ['Id']);
     
     final pipeline = Pipeline(samples, [
-      encodeAsIntegerLabels(
-        featureNames: ['Species'], // Here we convert strings from 'Species' column into numbers
+      toIntegerLabels(
+        columnNames: ['Species'], // Here we convert strings from 'Species' column into numbers
       ),
     ]);
 }
