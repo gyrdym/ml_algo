@@ -11,10 +11,7 @@ $ cd site
 $ dart pub global activate dhttpd
 $ dart pub global run dhttpd
 
-- Open your brwoser at : 
-
-http://localhost:8080/
-
+- Open your brwoser at : http://localhost:8080/site/index.html
 
 - type flower dimensions and run either using :
     - a preloaded model (faster) 
