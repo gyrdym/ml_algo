@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test ml dart wasm</title>
+  <link rel="preload" href="/test.wasm" as="fetch" crossorigin>
+</head>
+<body>
+  <h1>What iris is this ?</h1>
+  <h2>
+    <form onsubmit="return getValue('commands')">
+      SepalLengthCm: <input type="number" name="int1" id="int1"><br />
+      SepalWidthCm: <input type="number" name="int2" id="int2"><br />
+      PetalLengthCm: <input type="number" name="int3" id="int3"><br />
+      PetalWidthCm: <input type="number" name="int4" id="int4"><br />
+      <br>
+    </form>
+    <p></p>
+    <div id="decisionTreeLoaded_output">decisionTreeLoaded: Not run yet.</div>
+    <div id="decisionTreeFull">decisionTreeFull: Not run yet.</div>
+  </h2>
+  <script type="module">
+    const dartModulePromise = WebAssembly.compileStreaming(fetch('/test.wasm'));
+    const imports = {};
+    let dart2wasm_runtime = await import('/test.mjs');
+    let moduleInstance =
+      await dart2wasm_runtime.instantiate(dartModulePromise, imports);
+    dart2wasm_runtime.invoke(moduleInstance);
+  </script>
+  <script>
+    function testDecisionTreePreLoaded() {
+      let int1 = parseInt(document.getElementById('int1').value);
+      let int2 = parseInt(document.getElementById('int2').value);
+      let int3 = parseInt(document.getElementById('int3').value);
+      let int4 = parseInt(document.getElementById('int4').value);
+      console.log(`int1 ${int1}`);
+      if (isNaN(parseInt(int1)) || isNaN(parseInt(int2)) || isNaN(parseInt(int3)) || isNaN(parseInt(int4))) {
+        document.querySelector("#decisionTreeLoaded_output").innerHTML = "decisionTreeLoaded: " + "invalid";
+      } else {
+        const result = foo.decisionTreeLoaded(int1, int2, int3, int4);
+        document.querySelector("#decisionTreeLoaded_output").innerHTML = "decisionTreeLoaded: " + result;
+      }
+    }
+    async function testDecisionTreeFull() {
+      let int1 = parseInt(document.getElementById('int1').value);
+      let int2 = parseInt(document.getElementById('int2').value);
+      let int3 = parseInt(document.getElementById('int3').value);
+      let int4 = parseInt(document.getElementById('int4').value);
+      console.log(`int1 ${int1}`);
+      if (isNaN(parseInt(int1)) || isNaN(parseInt(int2)) || isNaN(parseInt(int3)) || isNaN(parseInt(int4))) {
+        document.querySelector("#decisionTreeFull").innerHTML = "decisionTreeFull: " + "invalid";
+      } else {
+        const result = foo.decisionTreeFull(int1, int2, int3, int4);
+        document.querySelector("#decisionTreeFull").innerHTML = "decisionTreeFull: " + result;
+      }
+    }
+  </script>
+  <div style="display: flex;justify-content: center;">
+    <button onclick="testDecisionTreePreLoaded()" style="margin-right: 10px;">test loading model </button>
+    <button onclick="testDecisionTreeFull()">test decision tree model</button>
+  </div>
+</body>
+
+</html>

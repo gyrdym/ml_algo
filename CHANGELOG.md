@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.17.13
+- Added Decision Tree web demo using Web Assembly
+
 ## 16.17.12
 - update in README 
     - mention that web is possible
