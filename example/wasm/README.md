@@ -7,21 +7,20 @@ This simple js web demo uses Dart Web Assembly support
 ## building/running
 - Serve the output, example
 
-$ cd site
 $ dart pub global activate dhttpd
 $ dart pub global run dhttpd
 
-- Open your brwoser at : http://localhost:8080/site/index.html
+- Open your browser at : http://localhost:8080/site/index.html
 
 - type flower dimensions and run either using :
     - a preloaded model (faster) 
-    - training a (small) model on on the fly
+    - training a (small) model on the fly
 
 ![screenshot](screenshot.png)
 
 
 - Compile with Wasm to a new site output directory:
  
-mywebapp$ dart compile wasm web/main.dart -o site/test.wasm
+$ dart compile wasm web/main.dart -o site/test.wasm
 
 For more details see documentation from https://dart.dev/web/wasm
