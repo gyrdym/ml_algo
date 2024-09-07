@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Test ml dart wasm</title>
-  <link rel="preload" href="/test.wasm" as="fetch" crossorigin>
+  <link rel="preload" href="/site/test.wasm" as="fetch" crossorigin>
 </head>
 <body>
   <h1>What iris is this ?</h1>
@@ -19,9 +19,9 @@
     <div id="decisionTreeFull">decisionTreeFull: Not run yet.</div>
   </h2>
   <script type="module">
-    const dartModulePromise = WebAssembly.compileStreaming(fetch('/test.wasm'));
+    const dartModulePromise = WebAssembly.compileStreaming(fetch('/site/test.wasm'));
     const imports = {};
-    let dart2wasm_runtime = await import('/test.mjs');
+    let dart2wasm_runtime = await import('/site/test.mjs');
     let moduleInstance =
       await dart2wasm_runtime.instantiate(dartModulePromise, imports);
     dart2wasm_runtime.invoke(moduleInstance);
