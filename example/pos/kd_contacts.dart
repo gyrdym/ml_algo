@@ -16,15 +16,10 @@ List<Ticket> parseData(List<dynamic> data) {
   return tickets;
 }
 
-List<Ticket> removeContactsTickets(List<Ticket> data, num selectedContactId) {
-  final filteredTickets = <Ticket>[];
-  for (final ticket in data) {
-    if (ticket.contactId != selectedContactId) {
-      filteredTickets.add(ticket);
-    }
-  }
-  return filteredTickets;
-}
+List<Ticket> removeContactsTickets(List<Ticket> data, num selectedContactId) =>
+    data
+        .where((ticket) => ticket.contactId != selectedContactId)
+        .toList(growable: false);
 
 /// this make a flat table of all items, one item per column
 List<Iterable<num>> prepareData(
