@@ -1,7 +1,7 @@
 # Changelog
 
-## 16.17.14
-- Added `MetricType.logLoss` and `LogLossMetric` for evaluating probabilistic
+## 16.17.15
+ - Added `MetricType.logLoss` and `LogLossMetric` for evaluating probabilistic
   binary classifiers
 
 ## 16.17.13
