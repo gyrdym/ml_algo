@@ -1,6 +1,7 @@
 import 'package:ml_algo/src/metric/classification/accuracy.dart';
 import 'package:ml_algo/src/metric/classification/precision.dart';
 import 'package:ml_algo/src/metric/classification/recall.dart';
+import 'package:ml_algo/src/metric/classification/log_loss_metric.dart';
 import 'package:ml_algo/src/metric/metric_factory_impl.dart';
 import 'package:ml_algo/src/metric/metric_type.dart';
 import 'package:ml_algo/src/metric/regression/mape.dart';
@@ -30,6 +31,10 @@ void main() {
 
     test('should create RecallMetric instance', () {
       expect(factory.createByType(MetricType.recall), isA<RecallMetric>());
+    });
+
+    test('should create LogLossMetric instance', () {
+      expect(factory.createByType(MetricType.logLoss), isA<LogLossMetric>());
     });
   });
 }

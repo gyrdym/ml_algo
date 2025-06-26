@@ -14,3 +14,4 @@ test/.test_coverage.dart
 
 .DS_Store
 */**/.DS_Store
+flutter-sdk/
