@@ -100,4 +100,7 @@ enum MetricType {
   /// better the prediction's quality is. The metric produces scores within the
   /// range [0, 1]
   recall,
+
+  /// Binary cross-entropy (a.k.a. log-loss)
+  logLoss,
 }

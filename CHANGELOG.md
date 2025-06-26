@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.17.15
+ - Added `MetricType.logLoss` and `LogLossMetric` for evaluating probabilistic
+  binary classifiers
+
 ## 16.17.13
 - Added Decision Tree web demo using Web Assembly
 
