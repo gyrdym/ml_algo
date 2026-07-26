@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.18.1
+- Remove obsolete contacts 
+
 ## 16.18.0
  - Added `MetricType.logLoss` and `LogLossMetric` for evaluating probabilistic
   binary classifiers

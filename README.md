@@ -861,6 +861,3 @@ final createClassifier = (DataFrame samples) =>
 ### Contacts
 If you have questions, feel free to text me on
  - [X](https://x.com/ilgyrd) 
- - [Telegram](https://t.me/Gyrdym)
- - [Facebook](https://www.facebook.com/ilya.gyrdymov)
- - [Linkedin](https://www.linkedin.com/in/gyrdym/)
