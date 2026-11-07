@@ -1,4 +1,4 @@
-// Approx. 5.1 sec (Macbook Pro 2019, Dart 2.16.0)
+// Approx. 2.4 sec (Macbook Pro 2019, Dart 2.16.0)
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/src/knn_solver/knn_solver.dart';

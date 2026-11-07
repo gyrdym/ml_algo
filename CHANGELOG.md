@@ -1,5 +1,8 @@
 # Changelog
 
+## 16.18.2
+- Correct benchmark timings
+
 ## 16.18.1
 - Remove obsolete contacts 
 

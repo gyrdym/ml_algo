@@ -1,4 +1,4 @@
-// Approx. 5.2 sec (Macbook Pro 2019, Dart 2.16.0)
+// Approx. 3.2 sec (Macbook Pro 2019, Dart 2.16.0)
 
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:ml_algo/ml_algo.dart';

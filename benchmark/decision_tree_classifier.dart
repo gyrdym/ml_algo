@@ -1,4 +1,4 @@
-// Approx. 7.0 sec (Macbook Pro 2019, Dart 2.16.0)
+// Approx. 4.2 sec (Macbook Pro 2019, Dart 2.16.0)
 
 import 'dart:math';
 
