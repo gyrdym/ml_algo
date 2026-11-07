@@ -18,16 +18,23 @@ class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
         _features = features,
         _labels = labels,
         _lambda = lambda,
-        _featureMatrices = features.columnIndices
-            .map((j) => features.filterColumns((_, idx) => idx != j))
-            .toList(growable: false),
         _featureColumns = features.columns.toList(growable: false),
         _initialCoefficientsGenerator = initialCoefficientsGenerator,
         _convergenceDetector = convergenceDetector,
         _normalizer = isFittingDataNormalized
             ? Vector.filled(features.columnCount, 1.0, dtype: dtype)
-            : features
-                .reduceRows((combine, vector) => (combine + vector * vector));
+            : features.reduceRows(
+                (combine, vector) {
+                  combine.toBuffer().add(vector * vector);
+
+                  return combine;
+                },
+                initValue: Vector.zero(features.columnCount, dtype: dtype),
+              ) {
+    _featureSquaredNorms = _featureColumns
+        .map((column) => column.dot(column))
+        .toList(growable: false);
+  }
 
   final Matrix _features;
   final Matrix _labels;
@@ -37,9 +44,8 @@ class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
   final double _lambda;
   final Vector _normalizer;
   final List<num> _errors = [];
-  // Feature matrices prepared for every iteration
-  final List<Matrix> _featureMatrices;
   final List<Vector> _featureColumns;
+  late final List<double> _featureSquaredNorms;
 
   @override
   List<num> get costPerIteration => _errors;
@@ -58,10 +64,10 @@ class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
     var diff = double.infinity;
 
     while (!_convergenceDetector.isConverged(diff, iteration)) {
+      final residual = labelsAsVector - _features * coefficients;
       final newCoeffsSource = List.generate(_features.columnCount, (j) {
         final jCoef = coefficients[j];
-        final newJCoef =
-            _optimizeCoordinate(j, _features, labelsAsVector, coefficients);
+        final newJCoef = _optimizeCoordinate(j, residual, coefficients);
 
         diff = (jCoef - newJCoef).abs();
 
@@ -75,11 +81,9 @@ class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
     return Matrix.fromColumns([coefficients], dtype: _dtype);
   }
 
-  double _optimizeCoordinate(int j, Matrix X, Vector y, Vector w) {
+  double _optimizeCoordinate(int j, Vector residual, Vector coefficients) {
     final xj = _featureColumns[j];
-    final XWithoutJ = _featureMatrices[j];
-    final wWithoutJ = w.filterElements((_, idx) => idx != j);
-    final coef = (xj * (y - XWithoutJ * wWithoutJ)).sum();
+    final coef = xj.dot(residual) + coefficients[j] * _featureSquaredNorms[j];
 
     return _regularize(coef, _lambda, j);
   }
