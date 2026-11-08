@@ -5,6 +5,20 @@ import 'package:ml_linalg/dtype.dart';
 import 'package:ml_linalg/matrix.dart';
 import 'package:ml_linalg/vector.dart';
 
+Vector _createNormalizer(Matrix features, DType dtype, bool isNormalized) {
+  if (isNormalized) {
+    return Vector.filled(features.columnCount, 1.0, dtype: dtype);
+  }
+
+  final normalizer = Vector.zero(features.columnCount, dtype: dtype).toMutable();
+
+  for (final row in features.rows) {
+    normalizer.add(row * row);
+  }
+
+  return normalizer.toVector();
+}
+
 class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
   LeastSquaresCoordinateDescentOptimizer(
     Matrix features,
@@ -21,16 +35,8 @@ class LeastSquaresCoordinateDescentOptimizer implements LinearOptimizer {
         _featureColumns = features.columns.toList(growable: false),
         _initialCoefficientsGenerator = initialCoefficientsGenerator,
         _convergenceDetector = convergenceDetector,
-        _normalizer = isFittingDataNormalized
-            ? Vector.filled(features.columnCount, 1.0, dtype: dtype)
-            : features.reduceRows(
-                (combine, vector) {
-                  combine.toBuffer().add(vector * vector);
-
-                  return combine;
-                },
-                initValue: Vector.zero(features.columnCount, dtype: dtype),
-              ) {
+        _normalizer =
+            _createNormalizer(features, dtype, isFittingDataNormalized) {
     _featureSquaredNorms = _featureColumns
         .map((column) => column.dot(column))
         .toList(growable: false);
